@@ -39,7 +39,7 @@ namespace hal
             py::arg("continue_on_match")     = false,
             py::arg("exit_endpoint_filter")  = nullptr,
             py::arg("entry_endpoint_filter") = nullptr,
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the ``target_gate_filter`` evaluates to ``True``.
             Traverse over gates that do not meet the ``target_gate_filter`` condition.
             Stop traversal if (1) ``continue_on_match`` is ``False`` the ``target_gate_filter`` evaluates to ``True``, (2) the ``exit_endpoint_filter`` evaluates to ``False`` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the ``entry_endpoint_filter`` evaluates to ``False`` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
@@ -81,7 +81,7 @@ namespace hal
             py::arg("continue_on_match")     = false,
             py::arg("exit_endpoint_filter")  = nullptr,
             py::arg("entry_endpoint_filter") = nullptr,
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the ``target_gate_filter`` evaluates to ``True``.
             Traverse over gates that do not meet the ``target_gate_filter`` condition.
             Stop traversal if (1) ``continue_on_match`` is ``False`` the ``target_gate_filter`` evaluates to ``True``, (2) the ``exit_endpoint_filter`` evaluates to ``False`` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the ``entry_endpoint_filter`` evaluates to ``False`` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
@@ -123,7 +123,7 @@ namespace hal
             py::arg("continue_on_mismatch")  = false,
             py::arg("exit_endpoint_filter")  = nullptr,
             py::arg("entry_endpoint_filter") = nullptr,
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the ``target_gate_filter`` evaluates to ``True``.
             Continue traversal independent of whatever ``target_gate_filter`` evaluates to.
             Stop traversal if (1) ``continue_on_mismatch`` is ``False`` the ``target_gate_filter`` evaluates to ``False``, (2) the ``exit_endpoint_filter`` evaluates to ``False`` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the ``entry_endpoint_filter`` evaluates to ``False`` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
@@ -165,7 +165,7 @@ namespace hal
             py::arg("continue_on_mismatch")  = false,
             py::arg("exit_endpoint_filter")  = nullptr,
             py::arg("entry_endpoint_filter") = nullptr,
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the ``target_gate_filter`` evaluates to ``True``.
             Continue traversal independent of whatever ``target_gate_filter`` evaluates to.
             Stop traversal if (1) ``continue_on_mismatch`` is ``False`` the ``target_gate_filter`` evaluates to ``False``, (2) the ``exit_endpoint_filter`` evaluates to ``False`` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the ``entry_endpoint_filter`` evaluates to ``False`` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
@@ -200,7 +200,7 @@ namespace hal
             py::arg("successors"),
             py::arg("max_depth"),
             py::arg("target_gate_filter") = nullptr,
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the ``target_gate_filter`` evaluates to ``True``.
             Continue traversal independent of whatever ``target_gate_filter`` evaluates to.
             Stop traversal if the specified depth is reached.
@@ -235,7 +235,7 @@ namespace hal
             py::arg("successors"),
             py::arg("max_depth"),
             py::arg("target_gate_filter") = nullptr,
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the ``target_gate_filter`` evaluates to ``True``.
             Continue traversal independent of whatever ``target_gate_filter`` evaluates to.
             Stop traversal if the specified depth is reached.
@@ -268,7 +268,7 @@ namespace hal
             py::arg("net"),
             py::arg("successors"),
             py::arg("forbidden_pins"),
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
             Traverse over gates that are not sequential until a sequential gate is found.
             Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
@@ -297,7 +297,7 @@ namespace hal
             py::arg("gate"),
             py::arg("successors"),
             py::arg("forbidden_pins"),
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
             Traverse over gates that are not sequential until a sequential gate is found.
             Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
@@ -325,7 +325,7 @@ namespace hal
             },
             py::arg("successors"),
             py::arg("forbidden_pins"),
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Get the next sequential gates for all sequential gates in the netlist by traversing through remaining logic (e.g., combinational logic).
             Compute a dict from a sequential gate to all its successors.
             Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
@@ -353,7 +353,7 @@ namespace hal
             py::arg("net"),
             py::arg("successors"),
             py::arg("forbidden_pins"),
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Starting from the given net, traverse the netlist and return all combinational successor/predecessor gates.
             Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
             All combinational gates found during traversal are added to the result.
@@ -383,7 +383,7 @@ namespace hal
             py::arg("gate"),
             py::arg("successors"),
             py::arg("forbidden_pins"),
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Starting from the given gate, traverse the netlist and return all combinational successor/predecessor gates.
             Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
             All combinational gates found during traversal are added to the result.
@@ -459,7 +459,7 @@ namespace hal
             py::arg("direction"),
             py::arg("exit_endpoint_filter")  = nullptr,
             py::arg("entry_endpoint_filter") = nullptr,
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
                 Find the shortest path (i.e., the smallest number of gates) that connects the start gate with the end gate.
                 The gate where the search started from will be the first in the result list, the end gate will be the last.
                 If there is no such path, ``None`` is returned. If there is more than one path with the same length, only the first one is returned.

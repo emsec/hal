@@ -241,7 +241,7 @@ namespace hal
                 }
             },
             py::arg("vertices"),
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
                 Get the gates corresponding to the specified list of vertices.
                 The result may contain ``None`` for dummy vertices.
 
@@ -265,7 +265,7 @@ namespace hal
                 }
             },
             py::arg("vertices"),
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
                 Get the gates corresponding to the specified set of vertices.
                 The result may contain ``None`` for dummy vertices.
 
@@ -289,7 +289,7 @@ namespace hal
                 }
             },
             py::arg("vertices"),
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
                 Get the gates corresponding to the specified list of vertices.
 
                 :param list[int] vertices: A list of vertices.
@@ -312,7 +312,7 @@ namespace hal
                 }
             },
             py::arg("vertices"),
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
                 Get the gates corresponding to the specified set of vertices.
 
                 :param set[int] vertices: A set of vertices.
@@ -335,7 +335,7 @@ namespace hal
                 }
             },
             py::arg("vertex"),
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
                 Get the gates corresponding to the specified vertex.
 
                 :param int vertex: A vertex.

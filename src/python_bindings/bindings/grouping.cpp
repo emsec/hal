@@ -80,20 +80,20 @@ namespace hal
             :rtype: bool
         )");
 
-        py_grouping.def_property_readonly("gates", py::overload_cast<>(&Grouping::get_gates, py::const_), py::return_value_policy::reference_internal, R"(
+        py_grouping.def_property_readonly("gates", py::overload_cast<>(&Grouping::get_gates, py::const_), borrowed(), R"(
             All gates contained within the grouping.
 
             :type: list[hal_py.Gate]
         )");
 
-        py_grouping.def("get_gates", py::overload_cast<>(&Grouping::get_gates, py::const_), py::return_value_policy::reference_internal, R"(
+        py_grouping.def("get_gates", py::overload_cast<>(&Grouping::get_gates, py::const_), borrowed(), R"(
             Get all gates contained within the grouping.
 
             :returns: A list of gates.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_grouping.def("get_gates", py::overload_cast<const std::function<bool(Gate*)>&>(&Grouping::get_gates, py::const_), py::arg("filter"), py::return_value_policy::reference_internal, R"(
+        py_grouping.def("get_gates", py::overload_cast<const std::function<bool(Gate*)>&>(&Grouping::get_gates, py::const_), py::arg("filter"), borrowed(), R"(
             Get all gates contained within the grouping.
             The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -174,20 +174,20 @@ namespace hal
             :rtype: bool
         )");
 
-        py_grouping.def_property_readonly("nets", py::overload_cast<>(&Grouping::get_nets, py::const_), py::return_value_policy::reference_internal, R"(
+        py_grouping.def_property_readonly("nets", py::overload_cast<>(&Grouping::get_nets, py::const_), borrowed(), R"(
             All nets contained within the grouping.
 
             :type: list[hal_py.Net]
         )");
 
-        py_grouping.def("get_nets", py::overload_cast<>(&Grouping::get_nets, py::const_), py::return_value_policy::reference_internal, R"(
+        py_grouping.def("get_nets", py::overload_cast<>(&Grouping::get_nets, py::const_), borrowed(), R"(
             Get all nets contained within the grouping.
 
             :returns: A list of nets.
             :rtype: list[hal_py.Net]
         )");
 
-        py_grouping.def("get_nets", py::overload_cast<const std::function<bool(Net*)>&>(&Grouping::get_nets, py::const_), py::arg("filter"), py::return_value_policy::reference_internal, R"(
+        py_grouping.def("get_nets", py::overload_cast<const std::function<bool(Net*)>&>(&Grouping::get_nets, py::const_), py::arg("filter"), borrowed(), R"(
             Get all nets contained within the grouping.
             The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -268,20 +268,20 @@ namespace hal
             :rtype: bool
         )");
 
-        py_grouping.def_property_readonly("modules", py::overload_cast<>(&Grouping::get_modules, py::const_), py::return_value_policy::reference_internal, R"(
+        py_grouping.def_property_readonly("modules", py::overload_cast<>(&Grouping::get_modules, py::const_), borrowed(), R"(
             All modules contained within the grouping.
 
             :type: list[hal_py.Module]
         )");
 
-        py_grouping.def("get_modules", py::overload_cast<>(&Grouping::get_modules, py::const_), py::return_value_policy::reference_internal, R"(
+        py_grouping.def("get_modules", py::overload_cast<>(&Grouping::get_modules, py::const_), borrowed(), R"(
             Get all modules contained within the grouping.
 
             :returns: A list of modules.
             :rtype: list[hal_py.Module]
         )");
 
-        py_grouping.def("get_modules", py::overload_cast<const std::function<bool(Module*)>&>(&Grouping::get_modules, py::const_), py::arg("filter"), py::return_value_policy::reference_internal, R"(
+        py_grouping.def("get_modules", py::overload_cast<const std::function<bool(Module*)>&>(&Grouping::get_modules, py::const_), py::arg("filter"), borrowed(), R"(
             Get all modules contained within the grouping.
             The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 

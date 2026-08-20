@@ -6,6 +6,8 @@
 #pragma clang diagnostic ignored "-Wshadow-field-in-constructor-modified"
 #endif
 
+#include "hal_core/python_bindings/python_bindings.h"
+
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
@@ -311,28 +313,28 @@ PYBIND11_PLUGIN(hal_gui)
         :rtype: tuple(int, int, int)
 )");
 
-    py_gui_api.def("getSelectedGates", &GuiApi::getSelectedGates, py::return_value_policy::reference_internal, R"(
+    py_gui_api.def("getSelectedGates", &GuiApi::getSelectedGates, borrowed(), R"(
         Get the gates which are currently selected in the graph view of the GUI.
 
         :returns: List of currently selected gates.
         :rtype: list[hal_py.Gate]
 )");
 
-    py_gui_api.def("getSelectedNets", &GuiApi::getSelectedNets, py::return_value_policy::reference_internal, R"(
+    py_gui_api.def("getSelectedNets", &GuiApi::getSelectedNets, borrowed(), R"(
         Get the nets which are currently selected in the graph view of the GUI.
 
         :returns: List of currently selected nets.
         :rtype: list[hal_py.Net]
 )");
 
-    py_gui_api.def("getSelectedModules", &GuiApi::getSelectedModules, py::return_value_policy::reference_internal, R"(
+    py_gui_api.def("getSelectedModules", &GuiApi::getSelectedModules, borrowed(), R"(
        Get the modules which are currently selected in the graph view of the GUI.
 
        :returns: List of currently selected modules.
        :rtype: list[hal_py.Module]
 )");
 
-    py_gui_api.def("getSelectedItems", &GuiApi::getSelectedItems, py::return_value_policy::reference_internal, R"(
+    py_gui_api.def("getSelectedItems", &GuiApi::getSelectedItems, borrowed(), R"(
        Get all selected items which are currently selected in the graph view of the GUI.
 
        :returns: Tuple of currently selected items.

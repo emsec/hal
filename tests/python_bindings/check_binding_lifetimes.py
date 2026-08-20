@@ -12,9 +12,9 @@ Two rules are checked.
    leaked every graph ever built.
 
 2. A binding that returns something owned by the receiver has to say so with
-   `return_value_policy::reference_internal`, which pybind applies to each element of a returned
-   container as well, or with an explicit `keep_alive`. Without it the owner can be freed while
-   Python still refers to the object.
+   `hal::borrowed()`, which keeps the owner of the result alive and reaches each element of a
+   returned container as well, or with an explicit `keep_alive`. Without it the owner can be freed
+   while Python still refers to the object.
 
 The check is deliberately signature-based. An earlier docstring-based version missed 40 percent of
 the cases, because `:rtype:` is documentation and drifts: one binding said `hal_py.module` in
@@ -88,7 +88,7 @@ def main() -> int:
             if 'R"(' not in body:
                 continue
             head, doc = body.split('R"(')[0], body.split('R"(', 1)[1]
-            if "return_value_policy" in head or "keep_alive" in head or "RawPtrWrapper" in head:
+            if "borrowed()" in head or "return_value_policy" in head or "keep_alive" in head or "RawPtrWrapper" in head:
                 continue
             returned = re.search(
                 r":(?:rtype|type):\s*(?:list|set|dict|tuple)?[\[(]?\s*(?:[\w]+\.)?(\w+)", doc
@@ -111,8 +111,8 @@ def main() -> int:
         for entry in entries:
             print(f"  {entry}", file=sys.stderr)
     print(
-        "\nAdd py::return_value_policy::reference_internal to an instance method, or a keep_alive "
-        "naming the argument that owns the result. See tests/python_bindings/check_binding_lifetimes.py.",
+        "\nAdd hal::borrowed() to the binding, or a keep_alive naming the argument that owns the "
+        "result. See tests/python_bindings/check_binding_lifetimes.py.",
         file=sys.stderr,
     )
     return 1

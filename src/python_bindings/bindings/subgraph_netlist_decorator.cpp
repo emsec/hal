@@ -194,7 +194,7 @@ namespace hal
             },
             py::arg("subgraph_gates"),
             py::arg("subgraph_output"),
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
             This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
 
@@ -220,7 +220,7 @@ namespace hal
             },
             py::arg("subgraph_module"),
             py::arg("subgraph_output"),
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
             This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
 

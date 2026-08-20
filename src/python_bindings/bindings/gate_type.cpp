@@ -96,13 +96,13 @@ namespace hal
         )");
 
         py_gate_type.def_property_readonly(
-            "components", [](const GateType& self) { return self.get_components(); }, py::return_value_policy::reference_internal, R"(
+            "components", [](const GateType& self) { return self.get_components(); }, borrowed(), R"(
             All components of the gate type as a list.
 
             :type: list[hal_py.GateTypeComponent]
         )");
 
-        py_gate_type.def("get_components", &GateType::get_components, py::arg("filter") = nullptr, py::return_value_policy::reference_internal, R"(
+        py_gate_type.def("get_components", &GateType::get_components, py::arg("filter") = nullptr, borrowed(), R"(
             Get all components matching the filter condition (if provided) as a list. 
             Returns an empty list if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
 
@@ -111,7 +111,7 @@ namespace hal
             :rtype: list[hal_py.GateTypeComponent]
         )");
 
-        py_gate_type.def("get_component", &GateType::get_component, py::arg("filter") = nullptr, py::return_value_policy::reference_internal, R"(
+        py_gate_type.def("get_component", &GateType::get_component, py::arg("filter") = nullptr, borrowed(), R"(
             Get a single component matching the filter condition (if provided).
             Returns ``None`` if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
 
@@ -186,13 +186,13 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate_type.def_property_readonly("gate_library", &GateType::get_gate_library, py::return_value_policy::reference_internal, R"(
+        py_gate_type.def_property_readonly("gate_library", &GateType::get_gate_library, borrowed(), R"(
             The gate library this gate type is associated with.
 
             :type: hal_py.GateLibrary
         )");
 
-        py_gate_type.def("get_gate_library", &GateType::get_gate_library, py::return_value_policy::reference_internal, R"(
+        py_gate_type.def("get_gate_library", &GateType::get_gate_library, borrowed(), R"(
             Get the gate library this gate type is associated with.
 
             :returns: The gate library.
@@ -238,7 +238,7 @@ namespace hal
             py::arg("direction"),
             py::arg("type")         = PinType::none,
             py::arg("create_group") = true,
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Create a gate pin with the specified name.
 
             :param int id: The ID of the pin.
@@ -268,7 +268,7 @@ namespace hal
             py::arg("direction"),
             py::arg("type")         = PinType::none,
             py::arg("create_group") = true,
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Create a gate pin with the specified name.
             The ID of the pin is set automatically.
 
@@ -283,13 +283,13 @@ namespace hal
         py_gate_type.def_property_readonly(
             "pins",
             [](const GateType& self) -> std::vector<GatePin*> { return self.get_pins(); },
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             An ordered list of all pins of the gate type.
 
             :type: list[hal_py.GatePin]
         )");
 
-        py_gate_type.def("get_pins", &GateType::get_pins, py::arg("filter") = nullptr, py::return_value_policy::reference_internal, R"(
+        py_gate_type.def("get_pins", &GateType::get_pins, py::arg("filter") = nullptr, borrowed(), R"(
             Get an ordered list of all pins of the gate type.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -317,13 +317,13 @@ namespace hal
             :rtype: list[str]
         )");
 
-        py_gate_type.def_property_readonly("input_pins", &GateType::get_input_pins, py::return_value_policy::reference_internal, R"(
+        py_gate_type.def_property_readonly("input_pins", &GateType::get_input_pins, borrowed(), R"(
             An ordered list of all input pins of the gate type (including inout pins).
 
             :type: list[hal_py.GatePin]
         )");
 
-        py_gate_type.def("get_input_pins", &GateType::get_input_pins, py::return_value_policy::reference_internal, R"(
+        py_gate_type.def("get_input_pins", &GateType::get_input_pins, borrowed(), R"(
             Get an ordered list of all input pins of the gate type (including inout pins).
 
             :returns: An ordered list of input pins.
@@ -343,13 +343,13 @@ namespace hal
             :rtype: list[str]
          )");
 
-        py_gate_type.def_property_readonly("output_pins", &GateType::get_output_pins, py::return_value_policy::reference_internal, R"(
+        py_gate_type.def_property_readonly("output_pins", &GateType::get_output_pins, borrowed(), R"(
             An ordered list of all output pins of the gate type (including inout pins).
 
             :type: list[hal_py.GatePin]
         )");
 
-        py_gate_type.def("get_output_pins", &GateType::get_output_pins, py::return_value_policy::reference_internal, R"(
+        py_gate_type.def("get_output_pins", &GateType::get_output_pins, borrowed(), R"(
             Get an ordered list of all output pins of the gate type (including inout pins).
 
             :returns: An ordered list of output pins.
@@ -369,7 +369,7 @@ namespace hal
             :rtype: list[str]
         )");
 
-        py_gate_type.def("get_pin_by_id", &GateType::get_pin_by_id, py::arg("id"), py::return_value_policy::reference_internal, R"(
+        py_gate_type.def("get_pin_by_id", &GateType::get_pin_by_id, py::arg("id"), borrowed(), R"(
             Get the pin corresponding to the given ID.
 
             :param int id: The ID of the pin.
@@ -377,7 +377,7 @@ namespace hal
             :rtype: hal_py.GatePin or None
         )");
 
-        py_gate_type.def("get_pin_by_name", &GateType::get_pin_by_name, py::arg("name"), py::return_value_policy::reference_internal, R"(
+        py_gate_type.def("get_pin_by_name", &GateType::get_pin_by_name, py::arg("name"), borrowed(), R"(
             Get the pin corresponding to the given name.
 
             :param str name: The name of the pin.
@@ -415,7 +415,7 @@ namespace hal
             py::arg("ascending")           = true,
             py::arg("start_index")         = 0,
             py::arg("delete_empty_groups") = true,
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Create a pin group with the given name.
 
             :param int id: The ID of the pin group.
@@ -458,7 +458,7 @@ namespace hal
             py::arg("ascending")           = true,
             py::arg("start_index")         = 0,
             py::arg("delete_empty_groups") = true,
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Create a pin group with the given name.
             The ID of the pin group is set automatically.
 
@@ -473,7 +473,7 @@ namespace hal
             :rtype: hal_py.GatePinGroup or None
         )");
 
-        py_gate_type.def("get_pin_groups", &GateType::get_pin_groups, py::arg("filter") = nullptr, py::return_value_policy::reference_internal, R"(
+        py_gate_type.def("get_pin_groups", &GateType::get_pin_groups, py::arg("filter") = nullptr, borrowed(), R"(
             Get an ordered list of all pin groups of the gate type.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -482,7 +482,7 @@ namespace hal
             :rtype: list[hal_py.GatePinGroup]
         )");
 
-        py_gate_type.def("get_pin_group_by_id", &GateType::get_pin_group_by_id, py::arg("id"), py::return_value_policy::reference_internal, R"(
+        py_gate_type.def("get_pin_group_by_id", &GateType::get_pin_group_by_id, py::arg("id"), borrowed(), R"(
             Get the pin group corresponding to the given ID.
 
             :param int id: The ID of the pin group.
@@ -490,7 +490,7 @@ namespace hal
             :rtype: hal_py.GatePinGroup or None
         )");
 
-        py_gate_type.def("get_pin_group_by_name", &GateType::get_pin_group_by_name, py::arg("name"), py::return_value_policy::reference_internal, R"(
+        py_gate_type.def("get_pin_group_by_name", &GateType::get_pin_group_by_name, py::arg("name"), borrowed(), R"(
             Get the pin group corresponding to the given name.
 
             :param str name: The name of the pin group.

@@ -22,13 +22,13 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module_pin.def_property_readonly("net", &ModulePin::get_net, py::return_value_policy::reference_internal, R"(
+        py_module_pin.def_property_readonly("net", &ModulePin::get_net, borrowed(), R"(
             The net passing through the pin.
 
             :type: hal_py.Net
         )");
 
-        py_module_pin.def("get_net", &ModulePin::get_net, py::return_value_policy::reference_internal, R"(
+        py_module_pin.def("get_net", &ModulePin::get_net, borrowed(), R"(
             Get the net passing through the pin.
 
             :returns: The net of the pin.

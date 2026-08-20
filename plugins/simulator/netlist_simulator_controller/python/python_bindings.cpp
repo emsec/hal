@@ -552,7 +552,7 @@ namespace hal
                 :param netlist_simulator_controller.WaveData wave: Waveform to be removed.
         )");
 
-        py_wave_data_group.def("get_waveforms", &WaveDataGroup::get_waveforms, py::return_value_policy::reference_internal, R"(
+        py_wave_data_group.def("get_waveforms", &WaveDataGroup::get_waveforms, borrowed(), R"(
                 Get list of waveforms contained by group.
 
                 :rtype: list[netlist_simulator_controller.WaveData]

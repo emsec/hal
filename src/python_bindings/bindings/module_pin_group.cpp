@@ -81,13 +81,13 @@ namespace hal
             :rtype: hal_py.PinType
         )");
 
-        py_module_pin_group.def_property_readonly("pins", [](const PinGroup<ModulePin>& self) -> std::vector<ModulePin*> { return self.get_pins(nullptr); }, py::return_value_policy::reference_internal, R"(
+        py_module_pin_group.def_property_readonly("pins", [](const PinGroup<ModulePin>& self) -> std::vector<ModulePin*> { return self.get_pins(nullptr); }, borrowed(), R"(
             The (ordered) pins of the pin groups.
 
             :type: list[hal_py.ModulePin]
         )");
 
-        py_module_pin_group.def("get_pins", &PinGroup<ModulePin>::get_pins, py::arg("filter") = nullptr, py::return_value_policy::reference_internal, R"(
+        py_module_pin_group.def("get_pins", &PinGroup<ModulePin>::get_pins, py::arg("filter") = nullptr, borrowed(), R"(
             Get the (ordered) pins of the pin groups.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -111,7 +111,7 @@ namespace hal
                 }
             },
             py::arg("index"),
-            py::return_value_policy::reference_internal, R"(
+            borrowed(), R"(
             Get the pin specified by the given index.
 
             :param int index: The index of the pin within the pin group.

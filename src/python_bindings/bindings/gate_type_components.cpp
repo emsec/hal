@@ -30,26 +30,26 @@ namespace hal
             .value("ram_port", GateTypeComponent::ComponentType::ram_port, R"(RAM port component type.)")
             .export_values();
 
-        py_gate_type_component.def_property_readonly("type", &GateTypeComponent::get_type, py::return_value_policy::reference_internal, R"(
+        py_gate_type_component.def_property_readonly("type", &GateTypeComponent::get_type, borrowed(), R"(
             The type of the gate type component.
 
             :type: hal_py.GateTypeComponent.ComponentType
         )");
 
-        py_gate_type_component.def("get_type", &GateTypeComponent::get_type, py::return_value_policy::reference_internal, R"(
+        py_gate_type_component.def("get_type", &GateTypeComponent::get_type, borrowed(), R"(
             Get the type of the gate type component.
 
             :returns: The type of the gate type component.
             :rtype: hal_py.GateTypeComponent.ComponentType
         )");
 
-        py_gate_type_component.def_property_readonly("components", &GateTypeComponent::get_components, py::return_value_policy::reference_internal, R"(
+        py_gate_type_component.def_property_readonly("components", &GateTypeComponent::get_components, borrowed(), R"(
             All components of the gate type component as a list.
 
             :type: list[hal_py.GateTypeComponent]
         )");
 
-        py_gate_type_component.def("get_components", &GateTypeComponent::get_components, py::arg("filter") = nullptr, py::return_value_policy::reference_internal, R"(
+        py_gate_type_component.def("get_components", &GateTypeComponent::get_components, py::arg("filter") = nullptr, borrowed(), R"(
             Get all components matching the filter condition (if provided) as a list. 
             Returns an empty list if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
 
@@ -58,7 +58,7 @@ namespace hal
             :rtype: list[hal_py.GateTypeComponent]
         )");
 
-        py_gate_type_component.def("get_component", &GateTypeComponent::get_component, py::arg("filter") = nullptr, py::return_value_policy::reference_internal, R"(
+        py_gate_type_component.def("get_component", &GateTypeComponent::get_component, py::arg("filter") = nullptr, borrowed(), R"(
             Get a single component matching the filter condition (if provided).
             Returns ``None`` if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
 
