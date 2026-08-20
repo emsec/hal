@@ -490,7 +490,8 @@ namespace hal
             :rtype: hal_py.ModulePin or None
         )");
 
-        py_module.def_property_readonly("pins", &Module::get_pins, py::return_value_policy::reference_internal, R"(
+        py_module.def_property_readonly(
+            "pins", [](const Module& self) { return self.get_pins(); }, py::return_value_policy::reference_internal, R"(
             The (ordered) pins of the module.
 
             :type: list[hal_py.ModulePin]
@@ -576,7 +577,8 @@ namespace hal
             :rtype: list[str]
         )");
 
-        py_module.def_property_readonly("pin_groups", &Module::get_pin_groups, py::return_value_policy::reference_internal, R"(
+        py_module.def_property_readonly(
+            "pin_groups", [](const Module& self) { return self.get_pin_groups(); }, py::return_value_policy::reference_internal, R"(
             All pin_groups of the module.
 
             :type: list[hal_py.ModulePinGroup]

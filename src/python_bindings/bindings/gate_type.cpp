@@ -95,7 +95,8 @@ namespace hal
             :rtype: Py_hash_t
         )");
 
-        py_gate_type.def_property_readonly("components", &GateType::get_components, py::return_value_policy::reference_internal, R"(
+        py_gate_type.def_property_readonly(
+            "components", [](const GateType& self) { return self.get_components(); }, py::return_value_policy::reference_internal, R"(
             All components of the gate type as a list.
 
             :type: list[hal_py.GateTypeComponent]
