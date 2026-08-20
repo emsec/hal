@@ -62,10 +62,14 @@ namespace hal
         py_gate_library_manager.def(
             "get_gate_libraries",
             [] {
+                // get_gate_libraries hands out borrowed pointers, so ask the manager for the owning
+                // pointer of each. Constructing a shared_ptr from the borrowed one instead would
+                // open a second, independent ownership group over a library the manager already
+                // owns, and the library would be freed twice.
                 std::vector<std::shared_ptr<GateLibrary>> result;
-                for (auto lib : gate_library_manager::get_gate_libraries())
+                for (const auto* lib : gate_library_manager::get_gate_libraries())
                 {
-                    result.emplace_back(lib);
+                    result.emplace_back(gate_library_manager::get_owning(lib));
                 }
                 return result;
             },
