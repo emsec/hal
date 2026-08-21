@@ -65,7 +65,10 @@ namespace hal
             const BooleanFunction& get(const BooleanFunction& key) const;
 
             /**
-             * Sets a Boolean function equivalent in the symbolic state.
+             * Sets a Boolean function equivalent in the symbolic state, replacing an equivalent that
+             * was set for the same key before.
+             * 
+             * Does nothing if the key is not a variable.
              * 
              * @param[in] key - The Boolean function.
              * @param[in] value - The equivalent Boolean function.
