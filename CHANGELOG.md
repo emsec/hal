@@ -72,6 +72,7 @@ All notable changes to this project will be documented in this file.
   * simulation
     * added feature, selecting a waveform in viewer selects net in graph view as well
     * fixed bug in waveform viewer, make sure that deleting a controller causes closing the tab
+    * fixed the documentation of `NetlistSimulatorController::initialize`, which described the behaviour of the legacy `NetlistSimulator`: it claimed that no gates or clocks may be added afterwards and that `simulate` calls it automatically, neither of which holds since its body became empty
   * dot viewer
     * added 'hover over node' feature in dot viewer
 * GUI
@@ -87,7 +88,7 @@ All notable changes to this project will be documented in this file.
     * fixed bug in pin model which must not crash when deleting a non-empty pin group
     * fixed bug by disallowing deletion of group comprising a single pin with same name
 * Build and dependencies
-  * added a test that checks the Python bindings never hand out a borrowed pointer without keeping its owner alive, and never give a class bound with a non-owning holder to a factory that returns a `unique_ptr`
+  * added a test that checks the Python bindings never hand out a borrowed pointer without keeping its owner alive, and never give a class bound with a non-owning holder to a factory that returns a `unique_ptr`. It covers plugins kept in a repository of their own as well
   * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
   * removed the tests below `tests/python_binding`, which were neither referenced by the build nor by any workflow and called API that no longer exists
 
