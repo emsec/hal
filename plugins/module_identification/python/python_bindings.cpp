@@ -463,7 +463,7 @@ namespace hal
             )");
 
         py_candidate_type.value("addition", module_identification::CandidateType::addition, R"(Addition operation.)")
-            .value("addition_offset", module_identification::CandidateType::addition, R"(Addition with constant offset operation.)")
+            .value("addition_offset", module_identification::CandidateType::addition_offset, R"(Addition with constant offset operation.)")
             .value("subtraction", module_identification::CandidateType::subtraction, R"(Subtraction operation.)")
             .value("counter", module_identification::CandidateType::counter, R"(Counter operation.)")
             .value("negation", module_identification::CandidateType::negation, R"(Negation operation.)")

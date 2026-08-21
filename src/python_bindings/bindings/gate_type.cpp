@@ -15,7 +15,7 @@ namespace hal
             .value("ff", GateTypeProperty::ff, R"(Flip-flop gate type.)")
             .value("latch", GateTypeProperty::latch, R"(Latch gate type.)")
             .value("ram", GateTypeProperty::ram, R"(RAM gate type.)")
-            .value("fifo", GateTypeProperty::ram, R"(FIFO gate type.)")
+            .value("fifo", GateTypeProperty::fifo, R"(FIFO gate type.)")
             .value("shift_register", GateTypeProperty::shift_register, R"(Shift register gate type.)")
             .value("io", GateTypeProperty::io, R"(IO gate type.)")
             .value("dsp", GateTypeProperty::dsp, R"(DSP gate type.)")
