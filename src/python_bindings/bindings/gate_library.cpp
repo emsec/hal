@@ -4,7 +4,7 @@ namespace hal
 {
     void gate_library_init(py::module& m)
     {
-        py::class_<GateLibrary, RawPtrWrapper<GateLibrary>> py_gate_library(m, "GateLibrary", R"(
+        py::class_<GateLibrary, std::shared_ptr<GateLibrary>> py_gate_library(m, "GateLibrary", R"(
             A gate library is a collection of gate types including their pins and Boolean functions.
         )");
 
@@ -28,13 +28,13 @@ namespace hal
             :rtype: str
         )");
 
-        py_gate_library.def_property_readonly("path", &GateLibrary::get_name, R"(
+        py_gate_library.def_property_readonly("path", &GateLibrary::get_path, R"(
             The path to the file describing the gate library.
 
             :type: pathlib.Path
         )");
 
-        py_gate_library.def("get_path", &GateLibrary::get_name, R"(
+        py_gate_library.def("get_path", &GateLibrary::get_path, R"(
             Get the path to the file describing the gate library.
 
             :returns: The path to the gate library file.
@@ -68,7 +68,7 @@ namespace hal
             :rtype: tuple(str,str)
         )");
 
-        // py_gate_library.def("create_gate_type", &GateLibrary::create_gate_type, py::arg("name"), py::arg("properties") = std::set<GateTypeProperty>(), R"(
+        // py_gate_library.def("create_gate_type", &GateLibrary::create_gate_type, py::arg("name"), py::arg("properties") = std::set<GateTypeProperty>(), borrowed(), R"(
         //     Create a new gate type, add it to the gate library, and return it.
 
         //     :param str name: The name of the gate type.
@@ -93,7 +93,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate_library.def("get_gate_type_by_name", &GateLibrary::get_gate_type_by_name, py::arg("name"), R"(
+        py_gate_library.def("get_gate_type_by_name", &GateLibrary::get_gate_type_by_name, py::arg("name"), borrowed(), R"(
             Get the gate type corresponding to the given name if contained within the library. In case there is no gate type with that name, ``None`` is returned.
 
             :param str name: The name of the gate type.
@@ -101,13 +101,13 @@ namespace hal
             :rtype: hal_py.GateType or None
         )");
 
-        py_gate_library.def_property_readonly("gate_types", [](const GateLibrary& self) { return self.get_gate_types(); }, R"(
+        py_gate_library.def_property_readonly("gate_types", [](const GateLibrary& self) { return self.get_gate_types(); }, borrowed(), R"(
             All gate types of the gate library as as dict from gate type names to gate types.
 
             :type: dict[str,hal_py.GateType]
         )");
 
-        py_gate_library.def("get_gate_types", &GateLibrary::get_gate_types, py::arg("filter") = nullptr, R"(
+        py_gate_library.def("get_gate_types", &GateLibrary::get_gate_types, py::arg("filter") = nullptr, borrowed(), R"(
             Get all gate types of the library.
             In case a filter is applied, only the gate types matching the filter condition are returned.
 
@@ -124,13 +124,13 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate_library.def_property_readonly("vcc_gate_types", &GateLibrary::get_vcc_gate_types, R"(
+        py_gate_library.def_property_readonly("vcc_gate_types", &GateLibrary::get_vcc_gate_types, borrowed(), R"(
             All VCC gate types of the gate library as as dict from gate type names to gate types.
 
             :type: dict[str,hal_py.GateType]
         )");
 
-        py_gate_library.def("get_vcc_gate_types", &GateLibrary::get_vcc_gate_types, R"(
+        py_gate_library.def("get_vcc_gate_types", &GateLibrary::get_vcc_gate_types, borrowed(), R"(
             Get all VCC gate types of the library.
 
             :returns: A dict from VCC gate type names to gate type objects.
@@ -145,13 +145,13 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate_library.def_property_readonly("gnd_gate_types", &GateLibrary::get_vcc_gate_types, R"(
+        py_gate_library.def_property_readonly("gnd_gate_types", &GateLibrary::get_vcc_gate_types, borrowed(), R"(
             All GND gate types of the gate library as as dict from gate type names to gate types.
 
             :type: dict[str,hal_py.GateType]
         )");
 
-        py_gate_library.def("get_gnd_gate_types", &GateLibrary::get_gnd_gate_types, R"(
+        py_gate_library.def("get_gnd_gate_types", &GateLibrary::get_gnd_gate_types, borrowed(), R"(
             Get all GND gate types of the library.
 
             :returns: A dict from GND gate type names to gate type objects.

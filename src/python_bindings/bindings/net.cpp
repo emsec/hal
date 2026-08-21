@@ -72,7 +72,7 @@ namespace hal
             :param str name: The new name.
         )");
 
-        py_net.def("get_grouping", &Net::get_grouping, R"(
+        py_net.def("get_grouping", &Net::get_grouping, borrowed(), R"(
             Get the grouping in which this net is contained.
             If no grouping contains this gate, ``None`` is returned.
 
@@ -80,7 +80,7 @@ namespace hal
             :rtype: hal_py.Grouping
         )");
 
-        py_net.def("add_source", py::overload_cast<Gate*, const std::string&>(&Net::add_source), py::arg("gate"), py::arg("pin_name"), R"(
+        py_net.def("add_source", py::overload_cast<Gate*, const std::string&>(&Net::add_source), py::arg("gate"), py::arg("pin_name"), borrowed(), R"(
             Add a source endpoint to the net.
             The endpoint is specified by a tuple of a gate and the name of an output pin of that gate.
 
@@ -90,7 +90,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_net.def("add_source", py::overload_cast<Gate*, GatePin*>(&Net::add_source), py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("add_source", py::overload_cast<Gate*, GatePin*>(&Net::add_source), py::arg("gate"), py::arg("pin"), borrowed(), R"(
             Add a source endpoint to the net.
             The endpoint is specified by a tuple of a gate and an output pin of that gate. 
 
@@ -179,13 +179,13 @@ namespace hal
             :rtype: int
         )");
 
-        py_net.def_property_readonly("sources", [](Net* n) { return n->get_sources(); }, R"(
+        py_net.def_property_readonly("sources", [](Net* n) { return n->get_sources(); }, borrowed(), R"(
             A list of sources of the net.
 
             :type: list[hal_py.Endpoint]
         )");
 
-        py_net.def("get_sources", &Net::get_sources, py::arg("filter") = nullptr, R"(
+        py_net.def("get_sources", &Net::get_sources, py::arg("filter") = nullptr, borrowed(), R"(
             Get a list of sources of the net.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -194,7 +194,7 @@ namespace hal
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_net.def("add_destination", py::overload_cast<Gate*, const std::string&>(&Net::add_destination), py::arg("gate"), py::arg("pin_name"), R"(
+        py_net.def("add_destination", py::overload_cast<Gate*, const std::string&>(&Net::add_destination), py::arg("gate"), py::arg("pin_name"), borrowed(), R"(
             Add a destination endpoint to the net.
             The endpoint is specified by a tuple of a gate and the name of an input pin of that gate.
 
@@ -204,7 +204,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_net.def("add_destination", py::overload_cast<Gate*, GatePin*>(&Net::add_destination), py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("add_destination", py::overload_cast<Gate*, GatePin*>(&Net::add_destination), py::arg("gate"), py::arg("pin"), borrowed(), R"(
             Add a destination endpoint to the net.
             The endpoint is specified by a tuple of a gate and an input pin of that gate.
 
@@ -293,13 +293,13 @@ namespace hal
             :rtype: int
         )");
 
-        py_net.def_property_readonly("destinations", [](Net* n) { return n->get_destinations(); }, R"(
+        py_net.def_property_readonly("destinations", [](Net* n) { return n->get_destinations(); }, borrowed(), R"(
             A list of destinations of the net.
 
             :type: list[hal_py.Endpoint]
         )");
 
-        py_net.def("get_destinations", &Net::get_destinations, py::arg("filter") = nullptr, R"(
+        py_net.def("get_destinations", &Net::get_destinations, py::arg("filter") = nullptr, borrowed(), R"(
             Get a vector of destinations of the net.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 

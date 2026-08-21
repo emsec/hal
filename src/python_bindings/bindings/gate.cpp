@@ -159,26 +159,26 @@ namespace hal
             :param tuple(int,int) location: A tuple <x-coordinate, y-coordinate>.
         )");
 
-        py_gate.def_property_readonly("module", &Gate::get_module, R"(
+        py_gate.def_property_readonly("module", &Gate::get_module, borrowed(), R"(
             The module in which contains this gate.
 
             :type: hal_py.Module
         )");
 
-        py_gate.def("get_module", &Gate::get_module, R"(
+        py_gate.def("get_module", &Gate::get_module, borrowed(), R"(
             Get the module which contains this gate.
 
             :returns: The module.
             :rtype: hal_py.Module
         )");
 
-        py_gate.def_property_readonly("modules", [](Gate* g) { return g->get_modules(); }, R"(
+        py_gate.def_property_readonly("modules", [](Gate* g) { return g->get_modules(); }, borrowed(), R"(
             A list of all modules that contain this gate, either directly or as parent of another module.
 
             :type: list[hal_py.Module]
         )");
 
-        py_gate.def("get_modules", &Gate::get_modules, py::arg("filter") = nullptr, py::arg("recursive") = true, R"(
+        py_gate.def("get_modules", &Gate::get_modules, py::arg("filter") = nullptr, py::arg("recursive") = true, borrowed(), R"(
             Get all modules that contain this gate, either directly or as parent of another module.
             If recursive is set to ``True``, indirect parent modules are also included. Otherwise, only the module containing the gate directly is returned.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
@@ -189,7 +189,7 @@ namespace hal
             :rtype: list[hal_py.Module]
         )");
 
-        py_gate.def("get_grouping", &Gate::get_grouping, R"(
+        py_gate.def("get_grouping", &Gate::get_grouping, borrowed(), R"(
             Gets the grouping in which this gate is contained.
             If no grouping contains this gate, ``None`` is returned.
 
@@ -306,20 +306,20 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate.def_property_readonly("fan_in_nets", py::overload_cast<>(&Gate::get_fan_in_nets, py::const_), R"(
+        py_gate.def_property_readonly("fan_in_nets", py::overload_cast<>(&Gate::get_fan_in_nets, py::const_), borrowed(), R"(
             A list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
 
             :type: list[hal_py.Net]
         )");
 
-        py_gate.def("get_fan_in_nets", py::overload_cast<>(&Gate::get_fan_in_nets, py::const_), R"(
+        py_gate.def("get_fan_in_nets", py::overload_cast<>(&Gate::get_fan_in_nets, py::const_), borrowed(), R"(
             Get a list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
 
             :returns: A list of all fan-in nets.
             :rtype: list[hal_py.Net]
         )");
 
-        py_gate.def("get_fan_in_nets", py::overload_cast<const std::function<bool(Net*)>&>(&Gate::get_fan_in_nets, py::const_), py::arg("filter"), R"(
+        py_gate.def("get_fan_in_nets", py::overload_cast<const std::function<bool(Net*)>&>(&Gate::get_fan_in_nets, py::const_), py::arg("filter"), borrowed(), R"(
             Get a list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
             The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -328,7 +328,7 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
-        py_gate.def("get_fan_in_net", py::overload_cast<const std::string&>(&Gate::get_fan_in_net, py::const_), py::arg("pin_name"), R"(
+        py_gate.def("get_fan_in_net", py::overload_cast<const std::string&>(&Gate::get_fan_in_net, py::const_), py::arg("pin_name"), borrowed(), R"(
             Get the fan-in net corresponding to the input pin specified by name.
 
             :param str pin_name: The input pin name.
@@ -336,7 +336,7 @@ namespace hal
             :rtype: hal_py.Net or None
         )");
 
-        py_gate.def("get_fan_in_net", py::overload_cast<const GatePin*>(&Gate::get_fan_in_net, py::const_), py::arg("pin"), R"(
+        py_gate.def("get_fan_in_net", py::overload_cast<const GatePin*>(&Gate::get_fan_in_net, py::const_), py::arg("pin"), borrowed(), R"(
             Get the fan-in net corresponding to the specified input pin.
 
             :param hal_py.GatePin pin: The input pin.
@@ -352,20 +352,20 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate.def_property_readonly("fan_in_endpoints", py::overload_cast<>(&Gate::get_fan_in_endpoints, py::const_), R"(
+        py_gate.def_property_readonly("fan_in_endpoints", py::overload_cast<>(&Gate::get_fan_in_endpoints, py::const_), borrowed(), R"(
             A list of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
 
             :type: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_fan_in_endpoints", py::overload_cast<>(&Gate::get_fan_in_endpoints, py::const_), R"(
+        py_gate.def("get_fan_in_endpoints", py::overload_cast<>(&Gate::get_fan_in_endpoints, py::const_), borrowed(), R"(
             Get a list of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
 
             :returns: A list of all fan-in endpoints.
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_fan_in_endpoints", py::overload_cast<const std::function<bool(Endpoint*)>&>(&Gate::get_fan_in_endpoints, py::const_), py::arg("filter"), R"(
+        py_gate.def("get_fan_in_endpoints", py::overload_cast<const std::function<bool(Endpoint*)>&>(&Gate::get_fan_in_endpoints, py::const_), py::arg("filter"), borrowed(), R"(
             Get a list of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
             The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -374,7 +374,7 @@ namespace hal
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_fan_in_endpoint", py::overload_cast<const std::string&>(&Gate::get_fan_in_endpoint, py::const_), py::arg("pin_name"), R"(
+        py_gate.def("get_fan_in_endpoint", py::overload_cast<const std::string&>(&Gate::get_fan_in_endpoint, py::const_), py::arg("pin_name"), borrowed(), R"(
             Get the fan-in endpoint corresponding to the input pin specified by name.
 
             :param str pin_name: The input pin name.
@@ -382,7 +382,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def("get_fan_in_endpoint", py::overload_cast<const GatePin*>(&Gate::get_fan_in_endpoint, py::const_), py::arg("pin"), R"(
+        py_gate.def("get_fan_in_endpoint", py::overload_cast<const GatePin*>(&Gate::get_fan_in_endpoint, py::const_), py::arg("pin"), borrowed(), R"(
             Get the fan-in endpoint corresponding to the specified input pin.
 
             :param hal_py.GatePin pin: The input pin.
@@ -390,7 +390,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def("get_fan_in_endpoint", py::overload_cast<const Net*>(&Gate::get_fan_in_endpoint, py::const_), py::arg("net"), R"(
+        py_gate.def("get_fan_in_endpoint", py::overload_cast<const Net*>(&Gate::get_fan_in_endpoint, py::const_), py::arg("net"), borrowed(), R"(
             Get the fan-in endpoint connected to the specified input net.
 
             :param hal_py.Net net: The input net.
@@ -398,20 +398,20 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def_property_readonly("fan_out_nets", py::overload_cast<>(&Gate::get_fan_out_nets, py::const_), R"(
+        py_gate.def_property_readonly("fan_out_nets", py::overload_cast<>(&Gate::get_fan_out_nets, py::const_), borrowed(), R"(
             A list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
 
             :type: list[hal_py.Net]
         )");
 
-        py_gate.def("get_fan_out_nets", py::overload_cast<>(&Gate::get_fan_out_nets, py::const_), R"(
+        py_gate.def("get_fan_out_nets", py::overload_cast<>(&Gate::get_fan_out_nets, py::const_), borrowed(), R"(
             Get a list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
 
             :returns: A list of all fan-out nets.
             :rtype: list[hal_py.Net]
         )");
 
-        py_gate.def("get_fan_out_nets", py::overload_cast<const std::function<bool(Net*)>&>(&Gate::get_fan_out_nets, py::const_), py::arg("filter"), R"(
+        py_gate.def("get_fan_out_nets", py::overload_cast<const std::function<bool(Net*)>&>(&Gate::get_fan_out_nets, py::const_), py::arg("filter"), borrowed(), R"(
             Get a list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
             The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -420,7 +420,7 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
-        py_gate.def("get_fan_out_net", py::overload_cast<const std::string&>(&Gate::get_fan_out_net, py::const_), py::arg("pin_name"), R"(
+        py_gate.def("get_fan_out_net", py::overload_cast<const std::string&>(&Gate::get_fan_out_net, py::const_), py::arg("pin_name"), borrowed(), R"(
             Get the fan-out net corresponding to the output pin specified by name.
 
             :param str pin_name: The output pin name.
@@ -428,7 +428,7 @@ namespace hal
             :rtype: hal_py.Net or None
         )");
 
-        py_gate.def("get_fan_out_net", py::overload_cast<const GatePin*>(&Gate::get_fan_out_net, py::const_), py::arg("pin"), R"(
+        py_gate.def("get_fan_out_net", py::overload_cast<const GatePin*>(&Gate::get_fan_out_net, py::const_), py::arg("pin"), borrowed(), R"(
             Get the fan-out net corresponding to the specified output pin.
 
             :param hal_py.GatePin pin: The output pin.
@@ -444,20 +444,20 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate.def_property_readonly("fan_out_endpoints", py::overload_cast<>(&Gate::get_fan_out_endpoints, py::const_), R"(
+        py_gate.def_property_readonly("fan_out_endpoints", py::overload_cast<>(&Gate::get_fan_out_endpoints, py::const_), borrowed(), R"(
             A list of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
 
             :type: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_fan_out_endpoints", py::overload_cast<>(&Gate::get_fan_out_endpoints, py::const_), R"(
+        py_gate.def("get_fan_out_endpoints", py::overload_cast<>(&Gate::get_fan_out_endpoints, py::const_), borrowed(), R"(
             Get a list of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
 
             :returns: A list of all fan-out endpoints.
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_fan_out_endpoints", py::overload_cast<const std::function<bool(Endpoint*)>&>(&Gate::get_fan_out_endpoints, py::const_), py::arg("filter"), R"(
+        py_gate.def("get_fan_out_endpoints", py::overload_cast<const std::function<bool(Endpoint*)>&>(&Gate::get_fan_out_endpoints, py::const_), py::arg("filter"), borrowed(), R"(
             Get a list of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
             The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -466,7 +466,7 @@ namespace hal
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_fan_out_endpoint", py::overload_cast<const std::string&>(&Gate::get_fan_out_endpoint, py::const_), py::arg("pin_name"), R"(
+        py_gate.def("get_fan_out_endpoint", py::overload_cast<const std::string&>(&Gate::get_fan_out_endpoint, py::const_), py::arg("pin_name"), borrowed(), R"(
             Get the fan-out endpoint corresponding to the output pin specified by name.
 
             :param str pin_name: The output pin name.
@@ -474,7 +474,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def("get_fan_out_endpoint", py::overload_cast<const GatePin*>(&Gate::get_fan_out_endpoint, py::const_), py::arg("pin"), R"(
+        py_gate.def("get_fan_out_endpoint", py::overload_cast<const GatePin*>(&Gate::get_fan_out_endpoint, py::const_), py::arg("pin"), borrowed(), R"(
             Get the fan-out endpoint corresponding to the specified output pin.
 
             :param hal_py.GatePin pin: The output pin.
@@ -482,7 +482,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def("get_fan_out_endpoint", py::overload_cast<const Net*>(&Gate::get_fan_out_endpoint, py::const_), py::arg("net"), R"(
+        py_gate.def("get_fan_out_endpoint", py::overload_cast<const Net*>(&Gate::get_fan_out_endpoint, py::const_), py::arg("net"), borrowed(), R"(
             Get the fan-out endpoint connected to the specified output net.
 
             :param hal_py.Net net: The output net.
@@ -490,13 +490,13 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def_property_readonly("unique_predecessors", [](Gate* g) { return g->get_unique_predecessors(); }, R"(
+        py_gate.def_property_readonly("unique_predecessors", [](Gate* g) { return g->get_unique_predecessors(); }, borrowed(), R"(
             A list of all unique predecessor gates of the gate.
 
             :type: list[hal_py.Gate]
         )");
 
-        py_gate.def("get_unique_predecessors", &Gate::get_unique_predecessors, py::arg("filter") = nullptr, R"(
+        py_gate.def("get_unique_predecessors", &Gate::get_unique_predecessors, py::arg("filter") = nullptr, borrowed(), R"(
             Get a list of all unique predecessor gates of the gate.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -505,13 +505,13 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py_gate.def_property_readonly("predecessors", [](Gate* g) { return g->get_predecessors(); }, R"(
+        py_gate.def_property_readonly("predecessors", [](Gate* g) { return g->get_predecessors(); }, borrowed(), R"(
             A list of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate. 
 
             :type: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_predecessors", &Gate::get_predecessors, py::arg("filter") = nullptr, R"(
+        py_gate.def("get_predecessors", &Gate::get_predecessors, py::arg("filter") = nullptr, borrowed(), R"(
             Get a list of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate. 
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -520,7 +520,7 @@ namespace hal
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_predecessor", py::overload_cast<const std::string&>(&Gate::get_predecessor, py::const_), py::arg("pin_name"), R"(
+        py_gate.def("get_predecessor", py::overload_cast<const std::string&>(&Gate::get_predecessor, py::const_), py::arg("pin_name"), borrowed(), R"(
             Get a single direct predecessor endpoint that is connected to the input pin specified by name.
             Fails if there are no or more than one predecessors.
 
@@ -529,7 +529,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def("get_predecessor", py::overload_cast<const GatePin*>(&Gate::get_predecessor, py::const_), py::arg("pin"), R"(
+        py_gate.def("get_predecessor", py::overload_cast<const GatePin*>(&Gate::get_predecessor, py::const_), py::arg("pin"), borrowed(), R"(
             Get a single direct predecessor endpoint that is connected to the specified input pin.
             Fails if there are no or more than one predecessors.
 
@@ -538,13 +538,13 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def_property_readonly("unique_successors", [](Gate* g) { return g->get_unique_successors(); }, R"(
+        py_gate.def_property_readonly("unique_successors", [](Gate* g) { return g->get_unique_successors(); }, borrowed(), R"(
             A list of all unique successor gates of the gate.
 
             :type: list[hal_py.Gate]
         )");
 
-        py_gate.def("get_unique_successors", &Gate::get_unique_successors, py::arg("filter") = nullptr, R"(
+        py_gate.def("get_unique_successors", &Gate::get_unique_successors, py::arg("filter") = nullptr, borrowed(), R"(
             Get a list of all unique successor gates of the gate.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -553,13 +553,13 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py_gate.def_property_readonly("successors", [](Gate* g) { return g->get_successors(); }, R"(
+        py_gate.def_property_readonly("successors", [](Gate* g) { return g->get_successors(); }, borrowed(), R"(
             A list of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate. 
 
             :type: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_successors", &Gate::get_successors, py::arg("filter") = nullptr, R"(
+        py_gate.def("get_successors", &Gate::get_successors, py::arg("filter") = nullptr, borrowed(), R"(
             Get a list of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate. 
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -568,7 +568,7 @@ namespace hal
             :rtype: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_successor", py::overload_cast<const std::string&>(&Gate::get_successor, py::const_), py::arg("pin_name"), R"(
+        py_gate.def("get_successor", py::overload_cast<const std::string&>(&Gate::get_successor, py::const_), py::arg("pin_name"), borrowed(), R"(
             Get a single direct successor endpoint that is connected to the output pin specified by name.
             Fails if there are no or more than one successors.
 
@@ -577,7 +577,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def("get_successor", py::overload_cast<const GatePin*>(&Gate::get_successor, py::const_), py::arg("pin"), R"(
+        py_gate.def("get_successor", py::overload_cast<const GatePin*>(&Gate::get_successor, py::const_), py::arg("pin"), borrowed(), R"(
             Get a single direct successor endpoint that is connected to the output pin specified by name.
             Fails if there are no or more than one successors.
 

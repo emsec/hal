@@ -2,40 +2,95 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-* added Python bindings for `ProgramOptions`, `ProgramArguments`, and `FacExtensionInterface`
-* added Python bindings for the remaining functions of `plugin_manager` and exposed the `initialize` and `silent` parameters of `get_plugin_instance`
-* added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
-* fixed crash when passing a `nullptr` pin to `Net::remove_source` or `Net::remove_destination`, which is also reachable from Python
-* changed `Net` and `Gate` to identify a pin by pointer identity instead of by value when looking up an endpoint
-* GUI
-  * fixed the GUI hanging for minutes when a module with many gates is selected, `ModuleModel` emitted a row insert signal per item while the model was already being reset, which made the attached filter proxy remap its rows once per item
-  * fixed the GUI stalling when a large module is unfolded, the tree views measured every row individually and shaped the text of each gate name just to learn how tall the row is
-  * changed the module elements tree to not rebuild itself twice per selection change
-* sped up the evaluation of Boolean functions, `BooleanFunction::operator<` compared two functions by building and comparing their reverse polish notation strings, which the symbolic state hit on every variable lookup
-* added the HAWKEYE S-box database to the build directory so that it is found at runtime, and clarified that `identify_sbox` returning an empty string means no match rather than an error
-* removed the tests below `tests/python_binding`, which were neither referenced by the build nor by any workflow and called API that no longer exists
-* updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
-* fixed bug in code and comment editor: avoid hang ups when RegExp-search returns zero-length matches
-* added information to GUI setting file so that widgets position and size from previous session gets restored
-* added option to focus on pin in pin context menu
-* changed default order to 'descending' when creating a pin group via Python command
-* module pin groups
-  * fixed bug in pin model which must not crash when deleting a non-empty pin group
-  * fixed bug by disallowing deletion of group comprising a single pin with same name
+<!--
+  Entries are grouped by what they affect: Core, Boolean functions, Python bindings, Plugins (one
+  sub-heading per plugin), GUI, and Build and dependencies. Add a new entry under the group it
+  belongs to rather than at the top of the section, and create the group if it is not there yet.
+-->
+* Core
+  * fixed crash when passing a `nullptr` pin to `Net::remove_source` or `Net::remove_destination`, which is also reachable from Python
+  * changed `Net` and `Gate` to identify a pin by pointer identity instead of by value when looking up an endpoint
+  * progress and layout reporting
+    * added `ProgressScope` and `LayoutLocker` to the core, which report progress and suppress layout updates through the user interface plugin looked up at runtime, replacing the copies of `GuiLayoutLocker` in the dataflow analysis and module identification plugins
+    * added `UIPluginInterface::set_progress` and `plugin_manager::get_ui_plugin`, so that a plugin no longer needs to provide a `GuiExtensionInterface` and register a callback just to report its progress
+    * moved the progress bar of the dataflow analysis into the core as `user_feedback::ProgressPrinter`, which reports to the terminal and to the user interface at once and brackets the operation like a `ProgressScope` does, so that a plugin reports its progress once and reaches whoever is watching
+    * fixed the progress overlay of the graph view staying up until it is clicked away after a dataflow analysis that was started from a script instead of from the plugin dialog, only the dialog reported the analysis as finished although both report its progress
+    * fixed the progress overlay of the graph view never being dismissed after a module identification run, the call reporting the analysis as finished was commented out
+    * fixed the progress overlay of the graph view being dismissed while the layout updates deferred during a dataflow analysis were still being applied, which left the graph view showing its spinner
+  * program options
+    * added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
+  * gate library
+    * fixed reloading a gate library destroying the library a netlist was built against, which silently replaced every gate type of that netlist. Gate libraries are now owned through a `shared_ptr` and outlive both the netlists and the Python handles that refer to them
 * Boolean functions
+  * sped up `BooleanFunction::compute_truth_table` by evaluating 64 rows of the table at once instead of running a symbolic execution per row, which walks and simplifies the entire node list every single time. Applies to single-bit functions of bitwise operations whose variables are all part of the truth table, everything else keeps using the previous implementation
+  * raised the limit on the number of variables a truth table may be computed for from 10 to 20, see `BooleanFunction::MAX_TRUTH_TABLE_VARIABLES`
+  * sped up the evaluation of Boolean functions, `BooleanFunction::operator<` compared two functions by building and comparing their reverse polish notation strings, which the symbolic state hit on every variable lookup
   * fixed silent truncation of additions and subtractions, results of operands wider than 32 bit lost their upper bits
   * fixed `Eq` reporting a definite inequality when an undefined bit could have made the two values equal, it now reports an undefined result like the other comparisons do
   * added constant folding for the `Sdiv`, `Udiv`, `Srem` and `Urem` operations, which were not implemented and made evaluation of any function containing them fail, following the SMT-LIB definitions these operations are translated to
   * sped up evaluation with constant inputs by about 3x by folding the values directly instead of building a Boolean function per operation, which dominates the runtime of `compute_truth_table()` and thereby of the HAWKEYE S-box identification
   * added simplification rules for the word level operations, which the single-bit simplification through ABC cannot reach: extensions to the width the value already has, nested extensions and slices, slices that fall into one half of a concatenation or into either part of an extension, unsigned comparisons against zero and the maximum, equality of a value with its own negation, and single bit equalities and selections
-* plugins
+* Python bindings
+  * fixed the Python bindings handing out gates, nets, modules, endpoints and pins without tying them to the netlist that owns them, so that dropping the netlist left them pointing into freed memory. Reading 500 gates and 500 nets of a dropped netlist returned the wrong name and ID for 184 and 230 of them respectively, silently rather than by crashing
+  * fixed the decorators storing a reference to the netlist or net they were constructed from without keeping it alive
+  * fixed `NetlistGraph` never being freed by Python: its factories hand over ownership but it was bound with a non-owning holder, so every graph built from a netlist leaked, more than a gigabyte over 1500 graphs on a 3458 gate netlist
+  * fixed `GateLibrary::get_path` and the `path` property returning the name of the library instead of its path
+  * fixed `GuiApi::getSelectedModules` and `getSelectedItems` not tying the returned modules to the netlist
+  * added Python bindings for `NetlistGraph::from_gates`, `is_shadow_vertex`, and `get_all_vertices_from_gate`
+  * added Python bindings for `ProgramOptions`, `ProgramArguments`, and `FacExtensionInterface`
+  * added Python bindings for the remaining functions of `plugin_manager` and exposed the `initialize` and `silent` parameters of `get_plugin_instance`
+  * fixed `GateLibraryManager.get_gate_libraries` handing each library to Python as a newly constructed `shared_ptr` over a pointer it had only borrowed, which opened a second ownership group over a library the manager already owned and freed it twice
+  * fixed `Module.pins`, `Module.pin_groups` and `GateType.components` raising a `TypeError` whenever they were read, as each was bound to a method whose only parameter has a default in C++, which pybind11 exposes as a required argument that a property cannot pass
+  * added a test that calls every no-argument binding reachable from a small netlist and imports every plugin module, so that a binding which compiles and only fails when called is caught
+  * changed every binding that hands out a borrowed object to keep its **owner** alive rather than the object it was read from, through the new `hal::borrowed()` call policy that replaces `py::return_value_policy::reference_internal` at 241 places. The policy was only applied while a wrapper was being created, so whether an object was protected depended on which binding happened to hand it over first, and a module read from a gate was tied to that gate although the netlist is what owns it
+  * fixed `DataContainer`, `ProjectDirectory`, `hawkeye.DetectionConfiguration`, `hawkeye.SBoxDatabase` and `dataflow.Configuration` leaking every instance created from Python, as each was bound with a holder that never frees. `SBoxDatabase.from_file` leaked 25 KB per call, and `ProjectManager.get_project_directory` leaked a copy on every call, as pybind11 copies a returned reference by default
+  * fixed three enum values that were bound to a different value of their own enum, which made them indistinguishable from Python: `GateTypeProperty.fifo` was bound to `ram`, `module_identification.CandidateType.addition_offset` to `addition`, and `gui_extension_demo.ParameterType.Module` to `Gate`
+* Plugins
+  * HAWKEYE
+    * replaced `RegisterCandidate`, `RoundCandidate` and the free S-box functions of HAWKEYE with a single `CipherCandidate` that analyzes a candidate in place instead of copying it into a netlist of its own, so its gates and nets are the ones of the netlist under analysis and no longer have to be mapped back
+    * added `CipherCandidate::identify_sboxes` that identifies every S-box of a candidate at once and annotates it with the outcome, grouping the variants the search produces of one and the same S-box and leaving a group as soon as one of them matches
+    * added `CipherCandidate::create_modules` that writes a candidate back into the netlist as a module hierarchy of the candidate, its state register, and one submodule per identified S-box
+    * fixed the candidates of HAWKEYE being ordered by the addresses of their gates, which made the result of `detect_candidates` depend on where the gates of the netlist happened to be allocated and hence differ between runs of the same binary. Two candidates sharing size and input register could also compare equal and silently discard one another, which cost an entire candidate and the S-box identification that depended on it
+    * fixed `RegisterCandidate::operator==` never reporting a round-based candidate as equal to itself
+    * fixed the S-box search of HAWKEYE calling `std::includes` on the unsorted result of `get_unique_predecessors`, which decided by an order that is not guaranteed which inverters it drops from an S-box. This made the number of located S-boxes differ between runs of the same binary, 476 to 1508 across three runs of a netlist that holds 16
+    * fixed the round function of HAWKEYE walking every path from each flip-flop of the register rather than every gate, which is exponential in a cone of logic that reconverges. Computing it for a 514 flip-flop candidate took 179 seconds and now takes 0.21 seconds with an unchanged result
+    * fixed the linear independence check of HAWKEYE shifting by more than the width of its type for S-boxes of more than 6 bits, which is undefined and made the check operate on garbage for 7-bit and 8-bit S-boxes
+    * sped up the S-box identification of HAWKEYE by tabulating each output over the state and the control inputs together and reading the assignment of the control inputs out of that one table, instead of substituting the control values and tabulating anew for each of up to 256 assignments
+    * changed the round function of a HAWKEYE candidate to determine which flip-flops each of its gates depends on only when the S-box search asks for it, as that is the most expensive part of analyzing a candidate and nothing else reads the result
+    * fixed `SBoxDatabase::lookup` never terminating for an 8-bit S-box that is not contained in the database, as it counted the constant it adds to the outputs in a `u8`, which never reaches 256
+    * fixed `SBoxDatabase::store` reporting a failure although it had written the database, and made it report one if the file cannot be opened
+    * added a limit to the canonical form search behind an S-box lookup, which finishes quickly for a real S-box but does not terminate in reasonable time for a table that is close to linear, such as two 4-bit S-boxes glued into an 8-bit one by the surrounding logic
+    * added the HAWKEYE S-box database to the build directory so that it is found at runtime, and clarified that `identify_sbox` returning an empty string means no match rather than an error
+  * graph algorithm
+    * added `NetlistGraph::from_gates` that builds a graph from a subset of the gates of a netlist, optionally representing a gate by a primary and a shadow vertex so that feedback through it does not close a cycle
+  * dataflow analysis
+    * fixed broken initialization of DANA plugin when starting via CLI
+  * netlist preprocessing
+    * fixed `remove_redundant_gates` treating two flip-flops as duplicates although they start out at different values, as the fingerprint it groups them by covers the gate type and the fan-in but not the initial value, and flip-flops are merged on that fingerprint alone without the equivalence check that combinational gates get. This affects 11 of the 13 flip-flop types of the Xilinx UNISIM library, all of which carry an `INIT` value
+  * bit-order propagation
+    * fixed bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
   * simulation
     * added feature, selecting a waveform in viewer selects net in graph view as well
     * fixed bug in waveform viewer, make sure that deleting a controller causes closing the tab
-  * added 'hover over node' feature in dot viewer
-  * fixed broken initialization of DANA plugin when starting via CLI
+    * fixed the documentation of `NetlistSimulatorController::initialize`, which described the behaviour of the legacy `NetlistSimulator`: it claimed that no gates or clocks may be added afterwards and that `simulate` calls it automatically, neither of which holds since its body became empty
+  * dot viewer
+    * added 'hover over node' feature in dot viewer
+* GUI
+  * fixed the GUI hanging for minutes when a module with many gates is selected, `ModuleModel` emitted a row insert signal per item while the model was already being reset, which made the attached filter proxy remap its rows once per item
+  * fixed the GUI stalling when a large module is unfolded, the tree views measured every row individually and shaped the text of each gate name just to learn how tall the row is
+  * changed the module elements tree to not rebuild itself twice per selection change
+  * fixed bug in code and comment editor: avoid hang ups when RegExp-search returns zero-length matches
+  * added information to GUI setting file so that widgets position and size from previous session gets restored
+  * added option to focus on pin in pin context menu
+  * changed default order to 'descending' when creating a pin group via Python command
   * changed behavior of GUI plugin manager to keep only those plugins loaded which are requested by user
-  * fixed bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
+  * module pin groups
+    * fixed bug in pin model which must not crash when deleting a non-empty pin group
+    * fixed bug by disallowing deletion of group comprising a single pin with same name
+* Build and dependencies
+  * added a test that checks the Python bindings never hand out a borrowed pointer without keeping its owner alive, and never give a class bound with a non-owning holder to a factory that returns a `unique_ptr`. It covers plugins kept in a repository of their own as well
+  * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
+  * removed the tests below `tests/python_binding`, which were neither referenced by the build nor by any workflow and called API that no longer exists
 
 ## [4.5.0](v4.5.0) - 2025-09-23 12:00:00+02:00 (urgency: medium)
 * plugins

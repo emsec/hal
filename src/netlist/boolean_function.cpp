@@ -1,5 +1,7 @@
 #include "hal_core/netlist/boolean_function.h"
 
+#include <unordered_set>
+
 #include "hal_core/netlist/boolean_function/parser.h"
 #include "hal_core/netlist/boolean_function/simplification.h"
 #include "hal_core/netlist/boolean_function/symbolic_execution.h"
@@ -1286,6 +1288,148 @@ namespace hal
         return ERR(result.get_error());
     }
 
+    Result<std::vector<std::vector<BooleanFunction::Value>>> BooleanFunction::compute_truth_table_bitwise(const std::vector<std::string>& variables) const
+    {
+        // only single-bit bitwise logic is handled here, anything else falls back to the general implementation
+        if (this->size() != 1)
+        {
+            return ERR("not a single-bit function");
+        }
+        // Every variable has to be part of the truth table and every constant has to be Boolean, so that no value is
+        // ever unknown. The general implementation evaluates symbolically and therefore simplifies, which cancels
+        // correlated unknowns: `x ^ x` is zero to it even for an unknown `x`, while evaluating three-valued logic
+        // yields `X`. Refusing the cases that can produce an unknown keeps both implementations in agreement instead
+        // of trading a correct answer for a faster one.
+        const std::unordered_set<std::string> known_variables(variables.begin(), variables.end());
+        for (const auto& node : this->m_nodes)
+        {
+            if (node.size != 1)
+            {
+                return ERR("not a single-bit function");
+            }
+            switch (node.type)
+            {
+                case NodeType::And:
+                case NodeType::Or:
+                case NodeType::Not:
+                case NodeType::Xor:
+                    break;
+                case NodeType::Constant:
+                    if (node.constant.size() != 1 || (node.constant[0] != Value::ZERO && node.constant[0] != Value::ONE))
+                    {
+                        return ERR("constant is not Boolean");
+                    }
+                    break;
+                case NodeType::Variable:
+                    if (known_variables.find(node.variable) == known_variables.end())
+                    {
+                        return ERR("function has a variable that is not part of the truth table");
+                    }
+                    break;
+                default:
+                    return ERR("not a bitwise function");
+            }
+        }
+
+        // A row of the truth table is one assignment of the variables, and the value of variable i in row r is bit i
+        // of r. Instead of evaluating the function once per row, evaluate it once per 64 rows: every intermediate
+        // value becomes a 64-bit word holding that value for 64 consecutive rows at once, and a gate becomes a single
+        // bitwise instruction. No value can ever be unknown, as the checks above rejected every function that holds a
+        // variable outside the truth table or a constant that is not Boolean, so one word per value is enough and the
+        // operations are plain two-valued logic.
+
+        // the value of variable i within a chunk of 64 consecutive rows, which for i < 6 is a fixed pattern and for
+        // larger i is constant across the whole chunk
+        static constexpr u64 PATTERN[6] = {
+            0xAAAAAAAAAAAAAAAAull,
+            0xCCCCCCCCCCCCCCCCull,
+            0xF0F0F0F0F0F0F0F0ull,
+            0xFF00FF00FF00FF00ull,
+            0xFFFF0000FFFF0000ull,
+            0xFFFFFFFF00000000ull,
+        };
+
+        std::unordered_map<std::string, u32> variable_index;
+        for (u32 i = 0; i < variables.size(); i++)
+        {
+            variable_index[variables[i]] = i;
+        }
+
+        const u64 num_rows = u64(1) << variables.size();
+        std::vector<Value> result(num_rows, Value::ZERO);
+
+        std::vector<u64> stack;
+        stack.reserve(this->m_nodes.size());
+
+        for (u64 base = 0; base < num_rows; base += 64)
+        {
+            const u64 rows_in_chunk = std::min<u64>(64, num_rows - base);
+            const u64 chunk_mask    = (rows_in_chunk == 64) ? ~u64(0) : ((u64(1) << rows_in_chunk) - 1);
+
+            stack.clear();
+            for (const auto& node : this->m_nodes)
+            {
+                if (node.type == NodeType::Variable)
+                {
+                    const u32 i = variable_index.at(node.variable);
+                    stack.push_back((i < 6) ? PATTERN[i] : (((base >> i) & 1) ? ~u64(0) : u64(0)));
+                    continue;
+                }
+
+                if (node.type == NodeType::Constant)
+                {
+                    stack.push_back((node.constant[0] == Value::ONE) ? ~u64(0) : u64(0));
+                    continue;
+                }
+
+                const u16 arity = node.get_arity();
+                if (stack.size() < arity)
+                {
+                    return ERR("could not compute truth table: malformed node list");
+                }
+
+                if (node.type == NodeType::Not)
+                {
+                    const u64 a = stack.back();
+                    stack.pop_back();
+                    stack.push_back(~a);
+                    continue;
+                }
+
+                const u64 b = stack.back();
+                stack.pop_back();
+                const u64 a = stack.back();
+                stack.pop_back();
+
+                if (node.type == NodeType::And)
+                {
+                    stack.push_back(a & b);
+                }
+                else if (node.type == NodeType::Or)
+                {
+                    stack.push_back(a | b);
+                }
+                else    // NodeType::Xor
+                {
+                    stack.push_back(a ^ b);
+                }
+            }
+
+            if (stack.size() != 1)
+            {
+                return ERR("could not compute truth table: malformed node list");
+            }
+
+            const u64 out = stack.back() & chunk_mask;
+            for (u64 bit = 0; bit < rows_in_chunk; bit++)
+            {
+                result[base + bit] = (out & (u64(1) << bit)) ? Value::ONE : Value::ZERO;
+            }
+        }
+
+        return OK(std::vector<std::vector<Value>>({std::move(result)}));
+    }
+
     Result<std::vector<std::vector<BooleanFunction::Value>>> BooleanFunction::compute_truth_table(const std::vector<std::string>& ordered_variables, bool remove_unknown_variables) const
     {
         auto variable_names_in_function = this->get_variable_names();
@@ -1322,10 +1466,20 @@ namespace hal
             return OK(std::vector<std::vector<Value>>(1, std::vector<Value>(1 << variables.size(), Value::X)));
         }
 
-        // (4.2) safety-check in case the number of variables is too large to process
-        if (variables.size() > 10)
+        // (4.2) safety-check in case the number of variables is too large to process. Every additional variable
+        //       doubles the number of rows, so the limit bounds both the runtime and the size of the result.
+        if (variables.size() > MAX_TRUTH_TABLE_VARIABLES)
         {
-            return ERR("could not compute truth table for Boolean function '" + this->to_string() + "': unable to generate truth-table with more than 10 variables");
+            return ERR("could not compute truth table for Boolean function '" + this->to_string() + "': unable to generate truth-table with more than "
+                       + std::to_string(MAX_TRUTH_TABLE_VARIABLES) + " variables");
+        }
+
+        // (4.3) evaluate the whole truth table at once if the function only consists of bitwise operations on single
+        //       bits, which is what a function extracted from a gate-level subgraph looks like. The general path below
+        //       runs a symbolic execution per row, which walks and simplifies the entire node list every single time.
+        if (const auto res = compute_truth_table_bitwise(variables); res.is_ok())
+        {
+            return res;
         }
 
         std::vector<std::vector<Value>> truth_table(this->size(), std::vector<Value>(1 << variables.size(), Value::ZERO));

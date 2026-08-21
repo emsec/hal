@@ -217,7 +217,7 @@ namespace hal
                 :param str timing_stats_json: A JSON string containing timing statistics. Defaults to an empty string.
             )");
 
-        py_result.def("get_netlist", &module_identification::Result::get_netlist, R"(
+        py_result.def("get_netlist", &module_identification::Result::get_netlist, py::return_value_policy::reference, R"(
                 Get the netlist on which module identification has been performed.
 
                 :returns: The netlist.
@@ -279,7 +279,7 @@ namespace hal
                 }
             },
             py::arg("id"),
-            R"(
+            borrowed(), R"(
                 Get the gates of the candidate with the corresponding ID.
 
                 :param int id: The ID of the requested candidate.
@@ -310,14 +310,14 @@ namespace hal
                 :rtype: module_identification.VerifiedCandidate or None
             )");
 
-        py_result.def("get_all_gates", &module_identification::Result::get_all_gates, R"(
+        py_result.def("get_all_gates", &module_identification::Result::get_all_gates, borrowed(), R"(
                 Get all gates contained in any of the candidates.
 
                 :returns: A set of gates.
                 :rtype: set[hal_py.Gate]
             )");
 
-        py_result.def("get_all_verified_gates", &module_identification::Result::get_all_verified_gates, R"(
+        py_result.def("get_all_verified_gates", &module_identification::Result::get_all_verified_gates, borrowed(), R"(
                 Get all gates contained in any of the verified candidates.
 
                 :returns: A set of gates.
@@ -463,7 +463,7 @@ namespace hal
             )");
 
         py_candidate_type.value("addition", module_identification::CandidateType::addition, R"(Addition operation.)")
-            .value("addition_offset", module_identification::CandidateType::addition, R"(Addition with constant offset operation.)")
+            .value("addition_offset", module_identification::CandidateType::addition_offset, R"(Addition with constant offset operation.)")
             .value("subtraction", module_identification::CandidateType::subtraction, R"(Subtraction operation.)")
             .value("counter", module_identification::CandidateType::counter, R"(Counter operation.)")
             .value("negation", module_identification::CandidateType::negation, R"(Negation operation.)")
@@ -577,13 +577,13 @@ namespace hal
                 :type: list[list[hal_py.Net]]
             )");
 
-        py_verified_candidate.def_readwrite("output_nets", &module_identification::VerifiedCandidate::m_output_nets, R"(
+        py_verified_candidate.def_readwrite("output_nets", &module_identification::VerifiedCandidate::m_output_nets, borrowed(), R"(
                 A vector of output nets.
                 
                 :type: list[hal_py.Net]
             )");
 
-        py_verified_candidate.def_readwrite("control_signals", &module_identification::VerifiedCandidate::m_control_signals, R"(
+        py_verified_candidate.def_readwrite("control_signals", &module_identification::VerifiedCandidate::m_control_signals, borrowed(), R"(
                 A vector of control signal nets.
                 
                 :type: list[hal_py.Net]
@@ -601,25 +601,25 @@ namespace hal
                 :type: dict[dict[hal_py.Net, hal_py.BooleanFunction.Value], hal_py.BooleanFunction]
             )");
 
-        py_verified_candidate.def_readwrite("gates", &module_identification::VerifiedCandidate::m_gates, R"(
+        py_verified_candidate.def_readwrite("gates", &module_identification::VerifiedCandidate::m_gates, borrowed(), R"(
                 A vector of gates associated with the candidate.
                 
                 :type: list[hal_py.Gate]
             )");
 
-        py_verified_candidate.def_readwrite("base_gates", &module_identification::VerifiedCandidate::m_base_gates, R"(
+        py_verified_candidate.def_readwrite("base_gates", &module_identification::VerifiedCandidate::m_base_gates, borrowed(), R"(
                 A vector of base gates associated with the candidate.
                 
                 :type: list[hal_py.Gate]
             )");
 
-        py_verified_candidate.def_readwrite("total_input_nets", &module_identification::VerifiedCandidate::m_total_input_nets, R"(
+        py_verified_candidate.def_readwrite("total_input_nets", &module_identification::VerifiedCandidate::m_total_input_nets, borrowed(), R"(
                 A vector of all input nets to the gate subgraph, regardless of whether they appear in a word-level operation or not.
                 
                 :type: list[hal_py.Net]
             )");
 
-        py_verified_candidate.def_readwrite("total_output_nets", &module_identification::VerifiedCandidate::m_total_output_nets, R"(
+        py_verified_candidate.def_readwrite("total_output_nets", &module_identification::VerifiedCandidate::m_total_output_nets, borrowed(), R"(
                 A vector of all output nets of the subgraph, regardless of whether they appear in a word-level operation or not.
                 
                 :type: list[hal_py.Net]

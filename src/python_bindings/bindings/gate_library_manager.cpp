@@ -10,7 +10,7 @@ namespace hal
 
         py_gate_library_manager.def(
             "load",
-            [](std::filesystem::path file_path, bool reload) { return RawPtrWrapper<GateLibrary>(gate_library_manager::load(file_path, reload)); },
+            [](std::filesystem::path file_path, bool reload) { return gate_library_manager::get_owning(gate_library_manager::load(file_path, reload)); },
             py::arg("file_path"),
             py::arg("reload") = false,
             R"(
@@ -39,7 +39,7 @@ namespace hal
         )");
 
         py_gate_library_manager.def(
-            "get_gate_library", [](const std::string& file_name) { return RawPtrWrapper<GateLibrary>(gate_library_manager::get_gate_library(file_name)); }, py::arg("file_path"), R"(
+            "get_gate_library", [](const std::string& file_name) { return gate_library_manager::get_owning(gate_library_manager::get_gate_library(file_name)); }, py::arg("file_path"), R"(
             Get a gate library by file path. If no library with the given name is loaded, loading the gate library from file will be attempted.
 
             :param str file_path: The input path.
@@ -49,7 +49,7 @@ namespace hal
 
         py_gate_library_manager.def(
             "get_gate_library_by_name",
-            [](const std::string& lib_name) { return RawPtrWrapper<GateLibrary>(gate_library_manager::get_gate_library_by_name(lib_name)); },
+            [](const std::string& lib_name) { return gate_library_manager::get_owning(gate_library_manager::get_gate_library_by_name(lib_name)); },
             py::arg("lib_name"),
             R"(
             Get a gate library by name. If no library with the given name is loaded, ``None`` will be returned.
@@ -62,10 +62,14 @@ namespace hal
         py_gate_library_manager.def(
             "get_gate_libraries",
             [] {
-                std::vector<RawPtrWrapper<GateLibrary>> result;
-                for (auto lib : gate_library_manager::get_gate_libraries())
+                // get_gate_libraries hands out borrowed pointers, so ask the manager for the owning
+                // pointer of each. Constructing a shared_ptr from the borrowed one instead would
+                // open a second, independent ownership group over a library the manager already
+                // owns, and the library would be freed twice.
+                std::vector<std::shared_ptr<GateLibrary>> result;
+                for (const auto* lib : gate_library_manager::get_gate_libraries())
                 {
-                    result.emplace_back(lib);
+                    result.emplace_back(gate_library_manager::get_owning(lib));
                 }
                 return result;
             },

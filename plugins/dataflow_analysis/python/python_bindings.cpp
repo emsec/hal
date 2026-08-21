@@ -60,7 +60,7 @@ namespace hal
             :rtype: str
         )");
 
-        py::class_<dataflow::Configuration, RawPtrWrapper<dataflow::Configuration>> py_dataflow_configuration(m, "Configuration", R"(
+        py::class_<dataflow::Configuration> py_dataflow_configuration(m, "Configuration", R"(
             This class holds all information relevant for the configuration of a dataflow analysis run, including the netlist to analyze.
         )");
 
@@ -94,7 +94,7 @@ namespace hal
             :type: list[list[hal_py.Net]]
         )");
 
-        py_dataflow_configuration.def_readwrite("gate_types", &dataflow::Configuration::gate_types, R"(
+        py_dataflow_configuration.def_readwrite("gate_types", &dataflow::Configuration::gate_types, borrowed(), R"(
             The gate types to be grouped by dataflow analysis. Defaults to an empty set.
 
             :type: set[hal_py.GateType]
@@ -373,7 +373,7 @@ namespace hal
             Please note that this ID is not related to any other HAL ID.
         )");
 
-        py_dataflow_result.def("get_netlist", &dataflow::Result::get_netlist, R"(
+        py_dataflow_result.def("get_netlist", &dataflow::Result::get_netlist, py::return_value_policy::reference, R"(
             Get the netlist on which dataflow analysis has been performed.
 
             :returns: The netlist.
@@ -387,7 +387,7 @@ namespace hal
             :rtype: dict[int,set[hal_py.Gate]]
         )");
 
-        py_dataflow_result.def("get_gates", &dataflow::Result::get_gates, R"(
+        py_dataflow_result.def("get_gates", &dataflow::Result::get_gates, borrowed(), R"(
             Get all gates contained in any of the groups groups.
         
             :returns: A list of gates.
@@ -409,7 +409,7 @@ namespace hal
                 }
             },
             py::arg("group_id"),
-            R"(
+            borrowed(), R"(
             Get the gates of the specified group of sequential gates.
 
             :param int group_id: The ID of the group.
@@ -456,7 +456,7 @@ namespace hal
             },
             py::arg("group_id"),
             py::arg("type"),
-            R"(
+            borrowed(), R"(
             Get the control nets of the group with the given group ID that are connected to a pin of the specified type.
 
             :param int group_id: The group ID.
@@ -481,7 +481,7 @@ namespace hal
             },
             py::arg("gate"),
             py::arg("type"),
-            R"(
+            borrowed(), R"(
             Get the control nets of the given gate that are connected to a pin of the specified type.
 
             :param hal_py.Gate gate: The gate.
@@ -528,7 +528,7 @@ namespace hal
                 }
             },
             py::arg("gate"),
-            R"(
+            borrowed(), R"(
             Get the sequential successor gates of the given sequential gate.
 
             :param hal_py.Gate gate: The gate.
@@ -574,7 +574,7 @@ namespace hal
                 }
             },
             py::arg("gate"),
-            R"(
+            borrowed(), R"(
             Get the sequential predecessor gates of the given sequential gate.
 
             :param hal_py.Gate gate: The gate.
@@ -647,7 +647,7 @@ namespace hal
                 }
             },
             py::arg("group_ids") = std::unordered_set<u32>(),
-            R"(
+            borrowed(), R"(
                 Create modules for the dataflow analysis result.
 
                 :param set[int] group_ids: The group IDs to consider. If an empty set is provided, all groups will be considered. Defaults to an empty set.
@@ -675,7 +675,7 @@ namespace hal
             py::arg("module_suffixes"),
             py::arg("pin_prefixes"),
             py::arg("group_ids"),
-            R"(
+            borrowed(), R"(
                 Create modules for the dataflow analysis result.
 
                 :param dict[hal_py.GateType,str] module_suffixes: The suffixes to use for modules containing only gates of a specific gate type. Defaults to ``"module"`` for mixed and unspecified gate types.
@@ -705,7 +705,7 @@ namespace hal
             py::arg("module_suffixes"),
             py::arg("pin_prefixes"),
             py::arg("group_ids"),
-            R"(
+            borrowed(), R"(
                 Create modules for the dataflow analysis result.
 
                 :param dict[hal_py.GateTypeProperty,str] module_suffixes: The suffixes to use for modules containing only gates of a specific gate type. All gate types featuring the specified gate type property are considered, but the module must still be pure (i.e., all gates must be of the same type) for the suffix to be used. Defaults to ``"module"`` for mixed and unspecified gate types.

@@ -110,13 +110,13 @@ namespace hal
             :param str device_name: The name of the target device.
         )");
 
-        py_netlist.def_property_readonly("gate_library", [](Netlist* nl) { return RawPtrWrapper<const GateLibrary>(nl->get_gate_library()); }, R"(
+        py_netlist.def_property_readonly("gate_library", [](Netlist* nl) { return gate_library_manager::get_owning(nl->get_gate_library()); }, R"(
             The gate library associated with the netlist.
 
             :type: hal_py.GateLibrary
         )");
 
-        py_netlist.def("get_gate_library", [](Netlist* nl) { return RawPtrWrapper<const GateLibrary>(nl->get_gate_library()); }, R"(
+        py_netlist.def("get_gate_library", [](Netlist* nl) { return gate_library_manager::get_owning(nl->get_gate_library()); }, R"(
             Get the gate library associated with the netlist.
 
             :returns: The gate library.
@@ -164,7 +164,7 @@ namespace hal
                        py::arg("name"),
                        py::arg("x") = -1,
                        py::arg("y") = -1,
-                       R"(
+                       borrowed(), R"(
             Create a new gate and add it to the netlist.
 
             :param int gate_id: The unique ID of the gate.
@@ -182,7 +182,7 @@ namespace hal
                        py::arg("name"),
                        py::arg("x") = -1,
                        py::arg("y") = -1,
-                       R"(
+                       borrowed(), R"(
             Create a new gate and add it to the netlist.
             The ID of the gate is set automatically.
 
@@ -210,7 +210,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist.def("get_gate_by_id", &Netlist::get_gate_by_id, py::arg("gate_id"), R"(
+        py_netlist.def("get_gate_by_id", &Netlist::get_gate_by_id, py::arg("gate_id"), borrowed(), R"(
             Get the gate specified by the given ID.
 
             :param int gate_id: The unique ID of the gate.
@@ -218,20 +218,20 @@ namespace hal
             :rtype: hal_py.Gate or None
         )");
 
-        py_netlist.def_property_readonly("gates", py::overload_cast<>(&Netlist::get_gates, py::const_), R"(
+        py_netlist.def_property_readonly("gates", py::overload_cast<>(&Netlist::get_gates, py::const_), borrowed(), R"(
             All gates contained within the netlist.
 
             :type: list[hal_py.Gate]
         )");
 
-        py_netlist.def("get_gates", py::overload_cast<>(&Netlist::get_gates, py::const_), R"(
+        py_netlist.def("get_gates", py::overload_cast<>(&Netlist::get_gates, py::const_), borrowed(), R"(
             Get all gates contained within the netlist.
 
             :returns: A list of gates.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist.def("get_gates", py::overload_cast<const std::function<bool(const Gate*)>&>(&Netlist::get_gates, py::const_), py::arg("filter"), R"(
+        py_netlist.def("get_gates", py::overload_cast<const std::function<bool(const Gate*)>&>(&Netlist::get_gates, py::const_), py::arg("filter"), borrowed(), R"(
             Get all gates contained within the netlist.
             The filter is evaluated on every gate such that the result only contains gates matching the specified condition.
 
@@ -288,52 +288,52 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist.def_property_readonly("vcc_gates", &Netlist::get_vcc_gates, R"(
+        py_netlist.def_property_readonly("vcc_gates", &Netlist::get_vcc_gates, borrowed(), R"(
             All global VCC gates.
 
             :type: list[hal_py.Gate]
         )");
 
-        py_netlist.def("get_vcc_gates", &Netlist::get_vcc_gates, R"(
+        py_netlist.def("get_vcc_gates", &Netlist::get_vcc_gates, borrowed(), R"(
             Get all global VCC gates.
 
             :returns: A list of gates.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist.def_property_readonly("gnd_gates", &Netlist::get_gnd_gates, R"(
+        py_netlist.def_property_readonly("gnd_gates", &Netlist::get_gnd_gates, borrowed(), R"(
             All global GND gates.
 
             :type: list[hal_py.Gate]
         )");
 
-        py_netlist.def("get_gnd_gates", &Netlist::get_gnd_gates, R"(
+        py_netlist.def("get_gnd_gates", &Netlist::get_gnd_gates, borrowed(), R"(
             Get all global GND gates.
 
             :returns: A list of gates.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist.def_property_readonly("vcc_nets", &Netlist::get_vcc_nets, R"(
+        py_netlist.def_property_readonly("vcc_nets", &Netlist::get_vcc_nets, borrowed(), R"(
             All global VCC nets.
 
             :type: list[hal_py.Net]
         )");
 
-        py_netlist.def("get_vcc_nets", &Netlist::get_vcc_nets, R"(
+        py_netlist.def("get_vcc_nets", &Netlist::get_vcc_nets, borrowed(), R"(
             Get all global VCC nets.
 
             :returns: A list of nets.
             :rtype: list[hal_py.Net]
         )");
 
-        py_netlist.def_property_readonly("gnd_nets", &Netlist::get_gnd_nets, R"(
+        py_netlist.def_property_readonly("gnd_nets", &Netlist::get_gnd_nets, borrowed(), R"(
             All global GND nets.
 
             :type: list[hal_py.Net]
         )");
 
-        py_netlist.def("get_gnd_nets", &Netlist::get_gnd_nets, R"(
+        py_netlist.def("get_gnd_nets", &Netlist::get_gnd_nets, borrowed(), R"(
             Get all GND nets in the netlist.
 
             :returns: A list of nets.
@@ -348,7 +348,7 @@ namespace hal
             :rtype: int
         )");
 
-        py_netlist.def("create_net", py::overload_cast<const u32, const std::string&>(&Netlist::create_net), py::arg("net_id"), py::arg("name"), R"(
+        py_netlist.def("create_net", py::overload_cast<const u32, const std::string&>(&Netlist::create_net), py::arg("net_id"), py::arg("name"), borrowed(), R"(
             Create a new net and add it to the netlist.
 
             :param int net_id: The unique ID of the net.
@@ -357,7 +357,7 @@ namespace hal
             :rtype: hal_py.Net or None
         )");
 
-        py_netlist.def("create_net", py::overload_cast<const std::string&>(&Netlist::create_net), py::arg("name"), R"(
+        py_netlist.def("create_net", py::overload_cast<const std::string&>(&Netlist::create_net), py::arg("name"), borrowed(), R"(
             Create a new net and add it to the netlist.
             The ID of the net is set automatically.
 
@@ -382,7 +382,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist.def("get_net_by_id", &Netlist::get_net_by_id, py::arg("net_id"), R"(
+        py_netlist.def("get_net_by_id", &Netlist::get_net_by_id, py::arg("net_id"), borrowed(), R"(
             Get the net specified by the given ID.
 
             :param int net_id: The unique ID of the net.
@@ -390,20 +390,20 @@ namespace hal
             :rtype: hal_py.Net or None
         )");
 
-        py_netlist.def_property_readonly("nets", py::overload_cast<>(&Netlist::get_nets, py::const_), R"(
+        py_netlist.def_property_readonly("nets", py::overload_cast<>(&Netlist::get_nets, py::const_), borrowed(), R"(
             All nets contained within the netlist.
 
             :type: list[hal_py.Net]
         )");
 
-        py_netlist.def("get_nets", py::overload_cast<>(&Netlist::get_nets, py::const_), R"(
+        py_netlist.def("get_nets", py::overload_cast<>(&Netlist::get_nets, py::const_), borrowed(), R"(
             Get all nets contained within the netlist.
 
             :returns: A list of nets.
             :rtype: list[hal_py.Net]
         )");
 
-        py_netlist.def("get_nets", py::overload_cast<const std::function<bool(const Net*)>&>(&Netlist::get_nets, py::const_), py::arg("filter"), R"(
+        py_netlist.def("get_nets", py::overload_cast<const std::function<bool(const Net*)>&>(&Netlist::get_nets, py::const_), py::arg("filter"), borrowed(), R"(
             Get all nets contained within the netlist.<br>
             The filter is evaluated on every net such that the result only contains nets matching the specified condition.
 
@@ -460,26 +460,26 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist.def_property_readonly("global_input_nets", &Netlist::get_global_input_nets, R"(
+        py_netlist.def_property_readonly("global_input_nets", &Netlist::get_global_input_nets, borrowed(), R"(
             All global input nets.
 
             :type: list[hal_py.Net]
         )");
 
-        py_netlist.def("get_global_input_nets", &Netlist::get_global_input_nets, R"(
+        py_netlist.def("get_global_input_nets", &Netlist::get_global_input_nets, borrowed(), R"(
             Get all global input nets.
 
             :returns: A list of nets.
             :rtype: list[hal_py.Net]
         )");
 
-        py_netlist.def_property_readonly("global_output_nets", &Netlist::get_global_output_nets, R"(
+        py_netlist.def_property_readonly("global_output_nets", &Netlist::get_global_output_nets, borrowed(), R"(
             All global output nets.
 
             :type: list[hal_py.Net]
         )");
 
-        py_netlist.def("get_global_output_nets", &Netlist::get_global_output_nets, R"(
+        py_netlist.def("get_global_output_nets", &Netlist::get_global_output_nets, borrowed(), R"(
             Get all global output nets.
 
             :returns: A list of nets.
@@ -508,7 +508,7 @@ namespace hal
                        py::arg("name"),
                        py::arg("parent"),
                        py::arg("gates") = std::vector<Gate*>(),
-                       R"(
+                       borrowed(), R"(
             Create a new module and add it to the netlist.
 
             :param int module_id: The unique ID of the module.
@@ -524,7 +524,7 @@ namespace hal
                        py::arg("name"),
                        py::arg("parent"),
                        py::arg("gates") = std::vector<Gate*>(),
-                       R"(
+                       borrowed(), R"(
             Create a new module and add it to the netlist.
             The ID of the module is set automatically.
 
@@ -552,7 +552,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist.def("get_module_by_id", &Netlist::get_module_by_id, py::arg("module_id"), R"(
+        py_netlist.def("get_module_by_id", &Netlist::get_module_by_id, py::arg("module_id"), borrowed(), R"(
             Get the module specified by the given ID.
 
             :param int module_id: The unique ID of the module.
@@ -560,20 +560,20 @@ namespace hal
             :rtype: hal_py.Module
         )");
 
-        py_netlist.def_property_readonly("modules", py::overload_cast<>(&Netlist::get_modules, py::const_), R"(
+        py_netlist.def_property_readonly("modules", py::overload_cast<>(&Netlist::get_modules, py::const_), borrowed(), R"(
             All modules contained within the netlist, including the top module.
 
             :type: list[hal_py.Module]
         )");
 
-        py_netlist.def("get_modules", py::overload_cast<>(&Netlist::get_modules, py::const_), R"(
+        py_netlist.def("get_modules", py::overload_cast<>(&Netlist::get_modules, py::const_), borrowed(), R"(
             Get all modules contained within the netlist, including the top module.
 
             :returns: A list of modules.
             :rtype: list[hal_py.Module]
         )");
 
-        py_netlist.def("get_modules", py::overload_cast<const std::function<bool(const Module*)>&>(&Netlist::get_modules, py::const_), py::arg("filter"), R"(
+        py_netlist.def("get_modules", py::overload_cast<const std::function<bool(const Module*)>&>(&Netlist::get_modules, py::const_), py::arg("filter"), borrowed(), R"(
             Get all modules contained within the netlist, including the top module.
             The filter is evaluated on every module such that the result only contains modules matching the specified condition.
 
@@ -582,13 +582,13 @@ namespace hal
             :rtype: list[hal_py.Module]
         )");
 
-        py_netlist.def_property_readonly("top_module", &Netlist::get_top_module, R"(
+        py_netlist.def_property_readonly("top_module", &Netlist::get_top_module, borrowed(), R"(
             The top module of the netlist.
 
             :type: hal_py.Module
         )");
 
-        py_netlist.def("get_top_module", &Netlist::get_top_module, R"(
+        py_netlist.def("get_top_module", &Netlist::get_top_module, borrowed(), R"(
             Get the top module of the netlist.
 
             :returns: The top module.
@@ -607,7 +607,7 @@ namespace hal
                        py::overload_cast<const u32, const std::string&>(&Netlist::create_grouping),
                        py::arg("grouping_id"),
                        py::arg("name"),
-                       R"(
+                       borrowed(), R"(
             Create a new grouping and add it to the netlist.
 
             :param int grouping_id: The unique ID of the grouping.
@@ -619,7 +619,7 @@ namespace hal
         py_netlist.def("create_grouping",
                        py::overload_cast<const std::string&>(&Netlist::create_grouping),
                        py::arg("name"),
-                       R"(
+                       borrowed(), R"(
             Create a new grouping and add it to the netlist.
             The ID of the grouping is set automatically.
 
@@ -644,7 +644,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist.def("get_grouping_by_id", &Netlist::get_grouping_by_id, py::arg("grouping_id"), R"(
+        py_netlist.def("get_grouping_by_id", &Netlist::get_grouping_by_id, py::arg("grouping_id"), borrowed(), R"(
             Get the grouping specified by the given ID.
 
             :param int grouping_id: The unique ID of the grouping.
@@ -652,20 +652,20 @@ namespace hal
             :rtype: hal_py.Grouping
         )");
 
-        py_netlist.def_property_readonly("groupings", py::overload_cast<>(&Netlist::get_groupings, py::const_), R"(
+        py_netlist.def_property_readonly("groupings", py::overload_cast<>(&Netlist::get_groupings, py::const_), borrowed(), R"(
             All groupings contained within the netlist.
 
             :type: list[hal_py.Grouping]
         )");
 
-        py_netlist.def("get_groupings", py::overload_cast<>(&Netlist::get_groupings, py::const_), R"(
+        py_netlist.def("get_groupings", py::overload_cast<>(&Netlist::get_groupings, py::const_), borrowed(), R"(
             Get all groupings contained within the netlist.
 
             :returns: A list of groupings.
             :rtype: list[hal_py.Grouping]
         )");
 
-        py_netlist.def("get_groupings", py::overload_cast<const std::function<bool(const Grouping*)>&>(&Netlist::get_groupings, py::const_), py::arg("filter"), R"(
+        py_netlist.def("get_groupings", py::overload_cast<const std::function<bool(const Grouping*)>&>(&Netlist::get_groupings, py::const_), py::arg("filter"), borrowed(), R"(
             Get all groupings contained within the netlist.
             The filter is evaluated on every grouping such that the result only contains groupings matching the specified condition.
 
