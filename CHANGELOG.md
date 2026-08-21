@@ -73,6 +73,8 @@ All notable changes to this project will be documented in this file.
   * netlist preprocessing
     * fixed `remove_redundant_gates` treating two flip-flops as duplicates although they start out at different values, as the fingerprint it groups them by covers the gate type and the fan-in but not the initial value, and flip-flops are merged on that fingerprint alone without the equivalence check that combinational gates get. This affects 11 of the 13 flip-flop types of the Xilinx UNISIM library, all of which carry an `INIT` value
   * bit-order propagation
+    * changed the interface to speak in a `BitOrder`, which is the order of one module pin group, and a `BitOrderResult`, which is what a propagation reports, in place of a map from pairs of module and pin group to a map from net to index. A bit order is now an object rather than a container, so Python can be given one without losing track of the netlist it belongs to, and a result iterates by module and pin group ID rather than by the addresses they happen to sit at
+    * added tests for the plugin, which had none
     * fixed bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
   * simulation
     * added feature, selecting a waveform in viewer selects net in graph view as well

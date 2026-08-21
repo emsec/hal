@@ -108,27 +108,25 @@ namespace hal
             Fixture f = build_bus(4);
             ASSERT_NE(f.netlist, nullptr);
 
-            std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>> known;
-            std::map<Net*, u32> order;
-            for (u32 i = 0; i < f.bus.size(); i++)
-            {
-                order[f.bus.at(i)] = i;
-            }
-
             ASSERT_NE(f.src_pin_group, nullptr);
             ASSERT_NE(f.dst_pin_group, nullptr);
             ASSERT_EQ(f.src_pin_group->get_pins().size(), 4);
             ASSERT_EQ(f.dst_pin_group->get_pins().size(), 4);
 
-            known[{f.src_module, f.src_pin_group}] = order;
+            std::vector<std::pair<Net*, u32>> order;
+            for (u32 i = 0; i < f.bus.size(); i++)
+            {
+                order.push_back({f.bus.at(i), i});
+            }
+
+            bitorder_propagation::BitOrderResult known({bitorder_propagation::BitOrder(f.src_module, f.src_pin_group, order)});
 
             auto res = bitorder_propagation::propagate_module_pingroup_bitorder(known, {{f.dst_module, f.dst_pin_group}});
             ASSERT_TRUE(res.is_ok());
 
-            const auto& all = res.get();
-            const auto it   = all.find({f.dst_module, f.dst_pin_group});
-            ASSERT_NE(it, all.end());
-            EXPECT_EQ(it->second, order);
+            const auto* propagated = res.get().get(f.dst_module, f.dst_pin_group);
+            ASSERT_NE(propagated, nullptr);
+            EXPECT_EQ(propagated->get_order(), order);
         }
         TEST_END
     }
@@ -151,38 +149,33 @@ namespace hal
                 ASSERT_NE(f.netlist, nullptr);
                 ASSERT_NE(f.src_pin_group, nullptr);
 
-                std::map<Net*, u32> order;
+                std::vector<std::pair<Net*, u32>> order;
                 for (u32 i = 0; i < f.bus.size(); i++)
                 {
-                    order[f.bus.at(i)] = indices.at(i);
+                    order.push_back({f.bus.at(i), indices.at(i)});
                 }
 
-                std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>> known;
-                known[{f.src_module, f.src_pin_group}] = order;
+                bitorder_propagation::BitOrderResult known({bitorder_propagation::BitOrder(f.src_module, f.src_pin_group, order)});
+                EXPECT_FALSE(known.get_bit_orders().front().is_continuous());
 
                 auto res = bitorder_propagation::propagate_module_pingroup_bitorder(known, {{f.dst_module, f.dst_pin_group}}, enforce_continuous);
                 ASSERT_TRUE(res.is_ok());
 
-                const auto& all = res.get();
-                const auto it   = all.find({f.dst_module, f.dst_pin_group});
+                const auto* propagated = res.get().get(f.dst_module, f.dst_pin_group);
 
                 if (enforce_continuous)
                 {
                     // The hole makes the order invalid, so nothing is reconstructed for the destination.
-                    EXPECT_EQ(it, all.end());
+                    EXPECT_EQ(propagated, nullptr);
                 }
                 else
                 {
                     // The destination is reconstructed, and its indices come out continuous even so:
                     // what the flag permits is accepting an order with a hole in it as input, not
                     // carrying that hole over to what is reconstructed from it.
-                    ASSERT_NE(it, all.end());
-                    std::set<u32> reconstructed;
-                    for (const auto& [_, index] : it->second)
-                    {
-                        reconstructed.insert(index);
-                    }
-                    EXPECT_EQ(reconstructed, std::set<u32>({0, 1, 2, 3}));
+                    ASSERT_NE(propagated, nullptr);
+                    EXPECT_TRUE(propagated->is_continuous());
+                    EXPECT_EQ(propagated->get_size(), 4);
                 }
             }
         }
@@ -202,23 +195,23 @@ namespace hal
             ASSERT_NE(f.netlist, nullptr);
             ASSERT_NE(f.src_pin_group, nullptr);
 
-            std::map<Net*, u32> order;
+            std::vector<std::pair<Net*, u32>> order;
             for (u32 i = 0; i < f.bus.size(); i++)
             {
-                order[f.bus.at(i)] = i;
+                order.push_back({f.bus.at(i), i});
             }
 
-            std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>> known;
-            known[{f.src_module, f.src_pin_group}] = order;
+            bitorder_propagation::BitOrderResult known({bitorder_propagation::BitOrder(f.src_module, f.src_pin_group, order)});
 
             auto res = bitorder_propagation::propagate_module_pingroup_bitorder(known, {{f.dst_module, f.dst_pin_group}});
             ASSERT_TRUE(res.is_ok());
 
             // The result carries the orders that were already known as well as the ones just found.
             const auto& all = res.get();
-            const auto it   = all.find({f.src_module, f.src_pin_group});
-            ASSERT_NE(it, all.end());
-            EXPECT_EQ(it->second, order);
+            EXPECT_EQ(all.get_size(), 2);
+            const auto* reported = all.get(f.src_module, f.src_pin_group);
+            ASSERT_NE(reported, nullptr);
+            EXPECT_EQ(reported->get_order(), order);
         }
         TEST_END
     }
@@ -236,14 +229,13 @@ namespace hal
             ASSERT_NE(f.netlist, nullptr);
             ASSERT_NE(f.dst_pin_group, nullptr);
 
-            std::map<Net*, u32> order;
+            std::vector<std::pair<Net*, u32>> order;
             for (u32 i = 0; i < f.bus.size(); i++)
             {
-                order[f.bus.at(i)] = i;
+                order.push_back({f.bus.at(i), i});
             }
 
-            std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>> to_apply;
-            to_apply[{f.dst_module, f.dst_pin_group}] = order;
+            bitorder_propagation::BitOrderResult to_apply({bitorder_propagation::BitOrder(f.dst_module, f.dst_pin_group, order)});
 
             auto res = bitorder_propagation::reorder_module_pin_groups(to_apply);
             ASSERT_TRUE(res.is_ok());
@@ -276,14 +268,13 @@ namespace hal
             ASSERT_NE(f.netlist, nullptr);
             ASSERT_NE(f.src_pin_group, nullptr);
 
-            std::map<Net*, u32> order;
+            std::vector<std::pair<Net*, u32>> order;
             for (u32 i = 0; i < f.bus.size(); i++)
             {
-                order[f.bus.at(i)] = i;
+                order.push_back({f.bus.at(i), i});
             }
 
-            std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>> known;
-            known[{f.src_module, f.src_pin_group}] = order;
+            bitorder_propagation::BitOrderResult known({bitorder_propagation::BitOrder(f.src_module, f.src_pin_group, order)});
 
             const std::string path = test_utils::create_sandbox_path("bitorder_export.json").string();
             auto res               = bitorder_propagation::export_bitorder_propagation_information(known, {{f.dst_module, f.dst_pin_group}}, path);
