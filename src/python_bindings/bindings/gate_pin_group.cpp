@@ -81,7 +81,7 @@ namespace hal
             :rtype: hal_py.PinType
         )");
 
-        py_gate_pin_group.def_property_readonly("pins", [](const PinGroup<GatePin>& self) -> std::vector<GatePin*> { return self.get_pins(nullptr); }, borrowed(), R"(
+        py_gate_pin_group.def_property_readonly("pins", py::cpp_function([](const PinGroup<GatePin>& self) -> std::vector<GatePin*> { return self.get_pins(nullptr); }, py::is_method(py_gate_pin_group), borrowed()), R"(
             The (ordered) pins of the pin groups.
 
             :type: list[hal_py.GatePin]

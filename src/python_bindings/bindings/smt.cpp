@@ -14,7 +14,16 @@ namespace hal
 
         py_smt_solver_type.value("Z3", SMT::SolverType::Z3, R"(Z3 SMT solver.)")
             .value("Boolector", SMT::SolverType::Boolector, R"(Boolector SMT solver.)")
+            .value("Bitwuzla", SMT::SolverType::Bitwuzla, R"(Bitwuzla SMT solver.)")
             .value("Unknown", SMT::SolverType::Unknown, R"(Unknown (unsupported) SMT solver.)")
+            .export_values();
+
+        py::enum_<SMT::SolverCall> py_smt_solver_call(py_smt, "SolverCall", R"(
+            Identifier for how the SMT solver is invoked.
+        )");
+
+        py_smt_solver_call.value("Binary", SMT::SolverCall::Binary, R"(Call the solver binary in a subprocess.)")
+            .value("Library", SMT::SolverCall::Library, R"(Call the solver through the library linked into HAL.)")
             .export_values();
 
         py::class_<SMT::QueryConfig> py_smt_query_config(py_smt, "QueryConfig", R"(
@@ -422,6 +431,26 @@ namespace hal
             :rtype: hal_py.SMT.Result or str
         )");
 
+        py_smt_solver.def(
+            "to_smt2",
+            [](const SMT::Solver& self, const SMT::QueryConfig& config) -> std::optional<std::string> {
+                auto res = self.to_smt2(config);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                log_error("python_context", "{}", res.get_error().get());
+                return std::nullopt;
+            },
+            py::arg("config"),
+            R"(
+            Translate the constraints of the solver into an smt2 representation of the query.
+
+            :param hal_py.SMT.QueryConfig config: The SMT solver query configuration.
+            :returns: The smt2 representation on success, ``None`` otherwise.
+            :rtype: str or None
+        )");
+
         py_smt_solver.def_static(
             "query_local_with_smt2",
             [](const SMT::QueryConfig& config, const std::string& smt2) -> std::optional<SMT::SolverResult> {
@@ -498,20 +527,44 @@ namespace hal
             :param list[hal_py.BooleanFunction] variables: The (optional) list of variables.
         )");
 
-        py_smt_symbolic_execution.def("evaluate", py::overload_cast<const BooleanFunction&>(&SMT::SymbolicExecution::evaluate, py::const_), py::arg("function"), R"(
+        py_smt_symbolic_execution.def(
+            "evaluate",
+            [](const SMT::SymbolicExecution& self, const BooleanFunction& function) -> std::optional<BooleanFunction> {
+                auto res = self.evaluate(function);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                log_error("python_context", "{}", res.get_error().get());
+                return std::nullopt;
+            },
+            py::arg("function"),
+            R"(
             Evaluates a Boolean function within the symbolic state of the symbolic execution.
 
             :param hal_py.BooleanFunction function: The Boolean function to evaluate.
-            :returns: The evaluated Boolean function on success, a string error message otherwise.
-            :rtype: hal_py.BooleanFunction or str
+            :returns: The evaluated Boolean function on success, ``None`` otherwise.
+            :rtype: hal_py.BooleanFunction or None
         )");
 
-        py_smt_symbolic_execution.def("evaluate", py::overload_cast<const SMT::Constraint&>(&SMT::SymbolicExecution::evaluate), py::arg("constraint"), R"(
+        py_smt_symbolic_execution.def(
+            "evaluate",
+            [](SMT::SymbolicExecution& self, const SMT::Constraint& constraint) -> bool {
+                auto res = self.evaluate(constraint);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                log_error("python_context", "{}", res.get_error().get());
+                return false;
+            },
+            py::arg("constraint"),
+            R"(
             Evaluates an equality constraint and applies it to the symbolic state of the symbolic execution.
 
             :param hal_py.SMT.Constraint constraint: The equality constraint to evaluate.
-            :returns: ``None`` on success, a string error message otherwise.
-            :rtype: None or str
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
         )");
     }
 }    // namespace hal

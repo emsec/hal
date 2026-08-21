@@ -30,6 +30,7 @@
 
 #pragma once
 
+#include "bitorder_propagation/bit_order.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/pins/pin_group.h"
 #include "hal_core/utilities/result.h"
@@ -59,8 +60,8 @@ namespace hal
          * @param[in] enforce_continuous_bitorders - Set `true` to only allow for continuous bit orders, `false` to also allow bit orders that are not continuous. Defaults to `true`.
          * @returns OK and a map containing all known bit orders (including new and already known ones) on success, an error otherwise.
          */
-        Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>>
-            propagate_module_pingroup_bitorder(const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& src,
+        Result<BitOrderResult>
+            propagate_module_pingroup_bitorder(const BitOrderResult& src,
                                                const std::set<std::pair<Module*, PinGroup<ModulePin>*>>& dst,
                                                const bool enforce_continuous_bitorders = true);
 
@@ -70,7 +71,7 @@ namespace hal
          * @param[in] ordered_module_pin_groups - A mapping from pairs of modules and their pin groups to known bit-order information given as a mapping from nets to their index.
          * @returns OK on success, an error otherwise.
          */
-        Result<std::monostate> reorder_module_pin_groups(const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& ordered_module_pin_groups);
+        Result<std::monostate> reorder_module_pin_groups(const BitOrderResult& ordered_module_pin_groups);
 
         /**
          * @brief Propagate known bit-order information from one module pin group to another module pin group of unknown bit order.
@@ -84,7 +85,7 @@ namespace hal
          * @param[in] dst - The pair of module ID and pin group name with unknown bit order.
          * @returns OK and a map containing all known bit orders (including new and already known ones) on success, an error otherwise.
          */
-        Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> propagate_bitorder(Netlist* nl, const std::pair<u32, std::string>& src, const std::pair<u32, std::string>& dst);
+        Result<BitOrderResult> propagate_bitorder(Netlist* nl, const std::pair<u32, std::string>& src, const std::pair<u32, std::string>& dst);
 
         /**
          * @brief Propagate known bit-order information from one module pin group to another module pin group of unknown bit order.
@@ -97,7 +98,7 @@ namespace hal
          * @param[in] dst - The pair of module and pin group with unknown bit order.
          * @returns OK and a map containing all known bit orders (including new and already known ones) on success, an error otherwise.
          */
-        Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> propagate_bitorder(const std::pair<Module*, PinGroup<ModulePin>*>& src,
+        Result<BitOrderResult> propagate_bitorder(const std::pair<Module*, PinGroup<ModulePin>*>& src,
                                                                                                            const std::pair<Module*, PinGroup<ModulePin>*>& dst);
 
         /**
@@ -112,7 +113,7 @@ namespace hal
          * @param[in] dst - The pairs of module ID and pin group name with unknown bit order.
          * @returns OK and a map containing all known bit orders (including new and already known ones) on success, an error otherwise.
          */
-        Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>>
+        Result<BitOrderResult>
             propagate_bitorder(Netlist* nl, const std::vector<std::pair<u32, std::string>>& src, const std::vector<std::pair<u32, std::string>>& dst);
 
         /**
@@ -126,7 +127,7 @@ namespace hal
          * @param[in] dst - The pairs of module and pin group with unknown bit order.
          * @returns OK and a map containing all known bit orders (including new and already known ones) on success, an error otherwise.
          */
-        Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> propagate_bitorder(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
+        Result<BitOrderResult> propagate_bitorder(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
                                                                                                            const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& dst);
 
         /**
@@ -137,7 +138,7 @@ namespace hal
          * @param[in] export_filepath - The filepath where the `.json` file should be written to.
          * @returns OK and a map containing all known bit orders (including new and already known ones) on success, an error otherwise.
          */
-        Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, u32>> export_bitorder_propagation_information(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
+        Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, WordIndex>> export_bitorder_propagation_information(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
                                                                                                                 const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& dst,
                                                                                                                 const std::string& export_filepath);
         /** 
@@ -148,7 +149,7 @@ namespace hal
          * @param[in] export_filepath - The filepath where the `.json` file should be written to.
          * @returns OK and the mapping from each mdoule/pingroup pair to its index on success, an error otherwise.
          */
-        Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, u32>> export_bitorder_propagation_information(const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& src,
+        Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, WordIndex>> export_bitorder_propagation_information(const BitOrderResult& src,
                                                                                                                 const std::set<std::pair<Module*, PinGroup<ModulePin>*>>& dst,
                                                                                                                 const std::string& export_filepath);
 

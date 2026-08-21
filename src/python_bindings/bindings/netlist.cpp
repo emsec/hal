@@ -218,7 +218,7 @@ namespace hal
             :rtype: hal_py.Gate or None
         )");
 
-        py_netlist.def_property_readonly("gates", py::overload_cast<>(&Netlist::get_gates, py::const_), borrowed(), R"(
+        py_netlist.def_property_readonly("gates", py::cpp_function(py::overload_cast<>(&Netlist::get_gates, py::const_), py::is_method(py_netlist), borrowed()), R"(
             All gates contained within the netlist.
 
             :type: list[hal_py.Gate]
@@ -288,7 +288,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist.def_property_readonly("vcc_gates", &Netlist::get_vcc_gates, borrowed(), R"(
+        py_netlist.def_property_readonly("vcc_gates", py::cpp_function(&Netlist::get_vcc_gates, py::is_method(py_netlist), borrowed()), R"(
             All global VCC gates.
 
             :type: list[hal_py.Gate]
@@ -301,7 +301,7 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist.def_property_readonly("gnd_gates", &Netlist::get_gnd_gates, borrowed(), R"(
+        py_netlist.def_property_readonly("gnd_gates", py::cpp_function(&Netlist::get_gnd_gates, py::is_method(py_netlist), borrowed()), R"(
             All global GND gates.
 
             :type: list[hal_py.Gate]
@@ -314,7 +314,7 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist.def_property_readonly("vcc_nets", &Netlist::get_vcc_nets, borrowed(), R"(
+        py_netlist.def_property_readonly("vcc_nets", py::cpp_function(&Netlist::get_vcc_nets, py::is_method(py_netlist), borrowed()), R"(
             All global VCC nets.
 
             :type: list[hal_py.Net]
@@ -327,7 +327,7 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
-        py_netlist.def_property_readonly("gnd_nets", &Netlist::get_gnd_nets, borrowed(), R"(
+        py_netlist.def_property_readonly("gnd_nets", py::cpp_function(&Netlist::get_gnd_nets, py::is_method(py_netlist), borrowed()), R"(
             All global GND nets.
 
             :type: list[hal_py.Net]
@@ -390,7 +390,7 @@ namespace hal
             :rtype: hal_py.Net or None
         )");
 
-        py_netlist.def_property_readonly("nets", py::overload_cast<>(&Netlist::get_nets, py::const_), borrowed(), R"(
+        py_netlist.def_property_readonly("nets", py::cpp_function(py::overload_cast<>(&Netlist::get_nets, py::const_), py::is_method(py_netlist), borrowed()), R"(
             All nets contained within the netlist.
 
             :type: list[hal_py.Net]
@@ -460,7 +460,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist.def_property_readonly("global_input_nets", &Netlist::get_global_input_nets, borrowed(), R"(
+        py_netlist.def_property_readonly("global_input_nets", py::cpp_function(&Netlist::get_global_input_nets, py::is_method(py_netlist), borrowed()), R"(
             All global input nets.
 
             :type: list[hal_py.Net]
@@ -473,7 +473,7 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
-        py_netlist.def_property_readonly("global_output_nets", &Netlist::get_global_output_nets, borrowed(), R"(
+        py_netlist.def_property_readonly("global_output_nets", py::cpp_function(&Netlist::get_global_output_nets, py::is_method(py_netlist), borrowed()), R"(
             All global output nets.
 
             :type: list[hal_py.Net]
@@ -560,7 +560,7 @@ namespace hal
             :rtype: hal_py.Module
         )");
 
-        py_netlist.def_property_readonly("modules", py::overload_cast<>(&Netlist::get_modules, py::const_), borrowed(), R"(
+        py_netlist.def_property_readonly("modules", py::cpp_function(py::overload_cast<>(&Netlist::get_modules, py::const_), py::is_method(py_netlist), borrowed()), R"(
             All modules contained within the netlist, including the top module.
 
             :type: list[hal_py.Module]
@@ -582,7 +582,7 @@ namespace hal
             :rtype: list[hal_py.Module]
         )");
 
-        py_netlist.def_property_readonly("top_module", &Netlist::get_top_module, borrowed(), R"(
+        py_netlist.def_property_readonly("top_module", py::cpp_function(&Netlist::get_top_module, py::is_method(py_netlist), borrowed()), R"(
             The top module of the netlist.
 
             :type: hal_py.Module
@@ -652,7 +652,7 @@ namespace hal
             :rtype: hal_py.Grouping
         )");
 
-        py_netlist.def_property_readonly("groupings", py::overload_cast<>(&Netlist::get_groupings, py::const_), borrowed(), R"(
+        py_netlist.def_property_readonly("groupings", py::cpp_function(py::overload_cast<>(&Netlist::get_groupings, py::const_), py::is_method(py_netlist), borrowed()), R"(
             All groupings contained within the netlist.
 
             :type: list[hal_py.Grouping]

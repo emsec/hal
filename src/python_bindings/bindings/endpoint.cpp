@@ -8,7 +8,7 @@ namespace hal
             An endpoint comprises the pin of a gate, the respective gate, and the connected net.
         )");
 
-        py_endpoint.def_property_readonly("gate", &Endpoint::get_gate, borrowed(), R"(
+        py_endpoint.def_property_readonly("gate", py::cpp_function(&Endpoint::get_gate, py::is_method(py_endpoint), borrowed()), R"(
             The gate associated with the endpoint.
 
             :type: hal_py.Gate
@@ -35,7 +35,7 @@ namespace hal
             :rtype: hal_py.Gate
         )");
 
-        py_endpoint.def_property_readonly("pin", &Endpoint::get_pin, borrowed(), R"(
+        py_endpoint.def_property_readonly("pin", py::cpp_function(&Endpoint::get_pin, py::is_method(py_endpoint), borrowed()), R"(
             The pin associated with the endpoint.
 
             :type: hal_py.GatePin
@@ -48,7 +48,7 @@ namespace hal
             :rtype: hal_py.GatePin
         )");
 
-        py_endpoint.def_property_readonly("net", &Endpoint::get_net, borrowed(), R"(
+        py_endpoint.def_property_readonly("net", py::cpp_function(&Endpoint::get_net, py::is_method(py_endpoint), borrowed()), R"(
             The net associated with the endpoint.
 
             :type: hal_py.Net

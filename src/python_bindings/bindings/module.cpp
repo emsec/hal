@@ -118,7 +118,7 @@ namespace hal
             :rtype: hal_py.Module or None
         )");
 
-        py_module.def_property_readonly("parent_modules", [](Module* mod) { return mod->get_parent_modules(); }, borrowed(), R"(
+        py_module.def_property_readonly("parent_modules", py::cpp_function([](Module* mod) { return mod->get_parent_modules(); }, py::is_method(py_module), borrowed()), R"(
             The parent modules of this module.
 
             :type: list[hal_py.Module]
@@ -153,7 +153,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def_property_readonly("submodules", [](Module* mod) { return mod->get_submodules(); }, borrowed(), R"(
+        py_module.def_property_readonly("submodules", py::cpp_function([](Module* mod) { return mod->get_submodules(); }, py::is_method(py_module), borrowed()), R"(
             A list of all direct submodules of this module.
 
             :type: list[hal_py.Module]
@@ -232,7 +232,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def_property_readonly("nets", py::overload_cast<>(&Module::get_nets, py::const_), borrowed(), R"(
+        py_module.def_property_readonly("nets", py::cpp_function(py::overload_cast<>(&Module::get_nets, py::const_), py::is_method(py_module), borrowed()), R"(
             An unordered set of all nets that have at least one source or one destination within the module.
 
             :type: set[hal_py.Net]
@@ -256,7 +256,7 @@ namespace hal
             :rtype: set[hal_py.Net]
         )");
 
-        py_module.def_property_readonly("input_nets", &Module::get_input_nets, borrowed(), R"(
+        py_module.def_property_readonly("input_nets", py::cpp_function(&Module::get_input_nets, py::is_method(py_module), borrowed()), R"(
             A set of all nets that are either a global input to the netlist or have at least one source outside of the module.
 
             :type: set[hal_py.Net]
@@ -269,7 +269,7 @@ namespace hal
             :rtype: set[hal_py.Net]
         )");
 
-        py_module.def_property_readonly("output_nets", &Module::get_output_nets, borrowed(), R"(
+        py_module.def_property_readonly("output_nets", py::cpp_function(&Module::get_output_nets, py::is_method(py_module), borrowed()), R"(
             A set of all nets that are either a global output to the netlist or have at least one destination outside of the module.
 
             :type: set[hal_py.Net]
@@ -282,7 +282,7 @@ namespace hal
             :rtype: set[hal_py.Net]
         )");
 
-        py_module.def_property_readonly("internal_nets", &Module::get_internal_nets, borrowed(), R"(
+        py_module.def_property_readonly("internal_nets", py::cpp_function(&Module::get_internal_nets, py::is_method(py_module), borrowed()), R"(
             A set of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
 
             :type: set[hal_py.Net]
@@ -375,7 +375,7 @@ namespace hal
             :rtype: hal_py.Gate or None
         )");
 
-        py_module.def_property_readonly("gates", py::overload_cast<>(&Module::get_gates, py::const_), borrowed(), R"(
+        py_module.def_property_readonly("gates", py::cpp_function(py::overload_cast<>(&Module::get_gates, py::const_), py::is_method(py_module), borrowed()), R"(
             The list of all gates contained within the module.
 
             :type: list[hal_py.Gate]
@@ -491,7 +491,7 @@ namespace hal
         )");
 
         py_module.def_property_readonly(
-            "pins", [](const Module& self) { return self.get_pins(); }, borrowed(), R"(
+            "pins", py::cpp_function([](const Module& self) { return self.get_pins(); }, py::is_method(py_module), borrowed()), R"(
             The (ordered) pins of the module.
 
             :type: list[hal_py.ModulePin]
@@ -525,7 +525,7 @@ namespace hal
             :rtype: list[str]
         )");
 
-        py_module.def_property_readonly("input_pins", &Module::get_input_pins, borrowed(), R"(
+        py_module.def_property_readonly("input_pins", py::cpp_function(&Module::get_input_pins, py::is_method(py_module), borrowed()), R"(
             An ordered list of all input pins of the module (including inout pins).
 
             :type: list[hal_py.ModulePin]
@@ -551,7 +551,7 @@ namespace hal
             :rtype: list[str]
          )");
 
-        py_module.def_property_readonly("output_pins", &Module::get_output_pins, borrowed(), R"(
+        py_module.def_property_readonly("output_pins", py::cpp_function(&Module::get_output_pins, py::is_method(py_module), borrowed()), R"(
             An ordered list of all output pins of the module (including inout pins).
 
             :type: list[hal_py.ModulePin]
@@ -578,7 +578,7 @@ namespace hal
         )");
 
         py_module.def_property_readonly(
-            "pin_groups", [](const Module& self) { return self.get_pin_groups(); }, borrowed(), R"(
+            "pin_groups", py::cpp_function([](const Module& self) { return self.get_pin_groups(); }, py::is_method(py_module), borrowed()), R"(
             All pin_groups of the module.
 
             :type: list[hal_py.ModulePinGroup]
