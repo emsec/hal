@@ -46,7 +46,17 @@ namespace hal
          */
         ProgramOptions get_cli_options() const override;
 
-        virtual bool handle_cli_call(Netlist*, ProgramArguments&) override {return false; }
+        /**
+         * Reports that the call was not handled, which ends HAL with an error.
+         *
+         * CliExtensionInterface requires an implementation, but this one is never reached: the
+         * options declared above belong to a UI plugin, and main.cpp dispatches those through
+         * UIPluginInterface::exec and returns before it walks the CLI extensions.
+         */
+        virtual bool handle_cli_call(Netlist*, ProgramArguments&) override
+        {
+            return false;
+        }
     };
 
     /**

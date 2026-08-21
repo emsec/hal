@@ -274,14 +274,16 @@ public:
     void set_input(const PinGroup<ModulePin>* pin_group, const std::vector<BooleanFunction::Value>& values);
 
     /**
-     * Initialize the simulation.
-     * No additional gates or clocks can be added after this point.
+     * Does nothing. Kept because existing scripts call it.
+     *
+     * The body has been empty since simulation moved to an external engine: there is nothing to
+     * initialize here any more, and unlike the legacy NetlistSimulator this controller does not stop
+     * accepting gates or clocks at any point.
      */
     void initialize();
 
     /**
      * Simulate for a specific period, advancing the internal state.
-     * Automatically initializes the simulation if 'initialize' has not yet been called.
      * Use 'set_input' to control specific signals.
      *
      * @param[in] picoseconds - The duration to simulate.

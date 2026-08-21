@@ -309,13 +309,13 @@ namespace hal
              )")
 
             .def("initialize", &NetlistSimulatorController::initialize, R"(
-                Initialize the simulation.
-                No additional gates or clocks can be added after this point.
+                Does nothing. Kept because existing scripts call it.
+
+                There is nothing to initialize since simulation moved to an external engine, and gates and clocks may still be added afterwards.
             )")
 
             .def("simulate", &NetlistSimulatorController::simulate, py::arg("picoseconds"), R"(
                 Simulate for a specific period, advancing the internal state.
-                Automatically initializes the simulation if 'initialize' has not yet been called.
                 Use \p set_input to control specific signals.
 
                 :param int picoseconds: The duration to simulate.
