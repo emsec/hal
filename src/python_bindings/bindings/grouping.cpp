@@ -80,7 +80,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_grouping.def_property_readonly("gates", py::overload_cast<>(&Grouping::get_gates, py::const_), borrowed(), R"(
+        py_grouping.def_property_readonly("gates", py::cpp_function(py::overload_cast<>(&Grouping::get_gates, py::const_), py::is_method(py_grouping), borrowed()), R"(
             All gates contained within the grouping.
 
             :type: list[hal_py.Gate]
@@ -174,7 +174,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_grouping.def_property_readonly("nets", py::overload_cast<>(&Grouping::get_nets, py::const_), borrowed(), R"(
+        py_grouping.def_property_readonly("nets", py::cpp_function(py::overload_cast<>(&Grouping::get_nets, py::const_), py::is_method(py_grouping), borrowed()), R"(
             All nets contained within the grouping.
 
             :type: list[hal_py.Net]
@@ -268,7 +268,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_grouping.def_property_readonly("modules", py::overload_cast<>(&Grouping::get_modules, py::const_), borrowed(), R"(
+        py_grouping.def_property_readonly("modules", py::cpp_function(py::overload_cast<>(&Grouping::get_modules, py::const_), py::is_method(py_grouping), borrowed()), R"(
             All modules contained within the grouping.
 
             :type: list[hal_py.Module]

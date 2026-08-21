@@ -159,7 +159,7 @@ namespace hal
             :param tuple(int,int) location: A tuple <x-coordinate, y-coordinate>.
         )");
 
-        py_gate.def_property_readonly("module", &Gate::get_module, borrowed(), R"(
+        py_gate.def_property_readonly("module", py::cpp_function(&Gate::get_module, py::is_method(py_gate), borrowed()), R"(
             The module in which contains this gate.
 
             :type: hal_py.Module
@@ -172,7 +172,7 @@ namespace hal
             :rtype: hal_py.Module
         )");
 
-        py_gate.def_property_readonly("modules", [](Gate* g) { return g->get_modules(); }, borrowed(), R"(
+        py_gate.def_property_readonly("modules", py::cpp_function([](Gate* g) { return g->get_modules(); }, py::is_method(py_gate), borrowed()), R"(
             A list of all modules that contain this gate, either directly or as parent of another module.
 
             :type: list[hal_py.Module]
@@ -306,7 +306,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate.def_property_readonly("fan_in_nets", py::overload_cast<>(&Gate::get_fan_in_nets, py::const_), borrowed(), R"(
+        py_gate.def_property_readonly("fan_in_nets", py::cpp_function(py::overload_cast<>(&Gate::get_fan_in_nets, py::const_), py::is_method(py_gate), borrowed()), R"(
             A list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
 
             :type: list[hal_py.Net]
@@ -352,7 +352,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate.def_property_readonly("fan_in_endpoints", py::overload_cast<>(&Gate::get_fan_in_endpoints, py::const_), borrowed(), R"(
+        py_gate.def_property_readonly("fan_in_endpoints", py::cpp_function(py::overload_cast<>(&Gate::get_fan_in_endpoints, py::const_), py::is_method(py_gate), borrowed()), R"(
             A list of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
 
             :type: list[hal_py.Endpoint]
@@ -398,7 +398,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def_property_readonly("fan_out_nets", py::overload_cast<>(&Gate::get_fan_out_nets, py::const_), borrowed(), R"(
+        py_gate.def_property_readonly("fan_out_nets", py::cpp_function(py::overload_cast<>(&Gate::get_fan_out_nets, py::const_), py::is_method(py_gate), borrowed()), R"(
             A list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
 
             :type: list[hal_py.Net]
@@ -444,7 +444,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate.def_property_readonly("fan_out_endpoints", py::overload_cast<>(&Gate::get_fan_out_endpoints, py::const_), borrowed(), R"(
+        py_gate.def_property_readonly("fan_out_endpoints", py::cpp_function(py::overload_cast<>(&Gate::get_fan_out_endpoints, py::const_), py::is_method(py_gate), borrowed()), R"(
             A list of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
 
             :type: list[hal_py.Endpoint]
@@ -490,7 +490,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def_property_readonly("unique_predecessors", [](Gate* g) { return g->get_unique_predecessors(); }, borrowed(), R"(
+        py_gate.def_property_readonly("unique_predecessors", py::cpp_function([](Gate* g) { return g->get_unique_predecessors(); }, py::is_method(py_gate), borrowed()), R"(
             A list of all unique predecessor gates of the gate.
 
             :type: list[hal_py.Gate]
@@ -505,7 +505,7 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py_gate.def_property_readonly("predecessors", [](Gate* g) { return g->get_predecessors(); }, borrowed(), R"(
+        py_gate.def_property_readonly("predecessors", py::cpp_function([](Gate* g) { return g->get_predecessors(); }, py::is_method(py_gate), borrowed()), R"(
             A list of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate. 
 
             :type: list[hal_py.Endpoint]
@@ -538,7 +538,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def_property_readonly("unique_successors", [](Gate* g) { return g->get_unique_successors(); }, borrowed(), R"(
+        py_gate.def_property_readonly("unique_successors", py::cpp_function([](Gate* g) { return g->get_unique_successors(); }, py::is_method(py_gate), borrowed()), R"(
             A list of all unique successor gates of the gate.
 
             :type: list[hal_py.Gate]
@@ -553,7 +553,7 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py_gate.def_property_readonly("successors", [](Gate* g) { return g->get_successors(); }, borrowed(), R"(
+        py_gate.def_property_readonly("successors", py::cpp_function([](Gate* g) { return g->get_successors(); }, py::is_method(py_gate), borrowed()), R"(
             A list of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate. 
 
             :type: list[hal_py.Endpoint]

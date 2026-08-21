@@ -179,7 +179,7 @@ namespace hal
             :rtype: int
         )");
 
-        py_net.def_property_readonly("sources", [](Net* n) { return n->get_sources(); }, borrowed(), R"(
+        py_net.def_property_readonly("sources", py::cpp_function([](Net* n) { return n->get_sources(); }, py::is_method(py_net), borrowed()), R"(
             A list of sources of the net.
 
             :type: list[hal_py.Endpoint]
@@ -293,7 +293,7 @@ namespace hal
             :rtype: int
         )");
 
-        py_net.def_property_readonly("destinations", [](Net* n) { return n->get_destinations(); }, borrowed(), R"(
+        py_net.def_property_readonly("destinations", py::cpp_function([](Net* n) { return n->get_destinations(); }, py::is_method(py_net), borrowed()), R"(
             A list of destinations of the net.
 
             :type: list[hal_py.Endpoint]

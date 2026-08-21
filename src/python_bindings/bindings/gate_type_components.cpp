@@ -30,7 +30,7 @@ namespace hal
             .value("ram_port", GateTypeComponent::ComponentType::ram_port, R"(RAM port component type.)")
             .export_values();
 
-        py_gate_type_component.def_property_readonly("type", &GateTypeComponent::get_type, borrowed(), R"(
+        py_gate_type_component.def_property_readonly("type", py::cpp_function(&GateTypeComponent::get_type, py::is_method(py_gate_type_component), borrowed()), R"(
             The type of the gate type component.
 
             :type: hal_py.GateTypeComponent.ComponentType
@@ -43,7 +43,7 @@ namespace hal
             :rtype: hal_py.GateTypeComponent.ComponentType
         )");
 
-        py_gate_type_component.def_property_readonly("components", &GateTypeComponent::get_components, borrowed(), R"(
+        py_gate_type_component.def_property_readonly("components", py::cpp_function(&GateTypeComponent::get_components, py::is_method(py_gate_type_component), borrowed()), R"(
             All components of the gate type component as a list.
 
             :type: list[hal_py.GateTypeComponent]

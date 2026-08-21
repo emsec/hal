@@ -96,7 +96,7 @@ namespace hal
         )");
 
         py_gate_type.def_property_readonly(
-            "components", [](const GateType& self) { return self.get_components(); }, borrowed(), R"(
+            "components", py::cpp_function([](const GateType& self) { return self.get_components(); }, py::is_method(py_gate_type), borrowed()), R"(
             All components of the gate type as a list.
 
             :type: list[hal_py.GateTypeComponent]
@@ -186,7 +186,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate_type.def_property_readonly("gate_library", &GateType::get_gate_library, borrowed(), R"(
+        py_gate_type.def_property_readonly("gate_library", py::cpp_function(&GateType::get_gate_library, py::is_method(py_gate_type), borrowed()), R"(
             The gate library this gate type is associated with.
 
             :type: hal_py.GateLibrary
@@ -281,9 +281,7 @@ namespace hal
         )");
 
         py_gate_type.def_property_readonly(
-            "pins",
-            [](const GateType& self) -> std::vector<GatePin*> { return self.get_pins(); },
-            borrowed(), R"(
+            "pins", py::cpp_function([](const GateType& self) -> std::vector<GatePin*> { return self.get_pins(); }, py::is_method(py_gate_type), borrowed()), R"(
             An ordered list of all pins of the gate type.
 
             :type: list[hal_py.GatePin]
@@ -317,7 +315,7 @@ namespace hal
             :rtype: list[str]
         )");
 
-        py_gate_type.def_property_readonly("input_pins", &GateType::get_input_pins, borrowed(), R"(
+        py_gate_type.def_property_readonly("input_pins", py::cpp_function(&GateType::get_input_pins, py::is_method(py_gate_type), borrowed()), R"(
             An ordered list of all input pins of the gate type (including inout pins).
 
             :type: list[hal_py.GatePin]
@@ -343,7 +341,7 @@ namespace hal
             :rtype: list[str]
          )");
 
-        py_gate_type.def_property_readonly("output_pins", &GateType::get_output_pins, borrowed(), R"(
+        py_gate_type.def_property_readonly("output_pins", py::cpp_function(&GateType::get_output_pins, py::is_method(py_gate_type), borrowed()), R"(
             An ordered list of all output pins of the gate type (including inout pins).
 
             :type: list[hal_py.GatePin]
