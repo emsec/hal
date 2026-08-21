@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
+   &#160;<span id="projectnumber">v4.5.0-84-g8c462e899</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -85,8 +85,10 @@ $(document).ready(function(){initNavTree('python__bindings_8h.html',''); initRes
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">python_bindings.h File Reference</div>  </div>
 </div><!--header-->
@@ -194,9 +196,23 @@ Include dependency graph for python_bindings.h:</div>
 </div>
 <p><a href="python__bindings_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1borrowed.html">hal::borrowed</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpybind11_1_1detail_1_1process__attribute_3_01hal_1_1borrowed_01_4.html">pybind11::detail::process_attribute&lt; hal::borrowed &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes <code><a class="el" href="structhal_1_1borrowed.html">hal::borrowed</a></code> usable as a call policy, like <code>py::keep_alive</code> or a return value policy.  <a href="structpybind11_1_1detail_1_1process__attribute_3_01hal_1_1borrowed_01_4.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacehal"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html">hal</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacehal_1_1python__bindings__detail"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1python__bindings__detail.html">hal::python_bindings_detail</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacepybind11"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepybind11.html">pybind11</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacepybind11_1_1detail"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepybind11_1_1detail.html">pybind11::detail</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
@@ -207,6 +223,13 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a51d4f9a1e3bd5730f626b41f1f2f18e7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a51d4f9a1e3bd5730f626b41f1f2f18e7"><td class="memTemplItemLeft" align="right" valign="top">py::handle&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1python__bindings__detail.html#a51d4f9a1e3bd5730f626b41f1f2f18e7">hal::python_bindings_detail::existing_wrapper</a> (const T *object)</td></tr>
+<tr class="separator:a51d4f9a1e3bd5730f626b41f1f2f18e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1e6aab1a379aadd0322f626d54ebe64"><td class="memItemLeft" align="right" valign="top">py::handle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1python__bindings__detail.html#ac1e6aab1a379aadd0322f626d54ebe64">hal::python_bindings_detail::owner_of</a> (py::handle object)</td></tr>
+<tr class="separator:ac1e6aab1a379aadd0322f626d54ebe64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87b5266ffcae4637294892c4e38f4cbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1python__bindings__detail.html#a87b5266ffcae4637294892c4e38f4cbd">hal::python_bindings_detail::keep_owner_alive</a> (py::detail::function_call &amp;call, py::handle value, py::handle receiver)</td></tr>
+<tr class="separator:a87b5266ffcae4637294892c4e38f4cbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:gadc243ad319cf87e17b4593eec859d1f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4">hal::data_container_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gadc243ad319cf87e17b4593eec859d1f4"><td class="memSeparator" colspan="2">&#160;</td></tr>

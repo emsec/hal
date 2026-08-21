@@ -1,5 +1,13 @@
 var NAVTREEINDEX35 =
 {
+"keybind__edit_8cpp.html":[10,0,1,7,2,27,0],
+"keybind__edit_8cpp_source.html":[10,0,1,7,2,27,0],
+"keybind__edit_8h.html":[10,0,1,7,0,0,28,0],
+"keybind__edit_8h_source.html":[10,0,1,7,0,0,28,0],
+"label__button_8cpp.html":[10,0,1,7,2,28,0],
+"label__button_8cpp_source.html":[10,0,1,7,2,28,0],
+"label__button_8h.html":[10,0,1,7,0,0,29,0],
+"label__button_8h_source.html":[10,0,1,7,0,0,29,0],
 "labeled__frame_8cpp.html":[10,0,1,7,2,17,0],
 "labeled__frame_8cpp_source.html":[10,0,1,7,2,17,0],
 "labeled__frame_8h.html":[10,0,1,7,0,0,17,0],
@@ -171,14 +179,10 @@ var NAVTREEINDEX35 =
 "module__elements__tree_8h_source.html":[10,0,1,7,0,0,42,1,1],
 "module__identification_2include_2module__identification_2api_2configuration_8h.html":[10,0,1,14,0,0,0,0],
 "module__identification_2include_2module__identification_2api_2configuration_8h_source.html":[10,0,1,14,0,0,0,0],
-"module__identification_2include_2module__identification_2utils_2gui__layout__locker_8h.html":[10,0,1,14,0,0,5,0],
-"module__identification_2include_2module__identification_2utils_2gui__layout__locker_8h_source.html":[10,0,1,14,0,0,5,0],
 "module__identification_2src_2api_2configuration_8cpp.html":[10,0,1,14,2,0,0],
 "module__identification_2src_2api_2configuration_8cpp_source.html":[10,0,1,14,2,0,0],
 "module__identification_2src_2api_2result_8cpp.html":[10,0,1,14,2,0,2],
 "module__identification_2src_2api_2result_8cpp_source.html":[10,0,1,14,2,0,2],
-"module__identification_2src_2utils_2gui__layout__locker_8cpp.html":[10,0,1,14,2,4,0],
-"module__identification_2src_2utils_2gui__layout__locker_8cpp_source.html":[10,0,1,14,2,4,0],
 "module__identification_8cpp.html":[10,0,1,14,2,0,1],
 "module__identification_8cpp.html#a0b0a75e73a0a27a5eccce8aa44f99f49":[10,0,1,14,2,0,1,2],
 "module__identification_8cpp.html#a37f95cd14d537ad8785bff412e8eec35":[10,0,1,14,2,0,1,3],
@@ -245,9 +249,5 @@ var NAVTREEINDEX35 =
 "multithreading__types_8h.html#aea197eaa6573e2d7072c90ea51d8e186a89c65a56491f0ee6c79cc5a855a96b72":[10,0,1,14,0,0,4,2,0,1],
 "multithreading__types_8h_source.html":[10,0,1,14,0,0,4,2],
 "namespacehal.html":[8,0,0],
-"namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83":[8,0,0,681],
-"namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83a02129bb861061d1a052c592e2dc6b383":[8,0,0,681,4],
-"namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83a8d9c307cb7f3c4a32822a51922d1ceaa":[8,0,0,681,2],
-"namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3":[8,0,0,681,3],
-"namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ac1d9f50f86825a1a2302ec2449c17196":[8,0,0,681,1]
+"namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83":[8,0,0,684]
 };

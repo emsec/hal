@@ -1,8 +1,5 @@
 var dir_f5b2fa91b17caf3c05fec2c6b1cf34b8 =
 [
-    [ "gui_layout_locker.h", "module__identification_2include_2module__identification_2utils_2gui__layout__locker_8h.html", [
-      [ "GuiLayoutLocker", "classhal_1_1module__identification_1_1_gui_layout_locker.html", "classhal_1_1module__identification_1_1_gui_layout_locker" ]
-    ] ],
     [ "statistics.h", "statistics_8h.html", [
       [ "Statistics", "structhal_1_1module__identification_1_1_statistics.html", "structhal_1_1module__identification_1_1_statistics" ]
     ] ],

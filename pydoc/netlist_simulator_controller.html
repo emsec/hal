@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netlist Simulator Controller &mdash; hal_py v4.5.0-83-g30c8f0afc documentation</title>
+  <title>Netlist Simulator Controller &mdash; hal_py v4.5.0-84-g8c462e899 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-83-g30c8f0afc
+                v4.5.0-84-g8c462e899
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -682,8 +682,8 @@ Only elements in the simulation set are considered during simulation.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_simulator_controller.NetlistSimulatorController.initialize">
 <span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#netlist_simulator_controller.NetlistSimulatorController" title="netlist_simulator_controller.NetlistSimulatorController"><span class="pre">netlist_simulator_controller.NetlistSimulatorController</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#netlist_simulator_controller.NetlistSimulatorController.initialize" title="Permalink to this definition"></a></dt>
-<dd><p>Initialize the simulation.
-No additional gates or clocks can be added after this point.</p>
+<dd><p>Does nothing. Kept because existing scripts call it.</p>
+<p>There is nothing to initialize since simulation moved to an external engine, and gates and clocks may still be added afterwards.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -856,7 +856,6 @@ Does not remove gates/nets from the simulation set.</p>
 <dt class="sig sig-object py" id="netlist_simulator_controller.NetlistSimulatorController.simulate">
 <span class="sig-name descname"><span class="pre">simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#netlist_simulator_controller.NetlistSimulatorController" title="netlist_simulator_controller.NetlistSimulatorController"><span class="pre">netlist_simulator_controller.NetlistSimulatorController</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">picoseconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#netlist_simulator_controller.NetlistSimulatorController.simulate" title="Permalink to this definition"></a></dt>
 <dd><p>Simulate for a specific period, advancing the internal state.
-Automatically initializes the simulation if ‘initialize’ has not yet been called.
 Use p set_input to control specific signals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

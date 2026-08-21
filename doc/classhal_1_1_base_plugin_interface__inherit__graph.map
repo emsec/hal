@@ -22,7 +22,7 @@
 <area shape="rect" id="node21" href="$classhal_1_1_resynthesis_plugin.html" title="Plugin interface for the netlist resynthesis plugin." alt="" coords="4045,226,4223,377"/>
 <area shape="rect" id="node22" href="$classhal_1_1_sequential_symbolic_execution_plugin.html" title="Plugin interface for HAWKEYE." alt="" coords="4247,204,4490,399"/>
 <area shape="rect" id="node23" href="$classhal_1_1_solve_fsm_plugin.html" title="Plugin interface for the solve FSM plugin." alt="" coords="4514,233,4677,369"/>
-<area shape="rect" id="node24" href="$classhal_1_1_u_i_plugin_interface.html" title=" " alt="" coords="4701,241,4871,362"/>
+<area shape="rect" id="node24" href="$classhal_1_1_u_i_plugin_interface.html" title=" " alt="" coords="4701,233,4871,369"/>
 <area shape="rect" id="node27" href="$classhal_1_1_v_h_d_l_parser_plugin.html" title=" " alt="" coords="4896,233,5063,369"/>
 <area shape="rect" id="node28" href="$classhal_1_1_verilator_simulator_plugin.html" title=" " alt="" coords="5087,233,5295,369"/>
 <area shape="rect" id="node29" href="$classhal_1_1_verilog_parser_plugin.html" title=" " alt="" coords="5320,233,5495,369"/>
@@ -30,6 +30,6 @@
 <area shape="rect" id="node31" href="$classhal_1_1_waveform_viewer_plugin.html" title=" " alt="" coords="5718,226,5921,377"/>
 <area shape="rect" id="node32" href="$classhal_1_1_xilinx_toolbox_plugin.html" title="Plugin interface for the Xilinx toolbox." alt="" coords="5945,226,6131,377"/>
 <area shape="rect" id="node33" href="$classhal_1_1_z3_utils_plugin.html" title=" " alt="" coords="6155,248,6292,355"/>
-<area shape="rect" id="node25" href="$classhal_1_1_plugin_gui.html" title=" " alt="" coords="4611,447,4772,612"/>
-<area shape="rect" id="node26" href="$classhal_1_1_plugin_python_shell.html" title=" " alt="" coords="4796,461,4963,597"/>
+<area shape="rect" id="node25" href="$classhal_1_1_plugin_gui.html" title=" " alt="" coords="4613,447,4772,597"/>
+<area shape="rect" id="node26" href="$classhal_1_1_plugin_python_shell.html" title=" " alt="" coords="4796,454,4963,590"/>
 </map>

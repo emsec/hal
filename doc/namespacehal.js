@@ -66,6 +66,7 @@ var namespacehal =
       [ "get_gate_libraries", "namespacehal_1_1gate__library__manager.html#a3ae6558acfeccd85000402340cd57874", null ],
       [ "get_gate_library", "namespacehal_1_1gate__library__manager.html#af8dbae03fe90a2dd846afd75022bbaeb", null ],
       [ "get_gate_library_by_name", "namespacehal_1_1gate__library__manager.html#a6c1b0915537d0f6c835cb3bf5d1445b8", null ],
+      [ "get_owning", "namespacehal_1_1gate__library__manager.html#a263a1bce3b00dc0bda917cd57f50b15a", null ],
       [ "load", "namespacehal_1_1gate__library__manager.html#a21db0193886493918bc33a7ffd09b8ff", null ],
       [ "load_all", "namespacehal_1_1gate__library__manager.html#a92abe4c023b408a948cc4d2693031764", null ],
       [ "remove", "namespacehal_1_1gate__library__manager.html#a51c46b4cdbdc6330ce1012f35eac67f0", null ],
@@ -187,6 +188,11 @@ var namespacehal =
       [ "write", "namespacehal_1_1netlist__writer__manager.html#a1bb87c0a35221bb18a28e97611b71a12", null ]
     ] ],
     [ "plugin_manager", "namespacehal_1_1plugin__manager.html", "namespacehal_1_1plugin__manager" ],
+    [ "python_bindings_detail", "namespacehal_1_1python__bindings__detail.html", [
+      [ "existing_wrapper", "namespacehal_1_1python__bindings__detail.html#a51d4f9a1e3bd5730f626b41f1f2f18e7", null ],
+      [ "keep_owner_alive", "namespacehal_1_1python__bindings__detail.html#a87b5266ffcae4637294892c4e38f4cbd", null ],
+      [ "owner_of", "namespacehal_1_1python__bindings__detail.html#ac1e6aab1a379aadd0322f626d54ebe64", null ]
+    ] ],
     [ "result_constructor_type", "namespacehal_1_1result__constructor__type.html", "namespacehal_1_1result__constructor__type" ],
     [ "resynthesis", "namespacehal_1_1resynthesis.html", [
       [ "decompose_gate", "namespacehal_1_1resynthesis.html#a05a373c0eed40bf9bc4ebc5eedcda0f9", null ],
@@ -228,6 +234,7 @@ var namespacehal =
     [ "style", "namespacehal_1_1style.html", [
       [ "debugUpdate", "namespacehal_1_1style.html#af1c64f88684b924fc0403ad8305ed98a", null ]
     ] ],
+    [ "user_feedback", "namespacehal_1_1user__feedback.html", "namespacehal_1_1user__feedback" ],
     [ "utils", "namespacehal_1_1utils.html", "namespacehal_1_1utils" ],
     [ "verilator", "namespacehal_1_1verilator.html", "namespacehal_1_1verilator" ],
     [ "xilinx_toolbox", "namespacehal_1_1xilinx__toolbox.html", "namespacehal_1_1xilinx__toolbox" ],
@@ -292,6 +299,7 @@ var namespacehal =
     [ "UIPluginInterface", "classhal_1_1_u_i_plugin_interface.html", "classhal_1_1_u_i_plugin_interface" ],
     [ "PluginParameter", "classhal_1_1_plugin_parameter.html", "classhal_1_1_plugin_parameter" ],
     [ "RuntimeLibrary", "classhal_1_1_runtime_library.html", "classhal_1_1_runtime_library" ],
+    [ "borrowed", "structhal_1_1borrowed.html", null ],
     [ "CallbackHook", "classhal_1_1_callback_hook.html", null ],
     [ "CallbackHook< R(ArgTypes...)>", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4" ],
     [ "EnumStrings", "structhal_1_1_enum_strings.html", "structhal_1_1_enum_strings" ],

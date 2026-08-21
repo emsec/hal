@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
+   &#160;<span id="projectnumber">v4.5.0-84-g8c462e899</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -141,8 +141,17 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 : <a class="el" href="struct_abc___obj__t__.html#a79bde9c39f8a8c27da3b7d26891ab802">Abc_Obj_t_</a>
 , <a class="el" href="struct_hop___obj__t__.html#a0b17d970cfa4eddbabcedbeb2c772e35">Hop_Obj_t_</a>
 </li>
+<li>identified_as
+: <a class="el" href="structhal_1_1hawkeye_1_1_s_box.html#a256152025b6b4f4584a3daaf3b40d694">hal::hawkeye::SBox</a>
+</li>
 <li>identify_control_signals()
 : <a class="el" href="classhal_1_1module__identification_1_1_functional_candidate.html#aa9f7be5bf80f12f0bef79a08d06cf7e5">hal::module_identification::FunctionalCandidate</a>
+</li>
+<li>identify_sbox()
+: <a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html#ac841a1d088cc2277ad1f92f06cb85cf5">hal::hawkeye::CipherCandidate</a>
+</li>
+<li>identify_sboxes()
+: <a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html#a330258cb567e3ee65a356d30f5bd2267">hal::hawkeye::CipherCandidate</a>
 </li>
 <li>ignoreClicked()
 : <a class="el" href="classhal_1_1_file_modified_bar.html#a75691e8da7478a0b51ed1c94a5f089bd">hal::FileModifiedBar</a>
@@ -209,13 +218,13 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 </li>
 <li>Index()
 : <a class="el" href="classhal_1_1_boolean_function.html#a7d9238e392858d5b0e28994e53ebb5ab">hal::BooleanFunction</a>
+, <a class="el" href="structhal_1_1_boolean_function_1_1_node.html#ad8a563d49d27d9814cba0f2c3cad455e">hal::BooleanFunction::Node</a>
 </li>
 <li>index
 : <a class="el" href="structhal_1_1_boolean_function_1_1_node.html#aef5ff44962299006d2f70b65a78444cc">hal::BooleanFunction::Node</a>
 </li>
-<li>Index()
-: <a class="el" href="structhal_1_1_boolean_function_1_1_node.html#ad8a563d49d27d9814cba0f2c3cad455e">hal::BooleanFunction::Node</a>
-, <a class="el" href="structhal_1_1_boolean_function_1_1_node_type.html#ac801a2203d38d3ffced3db169cbe48d4">hal::BooleanFunction::NodeType</a>
+<li>Index
+: <a class="el" href="structhal_1_1_boolean_function_1_1_node_type.html#ac801a2203d38d3ffced3db169cbe48d4">hal::BooleanFunction::NodeType</a>
 </li>
 <li>index()
 : <a class="el" href="classhal_1_1_channel_model.html#a7cd59be3d3f99b53ea9b6489eeeebd33">hal::ChannelModel</a>
@@ -248,6 +257,9 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 </li>
 <li>Init
 : <a class="el" href="classhal_1_1_gate_library_wizard.html#afc5ddfbb681daf58d7999f9173e62777a860512ef7e244431f1142e19f46bf97c">hal::GateLibraryWizard</a>
+</li>
+<li>init()
+: <a class="el" href="structpybind11_1_1detail_1_1process__attribute_3_01hal_1_1borrowed_01_4.html#a0ad5ca77205317d867680b5fb4527a4f">pybind11::detail::process_attribute&lt; hal::borrowed &gt;</a>
 </li>
 <li>InitComponent()
 : <a class="el" href="classhal_1_1_init_component.html#a15e16fd17bb74e3016702a58e5d52ba6">hal::InitComponent</a>
@@ -311,6 +323,9 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 </li>
 <li>Input
 : <a class="el" href="classhal_1_1_python_console.html#a1be3d0cb9bd3ba23f2902c85844c0b31aaed4b3b0a1ee6083aae12474b0a487c3">hal::PythonConsole</a>
+</li>
+<li>input_gates
+: <a class="el" href="structhal_1_1hawkeye_1_1_s_box.html#ab772a4cc9836cb3b533b3dd27a3b663d">hal::hawkeye::SBox</a>
 </li>
 <li>inputByNet()
 : <a class="el" href="classhal_1_1_graphics_node.html#ab8e9f46fdb8f5e23f98694c47bcf489e">hal::GraphicsNode</a>
@@ -462,7 +477,7 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 , <a class="el" href="structhal_1_1_s_m_t_1_1_solver_result.html#aaff4bef402c078706c460df36de77ea7">hal::SMT::SolverResult</a>
 </li>
 <li>is_a_destination()
-: <a class="el" href="classhal_1_1_net.html#ac00581b780f9ea901f6b3d7bc710bbdc">hal::Net</a>
+: <a class="el" href="classhal_1_1_net.html#a7c490a8377dcc972ae6df8af0a8ac833">hal::Net</a>
 </li>
 <li>is_a_source()
 : <a class="el" href="classhal_1_1_net.html#a7ca4f8f78f3c4e0af7b26384fa04883c">hal::Net</a>
@@ -609,13 +624,16 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 : <a class="el" href="classhal_1_1_program_options.html#a751129e8ad6e0b07d7258279e3c59b85">hal::ProgramOptions</a>
 </li>
 <li>is_round_based()
-: <a class="el" href="classhal_1_1hawkeye_1_1_register_candidate.html#a2edaf49856eb1972833c580ad91467d8">hal::hawkeye::RegisterCandidate</a>
+: <a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html#ac3ed9fb3c80b49ae9da5b548c3d47929">hal::hawkeye::CipherCandidate</a>
 </li>
 <li>is_sat()
 : <a class="el" href="structhal_1_1_s_m_t_1_1_solver_result.html#a756c3500b73acb8882a2f648d848320e">hal::SMT::SolverResult</a>
 </li>
 <li>is_set()
 : <a class="el" href="classsmallset__t.html#a680a39f102f6e2deb6338923c896292e">smallset_t</a>
+</li>
+<li>is_shadow_vertex()
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a26cbe7529cea1f5fbac4166d23a1574e">hal::graph_algorithm::NetlistGraph</a>
 </li>
 <li>is_source_pin()
 : <a class="el" href="classhal_1_1_endpoint.html#a93c74ed50f0ce4d8db33bc156edf7c35">hal::Endpoint</a>

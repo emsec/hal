@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
+   &#160;<span id="projectnumber">v4.5.0-84-g8c462e899</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2endpoint_8
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="stringliteral">            An endpoint comprises the pin of a gate, the respective gate, and the connected net.</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="stringliteral">        py_endpoint.def_property_readonly(</span><span class="stringliteral">&quot;gate&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">Endpoint::get_gate</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="stringliteral">        py_endpoint.def_property_readonly(</span><span class="stringliteral">&quot;gate&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">Endpoint::get_gate</a>, <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="stringliteral">            The gate associated with the endpoint.</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="stringliteral">            :type: hal_py.Gate</span></div>
@@ -118,33 +118,33 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2endpoint_8
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="stringliteral">        py_endpoint.def(</span><span class="stringliteral">&quot;get_gate&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">Endpoint::get_gate</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="stringliteral">        py_endpoint.def(</span><span class="stringliteral">&quot;get_gate&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">Endpoint::get_gate</a>, <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="stringliteral">            Get the gate associated with the endpoint.</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="stringliteral">            :returns: The gate.</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="stringliteral">            :rtype: hal_py.Gate</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="stringliteral">        py_endpoint.def_property_readonly(</span><span class="stringliteral">&quot;pin&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#a883e6db8e1984bfda94e673662bb4d8e">Endpoint::get_pin</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="stringliteral">        py_endpoint.def_property_readonly(</span><span class="stringliteral">&quot;pin&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#a883e6db8e1984bfda94e673662bb4d8e">Endpoint::get_pin</a>, <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="stringliteral">            The pin associated with the endpoint.</span></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="stringliteral">            :type: hal_py.GatePin</span></div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">        py_endpoint.def(</span><span class="stringliteral">&quot;get_pin&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#a883e6db8e1984bfda94e673662bb4d8e">Endpoint::get_pin</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">        py_endpoint.def(</span><span class="stringliteral">&quot;get_pin&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#a883e6db8e1984bfda94e673662bb4d8e">Endpoint::get_pin</a>, <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">            Get the pin associated with the endpoint.</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="stringliteral">            :returns: The pin.</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">            :rtype: hal_py.GatePin</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">        py_endpoint.def_property_readonly(</span><span class="stringliteral">&quot;net&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#a4eb6a0c6fc8133fb74feebfdf0cd1589">Endpoint::get_net</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">        py_endpoint.def_property_readonly(</span><span class="stringliteral">&quot;net&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#a4eb6a0c6fc8133fb74feebfdf0cd1589">Endpoint::get_net</a>, <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral">            The net associated with the endpoint.</span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral">            :type: hal_py.Net</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">        py_endpoint.def(</span><span class="stringliteral">&quot;get_net&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#a4eb6a0c6fc8133fb74feebfdf0cd1589">Endpoint::get_net</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">        py_endpoint.def(</span><span class="stringliteral">&quot;get_net&quot;</span>, &amp;<a class="code" href="classhal_1_1_endpoint.html#a4eb6a0c6fc8133fb74feebfdf0cd1589">Endpoint::get_net</a>, <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral">            Get the net associated with the endpoint.</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">            :returns: The net.</span></div>
@@ -187,6 +187,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2endpoint_8
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00751">graph_graphics_view.cpp:751</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
+<div class="ttc" id="astructhal_1_1borrowed_html"><div class="ttname"><a href="structhal_1_1borrowed.html">hal::borrowed</a></div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_8h_source.html#l00129">python_bindings.h:130</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

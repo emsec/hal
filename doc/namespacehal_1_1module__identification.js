@@ -14,7 +14,6 @@ var namespacehal_1_1module__identification =
     [ "StructuralCandidate", "classhal_1_1module__identification_1_1_structural_candidate.html", "classhal_1_1module__identification_1_1_structural_candidate" ],
     [ "WordLevelOperation", "structhal_1_1module__identification_1_1_word_level_operation.html", "structhal_1_1module__identification_1_1_word_level_operation" ],
     [ "VerifiedCandidate", "classhal_1_1module__identification_1_1_verified_candidate.html", "classhal_1_1module__identification_1_1_verified_candidate" ],
-    [ "GuiLayoutLocker", "classhal_1_1module__identification_1_1_gui_layout_locker.html", "classhal_1_1module__identification_1_1_gui_layout_locker" ],
     [ "Statistics", "structhal_1_1module__identification_1_1_statistics.html", "structhal_1_1module__identification_1_1_statistics" ],
     [ "Architecture", "namespacehal_1_1module__identification.html#acf76d806f42433de0dd21e6f43f7f8b5", [
       [ "lattice_ice40", "namespacehal_1_1module__identification.html#acf76d806f42433de0dd21e6f43f7f8b5aec6399818620e1b66dcd2c63f6a9e580", null ],

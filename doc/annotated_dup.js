@@ -23,8 +23,6 @@ var annotated_dup =
         [ "Result", "classhal_1_1dataflow_1_1_result.html", "classhal_1_1dataflow_1_1_result" ],
         [ "Grouping", "structhal_1_1dataflow_1_1_grouping.html", "structhal_1_1dataflow_1_1_grouping" ],
         [ "NetlistAbstraction", "structhal_1_1dataflow_1_1_netlist_abstraction.html", "structhal_1_1dataflow_1_1_netlist_abstraction" ],
-        [ "GuiLayoutLocker", "classhal_1_1dataflow_1_1_gui_layout_locker.html", "classhal_1_1dataflow_1_1_gui_layout_locker" ],
-        [ "ProgressPrinter", "classhal_1_1dataflow_1_1_progress_printer.html", "classhal_1_1dataflow_1_1_progress_printer" ],
         [ "measure_block_time_t", "classhal_1_1dataflow_1_1measure__block__time__t.html", "classhal_1_1dataflow_1_1measure__block__time__t" ]
       ] ],
       [ "graph_algorithm", "namespacehal_1_1graph__algorithm.html", [
@@ -38,10 +36,9 @@ var annotated_dup =
       ] ],
       [ "hawkeye", "namespacehal_1_1hawkeye.html", [
         [ "DetectionConfiguration", "structhal_1_1hawkeye_1_1_detection_configuration.html", "structhal_1_1hawkeye_1_1_detection_configuration" ],
-        [ "RegisterCandidate", "classhal_1_1hawkeye_1_1_register_candidate.html", "classhal_1_1hawkeye_1_1_register_candidate" ],
-        [ "RoundCandidate", "classhal_1_1hawkeye_1_1_round_candidate.html", "classhal_1_1hawkeye_1_1_round_candidate" ],
-        [ "SBoxDatabase", "classhal_1_1hawkeye_1_1_s_box_database.html", "classhal_1_1hawkeye_1_1_s_box_database" ],
-        [ "SBoxCandidate", "classhal_1_1hawkeye_1_1_s_box_candidate.html", "classhal_1_1hawkeye_1_1_s_box_candidate" ]
+        [ "SBox", "structhal_1_1hawkeye_1_1_s_box.html", "structhal_1_1hawkeye_1_1_s_box" ],
+        [ "CipherCandidate", "classhal_1_1hawkeye_1_1_cipher_candidate.html", "classhal_1_1hawkeye_1_1_cipher_candidate" ],
+        [ "SBoxDatabase", "classhal_1_1hawkeye_1_1_s_box_database.html", "classhal_1_1hawkeye_1_1_s_box_database" ]
       ] ],
       [ "module_identification", "namespacehal_1_1module__identification.html", [
         [ "Configuration", "structhal_1_1module__identification_1_1_configuration.html", "structhal_1_1module__identification_1_1_configuration" ],
@@ -52,7 +49,6 @@ var annotated_dup =
         [ "StructuralCandidate", "classhal_1_1module__identification_1_1_structural_candidate.html", "classhal_1_1module__identification_1_1_structural_candidate" ],
         [ "WordLevelOperation", "structhal_1_1module__identification_1_1_word_level_operation.html", "structhal_1_1module__identification_1_1_word_level_operation" ],
         [ "VerifiedCandidate", "classhal_1_1module__identification_1_1_verified_candidate.html", "classhal_1_1module__identification_1_1_verified_candidate" ],
-        [ "GuiLayoutLocker", "classhal_1_1module__identification_1_1_gui_layout_locker.html", "classhal_1_1module__identification_1_1_gui_layout_locker" ],
         [ "Statistics", "structhal_1_1module__identification_1_1_statistics.html", "structhal_1_1module__identification_1_1_statistics" ]
       ] ],
       [ "plugin_manager", "namespacehal_1_1plugin__manager.html", [
@@ -73,6 +69,11 @@ var annotated_dup =
         [ "Constraint", "structhal_1_1_s_m_t_1_1_constraint.html", "structhal_1_1_s_m_t_1_1_constraint" ],
         [ "Model", "structhal_1_1_s_m_t_1_1_model.html", "structhal_1_1_s_m_t_1_1_model" ],
         [ "SolverResult", "structhal_1_1_s_m_t_1_1_solver_result.html", "structhal_1_1_s_m_t_1_1_solver_result" ]
+      ] ],
+      [ "user_feedback", "namespacehal_1_1user__feedback.html", [
+        [ "LayoutLocker", "classhal_1_1user__feedback_1_1_layout_locker.html", "classhal_1_1user__feedback_1_1_layout_locker" ],
+        [ "ProgressScope", "classhal_1_1user__feedback_1_1_progress_scope.html", "classhal_1_1user__feedback_1_1_progress_scope" ],
+        [ "ProgressPrinter", "classhal_1_1user__feedback_1_1_progress_printer.html", "classhal_1_1user__feedback_1_1_progress_printer" ]
       ] ],
       [ "utils", "namespacehal_1_1utils.html", [
         [ "RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", "classhal_1_1utils_1_1_recursive_directory_range" ],
@@ -148,6 +149,7 @@ var annotated_dup =
       [ "UIPluginInterface", "classhal_1_1_u_i_plugin_interface.html", "classhal_1_1_u_i_plugin_interface" ],
       [ "PluginParameter", "classhal_1_1_plugin_parameter.html", "classhal_1_1_plugin_parameter" ],
       [ "RuntimeLibrary", "classhal_1_1_runtime_library.html", "classhal_1_1_runtime_library" ],
+      [ "borrowed", "structhal_1_1borrowed.html", null ],
       [ "CallbackHook", "classhal_1_1_callback_hook.html", null ],
       [ "CallbackHook< R(ArgTypes...)>", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4" ],
       [ "EnumStrings", "structhal_1_1_enum_strings.html", "structhal_1_1_enum_strings" ],
@@ -728,6 +730,11 @@ var annotated_dup =
       [ "VHDLParser", "classhal_1_1_v_h_d_l_parser.html", "classhal_1_1_v_h_d_l_parser" ],
       [ "XilinxToolboxPlugin", "classhal_1_1_xilinx_toolbox_plugin.html", "classhal_1_1_xilinx_toolbox_plugin" ],
       [ "Z3UtilsPlugin", "classhal_1_1_z3_utils_plugin.html", "classhal_1_1_z3_utils_plugin" ]
+    ] ],
+    [ "pybind11", "namespacepybind11.html", [
+      [ "detail", "namespacepybind11_1_1detail.html", [
+        [ "process_attribute< hal::borrowed >", "structpybind11_1_1detail_1_1process__attribute_3_01hal_1_1borrowed_01_4.html", null ]
+      ] ]
     ] ],
     [ "std", "namespacestd.html", [
       [ "hash< hal::core_strings::CaseInsensitiveString >", "structstd_1_1hash_3_01hal_1_1core__strings_1_1_case_insensitive_string_01_4.html", "structstd_1_1hash_3_01hal_1_1core__strings_1_1_case_insensitive_string_01_4" ]

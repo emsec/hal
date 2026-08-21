@@ -494,7 +494,8 @@ var group__gui =
       [ "get_name", "classhal_1_1_plugin_gui.html#afae9dee5316e1b95812c25b7d1c598a9", null ],
       [ "get_version", "classhal_1_1_plugin_gui.html#a21214d366b49e93ebdfad07607adeb8f", null ],
       [ "initialize_logging", "classhal_1_1_plugin_gui.html#a3f50c1907b0de260740cefd7bb8e6e19", null ],
-      [ "set_layout_locker", "classhal_1_1_plugin_gui.html#a5754fbe00cb285211d388dc52ed77cb0", null ]
+      [ "set_layout_locker", "classhal_1_1_plugin_gui.html#a5754fbe00cb285211d388dc52ed77cb0", null ],
+      [ "set_progress", "classhal_1_1_plugin_gui.html#a70e7ac7343a0c5afa271b73051073396", null ]
     ] ],
     [ "PluginRelay", "classhal_1_1_plugin_relay.html", [
       [ "PluginRelay", "classhal_1_1_plugin_relay.html#a2015343701da5d20c9477fbec756f5c7", null ],

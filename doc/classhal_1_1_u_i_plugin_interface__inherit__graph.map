@@ -1,6 +1,6 @@
 <map id="hal::UIPluginInterface" name="hal::UIPluginInterface">
-<area shape="rect" id="node1" title=" " alt="" coords="94,204,265,325"/>
-<area shape="rect" id="node3" href="$classhal_1_1_plugin_gui.html" title=" " alt="" coords="5,373,167,539"/>
-<area shape="rect" id="node4" href="$classhal_1_1_plugin_python_shell.html" title=" " alt="" coords="191,388,357,524"/>
-<area shape="rect" id="node2" href="$classhal_1_1_base_plugin_interface.html" title=" " alt="" coords="85,5,273,156"/>
+<area shape="rect" id="node1" title=" " alt="" coords="93,204,263,340"/>
+<area shape="rect" id="node3" href="$classhal_1_1_plugin_gui.html" title=" " alt="" coords="5,388,164,539"/>
+<area shape="rect" id="node4" href="$classhal_1_1_plugin_python_shell.html" title=" " alt="" coords="188,395,355,531"/>
+<area shape="rect" id="node2" href="$classhal_1_1_base_plugin_interface.html" title=" " alt="" coords="84,5,272,156"/>
 </map>

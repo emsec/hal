@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
+   &#160;<span id="projectnumber">v4.5.0-84-g8c462e899</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -103,7 +103,7 @@ Collaboration diagram for hal::graph_algorithm::NetlistGraph:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1graph__algorithm_1_1_netlist_graph__coll__graph.png" border="0" usemap="#ahal_1_1graph__algorithm_1_1_netlist_graph_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1graph__algorithm_1_1_netlist_graph_coll__map" id="ahal_1_1graph__algorithm_1_1_netlist_graph_coll__map">
-<area shape="rect" title="A directed graph corresponding to a netlist." alt="" coords="5,5,200,200"/>
+<area shape="rect" title="A directed graph corresponding to a netlist." alt="" coords="5,5,200,215"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -174,6 +174,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6cdbf6af3e642ead2bb07f790f7cf10e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6cdbf6af3e642ead2bb07f790f7cf10e">get_vertex_from_gate</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *g) const</td></tr>
 <tr class="memdesc:a6cdbf6af3e642ead2bb07f790f7cf10e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vertex corresponding to the specified gate.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6cdbf6af3e642ead2bb07f790f7cf10e">More...</a><br /></td></tr>
 <tr class="separator:a6cdbf6af3e642ead2bb07f790f7cf10e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26cbe7529cea1f5fbac4166d23a1574e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a26cbe7529cea1f5fbac4166d23a1574e">is_shadow_vertex</a> (const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> vertex) const</td></tr>
+<tr class="memdesc:a26cbe7529cea1f5fbac4166d23a1574e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether the specified vertex is a shadow vertex.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a26cbe7529cea1f5fbac4166d23a1574e">More...</a><br /></td></tr>
+<tr class="separator:a26cbe7529cea1f5fbac4166d23a1574e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb9d68be8ef3e9879c7bea0e10f515f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#afb9d68be8ef3e9879c7bea0e10f515f5">get_all_vertices_from_gate</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *g) const</td></tr>
+<tr class="memdesc:afb9d68be8ef3e9879c7bea0e10f515f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get all vertices corresponding to the specified gate, i.e., its primary vertex and, if the gate was split by <code>from_gates</code>, its shadow vertex.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#afb9d68be8ef3e9879c7bea0e10f515f5">More...</a><br /></td></tr>
+<tr class="separator:afb9d68be8ef3e9879c7bea0e10f515f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1809b66c69be895ca35d44928915b08b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a1809b66c69be895ca35d44928915b08b">get_num_vertices</a> (bool only_connected=false) const</td></tr>
 <tr class="memdesc:a1809b66c69be895ca35d44928915b08b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of vertices in the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a1809b66c69be895ca35d44928915b08b">More...</a><br /></td></tr>
 <tr class="separator:a1809b66c69be895ca35d44928915b08b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -216,6 +222,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:af512c96b5406c58144b44524750460c4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#af512c96b5406c58144b44524750460c4">from_netlist_no_edges</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates={})</td></tr>
 <tr class="memdesc:af512c96b5406c58144b44524750460c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an empty directed graph from a netlist.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#af512c96b5406c58144b44524750460c4">More...</a><br /></td></tr>
 <tr class="separator:af512c96b5406c58144b44524750460c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a846edbf994acc1a9ea98677ab189581d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a846edbf994acc1a9ea98677ab189581d">from_gates</a> (const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates, const std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;split_gates={}, const std::function&lt; bool(const <a class="el" href="classhal_1_1_net.html">Net</a> *)&gt; &amp;filter=nullptr)</td></tr>
+<tr class="memdesc:a846edbf994acc1a9ea98677ab189581d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a directed graph from a subset of the gates of a netlist.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a846edbf994acc1a9ea98677ab189581d">More...</a><br /></td></tr>
+<tr class="separator:a846edbf994acc1a9ea98677ab189581d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A directed graph corresponding to a netlist. </p>
@@ -381,9 +390,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>OK on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00746">746</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00897">897</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -413,9 +422,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>OK on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00666">666</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00817">817</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -445,9 +454,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>OK on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00709">709</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00860">860</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -469,7 +478,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Create a deep copy of the netlist graph. </p>
 <dl class="section return"><dt>Returns</dt><dd>The copied netlist graph on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00202">202</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00329">329</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
@@ -500,9 +509,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>OK on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00800">800</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00951">951</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -531,9 +540,71 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>OK on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00856">856</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l01007">1007</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+
+</div>
+</div>
+<a id="a846edbf994acc1a9ea98677ab189581d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a846edbf994acc1a9ea98677ab189581d">&#9670;&nbsp;</a></span>from_gates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> &gt; &gt; hal::graph_algorithm::NetlistGraph::from_gates </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>gates</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>split_gates</em> = <code>{}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_net.html">Net</a> *)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>filter</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a directed graph from a subset of the gates of a netlist. </p>
+<p>Only the given gates become vertices and only nets between two of them become edges, so the graph is a closed world irrespective of what the gates are connected to elsewhere in the netlist.</p>
+<p>Gates in <code>split_gates</code> are represented by two vertices instead of one: a primary vertex carrying only the outgoing edges of the gate and a shadow vertex carrying only its incoming edges. This breaks feedback through those gates, which makes a sequential loop such as the round function of a cipher acyclic without having to copy it into a netlist of its own. Both vertices resolve back to the same gate, so use <code>is_shadow_vertex</code> to tell the two roles apart. A shadow vertex is only created if the gate actually has incoming edges within the graph.</p>
+<p>Vertices are numbered in the order of <code>gates</code>, so pass them in a deterministic order to obtain a reproducible graph.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">gates</td><td>- The gates to include in the graph. Must all belong to the same netlist. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">split_gates</td><td>- The gates to represent by a primary and a shadow vertex. Gates that are not part of <code>gates</code> are ignored. Defaults to an empty set. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- An optional filter that is evaluated on every net considered as an edge. Defaults to <code>nullptr</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The netlist graph on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00044">44</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="cipher__candidate_8cpp_source.html#l00661">hal::hawkeye::CipherCandidate::build_round_function()</a>, and <a class="el" href="plugins_2graph__algorithm_2python_2python__bindings_8cpp_source.html#l00040">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -589,11 +660,11 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The netlist graph on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00044">44</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00171">171</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="round__candidate_8cpp_source.html#l00053">hal::hawkeye::RoundCandidate::from_register_candidate()</a>, and <a class="el" href="plugins_2graph__algorithm_2python_2python__bindings_8cpp_source.html#l00040">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2graph__algorithm_2python_2python__bindings_8cpp_source.html#l00040">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -642,11 +713,42 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The netlist graph on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00171">171</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00298">298</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="candidate__search_8cpp_source.html#l00312">hal::hawkeye::detect_candidates()</a>, and <a class="el" href="plugins_2graph__algorithm_2python_2python__bindings_8cpp_source.html#l00040">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="candidate__search_8cpp_source.html#l00317">hal::hawkeye::CipherCandidate::detect()</a>, and <a class="el" href="plugins_2graph__algorithm_2python_2python__bindings_8cpp_source.html#l00040">hal::PYBIND11_PLUGIN()</a>.</p>
+
+</div>
+</div>
+<a id="afb9d68be8ef3e9879c7bea0e10f515f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb9d68be8ef3e9879c7bea0e10f515f5">&#9670;&nbsp;</a></span>get_all_vertices_from_gate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt; hal::graph_algorithm::NetlistGraph::get_all_vertices_from_gate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>g</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get all vertices corresponding to the specified gate, i.e., its primary vertex and, if the gate was split by <code>from_gates</code>, its shadow vertex. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>- A gate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The vertices of the gate on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00635">635</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -668,7 +770,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Get the edges between vertices in the netlist graph. </p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of edges on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00587">587</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00738">738</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
@@ -692,7 +794,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Get the edges between gates in the netlist corresponding to the netlist graph. </p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of edges on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00615">615</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00766">766</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
@@ -723,9 +825,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A gates on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00374">374</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00501">501</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist__graph_8cpp_source.html#l00229">get_gates_from_vertices()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist__graph_8cpp_source.html#l00356">get_gates_from_vertices()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -755,9 +857,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of gates on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00252">252</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00379">379</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -787,11 +889,11 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of gates on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00229">229</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00356">356</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__graph_8cpp_source.html#l00374">get_gate_from_vertex()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__graph_8cpp_source.html#l00501">get_gate_from_vertex()</a>.</p>
 
 </div>
 </div>
@@ -821,9 +923,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of gates on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00275">275</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00402">402</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="subgraph_8cpp_source.html#l00150">hal::graph_algorithm::get_subgraph_igraph()</a>.</p>
 
@@ -854,9 +956,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A set of gates on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00324">324</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00451">451</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -885,9 +987,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A set of gates on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00300">300</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00427">427</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -916,9 +1018,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A set of gates on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00348">348</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00475">475</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -940,7 +1042,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Get the graph object of the netlist graph. </p>
 <dl class="section return"><dt>Returns</dt><dd>The graph object. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00224">224</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00351">351</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="shortest__path_8cpp_source.html#l00237">hal::graph_algorithm::get_all_shortest_paths_igraph()</a>, <a class="el" href="components_8cpp_source.html#l00011">hal::graph_algorithm::get_connected_components()</a>, <a class="el" href="neighborhood_8cpp_source.html#l00078">hal::graph_algorithm::get_neighborhood_igraph()</a>, <a class="el" href="shortest__path_8cpp_source.html#l00094">hal::graph_algorithm::get_shortest_paths_igraph()</a>, and <a class="el" href="subgraph_8cpp_source.html#l00150">hal::graph_algorithm::get_subgraph_igraph()</a>.</p>
 
@@ -964,7 +1066,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Get the netlist associated with the netlist graph. </p>
 <dl class="section return"><dt>Returns</dt><dd>The netlist. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00219">219</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00346">346</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="subgraph_8cpp_source.html#l00150">hal::graph_algorithm::get_subgraph_igraph()</a>, and <a class="el" href="plugins_2graph__algorithm_2python_2python__bindings_8cpp_source.html#l00040">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -988,7 +1090,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Get the number of edges in the netlist graph. </p>
 <dl class="section return"><dt>Returns</dt><dd>The number of edges in the netlist graph. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00536">536</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00687">687</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2graph__algorithm_2python_2python__bindings_8cpp_source.html#l00040">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -1019,7 +1121,7 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of vertices in the netlist graph. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00503">503</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00654">654</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2graph__algorithm_2python_2python__bindings_8cpp_source.html#l00040">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -1050,9 +1152,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vertex on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00492">492</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00619">619</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist__graph_8cpp_source.html#l00385">get_vertices_from_gates()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist__graph_8cpp_source.html#l00512">get_vertices_from_gates()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="shortest__path_8cpp_source.html#l00153">hal::graph_algorithm::get_all_shortest_paths()</a>, and <a class="el" href="shortest__path_8cpp_source.html#l00010">hal::graph_algorithm::get_shortest_paths()</a>.</p>
 
@@ -1083,7 +1185,7 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of vertices on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00541">541</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00692">692</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
@@ -1114,9 +1216,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of vertices on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00409">409</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00536">536</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -1145,11 +1247,11 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of vertices on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00385">385</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00512">512</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__graph_8cpp_source.html#l00492">get_vertex_from_gate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__graph_8cpp_source.html#l00619">get_vertex_from_gate()</a>.</p>
 
 </div>
 </div>
@@ -1178,9 +1280,9 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An igraph vector of vertices on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00460">460</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00587">587</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -1209,11 +1311,43 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An igraph vector of vertices on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00431">431</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00558">558</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="shortest__path_8cpp_source.html#l00153">hal::graph_algorithm::get_all_shortest_paths()</a>, <a class="el" href="neighborhood_8cpp_source.html#l00009">hal::graph_algorithm::get_neighborhood()</a>, <a class="el" href="shortest__path_8cpp_source.html#l00010">hal::graph_algorithm::get_shortest_paths()</a>, and <a class="el" href="subgraph_8cpp_source.html#l00010">hal::graph_algorithm::get_subgraph()</a>.</p>
+
+</div>
+</div>
+<a id="a26cbe7529cea1f5fbac4166d23a1574e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26cbe7529cea1f5fbac4166d23a1574e">&#9670;&nbsp;</a></span>is_shadow_vertex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::graph_algorithm::NetlistGraph::is_shadow_vertex </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
+          <td class="paramname"><em>vertex</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check whether the specified vertex is a shadow vertex. </p>
+<p>A shadow vertex carries only the incoming edges of a gate that was split by <code>from_gates</code>, while the primary vertex of that gate carries only its outgoing edges. Both resolve to the same gate, so this is the only way to tell which of the two roles a vertex stands for.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">vertex</td><td>- A vertex. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the vertex is a shadow vertex, <code>false</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00630">630</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2graph__algorithm_2python_2python__bindings_8cpp_source.html#l00040">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -1260,7 +1394,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Print the edge list of the graph to stdout. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00904">904</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l01055">1055</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2graph__algorithm_2python_2python__bindings_8cpp_source.html#l00040">hal::PYBIND11_PLUGIN()</a>.</p>
 

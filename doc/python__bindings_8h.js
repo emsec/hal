@@ -1,5 +1,6 @@
 var python__bindings_8h =
 [
+    [ "process_attribute< hal::borrowed >", "structpybind11_1_1detail_1_1process__attribute_3_01hal_1_1borrowed_01_4.html", null ],
     [ "RawPtrWrapper", "python__bindings_8h.html#ga81181bacca930bfda574ce3a51a01e9c", null ],
     [ "base_pin_init", "python__bindings_8h.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c", null ],
     [ "boolean_function_decorator_init", "python__bindings_8h.html#gadcbe9ddba67d0061af0b3f101c727c6e", null ],
@@ -8,6 +9,7 @@ var python__bindings_8h =
     [ "core_utils_init", "python__bindings_8h.html#gae67f2029fac093c1e1990401edbcfd0a", null ],
     [ "data_container_init", "python__bindings_8h.html#gadc243ad319cf87e17b4593eec859d1f4", null ],
     [ "endpoint_init", "python__bindings_8h.html#ga6d7aa3afc74611d7f65294808436eac9", null ],
+    [ "existing_wrapper", "python__bindings_8h.html#a51d4f9a1e3bd5730f626b41f1f2f18e7", null ],
     [ "gate_init", "python__bindings_8h.html#gaa2fbdd0b4ea1f33476ee30d7f2ce6a81", null ],
     [ "gate_library_init", "python__bindings_8h.html#ga3e97835fd6fda5f038f92cefbcdcf57b", null ],
     [ "gate_library_manager_init", "python__bindings_8h.html#gacd94e2b9ac19cb0a128446c71673aabf", null ],
@@ -18,6 +20,7 @@ var python__bindings_8h =
     [ "gate_type_lut_init", "python__bindings_8h.html#gaab97b444976a9d5305e3efc20b8bfad6", null ],
     [ "gate_type_sequential_init", "python__bindings_8h.html#ga23445061a41678f413471f3459e241d4", null ],
     [ "grouping_init", "python__bindings_8h.html#ga0b8291fb8af058d824b23bcd16a86821", null ],
+    [ "keep_owner_alive", "python__bindings_8h.html#a87b5266ffcae4637294892c4e38f4cbd", null ],
     [ "log_init", "python__bindings_8h.html#gac711bd76ed6d19d0ae42c56d8f190cfa", null ],
     [ "module_init", "python__bindings_8h.html#gaa664b51c68ac4d2b40e58e0c17aaec22", null ],
     [ "module_pin_group_init", "python__bindings_8h.html#ga99c6b86dabda84a9ccb3b6612557f10f", null ],
@@ -30,6 +33,7 @@ var python__bindings_8h =
     [ "netlist_traversal_decorator_init", "python__bindings_8h.html#gada2e57065ce648d389abb22e94a9ab69", null ],
     [ "netlist_utils_init", "python__bindings_8h.html#ga60d7e2dfe01bc847292f5473e2b849d1", null ],
     [ "netlist_writer_manager_init", "python__bindings_8h.html#ga24b748055e4be6a24e7103a78f6f272d", null ],
+    [ "owner_of", "python__bindings_8h.html#ac1e6aab1a379aadd0322f626d54ebe64", null ],
     [ "plugin_interfaces_init", "python__bindings_8h.html#gae288c84ff5c0b70e6f9571669aa29eb7", null ],
     [ "plugin_manager_init", "python__bindings_8h.html#ga9e03e20ad125cd9eb1f4e601ac556777", null ],
     [ "program_options_init", "python__bindings_8h.html#ga24730220376b911e08e8ba91bbba0352", null ],

@@ -21,5 +21,6 @@ var dir_6df68e7c4858c229578de4afea200fae =
     [ "plugin_parameter.h", "plugin__parameter_8h.html", [
       [ "PluginParameter", "classhal_1_1_plugin_parameter.html", "classhal_1_1_plugin_parameter" ]
     ] ],
-    [ "runtime_library.h", "runtime__library_8h.html", "runtime__library_8h" ]
+    [ "runtime_library.h", "runtime__library_8h.html", "runtime__library_8h" ],
+    [ "user_feedback.h", "user__feedback_8h.html", "user__feedback_8h" ]
 ];

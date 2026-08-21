@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
+   &#160;<span id="projectnumber">v4.5.0-84-g8c462e899</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__m
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="stringliteral">            A netlist decorator that provides functionality to modify the associated netlist.</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="stringliteral">        py_netlist_modification_decorator.def(py::init&lt;Netlist&amp;&gt;(), py::arg(</span><span class="stringliteral">&quot;netlist&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="stringliteral">        py_netlist_modification_decorator.def(py::init&lt;Netlist&amp;&gt;(), py::arg(</span><span class="stringliteral">&quot;netlist&quot;</span>), py::keep_alive&lt;1, 2&gt;(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="stringliteral">            Construct new NetlistModificationDecorator object.</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="stringliteral">            :param hal_py.Netlist netlist: The netlist to operate on.</span></div>
@@ -145,7 +145,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__m
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            py::arg(<span class="stringliteral">&quot;gate&quot;</span>),</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            py::arg(<span class="stringliteral">&quot;target_type&quot;</span>),</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            py::arg(<span class="stringliteral">&quot;pin_map&quot;</span>),</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral">            Replace the given gate with a gate of the specified gate type.</span></div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">            A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs.</span></div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">            A pin can be omitted if no connection at that pin is desired.</span></div>
@@ -175,7 +175,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__m
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            py::arg(<span class="stringliteral">&quot;src_pin&quot;</span>),</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            py::arg(<span class="stringliteral">&quot;dst_gate&quot;</span>),</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            py::arg(<span class="stringliteral">&quot;dst_pin&quot;</span>),</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="stringliteral">            Connects two gates through the specified pins.</span></div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">            If both pins are not yet connected to a net, a new net is created to connect both pins.</span></div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="stringliteral">            If one of the pins is already connected to a net, that net is connected to the other pin.</span></div>
@@ -205,7 +205,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__m
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            },</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            py::arg(<span class="stringliteral">&quot;master_net&quot;</span>),</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            py::arg(<span class="stringliteral">&quot;slave_net&quot;</span>),</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="stringliteral">            Connects (and thereby merges) two nets.</span></div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="stringliteral">            All properties of the slave net are transfered to the master net and the slave net is subsequently deleted.</span></div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="stringliteral"></span> </div>
@@ -227,6 +227,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__m
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00751">graph_graphics_view.cpp:751</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
+<div class="ttc" id="astructhal_1_1borrowed_html"><div class="ttname"><a href="structhal_1_1borrowed.html">hal::borrowed</a></div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_8h_source.html#l00129">python_bindings.h:130</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

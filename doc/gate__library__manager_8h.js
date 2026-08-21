@@ -4,6 +4,7 @@ var gate__library__manager_8h =
     [ "get_gate_libraries", "gate__library__manager_8h.html#a3ae6558acfeccd85000402340cd57874", null ],
     [ "get_gate_library", "gate__library__manager_8h.html#af8dbae03fe90a2dd846afd75022bbaeb", null ],
     [ "get_gate_library_by_name", "gate__library__manager_8h.html#a6c1b0915537d0f6c835cb3bf5d1445b8", null ],
+    [ "get_owning", "gate__library__manager_8h.html#a263a1bce3b00dc0bda917cd57f50b15a", null ],
     [ "load", "gate__library__manager_8h.html#a21db0193886493918bc33a7ffd09b8ff", null ],
     [ "load_all", "gate__library__manager_8h.html#a92abe4c023b408a948cc4d2693031764", null ],
     [ "remove", "gate__library__manager_8h.html#a51c46b4cdbdc6330ce1012f35eac67f0", null ],

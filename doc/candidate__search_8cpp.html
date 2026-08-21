@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
+   &#160;<span id="projectnumber">v4.5.0-84-g8c462e899</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -85,8 +85,7 @@ $(document).ready(function(){initNavTree('candidate__search_8cpp.html',''); init
 
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#namespaces">Namespaces</a>  </div>
   <div class="headertitle">
 <div class="title">candidate_search.cpp File Reference</div>  </div>
 </div><!--header-->
@@ -97,40 +96,48 @@ $(document).ready(function(){initNavTree('candidate__search_8cpp.html',''); init
 <code>#include &quot;<a class="el" href="netlist__traversal__decorator_8h_source.html">hal_core/netlist/decorators/netlist_traversal_decorator.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate_8h_source.html">hal_core/netlist/gate.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="net_8h_source.html">hal_core/netlist/net.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="include_2hal__core_2netlist_2netlist_8h_source.html">hal_core/netlist/netlist.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="user__feedback_8h_source.html">hal_core/plugin_system/user_feedback.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="cipher__candidate_8h_source.html">hawkeye/cipher_candidate.h</a>&quot;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for candidate_search.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="candidate__search_8cpp__incl.png" border="0" usemap="#aplugins_2hawkeye_2src_2candidate__search_8cpp" alt=""/></div>
 <map name="aplugins_2hawkeye_2src_2candidate__search_8cpp" id="aplugins_2hawkeye_2src_2candidate__search_8cpp">
-<area shape="rect" title=" " alt="" coords="771,5,938,47"/>
-<area shape="rect" href="candidate__search_8h.html" title="This file contains the function for HAWKEYE&#39;s candidate search as well as a struct for configuring th..." alt="" coords="917,281,1128,307"/>
-<area shape="rect" href="neighborhood_8h.html" title="This file contains functions related to neighborhoods in graphs." alt="" coords="5,95,208,136"/>
-<area shape="rect" href="netlist__graph_8h.html" title="This file contains the class that holds a netlist graph." alt="" coords="339,184,514,225"/>
-<area shape="rect" href="netlist__traversal__decorator_8h.html" title=" " alt="" coords="599,184,811,225"/>
-<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1666,102,1833,129"/>
-<area shape="rect" href="net_8h.html" title=" " alt="" coords="2543,191,2702,218"/>
-<area shape="rect" href="enums_8h.html" title=" " alt="" coords="1697,452,1828,493"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="761,452,892,493"/>
-<area shape="rect" href="register__candidate_8h.html" title="This file contains the class that holds all information on a register candidate." alt="" coords="718,370,935,397"/>
-<area shape="rect" title=" " alt="" coords="2525,459,2587,486"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="1385,541,1525,568"/>
-<area shape="rect" title=" " alt="" coords="2591,541,2641,568"/>
-<area shape="rect" title=" " alt="" coords="783,541,870,568"/>
-<area shape="rect" title=" " alt="" coords="1155,459,1197,486"/>
-<area shape="rect" title=" " alt="" coords="117,281,237,307"/>
-<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="616,281,795,307"/>
-<area shape="rect" title=" " alt="" coords="1243,459,1367,486"/>
-<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="1721,363,1906,404"/>
-<area shape="rect" title=" " alt="" coords="2184,370,2261,397"/>
-<area shape="rect" title=" " alt="" coords="2368,459,2427,486"/>
-<area shape="rect" title=" " alt="" coords="2819,459,2874,486"/>
-<area shape="rect" title=" " alt="" coords="819,281,893,307"/>
-<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="1365,363,1544,404"/>
-<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="2869,363,3024,404"/>
-<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="1965,191,2160,218"/>
-<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1787,184,1941,225"/>
-<area shape="rect" href="gate__pin_8h.html" title=" " alt="" coords="2489,273,2642,315"/>
-<area shape="rect" href="pin__group_8h.html" title=" " alt="" coords="2387,363,2541,404"/>
+<area shape="rect" title=" " alt="" coords="1551,5,1718,47"/>
+<area shape="rect" href="candidate__search_8h.html" title="This file contains the struct for configuring HAWKEYE&#39;s candidate search, see CipherCandidate::detect..." alt="" coords="3029,370,3240,397"/>
+<area shape="rect" href="neighborhood_8h.html" title="This file contains functions related to neighborhoods in graphs." alt="" coords="203,95,405,136"/>
+<area shape="rect" href="netlist__graph_8h.html" title="This file contains the class that holds a netlist graph." alt="" coords="315,184,490,225"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="944,281,1123,307"/>
+<area shape="rect" href="netlist__traversal__decorator_8h.html" title=" " alt="" coords="518,184,730,225"/>
+<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1491,102,1658,129"/>
+<area shape="rect" title=" " alt="" coords="3311,459,3396,486"/>
+<area shape="rect" href="net_8h.html" title=" " alt="" coords="1617,191,1775,218"/>
+<area shape="rect" href="user__feedback_8h.html" title=" " alt="" coords="2829,363,3005,404"/>
+<area shape="rect" href="cipher__candidate_8h.html" title="This file contains the class that holds all information on a candidate for a symmetric cryptographic ..." alt="" coords="2667,281,2874,307"/>
+<area shape="rect" href="enums_8h.html" title=" " alt="" coords="2556,452,2687,493"/>
+<area shape="rect" title=" " alt="" coords="3408,541,3459,568"/>
+<area shape="rect" title=" " alt="" coords="2107,459,2165,486"/>
+<area shape="rect" title=" " alt="" coords="3173,459,3235,486"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="1394,541,1534,568"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="843,452,973,493"/>
+<area shape="rect" title=" " alt="" coords="144,281,264,307"/>
+<area shape="rect" title=" " alt="" coords="1651,459,1693,486"/>
+<area shape="rect" title=" " alt="" coords="407,541,494,568"/>
+<area shape="rect" title=" " alt="" coords="1502,459,1626,486"/>
+<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="2035,363,2221,404"/>
+<area shape="rect" title=" " alt="" coords="1349,370,1427,397"/>
+<area shape="rect" title=" " alt="" coords="1049,459,1103,486"/>
+<area shape="rect" title=" " alt="" coords="592,281,667,307"/>
+<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="2576,363,2755,404"/>
+<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="2296,363,2451,404"/>
+<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="755,191,949,218"/>
+<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1885,184,2040,225"/>
+<area shape="rect" href="gate__pin_8h.html" title=" " alt="" coords="1886,273,2039,315"/>
+<area shape="rect" href="pin__group_8h.html" title=" " alt="" coords="1705,363,1858,404"/>
+<area shape="rect" title=" " alt="" coords="2884,459,2951,486"/>
+<area shape="rect" href="sbox__database_8h.html" title="This file contains the S&#45;box database class that holds and manages known cryptographic S&#45;boxes up to ..." alt="" coords="3315,370,3509,397"/>
 </map>
 </div>
 </div>
@@ -142,12 +149,6 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacehal_1_1hawkeye"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1hawkeye.html">hal::hawkeye</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a5df594a3128b34bd1499983e0b3a939e"><td class="memItemLeft" align="right" valign="top">Result&lt; std::vector&lt; RegisterCandidate &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1hawkeye.html#a5df594a3128b34bd1499983e0b3a939e">hal::hawkeye::detect_candidates</a> (Netlist *nl, const std::vector&lt; DetectionConfiguration &gt; &amp;configs, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> min_state_size=40, const std::vector&lt; Gate * &gt; &amp;start_ffs={})</td></tr>
-<tr class="memdesc:a5df594a3128b34bd1499983e0b3a939e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempt to locate candidates for symmetric cryptographic implementations within a gate-level netlist.  <a href="namespacehal_1_1hawkeye.html#a5df594a3128b34bd1499983e0b3a939e">More...</a><br /></td></tr>
-<tr class="separator:a5df594a3128b34bd1499983e0b3a939e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Variable Documentation</h2>
 <a id="a5f6db998a442cfbdec046e3a0761d1da"></a>
@@ -162,9 +163,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="candidate__search_8cpp_source.html#l00063">63</a> of file <a class="el" href="candidate__search_8cpp_source.html">candidate_search.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="candidate__search_8cpp_source.html#l00068">68</a> of file <a class="el" href="candidate__search_8cpp_source.html">candidate_search.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="candidate__search_8cpp_source.html#l00312">hal::hawkeye::detect_candidates()</a>, and <a class="el" href="sbox__lookup_8cpp_source.html#l00291">hal::hawkeye::identify_sbox()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="cipher__candidate_8cpp_source.html#l00226">hal::hawkeye::CipherCandidate::CipherCandidate()</a>, and <a class="el" href="candidate__search_8cpp_source.html#l00317">hal::hawkeye::CipherCandidate::detect()</a>.</p>
 
 </div>
 </div>
@@ -180,9 +181,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="candidate__search_8cpp_source.html#l00064">64</a> of file <a class="el" href="candidate__search_8cpp_source.html">candidate_search.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="candidate__search_8cpp_source.html#l00069">69</a> of file <a class="el" href="candidate__search_8cpp_source.html">candidate_search.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="candidate__search_8cpp_source.html#l00312">hal::hawkeye::detect_candidates()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="cipher__candidate_8cpp_source.html#l00226">hal::hawkeye::CipherCandidate::CipherCandidate()</a>, and <a class="el" href="candidate__search_8cpp_source.html#l00317">hal::hawkeye::CipherCandidate::detect()</a>.</p>
 
 </div>
 </div>
@@ -198,9 +199,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="candidate__search_8cpp_source.html#l00062">62</a> of file <a class="el" href="candidate__search_8cpp_source.html">candidate_search.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="candidate__search_8cpp_source.html#l00067">67</a> of file <a class="el" href="candidate__search_8cpp_source.html">candidate_search.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="create__functional__candidates_8cpp_source.html#l01876">hal::module_identification::FunctionalCandidate::add_n_shifted_operands()</a>, <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="verifying__candidates_8cpp_source.html#l00718">hal::module_identification::check_sliced_add()</a>, <a class="el" href="token__stream_8h_source.html#l00230">hal::TokenStream&lt; T &gt;::consume()</a>, <a class="el" href="token__stream_8h_source.html#l00282">hal::TokenStream&lt; T &gt;::consume_current_line()</a>, <a class="el" href="token__stream_8h_source.html#l00266">hal::TokenStream&lt; T &gt;::consume_until()</a>, <a class="el" href="candidate__search_8cpp_source.html#l00312">hal::hawkeye::detect_candidates()</a>, <a class="el" href="bitorder__propagation_8cpp_source.html#l01454">hal::bitorder_propagation::export_bitorder_propagation_information()</a>, <a class="el" href="token__stream_8h_source.html#l00308">hal::TokenStream&lt; T &gt;::extract_until()</a>, <a class="el" href="token__stream_8h_source.html#l00446">hal::TokenStream&lt; T &gt;::find_next()</a>, <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00070">hal::utils::get_binary_directory()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00149">hal::BooleanFunctionDecorator::get_boolean_function_from()</a>, <a class="el" href="saleae__directory_8cpp_source.html#l00353">hal::SaleaeDirectory::get_net_list()</a>, <a class="el" href="token__stream_8h_source.html#l00338">hal::TokenStream&lt; T &gt;::join_until()</a>, <a class="el" href="settings__manager_8cpp_source.html#l00087">hal::SettingsManager::mainWindowSaveGeometry()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00285">hal::SelectionRelay::navigateDown()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00192">hal::SelectionRelay::navigateUp()</a>, <a class="el" href="callback__hook_8h_source.html#l00137">hal::CallbackHook&lt; R(ArgTypes...)&gt;::operator()()</a>, <a class="el" href="svg__icon__engine_8cpp_source.html#l00026">hal::SvgIconEngine::pixmap()</a>, <a class="el" href="bitorder__propagation_8cpp_source.html#l01384">hal::bitorder_propagation::propagate_bitorder()</a>, <a class="el" href="token__stream_8h_source.html#l00494">hal::TokenStream&lt; T &gt;::remaining()</a>, <a class="el" href="plugins_2module__identification_2src_2utils_2utils_8cpp_source.html#l00194">hal::module_identification::reorder_commutative_operands()</a>, <a class="el" href="special__log__content__manager_8cpp_source.html#l00037">hal::SpecialLogContentManager::safeScreenshot()</a>, <a class="el" href="saleae_8cpp_source.html#l00151">saleae_ls()</a>, <a class="el" href="parser__types_8cpp_source.html#l00036">hal::BooleanFunctionParser::Token::Variable()</a>, <a class="el" href="dataflow__analysis_2src_2api_2configuration_8cpp_source.html#l00017">hal::dataflow::Configuration::with_min_group_size()</a>, <a class="el" href="dataflow__analysis_2src_2api_2result_8cpp_source.html#l00272">hal::dataflow::Result::write_dot()</a>, and <a class="el" href="dataflow__analysis_2src_2api_2result_8cpp_source.html#l00346">hal::dataflow::Result::write_txt()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="create__functional__candidates_8cpp_source.html#l01876">hal::module_identification::FunctionalCandidate::add_n_shifted_operands()</a>, <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="verifying__candidates_8cpp_source.html#l00718">hal::module_identification::check_sliced_add()</a>, <a class="el" href="token__stream_8h_source.html#l00230">hal::TokenStream&lt; T &gt;::consume()</a>, <a class="el" href="token__stream_8h_source.html#l00282">hal::TokenStream&lt; T &gt;::consume_current_line()</a>, <a class="el" href="token__stream_8h_source.html#l00266">hal::TokenStream&lt; T &gt;::consume_until()</a>, <a class="el" href="candidate__search_8cpp_source.html#l00317">hal::hawkeye::CipherCandidate::detect()</a>, <a class="el" href="bitorder__propagation_8cpp_source.html#l01454">hal::bitorder_propagation::export_bitorder_propagation_information()</a>, <a class="el" href="token__stream_8h_source.html#l00308">hal::TokenStream&lt; T &gt;::extract_until()</a>, <a class="el" href="token__stream_8h_source.html#l00446">hal::TokenStream&lt; T &gt;::find_next()</a>, <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00070">hal::utils::get_binary_directory()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00149">hal::BooleanFunctionDecorator::get_boolean_function_from()</a>, <a class="el" href="saleae__directory_8cpp_source.html#l00353">hal::SaleaeDirectory::get_net_list()</a>, <a class="el" href="token__stream_8h_source.html#l00338">hal::TokenStream&lt; T &gt;::join_until()</a>, <a class="el" href="settings__manager_8cpp_source.html#l00087">hal::SettingsManager::mainWindowSaveGeometry()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00285">hal::SelectionRelay::navigateDown()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00192">hal::SelectionRelay::navigateUp()</a>, <a class="el" href="callback__hook_8h_source.html#l00137">hal::CallbackHook&lt; R(ArgTypes...)&gt;::operator()()</a>, <a class="el" href="svg__icon__engine_8cpp_source.html#l00026">hal::SvgIconEngine::pixmap()</a>, <a class="el" href="bitorder__propagation_8cpp_source.html#l01384">hal::bitorder_propagation::propagate_bitorder()</a>, <a class="el" href="token__stream_8h_source.html#l00494">hal::TokenStream&lt; T &gt;::remaining()</a>, <a class="el" href="plugins_2module__identification_2src_2utils_2utils_8cpp_source.html#l00194">hal::module_identification::reorder_commutative_operands()</a>, <a class="el" href="special__log__content__manager_8cpp_source.html#l00037">hal::SpecialLogContentManager::safeScreenshot()</a>, <a class="el" href="saleae_8cpp_source.html#l00151">saleae_ls()</a>, <a class="el" href="parser__types_8cpp_source.html#l00036">hal::BooleanFunctionParser::Token::Variable()</a>, <a class="el" href="dataflow__analysis_2src_2api_2configuration_8cpp_source.html#l00017">hal::dataflow::Configuration::with_min_group_size()</a>, <a class="el" href="dataflow__analysis_2src_2api_2result_8cpp_source.html#l00272">hal::dataflow::Result::write_dot()</a>, and <a class="el" href="dataflow__analysis_2src_2api_2result_8cpp_source.html#l00346">hal::dataflow::Result::write_txt()</a>.</p>
 
 </div>
 </div>

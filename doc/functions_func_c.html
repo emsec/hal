@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
+   &#160;<span id="projectnumber">v4.5.0-84-g8c462e899</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -198,6 +198,9 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 <li>childrenWaveIndex()
 : <a class="el" href="classhal_1_1_wave_data_group.html#a074d24ad8f9d8e194f1da238c03803a1">hal::WaveDataGroup</a>
 </li>
+<li>CipherCandidate()
+: <a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html#a826a84856d7a28ad08bed18ee6b9ac0c">hal::hawkeye::CipherCandidate</a>
+</li>
 <li>CircleSeparatedNet()
 : <a class="el" href="classhal_1_1_circle_separated_net.html#a609816c133783c669987303f93ca05f6">hal::CircleSeparatedNet</a>
 </li>
@@ -207,7 +210,6 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 , <a class="el" href="classhal_1_1_content_layout_area.html#a70fd4c6fdd1d634e8e4b6d9d5e7b1882">hal::ContentLayoutArea</a>
 , <a class="el" href="classhal_1_1_context_tree_model.html#a146acc5f2f5b056499885bab2b4c68ec">hal::ContextTreeModel</a>
 , <a class="el" href="classhal_1_1_coordinate_from_data_map.html#a27fd687cb078e8e1e8bb29e26ca34873">hal::CoordinateFromDataMap</a>
-, <a class="el" href="classhal_1_1dataflow_1_1_progress_printer.html#ac4b09f8dafec9782422932c3b2b8ef07">hal::dataflow::ProgressPrinter</a>
 , <a class="el" href="classhal_1_1_dock_bar.html#a0269dc1433dcb659dc5e1bf585dd31ec">hal::DockBar</a>
 , <a class="el" href="classhal_1_1_drag_controller.html#a4c343f816a8f208083282630e03b7ec4">hal::DragController</a>
 , <a class="el" href="classhal_1_1_endpoint_table_model.html#ad2239067cbc2207be7cca59f565991ee">hal::EndpointTableModel</a>
@@ -232,10 +234,14 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 , <a class="el" href="classhal_1_1_simulation_input.html#aaeb6339c801f816cf5fb5bddcf86d093">hal::SimulationInput</a>
 , <a class="el" href="classhal_1_1_splitter_anchor.html#aca0ec543f029b97e6b1cba6e8ee30b49">hal::SplitterAnchor</a>
 , <a class="el" href="classhal_1_1_tab_widget.html#a208648799f8927cd9d4cdd2670b91743">hal::TabWidget</a>
+, <a class="el" href="classhal_1_1user__feedback_1_1_progress_printer.html#aeaa551d3c1f51215bbc04683a88ada77">hal::user_feedback::ProgressPrinter</a>
 , <a class="el" href="classhal_1_1_wave_data.html#a02f2d29a3c933f78552214cf0ae28917">hal::WaveData</a>
 </li>
 <li>clear_caches()
 : <a class="el" href="classhal_1_1_netlist.html#a9abaa35a57cf4aae1e39c48b2bc47cb3">hal::Netlist</a>
+</li>
+<li>clear_sboxes()
+: <a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html#a51fd77428635327852ae3e9a6ab700b6">hal::hawkeye::CipherCandidate</a>
 </li>
 <li>clearAll()
 : <a class="el" href="classhal_1_1_main_settings_list.html#a75b5cb8e094b32e87fe5e3dd2e77467b">hal::MainSettingsList</a>
@@ -474,10 +480,10 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="classhal_1_1_comment_dialog.html#a021c103e46037e20fbfc2376be4a24a6">hal::CommentDialog</a>
 </li>
 <li>CommentEntry()
-: <a class="el" href="classhal_1_1_comment_entry.html#a4abc144a88ef10bf8352c11b7ca9ceff">hal::CommentEntry</a>
+: <a class="el" href="classhal_1_1_comment_entry.html#a7faa99565f4586120dd862b7b25dfe10">hal::CommentEntry</a>
 </li>
 <li>CommentItem()
-: <a class="el" href="classhal_1_1_comment_item.html#a17b6cd85590d04547d219919036ba471">hal::CommentItem</a>
+: <a class="el" href="classhal_1_1_comment_item.html#a02702e7a16b54e234fbe7b6bb94feefc">hal::CommentItem</a>
 </li>
 <li>CommentManager()
 : <a class="el" href="classhal_1_1_comment_manager.html#a4ef9d652b20dc7357d25ab7f2f0a0df7">hal::CommentManager</a>
@@ -561,7 +567,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="classhal_1_1z3__utils_1_1_converter.html#a7d9f524a933bdf97130fb96cb73ff8e5">hal::z3_utils::Converter</a>
 </li>
 <li>consume()
-: <a class="el" href="classhal_1_1_token_stream.html#a95f8c575e74c1ba56b1699278611791a">hal::TokenStream&lt; T &gt;</a>
+: <a class="el" href="classhal_1_1_token_stream.html#ac78663ded2f48ed5c0001f98e28aad7f">hal::TokenStream&lt; T &gt;</a>
 </li>
 <li>consume_current_line()
 : <a class="el" href="classhal_1_1_token_stream.html#a34c3196764083342ecc1bd5ac8f65a57">hal::TokenStream&lt; T &gt;</a>
@@ -625,12 +631,14 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 <li>contentChanged()
 : <a class="el" href="classhal_1_1_splitter_anchor.html#a76454846d21a56a45891a3389a7b64a4">hal::SplitterAnchor</a>
 </li>
+<li>contentFactory()
+: <a class="el" href="classhal_1_1_content_factory.html#a5e1173d2908fce0a99603ce4eda19d04">hal::ContentFactory</a>
+</li>
 <li>ContentFactory()
 : <a class="el" href="classhal_1_1_content_factory.html#af666e254b657c66fdfc1074295301503">hal::ContentFactory</a>
 </li>
 <li>contentFactory()
-: <a class="el" href="classhal_1_1_content_factory.html#a5e1173d2908fce0a99603ce4eda19d04">hal::ContentFactory</a>
-, <a class="el" href="classhal_1_1_dot_viewer_factory.html#a7046ec07acd132c854903e7abfa2ba83">hal::DotViewerFactory</a>
+: <a class="el" href="classhal_1_1_dot_viewer_factory.html#a7046ec07acd132c854903e7abfa2ba83">hal::DotViewerFactory</a>
 , <a class="el" href="classhal_1_1_waveform_viewer_factory.html#a74329c8c9b0b964772c0e396df6d0e0f">hal::WaveformViewerFactory</a>
 </li>
 <li>ContentFrame()
@@ -773,6 +781,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 </li>
 <li>create_modules()
 : <a class="el" href="classhal_1_1dataflow_1_1_result.html#a5121ac9c18d84ad50095dac448e84131">hal::dataflow::Result</a>
+, <a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html#a90cd934f12cd245de18d8a396165f6a1">hal::hawkeye::CipherCandidate</a>
 </li>
 <li>create_modules_in_netlist()
 : <a class="el" href="structhal_1_1module__identification_1_1_result.html#abafe839e6e10a94ab0c7930033ad0575">hal::module_identification::Result</a>
@@ -792,7 +801,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 </li>
 <li>create_pin_group()
 : <a class="el" href="classhal_1_1_gate_type.html#a93241b61de55fc1e436214f7faead3ba">hal::GateType</a>
-, <a class="el" href="classhal_1_1_module.html#aa80d9564cd6571834b17528bb5031703">hal::Module</a>
+, <a class="el" href="classhal_1_1_module.html#a52eea387f4537aae1ebf9349b0399204">hal::Module</a>
 </li>
 <li>create_project_directory()
 : <a class="el" href="classhal_1_1_project_manager.html#a189c61c9b73c15b360018572ce9510d3">hal::ProjectManager</a>

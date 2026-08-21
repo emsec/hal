@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
+   &#160;<span id="projectnumber">v4.5.0-84-g8c462e899</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -119,6 +119,9 @@ $(document).ready(function(){initNavTree('functions_~.html',''); initResizable()
 </li>
 <li>~ChannelModel()
 : <a class="el" href="classhal_1_1_channel_model.html#a6a525cbcf49f7c119f770874f7b037f4">hal::ChannelModel</a>
+</li>
+<li>~CipherCandidate()
+: <a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html#a8aaef52a80dc4dd235856e51f35f2718">hal::hawkeye::CipherCandidate</a>
 </li>
 <li>~CliExtensionPythonShell()
 : <a class="el" href="classhal_1_1_cli_extension_python_shell.html#aabedcd6dac0b08c345af7de19eea18d7">hal::CliExtensionPythonShell</a>
@@ -222,10 +225,6 @@ $(document).ready(function(){initNavTree('functions_~.html',''); initResizable()
 <li>~GuiExtensionPythonBase()
 : <a class="el" href="classhal_1_1_gui_extension_python_base.html#a45c7408008cf0e124b02c577df7266af">hal::GuiExtensionPythonBase</a>
 </li>
-<li>~GuiLayoutLocker()
-: <a class="el" href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a2f1cf760581ddd309bb5f559c12c4f6e">hal::dataflow::GuiLayoutLocker</a>
-, <a class="el" href="classhal_1_1module__identification_1_1_gui_layout_locker.html#a44b3676515fee2c92a9df957fd26198d">hal::module_identification::GuiLayoutLocker</a>
-</li>
 <li>~GuiPluginDelegate()
 : <a class="el" href="classhal_1_1_gui_plugin_delegate.html#af82bfe919c98e1204e4daa32e06f3cb1">hal::GuiPluginDelegate</a>
 </li>
@@ -258,6 +257,7 @@ $(document).ready(function(){initNavTree('functions_~.html',''); initResizable()
 </li>
 <li>~LayoutLocker()
 : <a class="el" href="classhal_1_1_layout_locker.html#a2ac7bd36924bece4bf2c8690621d845e">hal::LayoutLocker</a>
+, <a class="el" href="classhal_1_1user__feedback_1_1_layout_locker.html#a405b2dbbbb503ab38b20083d248a9a93">hal::user_feedback::LayoutLocker</a>
 </li>
 <li>~LibertyParser()
 : <a class="el" href="classhal_1_1_liberty_parser.html#a9b42e79acc9e12ce902dc79e71dfe215">hal::LibertyParser</a>
@@ -349,6 +349,12 @@ $(document).ready(function(){initNavTree('functions_~.html',''); initResizable()
 <li>~ProgramOptions()
 : <a class="el" href="classhal_1_1_program_options.html#a24787304566ddf68d92c2d2574c13f38">hal::ProgramOptions</a>
 </li>
+<li>~ProgressPrinter()
+: <a class="el" href="classhal_1_1user__feedback_1_1_progress_printer.html#a251683e9639fcb8dc31541bca68b3f6d">hal::user_feedback::ProgressPrinter</a>
+</li>
+<li>~ProgressScope()
+: <a class="el" href="classhal_1_1user__feedback_1_1_progress_scope.html#a3c1ac9a42e61d6735ef133169d040fdc">hal::user_feedback::ProgressScope</a>
+</li>
 <li>~ProjectSerializer()
 : <a class="el" href="classhal_1_1_project_serializer.html#ae89d4f762270f68bb1aa6aaaa55463e6">hal::ProjectSerializer</a>
 </li>
@@ -373,17 +379,11 @@ $(document).ready(function(){initNavTree('functions_~.html',''); initResizable()
 <li>~PythonThread()
 : <a class="el" href="classhal_1_1_python_thread.html#aeaff2b703ed3f6be28c98b323aae80f8">hal::PythonThread</a>
 </li>
-<li>~RegisterCandidate()
-: <a class="el" href="classhal_1_1hawkeye_1_1_register_candidate.html#af8b352e6624d20d3ae01ec688ac40f8d">hal::hawkeye::RegisterCandidate</a>
-</li>
 <li>~ReorderRequest()
 : <a class="el" href="classhal_1_1_wave_tree_model_1_1_reorder_request.html#a6893ba3c1de38e685f6ce63530596855">hal::WaveTreeModel::ReorderRequest</a>
 </li>
 <li>~ResynthesisPlugin()
 : <a class="el" href="classhal_1_1_resynthesis_plugin.html#a3f7ea1185a7241beee0ceecafe40f330">hal::ResynthesisPlugin</a>
-</li>
-<li>~RoundCandidate()
-: <a class="el" href="classhal_1_1hawkeye_1_1_round_candidate.html#abeea8a7e30a627d68fb7d24878e53754">hal::hawkeye::RoundCandidate</a>
 </li>
 <li>~RuntimeLibrary()
 : <a class="el" href="classhal_1_1_runtime_library.html#a5cb8fbd0a9b942dc5de98724b81a0258">hal::RuntimeLibrary</a>
@@ -405,9 +405,6 @@ $(document).ready(function(){initNavTree('functions_~.html',''); initResizable()
 </li>
 <li>~SaleaeWriter()
 : <a class="el" href="classhal_1_1_saleae_writer.html#a57ed57d20570ae116dcf74910d36ed11">hal::SaleaeWriter</a>
-</li>
-<li>~SBoxCandidate()
-: <a class="el" href="classhal_1_1hawkeye_1_1_s_box_candidate.html#ad9fa5abce86b1fa780520dd59bfa329c">hal::hawkeye::SBoxCandidate</a>
 </li>
 <li>~SBoxDatabase()
 : <a class="el" href="classhal_1_1hawkeye_1_1_s_box_database.html#ad8fec149610e41ee597618ac6d82c567">hal::hawkeye::SBoxDatabase</a>

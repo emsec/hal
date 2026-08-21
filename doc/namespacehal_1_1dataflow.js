@@ -49,8 +49,6 @@ var namespacehal_1_1dataflow =
     [ "Result", "classhal_1_1dataflow_1_1_result.html", "classhal_1_1dataflow_1_1_result" ],
     [ "Grouping", "structhal_1_1dataflow_1_1_grouping.html", "structhal_1_1dataflow_1_1_grouping" ],
     [ "NetlistAbstraction", "structhal_1_1dataflow_1_1_netlist_abstraction.html", "structhal_1_1dataflow_1_1_netlist_abstraction" ],
-    [ "GuiLayoutLocker", "classhal_1_1dataflow_1_1_gui_layout_locker.html", "classhal_1_1dataflow_1_1_gui_layout_locker" ],
-    [ "ProgressPrinter", "classhal_1_1dataflow_1_1_progress_printer.html", "classhal_1_1dataflow_1_1_progress_printer" ],
     [ "measure_block_time_t", "classhal_1_1dataflow_1_1measure__block__time__t.html", "classhal_1_1dataflow_1_1measure__block__time__t" ],
     [ "analyze", "namespacehal_1_1dataflow.html#a9d7b9b5948aa361332502ed7bc255881", null ]
 ];

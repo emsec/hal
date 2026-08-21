@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
+   &#160;<span id="projectnumber">v4.5.0-84-g8c462e899</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -86,7 +86,7 @@ $(document).ready(function(){initNavTree('namespacehal_1_1hawkeye.html',''); ini
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">hal::hawkeye Namespace Reference</div>  </div>
 </div><!--header-->
@@ -95,170 +95,59 @@ $(document).ready(function(){initNavTree('namespacehal_1_1hawkeye.html',''); ini
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html">DetectionConfiguration</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration to set up the register candidate search.  <a href="structhal_1_1hawkeye_1_1_detection_configuration.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration to set up the candidate search.  <a href="structhal_1_1hawkeye_1_1_detection_configuration.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1hawkeye_1_1_register_candidate.html">RegisterCandidate</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A register candidate discovered by HAWKEYE.  <a href="classhal_1_1hawkeye_1_1_register_candidate.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1hawkeye_1_1_s_box.html">SBox</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An S-box located within the round function of a <code><a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html" title="A candidate for a symmetric cryptographic implementation within a netlist.">CipherCandidate</a></code>.  <a href="structhal_1_1hawkeye_1_1_s_box.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1hawkeye_1_1_round_candidate.html">RoundCandidate</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A round candidate constructed from a previously discovered register candidate.  <a href="classhal_1_1hawkeye_1_1_round_candidate.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html">CipherCandidate</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A candidate for a symmetric cryptographic implementation within a netlist.  <a href="classhal_1_1hawkeye_1_1_cipher_candidate.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1hawkeye_1_1_s_box_database.html">SBoxDatabase</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Database of known S-boxes.  <a href="classhal_1_1hawkeye_1_1_s_box_database.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1hawkeye_1_1_s_box_candidate.html">SBoxCandidate</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An S-box candidate discovered within the round function of a round candidate.  <a href="classhal_1_1hawkeye_1_1_s_box_candidate.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a5df594a3128b34bd1499983e0b3a939e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="classhal_1_1hawkeye_1_1_register_candidate.html">RegisterCandidate</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1hawkeye.html#a5df594a3128b34bd1499983e0b3a939e">detect_candidates</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html">DetectionConfiguration</a> &gt; &amp;configs, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> min_state_size=40, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;start_ffs={})</td></tr>
-<tr class="memdesc:a5df594a3128b34bd1499983e0b3a939e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempt to locate candidates for symmetric cryptographic implementations within a gate-level netlist.  <a href="namespacehal_1_1hawkeye.html#a5df594a3128b34bd1499983e0b3a939e">More...</a><br /></td></tr>
-<tr class="separator:a5df594a3128b34bd1499983e0b3a939e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a3913ad90deb3c274cad6a382db51e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="classhal_1_1hawkeye_1_1_s_box_candidate.html">SBoxCandidate</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1hawkeye.html#a0a3913ad90deb3c274cad6a382db51e8">locate_sboxes</a> (const <a class="el" href="classhal_1_1hawkeye_1_1_round_candidate.html">RoundCandidate</a> *candidate)</td></tr>
-<tr class="memdesc:a0a3913ad90deb3c274cad6a382db51e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to locate S-box candidates within the combinational next-state logic of the round function candidate.  <a href="namespacehal_1_1hawkeye.html#a0a3913ad90deb3c274cad6a382db51e8">More...</a><br /></td></tr>
-<tr class="separator:a0a3913ad90deb3c274cad6a382db51e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a785eb9e2f5079eec777ae49e2250d37c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1hawkeye.html#a785eb9e2f5079eec777ae49e2250d37c">identify_sbox</a> (const <a class="el" href="classhal_1_1hawkeye_1_1_s_box_candidate.html">SBoxCandidate</a> &amp;sbox_candidate, const <a class="el" href="classhal_1_1hawkeye_1_1_s_box_database.html">SBoxDatabase</a> &amp;db)</td></tr>
-<tr class="memdesc:a785eb9e2f5079eec777ae49e2250d37c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to identify an S-box candidate by matching it against a database of known S-boxes under affine equivalence.  <a href="namespacehal_1_1hawkeye.html#a785eb9e2f5079eec777ae49e2250d37c">More...</a><br /></td></tr>
-<tr class="separator:a785eb9e2f5079eec777ae49e2250d37c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:abe2c580d4bc36a01b78d5f0bcb614aa1"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1hawkeye.html#abe2c580d4bc36a01b78d5f0bcb614aa1">SBoxStatus</a> { <a class="el" href="namespacehal_1_1hawkeye.html#abe2c580d4bc36a01b78d5f0bcb614aa1a1e5e62235d094afd01cd56e65112fc63">unidentified</a>
+, <a class="el" href="namespacehal_1_1hawkeye.html#abe2c580d4bc36a01b78d5f0bcb614aa1aa0d5c22a0385001fa00b5a112fcbb79e">identified</a>
+, <a class="el" href="namespacehal_1_1hawkeye.html#abe2c580d4bc36a01b78d5f0bcb614aa1a382fa69b4a5ff1a290d502df1ee98010">superseded</a>
+ }</td></tr>
+<tr class="memdesc:abe2c580d4bc36a01b78d5f0bcb614aa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The outcome of trying to identify an S-box, see <code>CipherCandidate::identify_sboxes</code>.  <a href="namespacehal_1_1hawkeye.html#abe2c580d4bc36a01b78d5f0bcb614aa1">More...</a><br /></td></tr>
+<tr class="separator:abe2c580d4bc36a01b78d5f0bcb614aa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Locates candidates for symmetric cryptographic implementations within a gate-level netlist. </p>
-</div><h2 class="groupheader">Function Documentation</h2>
-<a id="a5df594a3128b34bd1499983e0b3a939e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5df594a3128b34bd1499983e0b3a939e">&#9670;&nbsp;</a></span>detect_candidates()</h2>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="abe2c580d4bc36a01b78d5f0bcb614aa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe2c580d4bc36a01b78d5f0bcb614aa1">&#9670;&nbsp;</a></span>SBoxStatus</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="classhal_1_1hawkeye_1_1_register_candidate.html">RegisterCandidate</a> &gt; &gt; hal::hawkeye::detect_candidates </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classhal_1_1_netlist.html">Netlist</a> *&#160;</td>
-          <td class="paramname"><em>nl</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html">DetectionConfiguration</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>configs</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
-          <td class="paramname"><em>min_state_size</em> = <code>40</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>start_ffs</em> = <code>{}</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname">enum <a class="el" href="namespacehal_1_1hawkeye.html#abe2c580d4bc36a01b78d5f0bcb614aa1">hal::hawkeye::SBoxStatus</a></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Attempt to locate candidates for symmetric cryptographic implementations within a gate-level netlist. </p>
-<p>Search operates only on an abstraction of the netlist that contains only flip-flops as nodes and connections through combinational logic as edges. The algorithm computes the k-neighborhood of each flip-flop for <code>k = 1, ..., config.timeout</code> and stops when the neighborhood size saturates. Depending on the <code>config</code>, additional criteria are used to narrow down the search space, see <code><a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4" title="Checks to be performed on flip-flop control inputs during candidate search.">DetectionConfiguration::Control</a></code> and <code><a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a9e9749311c2d2215d725cf53c6bcf75b" title="Determines whether to use SCC detection as part of neighborhood discovery.">DetectionConfiguration::Components</a></code> for details. When the neighborhood size saturates, a register candidate is created if the last neighborhood size is larger than <code>config.min_register_size</code>. After the candidates have been identified, they are reduced further to produce the final set of register candidates. To this end, large candidates that fully contain a smaller candidate and candidates that are smaller than <code>min_state_size</code> are discarded.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The netlist to operate on. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">configs</td><td>- The configurations of the detection approaches to be executed one after another on each start flip-flop. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">min_state_size</td><td>- The minimum size of a register candidate to be considered a cryptographic state register. Defaults to <code>40</code>. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">start_ffs</td><td>- The flip-flops to analyze. Defaults to an empty vector, i.e., all flip-flops in the netlist will be analyzed. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Ok() and a vector of candidates on success, an error otherwise. </dd></dl>
+<p>The outcome of trying to identify an S-box, see <code><a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html#a330258cb567e3ee65a356d30f5bd2267" title="Try to identify all S-boxes of the candidate by matching them against a database of known S-boxes.">CipherCandidate::identify_sboxes</a></code>. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="abe2c580d4bc36a01b78d5f0bcb614aa1a1e5e62235d094afd01cd56e65112fc63"></a>unidentified&#160;</td><td class="fielddoc"><p>Identification ran but the S-box is not contained in the database. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="abe2c580d4bc36a01b78d5f0bcb614aa1aa0d5c22a0385001fa00b5a112fcbb79e"></a>identified&#160;</td><td class="fielddoc"><p>Identification ran and matched, see <code><a class="el" href="structhal_1_1hawkeye_1_1_s_box.html#a256152025b6b4f4584a3daaf3b40d694" title="The name of the S-box in the database it was identified as, empty unless status is identified.">SBox::identified_as</a></code>. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="abe2c580d4bc36a01b78d5f0bcb614aa1a382fa69b4a5ff1a290d502df1ee98010"></a>superseded&#160;</td><td class="fielddoc"><p>Identification did not run, another variant of the same S-box was identified before. </p>
+</td></tr>
+</table>
 
-<p class="definition">Definition at line <a class="el" href="candidate__search_8cpp_source.html#l00312">312</a> of file <a class="el" href="candidate__search_8cpp_source.html">candidate_search.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4a892d0ad001a9cb665acf32ca2a283164">hal::hawkeye::DetectionConfiguration::CHECK_FF</a>, <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4a0ce179a75f85a32d2405a507163496b3">hal::hawkeye::DetectionConfiguration::CHECK_NETS</a>, <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4ab9a860c74b65955b371c87dcdf1e1d7b">hal::hawkeye::DetectionConfiguration::CHECK_PINS</a>, <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a9e9749311c2d2215d725cf53c6bcf75ba56814936837b9404d981d6cb5236171f">hal::hawkeye::DetectionConfiguration::CHECK_SCC</a>, <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4a1aa0a5df002be76db44700a337b3fc21">hal::hawkeye::DetectionConfiguration::CHECK_TYPE</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="el" href="netlist__graph_8cpp_source.html#l00171">hal::graph_algorithm::NetlistGraph::from_netlist_no_edges()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00132">hal::Netlist::get_gate_library()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00204">hal::Netlist::get_gates()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, <a class="el" href="candidate__search_8cpp_source.html#l00063">in_reg</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a9e9749311c2d2215d725cf53c6bcf75bab50339a10e1de285ac99d4c3990b8693">hal::hawkeye::DetectionConfiguration::NONE</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, <a class="el" href="candidate__search_8cpp_source.html#l00064">out_reg</a>, and <a class="el" href="candidate__search_8cpp_source.html#l00062">size</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00026">hal::PYBIND11_PLUGIN()</a>.</p>
-
-</div>
-</div>
-<a id="a785eb9e2f5079eec777ae49e2250d37c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a785eb9e2f5079eec777ae49e2250d37c">&#9670;&nbsp;</a></span>identify_sbox()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt; hal::hawkeye::identify_sbox </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhal_1_1hawkeye_1_1_s_box_candidate.html">SBoxCandidate</a> &amp;&#160;</td>
-          <td class="paramname"><em>sbox_candidate</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classhal_1_1hawkeye_1_1_s_box_database.html">SBoxDatabase</a> &amp;&#160;</td>
-          <td class="paramname"><em>db</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Try to identify an S-box candidate by matching it against a database of known S-boxes under affine equivalence. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">sbox_candidate</td><td>- An S-box candidate. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">db</td><td>- A database of known S-boxes. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK()</a> and the name of the matching S-box, or an empty string if no S-box of the database matched the candidate. An error is only returned if the candidate could not be analyzed at all. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="sbox__lookup_8cpp_source.html#l00291">291</a> of file <a class="el" href="sbox__lookup_8cpp_source.html">sbox_lookup.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00256">hal::BooleanFunction::Const()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00018">hal::BooleanFunctionNetDecorator::get_boolean_variable_name()</a>, <a class="el" href="round__candidate_8cpp_source.html#l00377">hal::hawkeye::RoundCandidate::get_control_inputs()</a>, <a class="el" href="round__candidate_8cpp_source.html#l00357">hal::hawkeye::RoundCandidate::get_input_reg()</a>, <a class="el" href="round__candidate_8cpp_source.html#l00342">hal::hawkeye::RoundCandidate::get_netlist()</a>, <a class="el" href="round__candidate_8cpp_source.html#l00382">hal::hawkeye::RoundCandidate::get_other_inputs()</a>, <a class="el" href="round__candidate_8cpp_source.html#l00372">hal::hawkeye::RoundCandidate::get_state_inputs()</a>, <a class="el" href="candidate__search_8cpp_source.html#l00063">in_reg</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="sbox__database_8cpp_source.html#l00439">hal::hawkeye::SBoxDatabase::lookup()</a>, <a class="el" href="sbox__lookup_8h_source.html#l00073">hal::hawkeye::SBoxCandidate::m_candidate</a>, <a class="el" href="sbox__lookup_8h_source.html#l00078">hal::hawkeye::SBoxCandidate::m_component</a>, <a class="el" href="sbox__lookup_8h_source.html#l00083">hal::hawkeye::SBoxCandidate::m_input_gates</a>, <a class="el" href="sbox__lookup_8h_source.html#l00088">hal::hawkeye::SBoxCandidate::m_output_gates</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba1d623b89683f9ce4e074de1676d12416">hal::sum</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00208">hal::BooleanFunction::to_u64()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00026">hal::PYBIND11_PLUGIN()</a>.</p>
-
-</div>
-</div>
-<a id="a0a3913ad90deb3c274cad6a382db51e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a3913ad90deb3c274cad6a382db51e8">&#9670;&nbsp;</a></span>locate_sboxes()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="classhal_1_1hawkeye_1_1_s_box_candidate.html">SBoxCandidate</a> &gt; &gt; hal::hawkeye::locate_sboxes </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhal_1_1hawkeye_1_1_round_candidate.html">RoundCandidate</a> *&#160;</td>
-          <td class="paramname"><em>candidate</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Try to locate S-box candidates within the combinational next-state logic of the round function candidate. </p>
-<p>Computes an initial set of connected components within the round function extracted between the input and output register of the round candidate. If these initial components are reasonably small and their input and output sizes match, construct S-box candidates for further analysis right away. Otherwise, iteratively consider more combinational gates starting from the components' input gates and search for sub-components. Create S-box candidates for these sub-components after determining the respective S-box output gates.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">candidate</td><td>- A round function candidate. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A vector of S-box candidates on success, an error otherwise. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="sbox__lookup_8cpp_source.html#l00018">18</a> of file <a class="el" href="sbox__lookup_8cpp_source.html">sbox_lookup.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caad85794454679ce47ec639fe85b32200e">hal::c_inverter</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="el" href="components_8cpp_source.html#l00011">hal::graph_algorithm::get_connected_components()</a>, <a class="el" href="round__candidate_8cpp_source.html#l00347">hal::hawkeye::RoundCandidate::get_graph()</a>, <a class="el" href="round__candidate_8cpp_source.html#l00392">hal::hawkeye::RoundCandidate::get_input_ffs_of_gate()</a>, <a class="el" href="round__candidate_8cpp_source.html#l00357">hal::hawkeye::RoundCandidate::get_input_reg()</a>, <a class="el" href="round__candidate_8cpp_source.html#l00397">hal::hawkeye::RoundCandidate::get_longest_distance_to_gate()</a>, <a class="el" href="round__candidate_8cpp_source.html#l00342">hal::hawkeye::RoundCandidate::get_netlist()</a>, <a class="el" href="round__candidate_8cpp_source.html#l00362">hal::hawkeye::RoundCandidate::get_output_reg()</a>, <a class="el" href="subgraph_8cpp_source.html#l00010">hal::graph_algorithm::get_subgraph()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="sbox__lookup_8h_source.html#l00073">hal::hawkeye::SBoxCandidate::m_candidate</a>, <a class="el" href="sbox__lookup_8h_source.html#l00078">hal::hawkeye::SBoxCandidate::m_component</a>, <a class="el" href="sbox__lookup_8h_source.html#l00083">hal::hawkeye::SBoxCandidate::m_input_gates</a>, <a class="el" href="sbox__lookup_8h_source.html#l00088">hal::hawkeye::SBoxCandidate::m_output_gates</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00026">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="cipher__candidate_8h_source.html#l00061">61</a> of file <a class="el" href="cipher__candidate_8h_source.html">cipher_candidate.h</a>.</p>
 
 </div>
 </div>

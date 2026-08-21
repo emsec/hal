@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
+   &#160;<span id="projectnumber">v4.5.0-84-g8c462e899</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -97,7 +97,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;        py::class_&lt;NetlistTraversalDecorator&gt; py_netlist_traversal_decorator(</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;            m, <span class="stringliteral">&quot;NetlistTraversalDecorator&quot;</span>, R<span class="stringliteral">&quot;(A netlist decorator that provides functionality to traverse the associated netlist without making any modifications.)&quot;);</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="stringliteral">        py_netlist_traversal_decorator.def(py::init&lt;Netlist&amp;&gt;(), py::arg(</span><span class="stringliteral">&quot;netlist&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="stringliteral">        py_netlist_traversal_decorator.def(py::init&lt;Netlist&amp;&gt;(), py::arg(</span><span class="stringliteral">&quot;netlist&quot;</span>), py::keep_alive&lt;1, 2&gt;(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="stringliteral">            Construct new NetlistTraversalDecorator object.</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="stringliteral">            :param hal_py.Netlist netlist: The netlist to operate on.</span></div>
@@ -129,7 +129,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            py::arg(<span class="stringliteral">&quot;continue_on_match&quot;</span>)     = <span class="keyword">false</span>,</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            py::arg(<span class="stringliteral">&quot;exit_endpoint_filter&quot;</span>)  = <span class="keyword">nullptr</span>,</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            py::arg(<span class="stringliteral">&quot;entry_endpoint_filter&quot;</span>) = <span class="keyword">nullptr</span>,</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="stringliteral">            Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the ``target_gate_filter`` evaluates to ``True``.</span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">            Traverse over gates that do not meet the ``target_gate_filter`` condition.</span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">            Stop traversal if (1) ``continue_on_match`` is ``False`` the ``target_gate_filter`` evaluates to ``True``, (2) the ``exit_endpoint_filter`` evaluates to ``False`` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the ``entry_endpoint_filter`` evaluates to ``False`` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).</span></div>
@@ -171,7 +171,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            py::arg(<span class="stringliteral">&quot;continue_on_match&quot;</span>)     = <span class="keyword">false</span>,</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            py::arg(<span class="stringliteral">&quot;exit_endpoint_filter&quot;</span>)  = <span class="keyword">nullptr</span>,</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            py::arg(<span class="stringliteral">&quot;entry_endpoint_filter&quot;</span>) = <span class="keyword">nullptr</span>,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="stringliteral">            Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the ``target_gate_filter`` evaluates to ``True``.</span></div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="stringliteral">            Traverse over gates that do not meet the ``target_gate_filter`` condition.</span></div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="stringliteral">            Stop traversal if (1) ``continue_on_match`` is ``False`` the ``target_gate_filter`` evaluates to ``True``, (2) the ``exit_endpoint_filter`` evaluates to ``False`` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the ``entry_endpoint_filter`` evaluates to ``False`` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).</span></div>
@@ -213,7 +213,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            py::arg(<span class="stringliteral">&quot;continue_on_mismatch&quot;</span>)  = <span class="keyword">false</span>,</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            py::arg(<span class="stringliteral">&quot;exit_endpoint_filter&quot;</span>)  = <span class="keyword">nullptr</span>,</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            py::arg(<span class="stringliteral">&quot;entry_endpoint_filter&quot;</span>) = <span class="keyword">nullptr</span>,</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="stringliteral">            Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the ``target_gate_filter`` evaluates to ``True``.</span></div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="stringliteral">            Continue traversal independent of whatever ``target_gate_filter`` evaluates to.</span></div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="stringliteral">            Stop traversal if (1) ``continue_on_mismatch`` is ``False`` the ``target_gate_filter`` evaluates to ``False``, (2) the ``exit_endpoint_filter`` evaluates to ``False`` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the ``entry_endpoint_filter`` evaluates to ``False`` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).</span></div>
@@ -255,7 +255,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;            py::arg(<span class="stringliteral">&quot;continue_on_mismatch&quot;</span>)  = <span class="keyword">false</span>,</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;            py::arg(<span class="stringliteral">&quot;exit_endpoint_filter&quot;</span>)  = <span class="keyword">nullptr</span>,</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;            py::arg(<span class="stringliteral">&quot;entry_endpoint_filter&quot;</span>) = <span class="keyword">nullptr</span>,</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="stringliteral">            Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the ``target_gate_filter`` evaluates to ``True``.</span></div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="stringliteral">            Continue traversal independent of whatever ``target_gate_filter`` evaluates to.</span></div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="stringliteral">            Stop traversal if (1) ``continue_on_mismatch`` is ``False`` the ``target_gate_filter`` evaluates to ``False``, (2) the ``exit_endpoint_filter`` evaluates to ``False`` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the ``entry_endpoint_filter`` evaluates to ``False`` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).</span></div>
@@ -290,7 +290,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            py::arg(<span class="stringliteral">&quot;successors&quot;</span>),</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            py::arg(<span class="stringliteral">&quot;max_depth&quot;</span>),</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            py::arg(<span class="stringliteral">&quot;target_gate_filter&quot;</span>) = <span class="keyword">nullptr</span>,</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="stringliteral">            Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the ``target_gate_filter`` evaluates to ``True``.</span></div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="stringliteral">            Continue traversal independent of whatever ``target_gate_filter`` evaluates to.</span></div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="stringliteral">            Stop traversal if the specified depth is reached.</span></div>
@@ -325,7 +325,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;            py::arg(<span class="stringliteral">&quot;successors&quot;</span>),</div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;            py::arg(<span class="stringliteral">&quot;max_depth&quot;</span>),</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            py::arg(<span class="stringliteral">&quot;target_gate_filter&quot;</span>) = <span class="keyword">nullptr</span>,</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="stringliteral">            Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the ``target_gate_filter`` evaluates to ``True``.</span></div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="stringliteral">            Continue traversal independent of whatever ``target_gate_filter`` evaluates to.</span></div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="stringliteral">            Stop traversal if the specified depth is reached.</span></div>
@@ -358,7 +358,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            py::arg(<span class="stringliteral">&quot;net&quot;</span>),</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            py::arg(<span class="stringliteral">&quot;successors&quot;</span>),</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            py::arg(<span class="stringliteral">&quot;forbidden_pins&quot;</span>),</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="stringliteral">            Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.</span></div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="stringliteral">            Traverse over gates that are not sequential until a sequential gate is found.</span></div>
 <div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="stringliteral">            Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.</span></div>
@@ -387,7 +387,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;            py::arg(<span class="stringliteral">&quot;gate&quot;</span>),</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;            py::arg(<span class="stringliteral">&quot;successors&quot;</span>),</div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            py::arg(<span class="stringliteral">&quot;forbidden_pins&quot;</span>),</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="stringliteral">            Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.</span></div>
 <div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="stringliteral">            Traverse over gates that are not sequential until a sequential gate is found.</span></div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="stringliteral">            Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.</span></div>
@@ -415,7 +415,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;            },</div>
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            py::arg(<span class="stringliteral">&quot;successors&quot;</span>),</div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            py::arg(<span class="stringliteral">&quot;forbidden_pins&quot;</span>),</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="stringliteral">            Get the next sequential gates for all sequential gates in the netlist by traversing through remaining logic (e.g., combinational logic).</span></div>
 <div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="stringliteral">            Compute a dict from a sequential gate to all its successors.</span></div>
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="stringliteral">            Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.</span></div>
@@ -443,7 +443,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;            py::arg(<span class="stringliteral">&quot;net&quot;</span>),</div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;            py::arg(<span class="stringliteral">&quot;successors&quot;</span>),</div>
 <div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;            py::arg(<span class="stringliteral">&quot;forbidden_pins&quot;</span>),</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="stringliteral">            Starting from the given net, traverse the netlist and return all combinational successor/predecessor gates.</span></div>
 <div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="stringliteral">            Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.</span></div>
 <div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="stringliteral">            All combinational gates found during traversal are added to the result.</span></div>
@@ -473,7 +473,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            py::arg(<span class="stringliteral">&quot;gate&quot;</span>),</div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;            py::arg(<span class="stringliteral">&quot;successors&quot;</span>),</div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;            py::arg(<span class="stringliteral">&quot;forbidden_pins&quot;</span>),</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;<span class="stringliteral">            Starting from the given gate, traverse the netlist and return all combinational successor/predecessor gates.</span></div>
 <div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;<span class="stringliteral">            Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.</span></div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;<span class="stringliteral">            All combinational gates found during traversal are added to the result.</span></div>
@@ -549,7 +549,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;            py::arg(<span class="stringliteral">&quot;direction&quot;</span>),</div>
 <div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;            py::arg(<span class="stringliteral">&quot;exit_endpoint_filter&quot;</span>)  = <span class="keyword">nullptr</span>,</div>
 <div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;            py::arg(<span class="stringliteral">&quot;entry_endpoint_filter&quot;</span>) = <span class="keyword">nullptr</span>,</div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;<span class="stringliteral">                Find the shortest path (i.e., the smallest number of gates) that connects the start gate with the end gate.</span></div>
 <div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;<span class="stringliteral">                The gate where the search started from will be the first in the result list, the end gate will be the last.</span></div>
 <div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;<span class="stringliteral">                If there is no such path, ``None`` is returned. If there is more than one path with the same length, only the first one is returned.</span></div>
@@ -577,6 +577,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__t
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a504c73ff1a68c50e5435dece66bc2772"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a></div><div class="ttdeci">Net * net</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">netlist_serializer.cpp:57</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a924ab95925fc83b38cba3ac2d8d7e9aa"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a></div><div class="ttdeci">PinDirection direction</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">netlist_serializer.cpp:64</a></div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
+<div class="ttc" id="astructhal_1_1borrowed_html"><div class="ttname"><a href="structhal_1_1borrowed.html">hal::borrowed</a></div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_8h_source.html#l00129">python_bindings.h:130</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

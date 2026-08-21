@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
+   &#160;<span id="projectnumber">v4.5.0-84-g8c462e899</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -100,7 +100,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2subgraph__
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="stringliteral">            A netlist decorator that operates on an existing subgraph of the associated netlist to, e.g., copy the subgraph as a new netlist object or compute a Boolean function describing the subgraph.</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="stringliteral">        py_subgraph_netlist_decorator.def(py::init&lt;const Netlist&amp;&gt;(), py::arg(</span><span class="stringliteral">&quot;netlist&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="stringliteral">        py_subgraph_netlist_decorator.def(py::init&lt;const Netlist&amp;&gt;(), py::arg(</span><span class="stringliteral">&quot;netlist&quot;</span>), py::keep_alive&lt;1, 2&gt;(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="stringliteral">            Construct new SubgraphNetlistDecorator object.</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="stringliteral">            :param hal_py.Netlist netlist: The netlist to operate on.</span></div>
@@ -284,7 +284,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2subgraph__
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            },</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            py::arg(<span class="stringliteral">&quot;subgraph_gates&quot;</span>),</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            py::arg(<span class="stringliteral">&quot;subgraph_output&quot;</span>),</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="stringliteral">            Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.</span></div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="stringliteral">            This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.</span></div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="stringliteral"></span> </div>
@@ -310,7 +310,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2subgraph__
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;            },</div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;            py::arg(<span class="stringliteral">&quot;subgraph_module&quot;</span>),</div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;            py::arg(<span class="stringliteral">&quot;subgraph_output&quot;</span>),</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="stringliteral">            Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.</span></div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="stringliteral">            This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.</span></div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="stringliteral"></span> </div>
@@ -330,6 +330,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2subgraph__
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00751">graph_graphics_view.cpp:751</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
+<div class="ttc" id="astructhal_1_1borrowed_html"><div class="ttname"><a href="structhal_1_1borrowed.html">hal::borrowed</a></div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_8h_source.html#l00129">python_bindings.h:130</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

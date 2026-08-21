@@ -1,4 +1,0 @@
-<map id="hal::hawkeye::SBoxCandidate" name="hal::hawkeye::SBoxCandidate">
-<area shape="rect" id="node1" title="An S&#45;box candidate discovered within the round function of a round candidate." alt="" coords="9,233,224,355"/>
-<area shape="rect" id="node2" href="$classhal_1_1hawkeye_1_1_round_candidate.html" title="A round candidate constructed from a previously discovered register candidate." alt="" coords="5,5,228,171"/>
-</map>

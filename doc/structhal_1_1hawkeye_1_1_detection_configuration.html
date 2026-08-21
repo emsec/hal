@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
+   &#160;<span id="projectnumber">v4.5.0-84-g8c462e899</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -93,7 +93,7 @@ $(document).ready(function(){initNavTree('structhal_1_1hawkeye_1_1_detection_con
 </div><!--header-->
 <div class="contents">
 
-<p>Configuration to set up the register candidate search.  
+<p>Configuration to set up the candidate search.  
  <a href="structhal_1_1hawkeye_1_1_detection_configuration.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="candidate__search_8h_source.html">/home/runner/work/hal/hal/plugins/hawkeye/include/hawkeye/candidate_search.h</a>&gt;</code></p>
@@ -102,7 +102,7 @@ Collaboration diagram for hal::hawkeye::DetectionConfiguration:</div>
 <div class="dyncontent">
 <div class="center"><img src="structhal_1_1hawkeye_1_1_detection_configuration__coll__graph.png" border="0" usemap="#ahal_1_1hawkeye_1_1_detection_configuration_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1hawkeye_1_1_detection_configuration_coll__map" id="ahal_1_1hawkeye_1_1_detection_configuration_coll__map">
-<area shape="rect" title="Configuration to set up the register candidate search." alt="" coords="5,5,272,141"/>
+<area shape="rect" title="Configuration to set up the candidate search." alt="" coords="5,5,272,141"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -134,14 +134,14 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:ac37565326a476662dd586275376c2469"><td class="mdescLeft">&#160;</td><td class="mdescRight">Neighborhood discovery iteration timeout.  <a href="structhal_1_1hawkeye_1_1_detection_configuration.html#ac37565326a476662dd586275376c2469">More...</a><br /></td></tr>
 <tr class="separator:ac37565326a476662dd586275376c2469"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a168b58f07d0b5091a2bc9bac4c9f5e14"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a168b58f07d0b5091a2bc9bac4c9f5e14">min_register_size</a> = 10</td></tr>
-<tr class="memdesc:a168b58f07d0b5091a2bc9bac4c9f5e14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum number of flip-flops for a register candidate to be created.  <a href="structhal_1_1hawkeye_1_1_detection_configuration.html#a168b58f07d0b5091a2bc9bac4c9f5e14">More...</a><br /></td></tr>
+<tr class="memdesc:a168b58f07d0b5091a2bc9bac4c9f5e14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum number of flip-flops of a register for a candidate to be created from it.  <a href="structhal_1_1hawkeye_1_1_detection_configuration.html#a168b58f07d0b5091a2bc9bac4c9f5e14">More...</a><br /></td></tr>
 <tr class="separator:a168b58f07d0b5091a2bc9bac4c9f5e14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Configuration to set up the register candidate search. </p>
-<p>This struct holds important parameters that configure the candidate search of HAWKEYE. </p>
+<div class="textblock"><p>Configuration to set up the candidate search. </p>
+<p>This struct holds important parameters that configure the candidate search of HAWKEYE, see <code><a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html#ac4ff412730b03665771bb5c987daeee6" title="Attempt to locate candidates for symmetric cryptographic SPN, Feistel, and ARX implementations within...">CipherCandidate::detect</a></code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00052">52</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00049">49</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a9e9749311c2d2215d725cf53c6bcf75b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9e9749311c2d2215d725cf53c6bcf75b">&#9670;&nbsp;</a></span>Components</h2>
@@ -172,7 +172,7 @@ Public Attributes</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00089">89</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00086">86</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
 
 </div>
 </div>
@@ -209,7 +209,7 @@ Public Attributes</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00060">60</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00057">57</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
 
 </div>
 </div>
@@ -226,7 +226,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00026">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00025">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -242,7 +242,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00026">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00025">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -260,9 +260,9 @@ Public Attributes</h2></td></tr>
 
 <p>A vector of a vector of gate types that are treated as identical types by the candidate search, i.e., when checking equality of the types of two gates that are different but declared equivalent, <code>true</code> is returned. </p>
 
-<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00105">105</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00102">102</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00026">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00025">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -278,11 +278,11 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Minimum number of flip-flops for a register candidate to be created. </p>
+<p>Minimum number of flip-flops of a register for a candidate to be created from it. </p>
 
-<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00115">115</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00112">112</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00026">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00025">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -300,9 +300,9 @@ Public Attributes</h2></td></tr>
 
 <p>Neighborhood discovery iteration timeout. </p>
 
-<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00110">110</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00107">107</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00026">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00025">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>

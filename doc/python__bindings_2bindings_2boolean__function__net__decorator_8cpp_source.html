@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
+   &#160;<span id="projectnumber">v4.5.0-84-g8c462e899</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2boolean__f
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="stringliteral">            A net decorator that provides functionality to translate between nets and Boolean function variables.</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="stringliteral">        py_boolean_function_net_decorator.def(py::init&lt;const Net&amp;&gt;(), py::arg(</span><span class="stringliteral">&quot;net&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="stringliteral">        py_boolean_function_net_decorator.def(py::init&lt;const Net&amp;&gt;(), py::arg(</span><span class="stringliteral">&quot;net&quot;</span>), py::keep_alive&lt;1, 2&gt;(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="stringliteral">            Construct new BooleanFunctionNetDecorator object.</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="stringliteral">            :param hal_py.Net net: The net to operate on.</span></div>
@@ -134,41 +134,43 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2boolean__f
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            },</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            py::arg(<span class="stringliteral">&quot;netlist&quot;</span>),</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            py::arg(<span class="stringliteral">&quot;var&quot;</span>),</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">            Get the net represented by a unique Boolean variable.</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">            :param hal_py.Netlist netlist: The netlist on which to operate.</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">            :param hal_py.BooleanFunction var: The Boolean variable.</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral">            :returns: The specified net on success, ``None`` otherwise.</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">            :rtype: hal_py.Net or None</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral">        py_boolean_function_net_decorator.def_static(</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_net_from&quot;</span>,</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* netlist, <span class="keyword">const</span> std::string&amp; var_name) -&gt; <a class="code" href="classhal_1_1_net.html">Net</a>* {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function_net_decorator.html#a184623934c0570c3c9443640bac90b12">BooleanFunctionNetDecorator::get_net_from</a>(netlist, var_name);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                }</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                {</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;error encountered while getting the net represented by a Boolean variable name:\n{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                }</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            },</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            py::arg(<span class="stringliteral">&quot;netlist&quot;</span>),</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            py::arg(<span class="stringliteral">&quot;var_name&quot;</span>),</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">            Get the net represented by a unique Boolean variable name.</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">            :param hal_py.Netlist netlist: The netlist on which to operate.</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral">            :param str var_name: The Boolean variable name.</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">            :returns: The specified net on success, ``None`` otherwise.</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">            :rtype: hal_py.Net or None</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral">    }</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            py::keep_alive&lt;0, 1&gt;(),</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">            Get the net represented by a unique Boolean variable.</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">            :param hal_py.Netlist netlist: The netlist on which to operate.</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral">            :param hal_py.BooleanFunction var: The Boolean variable.</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">            :returns: The specified net on success, ``None`` otherwise.</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral">            :rtype: hal_py.Net or None</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">        py_boolean_function_net_decorator.def_static(</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_net_from&quot;</span>,</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* netlist, <span class="keyword">const</span> std::string&amp; var_name) -&gt; <a class="code" href="classhal_1_1_net.html">Net</a>* {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                <span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function_net_decorator.html#a184623934c0570c3c9443640bac90b12">BooleanFunctionNetDecorator::get_net_from</a>(netlist, var_name);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;error encountered while getting the net represented by a Boolean variable name:\n{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            },</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            py::arg(<span class="stringliteral">&quot;netlist&quot;</span>),</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            py::arg(<span class="stringliteral">&quot;var_name&quot;</span>),</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            py::keep_alive&lt;0, 1&gt;(),</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">            Get the net represented by a unique Boolean variable name.</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">            :param hal_py.Netlist netlist: The netlist on which to operate.</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">            :param str var_name: The Boolean variable name.</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral">            :returns: The specified net on success, ``None`` otherwise.</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral">            :rtype: hal_py.Net or None</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="stringliteral">    }</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html"><div class="ttname"><a href="classhal_1_1_boolean_function.html">hal::BooleanFunction</a></div><div class="ttdef"><b>Definition:</b> <a href="boolean__function_8h_source.html#l00054">boolean_function.h:55</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_net_decorator_html_a184623934c0570c3c9443640bac90b12"><div class="ttname"><a href="classhal_1_1_boolean_function_net_decorator.html#a184623934c0570c3c9443640bac90b12">hal::BooleanFunctionNetDecorator::get_net_from</a></div><div class="ttdeci">static Result&lt; Net * &gt; get_net_from(const Netlist *netlist, const BooleanFunction &amp;var)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00044">boolean_function_net_decorator.cpp:44</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_net_decorator_html_a68c2d7aaa24c940c33bc040aa7437e76"><div class="ttname"><a href="classhal_1_1_boolean_function_net_decorator.html#a68c2d7aaa24c940c33bc040aa7437e76">hal::BooleanFunctionNetDecorator::get_boolean_variable_name</a></div><div class="ttdeci">std::string get_boolean_variable_name() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00018">boolean_function_net_decorator.cpp:18</a></div></div>

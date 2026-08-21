@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Graph Algorithms &mdash; hal_py v4.5.0-83-g30c8f0afc documentation</title>
+  <title>Graph Algorithms &mdash; hal_py v4.5.0-84-g8c462e899 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-83-g30c8f0afc
+                v4.5.0-84-g8c462e899
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -523,6 +523,37 @@ The vertices must already exist in the graph.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="graph_algorithm.NetlistGraph.from_gates">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_gates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_gates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">set()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#graph_algorithm.NetlistGraph" title="graph_algorithm.NetlistGraph"><span class="pre">graph_algorithm.NetlistGraph</span></a></span></span><a class="headerlink" href="#graph_algorithm.NetlistGraph.from_gates" title="Permalink to this definition"></a></dt>
+<dd><p>Create a directed graph from a subset of the gates of a netlist.</p>
+<blockquote>
+<div><p>Only the given gates become vertices and only nets between two of them become edges, so the graph is a closed world irrespective of what the gates are connected to elsewhere in the netlist.</p>
+<p>Gates in <code class="docutils literal notranslate"><span class="pre">split_gates</span></code> are represented by two vertices instead of one: a primary vertex carrying only the outgoing edges of the gate and a shadow vertex carrying only its incoming edges.
+This breaks feedback through those gates, which makes a sequential loop such as the round function of a cipher acyclic without having to copy it into a netlist of its own.
+Both vertices resolve back to the same gate, so use <code class="docutils literal notranslate"><span class="pre">is_shadow_vertex</span></code> to tell the two roles apart.
+A shadow vertex is only created if the gate actually has incoming edges within the graph.</p>
+<p>Vertices are numbered in the order of <code class="docutils literal notranslate"><span class="pre">gates</span></code>, so pass them in a deterministic order to obtain a reproducible graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param list[hal_py.Gate] gates</dt>
+<dd class="field-odd"><p>The gates to include in the graph. Must all belong to the same netlist.</p>
+</dd>
+<dt class="field-even">param set[hal_py.Gate] split_gates</dt>
+<dd class="field-even"><p>The gates to represent by a primary and a shadow vertex. Gates that are not part of <code class="docutils literal notranslate"><span class="pre">gates</span></code> are ignored. Defaults to an empty set.</p>
+</dd>
+<dt class="field-odd">param lambda filter</dt>
+<dd class="field-odd"><p>An optional filter that is evaluated on every net considered as an edge. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>graph_algorithm.NetlistGraph or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="graph_algorithm.NetlistGraph.from_netlist">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_netlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_dummy_vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#graph_algorithm.NetlistGraph" title="graph_algorithm.NetlistGraph"><span class="pre">graph_algorithm.NetlistGraph</span></a></span></span><a class="headerlink" href="#graph_algorithm.NetlistGraph.from_netlist" title="Permalink to this definition"></a></dt>
 <dd><p>Create a directed graph from a netlist. Optionally create dummy nodes at nets missing a source or destination. An optional filter can be applied to exclude undesired edges.</p>
@@ -567,6 +598,23 @@ The vertices must already exist in the graph.</p>
 </dd>
 </dl>
 </div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graph_algorithm.NetlistGraph.get_all_vertices_from_gate">
+<span class="sig-name descname"><span class="pre">get_all_vertices_from_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#graph_algorithm.NetlistGraph" title="graph_algorithm.NetlistGraph"><span class="pre">graph_algorithm.NetlistGraph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#graph_algorithm.NetlistGraph.get_all_vertices_from_gate" title="Permalink to this definition"></a></dt>
+<dd><p>Get all vertices corresponding to the specified gate, i.e., its primary vertex and, if the gate was split by <code class="docutils literal notranslate"><span class="pre">from_gates</span></code>, its shadow vertex.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>g</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – A gate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The vertices of the gate on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)">None</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -813,6 +861,25 @@ The result may contain <code class="docutils literal notranslate"><span class="p
 </div></blockquote>
 </li>
 </ol>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graph_algorithm.NetlistGraph.is_shadow_vertex">
+<span class="sig-name descname"><span class="pre">is_shadow_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#graph_algorithm.NetlistGraph" title="graph_algorithm.NetlistGraph"><span class="pre">graph_algorithm.NetlistGraph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#graph_algorithm.NetlistGraph.is_shadow_vertex" title="Permalink to this definition"></a></dt>
+<dd><p>Check whether the specified vertex is a shadow vertex.</p>
+<p>A shadow vertex carries only the incoming edges of a gate that was split by <code class="docutils literal notranslate"><span class="pre">from_gates</span></code>, while the primary vertex of that gate carries only its outgoing edges.
+Both resolve to the same gate, so this is the only way to tell which of the two roles a vertex stands for.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vertex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – A vertex.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the vertex is a shadow vertex, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

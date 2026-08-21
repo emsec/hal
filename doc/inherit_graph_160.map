@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhal_1_1_saleae_directory.html" title="The SaleaeDirectory class provides the API for the SALEAE directory file. The SALEAE directory file w..." alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node1" href="$classhal_1_1_saleae_directory_net_entry.html" title="The SaleaeDirectoryNetEntry class represents a regular waveform for a single simulated net...." alt="" coords="5,13,216,39"/>
+<area shape="rect" id="node2" href="$classhal_1_1_saleae_directory_composed_entry.html" title="The SaleaeDirectoryComposedEntry class represents a composed waveform. There are currently three type..." alt="" coords="264,5,487,47"/>
 </map>
