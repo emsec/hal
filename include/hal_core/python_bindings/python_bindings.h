@@ -264,7 +264,8 @@ namespace pybind11
             {
                 // Only a method has a receiver worth falling back to. The first argument of a free
                 // function is just an argument and need not own anything that is returned.
-                const handle receiver = (call.func.is_method && !call.args.empty()) ? call.args[0] : handle();
+                // size(), not empty(): pybind11 changed args from a std::vector to a small_vector that has no empty()
+                const handle receiver = (call.func.is_method && call.args.size() > 0) ? call.args[0] : handle();
                 hal::python_bindings_detail::keep_owner_alive(call, ret, receiver);
             }
         };
