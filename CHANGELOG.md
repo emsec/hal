@@ -65,6 +65,8 @@ All notable changes to this project will be documented in this file.
     * added `NetlistGraph::from_gates` that builds a graph from a subset of the gates of a netlist, optionally representing a gate by a primary and a shadow vertex so that feedback through it does not close a cycle
   * dataflow analysis
     * fixed broken initialization of DANA plugin when starting via CLI
+  * netlist preprocessing
+    * fixed `remove_redundant_gates` treating two flip-flops as duplicates although they start out at different values, as the fingerprint it groups them by covers the gate type and the fan-in but not the initial value, and flip-flops are merged on that fingerprint alone without the equivalence check that combinational gates get. This affects 11 of the 13 flip-flop types of the Xilinx UNISIM library, all of which carry an `INIT` value
   * bit-order propagation
     * fixed bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
   * simulation
