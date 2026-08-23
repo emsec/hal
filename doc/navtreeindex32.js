@@ -1,6 +1,5 @@
 var NAVTREEINDEX32 =
 {
-"gate_8h_source.html":[10,0,0,0,1,11],
 "gate__details__tab__widget_8cpp.html":[10,0,1,7,2,41,9],
 "gate__details__tab__widget_8cpp_source.html":[10,0,1,7,2,41,9],
 "gate__details__tab__widget_8h.html":[10,0,1,7,0,0,42,9],
@@ -249,5 +248,6 @@ var NAVTREEINDEX32 =
 "globals_eval.html":[10,1,5],
 "globals_f.html":[10,1,0,6],
 "globals_func.html":[10,1,1],
-"globals_g.html":[10,1,0,7]
+"globals_g.html":[10,1,0,7],
+"globals_h.html":[10,1,0,8]
 };

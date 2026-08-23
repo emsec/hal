@@ -1,6 +1,5 @@
 var NAVTREEINDEX16 =
 {
-"classhal_1_1_net_layout_metric.html#a49e5daa88dbd3a01829813edeec5c1bc":[7,1,0,2,14,2],
 "classhal_1_1_net_layout_metric.html#a7b67459474e6d437093e3bc3ce312a6c":[7,1,0,2,14,4],
 "classhal_1_1_net_layout_metric.html#abfeecf1dabcf380845c39bc8dd571a24":[7,1,0,2,14,1],
 "classhal_1_1_net_layout_metric.html#adfa4313c3dd61d2782f8dfdb698100ca":[7,1,0,2,14,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX16 =
 "classhal_1_1_netlist_simulator.html#abddd532397362f0703c8240b7a7a11e1":[9,0,0,530,4],
 "classhal_1_1_netlist_simulator.html#ac08908e29c56b2130afdc7fa7502dd30":[9,0,0,530,7],
 "classhal_1_1_netlist_simulator.html#ac98a49483ca075cb84370293191acf05":[9,0,0,530,1],
-"classhal_1_1_netlist_simulator.html#ad39df0c1f32f882bc7ade5993b485906":[9,0,0,530,0]
+"classhal_1_1_netlist_simulator.html#ad39df0c1f32f882bc7ade5993b485906":[9,0,0,530,0],
+"classhal_1_1_netlist_simulator.html#ad7fed0aa0932c2eda270a52b27db4960":[9,0,0,530,3]
 };

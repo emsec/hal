@@ -1,6 +1,5 @@
 var NAVTREEINDEX35 =
 {
-"keybind__edit_8cpp.html":[10,0,1,7,2,27,0],
 "keybind__edit_8cpp_source.html":[10,0,1,7,2,27,0],
 "keybind__edit_8h.html":[10,0,1,7,0,0,28,0],
 "keybind__edit_8h_source.html":[10,0,1,7,0,0,28,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX35 =
 "multithreading__types_8h.html#aea197eaa6573e2d7072c90ea51d8e186a89c65a56491f0ee6c79cc5a855a96b72":[10,0,1,14,0,0,4,2,0,1],
 "multithreading__types_8h_source.html":[10,0,1,14,0,0,4,2],
 "namespacehal.html":[8,0,0],
-"namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83":[8,0,0,684]
+"namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83":[8,0,0,684],
+"namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83a02129bb861061d1a052c592e2dc6b383":[8,0,0,684,4]
 };

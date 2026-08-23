@@ -1,6 +1,5 @@
 var NAVTREEINDEX24 =
 {
-"classhal_1_1_time_interval.html#ad913eb20355bbebadcf0f925369f3712":[9,0,0,599,2],
 "classhal_1_1_time_interval.html#ade7d74a1be98d7b67585a7b8dc36a62b":[9,0,0,599,0],
 "classhal_1_1_token_stream.html":[7,0,2,7],
 "classhal_1_1_token_stream.html#a0001aa8643e27c8a387420769982679a":[7,0,2,7,19],
@@ -249,5 +248,6 @@ var NAVTREEINDEX24 =
 "classhal_1_1_wave_data.html#a98043c2b16f40049edb9c1e4b0f3c3b5":[9,0,0,569,5],
 "classhal_1_1_wave_data.html#a9806c43cab3578d7f459ec7ec7747cf6":[9,0,0,569,50],
 "classhal_1_1_wave_data.html#a9d5a03ae4033b8a546ad10b17187d799":[9,0,0,569,26],
-"classhal_1_1_wave_data.html#a9e05ab8d4d2162317c227ef41fb5af95":[9,0,0,569,42]
+"classhal_1_1_wave_data.html#a9e05ab8d4d2162317c227ef41fb5af95":[9,0,0,569,42],
+"classhal_1_1_wave_data.html#aaa61665bed404bd8320f2463b53ab99c":[9,0,0,569,10]
 };

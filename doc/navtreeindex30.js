@@ -1,6 +1,5 @@
 var NAVTREEINDEX30 =
 {
-"dir_5bf97c9d6a33e0546cea2ef6bbf7ea13.html":[10,0,1,1,0,0],
 "dir_5dcb373bbc43d48bf653854ce72972b3.html":[10,0,1,7,0,0,34],
 "dir_5e8fab963b6d7d6d8891b5cad4f241a7.html":[10,0,1,7,2,49],
 "dir_5f4cccbb839d6c6ae068437bcedb0ae8.html":[10,0,0,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX30 =
 "dock__bar_8cpp_source.html":[10,0,1,7,2,11,1],
 "dock__bar_8h.html":[10,0,1,7,0,0,11,1],
 "dock__bar_8h_source.html":[10,0,1,7,0,0,11,1],
-"dock__button_8cpp.html":[10,0,1,7,2,11,2]
+"dock__button_8cpp.html":[10,0,1,7,2,11,2],
+"dock__button_8cpp_source.html":[10,0,1,7,2,11,2]
 };

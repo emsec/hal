@@ -1,6 +1,5 @@
 var NAVTREEINDEX34 =
 {
-"group__pybind.html#gadcbe9ddba67d0061af0b3f101c727c6e":[8,0,0,692],
 "group__pybind.html#gadcbe9ddba67d0061af0b3f101c727c6e":[7,0,3,3],
 "group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7":[8,0,0,737],
 "group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7":[7,0,3,31],
@@ -29,8 +28,8 @@ var NAVTREEINDEX34 =
 "group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[7,0,2,9],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[10,0,0,0,4,4,10],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[7,0,2,14],
-"group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[10,0,0,0,4,4,9],
 "group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[7,0,2,13],
+"group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[10,0,0,0,4,4,9],
 "group__utility__widgets-context.html":[7,1,7,0],
 "group__utility__widgets-grouping.html":[7,1,7,2],
 "group__utility__widgets-module.html":[7,1,7,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX34 =
 "key__value__table_8cpp.html":[10,0,1,7,2,30,3],
 "key__value__table_8cpp_source.html":[10,0,1,7,2,30,3],
 "key__value__table_8h.html":[10,0,1,7,0,0,31,3],
-"key__value__table_8h_source.html":[10,0,1,7,0,0,31,3]
+"key__value__table_8h_source.html":[10,0,1,7,0,0,31,3],
+"keybind__edit_8cpp.html":[10,0,1,7,2,27,0]
 };
