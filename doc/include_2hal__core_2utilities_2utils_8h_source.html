@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-86-g079c77f39</span>
+   &#160;<span id="projectnumber">v4.5.0-87-gd9fa23e9c</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -295,7 +295,7 @@ $(document).ready(function(){initNavTree('include_2hal__core_2utilities_2utils_8
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                    result.push_back(item);</div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                }</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            }</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;            <span class="keywordflow">if</span> (s.back() == delim)</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;            <span class="keywordflow">if</span> (!s.empty() &amp;&amp; s.back() == delim)</div>
 <div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;            {</div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;                result.push_back(<span class="stringliteral">&quot;&quot;</span>);</div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;            }</div>
