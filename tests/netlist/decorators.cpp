@@ -1209,4 +1209,96 @@ namespace hal {
         TEST_END
     }
 
+
+    /**
+     * Test the traversal that the other traversals of the decorator are written in terms of.
+     *
+     * Each case states the same question twice, once through a named traversal and once through the
+     * core one, so that the claim that they are the same traversal is checked rather than asserted.
+     *
+     * Functions: get_gates
+     */
+    TEST_F(DecoratorTest, check_netlist_traversal_decorator_core)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            Netlist* nl_raw       = nl.get();
+            const GateLibrary* gl = nl_raw->get_gate_library();
+
+            // ff0 -> inv0 -> inv1 -> ff1, with a second branch inv0 -> inv2 -> ff2
+            Gate* ff0  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff0");
+            Gate* ff1  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff1");
+            Gate* ff2  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff2");
+            Gate* inv0 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "inv0");
+            Gate* inv1 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "inv1");
+            Gate* inv2 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "inv2");
+
+            test_utils::connect(nl_raw, ff0, "Q", inv0, "I", "n0");
+            Net* fan = nl_raw->create_net("fan");
+            fan->add_source(inv0, "O");
+            fan->add_destination(inv1, "I");
+            fan->add_destination(inv2, "I");
+            test_utils::connect(nl_raw, inv1, "O", ff1, "D", "n1");
+            test_utils::connect(nl_raw, inv2, "O", ff2, "D", "n2");
+
+            NetlistTraversalDecorator dec(*nl_raw);
+            const auto is_seq  = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); };
+            const auto is_comb = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); };
+            const auto always  = [](const Gate*) { return true; };
+
+            {
+                // stopping at a match gives the boundary: the flip-flops behind the logic, and not the logic
+                auto res = dec.get_gates(ff0, TraversalDirection::forward, is_seq, TraversalStop::at_match);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), (std::set<Gate*>({ff1, ff2})));
+
+                auto named = dec.get_next_sequential_gates(ff0, true, {});
+                ASSERT_TRUE(named.is_ok());
+                EXPECT_EQ(res.get(), named.get());
+            }
+            {
+                // stopping at a mismatch gives the region: the logic itself, and not the flip-flops
+                auto res = dec.get_gates(ff0, TraversalDirection::forward, is_comb, TraversalStop::at_mismatch);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), (std::set<Gate*>({inv0, inv1, inv2})));
+
+                auto named = dec.get_next_combinational_gates(ff0, true, {});
+                ASSERT_TRUE(named.is_ok());
+                EXPECT_EQ(res.get(), named.get());
+            }
+            {
+                // never stopping walks everything reachable, so both the logic and the flip-flops
+                auto res = dec.get_gates(ff0, TraversalDirection::forward, always, TraversalStop::never);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), (std::set<Gate*>({inv0, inv1, inv2, ff1, ff2})));
+            }
+            {
+                // a depth of one reaches the direct neighbour only
+                auto res = dec.get_gates(ff0, TraversalDirection::forward, always, TraversalStop::never, 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), (std::set<Gate*>({inv0})));
+            }
+            {
+                // backwards from a flip-flop at the far end reaches back through the same logic
+                auto res = dec.get_gates(ff1, TraversalDirection::backward, is_seq, TraversalStop::at_match);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), (std::set<Gate*>({ff0})));
+            }
+            {
+                // both directions at once is the union of the two
+                auto res = dec.get_gates(inv0, TraversalDirection::both, is_seq, TraversalStop::at_match);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), (std::set<Gate*>({ff0, ff1, ff2})));
+            }
+            {
+                // a match condition is required, as a traversal that collects nothing says nothing
+                auto res = dec.get_gates(ff0, TraversalDirection::forward, nullptr, TraversalStop::at_match);
+                EXPECT_TRUE(res.is_error());
+            }
+        }
+        TEST_END
+    }
+
 }

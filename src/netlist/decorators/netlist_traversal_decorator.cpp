@@ -11,6 +11,192 @@ namespace hal
     {
     }
 
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_gates(const Net* net,
+                                                                 TraversalDirection direction,
+                                                                 const std::function<bool(const Gate*)>& match,
+                                                                 TraversalStop stop,
+                                                                 u32 max_depth,
+                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (net == nullptr)
+        {
+            return ERR("nullptr given as net");
+        }
+
+        if (!m_netlist.is_net_in_netlist(net))
+        {
+            return ERR("net does not belong to netlist");
+        }
+
+        if (!match)
+        {
+            return ERR("no match condition specified");
+        }
+
+        if (direction == TraversalDirection::both)
+        {
+            auto res_forward = get_gates(net, TraversalDirection::forward, match, stop, max_depth, exit_endpoint_filter, entry_endpoint_filter);
+            if (res_forward.is_error())
+            {
+                return res_forward;
+            }
+
+            auto res_backward = get_gates(net, TraversalDirection::backward, match, stop, max_depth, exit_endpoint_filter, entry_endpoint_filter);
+            if (res_backward.is_error())
+            {
+                return res_backward;
+            }
+
+            auto gates = res_forward.get();
+            gates.merge(res_backward.get());
+            return OK(gates);
+        }
+
+        const bool successors = (direction == TraversalDirection::forward);
+
+        std::set<Gate*> res;
+        std::vector<const Net*> stack     = {net};
+        std::vector<const Net*> previous  = {};
+        std::unordered_set<const Net*> visited;
+
+        while (!stack.empty())
+        {
+            const Net* current = stack.back();
+
+            if (!previous.empty() && current == previous.back())
+            {
+                stack.pop_back();
+                previous.pop_back();
+                continue;
+            }
+
+            const u32 current_depth = previous.size() + 1;
+            if (max_depth != 0 && current_depth > max_depth)
+            {
+                stack.pop_back();
+                continue;
+            }
+
+            visited.insert(current);
+
+            bool added = false;
+            for (const auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
+            {
+                if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, current_depth))
+                {
+                    continue;
+                }
+
+                auto* gate = entry_ep->get_gate();
+
+                const bool matches = match(gate);
+                if (matches)
+                {
+                    res.insert(gate);
+                }
+
+                // Where the walk halts. A gate that ends it is still reported if it matched, it is only
+                // not traversed through.
+                if ((matches && stop == TraversalStop::at_match) || (!matches && stop == TraversalStop::at_mismatch))
+                {
+                    continue;
+                }
+
+                if (max_depth != 0 && current_depth == max_depth)
+                {
+                    continue;
+                }
+
+                for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+                {
+                    if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, current_depth))
+                    {
+                        continue;
+                    }
+
+                    const Net* exit_net = exit_ep->get_net();
+                    if (visited.find(exit_net) == visited.end())
+                    {
+                        stack.push_back(exit_net);
+                        added = true;
+                    }
+                }
+            }
+
+            if (added)
+            {
+                previous.push_back(current);
+            }
+            else
+            {
+                stack.pop_back();
+            }
+        }
+
+        return OK(res);
+    }
+
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_gates(const Gate* gate,
+                                                                 TraversalDirection direction,
+                                                                 const std::function<bool(const Gate*)>& match,
+                                                                 TraversalStop stop,
+                                                                 u32 max_depth,
+                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (gate == nullptr)
+        {
+            return ERR("nullptr given as gate");
+        }
+
+        if (!m_netlist.is_gate_in_netlist(gate))
+        {
+            return ERR("gate does not belong to netlist");
+        }
+
+        if (!match)
+        {
+            return ERR("no match condition specified");
+        }
+
+        std::set<Gate*> res;
+        for (const auto* exit_ep : (direction == TraversalDirection::backward) ? gate->get_fan_in_endpoints() : gate->get_fan_out_endpoints())
+        {
+            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 1))
+            {
+                continue;
+            }
+
+            auto res_net = get_gates(exit_ep->get_net(), direction, match, stop, max_depth, exit_endpoint_filter, entry_endpoint_filter);
+            if (res_net.is_error())
+            {
+                return ERR_APPEND(res_net.get_error(), "cannot traverse from gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
+            }
+            res.merge(res_net.get());
+        }
+
+        if (direction == TraversalDirection::both)
+        {
+            for (const auto* exit_ep : gate->get_fan_in_endpoints())
+            {
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 1))
+                {
+                    continue;
+                }
+
+                auto res_net = get_gates(exit_ep->get_net(), direction, match, stop, max_depth, exit_endpoint_filter, entry_endpoint_filter);
+                if (res_net.is_error())
+                {
+                    return ERR_APPEND(res_net.get_error(), "cannot traverse from gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
+                }
+                res.merge(res_net.get());
+            }
+        }
+
+        return OK(res);
+    }
+
     Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_matching_gates(const Net* net,
                                                                                bool successors,
                                                                                const std::function<bool(const Gate*)>& target_gate_filter,

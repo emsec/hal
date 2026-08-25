@@ -13,6 +13,58 @@ namespace hal
             :param hal_py.Netlist netlist: The netlist to operate on.
         )");
 
+        py::enum_<TraversalDirection>(m, "TraversalDirection", R"(The direction in which a netlist is traversed.)")
+            .value("forward", TraversalDirection::forward, R"(Follow the fan-out, i.e., towards the successors of a gate.)")
+            .value("backward", TraversalDirection::backward, R"(Follow the fan-in, i.e., towards the predecessors of a gate.)")
+            .value("both", TraversalDirection::both, R"(Follow both directions.)")
+            .export_values();
+
+        py::enum_<TraversalStop>(m, "TraversalStop", R"(Where a traversal stops relative to the gates it is looking for.)")
+            .value("at_match", TraversalStop::at_match, R"(Stop at a gate the filter accepts, so the collected gates bound the search.)")
+            .value("at_mismatch", TraversalStop::at_mismatch, R"(Stop at a gate the filter rejects, so the collected gates form a connected region.)")
+            .value("never", TraversalStop::never, R"(Do not stop at a gate; bound the traversal with a depth or the endpoint filters.)")
+            .export_values();
+
+        py_netlist_traversal_decorator.def(
+            "get_gates",
+            [](NetlistTraversalDecorator& self,
+               const Gate* gate,
+               TraversalDirection direction,
+               const std::function<bool(const Gate*)>& match,
+               TraversalStop stop,
+               u32 max_depth                                                          = 0,
+               const std::function<bool(const Endpoint*, u32)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*, u32)>& entry_endpoint_filter = nullptr) -> std::optional<std::set<Gate*>> {
+                auto res = self.get_gates(gate, direction, match, stop, max_depth, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                log_error("python_context", "{}", res.get_error().get());
+                return std::nullopt;
+            },
+            py::arg("gate"),
+            py::arg("direction"),
+            py::arg("match"),
+            py::arg("stop"),
+            py::arg("max_depth")             = 0,
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            borrowed(),
+            R"(
+            Traverse the netlist from the given gate, collecting the gates that ``match`` accepts.
+
+            :param hal_py.Gate gate: The gate to start from.
+            :param hal_py.TraversalDirection direction: The direction to traverse in.
+            :param lambda match: The condition a gate has to meet to be collected.
+            :param hal_py.TraversalStop stop: Where to stop traversing, relative to the gates that ``match`` accepts.
+            :param int max_depth: The maximum number of gates to traverse through. ``0`` for no limit.
+            :param lambda exit_endpoint_filter: Condition that has to hold to leave a gate.
+            :param lambda entry_endpoint_filter: Condition that has to hold to enter a gate.
+            :returns: The collected gates on success, ``None`` otherwise.
+            :rtype: set[hal_py.Gate] or None
+        )");
+
         py_netlist_traversal_decorator.def(
             "get_next_matching_gates",
             [](NetlistTraversalDecorator& self,

@@ -34,6 +34,51 @@
 namespace hal
 {
     /**
+     * The direction in which a netlist is traversed.
+     *
+     * @ingroup decorators
+     */
+    enum class TraversalDirection
+    {
+        forward,  /**< Follow the fan-out, i.e., towards the successors of a gate. */
+        backward, /**< Follow the fan-in, i.e., towards the predecessors of a gate. */
+        both,     /**< Follow both, and report whichever answer is the better one. */
+    };
+
+    /**
+     * Where a traversal stops relative to the gates it is looking for.
+     *
+     * A traversal walks the netlist collecting the gates a filter accepts. What separates one
+     * traversal from another is not what it collects but where it comes to a halt, and these are the
+     * three ways that can be answered.
+     *
+     * @ingroup decorators
+     */
+    enum class TraversalStop
+    {
+        /**
+         * Stop at a gate the filter accepts. The gates collected are the boundary of the search: they
+         * are reported but not traversed through, so what lies behind them is not reached. This is
+         * how one asks for the next flip-flops behind a cone of combinational logic.
+         */
+        at_match,
+
+        /**
+         * Stop at a gate the filter rejects. Only gates the filter accepts are traversed through, so
+         * the gates collected form one connected region of them. This is how one asks for the
+         * combinational logic between two registers.
+         */
+        at_mismatch,
+
+        /**
+         * Do not stop at a gate at all. Everything reachable is traversed and every gate the filter
+         * accepts is collected on the way. Bound this with a depth or with the endpoint filters,
+         * or it walks to the edges of the netlist.
+         */
+        never,
+    };
+
+    /**
      * A netlist decorator that provides functionality to traverse the associated netlist without making any modifications.
      *
      * @ingroup decorators
@@ -47,6 +92,54 @@ namespace hal
          * @param[in] netlist - The netlist to operate on.
          */
         NetlistTraversalDecorator(const Netlist& netlist);
+
+        /**
+         * Traverse the netlist from the given net, collecting the gates that `match` accepts.
+         *
+         * This is the traversal that the other functions of this decorator are written in terms of. What
+         * distinguishes them from one another is `stop`, which says where the walk halts relative to the
+         * gates being looked for, see `TraversalStop`.
+         *
+         * @param[in] net - The net to start from.
+         * @param[in] direction - The direction to traverse in.
+         * @param[in] match - The condition a gate has to meet to be collected.
+         * @param[in] stop - Where to stop traversing, relative to the gates that `match` accepts.
+         * @param[in] max_depth - The maximum number of gates to traverse through, counted from 1 for the direct neighbours of the start. `0` for no limit.
+         * @param[in] exit_endpoint_filter - Condition that has to hold to leave a gate through a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Condition that has to hold to enter a gate through a successor/predecessor endpoint.
+         * @returns The gates that were collected on success, an error otherwise.
+         */
+        Result<std::set<Gate*>> get_gates(const Net* net,
+                                          TraversalDirection direction,
+                                          const std::function<bool(const Gate*)>& match,
+                                          TraversalStop stop,
+                                          u32 max_depth                                                                                = 0,
+                                          const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                          const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * Traverse the netlist from the given gate, collecting the gates that `match` accepts.
+         *
+         * This is the traversal that the other functions of this decorator are written in terms of. What
+         * distinguishes them from one another is `stop`, which says where the walk halts relative to the
+         * gates being looked for, see `TraversalStop`.
+         *
+         * @param[in] gate - The gate to start from.
+         * @param[in] direction - The direction to traverse in.
+         * @param[in] match - The condition a gate has to meet to be collected.
+         * @param[in] stop - Where to stop traversing, relative to the gates that `match` accepts.
+         * @param[in] max_depth - The maximum number of gates to traverse through, counted from 1 for the direct neighbours of the start. `0` for no limit.
+         * @param[in] exit_endpoint_filter - Condition that has to hold to leave a gate through a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Condition that has to hold to enter a gate through a successor/predecessor endpoint.
+         * @returns The gates that were collected on success, an error otherwise.
+         */
+        Result<std::set<Gate*>> get_gates(const Gate* gate,
+                                          TraversalDirection direction,
+                                          const std::function<bool(const Gate*)>& match,
+                                          TraversalStop stop,
+                                          u32 max_depth                                                                                = 0,
+                                          const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                          const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         /**
          * Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
