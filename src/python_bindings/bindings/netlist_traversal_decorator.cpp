@@ -25,6 +25,87 @@ namespace hal
             .value("never", TraversalStop::never, R"(Do not stop at a gate; bound the traversal with a depth or the endpoint filters.)")
             .export_values();
 
+        py::class_<TraversalCache> py_traversal_cache(m, "TraversalCache", R"(
+            A reusable store for the results of one specific traversal, handed to ``NetlistTraversalDecorator.get_gates``.
+
+            The traversal a cache belongs to is sealed in when it is created and the cache can only ever be used for exactly that traversal, which is what makes reuse sound. Create one with ``NetlistTraversalDecorator.make_traversal_cache`` and drop it when the netlist is modified.
+        )");
+
+        py_netlist_traversal_decorator.def(
+            "make_traversal_cache",
+            [](NetlistTraversalDecorator& self,
+               TraversalDirection direction,
+               const std::function<bool(const Gate*)>& match,
+               TraversalStop stop,
+               const std::function<bool(const Endpoint*)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*)>& entry_endpoint_filter = nullptr) -> std::unique_ptr<TraversalCache> {
+                return std::make_unique<TraversalCache>(self.make_traversal_cache(direction, match, stop, exit_endpoint_filter, entry_endpoint_filter));
+            },
+            py::arg("direction"),
+            py::arg("match"),
+            py::arg("stop"),
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            R"(
+            Create a cache for one specific traversal, to be handed to ``get_gates`` in place of the traversal's parameters.
+
+            The direction must be ``TraversalDirection.forward`` or ``backward``. The endpoint filters receive no depth and there is no depth limit, as either would make the cached answers depend on how a net was reached.
+
+            :param hal_py.TraversalDirection direction: The direction to traverse in.
+            :param lambda match: The condition a gate has to meet to be collected.
+            :param hal_py.TraversalStop stop: Where to stop traversing, relative to the gates that ``match`` accepts.
+            :param lambda exit_endpoint_filter: Condition that has to hold to leave a gate.
+            :param lambda entry_endpoint_filter: Condition that has to hold to enter a gate.
+            :returns: The cache.
+            :rtype: hal_py.TraversalCache
+        )");
+
+        py_netlist_traversal_decorator.def(
+            "get_gates",
+            [](NetlistTraversalDecorator& self, const Gate* gate, TraversalCache& cache) -> std::optional<std::set<Gate*>> {
+                auto res = self.get_gates(gate, cache);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                log_error("python_context", "{}", res.get_error().get());
+                return std::nullopt;
+            },
+            py::arg("gate"),
+            py::arg("cache"),
+            borrowed(),
+            R"(
+            Traverse the netlist from the given gate, sharing results through the cache: what an earlier call worked out is not walked again.
+
+            :param hal_py.Gate gate: The gate to start from.
+            :param hal_py.TraversalCache cache: The cache holding the traversal and its results.
+            :returns: The collected gates on success, ``None`` otherwise.
+            :rtype: set[hal_py.Gate] or None
+        )");
+
+        py_netlist_traversal_decorator.def(
+            "get_gates",
+            [](NetlistTraversalDecorator& self, const Net* net, TraversalCache& cache) -> std::optional<std::set<Gate*>> {
+                auto res = self.get_gates(net, cache);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                log_error("python_context", "{}", res.get_error().get());
+                return std::nullopt;
+            },
+            py::arg("net"),
+            py::arg("cache"),
+            borrowed(),
+            R"(
+            Traverse the netlist from the given net, sharing results through the cache: what an earlier call worked out is not walked again.
+
+            :param hal_py.Net net: The net to start from.
+            :param hal_py.TraversalCache cache: The cache holding the traversal and its results.
+            :returns: The collected gates on success, ``None`` otherwise.
+            :rtype: set[hal_py.Gate] or None
+        )");
+
         py_netlist_traversal_decorator.def(
             "get_gates",
             [](NetlistTraversalDecorator& self,

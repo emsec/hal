@@ -333,6 +333,70 @@ namespace hal
         return OK(res);
     }
 
+    TraversalCache NetlistTraversalDecorator::make_traversal_cache(TraversalDirection direction,
+                                                                    std::function<bool(const Gate*)> match,
+                                                                    TraversalStop stop,
+                                                                    std::function<bool(const Endpoint*)> exit_endpoint_filter,
+                                                                    std::function<bool(const Endpoint*)> entry_endpoint_filter) const
+    {
+        return TraversalCache(&m_netlist, direction, std::move(match), stop, std::move(exit_endpoint_filter), std::move(entry_endpoint_filter));
+    }
+
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_gates(const Net* net, TraversalCache& cache) const
+    {
+        if (cache.m_netlist != &m_netlist)
+        {
+            return ERR("cache was created for a different netlist");
+        }
+
+        if (cache.m_direction == TraversalDirection::both)
+        {
+            return ERR("a cache cannot hold both directions at once, create one per direction");
+        }
+
+        return get_gates_memoized(net, cache.m_direction == TraversalDirection::forward, cache.m_match, cache.m_stop, cache.m_exit_endpoint_filter, cache.m_entry_endpoint_filter, cache.m_store);
+    }
+
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_gates(const Gate* gate, TraversalCache& cache) const
+    {
+        if (gate == nullptr)
+        {
+            return ERR("nullptr given as gate");
+        }
+
+        if (!m_netlist.is_gate_in_netlist(gate))
+        {
+            return ERR("gate does not belong to netlist");
+        }
+
+        if (cache.m_netlist != &m_netlist)
+        {
+            return ERR("cache was created for a different netlist");
+        }
+
+        if (cache.m_direction == TraversalDirection::both)
+        {
+            return ERR("a cache cannot hold both directions at once, create one per direction");
+        }
+
+        std::set<Gate*> res;
+        for (const auto* exit_ep : (cache.m_direction == TraversalDirection::forward) ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+        {
+            if (cache.m_exit_endpoint_filter != nullptr && !cache.m_exit_endpoint_filter(exit_ep))
+            {
+                continue;
+            }
+
+            auto res_net = get_gates(exit_ep->get_net(), cache);
+            if (res_net.is_error())
+            {
+                return ERR_APPEND(res_net.get_error(), "cannot traverse from gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
+            }
+            res.merge(res_net.get());
+        }
+        return OK(res);
+    }
+
     Result<std::set<Gate*>> NetlistTraversalDecorator::get_gates_memoized(const Net* start,
                                                                           bool successors,
                                                                           const std::function<bool(const Gate*)>& match,

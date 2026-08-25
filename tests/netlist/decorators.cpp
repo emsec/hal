@@ -1456,4 +1456,67 @@ namespace hal {
         TEST_END
     }
 
+
+    /**
+     * Test the sealed traversal cache: results shared across calls agree with the uncached walk,
+     * and a cache refuses what would make it unsound.
+     *
+     * Functions: make_traversal_cache, get_gates
+     */
+    TEST_F(DecoratorTest, check_netlist_traversal_decorator_traversal_cache)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            Netlist* nl_raw       = nl.get();
+            const GateLibrary* gl = nl_raw->get_gate_library();
+
+            // ff0 -> inv0 -> {inv1 -> ff1, inv2 -> ff2}, shared logic between the flip-flops
+            Gate* ff0  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff0");
+            Gate* ff1  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff1");
+            Gate* ff2  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff2");
+            Gate* inv0 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "inv0");
+            Gate* inv1 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "inv1");
+            Gate* inv2 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "inv2");
+
+            test_utils::connect(nl_raw, ff0, "Q", inv0, "I", "n0");
+            Net* fan = nl_raw->create_net("fan");
+            fan->add_source(inv0, "O");
+            fan->add_destination(inv1, "I");
+            fan->add_destination(inv2, "I");
+            test_utils::connect(nl_raw, inv1, "O", ff1, "D", "n1");
+            test_utils::connect(nl_raw, inv2, "O", ff2, "D", "n2");
+
+            NetlistTraversalDecorator dec(*nl_raw);
+            const auto is_seq = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); };
+
+            {
+                // one cache, several starts: every answer equals the uncached walk
+                auto cache = dec.make_traversal_cache(TraversalDirection::forward, is_seq, TraversalStop::at_match);
+                for (Gate* start : {ff0, inv0, inv1})
+                {
+                    auto cached   = dec.get_gates(start, cache);
+                    auto uncached = dec.get_gates(start, TraversalDirection::forward, is_seq, TraversalStop::at_match);
+                    ASSERT_TRUE(cached.is_ok());
+                    ASSERT_TRUE(uncached.is_ok());
+                    EXPECT_EQ(cached.get(), uncached.get()) << "cached and uncached disagree from " << start->get_name();
+                }
+            }
+            {
+                // a cache seals one direction; both is refused rather than silently mixed
+                auto cache = dec.make_traversal_cache(TraversalDirection::both, is_seq, TraversalStop::at_match);
+                EXPECT_TRUE(dec.get_gates(ff0, cache).is_error());
+            }
+            {
+                // a cache belongs to its netlist
+                std::unique_ptr<Netlist> other = test_utils::create_empty_netlist(1);
+                ASSERT_NE(other, nullptr);
+                auto cache = NetlistTraversalDecorator(*other).make_traversal_cache(TraversalDirection::forward, is_seq, TraversalStop::at_match);
+                EXPECT_TRUE(dec.get_gates(ff0, cache).is_error());
+            }
+        }
+        TEST_END
+    }
+
 }

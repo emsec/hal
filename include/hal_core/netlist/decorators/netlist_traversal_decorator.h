@@ -79,6 +79,54 @@ namespace hal
     };
 
     /**
+     * A reusable store for the results of one specific traversal, handed to `NetlistTraversalDecorator::get_gates`.
+     *
+     * The traversal a cache belongs to is sealed in when it is created: the direction, the match
+     * condition, the stop rule and the endpoint filters all become part of the cache, and the cache
+     * can only ever be used for exactly that traversal. This is what makes reuse sound -- an entry
+     * for a net is the complete answer for that net, so it must never be consulted by a walk that
+     * asks a different question.
+     *
+     * Two things are excluded on purpose, because either would make the answer for a net depend on
+     * how the net was reached: there is no depth limit, and the endpoint filters receive no depth.
+     *
+     * The cache belongs to the netlist it was created for and must be dropped when the netlist is
+     * modified, as its entries are not invalidated by netlist events.
+     *
+     * @ingroup decorators
+     */
+    class NETLIST_API TraversalCache
+    {
+    public:
+        TraversalCache(TraversalCache&&)            = default;
+        TraversalCache& operator=(TraversalCache&&) = default;
+        TraversalCache(const TraversalCache&)       = delete;
+        TraversalCache& operator=(const TraversalCache&) = delete;
+
+    private:
+        friend class NetlistTraversalDecorator;
+
+        TraversalCache(const Netlist* netlist,
+                       TraversalDirection direction,
+                       std::function<bool(const Gate*)> match,
+                       TraversalStop stop,
+                       std::function<bool(const Endpoint*)> exit_endpoint_filter,
+                       std::function<bool(const Endpoint*)> entry_endpoint_filter)
+            : m_netlist(netlist), m_direction(direction), m_match(std::move(match)), m_stop(stop), m_exit_endpoint_filter(std::move(exit_endpoint_filter)),
+              m_entry_endpoint_filter(std::move(entry_endpoint_filter))
+        {
+        }
+
+        const Netlist* m_netlist;
+        TraversalDirection m_direction;
+        std::function<bool(const Gate*)> m_match;
+        TraversalStop m_stop;
+        std::function<bool(const Endpoint*)> m_exit_endpoint_filter;
+        std::function<bool(const Endpoint*)> m_entry_endpoint_filter;
+        std::unordered_map<const Net*, std::set<Gate*>> m_store;
+    };
+
+    /**
      * A netlist decorator that provides functionality to traverse the associated netlist without making any modifications.
      *
      * @ingroup decorators
@@ -436,6 +484,51 @@ namespace hal
                                                           const std::map<GateType*, std::vector<const GatePin*>>& input_pins  = {},
                                                           const std::map<GateType*, std::vector<const GatePin*>>& output_pins = {},
                                                           const std::function<bool(const Gate*)>& filter                      = nullptr) const;
+
+        /**
+         * Create a cache for one specific traversal, to be handed to `get_gates` in place of the
+         * traversal's parameters.
+         *
+         * The direction must be `TraversalDirection::forward` or `backward`; a cache cannot hold
+         * both directions at once. The endpoint filters receive no depth, and there is no depth
+         * limit, as either would make the cached answers depend on how a net was reached.
+         *
+         * @param[in] direction - The direction to traverse in.
+         * @param[in] match - The condition a gate has to meet to be collected.
+         * @param[in] stop - Where to stop traversing, relative to the gates that `match` accepts.
+         * @param[in] exit_endpoint_filter - Condition that has to hold to leave a gate through a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Condition that has to hold to enter a gate through a successor/predecessor endpoint.
+         * @returns The cache.
+         */
+        TraversalCache make_traversal_cache(TraversalDirection direction,
+                                            std::function<bool(const Gate*)> match,
+                                            TraversalStop stop,
+                                            std::function<bool(const Endpoint*)> exit_endpoint_filter  = nullptr,
+                                            std::function<bool(const Endpoint*)> entry_endpoint_filter = nullptr) const;
+
+        /**
+         * Traverse the netlist from the given net, collecting the gates that the cache's traversal collects.
+         *
+         * The parameters of the walk live in the cache, see `make_traversal_cache`, and results are
+         * shared through it: what an earlier call worked out is not walked again.
+         *
+         * @param[in] net - The net to start from.
+         * @param[in] cache - The cache holding the traversal and its results.
+         * @returns The gates that were collected on success, an error otherwise.
+         */
+        Result<std::set<Gate*>> get_gates(const Net* net, TraversalCache& cache) const;
+
+        /**
+         * Traverse the netlist from the given gate, collecting the gates that the cache's traversal collects.
+         *
+         * The parameters of the walk live in the cache, see `make_traversal_cache`, and results are
+         * shared through it: what an earlier call worked out is not walked again.
+         *
+         * @param[in] gate - The gate to start from.
+         * @param[in] cache - The cache holding the traversal and its results.
+         * @returns The gates that were collected on success, an error otherwise.
+         */
+        Result<std::set<Gate*>> get_gates(const Gate* gate, TraversalCache& cache) const;
 
     private:
         /**
