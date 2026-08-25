@@ -589,7 +589,10 @@ int main(int argc, char *argv[]) {
             std::map<Gate*, u32> gate_to_matrix_id;
             std::vector<std::vector<double>> matrix;
 
-            std::unordered_map<const Net*, std::set<Gate*>>* cache;
+            // Reused across the flip-flops below so that a net is only followed once. It used to be an
+            // uninitialized pointer, which is not null, so the callee's check for one passed and it
+            // dereferenced whatever the stack happened to hold.
+            std::unordered_map<const Net*, std::set<Gate*>> cache;
 
             u32 matrix_gates = 0;
             for (const auto& gate : nl->get_gates())
@@ -614,7 +617,7 @@ int main(int argc, char *argv[]) {
                 std::vector<double> line_of_matrix;
 
                 std::set<u32> gates_to_add;
-                const auto next_seq_gates = NetlistTraversalDecorator(*nl).get_next_sequential_gates(gate, false, {}, cache);
+                const auto next_seq_gates = NetlistTraversalDecorator(*nl).get_next_sequential_gates(gate, false, {}, &cache);
                 if (next_seq_gates.is_error())
                 {
                     return ERR_APPEND(next_seq_gates.get_error(),

@@ -46,6 +46,8 @@ All notable changes to this project will be documented in this file.
   * fixed `DataContainer`, `ProjectDirectory`, `hawkeye.DetectionConfiguration`, `hawkeye.SBoxDatabase` and `dataflow.Configuration` leaking every instance created from Python, as each was bound with a holder that never frees. `SBoxDatabase.from_file` leaked 25 KB per call, and `ProjectManager.get_project_directory` leaked a copy on every call, as pybind11 copies a returned reference by default
   * fixed three enum values that were bound to a different value of their own enum, which made them indistinguishable from Python: `GateTypeProperty.fifo` was bound to `ram`, `module_identification.CandidateType.addition_offset` to `addition`, and `gui_extension_demo.ParameterType.Module` to `Gate`
 * Plugins
+  * Boolean influence
+    * fixed `get_ff_dependency_matrix` dereferencing an uninitialized pointer on every call, which segfaulted before it returned anything. The cache it passes on was never initialized, and a pointer that is not null passed the callee's check for one
   * HAWKEYE
     * replaced `RegisterCandidate`, `RoundCandidate` and the free S-box functions of HAWKEYE with a single `CipherCandidate` that analyzes a candidate in place instead of copying it into a netlist of its own, so its gates and nets are the ones of the netlist under analysis and no longer have to be mapped back
     * added `CipherCandidate::identify_sboxes` that identifies every S-box of a candidate at once and annotates it with the outcome, grouping the variants the search produces of one and the same S-box and leaving a group as soon as one of them matches
