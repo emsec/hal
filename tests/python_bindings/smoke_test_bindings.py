@@ -173,15 +173,12 @@ def main():
     import hal_py
 
     # The gate library is read by a plugin, so the plugins have to be loaded before anything else.
-    # They also have to be unloaded again before the interpreter exits: leaving them loaded segfaults
-    # at teardown, independently of anything this test does. That is a real defect, but it predates
-    # this test -- it reproduces on a build from well before the binding work -- so it is not this
-    # test's job to fail on it.
+    # They are left loaded, which used to segfault at teardown. This test cannot be relied on to
+    # notice if that comes back, though, because it imports the plugin modules as well and an
+    # imported module holds a reference of its own to the library, which keeps it mapped. See
+    # teardown_test.py, which reproduces it without importing anything.
     hal_py.plugin_manager.load_all_plugins()
-    try:
-        return run_checks(hal_py)
-    finally:
-        hal_py.plugin_manager.unload_all_plugins()
+    return run_checks(hal_py)
 
 
 def run_checks(hal_py):

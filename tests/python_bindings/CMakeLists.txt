@@ -12,3 +12,12 @@ add_test(NAME runTest-python_binding_smoke
          WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 set_tests_properties(runTest-python_binding_smoke PROPERTIES
                      ENVIRONMENT "PYTHONPATH=${CMAKE_BINARY_DIR}/lib;HAL_BASE_PATH=${CMAKE_BINARY_DIR}")
+
+# Loading the plugins and letting the interpreter exit without unloading them used to segfault, so
+# this checks that a process which does exactly that comes back with a zero exit code. It runs its
+# cases in subprocesses, as what is under test is how a process ends.
+add_test(NAME runTest-python_teardown
+         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/teardown_test.py
+         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+set_tests_properties(runTest-python_teardown PROPERTIES
+                     ENVIRONMENT "PYTHONPATH=${CMAKE_BINARY_DIR}/lib;HAL_BASE_PATH=${CMAKE_BINARY_DIR}")
