@@ -333,121 +333,174 @@ namespace hal
         return OK(res);
     }
 
-    // The two traversals below are get_gates with a fixed condition, but they keep a walk of their own
-    // because they also carry a cache across calls, which get_gates has no notion of. Folding them in
-    // would cost that cache, and the Boolean influence plugin builds a dependency matrix by calling one
-    // of them once per flip-flop, which is where the cache earns its place.
-    Result<std::set<Gate*>>
-        NetlistTraversalDecorator::get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_gates_memoized(const Net* start,
+                                                                          bool successors,
+                                                                          const std::function<bool(const Gate*)>& match,
+                                                                          TraversalStop stop,
+                                                                          const std::function<bool(const Endpoint*)>& exit_endpoint_filter,
+                                                                          const std::function<bool(const Endpoint*)>& entry_endpoint_filter,
+                                                                          std::unordered_map<const Net*, std::set<Gate*>>& store) const
     {
-        if (net == nullptr)
+        if (start == nullptr)
         {
             return ERR("nullptr given as net");
         }
 
-        if (!m_netlist.is_net_in_netlist(net))
+        if (!m_netlist.is_net_in_netlist(start))
         {
             return ERR("net does not belong to netlist");
         }
 
-        std::unordered_set<const Net*> visited;
-        std::vector<const Net*> stack = {net};
-        std::vector<const Net*> previous;
-        std::set<Gate*> res;
-        while (!stack.empty())
+        if (!match)
         {
-            const Net* current = stack.back();
+            return ERR("no match condition specified");
+        }
 
-            if (!previous.empty() && current == previous.back())
+        if (const auto it = store.find(start); it != store.end())
+        {
+            return OK(it->second);
+        }
+
+        // Tarjan's algorithm over the nets, iteratively. `collected` holds, per unpublished net, the
+        // gates found next to it plus everything absorbed from already published successors; when a
+        // strongly connected component completes, its members share the union of what they collected
+        // and are published together.
+        struct Frame
+        {
+            const Net* net;
+            std::vector<const Net*> successors;
+            size_t next = 0;
+        };
+
+        std::unordered_map<const Net*, u32> index;
+        std::unordered_map<const Net*, u32> lowlink;
+        std::unordered_map<const Net*, std::set<Gate*>> collected;
+        std::vector<const Net*> scc_stack;
+        std::unordered_set<const Net*> on_stack;
+        std::vector<Frame> frames;
+        u32 next_index = 0;
+
+        const auto expand = [&](const Net* net) {
+            index[net] = lowlink[net] = next_index++;
+            scc_stack.push_back(net);
+            on_stack.insert(net);
+
+            Frame frame{net, {}, 0};
+            for (const auto* entry_ep : successors ? net->get_destinations() : net->get_sources())
             {
-                stack.pop_back();
-                previous.pop_back();
-                continue;
-            }
-
-            visited.insert(current);
-
-            bool added = false;
-            for (const auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
-            {
-                auto entry_pin = entry_ep->get_pin();
-                auto* gate     = entry_ep->get_gate();
-
-                // stop traversal if gate is sequential
-                if (gate->get_type()->has_property(GateTypeProperty::sequential))
+                if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep))
                 {
-                    // stop traversal on forbidden pins
-                    if (forbidden_pins.find(entry_pin->get_type()) != forbidden_pins.end())
+                    continue;
+                }
+
+                auto* gate         = entry_ep->get_gate();
+                const bool matches = match(gate);
+                if (matches)
+                {
+                    collected[net].insert(gate);
+                }
+
+                const bool traverse = (stop == TraversalStop::at_match) ? !matches : (stop == TraversalStop::at_mismatch) ? matches : true;
+                if (!traverse)
+                {
+                    continue;
+                }
+
+                for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+                {
+                    if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep))
                     {
                         continue;
                     }
 
-                    // only add gate to result if it has not been reached through a forbidden pin (e.g., control pin)
-                    res.insert(gate);
-
-                    // update cache
-                    if (cache)
-                    {
-                        (*cache)[current].insert(gate);
-                        for (const auto* n : previous)
-                        {
-                            (*cache)[n].insert(gate);
-                        }
-                    }
-                }
-                else
-                {
-                    for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
-                    {
-                        const Net* exit_net     = exit_ep->get_net();
-                        const GatePin* exit_pin = exit_ep->get_pin();
-
-                        // stop traversal on forbidden pins
-                        if (forbidden_pins.find(exit_pin->get_type()) != forbidden_pins.end())
-                        {
-                            continue;
-                        }
-
-                        if (cache)
-                        {
-                            if (const auto it = cache->find(exit_net); it != cache->end())
-                            {
-                                const auto& cached_gates = std::get<1>(*it);
-
-                                // append cached gates to result
-                                res.insert(cached_gates.begin(), cached_gates.end());
-
-                                // update cache
-                                (*cache)[current].insert(cached_gates.begin(), cached_gates.end());
-                                for (const auto* n : previous)
-                                {
-                                    (*cache)[n].insert(cached_gates.begin(), cached_gates.end());
-                                }
-
-                                continue;
-                            }
-                        }
-
-                        if (visited.find(exit_net) == visited.end())
-                        {
-                            stack.push_back(exit_net);
-                            added = true;
-                        }
-                    }
+                    frame.successors.push_back(exit_ep->get_net());
                 }
             }
+            frames.push_back(std::move(frame));
+        };
 
-            if (added)
+        expand(start);
+        while (!frames.empty())
+        {
+            Frame& frame = frames.back();
+            if (frame.next < frame.successors.size())
             {
-                previous.push_back(current);
+                const Net* child = frame.successors.at(frame.next++);
+                if (const auto it = store.find(child); it != store.end() && on_stack.find(child) == on_stack.end())
+                {
+                    // published, by an earlier call or by a component that completed within this one
+                    collected[frame.net].insert(it->second.begin(), it->second.end());
+                }
+                else if (index.find(child) == index.end())
+                {
+                    expand(child);
+                }
+                else if (on_stack.find(child) != on_stack.end())
+                {
+                    lowlink[frame.net] = std::min(lowlink[frame.net], index[child]);
+                }
             }
             else
             {
-                stack.pop_back();
+                const Net* net = frame.net;
+                frames.pop_back();
+
+                if (lowlink[net] == index[net])
+                {
+                    // the component is complete: its members share one answer and are published together
+                    std::vector<const Net*> members;
+                    std::set<Gate*> total;
+                    while (true)
+                    {
+                        const Net* member = scc_stack.back();
+                        scc_stack.pop_back();
+                        on_stack.erase(member);
+                        members.push_back(member);
+                        auto& part = collected[member];
+                        total.insert(part.begin(), part.end());
+                        if (member == net)
+                        {
+                            break;
+                        }
+                    }
+                    for (const Net* member : members)
+                    {
+                        store[member] = total;
+                    }
+                }
+
+                if (!frames.empty())
+                {
+                    Frame& parent = frames.back();
+                    lowlink[parent.net] = std::min(lowlink[parent.net], lowlink[net]);
+                    if (const auto it = store.find(net); it != store.end())
+                    {
+                        collected[parent.net].insert(it->second.begin(), it->second.end());
+                    }
+                }
             }
         }
 
-        return OK(res);
+        return OK(store[start]);
+    }
+
+    // The two traversals below are the memoized walk with their conditions pinned. They exist by name
+    // because the questions they answer are asked constantly, and they keep the caller-supplied store
+    // so that the Boolean influence plugin can share one across the flip-flops of a netlist.
+    Result<std::set<Gate*>>
+        NetlistTraversalDecorator::get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    {
+        // A forbidden pin stops the walk at a sequential gate entered through it, so that a flip-flop
+        // reached through its clock, for example, does not count. A combinational gate is traversed
+        // regardless of the pin it is entered through, which is what the previous implementation did.
+        const auto entry = [&forbidden_pins](const Endpoint* ep) {
+            return !(ep->get_gate()->get_type()->has_property(GateTypeProperty::sequential) && forbidden_pins.find(ep->get_pin()->get_type()) != forbidden_pins.end());
+        };
+        const auto exit  = [&forbidden_pins](const Endpoint* ep) { return forbidden_pins.find(ep->get_pin()->get_type()) == forbidden_pins.end(); };
+        const auto match = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); };
+
+        std::unordered_map<const Net*, std::set<Gate*>> local_store;
+        return get_gates_memoized(net, successors, match, TraversalStop::at_match, exit, entry, (cache != nullptr) ? *cache : local_store);
     }
 
     Result<std::set<Gate*>>
@@ -460,41 +513,24 @@ namespace hal
 
         if (!m_netlist.is_gate_in_netlist(gate))
         {
-            return ERR("net does not belong to netlist");
+            return ERR("gate does not belong to netlist");
         }
 
         std::set<Gate*> res;
+        std::unordered_map<const Net*, std::set<Gate*>> local_store;
         for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
         {
-            const auto* exit_net = exit_ep->get_net();
-            const auto* exit_pin = exit_ep->get_pin();
-
-            // stop traversal on forbidden pins
-            if (forbidden_pins.find(exit_pin->get_type()) != forbidden_pins.end())
+            if (forbidden_pins.find(exit_ep->get_pin()->get_type()) != forbidden_pins.end())
             {
                 continue;
             }
 
-            if (cache)
+            auto res_net = get_next_sequential_gates(exit_ep->get_net(), successors, forbidden_pins, (cache != nullptr) ? cache : &local_store);
+            if (res_net.is_error())
             {
-                if (const auto it = cache->find(exit_net); it != cache->end())
-                {
-                    const auto& cached_gates = std::get<1>(*it);
-
-                    // append cached gates to result
-                    res.insert(cached_gates.begin(), cached_gates.end());
-
-                    continue;
-                }
+                return ERR_APPEND(res_net.get_error(), "cannot get next sequential gates of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
             }
-
-            const auto next_res = this->get_next_sequential_gates(exit_ep->get_net(), successors, forbidden_pins, cache);
-            if (next_res.is_error())
-            {
-                return ERR(next_res.get_error());
-            }
-            auto next = next_res.get();
-            res.insert(next.begin(), next.end());
+            res.merge(res_net.get());
         }
         return OK(res);
     }
@@ -522,112 +558,15 @@ namespace hal
     Result<std::set<Gate*>>
         NetlistTraversalDecorator::get_next_combinational_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
     {
-        if (net == nullptr)
-        {
-            return ERR("nullptr given as net");
-        }
+        const auto entry = [&forbidden_pins](const Endpoint* ep) { return forbidden_pins.find(ep->get_pin()->get_type()) == forbidden_pins.end(); };
+        const auto match = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); };
 
-        if (!m_netlist.is_net_in_netlist(net))
-        {
-            return ERR("net does not belong to netlist");
-        }
-
-        std::unordered_set<const Net*> visited;
-        std::vector<const Net*> stack = {net};
-        std::vector<const Net*> previous;
-        std::set<Gate*> res;
-        while (!stack.empty())
-        {
-            const Net* current = stack.back();
-
-            if (!previous.empty() && current == previous.back())
-            {
-                stack.pop_back();
-                previous.pop_back();
-                continue;
-            }
-
-            visited.insert(current);
-
-            bool added = false;
-            for (const auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
-            {
-                auto* gate            = entry_ep->get_gate();
-                const auto* entry_pin = entry_ep->get_pin();
-                if (!gate->get_type()->has_property(GateTypeProperty::combinational))
-                {
-                    // stop traversal if not combinational
-                    continue;
-                }
-
-                // stop traversal on forbidden pins
-                if (forbidden_pins.find(entry_pin->get_type()) != forbidden_pins.end())
-                {
-                    continue;
-                }
-
-                // add to result if gate is combinational
-                res.insert(gate);
-
-                // update cache
-                if (cache)
-                {
-                    (*cache)[current].insert(gate);
-                    for (const auto* n : previous)
-                    {
-                        (*cache)[n].insert(gate);
-                    }
-                }
-
-                for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
-                {
-                    const Net* exit_net     = exit_ep->get_net();
-                    const GatePin* exit_pin = exit_ep->get_pin();
-
-                    // stop traversal on forbidden pins
-                    if (forbidden_pins.find(exit_pin->get_type()) != forbidden_pins.end())
-                    {
-                        continue;
-                    }
-
-                    if (cache)
-                    {
-                        if (const auto it = cache->find(exit_net); it != cache->end())
-                        {
-                            const auto& cached_gates = std::get<1>(*it);
-
-                            // append cached gates to result
-                            res.insert(cached_gates.begin(), cached_gates.end());
-
-                            continue;
-                        }
-                    }
-
-                    if (visited.find(exit_net) == visited.end())
-                    {
-                        stack.push_back(exit_net);
-                        added = true;
-                    }
-                }
-            }
-
-            if (added)
-            {
-                previous.push_back(current);
-            }
-            else
-            {
-                stack.pop_back();
-            }
-        }
-
-        return OK(res);
+        std::unordered_map<const Net*, std::set<Gate*>> local_store;
+        return get_gates_memoized(net, successors, match, TraversalStop::at_mismatch, entry, entry, (cache != nullptr) ? *cache : local_store);
     }
 
-    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_combinational_gates(const Gate* gate,
-                                                                                    bool successors,
-                                                                                    const std::set<PinType>& forbidden_pins,
-                                                                                    std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    Result<std::set<Gate*>>
+        NetlistTraversalDecorator::get_next_combinational_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
     {
         if (gate == nullptr)
         {
@@ -636,41 +575,24 @@ namespace hal
 
         if (!m_netlist.is_gate_in_netlist(gate))
         {
-            return ERR("net does not belong to netlist");
+            return ERR("gate does not belong to netlist");
         }
 
         std::set<Gate*> res;
+        std::unordered_map<const Net*, std::set<Gate*>> local_store;
         for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
         {
-            const auto* exit_net = exit_ep->get_net();
-            const auto* exit_pin = exit_ep->get_pin();
-
-            // stop traversal on forbidden pins
-            if (forbidden_pins.find(exit_pin->get_type()) != forbidden_pins.end())
+            if (forbidden_pins.find(exit_ep->get_pin()->get_type()) != forbidden_pins.end())
             {
                 continue;
             }
 
-            if (cache)
+            auto res_net = get_next_combinational_gates(exit_ep->get_net(), successors, forbidden_pins, (cache != nullptr) ? cache : &local_store);
+            if (res_net.is_error())
             {
-                if (const auto it = cache->find(exit_net); it != cache->end())
-                {
-                    const auto& cached_gates = std::get<1>(*it);
-
-                    // append cached gates to result
-                    res.insert(cached_gates.begin(), cached_gates.end());
-
-                    continue;
-                }
+                return ERR_APPEND(res_net.get_error(), "cannot get next combinational gates of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
             }
-
-            const auto next_res = this->get_next_combinational_gates(exit_ep->get_net(), successors, forbidden_pins, cache);
-            if (next_res.is_error())
-            {
-                return ERR(next_res.get_error());
-            }
-            auto next = next_res.get();
-            res.insert(next.begin(), next.end());
+            res.merge(res_net.get());
         }
         return OK(res);
     }

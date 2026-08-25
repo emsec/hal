@@ -439,6 +439,29 @@ namespace hal
 
     private:
         /**
+         * The walk behind the cached traversals: memoized reachability over the nets, sharing its
+         * results through `store` across calls.
+         *
+         * An entry is published into `store` only once the exploration of its net is complete, with
+         * the nets of a cycle published together once their strongly connected component is done.
+         * Publishing earlier is what made the previous cache silently wrong: a cycle led the walk
+         * back to a net whose entry was still partial, the partial answer was taken, and the net
+         * being explored at the time kept a truncated entry forever.
+         *
+         * The parameters deliberately exclude everything that would make a per-net entry depend on
+         * how the net was reached: there is no depth limit, and the endpoint filters do not receive
+         * a depth. Entries already in `store` are trusted, so a store must only ever be reused with
+         * the same match condition, stop rule, direction and filters.
+         */
+        Result<std::set<Gate*>> get_gates_memoized(const Net* start,
+                                                   bool successors,
+                                                   const std::function<bool(const Gate*)>& match,
+                                                   TraversalStop stop,
+                                                   const std::function<bool(const Endpoint*)>& exit_endpoint_filter,
+                                                   const std::function<bool(const Endpoint*)>& entry_endpoint_filter,
+                                                   std::unordered_map<const Net*, std::set<Gate*>>& store) const;
+
+        /**
          * The breadth-first search behind every get_shortest_path overload, stopping at the first gate the given
          * condition accepts. Kept in one place so that searching for one gate and searching for any gate of a module
          * cannot drift apart.

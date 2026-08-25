@@ -1359,4 +1359,101 @@ namespace hal {
         TEST_END
     }
 
+
+    /**
+     * Test that the cached traversals give the same answer as the fresh ones on a netlist with a
+     * combinational cycle.
+     *
+     * The regression this guards: cache entries used to be written while a net was still being
+     * explored, and a cycle that led the walk back to such a net baked the partial answer into the
+     * entries of the nets being explored at the time. A later call that reached one of those nets
+     * through a side path then returned a result with gates missing, which is how the Boolean
+     * influence plugin produced a wrong dependency matrix on netlists with combinational cycles.
+     *
+     * Functions: get_next_sequential_gates, get_next_combinational_gates, get_next_sequential_gates_map
+     */
+    TEST_F(DecoratorTest, check_netlist_traversal_decorator_cache_survives_cycles)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            Netlist* nl_raw       = nl.get();
+            const GateLibrary* gl = nl_raw->get_gate_library();
+
+            Gate* ff_first  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_first");
+            Gate* ff_second = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_second");
+            Gate* ff_a      = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_a");
+            Gate* ff_b      = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_b");
+            Gate* ff_x      = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_x");
+            Gate* ga        = nl_raw->create_gate(gl->get_gate_type_by_name("OR2"), "ga");
+            Gate* g_p       = nl_raw->create_gate(gl->get_gate_type_by_name("OR2"), "g_p");
+            Gate* g_c       = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "g_c");
+            Gate* g_d       = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "g_d");
+            Gate* g_side    = nl_raw->create_gate(gl->get_gate_type_by_name("OR2"), "g_side");
+
+            // the combinational cycle: w0 -> g_d -> f1 -> g_c -> e2 -> g_p -> p -> ga -> w0,
+            // with a side exit from inside the cycle through g_side into ff_second
+            Net* w0 = nl_raw->create_net("w0");
+            w0->add_source(ga, "O");
+            w0->add_destination(ff_first, "D");
+            w0->add_destination(g_d, "I");
+            Net* p = test_utils::connect(nl_raw, g_p, "O", ga, "I0", "p");
+            Net* e3 = test_utils::connect(nl_raw, ff_a, "Q", ga, "I1", "e3");
+            Net* e1 = test_utils::connect(nl_raw, ff_b, "Q", g_p, "I0", "e1");
+            Net* e2 = nl_raw->create_net("e2");
+            e2->add_source(g_c, "O");
+            e2->add_destination(g_p, "I1");
+            e2->add_destination(g_side, "I1");
+            Net* f1 = test_utils::connect(nl_raw, g_d, "O", g_c, "I", "f1");
+            Net* x  = test_utils::connect(nl_raw, ff_x, "Q", g_side, "I0", "x");
+            Net* y  = test_utils::connect(nl_raw, g_side, "O", ff_second, "D", "y");
+
+            NetlistTraversalDecorator dec(*nl_raw);
+
+            {
+                // one cache shared across two calls, the way the Boolean influence plugin shares one
+                // across the flip-flops of a netlist
+                std::unordered_map<const Net*, std::set<Gate*>> cache;
+                auto first_cached = dec.get_next_sequential_gates(ff_first, false, {}, &cache);
+                auto second_cached = dec.get_next_sequential_gates(ff_second, false, {}, &cache);
+                auto first_fresh  = dec.get_next_sequential_gates(ff_first, false, {});
+                auto second_fresh = dec.get_next_sequential_gates(ff_second, false, {});
+                ASSERT_TRUE(first_cached.is_ok());
+                ASSERT_TRUE(second_cached.is_ok());
+                ASSERT_TRUE(first_fresh.is_ok());
+                ASSERT_TRUE(second_fresh.is_ok());
+
+                EXPECT_EQ(first_fresh.get(), (std::set<Gate*>({ff_a, ff_b})));
+                EXPECT_EQ(second_fresh.get(), (std::set<Gate*>({ff_a, ff_b, ff_x})));
+                EXPECT_EQ(first_cached.get(), first_fresh.get());
+                EXPECT_EQ(second_cached.get(), second_fresh.get());
+            }
+            {
+                // the combinational region seen through a shared cache covers the whole cycle as well
+                std::unordered_map<const Net*, std::set<Gate*>> cache;
+                auto first_cached  = dec.get_next_combinational_gates(ff_first, false, {}, &cache);
+                auto second_cached = dec.get_next_combinational_gates(ff_second, false, {}, &cache);
+                auto second_fresh  = dec.get_next_combinational_gates(ff_second, false, {});
+                ASSERT_TRUE(first_cached.is_ok());
+                ASSERT_TRUE(second_cached.is_ok());
+                ASSERT_TRUE(second_fresh.is_ok());
+                EXPECT_EQ(second_cached.get(), second_fresh.get());
+                EXPECT_EQ(second_cached.get(), (std::set<Gate*>({ga, g_p, g_c, g_d, g_side})));
+            }
+            {
+                // the netlist-wide map shares one cache internally and has to agree with fresh calls
+                auto map_res = dec.get_next_sequential_gates_map(false, {});
+                ASSERT_TRUE(map_res.is_ok());
+                for (const auto& [gate, expected] : map_res.get())
+                {
+                    auto fresh = dec.get_next_sequential_gates(gate, false, {});
+                    ASSERT_TRUE(fresh.is_ok());
+                    EXPECT_EQ(expected, fresh.get()) << "map disagrees with the fresh walk for " << gate->get_name();
+                }
+            }
+        }
+        TEST_END
+    }
+
 }
