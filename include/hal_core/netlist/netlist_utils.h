@@ -254,8 +254,9 @@ namespace hal
          * @param[in] gate - The gate.
          * @param[in] pins - The targeted pins.
          * @returns A vector of nets connected to the pins.
+         * \deprecated This function is deprecated. Iterate the pins and use `Gate::get_fan_in_net` or `Gate::get_fan_out_net`, depending on each pin's direction.
          */
-        CORE_API std::vector<Net*> get_nets_at_pins(Gate* gate, std::vector<GatePin*> pins);
+        [[deprecated("Will be removed in a future version, iterate the pins and use Gate::get_fan_in_net or Gate::get_fan_out_net instead.")]] CORE_API std::vector<Net*> get_nets_at_pins(Gate* gate, std::vector<GatePin*> pins);
 
         /**
          * \deprecated
