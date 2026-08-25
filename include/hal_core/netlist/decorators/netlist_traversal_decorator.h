@@ -42,7 +42,7 @@ namespace hal
     {
         forward,  /**< Follow the fan-out, i.e., towards the successors of a gate. */
         backward, /**< Follow the fan-in, i.e., towards the predecessors of a gate. */
-        both,     /**< Follow both, and report whichever answer is the better one. */
+        both,     /**< Follow both, and report the union of the two. */
     };
 
     /**

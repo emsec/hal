@@ -1301,4 +1301,62 @@ namespace hal {
         TEST_END
     }
 
+
+    /**
+     * Test that traversing in both directions returns the union of the two single directions.
+     *
+     * The regression this guards: walking both directions from each *adjacent net* also walks forward
+     * from a fan-in net, which runs into the cones of sibling gates sharing that input -- gates that
+     * are neither ancestors nor descendants of the start gate.
+     *
+     * Functions: get_gates
+     */
+    TEST_F(DecoratorTest, check_netlist_traversal_decorator_both_is_the_union)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            Netlist* nl_raw       = nl.get();
+            const GateLibrary* gl = nl_raw->get_gate_library();
+
+            // ff_a drives both the gate under test and a sibling inverter with a flip-flop of its own
+            Gate* ff_a = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_a");
+            Gate* ff_b = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_b");
+            Gate* ff_o = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_o");
+            Gate* ff_s = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_sibling");
+            Gate* g    = nl_raw->create_gate(gl->get_gate_type_by_name("AND2"), "g");
+            Gate* g_s  = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "g_sibling");
+
+            Net* na = nl_raw->create_net("na");
+            na->add_source(ff_a, "Q");
+            na->add_destination(g, "I0");
+            na->add_destination(g_s, "I");
+            test_utils::connect(nl_raw, ff_b, "Q", g, "I1", "nb");
+            test_utils::connect(nl_raw, g, "O", ff_o, "D", "no");
+            test_utils::connect(nl_raw, g_s, "O", ff_s, "D", "ns");
+
+            NetlistTraversalDecorator dec(*nl_raw);
+            const auto is_seq = [](const Gate* gate) { return gate->get_type()->has_property(GateTypeProperty::sequential); };
+
+            auto res_forward  = dec.get_gates(g, TraversalDirection::forward, is_seq, TraversalStop::at_match);
+            auto res_backward = dec.get_gates(g, TraversalDirection::backward, is_seq, TraversalStop::at_match);
+            auto res_both     = dec.get_gates(g, TraversalDirection::both, is_seq, TraversalStop::at_match);
+            ASSERT_TRUE(res_forward.is_ok());
+            ASSERT_TRUE(res_backward.is_ok());
+            ASSERT_TRUE(res_both.is_ok());
+
+            EXPECT_EQ(res_forward.get(), (std::set<Gate*>({ff_o})));
+            EXPECT_EQ(res_backward.get(), (std::set<Gate*>({ff_a, ff_b})));
+
+            std::set<Gate*> expected = res_forward.get();
+            expected.merge(res_backward.get());
+            EXPECT_EQ(res_both.get(), expected);
+
+            // the sibling flip-flop belongs to neither direction
+            EXPECT_EQ(res_both.get().find(ff_s), res_both.get().end());
+        }
+        TEST_END
+    }
+
 }

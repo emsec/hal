@@ -160,23 +160,30 @@ namespace hal
             return ERR("no match condition specified");
         }
 
+        // For both, the fan-out nets are walked forward and the fan-in nets backward, each purely. Passing
+        // `both` down to the per-net walks instead would also walk *forward* from a fan-in net, which runs
+        // into the cones of sibling gates sharing that input -- gates that are neither ancestors nor
+        // descendants of this one.
         std::set<Gate*> res;
-        for (const auto* exit_ep : (direction == TraversalDirection::backward) ? gate->get_fan_in_endpoints() : gate->get_fan_out_endpoints())
+        if (direction == TraversalDirection::forward || direction == TraversalDirection::both)
         {
-            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 1))
+            for (const auto* exit_ep : gate->get_fan_out_endpoints())
             {
-                continue;
-            }
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 1))
+                {
+                    continue;
+                }
 
-            auto res_net = get_gates(exit_ep->get_net(), direction, match, stop, max_depth, exit_endpoint_filter, entry_endpoint_filter);
-            if (res_net.is_error())
-            {
-                return ERR_APPEND(res_net.get_error(), "cannot traverse from gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
+                auto res_net = get_gates(exit_ep->get_net(), TraversalDirection::forward, match, stop, max_depth, exit_endpoint_filter, entry_endpoint_filter);
+                if (res_net.is_error())
+                {
+                    return ERR_APPEND(res_net.get_error(), "cannot traverse from gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
+                }
+                res.merge(res_net.get());
             }
-            res.merge(res_net.get());
         }
 
-        if (direction == TraversalDirection::both)
+        if (direction == TraversalDirection::backward || direction == TraversalDirection::both)
         {
             for (const auto* exit_ep : gate->get_fan_in_endpoints())
             {
@@ -185,7 +192,7 @@ namespace hal
                     continue;
                 }
 
-                auto res_net = get_gates(exit_ep->get_net(), direction, match, stop, max_depth, exit_endpoint_filter, entry_endpoint_filter);
+                auto res_net = get_gates(exit_ep->get_net(), TraversalDirection::backward, match, stop, max_depth, exit_endpoint_filter, entry_endpoint_filter);
                 if (res_net.is_error())
                 {
                     return ERR_APPEND(res_net.get_error(), "cannot traverse from gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
