@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
   * sped up evaluation with constant inputs by about 3x by folding the values directly instead of building a Boolean function per operation, which dominates the runtime of `compute_truth_table()` and thereby of the HAWKEYE S-box identification
   * added simplification rules for the word level operations, which the single-bit simplification through ABC cannot reach: extensions to the width the value already has, nested extensions and slices, slices that fall into one half of a concatenation or into either part of an extension, unsigned comparisons against zero and the maximum, equality of a value with its own negation, and single bit equalities and selections
 * Python bindings
+  * fixed the four `boolean_influence` functions that return influences per net handing out the nets without keeping the netlist alive: they return dicts keyed by net, and nothing protected a borrowed object sitting in a dict key
   * added a warning, once per function and process, when a deprecated `NetlistUtils` function is called from Python, naming its replacement. `[[deprecated]]` warns whoever compiles, and a script has no compiler
   * fixed the deprecated `NetlistUtils` bindings handing out gates and nets without keeping the netlist alive for as long as Python refers to them, which they keep doing until they are removed
   * fixed `netlist_preprocessing.create_multi_bit_gate_modules` and `create_nets_at_unconnected_pins` handing out modules and nets without keeping the netlist alive: the `hal::borrowed()` call policy ties each returned object to the netlist that owns it, which works on a module-level function as well, as the owner is found through the wrapper the caller necessarily passed in
@@ -103,7 +104,7 @@ All notable changes to this project will be documented in this file.
     * fixed bug in pin model which must not crash when deleting a non-empty pin group
     * fixed bug by disallowing deletion of group comprising a single pin with same name
 * Build and dependencies
-  * added a test that checks the Python bindings never hand out a borrowed pointer without keeping its owner alive, and never give a class bound with a non-owning holder to a factory that returns a `unique_ptr`. It covers plugins kept in a repository of their own as well
+  * added a test that checks the Python bindings never hand out a borrowed pointer without keeping its owner alive, and never give a class bound with a non-owning holder to a factory that returns a `unique_ptr`. It covers plugins kept in a repository of their own as well, and holds free, static and submodule-level functions to the same rule as methods, which `hal::borrowed()` made fixable
   * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
   * removed the tests below `tests/python_binding`, which were neither referenced by the build nor by any workflow and called API that no longer exists
 

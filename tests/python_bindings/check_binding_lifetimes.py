@@ -81,8 +81,10 @@ def main() -> int:
         submodules = set(re.findall(r"auto\s+(\w+)\s*=\s*\w+\.def_submodule", text))
         for match in DEF_RE.finditer(text):
             receiver, form, name = match.groups()
-            if receiver in submodules or receiver == "m" or form == "def_static":
-                continue  # no receiver to tie the result to, see the deferred cases
+            # Free, static and submodule-level functions used to be exempt because nothing could fix
+            # them: keep_alive cannot nurse a returned list and reference_internal has no parent
+            # there. hal::borrowed() has neither problem -- it resolves each returned object's owner
+            # through the owner's own wrapper -- so they are held to the same rule as methods.
             end = text.find(')");', match.start())
             body = text[match.start(): end if end != -1 else match.start() + 4000]
             if 'R"(' not in body:
