@@ -1056,4 +1056,157 @@ namespace hal {
         }
         TEST_END
     }
+
+    /**
+     * Test the shortest path searches of the traversal decorator.
+     *
+     * These had no test at all, which is why they are written before the decorator is restructured:
+     * they describe what the searches do today so that a rewrite can be shown not to change it.
+     *
+     * Functions: get_shortest_path, get_shortest_path_distance
+     */
+    TEST_F(DecoratorTest, check_netlist_traversal_decorator_shortest_path)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            Netlist* nl_raw       = nl.get();
+            const GateLibrary* gl = nl_raw->get_gate_library();
+
+            // A long way round and a short one between the same two gates:
+            //   start -> a -> b -> finish     (four gates)
+            //   start -> c -> finish          (three gates)
+            Gate* start  = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "start");
+            Gate* a      = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "a");
+            Gate* b      = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "b");
+            Gate* c      = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "c");
+            Gate* finish = nl_raw->create_gate(gl->get_gate_type_by_name("OR2"), "finish");
+
+            // one net out of start feeding both branches, as an output pin drives a single net
+            Net* fan = nl_raw->create_net("fan");
+            fan->add_source(start, "O");
+            fan->add_destination(a, "I");
+            fan->add_destination(c, "I");
+
+            test_utils::connect(nl_raw, a, "O", b, "I", "a_to_b");
+            test_utils::connect(nl_raw, b, "O", finish, "I0", "b_to_finish");
+            test_utils::connect(nl_raw, c, "O", finish, "I1", "c_to_finish");
+
+            NetlistTraversalDecorator dec(*nl_raw);
+
+            {
+                // the short branch wins, and the path runs from start to finish
+                auto res = dec.get_shortest_path(start, finish, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                ASSERT_TRUE(res.get().has_value());
+                const auto path = res.get().value();
+                ASSERT_EQ(path.size(), 3);
+                EXPECT_EQ(path.front(), start);
+                EXPECT_EQ(path.at(1), c);
+                EXPECT_EQ(path.back(), finish);
+            }
+            {
+                auto res = dec.get_shortest_path_distance(start, finish, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                ASSERT_TRUE(res.get().has_value());
+                EXPECT_EQ(res.get().value(), 2);
+            }
+            {
+                // nothing leads backwards from start to finish
+                auto res = dec.get_shortest_path(start, finish, PinDirection::input);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_FALSE(res.get().has_value());
+            }
+            {
+                // searching both ways finds it regardless of which end it is asked from
+                auto res = dec.get_shortest_path(finish, start, PinDirection::inout);
+                ASSERT_TRUE(res.is_ok());
+                ASSERT_TRUE(res.get().has_value());
+                EXPECT_EQ(res.get().value().size(), 3);
+            }
+            {
+                // an endpoint filter that rejects everything leaves nothing to find
+                auto res = dec.get_shortest_path(start, finish, PinDirection::output, [](const Endpoint*, u32) { return false; });
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_FALSE(res.get().has_value());
+            }
+            {
+                // a gate that is not connected at all
+                Gate* island = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "island");
+                auto res     = dec.get_shortest_path(start, island, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_FALSE(res.get().has_value());
+            }
+        }
+        TEST_END
+    }
+
+    /**
+     * Test the shortest path searches that end at a module rather than at a gate.
+     *
+     * Functions: get_shortest_path
+     */
+    TEST_F(DecoratorTest, check_netlist_traversal_decorator_shortest_path_to_module)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            Netlist* nl_raw       = nl.get();
+            const GateLibrary* gl = nl_raw->get_gate_library();
+
+            // chain of five buffers, the first two in module A, the last two in module B
+            std::vector<Gate*> g;
+            for (u32 i = 0; i < 5; i++)
+            {
+                g.push_back(nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "g" + std::to_string(i)));
+            }
+            for (u32 i = 0; i + 1 < g.size(); i++)
+            {
+                test_utils::connect(nl_raw, g.at(i), "O", g.at(i + 1), "I", "n" + std::to_string(i));
+            }
+
+            Module* mod_a = nl_raw->create_module("A", nl_raw->get_top_module(), {g.at(0), g.at(1)});
+            Module* mod_b = nl_raw->create_module("B", nl_raw->get_top_module(), {g.at(3), g.at(4)});
+
+            NetlistTraversalDecorator dec(*nl_raw);
+
+            {
+                // from the first gate to the far module, stopping at the first gate that belongs to it
+                auto res = dec.get_shortest_path(g.at(0), mod_b, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                ASSERT_TRUE(res.get().has_value());
+                const auto path = res.get().value();
+                ASSERT_EQ(path.size(), 4);
+                EXPECT_EQ(path.front(), g.at(0));
+                EXPECT_EQ(path.back(), g.at(3));
+            }
+            {
+                // a gate that is already inside the module has arrived, so the path is that gate alone
+                auto res = dec.get_shortest_path(g.at(3), mod_b, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                ASSERT_TRUE(res.get().has_value());
+                ASSERT_EQ(res.get().value().size(), 1);
+                EXPECT_EQ(res.get().value().front(), g.at(3));
+            }
+            {
+                // between the two modules, from the last gate of A to the first of B
+                auto res = dec.get_shortest_path(mod_a, mod_b, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                const auto paths = res.get();
+                ASSERT_EQ(paths.size(), 1);
+                EXPECT_EQ(paths.front().front(), g.at(1));
+                EXPECT_EQ(paths.front().back(), g.at(3));
+            }
+            {
+                // the other way round there is no connection
+                auto res = dec.get_shortest_path(mod_b, mod_a, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().empty());
+            }
+        }
+        TEST_END
+    }
+
 }

@@ -273,9 +273,57 @@ namespace hal
                                                                     const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                                     const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
-        // TODO move get_gate_chain and get_complex_gate_chain here
+        /**
+         * Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate
+         * with any gate of the given module. The start gate will be the first in the result vector, the gate reached
+         * within the module the last. If there is no such path an empty optional is returned. If there is more than
+         * one path with the same length only the first one is returned. A start gate that already belongs to the
+         * module yields a path consisting of that gate alone.
+         *
+         * @param[in] start_gate - The gate to start from.
+         * @param[in] end_module - The module to connect to. Gates of its submodules count as belonging to it.
+         * @param[in] direction - The direction to search in. Can be PinDirection::input, PinDirection::output or PinDirection::inout to search both directions and return the shorter one.
+         * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+         * @return An optional vector of gates that connect the start gate with the module on success, an error otherwise.
+         */
+        Result<std::optional<std::vector<Gate*>>> get_shortest_path(const Gate* start_gate,
+                                                                    const Module* end_module,
+                                                                    const PinDirection& direction,
+                                                                    const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                                    const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * Find every shortest path (i.e., the result sets with the lowest number of gates) that connects the start
+         * module with the end module. There may be more than one such path, so every path of that length is returned;
+         * each runs from a gate of the start module to a gate of the end module. If there is no such path an empty
+         * vector is returned.
+         *
+         * @param[in] start_module - The module to start from. Gates of its submodules count as belonging to it.
+         * @param[in] end_module - The module to connect to. Gates of its submodules count as belonging to it.
+         * @param[in] direction - The direction to search in. Can be PinDirection::input, PinDirection::output or PinDirection::inout to search both directions and return the shorter one.
+         * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+         * @return A vector of the shortest paths connecting the two modules on success, an error otherwise.
+         */
+        Result<std::vector<std::vector<Gate*>>> get_shortest_path(const Module* start_module,
+                                                                  const Module* end_module,
+                                                                  const PinDirection& direction,
+                                                                  const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                                  const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
     private:
+        /**
+         * The breadth-first search behind every get_shortest_path overload, stopping at the first gate the given
+         * condition accepts. Kept in one place so that searching for one gate and searching for any gate of a module
+         * cannot drift apart.
+         */
+        Result<std::optional<std::vector<Gate*>>> get_shortest_path_to(const Gate* start_gate,
+                                                                       const std::function<bool(const Gate*)>& is_target,
+                                                                       const PinDirection& direction,
+                                                                       const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                       const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const;
+
         const Netlist& m_netlist;
     };
 }    // namespace hal

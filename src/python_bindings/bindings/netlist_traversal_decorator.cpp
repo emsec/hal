@@ -472,5 +472,74 @@ namespace hal
                 :returns: A list of gates that connect the start with end gate on success, ``None`` otherwise.
                 :rtype: list[hal_py.Gate] or None
             )");
+
+        py_netlist_traversal_decorator.def(
+            "get_shortest_path",
+            [](NetlistTraversalDecorator& self,
+               const Gate* start_gate,
+               const Module* end_module,
+               const PinDirection& direction,
+               const std::function<bool(const Endpoint*, u32)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*, u32)>& entry_endpoint_filter = nullptr) -> std::optional<std::vector<Gate*>> {
+                auto res = self.get_shortest_path(start_gate, end_module, direction, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                log_error("python_context", "{}", res.get_error().get());
+                return std::nullopt;
+            },
+            py::arg("start_gate"),
+            py::arg("end_module"),
+            py::arg("direction"),
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            borrowed(),
+            R"(
+            Find the shortest path that connects the start gate with any gate of the given module.
+
+            :param hal_py.Gate start_gate: The gate to start from.
+            :param hal_py.Module end_module: The module to connect to. Gates of its submodules count as belonging to it.
+            :param hal_py.PinDirection direction: The direction to search in.
+            :param lambda exit_endpoint_filter: Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+            :param lambda entry_endpoint_filter: Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+            :returns: The path on success, ``None`` otherwise.
+            :rtype: list[hal_py.Gate] or None
+        )");
+
+        py_netlist_traversal_decorator.def(
+            "get_shortest_path",
+            [](NetlistTraversalDecorator& self,
+               const Module* start_module,
+               const Module* end_module,
+               const PinDirection& direction,
+               const std::function<bool(const Endpoint*, u32)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*, u32)>& entry_endpoint_filter = nullptr) -> std::optional<std::vector<std::vector<Gate*>>> {
+                auto res = self.get_shortest_path(start_module, end_module, direction, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                log_error("python_context", "{}", res.get_error().get());
+                return std::nullopt;
+            },
+            py::arg("start_module"),
+            py::arg("end_module"),
+            py::arg("direction"),
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            borrowed(),
+            R"(
+            Find every shortest path that connects the start module with the end module.
+
+            :param hal_py.Module start_module: The module to start from. Gates of its submodules count as belonging to it.
+            :param hal_py.Module end_module: The module to connect to. Gates of its submodules count as belonging to it.
+            :param hal_py.PinDirection direction: The direction to search in.
+            :param lambda exit_endpoint_filter: Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+            :param lambda entry_endpoint_filter: Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+            :returns: The shortest paths on success, ``None`` otherwise.
+            :rtype: list[list[hal_py.Gate]] or None
+        )");
+
     }
 }    // namespace hal

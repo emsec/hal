@@ -1,5 +1,7 @@
 #include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 
+#include "hal_core/netlist/module.h"
+
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 
@@ -810,11 +812,11 @@ namespace hal
                    + std::to_string(end_gate->get_id()) + ": pin direction " + enum_to_string(direction) + " is not supported");
     }
 
-    Result<std::optional<std::vector<Gate*>>> NetlistTraversalDecorator::get_shortest_path(const Gate* start_gate,
-                                                                                           const Gate* end_gate,
-                                                                                           const PinDirection& direction,
-                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
-                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    Result<std::optional<std::vector<Gate*>>> NetlistTraversalDecorator::get_shortest_path_to(const Gate* start_gate,
+                                                                                              const std::function<bool(const Gate*)>& is_target,
+                                                                                              const PinDirection& direction,
+                                                                                              const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                              const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
     {
         const auto reconstruct_shortest_path = [](const Gate* start_gate, const Gate* end_gate, const std::unordered_map<Gate*, Gate*>& origin_map) -> Result<std::optional<std::vector<Gate*>>> {
             Gate* _start_gate       = start_gate->get_netlist()->get_gate_by_id(start_gate->get_id());
@@ -879,9 +881,9 @@ namespace hal
                             }
                             origin_map.insert({next_g, curr_g});
 
-                            if (next_g == end_gate)
+                            if (is_target(next_g))
                             {
-                                return reconstruct_shortest_path(start_gate, end_gate, origin_map);
+                                return reconstruct_shortest_path(start_gate, next_g, origin_map);
                             }
 
                             next.push_back(next_g);
@@ -903,13 +905,13 @@ namespace hal
 
         if (direction == PinDirection::inout)
         {
-            const auto res_backward = get_shortest_path(start_gate, end_gate, PinDirection::input);
+            const auto res_backward = get_shortest_path_to(start_gate, is_target, PinDirection::input, exit_endpoint_filter, entry_endpoint_filter);
             if (res_backward.is_error())
             {
                 return res_backward;
             }
 
-            const auto res_forward = get_shortest_path(start_gate, end_gate, PinDirection::output);
+            const auto res_forward = get_shortest_path_to(start_gate, is_target, PinDirection::output, exit_endpoint_filter, entry_endpoint_filter);
             if (res_forward.is_error())
             {
                 return res_forward;
@@ -941,8 +943,98 @@ namespace hal
             return OK(path_forward);
         }
 
-        return ERR("cannot get shortest path between Gate " + start_gate->get_name() + " with ID " + std::to_string(start_gate->get_id()) + " and Gate " + end_gate->get_name() + " with ID "
-                   + std::to_string(end_gate->get_id()) + ": pin direction " + enum_to_string(direction) + " is not supported");
+        return ERR("cannot get shortest path from Gate " + start_gate->get_name() + " with ID " + std::to_string(start_gate->get_id()) + ": pin direction " + enum_to_string(direction)
+                   + " is not supported");
+    }
+
+    Result<std::optional<std::vector<Gate*>>> NetlistTraversalDecorator::get_shortest_path(const Gate* start_gate,
+                                                                                           const Gate* end_gate,
+                                                                                           const PinDirection& direction,
+                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (end_gate == nullptr)
+        {
+            return ERR("nullptr given as end gate");
+        }
+
+        return get_shortest_path_to(
+            start_gate, [end_gate](const Gate* gate) { return gate == end_gate; }, direction, exit_endpoint_filter, entry_endpoint_filter);
+    }
+
+    Result<std::optional<std::vector<Gate*>>> NetlistTraversalDecorator::get_shortest_path(const Gate* start_gate,
+                                                                                           const Module* end_module,
+                                                                                           const PinDirection& direction,
+                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (end_module == nullptr)
+        {
+            return ERR("nullptr given as end module");
+        }
+
+        const auto gates = end_module->get_gates(nullptr, true);
+        const std::unordered_set<const Gate*> end_gates(gates.begin(), gates.end());
+
+        // A start gate that is already inside the module has arrived: the path is the gate itself. Searching from
+        // here instead would walk to a neighbour and report a path of two, and reporting nothing would not be
+        // distinguishable from the module being unreachable.
+        if (end_gates.find(start_gate) != end_gates.end())
+        {
+            Gate* gate = start_gate->get_netlist()->get_gate_by_id(start_gate->get_id());
+            return OK(std::optional<std::vector<Gate*>>({gate}));
+        }
+
+        return get_shortest_path_to(
+            start_gate, [&end_gates](const Gate* gate) { return end_gates.find(gate) != end_gates.end(); }, direction, exit_endpoint_filter, entry_endpoint_filter);
+    }
+
+    Result<std::vector<std::vector<Gate*>>> NetlistTraversalDecorator::get_shortest_path(const Module* start_module,
+                                                                                         const Module* end_module,
+                                                                                         const PinDirection& direction,
+                                                                                         const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                         const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (start_module == nullptr)
+        {
+            return ERR("nullptr given as start module");
+        }
+        if (end_module == nullptr)
+        {
+            return ERR("nullptr given as end module");
+        }
+
+        // One search per gate of the start module, keeping every path that ties for the shortest. Searching from each
+        // gate rather than towards each one keeps the paths running from start to end, so that a caller does not have
+        // to know which end a path was grown from.
+        std::vector<std::vector<Gate*>> shortest;
+        for (Gate* start_gate : start_module->get_gates(nullptr, true))
+        {
+            const auto res = get_shortest_path(start_gate, end_module, direction, exit_endpoint_filter, entry_endpoint_filter);
+            if (res.is_error())
+            {
+                return ERR_APPEND(res.get_error(),
+                                  "cannot get shortest path between Module " + start_module->get_name() + " with ID " + std::to_string(start_module->get_id()) + " and Module "
+                                      + end_module->get_name() + " with ID " + std::to_string(end_module->get_id()) + ": failed to search from Gate " + start_gate->get_name());
+            }
+
+            const auto& path = res.get();
+            if (!path.has_value() || path.value().empty())
+            {
+                continue;
+            }
+
+            if (shortest.empty() || path.value().size() < shortest.front().size())
+            {
+                shortest = {path.value()};
+            }
+            else if (path.value().size() == shortest.front().size())
+            {
+                shortest.push_back(path.value());
+            }
+        }
+
+        return OK(shortest);
     }
 
 }    // namespace hal

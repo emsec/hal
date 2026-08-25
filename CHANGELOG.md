@@ -19,6 +19,8 @@ All notable changes to this project will be documented in this file.
     * fixed the progress overlay of the graph view being dismissed while the layout updates deferred during a dataflow analysis were still being applied, which left the graph view showing its spinner
   * program options
     * added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
+  * netlist traversal
+    * added `NetlistTraversalDecorator::get_shortest_path` overloads that end at any gate of a module and that connect two modules, which existed only as free functions in `netlist_utils` before
   * gate library
     * fixed reloading a gate library destroying the library a netlist was built against, which silently replaced every gate type of that netlist. Gate libraries are now owned through a `shared_ptr` and outlive both the netlists and the Python handles that refer to them
 * Boolean functions
