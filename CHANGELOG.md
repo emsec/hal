@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
   * program options
     * added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
   * netlist traversal
+    * deprecated the three `netlist_utils::get_shortest_path` overloads in favour of `NetlistTraversalDecorator::get_shortest_path`, and `netlist_utils::get_ff_dependency_matrix` in favour of the one in the Boolean influence plugin, which also reports how strongly each flip-flop depends on another rather than only whether it does
     * moved `get_gate_chain` and `get_complex_gate_chain` from `netlist_utils` onto `NetlistTraversalDecorator`, where the rest of the traversal lives and where a binding can keep the netlist alive for as long as Python refers to the gates it returns
     * added `NetlistTraversalDecorator::get_shortest_path` overloads that end at any gate of a module and that connect two modules, which existed only as free functions in `netlist_utils` before
   * gate library

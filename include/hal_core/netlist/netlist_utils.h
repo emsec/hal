@@ -82,8 +82,10 @@ namespace hal
          * @param[in] nl - The netlist to extract the dependency matrix from.
          * @returns A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
          *          IDs to the ones in the matrix, and a std::vector<std::vector<int>, which is the ff dependency matrix
+         * \deprecated This function is deprecated, use `boolean_influence::get_ff_dependency_matrix` instead.
          */
-        std::pair<std::map<u32, Gate*>, std::vector<std::vector<int>>> get_ff_dependency_matrix(const Netlist* nl);
+        [[deprecated("Will be removed in a future version, use boolean_influence::get_ff_dependency_matrix instead.")]] std::pair<std::map<u32, Gate*>, std::vector<std::vector<int>>>
+            get_ff_dependency_matrix(const Netlist* nl);
 
         /**
          * \deprecated
@@ -307,8 +309,9 @@ namespace hal
          * @param[in] end_gate - The gate to connect to.
          * @param[in] search_both_directions - `true` to additionally check whether a shorter path from end to start exists, `false` otherwise.
          * @return A vector of gates that connect the start with end gate (possibly in reverse order).
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_shortest_path` instead.
          */
-        CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_shortest_path instead.")]] CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);
 
         /**
          * Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with any gate from the given module.
@@ -319,8 +322,9 @@ namespace hal
          * @param[in] end_module - The module to connect to.
          * @param[in] forward_direction - `true` to search along the fan-out nets of the start gate, `false` to search along its fan-in nets.
          * @return A vector of gates that connect the start with end gate (possibly in reverse order).
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_shortest_path` instead.
          */
-        CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Module* end_module, bool forward_direction);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_shortest_path instead.")]] CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Module* end_module, bool forward_direction);
 
 
         /**
@@ -332,7 +336,8 @@ namespace hal
          * @param[in] start_module - The module to start from.
          * @param[in] end_module - The module to connect to.
          * @return A vector of connecting vectors with gates that connect the start with end gate.
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_shortest_path` instead.
          */
-        CORE_API std::vector<std::vector<Gate*> > get_shortest_path(Module* start_module, Module* end_module);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_shortest_path instead.")]] CORE_API std::vector<std::vector<Gate*> > get_shortest_path(Module* start_module, Module* end_module);
     }    // namespace netlist_utils
 }    // namespace hal
