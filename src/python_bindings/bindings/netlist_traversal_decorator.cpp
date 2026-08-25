@@ -32,6 +32,31 @@ namespace hal
         )");
 
         py_netlist_traversal_decorator.def(
+            "get_common_inputs",
+            [](NetlistTraversalDecorator& self, const std::vector<Gate*>& gates, u32 threshold = 0) -> std::optional<std::vector<Net*>> {
+                auto res = self.get_common_inputs(gates, threshold);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                log_error("python_context", "{}", res.get_error().get());
+                return std::nullopt;
+            },
+            py::arg("gates"),
+            py::arg("threshold") = 0,
+            borrowed(),
+            R"(
+            Get the nets that are inputs to at least ``threshold`` of the given gates.
+
+            Shared inputs across a group of gates typically indicate a shared control signal, so this is a cheap way to test whether a set of gates belongs together. Nets driven by GND or VCC gates do not count.
+
+            :param list[hal_py.Gate] gates: The gates to inspect.
+            :param int threshold: The number of gates a net has to feed. ``0`` to require all of them. Defaults to ``0``.
+            :returns: The common input nets on success, ``None`` otherwise.
+            :rtype: list[hal_py.Net] or None
+        )");
+
+        py_netlist_traversal_decorator.def(
             "make_traversal_cache",
             [](NetlistTraversalDecorator& self,
                TraversalDirection direction,

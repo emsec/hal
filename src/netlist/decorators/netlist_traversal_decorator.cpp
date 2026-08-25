@@ -333,6 +333,50 @@ namespace hal
         return OK(res);
     }
 
+    Result<std::vector<Net*>> NetlistTraversalDecorator::get_common_inputs(const std::vector<Gate*>& gates, u32 threshold) const
+    {
+        // a threshold of zero means a net only counts when it is an input to every single gate
+        if (threshold == 0)
+        {
+            threshold = gates.size();
+        }
+
+        std::map<Net*, u32> net_count;
+        for (Gate* gate : gates)
+        {
+            if (gate == nullptr)
+            {
+                return ERR("nullptr given within gates");
+            }
+
+            if (!m_netlist.is_gate_in_netlist(gate))
+            {
+                return ERR("gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " does not belong to netlist");
+            }
+
+            for (Endpoint* pred : gate->get_predecessors())
+            {
+                if (pred->get_gate()->is_gnd_gate() || pred->get_gate()->is_vcc_gate())
+                {
+                    continue;
+                }
+
+                net_count[pred->get_net()]++;
+            }
+        }
+
+        std::vector<Net*> common_inputs;
+        for (const auto& [net, count] : net_count)
+        {
+            if (count >= threshold)
+            {
+                common_inputs.push_back(net);
+            }
+        }
+
+        return OK(common_inputs);
+    }
+
     TraversalCache NetlistTraversalDecorator::make_traversal_cache(TraversalDirection direction,
                                                                     std::function<bool(const Gate*)> match,
                                                                     TraversalStop stop,

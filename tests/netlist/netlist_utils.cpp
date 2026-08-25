@@ -585,9 +585,13 @@ namespace hal
             Net* common_net2 = test_utils::connect(nl.get(), l1, "O", l2, "I1");
             test_utils::connect(nl.get(), l1, "O", l3, "I1");
 
-            std::vector<Gate*> gates       = {l2, l3, l4, l5};
-            std::vector<Net*> common_nets4 = netlist_utils::get_common_inputs(gates);
-            std::vector<Net*> common_nets2 = netlist_utils::get_common_inputs(gates, 2);
+            std::vector<Gate*> gates = {l2, l3, l4, l5};
+            auto res_common_nets4    = NetlistTraversalDecorator(*nl).get_common_inputs(gates);
+            auto res_common_nets2    = NetlistTraversalDecorator(*nl).get_common_inputs(gates, 2);
+            ASSERT_TRUE(res_common_nets4.is_ok());
+            ASSERT_TRUE(res_common_nets2.is_ok());
+            std::vector<Net*> common_nets4 = res_common_nets4.get();
+            std::vector<Net*> common_nets2 = res_common_nets2.get();
 
             ASSERT_EQ(common_nets4.size(), 1);
             EXPECT_TRUE(std::find(common_nets4.begin(), common_nets4.end(), common_net4) != common_nets4.end());

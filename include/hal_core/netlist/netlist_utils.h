@@ -286,9 +286,10 @@ namespace hal
          * @param[in] gates - The gates.
          * @param[in] threshold - The threshold value, defaults to 0.
          * @returns The common input nets.
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_common_inputs` instead.
          */
         // TODO move to SubgraphNetlistDecorator
-        CORE_API std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_common_inputs instead.")]] CORE_API std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0);
 
         /**
          * \deprecated

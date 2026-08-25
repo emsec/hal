@@ -486,6 +486,19 @@ namespace hal
                                                           const std::function<bool(const Gate*)>& filter                      = nullptr) const;
 
         /**
+         * Get the nets that are inputs to at least `threshold` of the given gates.
+         *
+         * Shared inputs across a group of gates typically indicate a shared control signal, so this is
+         * a cheap way to test whether a set of gates belongs together. A `threshold` of `0` requires a
+         * net to feed every single one of the gates. Nets driven by GND or VCC gates do not count.
+         *
+         * @param[in] gates - The gates to inspect.
+         * @param[in] threshold - The number of gates a net has to feed. `0` to require all of them. Defaults to `0`.
+         * @returns The common input nets on success, an error otherwise.
+         */
+        Result<std::vector<Net*>> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0) const;
+
+        /**
          * Create a cache for one specific traversal, to be handed to `get_gates` in place of the
          * traversal's parameters.
          *
