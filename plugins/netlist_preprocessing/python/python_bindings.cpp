@@ -462,6 +462,7 @@ namespace hal
             },
             py::arg("nl"),
             py::arg("concatenated_pin_groups"),
+            borrowed(),
             R"(
                 Create modules from large gates like RAMs and DSPs with the option to concatenate multiple gate pin groups into larger consecutive pin groups.
 
@@ -486,6 +487,7 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            borrowed(),
             R"(
                 Create a new net for every unconnected output pin of every gate of the netlist.
                 The new nets are named ``HAL_UNCONNECTED_<net_id>``.
