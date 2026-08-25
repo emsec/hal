@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
   * program options
     * added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
   * netlist traversal
+    * deprecated the four `netlist_utils::get_path` overloads, which despite the name return every gate of a cone rather than a path, in favour of `NetlistTraversalDecorator::get_gates` with a negated condition and `TraversalStop::at_mismatch`
     * added `NetlistTraversalDecorator::get_gates`, the traversal that the other traversals of the decorator are special cases of. What separated them from one another was never what they collect but where they stop relative to it, which is now said out loud by a `TraversalStop` of `at_match`, `at_mismatch` or `never` rather than implied by a pair of booleans named one syllable apart. Direction is a `TraversalDirection` rather than a bare `bool successors`
     * deprecated the three `netlist_utils::get_shortest_path` overloads in favour of `NetlistTraversalDecorator::get_shortest_path`, and `netlist_utils::get_ff_dependency_matrix` in favour of the one in the Boolean influence plugin, which also reports how strongly each flip-flop depends on another rather than only whether it does
     * moved `get_gate_chain` and `get_complex_gate_chain` from `netlist_utils` onto `NetlistTraversalDecorator`, where the rest of the traversal lives and where a binding can keep the netlist alive for as long as Python refers to the gates it returns

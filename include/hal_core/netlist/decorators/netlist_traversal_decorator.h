@@ -144,6 +144,8 @@ namespace hal
         /**
          * Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
          * Traverse over gates that do not meet the `target_gate_filter` condition.
+         *
+         * Equivalent to `get_gates` with a `TraversalStop` of `at_match`, or of `never` when `continue_on_match` is set.
          * Stop traversal if (1) `continue_on_match` is `false` the `target_gate_filter` evaluates to `true`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
          * Both the `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
          * 

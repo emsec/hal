@@ -203,8 +203,9 @@ namespace hal
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @param[inout] cache - The cache. 
          * @returns All gates on the predecessor or successor path of the gate.
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_gates` with a negated condition and `TraversalStop::at_mismatch` instead.
          */
-        CORE_API std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_gates instead.")]] CORE_API std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache);
 
         /**
          * Find all gates on the predeccessor or successor path of a gate.
@@ -215,8 +216,9 @@ namespace hal
          * @param[in] get_successors - If `true`, the successor path is returned, otherwise the predecessor path is returned.
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @returns All gates on the predecessor or successor path of the gate.
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_gates` with a negated condition and `TraversalStop::at_mismatch` instead.
          */
-        CORE_API std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_gates instead.")]] CORE_API std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties);
 
         /**
          * Find all gates on the predecessor or successor path of a net.
@@ -230,8 +232,9 @@ namespace hal
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @param[inout] cache - The cache. 
          * @returns All gates on the predecessor or successor path of the net.
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_gates` with a negated condition and `TraversalStop::at_mismatch` instead.
          */
-        CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_gates instead.")]] CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache);
 
         /**
          * Find all gates on the predecessor or successor path of a net.
@@ -241,8 +244,9 @@ namespace hal
          * @param[in] get_successors - If `true`, the successor path is returned, otherwise the predecessor path is returned.
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @returns All gates on the predecessor or successor path of the net.
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_gates` with a negated condition and `TraversalStop::at_mismatch` instead.
          */
-        CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_gates instead.")]] CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties);
 
         /**
          * Get the nets that are connected to a subset of pins of the specified gate.
