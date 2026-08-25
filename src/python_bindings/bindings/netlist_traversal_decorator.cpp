@@ -541,5 +541,79 @@ namespace hal
             :rtype: list[list[hal_py.Gate]] or None
         )");
 
+py_netlist_traversal_decorator.def(
+            "get_gate_chain",
+            [](NetlistTraversalDecorator& self, Gate* start_gate, const std::vector<const GatePin*>& input_pins = {}, const std::vector<const GatePin*>& output_pins = {}, const std::function<bool(const Gate*)>& filter = nullptr)
+                -> std::vector<Gate*> {
+                auto res = self.get_gate_chain(start_gate, input_pins, output_pins, filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while detecting gate chain:\n{}", res.get_error().get());
+                    return {};
+                }
+            },
+            py::arg("start_gate"),
+            py::arg("input_pins")  = std::vector<GatePin*>(),
+            py::arg("output_pins") = std::vector<GatePin*>(),
+            py::arg("filter")      = nullptr,
+            borrowed(),
+            R"(
+            Find a sequence of identical gates that are connected via the specified input and output pins.
+            The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
+            If input and/or output pins are specified, the gates must be connected through one of the input pins and/or one of the output pins.
+            The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
+
+            :param hal_py.Gate start_gate: The gate at which to start the chain detection.
+            :param list[hal_py.GatePin] input_pins: The input pins through which the gates must be connected. Defaults to an empty list.
+            :param set[hal_py.GatePin] output_pins: The output pins through which the gates must be connected. Defaults to an empty list.
+            :param lambda filter: An optional filter function to be evaluated on each gate.
+            :returns: A list of gates that form a chain on success, an empty list on error.
+            :rtype: list[hal_py.Gate]
+        )");
+
+        py_netlist_traversal_decorator.def(
+            "get_complex_gate_chain",
+            [](NetlistTraversalDecorator& self, Gate* start_gate,
+               const std::vector<GateType*>& chain_types,
+               const std::map<GateType*, std::vector<const GatePin*>>& input_pins,
+               const std::map<GateType*, std::vector<const GatePin*>>& output_pins,
+               const std::function<bool(const Gate*)>& filter = nullptr) -> std::vector<Gate*> {
+                auto res = self.get_complex_gate_chain(start_gate, chain_types, input_pins, output_pins, filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while detecting complex gate chain:\n{}", res.get_error().get());
+                    return {};
+                }
+            },
+            py::arg("start_gate"),
+            py::arg("chain_types"),
+            py::arg("input_pins"),
+            py::arg("output_pins"),
+            py::arg("filter") = nullptr,
+            borrowed(),
+            R"(
+            Find a sequence of gates (of the specified sequence of gate types) that are connected via the specified input and output pins.
+            The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
+            However, the start gate must be of the first gate type within the repeating sequence.
+            If input and/or output pins are specified for a gate type, the gates must be connected through one of the input pins and/or one of the output pins.
+            The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
+
+            :param hal_py.Gate start_gate: The gate at which to start the chain detection.
+            :param list[hal_py.GateType] chain_types: The sequence of gate types that is expected to make up the gate chain.
+            :param dict[hal_py.GateType,set[str]] input_pins: The input pins (of every gate type of the sequence) through which the gates must be connected.
+            :param dict[hal_py.GateType,set[str]] output_pins: The output pins (of every gate type of the sequence) through which the gates must be connected.
+            :param lambda filter: An optional filter function to be evaluated on each gate.
+            :returns: A list of gates that form a chain on success, an empty list on error.
+            :rtype: list[hal_py.Gate]
+        )");
+
     }
 }    // namespace hal

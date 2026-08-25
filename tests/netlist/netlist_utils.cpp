@@ -1,3 +1,4 @@
+#include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 #include "hal_core/netlist/netlist_utils.h"
 
 #include "gate_library_test_utils.h"
@@ -653,35 +654,35 @@ namespace hal
             std::vector<Gate*> expected_chain = {c0, c1, c2, c3};
 
             {
-                auto res = netlist_utils::get_gate_chain(c0, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")});
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c0, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")});
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, expected_chain);
             }
 
             {
-                auto res = netlist_utils::get_gate_chain(c1, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")});
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c1, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")});
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, expected_chain);
             }
 
             {
-                auto res = netlist_utils::get_gate_chain(c2, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")});
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c2, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")});
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, expected_chain);
             }
 
             {
-                auto res = netlist_utils::get_gate_chain(c3, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")});
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c3, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")});
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, expected_chain);
             }
 
             {
-                auto res = netlist_utils::get_gate_chain(g0, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")}, [](const Gate* g) {
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(g0, {carry->get_pin_by_name("CI")}, {carry->get_pin_by_name("CO")}, [](const Gate* g) {
                     return g->get_type()->has_property(GateTypeProperty::c_carry);
                 });
                 ASSERT_TRUE(res.is_error());
@@ -715,25 +716,25 @@ namespace hal
             std::vector<Gate*> expected_chain = {c0, c1, c2, c3};
 
             {
-                auto res = netlist_utils::get_gate_chain(c0);
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c0);
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, expected_chain);
             }
             {
-                auto res = netlist_utils::get_gate_chain(c1);
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c1);
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, expected_chain);
             }
             {
-                auto res = netlist_utils::get_gate_chain(c2);
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c2);
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, expected_chain);
             }
             {
-                auto res = netlist_utils::get_gate_chain(c3);
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c3);
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, expected_chain);
@@ -759,7 +760,7 @@ namespace hal
             test_utils::connect(nl.get(), c3, "CO", c0, "CI");
 
             {
-                auto res = netlist_utils::get_gate_chain(c0);
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c0);
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, std::vector<Gate*>({c0, c1, c2, c3}));
@@ -788,37 +789,37 @@ namespace hal
             test_utils::connect(nl.get(), c4, "CO", c5, "CI");
 
             {
-                auto res = netlist_utils::get_gate_chain(c0);
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c0);
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, std::vector<Gate*>({c0, c1}));
             }
             {
-                auto res = netlist_utils::get_gate_chain(c1);
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c1);
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, std::vector<Gate*>({c0, c1}));
             }
             {
-                auto res = netlist_utils::get_gate_chain(c2);
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c2);
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, std::vector<Gate*>({c0, c1, c2, c3}));
             }
             {
-                auto res = netlist_utils::get_gate_chain(c3);
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c3);
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, std::vector<Gate*>({c0, c1, c2, c3}));
             }
             {
-                auto res = netlist_utils::get_gate_chain(c4);
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c4);
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, std::vector<Gate*>({c0, c1, c4, c5}));
             }
             {
-                auto res = netlist_utils::get_gate_chain(c5);
+                auto res = NetlistTraversalDecorator(*nl).get_gate_chain(c5);
                 ASSERT_TRUE(res.is_ok());
                 std::vector<Gate*> chain = res.get();
                 EXPECT_EQ(chain, std::vector<Gate*>({c0, c1, c4, c5}));

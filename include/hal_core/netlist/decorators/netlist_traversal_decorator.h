@@ -312,6 +312,36 @@ namespace hal
                                                                   const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                                   const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
+        /**
+         * Find a chain of gates of the same type, starting at the given gate and following its output pins.
+         *
+         * @param[in] start_gate - The gate to start from.
+         * @param[in] input_pins - The input pins to follow. Defaults to all of them.
+         * @param[in] output_pins - The output pins to follow. Defaults to all of them.
+         * @param[in] filter - An optional filter a gate has to pass to be part of the chain.
+         * @returns The gates of the chain in order on success, an error otherwise.
+         */
+        Result<std::vector<Gate*>> get_gate_chain(Gate* start_gate,
+                                                  const std::vector<const GatePin*>& input_pins  = {},
+                                                  const std::vector<const GatePin*>& output_pins = {},
+                                                  const std::function<bool(const Gate*)>& filter = nullptr) const;
+
+        /**
+         * Find a chain of gates that repeats the given sequence of gate types, starting at the given gate.
+         *
+         * @param[in] start_gate - The gate to start from.
+         * @param[in] chain_types - The gate types the chain repeats, in order.
+         * @param[in] input_pins - The input pins to follow, per gate type. Defaults to all of them.
+         * @param[in] output_pins - The output pins to follow, per gate type. Defaults to all of them.
+         * @param[in] filter - An optional filter a gate has to pass to be part of the chain.
+         * @returns The gates of the chain in order on success, an error otherwise.
+         */
+        Result<std::vector<Gate*>> get_complex_gate_chain(Gate* start_gate,
+                                                          const std::vector<GateType*>& chain_types,
+                                                          const std::map<GateType*, std::vector<const GatePin*>>& input_pins  = {},
+                                                          const std::map<GateType*, std::vector<const GatePin*>>& output_pins = {},
+                                                          const std::function<bool(const Gate*)>& filter                      = nullptr) const;
+
     private:
         /**
          * The breadth-first search behind every get_shortest_path overload, stopping at the first gate the given

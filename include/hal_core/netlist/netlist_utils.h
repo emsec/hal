@@ -299,43 +299,6 @@ namespace hal
             replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map);
 
         /**
-         * Find a sequence of identical gates that are connected via the specified input and output pins.
-         * The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
-         * If input and/or output pins are specified, the gates must be connected through one of the input pins and/or one of the output pins.
-         * The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
-         * 
-         * @param[in] start_gate - The gate at which to start the chain detection.
-         * @param[in] input_pins - The input pins through which the gates must be connected. Defaults to an empty vector.
-         * @param[in] output_pins - The output pins through which the gates must be connected. Defaults to an empty vector.
-         * @param[in] filter - An optional filter function to be evaluated on each gate.
-         * @returns A vector of gates that form a chain on success, an error otherwise.
-         */
-        CORE_API Result<std::vector<Gate*>> get_gate_chain(Gate* start_gate,
-                                                           const std::vector<const GatePin*>& input_pins  = {},
-                                                           const std::vector<const GatePin*>& output_pins = {},
-                                                           const std::function<bool(const Gate*)>& filter = nullptr);
-
-        /**
-         * Find a sequence of gates (of the specified sequence of gate types) that are connected via the specified input and output pins.
-         * The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
-         * However, the start gate must be of the first gate type within the repeating sequence.
-         * If input and/or output pins are specified for a gate type, the gates must be connected through one of the input pins and/or one of the output pins.
-         * The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
-         * 
-         * @param[in] start_gate - The gate at which to start the chain detection.
-         * @param[in] chain_types - The sequence of gate types that is expected to make up the gate chain.
-         * @param[in] input_pins - The input pins (of every gate type of the sequence) through which the gates must be connected.
-         * @param[in] output_pins - The output pins (of every gate type of the sequence) through which the gates must be connected.
-         * @param[in] filter - An optional filter function to be evaluated on each gate.
-         * @returns A vector of gates that form a chain on success, an error otherwise.
-         */
-        CORE_API Result<std::vector<Gate*>> get_complex_gate_chain(Gate* start_gate,
-                                                                   const std::vector<GateType*>& chain_types,
-                                                                   const std::map<GateType*, std::vector<const GatePin*>>& input_pins,
-                                                                   const std::map<GateType*, std::vector<const GatePin*>>& output_pins,
-                                                                   const std::function<bool(const Gate*)>& filter = nullptr);
-
-        /**
          * Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with the end gate. 
          * The gate where the search started from will be the first in the result vector, the end gate will be the last. 
          * If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.

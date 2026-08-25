@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
   * program options
     * added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
   * netlist traversal
+    * moved `get_gate_chain` and `get_complex_gate_chain` from `netlist_utils` onto `NetlistTraversalDecorator`, where the rest of the traversal lives and where a binding can keep the netlist alive for as long as Python refers to the gates it returns
     * added `NetlistTraversalDecorator::get_shortest_path` overloads that end at any gate of a module and that connect two modules, which existed only as free functions in `netlist_utils` before
   * gate library
     * fixed reloading a gate library destroying the library a netlist was built against, which silently replaced every gate type of that netlist. Gate libraries are now owned through a `shared_ptr` and outlive both the netlists and the Python handles that refer to them
