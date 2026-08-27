@@ -33,6 +33,10 @@ namespace hal {
 
     class Netlist;
 
+    /**
+     * The base class for all serializers that store additional data alongside a netlist within a project directory.
+     * Each serializer is identified by a tag name under which the project manager records the file it produced.
+     */
     class ProjectSerializer
     {
     protected:
@@ -56,7 +60,7 @@ namespace hal {
          * be returned.
          * @param[in] netlist The netlist to be serialized
          * @param[in] savedir Target project directory
-         * @param[in] isAutosave True if serialize call was issued from autosave, false otherwise
+         * @param[in] isAutosave `true` if serialize call was issued from autosave, `false` otherwise
          * @return relative name of file name that was used for serialization
          */
         virtual std::string serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave) = 0;

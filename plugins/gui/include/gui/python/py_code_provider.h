@@ -31,6 +31,9 @@
 
 namespace hal
 {
+    /**
+     * Builds the python snippets that the GUI offers for copying, e.g., the expression that retrieves the selected gate.
+     */
     class PyCodeProvider
     {
 

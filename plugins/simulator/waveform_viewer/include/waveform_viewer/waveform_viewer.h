@@ -59,6 +59,9 @@ namespace hal
     class Toolbar;
     class SimulationInput;
 
+    /**
+     * Creates the waveform viewer content widget on demand.
+     */
     class NETLIST_API WaveformViewerFactory : public ContentFactory
     {
     public:
@@ -67,6 +70,8 @@ namespace hal
     };
 
     /**
+     * The content widget that hosts the waveform views of all simulation controllers.
+     *
      * @ingroup netlist_writer
      */
     class NETLIST_API WaveformViewer : public ExternalContentWidget

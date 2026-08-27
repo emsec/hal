@@ -112,6 +112,7 @@ namespace hal
         /**
          * Show progress in overlay
          * @param percent percent done
+         * @param text optional message shown next to the progress bar
          */
         void showProgress(int percent, const QString& text=QString());
 
@@ -175,6 +176,9 @@ namespace hal
         QRectF mRectAfterFocus;
         QRectF mLastTargetRect;
 
+        /**
+         * Remembers the visible section of the graph so that it can be restored after the view was relayouted.
+         */
         class StoreViewport
         {
         public:

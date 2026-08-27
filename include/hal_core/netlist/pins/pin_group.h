@@ -42,8 +42,11 @@ namespace hal
     class GateType;
 
     /**
+     * An ordered collection of pins that belong together, e.g., the bits of a bus.
+     * A pin group assigns a consecutive index to each of its pins, either in ascending or in descending order.
+     *
      * A group of pins made up of a name, the pins, a pin order, and a start index.
-     * 
+     *
      * @ingroup pins
      */
     template<class T>
@@ -340,7 +343,7 @@ namespace hal
         /**
          * Check whether the pin group is empty, i.e., contains no pins.
          * 
-         * @returns True if the pin group is empty, false otherwise.
+         * @returns `true` if the pin group is empty, `false` otherwise.
          */
         bool empty() const
         {
@@ -365,7 +368,7 @@ namespace hal
          * For descending groups, it will be inserted at the beginning of the list of pins. 
          * 
          * @param[in] pin - The pin to assign.
-         * @returns true on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool assign_pin(T* pin)
         {

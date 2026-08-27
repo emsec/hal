@@ -31,6 +31,9 @@
 
 namespace hal
 {
+    /**
+     * A gate type component that describes a latch, i.e., its data input, enable, and asynchronous set and reset behavior.
+     */
     class LatchComponent : public GateTypeComponent
     {
     public:
@@ -52,7 +55,7 @@ namespace hal
          * Check whether a component is a LatchComponent.
          * 
          * @param[in] component - The component to check.
-         * @returns True if component is a LatchComponent, false otherwise.
+         * @returns `true` if component is a LatchComponent, `false` otherwise.
          */
         static bool is_class_of(const GateTypeComponent* component);
 
@@ -75,7 +78,7 @@ namespace hal
         /**
          * Set the Boolean function describing the data input of the latch.
          * 
-         * @param[in] data_in_bf - The function describing the internal state.
+         * @param[in] data_in_bf - The function describing the data input.
          */
         void set_data_in_function(const BooleanFunction& data_in_bf);
 

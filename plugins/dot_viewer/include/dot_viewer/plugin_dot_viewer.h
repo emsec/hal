@@ -37,13 +37,14 @@ namespace hal
     class DotViewer;
     class DotViewerSerializer;
 
+    /** The netlist that is currently loaded in the GUI. */
     extern Netlist* gNetlist;
 
     /**
      * @class DotViewerPlugin
      * @brief Plugin interface for the DotViewerPlugin.
      * 
-     * This class provides an interface to integrate a .dot viewer as a plugin within the HAL framework.
+     * This class provides an interface to integrate a `.dot` viewer as a plugin within the HAL framework.
      */
     class PLUGIN_API DotViewerPlugin : public BasePluginInterface
     {
@@ -86,10 +87,19 @@ namespace hal
          */
         std::set<std::string> get_dependencies() const override;
 
+        /**
+         * Initialize the plugin, which registers the DOT viewer content factory with the GUI.
+         */
         void initialize() override;
 
+        /**
+         * Called when the plugin is loaded, which sets up the log channel and the GUI extension.
+         */
         void on_load() override;
 
+        /**
+         * Called when the plugin is unloaded, which releases the GUI extension again.
+         */
         void on_unload() override;
     };
 }    // namespace hal

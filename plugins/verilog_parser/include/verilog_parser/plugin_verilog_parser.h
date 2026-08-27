@@ -30,12 +30,18 @@
 
 namespace hal
 {
+    /**
+     * Registers the Verilog netlist parser with HAL's netlist parser manager.
+     */
     class VerilogParserExtension : public FacExtensionInterface
     {
     public:
         VerilogParserExtension();
     };
 
+    /**
+     * The plugin that provides the Verilog netlist parser.
+     */
     class PLUGIN_API VerilogParserPlugin : public BasePluginInterface
     {
         VerilogParserExtension* m_extension;

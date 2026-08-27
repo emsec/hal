@@ -37,6 +37,9 @@
 
 namespace hal {
     class GateLibraryWizard;
+    /**
+     * The wizard page on which the state component of the gate type is configured.
+     */
     class StateWizardPage:public QWizardPage{
         friend class GateLibraryWizard;
         friend class FlipFlopWizardPage;

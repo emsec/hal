@@ -36,8 +36,11 @@
 namespace hal
 {
     /**
+     * The base class for the pins of a gate type and the pins of a module.
+     * A pin carries a name, a direction, and a type, and it belongs to exactly one pin group.
+     *
      * Base class for gate and module pins.
-     * 
+     *
      * @ingroup pins
      */
     template<class T>
@@ -50,7 +53,7 @@ namespace hal
          * Check whether two pins are equal.
          *
          * @param[in] other - The pin to compare against.
-         * @returns True if both pins are equal, false otherwise.
+         * @returns `true` if both pins are equal, `false` otherwise.
          */
         bool operator==(const BasePin& other) const
         {
@@ -62,7 +65,7 @@ namespace hal
          * Check whether two pins are unequal.
          *
          * @param[in] other - The pin to compare against.
-         * @returns True if both pins are unequal, false otherwise.
+         * @returns `true` if both pins are unequal, `false` otherwise.
          */
         bool operator!=(const BasePin& other) const
         {
@@ -80,7 +83,6 @@ namespace hal
         }
 
         /**
-         * TODO test, pybind
          * Get the ID of the pin. The ID is unique within an entity, e.g., a module or a gate type.
          * 
          * @returns The ID of the pin.

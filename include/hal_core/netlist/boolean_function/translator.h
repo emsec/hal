@@ -35,6 +35,9 @@ namespace hal
 {
     namespace SMT
     {
+        /**
+         * Contains the translation of Boolean functions into the input languages of external solvers, e.g., SMT-LIB.
+         */
         namespace Translator
         {
             /**

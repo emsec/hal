@@ -30,6 +30,8 @@
 namespace hal
 {
     /**
+     * Generates grid positions in a spiral around the origin, used to place nodes that have no position yet.
+     *
      * @ingroup graph-layouter
      */
     class PositionGenerator

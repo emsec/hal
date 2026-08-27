@@ -308,4 +308,63 @@ namespace hal {
         }
         TEST_END
     }
+
+    /**
+     * Test that two flip-flops which differ only in the value they start out at are not treated as
+     * duplicates of one another.
+     *
+     * Functions: remove_redundant_gates
+     */
+    TEST_F(NetlistPreprocessingTest, check_remove_redundant_gates_keeps_differing_initial_values)
+    {
+        TEST_START
+        {
+            // Two flip-flops of the same type, driven by the same clock and the same data net, so that
+            // everything the fan-in can tell them apart by is identical.
+            const auto build = [](const std::string& init_0, const std::string& init_1) {
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                const GateLibrary* gl       = nl->get_gate_library();
+
+                Gate* ff_0 = nl->create_gate(gl->get_gate_type_by_name("DFF"), "ff_0");
+                Gate* ff_1 = nl->create_gate(gl->get_gate_type_by_name("DFF"), "ff_1");
+
+                Net* clk = nl->create_net("clk");
+                clk->add_destination(ff_0, "CLK");
+                clk->add_destination(ff_1, "CLK");
+                clk->mark_global_input_net();
+
+                Net* data = nl->create_net("data");
+                data->add_destination(ff_0, "D");
+                data->add_destination(ff_1, "D");
+                data->mark_global_input_net();
+
+                ff_0->set_data("generic", "INIT", "bit_vector", init_0);
+                ff_1->set_data("generic", "INIT", "bit_vector", init_1);
+                return nl;
+            };
+
+            {
+                // The same initial value: the two really are interchangeable and one may go.
+                std::unique_ptr<Netlist> nl = build("0", "0");
+                ASSERT_NE(nl, nullptr);
+
+                auto res = netlist_preprocessing::remove_redundant_gates(nl.get());
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), 1);
+                EXPECT_EQ(nl->get_gates().size(), 1);
+            }
+            {
+                // Different initial values: one starts at 0 and the other at 1, so neither can stand in
+                // for the other and both have to survive.
+                std::unique_ptr<Netlist> nl = build("0", "1");
+                ASSERT_NE(nl, nullptr);
+
+                auto res = netlist_preprocessing::remove_redundant_gates(nl.get());
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), 0);
+                EXPECT_EQ(nl->get_gates().size(), 2);
+            }
+        }
+        TEST_END
+    }
 } // namespace hal

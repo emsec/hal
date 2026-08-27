@@ -38,6 +38,9 @@ namespace hal
 
     class Gate;
 
+    /**
+     * One entry of the gate pin tree, i.e., a pin or a pin group of the selected gate.
+     */
     class GatePinsTreeItem : public BaseTreeItem
     {
     public:

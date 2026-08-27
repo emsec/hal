@@ -34,6 +34,9 @@
 namespace hal
 {
 
+    /**
+     * A directory of the view manager that groups several graph views.
+     */
     class ContextDirectory
     {
         private:
@@ -60,6 +63,9 @@ namespace hal
             void setName(QString name_) { mName = name_; }
     };
 
+    /**
+     * An entry of the view manager tree, which is either a graph view or a directory.
+     */
     class ContextTreeItem : public BaseTreeItem
     {
         private:
@@ -202,7 +208,7 @@ namespace hal
         /**
          * Sets the CurrentDirectory.
          *
-         * @param ContextTreeItem - The Currently focused Item.
+         * @param currentItem - The Currently focused Item.
          */
         void setCurrentDirectory(ContextTreeItem* currentItem);
 
@@ -220,14 +226,14 @@ namespace hal
          * @param newParent - The parent item, under which itemToMove is placed.
          * @param row - The row in newParent, where itemToMove is inserted. 
          *              If -1, then itemToMove is instead just appended to newParent.
-         * @return True, if the operation succeded. False, if not.
+         * @return `true`, if the operation succeded. `false`, if not, `false` otherwise.
          */
         bool moveItem(ContextTreeItem* itemToMove, BaseTreeItem* newParent, int row = -1);
 
         /**
          * Returns the ids of all direct child directories of a given parent directory.
          * 
-         * @param directoyId - The id of the parent directory.
+         * @param directoryId - The id of the parent directory.
          * @return List of IDs of all directories, that are ordered directly under the parent directory.
          */
         std::vector<u32> getChildDirectoriesOf(u32 directoryId);
@@ -235,7 +241,7 @@ namespace hal
         /**
          * Returns the ids of all direct child contexts of a given parent directory.
          * 
-         * @param directoyId - The id of the parent directory.
+         * @param directoryId - The id of the parent directory.
          * @return List of IDs of all contexts, that are ordered directly under the parent directory.
          */
         std::vector<u32> getChildContextsOf(u32 directoryId);

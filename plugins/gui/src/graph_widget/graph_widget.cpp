@@ -45,6 +45,8 @@
 #include <QVBoxLayout>
 #include <QVariantAnimation>
 
+#include <atomic>
+
 namespace hal
 {
     SettingsItemSpinbox* GraphWidget::sSettingAnimationDuration =
@@ -1073,9 +1075,21 @@ namespace hal
         // Qt widgets must only be touched on the GUI thread. If we're already on it,
         // call showBusy / handleSceneAvailable directly; otherwise post the update to
         // the main event queue.
+        // Updates coming from a worker thread are posted to the event queue while updates from the GUI
+        // thread are applied at once, so an update issued earlier by a worker can be delivered after the
+        // final one and show the overlay again. Each update carries a ticket, and one that lost the race
+        // to a newer update is dropped instead of being applied on top of it.
+        static std::atomic<u64> issuedTicket(0);
+        static u64 appliedTicket = 0;
+
+        const u64 ticket = ++issuedTicket;
+
         QString qmsg = QString::fromStdString(msg);
-        auto apply = [percent, qmsg]() {
+        auto apply = [percent, qmsg, ticket]() {
             if (!sInstance) return;
+            if (ticket < appliedTicket)
+                return;
+            appliedTicket = ticket;
             if (percent == 100)
                 sInstance->handleSceneAvailable();
             else

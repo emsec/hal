@@ -80,7 +80,7 @@ namespace hal
          * Any flag of the option works, even if one of the other flags was actually used to set the option.
          *
          * @param[in] flag - A flag of the option.
-         * @returns True, if the user entered a flag for this option.
+         * @returns `true`, if the user entered a flag for this option, `false` otherwise.
          */
         bool is_option_set(const std::string& flag) const;
 
@@ -107,7 +107,7 @@ namespace hal
          * @param[in] flag - A single flag which is actually set.
          * @param[in] equivalent_flags - All flags for the same option.
          * @param[in] parameters - The parameters for this flag.
-         * @returns True, if the flags were not found in multiple disjunct options already.
+         * @returns `true`, if the flags were not found in multiple disjunct options already, `false` otherwise.
          */
         bool set_option(const std::string& flag, const std::set<std::string>& equivalent_flags, const std::vector<std::string>& parameters);
 

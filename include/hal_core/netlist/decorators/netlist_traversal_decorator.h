@@ -66,8 +66,8 @@ namespace hal
                                                         bool successors,
                                                         const std::function<bool(const Gate*)>& target_gate_filter,
                                                         bool continue_on_match                                                                     = false,
-                                                        const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
-                                                        const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         /**
          * Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
@@ -87,8 +87,8 @@ namespace hal
                                                         bool successors,
                                                         const std::function<bool(const Gate*)>& target_gate_filter,
                                                         bool continue_on_match                                                                     = false,
-                                                        const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
-                                                        const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         /**
          * Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
@@ -108,8 +108,8 @@ namespace hal
                                                               bool successors,
                                                               const std::function<bool(const Gate*)>& target_gate_filter,
                                                               bool continue_on_mismatch                                                                  = false,
-                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
-                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+                                                              const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                              const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         /**
          * Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
@@ -129,8 +129,8 @@ namespace hal
                                                               bool successors,
                                                               const std::function<bool(const Gate*)>& target_gate_filter,
                                                               bool continue_on_mismatch                                                                  = false,
-                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
-                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+                                                              const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                              const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         /**
          * Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
@@ -172,7 +172,7 @@ namespace hal
          * 
          * @param[in] net - Start net.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
-         * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result.
+         * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result. Defaults to an empty set.
          * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
          * @returns The next sequential gates on success, an error otherwise.
          */
@@ -187,7 +187,7 @@ namespace hal
          * 
          * @param[in] gate - Start gate.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
-         * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result.
+         * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result. Defaults to an empty set.
          * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
          * @returns The next sequential gates on success, an error otherwise.
          */
@@ -200,7 +200,7 @@ namespace hal
          * Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
          * 
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
-         * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result.
+         * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result. Defaults to an empty set.
          * @returns A map from each sequential gate to all its sequential successors on success, an error otherwise.
          */
         Result<std::map<Gate*, std::set<Gate*>>> get_next_sequential_gates_map(bool successors, const std::set<PinType>& forbidden_pins) const;
@@ -210,9 +210,11 @@ namespace hal
          * Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
          * All combinational gates found during traversal are added to the result.
          * Provide a cache to speed up traversal when calling this function multiple times on the same netlist.
+         * Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.
          * 
          * @param[in] net - Start net.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] forbidden_pins - Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.
          * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
          * @returns The next combinational gates on success, an error otherwise.
          */
@@ -224,9 +226,11 @@ namespace hal
          * Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
          * All combinational gates found during traversal are added to the result.
          * Provide a cache to speed up traversal when calling this function multiple times on the same netlist.
+         * Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.
          * 
          * @param[in] gate - Start gate.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] forbidden_pins - Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.
          * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
          * @returns The next combinational gates on success, an error otherwise.
          */
@@ -243,13 +247,13 @@ namespace hal
          * @param[in] direction - The direction to search in. Can be PinDirection::input, PinDirection::output or PinDirection::inout to search both directions and return the shorter one.
          * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
-         * @return An optional unsigned integer representing the shortest distance between the start and end gate incase of success, an erro otherwise. 
+         * @return An optional unsigned integer representing the shortest distance between the start and end gate on success, an error otherwise.
          */
         Result<std::optional<u32>> get_shortest_path_distance(const Gate* start_gate,
                                                               const Gate* end_gate,
                                                               const PinDirection& direction,
-                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
-                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+                                                              const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                              const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         /**
          * Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with the end gate. 
@@ -261,13 +265,13 @@ namespace hal
          * @param[in] direction - The direction to search in. Can be PinDirection::input, PinDirection::output or PinDirection::inout to search both directions and return the shorter one.
          * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
-         * @return An optional vector of gates that connect the start with end gate incase of successs, an error otherwise.
+         * @return An optional vector of gates that connect the start with end gate on success, an error otherwise.
          */
         Result<std::optional<std::vector<Gate*>>> get_shortest_path(const Gate* start_gate,
                                                                     const Gate* end_gate,
                                                                     const PinDirection& direction,
-                                                                    const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
-                                                                    const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+                                                                    const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                                    const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         // TODO move get_gate_chain and get_complex_gate_chain here
 

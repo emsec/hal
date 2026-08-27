@@ -29,6 +29,10 @@
 #include "hal_core/netlist/netlist.h"
 
 namespace hal  {
+    /**
+     * A plugin extension that adds a command line interface to a plugin.
+     * It declares the options that the plugin accepts and provides the entry point that is called when one of them is used.
+     */
     class CliExtensionInterface : public AbstractExtensionInterface
     {
     public:
@@ -46,7 +50,7 @@ namespace hal  {
          *
          * @param[in] netlist - The netlist.
          * @param[in] args - Program options.
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         virtual bool handle_cli_call(Netlist* netlist, ProgramArguments& args) = 0;
 

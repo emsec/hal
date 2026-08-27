@@ -29,6 +29,9 @@
 
 namespace hal
 {
+    /**
+     * Simulates a netlist by translating it into Verilog and running it through Verilator.
+     */
     namespace verilator
     {
         const std::string get_testbench_cpp_template()

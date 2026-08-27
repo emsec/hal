@@ -4,9 +4,11 @@ namespace hal
 {
     void netlist_modification_decorator_init(py::module& m)
     {
-        py::class_<NetlistModificationDecorator> py_netlist_modification_decorator(m, "NetlistModificationDecorator", R"()");
+        py::class_<NetlistModificationDecorator> py_netlist_modification_decorator(m, "NetlistModificationDecorator", R"(
+            A netlist decorator that provides functionality to modify the associated netlist.
+        )");
 
-        py_netlist_modification_decorator.def(py::init<Netlist&>(), py::arg("netlist"), R"(
+        py_netlist_modification_decorator.def(py::init<Netlist&>(), py::arg("netlist"), py::keep_alive<1, 2>(), R"(
             Construct new NetlistModificationDecorator object.
 
             :param hal_py.Netlist netlist: The netlist to operate on.
@@ -32,7 +34,7 @@ namespace hal
             An optional filter can be specified to delete only modules fulfilling a certain condition.
 
             :param lambda filter: An optional filter to be applied to the modules before deletion.
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -53,7 +55,7 @@ namespace hal
             py::arg("gate"),
             py::arg("target_type"),
             py::arg("pin_map"),
-            R"(
+            borrowed(), R"(
             Replace the given gate with a gate of the specified gate type.
             A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs.
             A pin can be omitted if no connection at that pin is desired.
@@ -61,7 +63,7 @@ namespace hal
             :param hal_py.Gate gate: The gate to be replaced.
             :param hal_py.GateType target_type: The gate type of the replacement gate.
             :param dict[hal_py.GatePin,hal_py.GatePin] pin_map: A dict from old to new pins.
-            :returns: The new gate on success, None otherwise.
+            :returns: The new gate on success, ``None`` otherwise.
             :rtype: hal_py.Gate or None
         )");
 
@@ -83,7 +85,7 @@ namespace hal
             py::arg("src_pin"),
             py::arg("dst_gate"),
             py::arg("dst_pin"),
-            R"(
+            borrowed(), R"(
             Connects two gates through the specified pins.
             If both pins are not yet connected to a net, a new net is created to connect both pins.
             If one of the pins is already connected to a net, that net is connected to the other pin.
@@ -93,7 +95,7 @@ namespace hal
             :param hal_py.GatePin src_pin: The output pin of the source gate.
             :param hal_py.Gate dst_gate: The destination gate.
             :param hal_py.GatePin dst_pin: The input pin of the destination gate.
-            :returns: The connecting net on success, None otherwise.
+            :returns: The connecting net on success, ``None`` otherwise.
             :rtype: hal_py.Net or None
         )");
 
@@ -113,13 +115,13 @@ namespace hal
             },
             py::arg("master_net"),
             py::arg("slave_net"),
-            R"(
+            borrowed(), R"(
             Connects (and thereby merges) two nets.
             All properties of the slave net are transfered to the master net and the slave net is subsequently deleted.
 
             :param hal_py.Net master_net: The net that receives all properties from the slave net. 
             :param hal_py.Net slave_net: The net that transfers all properties to the master net and is subsequently deleted.
-            :returns: The merged net on success, None otherwise.
+            :returns: The merged net on success, ``None`` otherwise.
             :rtype: hal_py.Net or None
         )");
     }

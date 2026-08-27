@@ -52,8 +52,14 @@ namespace hal
     class SettingsItemKeybind;
     class GraphContextSerializer;
 
+    /**
+     * The base class for content widgets that are provided by a plugin rather than by the GUI itself.
+     */
     class ExternalContentWidget;
 
+    /**
+     * The base class for the factories that create the content widgets contributed by a plugin.
+     */
     class ContentFactory
     {
         QString mPluginName;
@@ -63,6 +69,9 @@ namespace hal
         virtual ExternalContentWidget* contentFactory() const = 0;
     };
 
+    /**
+     * Where a content widget is docked, i.e., the widget together with its anchor and its index within that anchor.
+     */
     struct ContentWidgetPlacement {
         ContentWidget* widget;
         int index;
@@ -70,6 +79,9 @@ namespace hal
         bool visible;
     };
 
+    /**
+     * The registry of all content factories that plugins have contributed.
+     */
     class ExternalContent : public QList<ContentFactory*>
     {
         static ExternalContent* inst;
@@ -80,6 +92,9 @@ namespace hal
         QMap<QString,ExternalContentWidget*> openWidgets;
     };
 
+    /**
+     * The base class for content widgets that are provided by a plugin rather than by the GUI itself.
+     */
     class ExternalContentWidget : public ContentWidget
     {
         Q_OBJECT

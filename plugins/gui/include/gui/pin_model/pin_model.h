@@ -46,6 +46,9 @@ namespace hal
 {
 
 
+    /**
+     * The item model behind the pin tree of the gate library wizard, which also validates the edited pins.
+     */
     class PinModel : public BaseTreeModel
     {
         Q_OBJECT
@@ -84,14 +87,14 @@ namespace hal
         /**
          * should be called when the items direction is changed via the delegate
          * @param index index of the PinItem
-         * @param direction new direction
+         * @param directionString new direction
          */
         void handleEditDirection(QModelIndex index, const QString& directionString);
 
         /**
          * should be called when the items type is changed via the delegate
          * @param index index of the PinItem
-         * @param type new type
+         * @param typeString new type
          */
         void handleEditType(QModelIndex index, const QString& typeString);
 
@@ -116,7 +119,7 @@ namespace hal
          * @param name the new name which has to be checked
          * @param pinItem pinItem for which the name should be checked
          * @param assign whether the new name should be marked as assigned and the old one should be available again
-         * @return true if name is available to be taken - otherwise false
+         * @return `true` if name is available to be taken -, `false` otherwise.
          */
         bool isNameAvailable(const QString& newName, PinItem* treeItem);
         void handleInvalidPinUpdate(PinItem* pinItem);

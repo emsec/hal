@@ -99,7 +99,7 @@ namespace hal
         /**
          * Compares the default value to the current value.
          *
-         * @return True if they are the same. False otherwise.
+         * @return `true` if they are the same. `false` otherwise.
          */
         virtual bool isDefaultValue() const
         {
@@ -129,7 +129,7 @@ namespace hal
         /**
          * Checks if the setting is a global setting.
          *
-         * @return True if it is, False otherwise.
+         * @return `true` if it is, `false` otherwise.
          */
         virtual bool isGlobal() const
         {

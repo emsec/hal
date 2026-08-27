@@ -37,6 +37,9 @@ class QTextCharFormat;
 namespace hal
 {
     class CommentEntry;
+    /**
+     * The dialog in which a comment is written or edited.
+     */
     class CommentDialog : public QDialog
     {
         Q_OBJECT
@@ -48,12 +51,12 @@ namespace hal
         // Perhaps remove the title-parameter and determine "New comment" and "Modify comment"
         // through the item parameter (or perhaps 2 constructors?)
         /**
-         * Constructor. If the CommentEntry is a nullptr, this dialog is treated as a
+         * Constructor. If the CommentEntry is a `nullptr`, this dialog is treated as a
          * "New Comment" dialog (no real differences to a "Modify" dialog).
          *
          * @param windowTitle - The title of the Dialog.
-         * @param entry - The entry. If the entry is a nullptr, this dialog is a "New comment" dialog.
-         * @param parent - The parent of the widget. Usually a nullptr.
+         * @param entry - The entry. If the entry is a `nullptr`, this dialog is a "New comment" dialog.
+         * @param parent - The parent of the widget. Usually a `nullptr`.
          */
         CommentDialog(const QString windowTitle, CommentEntry* entry = nullptr, QWidget* parent = nullptr);
         ~CommentDialog();

@@ -40,6 +40,9 @@ namespace hal
     class Module;
     class Net;
 
+    /**
+     * Simplifies a netlist before analysis, e.g., by removing unused gates and nets and by resolving redundant logic.
+     */
     namespace netlist_preprocessing
     {
         /**
@@ -186,15 +189,21 @@ namespace hal
         Result<std::monostate> parse_def_file(Netlist* nl, const std::filesystem::path& def_file);
 
         /**
-         * Create modules from large gates like RAMs and DSPs with the option to concat mutliple gate pingroups to larger consecutive pin groups
-         * 
-         * TODO: document paramaters
+         * Create modules from large gates like RAMs and DSPs with the option to concatenate multiple gate pin groups into larger consecutive pin groups.
+         *
+         * @param[in] nl - The netlist to operate on.
+         * @param[in] concatenated_pin_groups - A map from gate type name to a map from the name of the resulting pin group to the names of the pin groups it is concatenated from.
+         * @returns OK() and the created modules on success, an error otherwise.
          */
         Result<std::vector<Module*>> create_multi_bit_gate_modules(Netlist* nl, const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatenated_pin_groups);
 
         /**
-         * TODO: document
-        */
+         * Create a new net for every unconnected output pin of every gate of the netlist.
+         * The new nets are named `HAL_UNCONNECTED_<net_id>`.
+         *
+         * @param[in] nl - The netlist to operate on.
+         * @returns OK() and the created nets on success, an error otherwise.
+         */
         Result<std::vector<Net*>> create_nets_at_unconnected_pins(Netlist* nl);
 
         /**

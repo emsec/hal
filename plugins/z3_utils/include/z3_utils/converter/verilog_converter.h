@@ -31,21 +31,65 @@ namespace hal
 {
     namespace z3_utils
     {
+        /**
+         * Converts a Boolean function given in SMT-LIB notation into Verilog source code.
+         */
         class VerilogConverter : public Converter
         {
         public:
+            /**
+             * Set the values that the control signals are fixed to while the function is translated.
+             *
+             * @param[in] control_mapping - A map from the name of a control signal to the value it is fixed to.
+             */
             void set_control_mapping(const std::map<std::string, bool>& control_mapping);
 
         private:
             // VIRTUAL METHODS
+            /**
+             * Translate a single operand into Verilog.
+             *
+             * @param[in] operand - The operand in SMT-LIB notation.
+             * @returns The operand in Verilog.
+             */
             std::string build_operand(const std::string& operand) const override;
+
+            /**
+             * Translate a single operation and its operands into Verilog.
+             *
+             * @param[in] operation - The operation to translate.
+             * @param[in] operands - The operands of the operation, already translated.
+             * @returns The operation in Verilog.
+             */
             std::string build_operation(const Operation& operation, const std::vector<std::string>& operands) const override;
+
+            /**
+             * Translate a single assignment of the SMT-LIB representation into Verilog.
+             *
+             * @param[in] l - The line holding the assignment.
+             * @returns The assignment in Verilog.
+             */
             std::string generate_assignment(const std::string& l) const override;
+
+            /**
+             * Generate the Verilog code that reads the input variables before the translated function is evaluated.
+             *
+             * @param[in] input_vars - The input variables of the function.
+             * @returns The initialization code in Verilog.
+             */
             std::string generate_initialization(const std::vector<std::string>& input_vars) const override;
+
+            /**
+             * Assemble the complete Verilog function from its parts.
+             *
+             * @param[in] assignments - The translated assignments that make up the body.
+             * @param[in] initalization - The translated initialization code.
+             * @param[in] input_vars - The input variables of the function.
+             * @returns The complete function in Verilog.
+             */
             std::string construct_function(const std::string& assignments, const std::string& initalization, const std::vector<std::string>& input_vars) const override;
 
-            //std::vector<OPERATION> m_operations;
-
+            /** A map from the name of a control signal to the value it is fixed to. */
             std::map<std::string, bool> m_control_mapping;
         };
     }    // namespace z3_utils

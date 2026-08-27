@@ -1,5 +1,7 @@
 #include "hal_core/netlist/boolean_function.h"
 
+#include <unordered_set>
+
 #include "hal_core/netlist/boolean_function/parser.h"
 #include "hal_core/netlist/boolean_function/simplification.h"
 #include "hal_core/netlist/boolean_function/symbolic_execution.h"
@@ -80,20 +82,23 @@ namespace hal
             std::string res = "";
             res.reserve((bitsize + 2) / 3);
 
-            // deal with 0-3 leading bits
+            // deal with 1 or 2 leading bits
             for (u8 i = 0; i < first_bits; i++)
             {
                 v1    = value.at(i);
                 index = (index << 1) | v1;
                 mask |= v1;
             }
-            mask = -((mask >> 1) & 0x1);
+
             if (first_bits)
             {
-                res += (char_map[index] & ~mask) | ('X' & mask);
+                if ((mask & 0x80) > 0) // mask "sign" bit set if 'X' or 'Z' among first bits in vector
+                    res += 'X';
+                else
+                    res += (char_map[index]);
             }
 
-            // deal with 4-bit blocks (left to right)
+            // deal with 3-bit blocks (left to right)
             for (int i = bitsize % 3; i < bitsize; i += 3)
             {
                 v1 = value[i];
@@ -101,9 +106,12 @@ namespace hal
                 v3 = value[i + 2];
 
                 index = (v1 << 2) | (v2 << 1) | v3;    // cannot exceed char_map range as index always < 16, no further check required
-                mask  = -(((v1 | v2 | v3) >> 1) & 0x1);
+                mask  = (v1 | v2 | v3);
 
-                res += (char_map[index] & ~mask) | ('X' & mask);
+                if ((mask & 0x80) > 0) // mask "sign" bit set if 'X' or 'Z' among tested 3 bits
+                    res += 'X';
+                else
+                    res += (char_map[index]);
             }
             return OK(res);
         }
@@ -157,17 +165,20 @@ namespace hal
             std::string res = "";
             res.reserve((bitsize + 3) / 4);
 
-            // deal with 0-3 leading bits
+            // deal with 1-3 leading bits
             for (u8 i = 0; i < first_bits; i++)
             {
                 v1    = value.at(i);
                 index = (index << 1) | v1;
                 mask |= v1;
             }
-            mask = -((mask >> 1) & 0x1);
+
             if (first_bits)
             {
-                res += (char_map[index] & ~mask) | ('X' & mask);
+                if ((mask & 0x80) > 0) // mask "sign" bit set if 'X' or 'Z' among first bits in vector
+                    res += 'X';
+                else
+                    res += (char_map[index]);
             }
 
             // deal with 4-bit blocks (left to right)
@@ -179,9 +190,12 @@ namespace hal
                 v4 = value[i + 3];
 
                 index = ((v1 << 3) | (v2 << 2) | (v3 << 1) | v4) & 0xF;
-                mask  = -(((v1 | v2 | v3 | v4) >> 1) & 0x1);
+                mask  = (v1 | v2 | v3 | v4);
 
-                res += (char_map[index] & ~mask) | ('X' & mask);
+                if ((mask & 0x80) > 0) // mask "sign" bit set if 'X' or 'Z' among tested 4 bits
+                    res += 'X';
+                else
+                    res += (char_map[index]);
             }
 
             return OK(res);
@@ -721,7 +735,9 @@ namespace hal
             return false;
         }
 
-        return this->to_string_in_reverse_polish_notation() < other.to_string_in_reverse_polish_notation();
+        // compare the nodes directly instead of their string representation, this operator is on the hot path
+        // of every symbolic state lookup and formatting two strings per comparison dominated the evaluation
+        return std::lexicographical_compare(this->m_nodes.begin(), this->m_nodes.end(), other.m_nodes.begin(), other.m_nodes.end());
     }
 
     bool BooleanFunction::is_empty() const
@@ -1172,11 +1188,11 @@ namespace hal
 
     Result<BooleanFunction> BooleanFunction::substitute(const std::map<std::string, BooleanFunction>& substitutions) const
     {
-        /// Helper function to find the replacement for a variable and substitute it with a Boolean function.
-        ///
-        /// @param[in] node - Node.
-        /// @param[in] operands - Operands of node.
-        /// @returns AST replacement.
+        // Helper function to find the replacement for a variable and substitute it with a Boolean function.
+        //
+        // node     - Node.
+        // operands - Operands of node.
+        // returns the AST replacement.
         auto substitute_variable = [substitutions](const auto& node, auto&& operands) -> BooleanFunction {
             if (node.is_variable())
             {
@@ -1246,16 +1262,20 @@ namespace hal
             return OK(std::vector<BooleanFunction::Value>({BooleanFunction::Value::X}));
         }
 
-        // (1) validate whether the input sizes match the boolean function
-        for (const auto& [name, value] : inputs)
+        // (1) validate whether the input sizes match the boolean function.
+        //     Walk the nodes once and look up each variable, rather than comparing every input name against
+        //     every node, since compute_truth_table() calls this for each of its rows.
+        for (const auto& node : this->m_nodes)
         {
-            for (const auto& node : this->m_nodes)
+            if (!node.is_variable())
             {
-                if (node.has_variable_name(name) && node.size != value.size())
-                {
-                    return ERR("could not evaluate Boolean function '" + this->to_string() + "': as the size of vairbale " + name + " with size " + std::to_string(node.size)
-                               + " does not match the size of the provided input (" + std::to_string(value.size()) + ")");
-                }
+                continue;
+            }
+
+            if (const auto it = inputs.find(node.variable); it != inputs.end() && node.size != it->second.size())
+            {
+                return ERR("could not evaluate Boolean function '" + this->to_string() + "': as the size of vairbale " + node.variable + " with size " + std::to_string(node.size)
+                           + " does not match the size of the provided input (" + std::to_string(it->second.size()) + ")");
             }
         }
 
@@ -1278,6 +1298,148 @@ namespace hal
             return OK(std::vector<BooleanFunction::Value>(this->size(), BooleanFunction::Value::X));
         }
         return ERR(result.get_error());
+    }
+
+    Result<std::vector<std::vector<BooleanFunction::Value>>> BooleanFunction::compute_truth_table_bitwise(const std::vector<std::string>& variables) const
+    {
+        // only single-bit bitwise logic is handled here, anything else falls back to the general implementation
+        if (this->size() != 1)
+        {
+            return ERR("not a single-bit function");
+        }
+        // Every variable has to be part of the truth table and every constant has to be Boolean, so that no value is
+        // ever unknown. The general implementation evaluates symbolically and therefore simplifies, which cancels
+        // correlated unknowns: `x ^ x` is zero to it even for an unknown `x`, while evaluating three-valued logic
+        // yields `X`. Refusing the cases that can produce an unknown keeps both implementations in agreement instead
+        // of trading a correct answer for a faster one.
+        const std::unordered_set<std::string> known_variables(variables.begin(), variables.end());
+        for (const auto& node : this->m_nodes)
+        {
+            if (node.size != 1)
+            {
+                return ERR("not a single-bit function");
+            }
+            switch (node.type)
+            {
+                case NodeType::And:
+                case NodeType::Or:
+                case NodeType::Not:
+                case NodeType::Xor:
+                    break;
+                case NodeType::Constant:
+                    if (node.constant.size() != 1 || (node.constant[0] != Value::ZERO && node.constant[0] != Value::ONE))
+                    {
+                        return ERR("constant is not Boolean");
+                    }
+                    break;
+                case NodeType::Variable:
+                    if (known_variables.find(node.variable) == known_variables.end())
+                    {
+                        return ERR("function has a variable that is not part of the truth table");
+                    }
+                    break;
+                default:
+                    return ERR("not a bitwise function");
+            }
+        }
+
+        // A row of the truth table is one assignment of the variables, and the value of variable i in row r is bit i
+        // of r. Instead of evaluating the function once per row, evaluate it once per 64 rows: every intermediate
+        // value becomes a 64-bit word holding that value for 64 consecutive rows at once, and a gate becomes a single
+        // bitwise instruction. No value can ever be unknown, as the checks above rejected every function that holds a
+        // variable outside the truth table or a constant that is not Boolean, so one word per value is enough and the
+        // operations are plain two-valued logic.
+
+        // the value of variable i within a chunk of 64 consecutive rows, which for i < 6 is a fixed pattern and for
+        // larger i is constant across the whole chunk
+        static constexpr u64 PATTERN[6] = {
+            0xAAAAAAAAAAAAAAAAull,
+            0xCCCCCCCCCCCCCCCCull,
+            0xF0F0F0F0F0F0F0F0ull,
+            0xFF00FF00FF00FF00ull,
+            0xFFFF0000FFFF0000ull,
+            0xFFFFFFFF00000000ull,
+        };
+
+        std::unordered_map<std::string, u32> variable_index;
+        for (u32 i = 0; i < variables.size(); i++)
+        {
+            variable_index[variables[i]] = i;
+        }
+
+        const u64 num_rows = u64(1) << variables.size();
+        std::vector<Value> result(num_rows, Value::ZERO);
+
+        std::vector<u64> stack;
+        stack.reserve(this->m_nodes.size());
+
+        for (u64 base = 0; base < num_rows; base += 64)
+        {
+            const u64 rows_in_chunk = std::min<u64>(64, num_rows - base);
+            const u64 chunk_mask    = (rows_in_chunk == 64) ? ~u64(0) : ((u64(1) << rows_in_chunk) - 1);
+
+            stack.clear();
+            for (const auto& node : this->m_nodes)
+            {
+                if (node.type == NodeType::Variable)
+                {
+                    const u32 i = variable_index.at(node.variable);
+                    stack.push_back((i < 6) ? PATTERN[i] : (((base >> i) & 1) ? ~u64(0) : u64(0)));
+                    continue;
+                }
+
+                if (node.type == NodeType::Constant)
+                {
+                    stack.push_back((node.constant[0] == Value::ONE) ? ~u64(0) : u64(0));
+                    continue;
+                }
+
+                const u16 arity = node.get_arity();
+                if (stack.size() < arity)
+                {
+                    return ERR("could not compute truth table: malformed node list");
+                }
+
+                if (node.type == NodeType::Not)
+                {
+                    const u64 a = stack.back();
+                    stack.pop_back();
+                    stack.push_back(~a);
+                    continue;
+                }
+
+                const u64 b = stack.back();
+                stack.pop_back();
+                const u64 a = stack.back();
+                stack.pop_back();
+
+                if (node.type == NodeType::And)
+                {
+                    stack.push_back(a & b);
+                }
+                else if (node.type == NodeType::Or)
+                {
+                    stack.push_back(a | b);
+                }
+                else    // NodeType::Xor
+                {
+                    stack.push_back(a ^ b);
+                }
+            }
+
+            if (stack.size() != 1)
+            {
+                return ERR("could not compute truth table: malformed node list");
+            }
+
+            const u64 out = stack.back() & chunk_mask;
+            for (u64 bit = 0; bit < rows_in_chunk; bit++)
+            {
+                result[base + bit] = (out & (u64(1) << bit)) ? Value::ONE : Value::ZERO;
+            }
+        }
+
+        return OK(std::vector<std::vector<Value>>({std::move(result)}));
     }
 
     Result<std::vector<std::vector<BooleanFunction::Value>>> BooleanFunction::compute_truth_table(const std::vector<std::string>& ordered_variables, bool remove_unknown_variables) const
@@ -1316,10 +1478,20 @@ namespace hal
             return OK(std::vector<std::vector<Value>>(1, std::vector<Value>(1 << variables.size(), Value::X)));
         }
 
-        // (4.2) safety-check in case the number of variables is too large to process
-        if (variables.size() > 10)
+        // (4.2) safety-check in case the number of variables is too large to process. Every additional variable
+        //       doubles the number of rows, so the limit bounds both the runtime and the size of the result.
+        if (variables.size() > MAX_TRUTH_TABLE_VARIABLES)
         {
-            return ERR("could not compute truth table for Boolean function '" + this->to_string() + "': unable to generate truth-table with more than 10 variables");
+            return ERR("could not compute truth table for Boolean function '" + this->to_string() + "': unable to generate truth-table with more than "
+                       + std::to_string(MAX_TRUTH_TABLE_VARIABLES) + " variables");
+        }
+
+        // (4.3) evaluate the whole truth table at once if the function only consists of bitwise operations on single
+        //       bits, which is what a function extracted from a gate-level subgraph looks like. The general path below
+        //       runs a symbolic execution per row, which walks and simplifies the entire node list every single time.
+        if (const auto res = compute_truth_table_bitwise(variables); res.is_ok())
+        {
+            return res;
         }
 
         std::vector<std::vector<Value>> truth_table(this->size(), std::vector<Value>(1 << variables.size(), Value::ZERO));
@@ -1438,12 +1610,12 @@ namespace hal
 
     z3::expr BooleanFunction::to_z3(z3::context& context, const std::map<std::string, z3::expr>& var2expr) const
     {
-        /// Helper function to reduce a abstract syntax subtree to z3 expressions
-        ///
-        /// @param[in] node - Boolean function node.
-        /// @param[in] p - Boolean function node parameters.
-        /// @returns (1) status (true on success, false otherwise),
-        ///          (2) SMT-LIB string representation of node and operands.
+        // Helper function to reduce a abstract syntax subtree to z3 expressions
+        //
+        // node - Boolean function node.
+        // p    - Boolean function node parameters.
+        // returns (1) status (true on success, false otherwise),
+        //         (2) SMT-LIB string representation of node and operands.
         auto reduce_to_z3 = [&context, &var2expr](const auto& node, auto&& p) -> std::tuple<bool, z3::expr> {
             if (node.get_arity() != p.size())
             {

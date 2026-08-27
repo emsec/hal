@@ -35,6 +35,9 @@
 
 namespace hal
 {
+    /**
+     * Provides the icons that the GUI uses for gates, nets, and modules, styled to match the current theme.
+     */
     class SelectionDetailsIconProvider : public QObject
     {
         Q_OBJECT

@@ -78,26 +78,26 @@ namespace hal
 
         /**
          * @brief isNull test for null-Node object typically returned from functions
-         * @return true if node is null
+         * @return `true` if node is null, `false` otherwise.
          */
         bool isNull()   const { return mType == None; }
 
         /**
          * @brief isGate test whether node is a gate
-         * @return true if node is a gate
+         * @return `true` if node is a gate, `false` otherwise.
          */
         bool isGate()   const { return mType == Gate; }
 
         /**
          * @brief isModule test wheter node is a module
-         * @return true if node is a module
+         * @return `true` if node is a module, `false` otherwise.
          */
         bool isModule() const { return mType == Module; }
 
         /**
          * @brief operator < to provide an ordering scheme for maps and ordered lists
          * @param rhs the other Node to be compared with
-         * @return true if node is 'smaller' according to test
+         * @return `true` if node is 'smaller' according to test, `false` otherwise.
          */
         bool operator<(const Node& rhs) const
         {
@@ -111,7 +111,7 @@ namespace hal
         /**
          * @brief operator == to test whether two nodes are equal
          * @param rhs the other Node to be compared with
-         * @return true if nodes are of same type and have same ID
+         * @return `true` if nodes are of same type and have same ID, `false` otherwise.
          */
         bool operator==(const Node& rhs) const
         {
@@ -121,7 +121,7 @@ namespace hal
         /**
          * @brief operator != to test whether two nodes are not equal
          * @param rhs the other Node to be compared with
-         * @return true if nodes have either different type or different ID
+         * @return `true` if nodes have either different type or different ID, `false` otherwise.
          */
         bool operator!=(const Node& rhs) const
         {
@@ -137,6 +137,9 @@ namespace hal
 
     uint qHash(const Node &n);
 
+    /**
+     * The grid position of every node of a graph view, used to store and restore a layout.
+     */
     class GridPlacement : public QHash<Node,QPoint>
     {
     public:
@@ -248,7 +251,7 @@ namespace hal
         /**
          * @brief operator < provide an order structure for placement hints
          * @param rhs the other placement hint to compare with
-         * @return true if placement hint is 'smaller' according to test
+         * @return `true` if placement hint is 'smaller' according to test, `false` otherwise.
          */
         bool operator<(const PlacementHint& rhs) const
         {
@@ -262,7 +265,7 @@ namespace hal
         /**
          * @brief operator == test whether two placement hints are equal
          * @param rhs the other placement hint to compare with
-         * @return true if placement hints have same placement mode type and origin
+         * @return `true` if placement hints have same placement mode type and origin, `false` otherwise.
          */
         bool operator==(const PlacementHint& rhs) const
         {

@@ -68,8 +68,8 @@ namespace hal
         /**
          * Substitute all Boolean function variables that are either 1) output or 2) input nets to one of the passed module with a BooleanFunction of the form Extract(Var(<module_name>_<pin_group_name>), index, index).
          * This allows a simplification in case multiple pins of the same pin group are concatenated.
-         * 
-         * @param[in] nl - The netlist to operate on.
+         *
+         * @param[in] modules - The modules whose input and output nets shall be substituted.
          * @return The resulting Boolean function on success, an error otherwise.
          */
         Result<BooleanFunction> substitute_module_pins(const std::vector<Module*>& modules) const;

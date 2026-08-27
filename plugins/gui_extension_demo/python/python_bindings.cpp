@@ -49,7 +49,7 @@ namespace hal
                 Defines the type of a gui input parameter.
                 )")
                 .value("Absent",      PluginParameter::Absent,      R"(Indicate not used.)")
-                .value("Boolean",     PluginParameter::Boolean,     R"('true' or 'false'.)")
+                .value("Boolean",     PluginParameter::Boolean,     R"(``True`` or ``False``.)")
                 .value("Color",       PluginParameter::Color,       R"(Color value like '#ffe080'.)")
                 .value("ComboBox",    PluginParameter::ComboBox,    R"(Combo box to select string from semicolon separated input list.)")
                 .value("Dictionary",  PluginParameter::Dictionary,  R"(Key value pairs (string).)")
@@ -58,7 +58,7 @@ namespace hal
                 .value("Float",       PluginParameter::Float,       R"(Floating point number.)")
                 .value("Gate",        PluginParameter::Gate,        R"(Gate ID.)")
                 .value("Integer",     PluginParameter::Integer,     R"(Integer number.)")
-                .value("Module",      PluginParameter::Gate,        R"(Module ID.)")
+                .value("Module",      PluginParameter::Module,      R"(Module ID.)")
                 .value("NewFile",     PluginParameter::NewFile,     R"(New file name.)")
                 .value("PushButton",  PluginParameter::PushButton,  R"(Push Button.)")
                 .value("Label",       PluginParameter::Label,       R"(Text Label.)")

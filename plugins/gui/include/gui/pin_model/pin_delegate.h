@@ -34,6 +34,9 @@
 namespace hal
 {
 
+    /**
+     * Renders and edits the cells of the pin tree, e.g., the direction and type drop-downs.
+     */
     class PinDelegate : public QStyledItemDelegate
     {
         Q_OBJECT

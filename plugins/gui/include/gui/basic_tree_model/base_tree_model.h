@@ -111,7 +111,7 @@ namespace hal
         /**
          * This function must be called first (as of now) in the constructor of the derived
          * classed to initialize
-         * @param labels
+         * @param label
          */
         void setHeaderLabels(const QStringList& label);
 

@@ -54,7 +54,7 @@ namespace hal {
          * Opens a save file dialog with all valid extensions to get a filename to write
          * the project (netlist) to. It sets the filename internally.
          *
-         * @return True on success, False otherwise.
+         * @return `true` on success, `false` otherwise.
          */
         bool queryFilename();
 

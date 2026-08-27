@@ -32,6 +32,9 @@ class QRadioButton;
 namespace hal
 {
 
+    /**
+     * The dialog in which the user picks the highlight color of a comment.
+     */
     class CommentColorPicker : public QDialog
     {
         public:

@@ -38,6 +38,9 @@ namespace hal
 {
     class PythonConsoleHistory;
 
+    /**
+     * The action that aborts the python script currently running in the console.
+     */
     class PythonConsoleAbortThread : public QFrame
     {
         Q_OBJECT
@@ -161,7 +164,7 @@ namespace hal
         /**
          * Currently unused.
          *
-         * @returns false
+         * @returns `false`
          */
         bool selectionEditable();
 
@@ -191,7 +194,7 @@ namespace hal
         /**
          * Set input mode on or off. In input mode input for running script is expected.
          *
-         * @param state - true=on, false=off
+         * @param state - `true`=on, `false`=off
          */
         void setInputMode(bool state);
 

@@ -43,6 +43,9 @@
 
 namespace hal
 {
+    /**
+     * The wizard that guides the user through creating or editing a gate type.
+     */
     class GateLibraryWizard : public QWizard
     {
         Q_OBJECT

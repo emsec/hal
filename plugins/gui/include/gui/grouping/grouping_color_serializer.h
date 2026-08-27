@@ -31,6 +31,9 @@
 namespace hal {
     class GroupingTableModel;
 
+    /**
+     * Stores the colors that the user assigned to the groupings of a project.
+     */
     class GroupingColorSerializer : public ProjectSerializer
     {
         void restoreGroupingColor(const std::filesystem::path& loaddir, const std::string& jsonfile, GroupingTableModel *gtm = nullptr);

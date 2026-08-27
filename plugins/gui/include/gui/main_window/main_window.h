@@ -345,7 +345,7 @@ namespace hal
         void handleActionNew();
 
         /**
-         * Q_SLOT to import a netlist. Asks the user for the .hal/.vhdl/.v file to open.
+         * Q_SLOT to import a netlist. Asks the user for the `.hal`/.vhdl/.v file to open.
          */
         void handleActionImportNetlist();
 
@@ -370,13 +370,13 @@ namespace hal
         void handleProjectOpened(const QString& projDir, const QString& fileName);
 
         /**
-         * Q_SLOT to save the current project as a .hal file.
+         * Q_SLOT to save the current project as a `.hal` file.
          * call to FileManager::emitSaveTriggered().
          */
         void handleSaveTriggered();
 
         /**
-         * Q_SLOT to save the current project as a new .hal file.
+         * Q_SLOT to save the current project as a new `.hal` file.
          * Will query for new name.
          * call to FileManager::emitSaveTriggered().
          */

@@ -32,6 +32,9 @@ namespace hal
     class Gate;
     class Module;
 
+    /**
+     * Shows the name, ID, type, and location of the selected gate.
+     */
     class GateInfoTable : public GeneralTableWidget
     {
         Q_OBJECT

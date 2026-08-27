@@ -26,6 +26,10 @@
 #pragma once
 
 namespace hal  {
+    /**
+     * The base class for all plugin extension interfaces.
+     * An extension adds a specific capability, e.g., a command line interface or a GUI contribution, to a plugin.
+     */
     class AbstractExtensionInterface
     {
     public:

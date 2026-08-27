@@ -16,6 +16,8 @@ namespace hal
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        // all rows are plain single line text, so the view must not measure each of them separately
+        setUniformRowHeights(true);
         setSelectionMode(QAbstractItemView::SingleSelection);
         setSelectionBehavior(QAbstractItemView::SelectRows);
         setFocusPolicy(Qt::NoFocus);
@@ -42,6 +44,13 @@ namespace hal
     void ModuleElementsTree::setModule(Module *m)
     {
         if(!m) return;
+
+        // One selection change sets the same module twice, once directly from SelectionDetailsWidget and once
+        // through the selection tree it populates on the way. Rebuilding the tree of a large module is
+        // expensive, so skip it if that module is already on display. The model keeps itself up to date
+        // through the netlist relay, the rebuild is not what refreshes it.
+        if (mModuleID == (int)m->get_id() && mModel->getItem(m->get_id()) != nullptr)
+            return;
 
         mModel->populateTree({m->get_id()});
         setRootIndex(mProxyModel->mapFromSource(mModel->getIndexFromItem(mModel->getItem(m->get_id())))); // hide top-element m in TreeView

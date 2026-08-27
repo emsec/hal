@@ -72,7 +72,7 @@ namespace hal
          * Initializes the toolbar of the LoggerWidget. It creates the ChannelSelector for the logger channels within
          * the toolbar.
          *
-         * @param Toolbar - The toolbar to initialize
+         * @param toolbar - The toolbar to initialize
          */
         virtual void setupToolbar(Toolbar* toolbar) override;
 

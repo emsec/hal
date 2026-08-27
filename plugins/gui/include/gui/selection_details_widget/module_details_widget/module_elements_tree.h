@@ -63,7 +63,7 @@ namespace hal
          * Sets the module and updates its model to display the module's
          * direct submodules and gates.
          *
-         * @param moduleID - The module.
+         * @param m - The module.
          */
         void setModule(Module* m);
 

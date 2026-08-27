@@ -1024,9 +1024,9 @@ namespace hal
             return nullptr;
         }
 
-        if (const auto it = std::find_if(m_pins.begin(), m_pins.end(), [net](const std::unique_ptr<ModulePin>& pin) { return pin->get_net() == net; }); it != m_pins.end())
+        if (const auto it = m_pin_nets_map.find(net); it != m_pin_nets_map.end())
         {
-            return it->get();
+            return it->second;
         }
 
         log_debug("module", "could not get pin by net for module '{}' with ID {}: no pin belongs to net '{}' with ID {}", m_name, m_id, net->get_name(), net->get_id());
@@ -1790,6 +1790,7 @@ namespace hal
         m_pins.push_back(std::move(pin_owner));
         m_pins_map[id]        = pin;
         m_pin_names_map[name] = pin;
+        m_pin_nets_map[net]   = pin;
 
         // mark pin ID as used
         if (auto free_id_it = m_free_pin_ids.find(id); free_id_it != m_free_pin_ids.end())
@@ -1820,6 +1821,7 @@ namespace hal
         const std::string& del_name = pin->get_name();
         m_pins_map.erase(del_id);
         m_pin_names_map.erase(del_name);
+        m_pin_nets_map.erase(pin->get_net());
         m_pins.erase(std::find_if(m_pins.begin(), m_pins.end(), [pin](const auto& p) { return p.get() == pin; }));
 
         // free pin ID

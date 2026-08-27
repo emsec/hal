@@ -704,7 +704,7 @@ namespace hal
             log_warning("gate", "could not get fan-in endpoint of pin '{}' at gate '{}' with ID {}: pin is not an input pin", pin->get_name(), m_name, m_id);
             return nullptr;
         }
-        auto it = std::find_if(m_in_endpoints.begin(), m_in_endpoints.end(), [&pin](auto& ep) { return *ep->get_pin() == *pin; });
+        auto it = std::find_if(m_in_endpoints.begin(), m_in_endpoints.end(), [pin](const auto* ep) { return ep->get_pin() == pin; });
         if (it == m_in_endpoints.end())
         {
             log_debug("gate", "could not get fan-in endpoint of pin '{}' at gate '{}' with ID {}: no net is connected to pin", pin->get_name(), m_name, m_id);
@@ -843,7 +843,7 @@ namespace hal
             log_warning("gate", "could not get fan-out endpoint of pin '{}' at gate '{}' with ID {}: pin is not an output pin", pin->get_name(), m_name, m_id);
             return nullptr;
         }
-        auto it = std::find_if(m_out_endpoints.begin(), m_out_endpoints.end(), [&pin](auto& ep) { return *ep->get_pin() == *pin; });
+        auto it = std::find_if(m_out_endpoints.begin(), m_out_endpoints.end(), [pin](const auto* ep) { return ep->get_pin() == pin; });
         if (it == m_out_endpoints.end())
         {
             log_debug("gate", "could not get fan-out endpoint of pin '{}' at gate '{}' with ID {}: no net is connected to pin", pin->get_name(), m_name, m_id);

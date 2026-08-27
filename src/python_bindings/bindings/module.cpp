@@ -83,7 +83,7 @@ namespace hal
             :param str type: The new type.
         )");
 
-        py_module.def("get_grouping", &Module::get_grouping, R"(
+        py_module.def("get_grouping", &Module::get_grouping, borrowed(), R"(
             Get the grouping in which this module is contained.
 
             :returns: The grouping.
@@ -103,28 +103,28 @@ namespace hal
             :rtype: int
         )");
 
-        py_module.def_property("parent_module", &Module::get_parent_module, &Module::set_parent_module, R"(
+        py_module.def_property("parent_module", &Module::get_parent_module, &Module::set_parent_module, borrowed(), R"(
             The parent module of this module.
-            Is set to None for the top module, but cannot be set to None by the user.
+            Is set to ``None`` for the top module, but cannot be set to ``None`` by the user.
 
             :type: hal_py.Module or None
         )");
 
-        py_module.def("get_parent_module", &Module::get_parent_module, R"(
+        py_module.def("get_parent_module", &Module::get_parent_module, borrowed(), R"(
             Get the parent module of this module.
-            For the top module, None is returned.
+            For the top module, ``None`` is returned.
 
             :returns: The parent module.
             :rtype: hal_py.Module or None
         )");
 
-        py_module.def_property_readonly("parent_modules", [](Module* mod) { return mod->get_parent_modules(); }, R"(
+        py_module.def_property_readonly("parent_modules", py::cpp_function([](Module* mod) { return mod->get_parent_modules(); }, py::is_method(py_module), borrowed()), R"(
             The parent modules of this module.
 
             :type: list[hal_py.Module]
         )");
 
-        py_module.def("get_parent_modules", &Module::get_parent_modules, py::arg("filter") = nullptr, py::arg("recursive") = true, R"(
+        py_module.def("get_parent_modules", &Module::get_parent_modules, py::arg("filter") = nullptr, py::arg("recursive") = true, borrowed(), R"(
             Get all parents of this module.
             If ``recursive`` is set to ``True``, all indirect parents are also included.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
@@ -153,13 +153,13 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def_property_readonly("submodules", [](Module* mod) { return mod->get_submodules(); }, R"(
+        py_module.def_property_readonly("submodules", py::cpp_function([](Module* mod) { return mod->get_submodules(); }, py::is_method(py_module), borrowed()), R"(
             A list of all direct submodules of this module.
 
             :type: list[hal_py.Module]
         )");
 
-        py_module.def("get_submodules", &Module::get_submodules, py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
+        py_module.def("get_submodules", &Module::get_submodules, py::arg("filter") = nullptr, py::arg("recursive") = false, borrowed(), R"(
             Get all direct submodules of this module.
             If ``recursive`` is set to ``True``, all indirect submodules are also included.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
@@ -176,9 +176,10 @@ namespace hal
             :param hal_py.Module module: The module.
             :param bool recursive: Set ``True`` to check recursively, ``False`` otherwise.
             :returns: ``True`` if the module is a submodule of the specified module, ``False`` otherwise.
+            :rtype: bool
         )");
 
-        py_module.def("contains_module", &Module::contains_module, py::arg("other"), py::arg("recusive") = false, R"(
+        py_module.def("contains_module", &Module::contains_module, py::arg("other"), py::arg("recursive") = false, R"(
             Checks whether another module is a submodule of this module.
             If recursive is set to ``True``, all indirect submodules are also included.
 
@@ -189,13 +190,13 @@ namespace hal
         )");
 
         py_module.def_property_readonly("top_module", &Module::is_top_module, R"(
-            True only if the module is the top module of the netlist.
+            ``True`` only if the module is the top module of the netlist.
         
             :type: bool
         )");
 
         py_module.def("is_top_module", &Module::is_top_module, R"(
-            Returns true only if the module is the top module of the netlist.
+            Returns ``True`` only if the module is the top module of the netlist.
 
             :returns: ``True`` if the module is the top module, ``False`` otherwise.
             :rtype: bool
@@ -219,9 +220,6 @@ namespace hal
             Has no effect on module pins. 
 
             WARNING: can only be used when automatic net checks have been disabled using hal_py.Netlist.enable_automatic_net_checks.
-
-            :returns: ``True`` on success, ``False`` otherwise.
-            :rtype: bool
         )");
 
         py_module.def("contains_net", &Module::contains_net, py::arg("net"), py::arg("recursive") = false, R"(
@@ -234,20 +232,20 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def_property_readonly("nets", py::overload_cast<>(&Module::get_nets, py::const_), R"(
+        py_module.def_property_readonly("nets", py::cpp_function(py::overload_cast<>(&Module::get_nets, py::const_), py::is_method(py_module), borrowed()), R"(
             An unordered set of all nets that have at least one source or one destination within the module.
 
             :type: set[hal_py.Net]
         )");
 
-        py_module.def("get_nets", py::overload_cast<>(&Module::get_nets, py::const_), R"(
+        py_module.def("get_nets", py::overload_cast<>(&Module::get_nets, py::const_), borrowed(), R"(
             Get all nets that have at least one source or one destination within the module.
 
             :returns: An unordered set of nets.
             :rtype: set[hal_py.Net]
         )");
 
-        py_module.def("get_nets", py::overload_cast<const std::function<bool(Net*)>&, bool>(&Module::get_nets, py::const_), py::arg("filter"), py::arg("recursive") = false, R"(
+        py_module.def("get_nets", py::overload_cast<const std::function<bool(Net*)>&, bool>(&Module::get_nets, py::const_), py::arg("filter"), py::arg("recursive") = false, borrowed(), R"(
             Get all nets that have at least one source or one destination within the module.
             The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
             If ``recursive`` is ``True``, nets in submodules are considered as well.
@@ -258,39 +256,39 @@ namespace hal
             :rtype: set[hal_py.Net]
         )");
 
-        py_module.def_property_readonly("input_nets", &Module::get_input_nets, R"(
+        py_module.def_property_readonly("input_nets", py::cpp_function(&Module::get_input_nets, py::is_method(py_module), borrowed()), R"(
             A set of all nets that are either a global input to the netlist or have at least one source outside of the module.
 
             :type: set[hal_py.Net]
         )");
 
-        py_module.def("get_input_nets", &Module::get_input_nets, R"(
+        py_module.def("get_input_nets", &Module::get_input_nets, borrowed(), R"(
             Get all nets that are either a global input to the netlist or have at least one source outside of the module.
 
             :returns: A set of input nets.
             :rtype: set[hal_py.Net]
         )");
 
-        py_module.def_property_readonly("output_nets", &Module::get_output_nets, R"(
+        py_module.def_property_readonly("output_nets", py::cpp_function(&Module::get_output_nets, py::is_method(py_module), borrowed()), R"(
             A set of all nets that are either a global output to the netlist or have at least one destination outside of the module.
 
             :type: set[hal_py.Net]
         )");
 
-        py_module.def("get_output_nets", &Module::get_output_nets, R"(
+        py_module.def("get_output_nets", &Module::get_output_nets, borrowed(), R"(
             Get all nets that are either a global output to the netlist or have at least one destination outside of the module.
 
             :returns: A set of output nets.
             :rtype: set[hal_py.Net]
         )");
 
-        py_module.def_property_readonly("internal_nets", &Module::get_internal_nets, R"(
+        py_module.def_property_readonly("internal_nets", py::cpp_function(&Module::get_internal_nets, py::is_method(py_module), borrowed()), R"(
             A set of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
 
             :type: set[hal_py.Net]
         )");
 
-        py_module.def("get_internal_nets", &Module::get_internal_nets, R"(
+        py_module.def("get_internal_nets", &Module::get_internal_nets, borrowed(), R"(
             Get all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
 
             :returns: A set of internal nets.
@@ -367,30 +365,30 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def("get_gate_by_id", &Module::get_gate_by_id, py::arg("id"), py::arg("recursive") = false, R"(
+        py_module.def("get_gate_by_id", &Module::get_gate_by_id, py::arg("id"), py::arg("recursive") = false, borrowed(), R"(
             Get a gate specified by the given ID.
             If ``recursive`` is ``True``, gates in submodules are considered as well.
 
             :param int id: The unique ID of the gate.
             :param bool recursive: ``True`` to also consider gates in submodules, ``False`` otherwise.
-            :returns: The gate if found, None otherwise.
+            :returns: The gate if found, ``None`` otherwise.
             :rtype: hal_py.Gate or None
         )");
 
-        py_module.def_property_readonly("gates", py::overload_cast<>(&Module::get_gates, py::const_), R"(
+        py_module.def_property_readonly("gates", py::cpp_function(py::overload_cast<>(&Module::get_gates, py::const_), py::is_method(py_module), borrowed()), R"(
             The list of all gates contained within the module.
 
             :type: list[hal_py.Gate]
         )");
 
-        py_module.def("get_gates", py::overload_cast<>(&Module::get_gates, py::const_), R"(
+        py_module.def("get_gates", py::overload_cast<>(&Module::get_gates, py::const_), borrowed(), R"(
             Get all gates contained within the module.
 
             :returns: A list of gates.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_module.def("get_gates", py::overload_cast<const std::function<bool(Gate*)>&, bool>(&Module::get_gates, py::const_), py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
+        py_module.def("get_gates", py::overload_cast<const std::function<bool(Gate*)>&, bool>(&Module::get_gates, py::const_), py::arg("filter") = nullptr, py::arg("recursive") = false, borrowed(), R"(
             Get all gates contained within the module.
             The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
             If ``recursive`` is ``True``, gates in submodules are considered as well.
@@ -437,10 +435,10 @@ namespace hal
             py::arg("type")         = PinType::none,
             py::arg("create_group") = true,
             py::arg("force_name")   = false,
-            R"(
-            Manually assign a module pin to a net.
+            borrowed(), R"(
+            Manually create a module pin and assign it to a net.
             Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
-            Hence, make sure to update the module nets beforehand using ``hal_py.Module.update_net``.
+            Hence, make sure to update the module nets beforehand using ``hal_py.Module.update_nets``.
             If ``create_group`` is set to ``False``, the pin will not be added to a pin group.
             
             WARNING: can only be used when automatic net checks have been disabled using ``hal_py.Netlist.enable_automatic_net_checks``.
@@ -450,7 +448,7 @@ namespace hal
             :param hal_py.Net net: The net that the pin is being assigned to.
             :param hal_py.PinType type: The type of the pin. Defaults to ``hal_py.PinType.none``.
             :param bool create_group: Set ``True`` to automatically create a pin group and assign the pin, ``False`` otherwise. Defaults to ``True``.
-            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to ``False``.
+            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to ``False``.
             :returns: The module pin on success, ``None`` otherwise.
             :rtype: hal_py.ModulePin or None
         )");
@@ -474,11 +472,11 @@ namespace hal
             py::arg("type")         = PinType::none,
             py::arg("create_group") = true,
             py::arg("force_name")   = false,
-            R"(
-            Manually assign a module pin to a net.
+            borrowed(), R"(
+            Manually create a module pin and assign it to a net.
             The ID of the pin is set automatically.
             Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
-            Hence, make sure to update the module nets beforehand using ``hal_py.Module.update_net``.
+            Hence, make sure to update the module nets beforehand using ``hal_py.Module.update_nets``.
             If ``create_group`` is set to ``False``, the pin will not be added to a pin group.
             
             WARNING: can only be used when automatic net checks have been disabled using ``hal_py.Netlist.enable_automatic_net_checks``.
@@ -487,23 +485,24 @@ namespace hal
             :param hal_py.Net net: The net that the pin is being assigned to.
             :param hal_py.PinType type: The type of the pin. Defaults to ``hal_py.PinType.none``.
             :param bool create_group: Set ``True`` to automatically create a pin group and assign the pin, ``False`` otherwise. Defaults to ``True``.
-            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to ``False``.
+            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to ``False``.
             :returns: The module pin on success, ``None`` otherwise.
             :rtype: hal_py.ModulePin or None
         )");
 
-        py_module.def_property_readonly("pins", &Module::get_pins, R"(
+        py_module.def_property_readonly(
+            "pins", py::cpp_function([](const Module& self) { return self.get_pins(); }, py::is_method(py_module), borrowed()), R"(
             The (ordered) pins of the module.
 
             :type: list[hal_py.ModulePin]
         )");
 
-        py_module.def("get_pins", &Module::get_pins, py::arg("filter") = nullptr, R"(
-            Get the (ordered) pins of the module.
+        py_module.def("get_pins", &Module::get_pins, py::arg("filter") = nullptr, borrowed(), R"(
+            Get an ordered list of all pins of the module.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
             :param lambda filter: An optional filter.
-            :returns: A list of pins.
+            :returns: An ordered list of pins.
             :rtype: list[hal_py.ModulePin]
         )");
 
@@ -522,17 +521,17 @@ namespace hal
 
             :returns: A list of input pin names of the module.
             :param lambda filter: An optional filter.
-            :returns: An ordered list of pins.
+            :returns: An ordered list of pin names.
             :rtype: list[str]
         )");
 
-        py_module.def_property_readonly("input_pins", &Module::get_input_pins, R"(
+        py_module.def_property_readonly("input_pins", py::cpp_function(&Module::get_input_pins, py::is_method(py_module), borrowed()), R"(
             An ordered list of all input pins of the module (including inout pins).
 
             :type: list[hal_py.ModulePin]
         )");
 
-        py_module.def("get_input_pins", &Module::get_input_pins, R"(
+        py_module.def("get_input_pins", &Module::get_input_pins, borrowed(), R"(
             Get an ordered list of all input pins of the module (including inout pins).
 
             :returns: An ordered list of input pins.
@@ -552,13 +551,13 @@ namespace hal
             :rtype: list[str]
          )");
 
-        py_module.def_property_readonly("output_pins", &Module::get_output_pins, R"(
+        py_module.def_property_readonly("output_pins", py::cpp_function(&Module::get_output_pins, py::is_method(py_module), borrowed()), R"(
             An ordered list of all output pins of the module (including inout pins).
 
             :type: list[hal_py.ModulePin]
         )");
 
-        py_module.def("get_output_pins", &Module::get_output_pins, R"(
+        py_module.def("get_output_pins", &Module::get_output_pins, borrowed(), R"(
             Get an ordered list of all output pins of the module (including inout pins).
 
             :returns: An ordered list of output pins.
@@ -578,13 +577,14 @@ namespace hal
             :rtype: list[str]
         )");
 
-        py_module.def_property_readonly("pin_groups", &Module::get_pin_groups, R"(
+        py_module.def_property_readonly(
+            "pin_groups", py::cpp_function([](const Module& self) { return self.get_pin_groups(); }, py::is_method(py_module), borrowed()), R"(
             All pin_groups of the module.
 
             :type: list[hal_py.ModulePinGroup]
         )");
 
-        py_module.def("get_pin_groups", &Module::get_pin_groups, py::arg("filter") = nullptr, R"(
+        py_module.def("get_pin_groups", &Module::get_pin_groups, py::arg("filter") = nullptr, borrowed(), R"(
             Get all pin groups of the module.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -593,7 +593,7 @@ namespace hal
             :rtype: list[hal_py.ModulePinGroup]
         )");
 
-        py_module.def("get_pin_by_id", &Module::get_pin_by_id, py::arg("id"), R"(
+        py_module.def("get_pin_by_id", &Module::get_pin_by_id, py::arg("id"), borrowed(), R"(
             Get the pin corresponding to the given ID.
 
             :param int id: The ID of the pin.
@@ -601,7 +601,7 @@ namespace hal
             :rtype: hal_py.ModulePin or None
         )");
 
-        py_module.def("get_pin_by_name", &Module::get_pin_by_name, py::arg("name"), R"(
+        py_module.def("get_pin_by_name", &Module::get_pin_by_name, py::arg("name"), borrowed(), R"(
              Get the pin corresponding to the given name.
 
              :param str name: The name of the pin.
@@ -609,7 +609,7 @@ namespace hal
              :rtype: hal_py.ModulePin or None
          )");
 
-        py_module.def("get_pin_by_net", &Module::get_pin_by_net, py::arg("net"), R"(
+        py_module.def("get_pin_by_net", &Module::get_pin_by_net, py::arg("net"), borrowed(), R"(
             Get the pin that passes through the specified net.
 
             :param hal_py.Net net: The net.
@@ -617,7 +617,7 @@ namespace hal
             :rtype: hal_py.ModulePin or None
         )");
 
-        py_module.def("get_pin_group_by_id", &Module::get_pin_group_by_id, py::arg("id"), R"(
+        py_module.def("get_pin_group_by_id", &Module::get_pin_group_by_id, py::arg("id"), borrowed(), R"(
             Get the pin group corresponding to the given ID.
 
             :param int id: The ID of the pin group.
@@ -625,7 +625,7 @@ namespace hal
             :rtype: hal_py.ModulePinGroup or None
         )");
 
-        py_module.def("get_pin_group_by_name", &Module::get_pin_group_by_name, py::arg("name"), R"(
+        py_module.def("get_pin_group_by_name", &Module::get_pin_group_by_name, py::arg("name"), borrowed(), R"(
              Get the pin group corresponding to the given name.
 
              :param str name: The name of the pin group.
@@ -638,7 +638,7 @@ namespace hal
 
             :param hal_py.ModulePin pin: The pin.
             :param str new_name: The name to be assigned to the pin.
-            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to ``False``.
+            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to ``False``.
             :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
@@ -719,7 +719,7 @@ namespace hal
             py::arg("start_index")         = UINT_MAX,
             py::arg("delete_empty_groups") = true,
             py::arg("force_name")          = false,
-            R"(
+            borrowed(), R"(
             Create a new pin group with the given name.
             All pins to be added to the pin group must have the same direction and type.
 
@@ -773,7 +773,7 @@ namespace hal
             py::arg("start_index")         = UINT_MAX,
             py::arg("delete_empty_groups") = true,
             py::arg("force_name")          = false,
-            R"(
+            borrowed(), R"(
             Create a new pin group with the given name.
             All pins to be added to the pin group must have the same direction and type.
 
@@ -783,7 +783,7 @@ namespace hal
             :param hal_py.PinType type: The type of the pin group, if any. Defaults to ``hal_py.PinType.none``.
             :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.
             :param int start_index: The start index of the pin group. Defaults to ``0``.
-            :param bool delete_empty_groups: Set `True`` to delete groups that are empty after the pins have been assigned to the new group, ``False`` to keep empty groups. Defaults to ``True``.
+            :param bool delete_empty_groups: Set ``True``` to delete groups that are empty after the pins have been assigned to the new group, ```False``` to keep empty groups. Defaults to ```True```.
             :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to ``False``.
             :returns: The pin group on success, ``None`` otherwise.
             :rtype: hal_py.ModulePinGroup or None

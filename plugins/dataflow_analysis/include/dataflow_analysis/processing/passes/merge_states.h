@@ -39,6 +39,9 @@ namespace hal
             struct Configuration;
         }
 
+        /**
+         * A dataflow analysis pass that merges two groupings into one by keeping the groups that both of them agree on.
+         */
         namespace merge_states
         {
             std::shared_ptr<Grouping>

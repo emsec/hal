@@ -8,20 +8,23 @@ set (IGRAPH_INCLUDES  "${IGRAPH_INSTALL}/include")
 set (IGRAPH_LIB       "${IGRAPH_INSTALL}/lib/libigraph${CMAKE_SHARED_LIBRARY_SUFFIX}")
 set (HAVE_IGRAPH TRUE)
   
-message("-- IGRAPH version 0.10.12 : download and build libigraph${CMAKE_SHARED_LIBRARY_SUFFIX} in ${IGRAPH_BASE}")
+message("-- IGRAPH version 1.0.1 : download and build libigraph${CMAKE_SHARED_LIBRARY_SUFFIX} in ${IGRAPH_BASE}")
 
 #Avoid warning about DOWNLOAD_EXTRACT_TIMESTAMP in CMake 3.24
 if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
     cmake_policy(SET CMP0135 NEW)
 endif()
 
-ExternalProject_Add(igraph_0_10
+# igraph builds its own sources with -Werror by default. Since we do not control the compiler
+# used to build HAL, every new diagnostic that a future compiler introduces turns into a hard
+# build failure inside a third-party dependency. Keep the warnings, but do not treat them as errors.
+ExternalProject_Add(igraph_1_0
   PREFIX "${IGRAPH_INSTALL}"
-  URL "https://github.com/igraph/igraph/releases/download/0.10.12/igraph-0.10.12.tar.gz"
+  URL "https://github.com/igraph/igraph/releases/download/1.0.1/igraph-1.0.1.tar.gz"
   SOURCE_DIR "${IGRAPH_DOWNLOAD}"
-  CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${IGRAPH_INSTALL}" "-DBUILD_SHARED_LIBS=ON" "-DCMAKE_INSTALL_LIBDIR=${IGRAPH_INSTALL}/lib" "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}" "-Wno-deprecated" "-DIGRAPH_VERSION=0.10.12"
+  CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${IGRAPH_INSTALL}" "-DBUILD_SHARED_LIBS=ON" "-DCMAKE_INSTALL_LIBDIR=${IGRAPH_INSTALL}/lib" "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}" "-Wno-deprecated" "-DIGRAPH_VERSION=1.0.1" "-DIGRAPH_WARNINGS_AS_ERRORS=OFF"
   BINARY_DIR "${IGRAPH_BUILD}"
-  PATCH_COMMAND echo "No patch for igraph-0.10.x required"
+  PATCH_COMMAND echo "No patch for igraph-1.0.x required"
   INSTALL_DIR "${IGRAPH_INSTALL}"
   BUILD_BYPRODUCTS "${IGRAPH_LIB}"
   )
@@ -34,7 +37,7 @@ set_target_properties ( igraph::igraph PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${IGRAPH_INCLUDES}
 )
 
-add_dependencies ( igraph::igraph igraph_0_10 )
+add_dependencies ( igraph::igraph igraph_1_0 )
 
 mark_as_advanced (
   HAVE_IGRAPH

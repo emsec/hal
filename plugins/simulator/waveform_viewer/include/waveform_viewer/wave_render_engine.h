@@ -47,6 +47,9 @@ namespace hal {
     class WaveItemHash;
     class WaveDataTimeframe;
 
+    /**
+     * Loads the transitions of a single waveform in the background.
+     */
     class WaveLoaderThread : public QThread
     {
         Q_OBJECT
@@ -61,6 +64,9 @@ namespace hal {
         void run() override;
     };
 
+    /**
+     * Works through the queue of waveforms that still need to be loaded.
+     */
     class WaveLoaderBackbone : public QThread
     {
         Q_OBJECT
@@ -76,6 +82,9 @@ namespace hal {
         void run() override;
     };
 
+    /**
+     * Turns the loaded waveform data into drawing primitives and paints them onto the canvas.
+     */
     class WaveRenderEngine : public QWidget
     {
         Q_OBJECT

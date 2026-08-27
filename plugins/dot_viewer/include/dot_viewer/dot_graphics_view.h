@@ -32,25 +32,65 @@
 
 namespace hal
 {
+    /**
+     * The graphics view that displays a rendered DOT graph and handles zooming and panning.
+     */
     class DotGraphicsView : public QGraphicsView
     {
         Q_OBJECT
     public:
+        /**
+         * Construct a new graphics view.
+         *
+         * @param[in] parent - The parent widget. Defaults to a `nullptr`.
+         */
         DotGraphicsView(QWidget *parent = nullptr);
 
     public Q_SLOTS:
+        /**
+         * Zoom into the graph by one step, triggered by the zoom-in shortcut.
+         */
         void handleZoomInShortcut();
+
+        /**
+         * Zoom out of the graph by one step, triggered by the zoom-out shortcut.
+         */
         void handleZoomOutShortcut();
 
     protected:
+        /**
+         * Zoom the graph in or out when the mouse wheel is turned while the pan modifier is not held.
+         *
+         * @param[in] event - The wheel event.
+         */
         void wheelEvent(QWheelEvent* event) override;
+
+        /**
+         * Remember the cursor position so that a subsequent drag can pan the graph.
+         *
+         * @param[in] event - The mouse event.
+         */
         void mousePressEvent(QMouseEvent* event) override;
+
+        /**
+         * Pan the graph while the mouse is dragged with the pan modifier held.
+         *
+         * @param[in] event - The mouse event.
+         */
         void mouseMoveEvent(QMouseEvent* event) override;
 
     private:
+        /** The cursor position at which the current panning operation started. */
         QPoint mMovePosition;
+
+        /** The keyboard modifier that has to be held to pan the graph instead of zooming it. */
         Qt::KeyboardModifier mPanModifier;
 
+        /**
+         * Scale the view by the given factor, unless that would exceed the minimum or maximum zoom level.
+         *
+         * @param[in] scaleFactor - The factor to scale the view by.
+         */
         void scaleWithinLimits(qreal scaleFactor);
     };
 }

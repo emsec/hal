@@ -60,7 +60,7 @@ namespace hal
         /**
          * Sets the gates and updates its model to display the gate's pins.
          *
-         * @param gateID - The gate.
+         * @param g - The gate.
          */
         void setGate(Gate* g);
 

@@ -33,30 +33,89 @@
 namespace hal {
     class Module;
 
+    /**
+     * Adds the dataflow analysis actions to the context menu of the nodes and edges of a displayed DOT graph.
+     */
     class DataflowInteraction : public QGVInteraction {
         Q_OBJECT
     public:
+        /**
+         * Construct the interaction for the given scene.
+         *
+         * @param[in] parent - The scene that holds the displayed graph.
+         */
         DataflowInteraction(QGVScene* parent);
 
+        /**
+         * Attach the interaction to a node of the graph, which makes the module it represents selectable.
+         *
+         * @param[in] node - The node to attach to.
+         */
         void registerNode(QGVNode* node) override;
+
+        /**
+         * Attach the interaction to an edge of the graph, which makes the connection it represents selectable.
+         *
+         * @param[in] scene - The edge to attach to.
+         */
         void registerEdge(QGVEdge* scene) override;
 
     private Q_SLOTS:
+        /**
+         * Highlight the graph nodes that correspond to the modules selected in HAL.
+         *
+         * @param[in] sender - The object that changed the selection.
+         */
         void handleHALSelectionChanged(void* sender);
+
+        /**
+         * Update the label of the graph node that represents the renamed module.
+         *
+         * @param[in] m - The module that was renamed.
+         */
         void handleHALModuleNameChanged(Module* m);
+
+        /**
+         * Select the modules that correspond to the graph nodes selected in the scene.
+         */
         void handleQGVSelectionChanged();
+
+        /**
+         * Show the context menu of the given edge, which offers the nets that make up the connection.
+         *
+         * @param[in] edge - The edge that was right-clicked.
+         */
         void handleEdgeContextMenu(QGVEdge* edge);
 
     private:
+        /** A map from each module to the graph node that represents it. */
         QHash<u32, QGVNode*> mModuleHash;
+
+        /** A map from each graph node to the module that it represents. */
         QHash<QGVNode*, u32> mNodeHash;
+
+        /** The scene that holds the displayed graph. */
         QGVScene* mScene;
     };
 
+    /**
+     * Create the dataflow interaction for the given scene.
+     *
+     * @param[in] parent - The scene that holds the displayed graph.
+     * @returns The created interaction.
+     */
     QGVInteraction* constructDataflowInteraction(QGVScene* parent);
+    /**
+     * Registers the dataflow interaction with the DOT viewer on program startup.
+     */
     class DataflowInteractionRegistration {
+        /** The single instance whose construction performs the registration. */
         static DataflowInteractionRegistration sRegistration;
+
     public:
+        /**
+         * Register the dataflow interaction with the DOT viewer.
+         */
         DataflowInteractionRegistration();
     };
 

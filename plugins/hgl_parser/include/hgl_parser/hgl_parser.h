@@ -38,6 +38,8 @@
 namespace hal
 {
     /**
+     * A gate library parser for HAL's own HGL gate library format.
+     *
      * @ingroup netlist
      */
     class NETLIST_API HGLParser : public GateLibraryParser
@@ -50,7 +52,7 @@ namespace hal
          * Deserializes a gate library in HGL format from the string stream into a gate library object.
          *
          * @param[in] file_path - Path to the file containing the gate library definition.
-         * @returns The gate library or a nullptr on failure.
+         * @returns The gate library or a `nullptr` on failure.
          */
         Result<std::unique_ptr<GateLibrary>> parse(const std::filesystem::path& file_path) override;
 
@@ -58,6 +60,9 @@ namespace hal
         const u32 HGL_FORMAT_VERSION = 4;
         u32 file_version             = 1;
 
+        /**
+         * Collects the pins of a gate type together with their directions, types, and Boolean functions while the gate type is being parsed.
+         */
         struct PinCtx
         {
             std::vector<std::string> pins;
@@ -66,6 +71,9 @@ namespace hal
             std::unordered_map<std::string, std::string> boolean_functions;
         };
 
+        /**
+         * Collects the pins of a pin group together with its order and start index while the gate type is being parsed.
+         */
         struct GroupCtx
         {
             std::vector<std::string> pins;

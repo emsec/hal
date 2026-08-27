@@ -11,24 +11,24 @@ namespace hal
         py_module_pin.def(py::self == py::self, R"(
             Check whether two module pins are equal.
 
-            :returns: True if both module pins are equal, False otherwise.
+            :returns: ``True`` if both module pins are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_module_pin.def(py::self != py::self, R"(
             Check whether two module pins are unequal.
 
-            :returns: True if both module pins are unequal, False otherwise.
+            :returns: ``True`` if both module pins are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
-        py_module_pin.def_property_readonly("net", &ModulePin::get_net, R"(
+        py_module_pin.def_property_readonly("net", py::cpp_function(&ModulePin::get_net, py::is_method(py_module_pin), borrowed()), R"(
             The net passing through the pin.
 
             :type: hal_py.Net
         )");
 
-        py_module_pin.def("get_net", &ModulePin::get_net, R"(
+        py_module_pin.def("get_net", &ModulePin::get_net, borrowed(), R"(
             Get the net passing through the pin.
 
             :returns: The net of the pin.

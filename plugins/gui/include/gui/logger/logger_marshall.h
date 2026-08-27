@@ -61,13 +61,12 @@ namespace hal
     public Q_SLOTS:
 
         /**
-         * Given a message type, a message and a filter this function wraps the message in an html string of the
-         * respective color of the channel type, applies the filter and appends the final html string to the
+         * Given a message type and a message this function wraps the message in an html string of the
+         * respective color of the channel type and appends the final html string to the
          * QPlainTextEdit of the LoggerWidget this LoggerMarshall belongs to.
          *
          * @param log_type - The message type
          * @param msg - The message
-         * @param filter - The filter
          */
         void appendLog(spdlog::level::level_enum log_type, QString const& msg);
 

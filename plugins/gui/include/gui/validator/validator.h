@@ -41,11 +41,11 @@ namespace hal
     {
         public:
             /**
-             * Given any input string this function returns true if the Validator considers this string as valid.
-             * It returns false otherwise.
+             * Given any input string this function returns `true` if the Validator considers this string as valid.
+             * It returns `false` otherwise.
              *
              * @param input - The input string
-             * @returns <b>true</b> iff the string is considered valid
+             * @returns `true` iff the string is considered valid, `false` otherwise.
              */
             virtual bool validate(const QString &input) = 0;
 

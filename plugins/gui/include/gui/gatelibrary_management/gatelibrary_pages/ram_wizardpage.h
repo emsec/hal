@@ -34,6 +34,9 @@
 #include <QLabel>
 
 namespace hal {
+    /**
+     * The wizard page on which the RAM component of the gate type is configured.
+     */
     class RAMWizardPage:public QWizardPage{
         friend class GateLibraryWizard;
     public:

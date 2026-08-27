@@ -35,6 +35,9 @@
 
 namespace hal {
     class GateLibraryWizard;
+    /**
+     * The wizard page on which the latch component of the gate type is configured.
+     */
     class LatchWizardPage:public QWizardPage{
         friend class GateLibraryWizard;
     public:

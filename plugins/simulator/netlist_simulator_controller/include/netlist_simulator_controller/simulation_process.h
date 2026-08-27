@@ -36,6 +36,9 @@ namespace hal {
 
     class NetlistSimulatorController;
 
+    /**
+     * Receives the log output that an external simulation process produces.
+     */
     class SimulationLogReceiver : public QObject
     {
         Q_OBJECT
@@ -47,6 +50,9 @@ namespace hal {
     };
 
 
+    /**
+     * Writes the log output of an external simulation process to a file.
+     */
     class SimulationProcessLog : public QObject
     {
         Q_OBJECT
@@ -66,6 +72,9 @@ namespace hal {
         static QString sLogFilename;
     };
 
+    /**
+     * Runs the shell commands of a scripted simulation engine in a separate thread.
+     */
     class SimulationProcess : public QThread {
         Q_OBJECT
 

@@ -34,8 +34,8 @@
 namespace hal
 {
     /**
-     * A token holds a string and a line number and may, for example, be used during parsing of input files.
-     * 
+     * A single token of a token stream, i.e., a string together with the number of the line that it was read from.
+     *
      * @ingroup utilities
      */
     template<typename T>
@@ -97,7 +97,7 @@ namespace hal
          * Check if the string stored within the token is equal to another string.
          *
          * @param[in] s - The string to compare against.
-         * @returns True if both strings are equal, false otherwise.
+         * @returns `true` if both strings are equal, `false` otherwise.
          */
         bool operator==(const T& s) const
         {
@@ -108,7 +108,7 @@ namespace hal
          * Check if the string stored within the token is unequal to another string.
          *
          * @param[in] s - The string to compare against.
-         * @returns True if both strings are not equal, false otherwise.
+         * @returns `true` if both strings are not equal, `false` otherwise.
          */
         bool operator!=(const T& s) const
         {
@@ -117,8 +117,8 @@ namespace hal
     };
 
     /**
-     * A token stream comprises a sequence of tokens that may, for example, have been read from a file.
-     * 
+     * A stream of tokens that provides the lookahead and consumption operations needed to write a recursive descent parser.
+     *
      * @ingroup utilities
      */
     template<typename T>
@@ -224,8 +224,8 @@ namespace hal
          * If the token does not match, the stream remains unchanged.
          *
          * @param[in] expected - The expected token.
-         * @param[in] throw_on_error - If true, throws an TokenStreamException instead of returning false on error.
-         * @returns True if the next Token matches the expected string, false otherwise or if no more tokens are available.
+         * @param[in] throw_on_error - If `true`, throws an TokenStreamException instead of returning `false` on error.
+         * @returns `true` if the next Token matches the expected string, `false` otherwise or if no more tokens are available.
          */
         bool consume(const T& expected, bool throw_on_error = false)
         {
@@ -259,8 +259,8 @@ namespace hal
          *
          * @param[in] expected - The string on which to end.
          * @param[in] end - The absolute position in the stream on which to stop if no match was found until this point.
-         * @param[in] level_aware - If false, tokens are also matched if they are not at level 0.
-         * @param[in] throw_on_error - If true, throws an TokenStreamException instead of returning false on error.
+         * @param[in] level_aware - If `false`, tokens are also matched if they are not at level 0.
+         * @param[in] throw_on_error - If `true`, throws an TokenStreamException instead of returning `false` on error.
          * @returns The last consumed token or the last token of the stream.
          */
         Token<T> consume_until(const T& expected, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false)
@@ -301,8 +301,8 @@ namespace hal
          *
          * @param[in] expected - The string on which to end.
          * @param[in] end - The absolute position in the stream on which to stop if no match was not found until this point.
-         * @param[in] level_aware - If false, tokens are also matched if they are not at level 0.
-         * @param[in] throw_on_error - If true, throws an TokenStreamException instead of returning false on error.
+         * @param[in] level_aware - If `false`, tokens are also matched if they are not at level 0.
+         * @param[in] throw_on_error - If `true`, throws an TokenStreamException instead of returning `false` on error.
          * @returns All consumed tokens in form of a new token stream.
          */
         TokenStream<T> extract_until(const T& expected, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false)
@@ -331,8 +331,8 @@ namespace hal
          * @param[in] match - The string on which to end.
          * @param[in] joiner - The string used to join consumed tokens.
          * @param[in] end - The absolute position in the stream on which to stop if no match was not found until this point.
-         * @param[in] level_aware - If false, tokens are also matched if they are not at level 0.
-         * @param[in] throw_on_error - If true, throws an TokenStreamException instead of returning false on error.
+         * @param[in] level_aware - If `false`, tokens are also matched if they are not at level 0.
+         * @param[in] throw_on_error - If `true`, throws an TokenStreamException instead of returning `false` on error.
          * @returns The joined token.
          */
         Token<T> join_until(const T& match, const T& joiner, u32 end = END_OF_STREAM, bool level_aware = true, bool throw_on_error = false)
@@ -440,7 +440,7 @@ namespace hal
          *
          * @param[in] match - The string to match.
          * @param[in] end - The absolute position in the stream on which to stop if no match was not found until this point.
-         * @param[in] level_aware - If false, tokens are also matched if they are not at level 0.
+         * @param[in] level_aware - If `false`, tokens are also matched if they are not at level 0.
          * @returns The token at the queried position or END_OF_STREAM if not found.
          */
         u32 find_next(const T& match, u32 end = END_OF_STREAM, bool level_aware = true) const

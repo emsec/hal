@@ -29,6 +29,9 @@
 
 namespace hal
 {
+    /**
+     * A gate type component that describes a look-up table, in particular the bit-order of its initialization string.
+     */
     class LUTComponent : public GateTypeComponent
     {
     public:
@@ -36,7 +39,7 @@ namespace hal
          * Construct a new LUTComponent with given child component and bit-order.
          * 
          * @param[in] component - Another component to be added as a child component.
-         * @param[in] init_ascending - True if ascending bit-order, false otherwise.
+         * @param[in] init_ascending - `true` if ascending bit-order, `false` otherwise.
          */
         LUTComponent(std::unique_ptr<GateTypeComponent> component, bool init_ascending);
 
@@ -51,7 +54,7 @@ namespace hal
          * Check whether a component is a LUTComponent.
          * 
          * @param[in] component - The component to check.
-         * @returns True if component is a LUTComponent, false otherwise.
+         * @returns `true` if component is a LUTComponent, `false` otherwise.
          */
         static bool is_class_of(const GateTypeComponent* component);
 
@@ -67,14 +70,14 @@ namespace hal
         /**
          * Get the bit-order of the initialization string.
          *
-         * @returns True if ascending bit-order, false otherwise.
+         * @returns `true` if ascending bit-order, `false` otherwise.
          */
         bool is_init_ascending() const;
 
         /**
          * Set the bit-order of the initialization string.
          *
-         * @param[in] init_ascending - True if ascending bit-order, false otherwise.
+         * @param[in] init_ascending - `true` if ascending bit-order, `false` otherwise.
          */
         void set_init_ascending(bool init_ascending = true);
 

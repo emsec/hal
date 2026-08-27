@@ -66,7 +66,7 @@ namespace hal
              */
             const Netlist* nl;
 
-            // utils
+            /** Set `true` if the netlist was synthesized with Yosys, `false` otherwise. */
             bool yosys;
 
             /**
@@ -75,14 +75,32 @@ namespace hal
             std::vector<Gate*> target_gates;
 
             /* pre_processed_data */
+
+            /** A map from each target gate to the fingerprint that summarizes its type and connectivity. */
             std::unordered_map<u32, std::vector<u32>> gate_to_fingerprint;
+
+            /** A map from each target gate to the nets connected to its control pins, grouped by pin type. */
             std::unordered_map<u32, std::map<PinType, std::unordered_set<u32>>> gate_to_control_signals;
+
+            /** A map from each target gate to the register stages it belongs to. */
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_register_stages;
+
+            /** A map from each target gate to the target gates that precede it. */
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_predecessors;
+
+            /** A map from each target gate to the target gates that succeed it. */
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_successors;
+
+            /** A map from each target gate to the previously known groups that precede it. */
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_known_predecessor_groups;
+
+            /** A map from each target gate to the previously known groups that succeed it. */
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_known_successor_groups;
+
+            /** A map from each target gate to the sizes of the pin groups that its outputs feed into. */
             std::unordered_map<u32, std::vector<std::vector<u32>>> gate_to_output_shape;
+
+            /** A map from each target gate to the sizes of the pin groups that drive its inputs. */
             std::unordered_map<u32, std::vector<std::vector<u32>>> gate_to_input_shape;
         };
     }    // namespace dataflow

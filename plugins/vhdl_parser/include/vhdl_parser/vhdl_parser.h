@@ -43,6 +43,8 @@
 namespace hal
 {
     /**
+     * A netlist parser for gate-level VHDL.
+     *
      * @ingroup netlist_parser
      */
     class NETLIST_API VHDLParser : public NetlistParser
@@ -55,7 +57,7 @@ namespace hal
          * Parse a VHDL netlist into an internal intermediate format.
          *
          * @param[in] file_path - Path to the VHDL netlist file.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         Result<std::monostate> parse(const std::filesystem::path& file_path) override;
 
@@ -75,6 +77,9 @@ namespace hal
         using empty_t             = std::monostate;
         using assignment_t        = std::variant<identifier_t, ranged_identifier_t, numeral_t, empty_t>;
 
+        /**
+         * A named value with an associated type, used for the attributes and generics of a VHDL design.
+         */
         struct VhdlDataEntry
         {
             u32 m_line_number;
@@ -83,6 +88,9 @@ namespace hal
             std::string m_value = "";
         };
 
+        /**
+         * The intermediate representation of a VHDL signal, i.e., a signal or a port, including its bit ranges.
+         */
         struct VhdlSignal
         {
             ci_string m_name;
@@ -91,6 +99,9 @@ namespace hal
             std::vector<ci_string> m_expanded_names;
         };
 
+        /**
+         * The intermediate representation of a port of a VHDL entity.
+         */
         struct VhdlPort
         {
             ci_string m_identifier;
@@ -99,18 +110,27 @@ namespace hal
             std::vector<ci_string> m_expanded_identifiers;
         };
 
+        /**
+         * The signals that are assigned to a single port of a VHDL instance.
+         */
         struct VhdlPortAssignment
         {
             std::optional<assignment_t> m_port;
             std::vector<assignment_t> m_assignment;
         };
 
+        /**
+         * A continuous assignment between two sets of VHDL signals.
+         */
         struct VhdlAssignment
         {
             std::vector<assignment_t> m_variable;
             std::vector<assignment_t> m_assignment;
         };
 
+        /**
+         * The intermediate representation of an instantiation of a VHDL entity or a gate type.
+         */
         struct VhdlInstance
         {
             ci_string m_name;
@@ -122,6 +142,9 @@ namespace hal
             std::vector<std::pair<ci_string, ci_string>> m_expanded_port_assignments;
         };
 
+        /**
+         * The intermediate representation of a VHDL entity, i.e., its ports, signals, assignments, and instances.
+         */
         struct VhdlEntity
         {
         public:
@@ -132,7 +155,7 @@ namespace hal
          * Check whether an module is considered smaller than another module.
          *
          * @param[in] other - The module to compare against.
-         * @returns True if the module is smaller than 'other', false otherwise.
+         * @returns `true` if the module is smaller than 'other', `false` otherwise.
          */
             bool operator<(const VhdlEntity& other) const
             {

@@ -55,6 +55,9 @@ namespace hal {
         ~PythonMutex();
     };
 
+    /**
+     * Runs a python script in the background so that the GUI stays responsive, and relays its output and input requests.
+     */
     class PythonThread : public QThread, public PythonContextSubscriber
     {
     public:

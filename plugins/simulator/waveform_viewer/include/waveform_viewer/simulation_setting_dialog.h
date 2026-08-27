@@ -41,6 +41,9 @@ namespace hal {
 
     class SimulationSettings;
 
+    /**
+     * The tab of the simulation settings dialog in which the waveform colors are configured.
+     */
     class SimulationSettingColorTab : public QWidget
     {
         Q_OBJECT
@@ -51,6 +54,9 @@ namespace hal {
         QString colorSetting(int inx) const;
     };
 
+    /**
+     * The tab of the simulation settings dialog in which the engine-specific properties are edited.
+     */
     class SimulationSettingPropertiesTab : public QTableWidget
     {
         Q_OBJECT
@@ -61,6 +67,9 @@ namespace hal {
         QMap<QString,QString> engineProperties() const;
     };
 
+    /**
+     * The tab of the simulation settings dialog in which the global limits and defaults are configured.
+     */
     class SimulationSettingGlobalTab : public QWidget
     {
         Q_OBJECT
@@ -78,6 +87,9 @@ namespace hal {
         bool isCustomBaseDirectory() const { return mCustomBaseDicectory->isChecked(); }
     };
 
+    /**
+     * The dialog in which the settings of the simulator and the waveform viewer are configured.
+     */
     class SimulationSettingDialog : public QDialog
     {
         Q_OBJECT

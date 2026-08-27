@@ -29,6 +29,9 @@
 
 namespace hal
 {
+    /**
+     * A gate type component that describes where the initialization data of a gate is stored within its data container.
+     */
     class InitComponent : public GateTypeComponent
     {
     public:
@@ -51,7 +54,7 @@ namespace hal
          * Check whether a component is an InitComponent.
          * 
          * @param[in] component - The component to check.
-         * @returns True if component is an InitComponent, false otherwise.
+         * @returns `true` if component is an InitComponent, `false` otherwise.
          */
         static bool is_class_of(const GateTypeComponent* component);
 

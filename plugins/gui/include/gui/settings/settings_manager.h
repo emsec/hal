@@ -98,7 +98,7 @@ namespace hal
 
         /**
          * Write widgets location and geometry to the user settings file.
-         * @param anchor - One of L(eft), R(ight), B(ottom), T(ab)
+         * @param anchorPos - One of L(eft), R(ight), B(ottom), T(ab)
          * @param widgets - List of widgets in that anchor
          */
         void widgetsSaveGeometry(ContentLayout::Position anchorPos, QList<const ContentWidget*>& widgets);

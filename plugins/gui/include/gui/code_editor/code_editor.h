@@ -71,8 +71,8 @@ namespace hal
          *
          * @param object - The object this filter is applied on.
          * @param event - The event to filter
-         * @returns true if the event is handled by this filter and shouldn't be processed any further by the target
-         *          object. Returns false to pass the event to the target object.
+         * @returns `true` if the event is handled by this filter and shouldn't be processed any further by the target, `false` otherwise.
+         *          object. Returns `false` to pass the event to the target object.
          */
         virtual bool eventFilter(QObject* object, QEvent* event) override;
 
@@ -158,28 +158,28 @@ namespace hal
         /**
          * Enables or disables the line numbers.
          *
-         * @param enabled - True to enable, False to disable.
+         * @param enabled - `true` to enable, `false` to disable.
          */
         void setLineNumberEnabled(bool enabled);
 
         /**
          * Enables or disables the highlight of the current line.
          *
-         * @param enabled - True to enable, False to disable.
+         * @param enabled - `true` to enable, `false` to disable.
          */
         void setHighlightCurrentLineEnabled(bool enabled);
 
         /**
          * Enables or disables the linewrap.
          *
-         * @param enabled - True to enable, False to disable.
+         * @param enabled - `true` to enable, `false` to disable.
          */
         void setLineWrapEnabled(bool enabled);
 
         /**
          * Enables or disables the minimap.
          *
-         * @param enabled - True to enable, False to disable.
+         * @param enabled - `true` to enable, `false` to disable.
          */
         void setMinimapEnabled(bool enabled);
 
@@ -188,7 +188,7 @@ namespace hal
          * Marks all occurrences of the specified string in the code editor.
          *
          * @param string - The string to mark
-         * @param options - Optional QTextDocument::FindFlags (e.g. "FindCaseSensitively" or "FindWholeWords")
+         * @param searchOpts - Optional search options bitmask (e.g. "FindCaseSensitively" or "FindWholeWords")
          */
         void search(const QString& string, SearchOptions searchOpts = 8);
 

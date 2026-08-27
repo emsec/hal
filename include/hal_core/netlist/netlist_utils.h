@@ -35,9 +35,10 @@ namespace hal
     class Net;
 
     /**
+     * Contains various utility functions that operate on a netlist without modifying it, e.g., traversal and analysis helpers.
+     *
      * @ingroup netlist
      */
-
     namespace netlist_utils
     {
         /**
@@ -104,7 +105,7 @@ namespace hal
          * The result will not include the provided gate itself.
          *
          * @param[in] gate - The initial gate.
-         * @param[in] get_successors - True to return successors, false for Predecessors.
+         * @param[in] get_successors - `true` to return successors, `false` for Predecessors.
          * @param[in] depth - Depth of recursion.
          * @param[in] filter - User-defined filter function.
          * @return Vector of predecessor/successor gates.
@@ -117,11 +118,11 @@ namespace hal
          * Find predecessors or successors of a net. If depth is set to 1 only direct predecessors/successors will be returned. 
          * Higher number of depth causes as many steps of recursive calls. 
          * If depth is set to 0  there is no limitation and the loop continues until no more predecessors/succesors are found.
-         * If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
+         * If a filter function is given, the recursion stops whenever the filter function evaluates to `false`. 
          * Only gates matching the filter will be added to the result vector.
          *
          * @param[in] net - The initial net.
-         * @param[in] get_successors - True to return successors, false for Predecessors.
+         * @param[in] get_successors - `true` to return successors, `false` for Predecessors.
          * @param[in] depth - Depth of recursion.
          * @param[in] filter - User-defined filter function.
          * @return Vector of predecessor/successor gates.
@@ -139,7 +140,7 @@ namespace hal
          * Different caches for different values of get_successors shall be used.
          *
          * @param[in] gate - The initial gate.
-         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @param[in] get_successors - If `true`, sequential successors are returned, otherwise sequential predecessors are returned.
          * @param[inout] cache - The cache. 
          * @returns All sequential successors or predecessors of the gate.
          */
@@ -153,7 +154,7 @@ namespace hal
          * The result may include the provided gate itself.
          *
          * @param[in] gate - The initial gate.
-         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @param[in] get_successors - If `true`, sequential successors are returned, otherwise sequential predecessors are returned.
          * @returns All sequential successors or predecessors of the gate.
          */
         [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_next_sequential_gates instead.")]] CORE_API std::vector<Gate*>
@@ -168,7 +169,7 @@ namespace hal
          * Different caches for different values of get_successors shall be used.
          *
          * @param[in] net - The initial net.
-         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @param[in] get_successors - If `true`, sequential successors are returned, otherwise sequential predecessors are returned.
          * @param[inout] cache - The cache. 
          * @returns All sequential successors or predecessors of the net.
          */
@@ -181,7 +182,7 @@ namespace hal
          * Traverses combinational logic of all input or output nets until sequential gates are found.
          *
          * @param[in] net - The initial net.
-         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @param[in] get_successors - If `true`, sequential successors are returned, otherwise sequential predecessors are returned.
          * @returns All sequential successors or predecessors of the net.
          */
         [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_next_sequential_gates instead.")]] CORE_API std::vector<Gate*>
@@ -196,7 +197,7 @@ namespace hal
          * Different caches for different values of get_successors shall be used.
          *
          * @param[in] gate - The initial gate.
-         * @param[in] get_successors - If true, the successor path is returned, otherwise the predecessor path is returned.
+         * @param[in] get_successors - If `true`, the successor path is returned, otherwise the predecessor path is returned.
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @param[inout] cache - The cache. 
          * @returns All gates on the predecessor or successor path of the gate.
@@ -209,7 +210,7 @@ namespace hal
          * The result may include the provided gate itself.
          *
          * @param[in] gate - The initial gate.
-         * @param[in] get_successors - If true, the successor path is returned, otherwise the predecessor path is returned.
+         * @param[in] get_successors - If `true`, the successor path is returned, otherwise the predecessor path is returned.
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @returns All gates on the predecessor or successor path of the gate.
          */
@@ -223,7 +224,7 @@ namespace hal
          * Different caches for different values of get_successors shall be used.
          *
          * @param[in] net - The initial net.
-         * @param[in] get_successors - If true, the successor path is returned, otherwise the predecessor path is returned.
+         * @param[in] get_successors - If `true`, the successor path is returned, otherwise the predecessor path is returned.
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @param[inout] cache - The cache. 
          * @returns All gates on the predecessor or successor path of the net.
@@ -235,7 +236,7 @@ namespace hal
          * Traverses all input or output nets until gates of the specified base types are found.
          *
          * @param[in] net - The initial net.
-         * @param[in] get_successors - If true, the successor path is returned, otherwise the predecessor path is returned.
+         * @param[in] get_successors - If `true`, the successor path is returned, otherwise the predecessor path is returned.
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @returns All gates on the predecessor or successor path of the net.
          */
@@ -335,32 +336,32 @@ namespace hal
                                                                    const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
-         * Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with the end gate. 
+         * Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with the end gate. 
          * The gate where the search started from will be the first in the result vector, the end gate will be the last. 
          * If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
          *
          * @param[in] start_gate - The gate to start from.
          * @param[in] end_gate - The gate to connect to.
-         * @param[in] search_both_directions - True to additionally check whether a shorter path from end to start exists, false otherwise.
+         * @param[in] search_both_directions - `true` to additionally check whether a shorter path from end to start exists, `false` otherwise.
          * @return A vector of gates that connect the start with end gate (possibly in reverse order).
          */
         CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);
 
         /**
-         * Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with any gate from the given module.
+         * Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with any gate from the given module.
          * The gate where the search started from will be the first in the result vector, the end gate will be the last.
          * If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
          *
          * @param[in] start_gate - The gate to start from.
          * @param[in] end_module - The module to connect to.
-         * @param[in] search_both_directions - True to additionally check whether a shorter path from end to start exists, false otherwise.
+         * @param[in] forward_direction - `true` to search along the fan-out nets of the start gate, `false` to search along its fan-in nets.
          * @return A vector of gates that connect the start with end gate (possibly in reverse order).
          */
         CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Module* end_module, bool forward_direction);
 
 
         /**
-         * Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start module with the target module.
+         * Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start module with the target module.
          * There might be more than one connection thus a vector of connecting gate vectors is returned. In each connecting gate vector
          *gate where the search started from will be the first, the end gate will be the last.
          * If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.

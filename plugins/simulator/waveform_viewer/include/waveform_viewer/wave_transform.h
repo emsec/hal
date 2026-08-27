@@ -30,6 +30,9 @@
 namespace hal {
     class WaveScrollbar;
 
+    /**
+     * The mapping between simulation time and horizontal scene coordinates, i.e., the current zoom level.
+     */
     class WaveTransform
     {
         quint64 mTmin;
@@ -50,6 +53,9 @@ namespace hal {
         void setScale(double m11) { mMag = m11; }
     };
 
+    /**
+     * A snapshot of the zoom level and the horizontal offset, used to tell whether a rendered waveform is still valid.
+     */
     class WaveZoomShift
     {
         double mScale;

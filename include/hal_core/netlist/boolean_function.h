@@ -107,7 +107,7 @@ namespace hal
          * Output stream operator that forwards `to_string` of a value.
          *
          * @param[in] os - The stream to write to.
-         * @param[in] value - The value.
+         * @param[in] v - The value.
          * @returns A reference to output stream.
          */
         friend std::ostream& operator<<(std::ostream& os, Value v);
@@ -443,7 +443,7 @@ namespace hal
         static Result<BooleanFunction> Ult(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
-         * Joins three Boolean functions by an if-then-else operation with p0 as the condition, p1 as true-case, and p2 as false-case.
+         * Joins three Boolean functions by an if-then-else operation with p0 as the condition, p1 as `true`-case, and p2 as `false`-case.
          * Requires `p1` to be of bit-size 1 and both Boolean functions `p1` and `p2` to be of the same bit-size.
          * Produces a new Boolean function of the specified bit-size that must be equal to the size of `p1` and `p2`.
          * 
@@ -725,7 +725,7 @@ namespace hal
         /**
          * Get the index value of the top-level node of the Boolean function of type `Index`.
          * 
-         * @returns The constant value on success, an error otherwise.
+         * @returns The index value on success, an error otherwise.
          */
         Result<u16> get_index_value() const;
 
@@ -865,6 +865,12 @@ namespace hal
          * @param[in] remove_unknown_variables - Set `true` to remove variables from the truth table that are not present within the Boolean function, `false` otherwise. Defaults to `false`.
          * @returns Ok() and a vector of values representing the truth table output on success, an error otherwise.
          */
+        /**
+         * The maximum number of variables a truth table may be computed for. Each additional variable doubles the
+         * number of rows, so the limit bounds the runtime as well as the size of the result.
+         */
+        static constexpr u32 MAX_TRUTH_TABLE_VARIABLES = 20;
+
         Result<std::vector<std::vector<Value>>> compute_truth_table(const std::vector<std::string>& ordered_variables = {}, bool remove_unknown_variables = false) const;
 
         /**
@@ -962,6 +968,15 @@ namespace hal
         ////////////////////////////////////////////////////////////////////////
         // Member
         ////////////////////////////////////////////////////////////////////////
+
+        /**
+         * Compute the truth table of a single-bit function that only consists of bitwise operations, evaluating 64
+         * rows at a time. Returns an error for any other function, in which case the general implementation applies.
+         *
+         * @param[in] variables - The variables in the order they index the rows of the truth table.
+         * @returns The truth table on success, an error otherwise.
+         */
+        Result<std::vector<std::vector<Value>>> compute_truth_table_bitwise(const std::vector<std::string>& variables) const;
 
         /// refers to the list of nodes in reverse polish notation
         std::vector<BooleanFunction::Node> m_nodes{};

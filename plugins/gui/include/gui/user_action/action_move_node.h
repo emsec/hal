@@ -51,21 +51,17 @@ namespace hal
 
         bool checkContextId();
     public:
-        /**
-         * empty constructor
-         * @param ctxId
-         */
+        // empty constructor
+        //     ctxId - context
 
         /*ActionMoveNode(u32 ctxId)
              :mContextId(ctxId) {;}*/
-        /**
-         * Action constructor.
-         *
-         * The action object will be set by 'from' node
-         * @param ctxID - context
-         * @param from - The initial position of the node to move
-         * @param to - The destination of the node
-         */
+        // Action constructor.
+        //
+        // The action object will be set by 'from' node
+        //     ctxID - context
+        //     from  - The initial position of the node to move
+        //     to    - The destination of the node
        // ActionMoveNode(u32 ctxID, const QPoint& from, const QPoint& to, bool swap = false);
 
         /**
@@ -83,7 +79,7 @@ namespace hal
          * Will move the nodes according to GridPlacement position info,
          * no action object should be given
          *
-         * @param ctxID - context
+         * @param ctxId - context
          * @param gridPlc - The grid placement instance to copy (if any)
          */
         ActionMoveNode(u32 ctxId=0, const GridPlacement* gridPlc=nullptr);

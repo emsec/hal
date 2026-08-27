@@ -38,6 +38,9 @@ namespace hal {
 
     class Net;
 
+    /**
+     * A spin box that displays and accepts its value in hexadecimal notation.
+     */
     class LogicEvaluatorHexSpinbox : public QSpinBox
     {
         Q_OBJECT
@@ -49,6 +52,9 @@ namespace hal {
         LogicEvaluatorHexSpinbox(QWidget* parent = nullptr);
     };
 
+    /**
+     * A check box that represents the logic value of a single net.
+     */
     class LogicEvaluatorCheckBox : public QCheckBox
     {
         Q_OBJECT
@@ -59,6 +65,9 @@ namespace hal {
         void setValue(const Net* n, BooleanFunction::Value val);
     };
 
+    /**
+     * Displays the combined value of a whole pin group as a single number and allows the user to edit it.
+     */
     class LogicEvaluatorValue : public QWidget
     {
         Q_OBJECT
@@ -76,6 +85,9 @@ namespace hal {
         bool isLabel() const { return mLabel!=nullptr; }
     };
 
+    /**
+     * Groups the check boxes of all nets of a pin group together with the combined value of that group.
+     */
     class LogicEvaluatorPingroup : public QFrame
     {
         Q_OBJECT

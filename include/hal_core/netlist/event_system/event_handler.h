@@ -39,6 +39,9 @@ namespace hal
     class Module;
     class Grouping;
 
+    /**
+     * Holds the enumeration of all events that a netlist can emit.
+     */
     class NetlistEvent
     {
     public:
@@ -62,6 +65,9 @@ namespace hal
     template<>
     std::map<NetlistEvent::event, std::string> EnumStrings<NetlistEvent::event>::data;
 
+    /**
+     * Holds the enumeration of all events that a gate can emit.
+     */
     class GateEvent
     {
     public:
@@ -78,6 +84,9 @@ namespace hal
     template<>
     std::map<GateEvent::event, std::string> EnumStrings<GateEvent::event>::data;
 
+    /**
+     * Holds the enumeration of all events that a net can emit.
+     */
     class NetEvent
     {
     public:
@@ -96,6 +105,9 @@ namespace hal
     template<>
     std::map<NetEvent::event, std::string> EnumStrings<NetEvent::event>::data;
 
+    /**
+     * Holds the enumeration of all events that a module can emit.
+     */
     class ModuleEvent
     {
     public:
@@ -121,6 +133,9 @@ namespace hal
     template<>
     std::map<ModuleEvent::event, std::string> EnumStrings<ModuleEvent::event>::data;
 
+    /**
+     * Holds the enumeration of all events that a grouping can emit.
+     */
     class GroupingEvent
     {
     public:
@@ -142,6 +157,10 @@ namespace hal
     template<>
     std::map<GroupingEvent::event, std::string> EnumStrings<GroupingEvent::event>::data;
 
+    /**
+     * The event handler distributes the events emitted by the netlist and its elements to all registered callbacks.
+     * Callbacks are registered per event type and can be enabled or disabled individually.
+     */
     class EventHandler
     {
     private:
@@ -163,7 +182,7 @@ namespace hal
          * Enables/disables callbacks for all handler.<br>
          * Enabled by default.
          *
-         * @param[in] flag - True to enable, false to disable.
+         * @param[in] flag - `true` to enable, `false` to disable.
          */
         NETLIST_API void event_enable_all(bool flag);
 

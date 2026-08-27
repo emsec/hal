@@ -43,6 +43,9 @@ namespace hal {
 
     class BasePluginInterface;
 
+    /**
+     * The file chooser that is embedded into the plugin parameter dialog for file and directory parameters.
+     */
     class PluginParameterFileDialog : public QWidget
     {
         Q_OBJECT
@@ -58,6 +61,9 @@ namespace hal {
         QString getFilename() const;
     };
 
+    /**
+     * The picker that is embedded into the plugin parameter dialog for gate and module parameters.
+     */
     class PluginParameterNodeDialog : public QWidget
     {
         Q_OBJECT
@@ -79,6 +85,9 @@ namespace hal {
         int getNodeId() const;
     };
 
+    /**
+     * The dialog that renders the configurable parameters of a plugin and hands the entered values back to it.
+     */
     class PluginParameterDialog : public QDialog
     {
         Q_OBJECT

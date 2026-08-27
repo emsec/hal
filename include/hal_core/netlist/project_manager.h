@@ -77,14 +77,14 @@ namespace hal
         /**
          * Internal method to deserialize hal project, called by open_project()
          *
-         * @return true if OK, false if any error
+         * @return `true` on success, `false` otherwise.
          */
         bool deserialize();
 
         /**
          * Serialize project file summary to .project.json
-         * @param[in] shadow true if called from autosave procedure
-         * @return true if project file was written successfully, false otherwise
+         * @param[in] shadow `true` if called from autosave procedure
+         * @return `true` if project file was written successfully, `false` otherwise
          */
         bool serialize_to_projectfile(bool shadow) const;
 

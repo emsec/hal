@@ -30,6 +30,9 @@
 
 namespace hal
 {
+    /**
+     * The command line interface of the Python shell plugin.
+     */
     class CliExtensionPythonShell : public CliExtensionInterface
     {
     public:
@@ -43,9 +46,22 @@ namespace hal
          */
         ProgramOptions get_cli_options() const override;
 
-        virtual bool handle_cli_call(Netlist*, ProgramArguments&) override {return false; }
+        /**
+         * Reports that the call was not handled, which ends HAL with an error.
+         *
+         * CliExtensionInterface requires an implementation, but this one is never reached: the
+         * options declared above belong to a UI plugin, and main.cpp dispatches those through
+         * UIPluginInterface::exec and returns before it walks the CLI extensions.
+         */
+        virtual bool handle_cli_call(Netlist*, ProgramArguments&) override
+        {
+            return false;
+        }
     };
 
+    /**
+     * The plugin that provides an interactive Python shell on the command line.
+     */
     class PluginPythonShell : virtual public UIPluginInterface
     {
     public:
@@ -73,14 +89,18 @@ namespace hal
          * Excutes the plugin with given command line parameters.
          *
          * @param[in] args - The command line parameters.
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool exec(ProgramArguments& args) override;
 
         /**
-         * Nothing to do for GUI layout locker
-         * @param enable[in] unused
+         * Nothing to do for GUI layout locker.
+         *
+         * @param[in] enable - Unused.
          */
-        void set_layout_locker(bool) override {;}
+        void set_layout_locker(bool enable) override
+        {
+            UNUSED(enable);
+        }
     };
 }    // namespace hal

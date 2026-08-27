@@ -1222,6 +1222,335 @@ namespace hal {
         TEST_END
     }  
       
+    /**
+     * Testing that module pins are created and deleted automatically when gates are assigned to or removed from a module.
+     *
+     * Functions: assign_gate, remove_gate, get_pins, get_pin_by_net
+     */
+    TEST_F(ModuleTest, check_pins_on_gate_assignment) {
+        TEST_START
+            auto nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+
+            Gate* gate_in  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_in");
+            Gate* gate_mid = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_mid");
+            Gate* gate_out = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_out");
+            ASSERT_NE(gate_in, nullptr);
+            ASSERT_NE(gate_mid, nullptr);
+            ASSERT_NE(gate_out, nullptr);
+
+            Net* net_in  = test_utils::connect(nl.get(), gate_in, "O", gate_mid, "I");
+            Net* net_out = test_utils::connect(nl.get(), gate_mid, "O", gate_out, "I");
+            ASSERT_NE(net_in, nullptr);
+            ASSERT_NE(net_out, nullptr);
+
+            Module* test_module = nl->create_module("test_module", nl->get_top_module());
+            ASSERT_NE(test_module, nullptr);
+
+            // an empty module has no pins at all
+            EXPECT_TRUE(test_module->get_pins().empty());
+            EXPECT_TRUE(test_module->get_pin_groups().empty());
+
+            // assigning the gate in the middle turns both of its nets into boundary nets
+            ASSERT_TRUE(test_module->assign_gate(gate_mid));
+            ASSERT_EQ(test_module->get_pins().size(), 2);
+            ASSERT_EQ(test_module->get_pin_groups().size(), 2);
+
+            ModulePin* pin_in = test_module->get_pin_by_net(net_in);
+            ASSERT_NE(pin_in, nullptr);
+            EXPECT_EQ(pin_in->get_direction(), PinDirection::input);
+            EXPECT_EQ(pin_in->get_name(), "I(0)");
+            EXPECT_EQ(test_module->get_pin_by_id(pin_in->get_id()), pin_in);
+            EXPECT_EQ(test_module->get_pin_by_name(pin_in->get_name()), pin_in);
+
+            ModulePin* pin_out = test_module->get_pin_by_net(net_out);
+            ASSERT_NE(pin_out, nullptr);
+            EXPECT_EQ(pin_out->get_direction(), PinDirection::output);
+            EXPECT_EQ(pin_out->get_name(), "O(0)");
+
+            // every automatically created pin sits in a group of its own that carries the same name
+            EXPECT_EQ(pin_in->get_group().first->get_name(), pin_in->get_name());
+            EXPECT_EQ(pin_in->get_group().first->size(), 1);
+            EXPECT_EQ(pin_out->get_group().first->get_name(), pin_out->get_name());
+            EXPECT_EQ(pin_out->get_group().first->size(), 1);
+
+            // pulling the source of the input net into the module turns that net internal, so its pin goes away
+            ASSERT_TRUE(test_module->assign_gate(gate_in));
+            EXPECT_EQ(test_module->get_pin_by_net(net_in), nullptr);
+            EXPECT_TRUE(test_module->is_internal_net(net_in));
+            ASSERT_EQ(test_module->get_pins().size(), 1);
+            ASSERT_EQ(test_module->get_pin_groups().size(), 1);
+            EXPECT_EQ(test_module->get_pin_by_net(net_out), pin_out);
+
+            // removing the gate again makes the net a boundary net once more
+            ASSERT_TRUE(test_module->remove_gate(gate_in));
+            ASSERT_EQ(test_module->get_pins().size(), 2);
+            ModulePin* pin_in_again = test_module->get_pin_by_net(net_in);
+            ASSERT_NE(pin_in_again, nullptr);
+            EXPECT_EQ(pin_in_again->get_direction(), PinDirection::input);
+
+            // emptying the module removes every pin
+            ASSERT_TRUE(test_module->remove_gate(gate_mid));
+            EXPECT_TRUE(test_module->get_pins().empty());
+            EXPECT_TRUE(test_module->get_pin_groups().empty());
+        TEST_END
+    }
+
+    /**
+     * Testing that the direction of a module pin follows the connectivity of its net, including the inout case.
+     *
+     * Functions: assign_gate, remove_gate, get_pin_by_net
+     */
+    TEST_F(ModuleTest, check_pin_direction_transitions) {
+        TEST_START
+            auto nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+
+            // two sources and two destinations on a single net, so that the net can be split between inside and outside
+            Gate* src_in   = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "src_in");
+            Gate* src_out  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "src_out");
+            Gate* dst_in   = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "dst_in");
+            Gate* dst_out  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "dst_out");
+            ASSERT_NE(src_in, nullptr);
+            ASSERT_NE(src_out, nullptr);
+            ASSERT_NE(dst_in, nullptr);
+            ASSERT_NE(dst_out, nullptr);
+
+            Net* net = nl->create_net("shared_net");
+            ASSERT_NE(net, nullptr);
+            ASSERT_NE(net->add_source(src_in, "O"), nullptr);
+            ASSERT_NE(net->add_source(src_out, "O"), nullptr);
+            ASSERT_NE(net->add_destination(dst_in, "I"), nullptr);
+            ASSERT_NE(net->add_destination(dst_out, "I"), nullptr);
+
+            Module* test_module = nl->create_module("test_module", nl->get_top_module());
+            ASSERT_NE(test_module, nullptr);
+
+            // only an internal destination: the net enters the module
+            ASSERT_TRUE(test_module->assign_gate(dst_in));
+            ModulePin* pin = test_module->get_pin_by_net(net);
+            ASSERT_NE(pin, nullptr);
+            EXPECT_EQ(pin->get_direction(), PinDirection::input);
+            const u32 pin_id = pin->get_id();
+
+            // adding an internal source while a source and a destination remain outside makes the pin bidirectional
+            ASSERT_TRUE(test_module->assign_gate(src_in));
+            ASSERT_EQ(test_module->get_pin_by_net(net), pin);
+            EXPECT_EQ(pin->get_direction(), PinDirection::inout);
+            EXPECT_EQ(pin->get_id(), pin_id) << "the pin is expected to be updated in place rather than recreated";
+            EXPECT_TRUE(test_module->is_input_net(net));
+            EXPECT_TRUE(test_module->is_output_net(net));
+            EXPECT_TRUE(test_module->is_internal_net(net));
+
+            // pulling the remaining external destination inside leaves an external source feeding internal
+            // destinations only, so the net is an input again and the pin drops back from inout to input
+            ASSERT_TRUE(test_module->assign_gate(dst_out));
+            ASSERT_EQ(test_module->get_pin_by_net(net), pin);
+            EXPECT_EQ(pin->get_direction(), PinDirection::input);
+            EXPECT_TRUE(test_module->is_input_net(net));
+            EXPECT_FALSE(test_module->is_output_net(net));
+
+            // conversely, keeping the external destination and pulling the external source inside makes it an output
+            ASSERT_TRUE(test_module->remove_gate(dst_out));
+            ASSERT_TRUE(test_module->assign_gate(src_out));
+            ASSERT_EQ(test_module->get_pin_by_net(net), pin);
+            EXPECT_EQ(pin->get_direction(), PinDirection::output);
+            EXPECT_FALSE(test_module->is_input_net(net));
+            EXPECT_TRUE(test_module->is_output_net(net));
+
+            // with every endpoint inside, the net is purely internal and the pin disappears
+            ASSERT_TRUE(test_module->assign_gate(dst_out));
+            EXPECT_EQ(test_module->get_pin_by_net(net), nullptr);
+            EXPECT_TRUE(test_module->get_pins().empty());
+            EXPECT_TRUE(test_module->is_internal_net(net));
+            EXPECT_FALSE(test_module->is_input_net(net));
+            EXPECT_FALSE(test_module->is_output_net(net));
+        TEST_END
+    }
+
+    /**
+     * Testing that module pins are kept up to date in all ancestors of a module, and when a module is re-parented.
+     *
+     * Functions: assign_gate, set_parent_module, get_pin_by_net
+     */
+    TEST_F(ModuleTest, check_pins_of_parent_modules) {
+        TEST_START
+            auto nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+
+            Gate* gate_outside = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_outside");
+            Gate* gate_inside  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_inside");
+            ASSERT_NE(gate_outside, nullptr);
+            ASSERT_NE(gate_inside, nullptr);
+
+            Net* net = test_utils::connect(nl.get(), gate_outside, "O", gate_inside, "I");
+            ASSERT_NE(net, nullptr);
+
+            Module* parent = nl->create_module("parent", nl->get_top_module());
+            Module* child  = nl->create_module("child", parent);
+            Module* other  = nl->create_module("other", nl->get_top_module());
+            ASSERT_NE(parent, nullptr);
+            ASSERT_NE(child, nullptr);
+            ASSERT_NE(other, nullptr);
+
+            // assigning the gate to the child creates a pin on the child and on every ancestor
+            ASSERT_TRUE(child->assign_gate(gate_inside));
+            ASSERT_NE(child->get_pin_by_net(net), nullptr);
+            EXPECT_EQ(child->get_pin_by_net(net)->get_direction(), PinDirection::input);
+            ASSERT_NE(parent->get_pin_by_net(net), nullptr);
+            EXPECT_EQ(parent->get_pin_by_net(net)->get_direction(), PinDirection::input);
+            EXPECT_EQ(other->get_pin_by_net(net), nullptr);
+
+            // moving the child to another parent moves the pin along with it
+            ASSERT_TRUE(child->set_parent_module(other));
+            EXPECT_EQ(child->get_parent_module(), other);
+            ASSERT_NE(child->get_pin_by_net(net), nullptr);
+            ASSERT_NE(other->get_pin_by_net(net), nullptr);
+            EXPECT_EQ(other->get_pin_by_net(net)->get_direction(), PinDirection::input);
+            EXPECT_EQ(parent->get_pin_by_net(net), nullptr) << "the former parent no longer contains the gate";
+            EXPECT_TRUE(parent->get_pins().empty());
+        TEST_END
+    }
+
+    /**
+     * Testing that marking a net as a global input or output creates the corresponding module pin.
+     *
+     * Functions: mark_global_input_net, mark_global_output_net, unmark_global_input_net, unmark_global_output_net
+     */
+    TEST_F(ModuleTest, check_pins_on_global_net_marking) {
+        TEST_START
+            auto nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+
+            Gate* gate_0 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
+            Gate* gate_1 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_1");
+            ASSERT_NE(gate_0, nullptr);
+            ASSERT_NE(gate_1, nullptr);
+
+            Net* net = test_utils::connect(nl.get(), gate_0, "O", gate_1, "I");
+            ASSERT_NE(net, nullptr);
+
+            Module* test_module = nl->create_module("test_module", nl->get_top_module());
+            ASSERT_NE(test_module, nullptr);
+            ASSERT_TRUE(test_module->assign_gates({gate_0, gate_1}));
+
+            // both endpoints are inside, so the net is internal and has no pin
+            EXPECT_EQ(test_module->get_pin_by_net(net), nullptr);
+            EXPECT_TRUE(test_module->is_internal_net(net));
+
+            // marking the net as a global output adds an external destination and therefore an output pin
+            ASSERT_TRUE(nl->mark_global_output_net(net));
+            ModulePin* pin = test_module->get_pin_by_net(net);
+            ASSERT_NE(pin, nullptr);
+            EXPECT_EQ(pin->get_direction(), PinDirection::output);
+            EXPECT_TRUE(test_module->is_output_net(net));
+
+            // marking it as a global input as well adds an external source, making the pin bidirectional
+            ASSERT_TRUE(nl->mark_global_input_net(net));
+            ASSERT_EQ(test_module->get_pin_by_net(net), pin);
+            EXPECT_EQ(pin->get_direction(), PinDirection::inout);
+
+            // undoing both marks makes the net internal again and removes the pin
+            ASSERT_TRUE(nl->unmark_global_input_net(net));
+            ASSERT_TRUE(nl->unmark_global_output_net(net));
+            EXPECT_EQ(test_module->get_pin_by_net(net), nullptr);
+            EXPECT_TRUE(test_module->get_pins().empty());
+        TEST_END
+    }
+
+    /**
+     * Testing the behavior of module pins while the automatic net checks are disabled, which is how the parsers,
+     * the serializer, and the netlist copy avoid recomputing pins for every single change.
+     *
+     * Functions: enable_automatic_net_checks, update_nets, create_pin
+     */
+    TEST_F(ModuleTest, check_pins_with_disabled_net_checks) {
+        TEST_START
+            auto nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+
+            Gate* gate_in  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_in");
+            Gate* gate_mid = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_mid");
+            Gate* gate_out = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_out");
+            ASSERT_NE(gate_in, nullptr);
+            ASSERT_NE(gate_mid, nullptr);
+            ASSERT_NE(gate_out, nullptr);
+
+            Net* net_in  = test_utils::connect(nl.get(), gate_in, "O", gate_mid, "I");
+            Net* net_out = test_utils::connect(nl.get(), gate_mid, "O", gate_out, "I");
+            ASSERT_NE(net_in, nullptr);
+            ASSERT_NE(net_out, nullptr);
+
+            Module* test_module = nl->create_module("test_module", nl->get_top_module());
+            ASSERT_NE(test_module, nullptr);
+
+            nl->enable_automatic_net_checks(false);
+
+            // without the automatic checks, neither the net sets nor the pins are updated
+            ASSERT_TRUE(test_module->assign_gate(gate_mid));
+            EXPECT_TRUE(test_module->get_pins().empty());
+            EXPECT_TRUE(test_module->get_nets().empty());
+            EXPECT_TRUE(test_module->get_input_nets().empty());
+            EXPECT_TRUE(test_module->get_output_nets().empty());
+
+            // update_nets recomputes the net sets, but deliberately does not create any pin
+            test_module->update_nets();
+            EXPECT_EQ(test_module->get_input_nets(), std::unordered_set<Net*>({net_in}));
+            EXPECT_EQ(test_module->get_output_nets(), std::unordered_set<Net*>({net_out}));
+            EXPECT_EQ(test_module->get_nets(), std::unordered_set<Net*>({net_in, net_out}));
+            EXPECT_TRUE(test_module->get_pins().empty());
+
+            // while the checks are disabled, pins are created manually, which is what the parsers do
+            auto pin_res = test_module->create_pin("my_input", net_in, PinType::none, true, false);
+            ASSERT_TRUE(pin_res.is_ok());
+            ModulePin* pin = pin_res.get();
+            ASSERT_NE(pin, nullptr);
+            EXPECT_EQ(pin->get_direction(), PinDirection::input);
+            EXPECT_EQ(pin->get_name(), "my_input");
+            EXPECT_EQ(test_module->get_pin_by_net(net_in), pin);
+
+            // re-enabling the checks does not retroactively repair anything
+            nl->enable_automatic_net_checks(true);
+            EXPECT_EQ(test_module->get_pins().size(), 1);
+            EXPECT_EQ(test_module->get_pin_by_net(net_out), nullptr);
+
+            // the next change that touches the module runs the checks again and completes the pins
+            ASSERT_TRUE(test_module->assign_gate(gate_out));
+            EXPECT_TRUE(test_module->is_internal_net(net_out));
+            EXPECT_EQ(test_module->get_pin_by_net(net_in), pin) << "the manually created pin is expected to survive";
+            EXPECT_EQ(pin->get_name(), "my_input");
+        TEST_END
+    }
+
+    /**
+     * Testing that manual pin creation is rejected while the automatic net checks are enabled.
+     *
+     * Functions: create_pin
+     */
+    TEST_F(ModuleTest, check_manual_pin_creation_requires_disabled_checks) {
+        TEST_START
+            NO_COUT_TEST_BLOCK;
+            auto nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+
+            Gate* gate_0 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
+            Gate* gate_1 = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "gate_1");
+            ASSERT_NE(gate_0, nullptr);
+            ASSERT_NE(gate_1, nullptr);
+
+            Net* net = test_utils::connect(nl.get(), gate_0, "O", gate_1, "I");
+            ASSERT_NE(net, nullptr);
+
+            Module* test_module = nl->create_module("test_module", nl->get_top_module());
+            ASSERT_NE(test_module, nullptr);
+            ASSERT_TRUE(test_module->assign_gate(gate_1));
+
+            // the pin for the boundary net already exists, creating it manually must fail
+            ASSERT_NE(test_module->get_pin_by_net(net), nullptr);
+            EXPECT_TRUE(test_module->create_pin("manual", net, PinType::none, true, false).is_error());
+        TEST_END
+    }
+
     /*************************************
      * Event System
      *************************************/

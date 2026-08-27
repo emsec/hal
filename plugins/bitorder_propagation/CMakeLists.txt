@@ -12,4 +12,6 @@ if(PL_BITORDER_PROPAGATION OR BUILD_ALL_PLUGINS)
         PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/bitorder_propagation.rst
         LINK_LIBRARIES nlohmann_json::nlohmann_json
     )
+
+    add_subdirectory(test)
 endif()

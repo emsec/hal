@@ -32,6 +32,9 @@ namespace hal
     class Module;
     class Net;
 
+    /**
+     * Shows the name, ID, type, and contents of the selected module.
+     */
     class ModuleInfoTable : public GeneralTableWidget
     {
         Q_OBJECT
@@ -133,7 +136,7 @@ namespace hal
         QString numberOfInternalNets() const;
 
         /**
-         * Returns True as a QString if the module is the top module, False otherwise.
+         * Returns `true` as a QString if the module is the top module, `false` otherwise.
          */
         QString isTopModule() const;
 

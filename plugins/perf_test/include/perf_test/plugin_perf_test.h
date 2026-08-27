@@ -35,6 +35,9 @@ namespace hal
 
     /* forward declaration */
 
+    /**
+     * The command line interface of the performance test plugin.
+     */
     class CliExtensionsPerfTest : public CliExtensionInterface
     {
         PerfTestPlugin* mParent;
@@ -48,6 +51,9 @@ namespace hal
         bool handle_cli_call(hal::Netlist* nl, hal::ProgramArguments& args) override;
     };
 
+    /**
+     * The plugin that runs performance benchmarks against HAL's netlist API.
+     */
     class PLUGIN_API PerfTestPlugin : public BasePluginInterface
     {
     public:

@@ -96,12 +96,12 @@ namespace hal
             py::arg("bf"),
             py::arg("num_evaluations") = 32000,
             R"(
-            Generates the Boolean influence of each input variable of a Boolean function using the internal HAL functions only
-            The function is slower, but can be better used in multithreading enviroment.
+            Compute the Boolean influence of each input variable of a Boolean function.
+            The influence is approximated by evaluating the function on randomly sampled input assignments.
 
             :param hal_py.BooleanFunction bf: The Boolean function.
-            :param int num_evaluations: The amount of evaluations that are performed for each input variable.
-            :returns: A dict from the variables that appear in the function to their Boolean influence on said function on success, None otherwise.
+            :param int num_evaluations: The number of evaluations that are performed for each input variable.
+            :returns: A dict from each variable of the function to its Boolean influence on success, ``None`` otherwise.
             :rtype: dict[str,float] or None
         )");
 
@@ -122,12 +122,13 @@ namespace hal
             py::arg("bf"),
             py::arg("num_evaluations") = 32000,
             R"(
-            The Boolean function gets translated to a z3::expr and afterwards efficient c code.
-            The program is compiled and executed many times to measure the Boolean influence of each input variable.
+            Compute the Boolean influence of each input variable of a Boolean function using only HAL-internal functionality.
+            The influence is approximated by evaluating the function on randomly sampled input assignments.
+            This variant is slower than ``get_boolean_influence``, but it is better suited for use in a multi-threaded environment.
 
             :param hal_py.BooleanFunction bf: The Boolean function.
-            :param int num_evaluations: The amount of evaluations that are performed for each input variable.
-            :returns: A dict from the variables that appear in the function to their Boolean influence on said function on success, None otherwise.
+            :param int num_evaluations: The number of evaluations that are performed for each input variable.
+            :returns: A dict from each variable of the function to its Boolean influence on success, ``None`` otherwise.
             :rtype: dict[str,float] or None
         )");
 
@@ -148,12 +149,13 @@ namespace hal
             py::arg("bf"),
             py::arg("num_evaluations") = 32000,
             R"(
-            Generates the Boolean influence of each input variable of a Boolean function using z3 expressions and substitutions/simplifications only.
-            The function is slower, but can be better used in multithreading environment.
+            Compute the Boolean influence of each input variable of a Boolean function using only z3 substitution and simplification.
+            The influence is approximated by evaluating the function on randomly sampled input assignments.
+            This variant is slower than ``get_boolean_influence``, but it is better suited for use in a multi-threaded environment.
 
             :param hal_py.BooleanFunction bf: The Boolean function.
-            :param int num_evaluations: The amount of evaluations that are performed for each input variable.
-            :returns: A dict from the variables that appear in the function to their Boolean influence on said function on success, None otherwise.
+            :param int num_evaluations: The number of evaluations that are performed for each input variable.
+            :returns: A dict from each variable of the function to its Boolean influence on success, ``None`` otherwise.
             :rtype: dict[str,float] or None
         )");
 
@@ -175,13 +177,14 @@ namespace hal
             py::arg("start_net"),
             py::arg("num_evaluations") = 32000,
             R"(
-            Generates the function of the net using only the given gates.
-            Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.
+            Compute the Boolean influence of each input net of a subcircuit on one of its output nets.
+            The Boolean function of the start net is built from the given gates, translated into C code, and then compiled and executed for speed.
+            The influence is approximated by evaluating that function on randomly sampled input assignments.
 
             :param list[hal_py.Gate] gates: The gates of the subcircuit.
             :param hal_py.Net start_net: The output net of the subcircuit at which to start the analysis.
-            :param int num_evaluations: The amount of evaluations that are performed for each input variable.
-            :returns: A dict from the nets that appear in the function of the start net to their Boolean influence on said function on success, None otherwise.
+            :param int num_evaluations: The number of evaluations that are performed for each input variable.
+            :returns: A dict from each input net of the subcircuit to its Boolean influence on the start net on success, ``None`` otherwise.
             :rtype: dict[hal_py.Net,float] or None
         )");
 
@@ -202,12 +205,13 @@ namespace hal
             py::arg("gate"),
             py::arg("num_evaluations") = 32000,
             R"(
-            Generates the function of the dataport net of the given flip-flop.
-            Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.
+            Compute the Boolean influence of each net that drives the data input of the given flip-flop.
+            The Boolean function of the data input net is built, translated into C code, and then compiled and executed for speed.
+            The influence is approximated by evaluating that function on randomly sampled input assignments.
 
-            :param hal_py.Gate gate: The flip-flop which data input net is used to build the boolean function.
-            :param int num_evaluations: The amount of evaluations that are performed for each input variable.
-            :returns: A dict from the nets that appear in the function of the data net to their Boolean influence on said function on success, None otherwise.
+            :param hal_py.Gate gate: The flip-flop whose data input net is used to build the Boolean function.
+            :param int num_evaluations: The number of evaluations that are performed for each input variable.
+            :returns: A dict from each net of the function to its Boolean influence on the data input net on success, ``None`` otherwise.
             :rtype: dict[hal_py.Net,float]
         )");
 
@@ -227,11 +231,12 @@ namespace hal
             },
             py::arg("bf"),
             R"(
-            The Boolean function gets translated to a z3::expr and afterwards efficient c code.
-            The program is compiled and executed exactly once for every possible input mapping to accurately determine the boolean influence of each variable.
+            Compute the exact Boolean influence of each input variable of a Boolean function.
+            In contrast to ``get_boolean_influence``, the function is evaluated on every possible input assignment instead of a random sample.
+            This is only feasible for functions of at most 16 variables.
 
             :param hal_py.BooleanFunction bf: The Boolean function.
-            :returns: A dict from the variables that appear in the function to their Boolean influence on said function on success, None otherwise.
+            :returns: A dict from each variable of the function to its Boolean influence on success, ``None`` otherwise.
             :rtype: dict[str,float] or None
         )");
 
@@ -252,12 +257,13 @@ namespace hal
             py::arg("gates"),
             py::arg("start_net"),
             R"(
-            Generates the function of the net using only the given gates.
-            Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.
+            Compute the exact Boolean influence of each input net of a subcircuit on one of its output nets.
+            In contrast to ``get_boolean_influences_of_subcircuit``, the function is evaluated on every possible input assignment instead of a random sample.
+            This is only feasible for subcircuits with at most 16 input nets.
 
             :param list[hal_py.Gate] gates: The gates of the subcircuit.
             :param hal_py.Net start_net: The output net of the subcircuit at which to start the analysis.
-            :returns: A dict from the nets that appear in the function of the start net to their Boolean influence on said function on success, None otherwise.
+            :returns: A dict from each input net of the subcircuit to its Boolean influence on the start net on success, ``None`` otherwise.
             :rtype: dict[hal_py.Net,float] or None
         )");
 
@@ -277,11 +283,12 @@ namespace hal
             },
             py::arg("gate"),
             R"(
-            Generates the function of the dataport net of the given flip-flop.
-            Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.
+            Compute the exact Boolean influence of each net that drives the data input of the given flip-flop.
+            In contrast to ``get_boolean_influences_of_gate``, the function is evaluated on every possible input assignment instead of a random sample.
+            This is only feasible for data input functions of at most 16 nets.
 
-            :param hal_py.Gate gate: The flip-flop which data input net is used to build the boolean function.
-            :returns: A dict from the nets that appear in the function of the data net to their Boolean influence on said function on success, None otherwise.
+            :param hal_py.Gate gate: The flip-flop whose data input net is used to build the Boolean function.
+            :returns: A dict from each net of the function to its Boolean influence on the data input net on success, ``None`` otherwise.
             :rtype: dict[hal_py.Net,float]
         )");
 
@@ -302,12 +309,12 @@ namespace hal
             py::arg("netlist"),
             py::arg("with_boolean_influence"),
             R"(
-            Get the FF dependency matrix of a netlist, with or without boolean influences.
+            Get the flip-flop dependency matrix of a netlist, i.e., a matrix that holds an entry for every pair of flip-flops that are connected through combinational logic.
 
             :param hal_py.Netlist netlist: The netlist to extract the dependency matrix from.
-            :param bool with_boolean_influence: True -- set boolean influence, False -- sets 1.0 if connection between FFs
-            :returns: A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
-            :rtype: pair(dict(int, hal_py.Gate), list[list[double]])
+            :param bool with_boolean_influence: Set ``True`` to use the Boolean influence as the matrix entry, ``False`` to use ``1.0`` for every connection.
+            :returns: A tuple consisting of a dict from the original gate IDs to the corresponding matrix indices and the flip-flop dependency matrix itself, ``None`` otherwise.
+            :rtype: tuple(dict[int,hal_py.Gate], list[list[float]]) or None
         )");
         ;
 

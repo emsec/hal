@@ -45,6 +45,9 @@ namespace hal
     class Gate;
     class Net;
 
+    /**
+     * Provides graph representations of a netlist together with the graph algorithms that operate on them.
+     */
     namespace graph_algorithm
     {
         /**
@@ -92,10 +95,23 @@ namespace hal
              */
             NetlistGraph(Netlist* nl, igraph_t&& graph, std::unordered_map<u32, Gate*>&& nodes_to_gates);
 
-            /** 
+            /**
              * @brief Default destructor for `NetlistGraph`.
              */
             ~NetlistGraph();
+
+            /**
+             * `igraph_t` is a plain C struct holding heap pointers, so the implicitly generated copy
+             * operations would bitwise-copy `m_graph` and leave two `NetlistGraph` objects aliasing the
+             * same graph internals -- the destructor would then call `igraph_destroy()` on them twice, and
+             * the copy's `m_graph_ptr` would still point into the source object. Every factory hands out a
+             * `std::unique_ptr<NetlistGraph>`, so nothing is meant to copy a graph in the first place;
+             * deleting the copy operations makes that invariant explicit and enforced at compile time
+             * instead of relying on convention.
+             */
+            NetlistGraph(const NetlistGraph&) = delete;
+
+            NetlistGraph& operator=(const NetlistGraph&) = delete;
 
             /**
              * @brief Create a directed graph from a netlist. 
@@ -120,6 +136,30 @@ namespace hal
              * @returns The netlist graph on success, an error otherwise.
              */
             static Result<std::unique_ptr<NetlistGraph>> from_netlist_no_edges(Netlist* nl, const std::vector<Gate*>& gates = {});
+
+            /**
+             * @brief Create a directed graph from a subset of the gates of a netlist.
+             *
+             * Only the given gates become vertices and only nets between two of them become edges, so the graph is a
+             * closed world irrespective of what the gates are connected to elsewhere in the netlist.
+             *
+             * Gates in `split_gates` are represented by two vertices instead of one: a primary vertex carrying only the
+             * outgoing edges of the gate and a shadow vertex carrying only its incoming edges. This breaks feedback
+             * through those gates, which makes a sequential loop such as the round function of a cipher acyclic without
+             * having to copy it into a netlist of its own. Both vertices resolve back to the same gate, so use
+             * `is_shadow_vertex` to tell the two roles apart. A shadow vertex is only created if the gate actually has
+             * incoming edges within the graph.
+             *
+             * Vertices are numbered in the order of `gates`, so pass them in a deterministic order to obtain a
+             * reproducible graph.
+             *
+             * @param[in] gates - The gates to include in the graph. Must all belong to the same netlist.
+             * @param[in] split_gates - The gates to represent by a primary and a shadow vertex. Gates that are not part of `gates` are ignored. Defaults to an empty set.
+             * @param[in] filter - An optional filter that is evaluated on every net considered as an edge. Defaults to `nullptr`.
+             * @returns The netlist graph on success, an error otherwise.
+             */
+            static Result<std::unique_ptr<NetlistGraph>>
+                from_gates(const std::vector<Gate*>& gates, const std::set<Gate*>& split_gates = {}, const std::function<bool(const Net*)>& filter = nullptr);
 
             /**
              * @brief Create a deep copy of the netlist graph.
@@ -245,6 +285,27 @@ namespace hal
             Result<u32> get_vertex_from_gate(Gate* g) const;
 
             /**
+             * @brief Check whether the specified vertex is a shadow vertex.
+             *
+             * A shadow vertex carries only the incoming edges of a gate that was split by `from_gates`, while the
+             * primary vertex of that gate carries only its outgoing edges. Both resolve to the same gate, so this is
+             * the only way to tell which of the two roles a vertex stands for.
+             *
+             * @param[in] vertex - A vertex.
+             * @returns `true` if the vertex is a shadow vertex, `false` otherwise.
+             */
+            bool is_shadow_vertex(const u32 vertex) const;
+
+            /**
+             * @brief Get all vertices corresponding to the specified gate, i.e., its primary vertex and, if the gate
+             * was split by `from_gates`, its shadow vertex.
+             *
+             * @param[in] g - A gate.
+             * @returns The vertices of the gate on success, an error otherwise.
+             */
+            Result<std::vector<u32>> get_all_vertices_from_gate(Gate* g) const;
+
+            /**
              * @brief Get the number of vertices in the netlist graph.
              * 
              * @param[in] only_connected - Set `true` to only count vertices connected to at least one edge, `false` otherwise. Defaults to `false`.
@@ -353,9 +414,20 @@ namespace hal
             igraph_t m_graph;
 
             /**
+             * Whether `m_graph` has actually been initialized and therefore has to be destroyed.
+             *
+             * The `NetlistGraph(Netlist*)` constructor deliberately leaves `m_graph` uninitialized -- the
+             * factories fill it in afterwards via `igraph_create()`/`igraph_empty()`. If such a factory bails
+             * out in between (e.g. an igraph allocation fails), the `std::unique_ptr` holding the
+             * half-constructed graph unwinds and the destructor would otherwise call `igraph_destroy()` on
+             * uninitialized memory. This flag lets the destructor skip that.
+             */
+            bool m_graph_initialized = false;
+
+            /**
              * A pointer to the `igraph` object.
              */
-            igraph_t* m_graph_ptr;
+            igraph_t* m_graph_ptr = nullptr;
 
             /**
              * A map from `igraph` nodes to HAL gates.
@@ -363,9 +435,17 @@ namespace hal
             std::unordered_map<u32, Gate*> m_nodes_to_gates;
 
             /**
-             * A map from HAL gates to `igraph` nodes. 
+             * A map from HAL gates to `igraph` nodes.
              */
             std::unordered_map<Gate*, u32> m_gates_to_nodes;
+
+            /**
+             * The shadow nodes created by `from_gates`, mapped to the primary node of the same gate.
+             *
+             * A gate is present in `m_nodes_to_gates` once per node it owns, but only once in `m_gates_to_nodes`,
+             * which always holds its primary node. Shadow nodes are therefore tracked separately.
+             */
+            std::unordered_map<u32, u32> m_shadow_nodes_to_nodes;
         };
     }    // namespace graph_algorithm
 

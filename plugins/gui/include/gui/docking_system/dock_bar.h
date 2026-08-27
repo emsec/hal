@@ -103,7 +103,7 @@ namespace hal
          *
          * @param watched - The dockbutton that sent the event.
          * @param event - The event that was emitted by the watched dockbutton.
-         * @return - True if the event must not be propagated any further. False (mostly the default) otherwise.
+         * @return - `true` if the event must not be propagated any further. `false` (mostly the default) otherwise.
          */
         bool eventFilter(QObject* watched, QEvent* event) override;
 
@@ -132,7 +132,7 @@ namespace hal
         void setAnchor(ContentAnchor* anchor);
 
         /**
-         * Sets the autohide property of the dockbar. If it is set to true the dockbar hides itself when
+         * Sets the autohide property of the dockbar. If it is set to `true` the dockbar hides itself when
          * it contains zero dockbuttons. It still appears when the drag action of a dockbutton from anywhere is
          * started.
          *
@@ -141,7 +141,7 @@ namespace hal
         void setAutohide(bool autohide);
 
         /**
-         * Get the used status of the dockbar. Returns true if the dockbar is unused, meaning all buttons are hidden
+         * Get the used status of the dockbar. Returns `true` if the dockbar is unused, meaning all buttons are hidden
          * (For example when all widget belonging to the corresponding content anchor-and therefore to the dockbar-
          *  are detached).
          *
@@ -187,7 +187,7 @@ namespace hal
          * Removes the corresponding button for the given conten widget.
          *
          * @param widget - The content widget to remove the corresponding button.
-         * @return True when a button for the widget is found and sucessfully removed. False otherwise.
+         * @return `true` when a button for the widget is found and sucessfully removed. `false` otherwise.
          */
         bool removeButton(ContentWidget* widget);
 
@@ -195,7 +195,7 @@ namespace hal
          * Removes a button at the given index.
          *
          * @param index - The index at which a button should be removed.
-         * @return True when the button is sucessfully removed. False when the index is out of bounds.
+         * @return `true` when the button is sucessfully removed. `false` when the index is out of bounds, `false` otherwise.
          */
         bool removeButton(int index);
 
@@ -253,7 +253,7 @@ namespace hal
         /**
          * Returns the 'hidden' property for index button
          * @param index - The index for the content widget.
-         * @return true if the button is hidden (the widget detached)
+         * @return `true` if the button is hidden (the widget detached), `false` otherwise.
          */
         bool isHidden(int index) const;
 

@@ -80,6 +80,17 @@ namespace hal
          */
         ///@{
         void handleContextMenuRequested(const QPoint &pos);
+
+        /**
+         * Remembers which pin groups are expanded and which items are selected so that the state survives
+         * the model reload that follows a bulk pin change.
+         */
+        void handlePinsAboutToReload();
+
+        /**
+         * Restores expansion and selection of those items that still exist after a bulk pin change.
+         */
+        void handlePinsReloaded();
         ///@}
 
     Q_SIGNALS:
@@ -94,15 +105,22 @@ namespace hal
         ModulePinsTreeModel* mPortModel;
         int mModuleID;
 
+        /// pin group IDs that were expanded when the last reload started
+        QSet<u32> mExpandedGroupIds;
+        /// pin group IDs that were selected when the last reload started
+        QSet<u32> mSelectedGroupIds;
+        /// pin IDs that were selected when the last reload started
+        QSet<u32> mSelectedPinIds;
+
         void handleNumberOfPortsChanged(int newNumberPorts);
         //helper function to add entries belonging to multiselection
         void appendMultiSelectionEntries(QMenu &menu, int modId);
         /**
          * utility function to get all selected pins (as treeitems).
          *
-         * @return The selected pins, first boolean = true if they belonged to the same group
+         * @return The selected pins, first boolean = `true` if they belonged to the same group
          * (and if yes it returns the group id, otherwise -1),
-         * second boolean = true if only pins (and no groups) were selected.
+         * second boolean = `true` if only pins (and no groups) were selected.
          */
         std::tuple<QList<BaseTreeItem*>, std::pair<bool, int>, bool> getSelectedPins();
 

@@ -82,7 +82,7 @@ namespace hal
 
         /**
          * Loads the value of its SettingsItem and adjusts the visuals accordingly
-         * and sets its dirty state to false.
+         * and sets its dirty state to `false`.
          */
         void prepare();
 
@@ -156,7 +156,7 @@ namespace hal
         /**
          * Q_SIGNAL that is emitted whenever the mouse enters or leaves the widget.
          *
-         * @param item - The widget's SettingItem when entering or nullptr when leaving the widget.
+         * @param item - The widget's SettingItem when entering or `nullptr` when leaving the widget.
          */
         void triggerDescriptionUpdate(SettingsItem* item);
 

@@ -41,13 +41,13 @@ namespace hal
 
         /**
          * @brief Flag to enable or disable multithreading.
-         * Default is false.
+         * Default is `false`.
          */
         bool m_do_multithreading = false;
 
         /**
          * @brief Flag to indicate if the button was clicked.
-         * Default is false.
+         * Default is `false`.
          */
         bool m_button_clicked = false;
 
@@ -98,18 +98,6 @@ namespace hal
          * @param[in] nets - The nets involved.
          */
         void execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
-
-        /**
-         * @brief Register function to indicate work progress when busy.
-         * 
-         * @param[in] pif - Progress Indicator Function to register.
-         */
-        virtual void register_progress_indicator(std::function<void(int, const std::string&)> pif) override;
-
-        /**
-         * @brief Static progress indicator function.
-         */
-        static std::function<void(int, const std::string&)> s_progress_indicator_function;
 
         /**
          * @brief Get context menu contributions based on the current netlist and selection.

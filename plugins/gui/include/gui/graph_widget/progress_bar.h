@@ -36,6 +36,9 @@ namespace hal {
 
     class GraphContext;
 
+    /**
+     * The base class for the widgets that indicate that a long-running operation is in progress.
+     */
     class AbstractBusyIndicator : public QFrame
     {
         Q_OBJECT
@@ -45,6 +48,9 @@ namespace hal {
         virtual void setText(const QString& txt) = 0;
     };
 
+    /**
+     * Indicates the progress of a long-running operation together with a message.
+     */
     class ProgressBar : public AbstractBusyIndicator
     {
         Q_OBJECT
@@ -59,6 +65,9 @@ namespace hal {
         void setText(const QString& txt) override;
     };
 
+    /**
+     * The animated bar that is shown while an operation of unknown duration is running.
+     */
     class BusyAnimation : public QWidget
     {
         Q_OBJECT
@@ -72,6 +81,9 @@ namespace hal {
         BusyAnimation(QWidget* parent = nullptr);
     };
 
+    /**
+     * Indicates that an operation of unknown duration is running, together with a message.
+     */
     class BusyIndicator : public AbstractBusyIndicator
     {
         BusyAnimation* mAnimation;

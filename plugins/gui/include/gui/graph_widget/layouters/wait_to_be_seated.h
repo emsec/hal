@@ -33,10 +33,15 @@
 
 namespace hal
 {
+   /**
+    * The nodes that still have to be placed, ordered so that well-connected nodes are placed first.
+    */
    class WaitToBeSeatedList;
    class WaitToBeSeatedWaiting;
 
    /**
+    * One node that still has to be placed, together with the already placed nodes it connects to.
+    *
     * @ingroup graph-layouter
     */
    class WaitToBeSeatedEntry
@@ -64,6 +69,8 @@ namespace hal
    };
 
    /**
+    * The nodes that still have to be placed, ordered so that well-connected nodes are placed first.
+    *
     * @ingroup graph-layouter
     */
    class WaitToBeSeatedList : public QList<WaitToBeSeatedEntry*>

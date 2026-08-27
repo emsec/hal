@@ -79,7 +79,7 @@ namespace hal
         /**
          * Enables/Disables the grid in the background.
          *
-         * @param value - <b>true</b> to enable the grid. <b>false</b> to disable the grid.
+         * @param value - `true` to enable the grid. `false` to disable the grid.
          */
         static void setGridEnabled(const bool& value);
 
@@ -87,7 +87,7 @@ namespace hal
          * Enables/Disables the grid clusters. The grid clusters are the darker lines in the grid that
          * indicate 8 steps in the main grid.
          *
-         * @param value - <b>true</b> to enable the grid clusters. <b>false</b> to disable the grid clusters.
+         * @param value - `true` to enable the grid clusters. `false` to disable the grid clusters.
          */
         static void setGridClustersEnabled(const bool& value);
 
@@ -171,7 +171,7 @@ namespace hal
 
         /**
          * Gets the GraphicsGate for the corresponding gate. If there is no GraphicsGate for the given id,
-         * a <i>nullptr</i> is returned.
+         * a `nullptr` is returned.
          *
          * @param id - The id of the gate in the netlist
          * @returns the GraphicsGate.
@@ -180,7 +180,7 @@ namespace hal
 
         /**
          * Gets the GraphicsNet for the corresponding net. If there is no GraphicsNet for the given id,
-         * a <i>nullptr</i> is returned.
+         * a `nullptr` is returned.
          *
          * @param id - The id of the net in the netlist
          * @returns the GraphicsNet.
@@ -189,7 +189,7 @@ namespace hal
 
         /**
          * Gets the GraphicsModule for the corresponding module. If there is no GraphicsModule for the given id,
-         * a <i>nullptr</i> is returned.
+         * a `nullptr` is returned.
          *
          * @param id - The id of the module in the netlist
          * @returns the GraphicsModule.
@@ -198,7 +198,7 @@ namespace hal
 
         /**
          * Keep track on mouse pressed status to avoid premature actions during rubber band selection
-         * @param isPressed true=mouse pressed, false=mouse released.
+         * @param isPressed `true`=mouse pressed, `false`=mouse released.
          */
         void setMousePressed(bool isPressed);
 
@@ -277,7 +277,7 @@ namespace hal
         void updateAllItems();
 
         /**
-         * Set reference pointer to drag controller on start drag, nullptr when drag ended
+         * Set reference pointer to drag controller on start drag, `nullptr` when drag ended
          * @param dc - Reference to drag controller
          */
         void setDragController(DragController* dc);

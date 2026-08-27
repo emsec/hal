@@ -4,6 +4,7 @@
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_status_manager/file_status_manager.h"
 #include "gui/graph_widget/graph_context_manager.h"
+#include "gui/graph_widget/graph_widget.h"
 #include "gui/gui_api/gui_api.h"
 #include "gui/main_window/main_window.h"
 #include "gui/netlist_relay/netlist_relay.h"
@@ -310,5 +311,10 @@ namespace hal
             LayoutLocker* ll = mLayoutLockerList.takeLast();
             delete ll;
         }
+    }
+
+    void PluginGui::set_progress(int percent, const std::string& message)
+    {
+        GraphWidget::pluginProgressIndicator(percent, message);
     }
 }    // namespace hal

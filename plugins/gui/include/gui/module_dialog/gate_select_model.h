@@ -74,7 +74,8 @@ namespace hal {
     public:
         /**
          * @brief GateSelectModel constructor
-         * @param history if true a list of modules previously selected gets generated
+         * @param history if `true` a list of modules previously selected gets generated
+         * @param selectable the ids of the gates that can be selected, an empty set makes all gates selectable
          * @param parent the parent object
          */
         GateSelectModel(bool history, const QSet<u32>& selectable = QSet<u32>(), QObject* parent=nullptr);
@@ -111,6 +112,9 @@ namespace hal {
         gui_utility::mSortMechanism mSortMechanism;
     };
 
+    /**
+     * The base class for the objects that are notified once the user has picked a gate.
+     */
     class GateSelectReceiver : public QObject
     {
         Q_OBJECT
@@ -164,7 +168,8 @@ namespace hal {
     public:
         /**
          * @brief GateSelectView constructor
-         * @param history if true a list of modules previously selected gets generated
+         * @param history if `true` a list of modules previously selected gets generated
+         * @param selectable the ids of the gates that can be selected
          * @param parent the parent widget
          */
         GateSelectView(bool history, const QSet<u32>& selectable, QWidget* parent=nullptr);

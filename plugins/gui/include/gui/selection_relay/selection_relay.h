@@ -183,43 +183,43 @@ namespace hal
 
         /**
          * Decides whether a module is selected or not. <br>
-         * Note that this function will always return <b>false</b> for modules that appear in the
+         * Note that this function will always return `false` for modules that appear in the
          * mModulesSuppressedByFilter member (set by suppressedByFilter).
          *
          * @param id - The id of the module
-         * @returns <b>true</b> if the module is selected and not suppressed.
+         * @returns `true` if the module is selected and not suppressed, `false` otherwise.
          */
         bool isModuleSelected(u32 id) const;
 
         /**
          * Decides whether a gate is selected or not. <br>
-         * Note that this function will always return <b>false</b> for gates that appear in the
+         * Note that this function will always return `false` for gates that appear in the
          * mGatesSuppressedByFilter member (set by suppressedByFilter).
          *
          * @param id - The id of the gate
-         * @returns <b>true</b> if the gate is selected and not suppressed.
+         * @returns `true` if the gate is selected and not suppressed, `false` otherwise.
          */
         bool isGateSelected(u32 id) const;
 
         /**
          * Decides whether a net is selected or not. <br>
-         * Note that this function will always return <b>false</b> for nets that appear in the
+         * Note that this function will always return `false` for nets that appear in the
          * mNetsSuppressedByFilter member (set by suppressedByFilter).
          *
          * @param id - The id of the net
-         * @returns <b>true</b> if the net is selected and not suppressed.
+         * @returns `true` if the net is selected and not suppressed, `false` otherwise.
          */
         bool isNetSelected(u32 id) const;
 
         /**
          * Overwrites the list of suppressed modules, gates and nets. Suppressed items can't be selected
-         * i.e. isModuleSelected/isGateSelected/isNetSelected will always return <b>false</b>.
+         * i.e. isModuleSelected/isGateSelected/isNetSelected will always return `false`.
          * Note that this only applies to these three functions. It does not restrict their appearance in the
          * public members mSelectedGates/mSelectedNets/mSelectedModules.
          *
-         * @param modIds - A list of suppressed module ids
-         * @param gatIds - A list of suppressed gate ids
-         * @param netIds - A list of suppressed net ids
+         *     modIds - A list of suppressed module ids
+         *     gatIds - A list of suppressed gate ids
+         *     netIds - A list of suppressed net ids
          */
         //void suppressedByFilter(const QList<u32>& modIds = QList<u32>(), const QList<u32>& gatIds = QList<u32>(), const QList<u32>& netIds = QList<u32>());
 
@@ -371,10 +371,10 @@ namespace hal
         }
 
         /**
-         * Return true iff the gate with the specified id is contained in the current selection.
+         * Return `true` iff the gate with the specified id is contained in the current selection.
          *
          * @param id - The id of the gate to look for
-         * @returns true iff the gate is selected
+         * @returns `true` iff the gate is selected, `false` otherwise.
          */
         bool containsGate(u32 id) const
         {
@@ -382,10 +382,10 @@ namespace hal
         }
 
         /**
-         * Return true iff the net with the specified id is contained in the current selection.
+         * Return `true` iff the net with the specified id is contained in the current selection.
          *
          * @param id - The id of the net to look for
-         * @returns true iff the net is selected
+         * @returns `true` iff the net is selected, `false` otherwise.
          */
         bool containsNet(u32 id) const
         {
@@ -393,10 +393,10 @@ namespace hal
         }
 
         /**
-         * Return true iff the module with the specified id is contained in the current selection.
+         * Return `true` iff the module with the specified id is contained in the current selection.
          *
          * @param id - The id of the module to look for
-         * @returns true iff the module is selected
+         * @returns `true` iff the module is selected, `false` otherwise.
          */
         bool containsModule(u32 id) const
         {

@@ -35,6 +35,9 @@ namespace hal
     class ContentWidget;
     class DockBar;
 
+    /**
+     * The positions within the main content area of the GUI that a content widget can be docked to.
+     */
     namespace ContentLayout
     {
         Q_NAMESPACE

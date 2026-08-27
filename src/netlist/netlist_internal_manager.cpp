@@ -27,7 +27,7 @@ namespace hal
 
     Result<std::unique_ptr<Netlist>> NetlistInternalManager::copy_netlist(const Netlist* nl) const
     {
-        std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->m_gate_library);
+        std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->m_gate_library.get());
         if (c_netlist == nullptr)
         {
             return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create netlist");
@@ -874,6 +874,9 @@ namespace hal
         m_netlist->m_free_module_ids.insert(to_remove->get_id());
         m_netlist->m_used_module_ids.erase(to_remove->get_id());
 
+        // no pin event must survive the module it refers to
+        PinChangedEvent::discard(to_remove);
+
         m_event_handler->notify(ModuleEvent::event::removed, to_remove);
         return true;
     }
@@ -973,6 +976,10 @@ namespace hal
 
         if (m_net_checks_enabled)
         {
+            // a bulk assignment changes the pins of the affected modules wholesale, so the individual pin events
+            // are collapsed into a single PinEvent::PinsReload per module instead of several events per pin
+            PinChangedBulkScope pin_scope;
+
             for (const auto& [affected_module, nets] : nets_to_check)
             {
                 for (Net* net : nets)

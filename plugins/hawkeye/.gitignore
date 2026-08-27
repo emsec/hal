@@ -11,3 +11,4 @@
 !scripts/**/*
 !.gitignore
 !README.md
+!sbox-database.json

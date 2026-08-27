@@ -43,6 +43,9 @@ namespace hal {
     class SaleaeOutputFile;
     class SaleaeWriter;
 
+    /**
+     * One net of a VCD file, i.e., its waveform together with the abbreviation used for it in the file.
+     */
     class VcdSerializerElement
     {
         int mIndex;
@@ -60,6 +63,9 @@ namespace hal {
         QByteArray charCode() const;
     };
 
+    /**
+     * Reads and writes waveform data in the value change dump (VCD) format.
+     */
     class VcdSerializer : public QObject
     {
         Q_OBJECT

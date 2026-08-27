@@ -119,7 +119,7 @@ namespace hal {
          * @param index - The model index
          * @param value - The value to set
          * @param role - The access role
-         * @returns <b>true</b> on success
+         * @returns `true` on success, `false` otherwise.
          */
         bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
@@ -139,6 +139,9 @@ namespace hal {
         void updateData(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& dc);
 
     private:
+        /**
+         * The colors and the font that one row of the data table is rendered with.
+         */
         struct RowStyle
         {
             QFont keyFont;

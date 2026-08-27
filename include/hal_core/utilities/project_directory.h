@@ -34,74 +34,73 @@
 namespace hal
 {
 
+    /**
+     * Represents a project directory.
+     *
+     * @ingroup utilities
+     */
     class ProjectDirectory : public std::filesystem::path
     {
         friend class ProjectManager;
 
     public:
         /**
-         * ProjectDirectory constructor.
-         * 
-         * @param path - Path to hal project. If path has an extension (like .v or .hal) the extension will be removed.
+         * Constructs a ProjectDirectory object.
+         *
+         * @param[in] path - Path to the project directory. If the path has an extension (like `.v` or `.hal`) the extension will be removed.
          */
         ProjectDirectory(const std::string& path = std::string());
 
         /**
-         * Returns the default file name which is a file with the same as the name as
-         * the project directory plus an extension.
-         * 
-         * @param[in] extension - Extension of default file name. If empty, '.hal' is assumed.
-         * @return Absolute path to file
+         * Returns the default file name for the project directory, which is a file with the same name as the project directory plus an extension.
+         *
+         * @param[in] extension - Extension of the default file name. If empty, `.hal` is assumed.
+         * @returns The absolute path to the default file.
          */
         std::filesystem::path get_default_filename(const std::string& extension = std::string()) const;
 
         /**
-         * Returns absolute path to file within project directory
-         * 
-         * @param[in] relative_filename - Relative file name in project directory.
-         * @return Absolute path of file
+         * Returns the absolute path to a file within the project directory.
+         *
+         * @param[in] relative_filename - The relative file name within the project directory.
+         * @returns The absolute path to the file.
          */
         std::filesystem::path get_filename(const std::string& relative_filename) const;
 
         /**
-         * Similar to get_default_filename() but will return file name which is located
-         * in the autosave (aka shadow) directory.
-         * 
-         * @param[in] extension - Extension of shadow file name. If empty '.hal' is assumed
-         * @return Absolute path to file
+         * Returns the file name within the autosave (shadow) directory.
+         *
+         * @param[in] extension - Extension of the shadow file name. If empty, `.hal` is assumed.
+         * @returns The absolute path to the shadow file.
          */
         std::filesystem::path get_shadow_filename(const std::string& extension = std::string()) const;
 
         /**
-         * Get autosave directory path
-         * 
-         * @return Absolute path to autosave directory
+         * Returns the path to the autosave (shadow) directory.
+         *
+         * @returns The absolute path to the autosave directory.
          */
         std::filesystem::path get_shadow_dir() const;
 
         /**
-         * Project directories canonical path. Other than std::filesystem::canonical
-         * this method will return an empty path if no project path given.
-         * 
-         * @return Absolute canonical path to project directory
+         * Returns the canonical path to the project directory.
+         *
+         * @returns The absolute canonical path to the project directory. If no project path is given, an empty path is returned.
          */
         std::filesystem::path get_canonical_path() const;
 
         /**
-         * If filename is within project directory the relative file name will
-         * be returned. Otherwise this method will return parameter filename
-         * without modifications.
-         * 
-         * @param[in] filename - Absolute path to file
-         * @return Relative file name if file in project directory
+         * Returns the relative file path if the file is within the project directory.
+         *
+         * @param[in] filename - The absolute path to the file.
+         * @returns The relative file path if the file is within the project directory; otherwise, the original filename.
          */
         std::filesystem::path get_relative_file_path(const std::string& filename) const;
 
         /**
-         * Generate a directory name in current working directory which contains a
-         * four digit random number
-         * 
-         * @return Absolute path to directory
+         * Generates a random directory name in the current working directory.
+         *
+         * @returns The absolute path to the generated directory.
          */
         static ProjectDirectory generate_random();
 

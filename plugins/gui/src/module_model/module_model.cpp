@@ -12,7 +12,7 @@
 
 namespace hal
 {
-    ModuleModel::ModuleModel(QObject* parent) : BaseTreeModel(parent)
+    ModuleModel::ModuleModel(QObject* parent) : BaseTreeModel(parent), mIsModifying(false), mResetInProgress(false)
     {
         // use root item to store header information
         setHeaderLabels(QStringList() << "Name" << "ID" << "Type");
@@ -216,6 +216,7 @@ namespace hal
     void ModuleModel::populateTree(const QVector<u32>& modIds, const QVector<u32>& gateIds, const QVector<u32>& netIds)
     {
         setIsModifying(true);
+        mResetInProgress = true;
         beginResetModel();
         // Might want to add parameter for container of moduleIds that don't get recursively inserted.
         clear();
@@ -233,6 +234,7 @@ namespace hal
 
         for(auto item : newRootList)
             mRootItem->appendChild(item);
+        mResetInProgress = false;
         setIsModifying(false);
         endResetModel();
     }
@@ -331,13 +333,23 @@ namespace hal
         ModuleItem* retval = new ModuleItem(id, itemType, this);
 
         if (!parentItem) parentItem = mRootItem;
+
+        if (mResetInProgress)
+        {
+            // the enclosing model reset already makes the views re-read everything. Emitting row signals in
+            // between is undefined behavior and would make an attached proxy re-map its rows for every item.
+            parentItem->appendChild(retval);
+            return retval;
+        }
+
         QModelIndex index = getIndexFromItem(parentItem);
         int row = parentItem->getChildCount();
+        const bool wasModifying = mIsModifying;
         mIsModifying = true;
         beginInsertRows(index, row, row);
         parentItem->appendChild(retval);
         endInsertRows();
-        mIsModifying = false;
+        mIsModifying = wasModifying;
 
         return retval;
     }
@@ -353,15 +365,24 @@ namespace hal
             removeChildItem(childItem,itemToRemove);
         }
 
+        if (mResetInProgress)
+        {
+            // see createChildItem(), the enclosing model reset covers this removal
+            parentItem->removeChild(itemToRemove);
+            delete itemToRemove;
+            return;
+        }
+
         QModelIndex index = getIndexFromItem(parentItem);
 
         int row = itemToRemove->getOwnRow();
 
+        const bool wasModifying = mIsModifying;
         mIsModifying = true;
         beginRemoveRows(index, row, row);
         parentItem->removeChild(itemToRemove);
         endRemoveRows();
-        mIsModifying = false;
+        mIsModifying = wasModifying;
 
         delete itemToRemove;
     }

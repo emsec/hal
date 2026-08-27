@@ -28,6 +28,9 @@
 
 namespace hal
 {
+    /**
+     * A user action that sets a data entry on a gate, net, module, or netlist.
+     */
     class ActionSetObjectData : public UserAction
     {
 

@@ -391,12 +391,12 @@ namespace hal
                 std::map<GatePin*, Net*> ordered_fan_in = {};
                 std::set<Net*> unordered_fan_in         = {};
                 u8 truth_table_hw                       = 0;
+                std::vector<std::string> init_data      = {};
 
                 bool operator<(const GateFingerprint& other) const
                 {
-                    return (other.type < type) || (other.type == type && other.ordered_fan_in < ordered_fan_in)
-                           || (other.type == type && other.ordered_fan_in == ordered_fan_in && other.unordered_fan_in < unordered_fan_in)
-                           || (other.type == type && other.ordered_fan_in == ordered_fan_in && other.unordered_fan_in == unordered_fan_in && other.truth_table_hw < truth_table_hw);
+                    return std::tie(type, ordered_fan_in, unordered_fan_in, truth_table_hw, init_data)
+                           < std::tie(other.type, other.ordered_fan_in, other.unordered_fan_in, other.truth_table_hw, other.init_data);
                 }
             };
 
@@ -459,6 +459,15 @@ namespace hal
                         for (const auto& ep : gate->get_fan_in_endpoints())
                         {
                             fingerprint.ordered_fan_in[ep->get_pin()] = ep->get_net();
+                        }
+
+                        // Two flip-flops of the same type driven by the same nets can still differ in the value they
+                        // start out at, which the fan-in does not show. The fingerprint decides on its own here, as
+                        // there is no equivalence check behind it as there is for combinational gates, so the initial
+                        // value has to be part of it rather than folded into a hash of it.
+                        if (const auto res = gate->get_init_data(); res.is_ok())
+                        {
+                            fingerprint.init_data = res.get();
                         }
                     }
 
