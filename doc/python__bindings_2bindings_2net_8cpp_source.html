@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-87-gd9fa23e9c</span>
+   &#160;<span id="projectnumber">v4.5.0-93-g29685878a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -269,7 +269,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2net_8cpp_s
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="stringliteral">        py_net.def_property_readonly(</span><span class="stringliteral">&quot;sources&quot;</span>, [](<a class="code" href="classhal_1_1_net.html">Net</a>* n) { <span class="keywordflow">return</span> n-&gt;<a class="code" href="classhal_1_1_net.html#af62cd3da438ede28f00f3076fd949fac">get_sources</a>(); }, <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="stringliteral">        py_net.def_property_readonly(</span><span class="stringliteral">&quot;sources&quot;</span>, py::cpp_function([](<a class="code" href="classhal_1_1_net.html">Net</a>* n) { <span class="keywordflow">return</span> n-&gt;<a class="code" href="classhal_1_1_net.html#af62cd3da438ede28f00f3076fd949fac">get_sources</a>(); }, py::is_method(py_net), <a class="code" href="structhal_1_1borrowed.html">borrowed</a>()), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="stringliteral">            A list of sources of the net.</span></div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="stringliteral">            :type: list[hal_py.Endpoint]</span></div>
@@ -383,7 +383,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2net_8cpp_s
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="stringliteral">        py_net.def_property_readonly(</span><span class="stringliteral">&quot;destinations&quot;</span>, [](<a class="code" href="classhal_1_1_net.html">Net</a>* n) { <span class="keywordflow">return</span> n-&gt;<a class="code" href="classhal_1_1_net.html#ab8947aa24e7c234b984da284a20558c7">get_destinations</a>(); }, <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="stringliteral">        py_net.def_property_readonly(</span><span class="stringliteral">&quot;destinations&quot;</span>, py::cpp_function([](<a class="code" href="classhal_1_1_net.html">Net</a>* n) { <span class="keywordflow">return</span> n-&gt;<a class="code" href="classhal_1_1_net.html#ab8947aa24e7c234b984da284a20558c7">get_destinations</a>(); }, py::is_method(py_net), <a class="code" href="structhal_1_1borrowed.html">borrowed</a>()), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="stringliteral">            A list of destinations of the net.</span></div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="stringliteral">            :type: list[hal_py.Endpoint]</span></div>

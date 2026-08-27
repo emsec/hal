@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-87-gd9fa23e9c</span>
+   &#160;<span id="projectnumber">v4.5.0-93-g29685878a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -244,17 +244,17 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <span class="comment">// expand module port assignments</span></div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; [module_name, verilog_module] : m_modules_by_name)</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        {</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; instance : verilog_module-&gt;m_instances)</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a> : verilog_module-&gt;m_instances)</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;            {</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> module_it = m_modules_by_name.find(instance-&gt;m_type); module_it != m_modules_by_name.end())</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> module_it = m_modules_by_name.find(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type); module_it != m_modules_by_name.end())</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                {</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                    instance-&gt;m_is_module = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                    <span class="keywordflow">if</span> (!instance-&gt;m_port_assignments.empty())</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                    <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_is_module = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                    <span class="keywordflow">if</span> (!<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_port_assignments.empty())</div>
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                    {</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                        <span class="comment">// all port assignments by name</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                        <span class="keywordflow">if</span> (instance-&gt;m_port_assignments.front().m_port_name.has_value())</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                        <span class="keywordflow">if</span> (<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_port_assignments.front().m_port_name.has_value())</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;                        {</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; port_assignment : instance-&gt;m_port_assignments)</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; port_assignment : <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_port_assignments)</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                            {</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                                <span class="keyword">const</span> std::vector&lt;std::string&gt; right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                                <span class="keywordflow">if</span> (!right_port.empty())</div>
@@ -280,7 +280,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;                                    <span class="keywordflow">for</span> (<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> i = 0; i &lt; max_size; i++)</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                                    {</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                                        instance-&gt;m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                                        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                                    }</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                                }</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;                            }</div>
@@ -289,14 +289,14 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                        {</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                            std::vector&lt;std::string&gt; ports;</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; port : m_modules_by_name.at(instance-&gt;m_type)-&gt;m_ports)</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; port : m_modules_by_name.at(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type)-&gt;m_ports)</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                            {</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                                ports.insert(ports.end(), port-&gt;m_expanded_identifiers.begin(), port-&gt;m_expanded_identifiers.end());</div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                            }</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                            <span class="keyword">auto</span> port_it = ports.begin();</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; port_assignment : instance-&gt;m_port_assignments)</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; port_assignment : <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_port_assignments)</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                            {</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                                std::vector&lt;std::string&gt; right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                                <span class="keywordflow">if</span> (!right_port.empty())</div>
@@ -312,7 +312,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                                    <span class="keywordflow">for</span> (<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> i = 0; i &lt; max_size; i++)</div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                                    {</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                                        instance-&gt;m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                                        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                                    }</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                                }</div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                            }</div>
@@ -347,11 +347,11 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        m_module_port_by_net.clear();</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; verilog_module : m_modules)</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        {</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; instance : verilog_module-&gt;m_instances)</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a> : verilog_module-&gt;m_instances)</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            {</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;                <span class="keywordflow">if</span> (!instance-&gt;m_is_module)</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;                <span class="keywordflow">if</span> (!<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_is_module)</div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                {</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                    instance-&gt;m_expanded_port_assignments.clear();</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                    <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_expanded_port_assignments.clear();</div>
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                }</div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;            }</div>
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        }</div>
@@ -380,9 +380,9 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        std::map&lt;std::string, u32&gt; module_name_to_refereneces;</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [_name, <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>] : m_modules_by_name)</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        {</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; instance : <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_instances)</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a> : <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_instances)</div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;            {</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = m_modules_by_name.find(instance-&gt;m_type); it != m_modules_by_name.end())</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = m_modules_by_name.find(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type); it != m_modules_by_name.end())</div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;                {</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;                    module_name_to_refereneces[it-&gt;first]++;</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                }</div>
@@ -1063,44 +1063,44 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160; </div>
 <div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160;    Result&lt;std::monostate&gt; VerilogParser::parse_instance(VerilogModule* verilog_module, std::vector&lt;VerilogDataEntry&gt;&amp; attributes)</div>
 <div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160;    {</div>
-<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160;        <span class="keyword">auto</span> instance    = std::make_unique&lt;VerilogInstance&gt;();</div>
+<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160;        <span class="keyword">auto</span> <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>    = std::make_unique&lt;VerilogInstance&gt;();</div>
 <div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> line_number  = m_token_stream.<a class="code" href="classhal_1_1_token_stream.html#a660cabea791d72b7980930d49e8f8ec9">peek</a>().number;</div>
-<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;        instance-&gt;m_type = m_token_stream.<a class="code" href="classhal_1_1_token_stream.html#ac78663ded2f48ed5c0001f98e28aad7f">consume</a>().string;</div>
+<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type = m_token_stream.<a class="code" href="classhal_1_1_token_stream.html#ac78663ded2f48ed5c0001f98e28aad7f">consume</a>().string;</div>
 <div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160; </div>
 <div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;        <span class="comment">// parse generics map</span></div>
 <div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;        <span class="keywordflow">if</span> (m_token_stream.<a class="code" href="classhal_1_1_token_stream.html#ac78663ded2f48ed5c0001f98e28aad7f">consume</a>(<span class="stringliteral">&quot;#(&quot;</span>))</div>
 <div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;        {</div>
 <div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = parse_parameter_assign(); res.is_error())</div>
 <div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;            {</div>
-<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(res.get_error(), <span class="stringliteral">&quot;could not parse instance of type &#39;&quot;</span> + instance-&gt;m_type + <span class="stringliteral">&quot;&#39;: unable to parse parameter assignment (line &quot;</span> + std::to_string(line_number) + <span class="stringliteral">&quot;)&quot;</span>);</div>
+<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(res.get_error(), <span class="stringliteral">&quot;could not parse instance of type &#39;&quot;</span> + <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type + <span class="stringliteral">&quot;&#39;: unable to parse parameter assignment (line &quot;</span> + std::to_string(line_number) + <span class="stringliteral">&quot;)&quot;</span>);</div>
 <div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;            }</div>
 <div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160;            <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00988"></a><span class="lineno">  988</span>&#160;            {</div>
-<div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;                instance-&gt;m_parameters = res.get();</div>
+<div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;                <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_parameters = res.get();</div>
 <div class="line"><a name="l00990"></a><span class="lineno">  990</span>&#160;            }</div>
 <div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160;        }</div>
 <div class="line"><a name="l00992"></a><span class="lineno">  992</span>&#160; </div>
 <div class="line"><a name="l00993"></a><span class="lineno">  993</span>&#160;        <span class="comment">// parse instance name</span></div>
-<div class="line"><a name="l00994"></a><span class="lineno">  994</span>&#160;        instance-&gt;m_name = m_token_stream.<a class="code" href="classhal_1_1_token_stream.html#ac78663ded2f48ed5c0001f98e28aad7f">consume</a>().string;</div>
+<div class="line"><a name="l00994"></a><span class="lineno">  994</span>&#160;        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name = m_token_stream.<a class="code" href="classhal_1_1_token_stream.html#ac78663ded2f48ed5c0001f98e28aad7f">consume</a>().string;</div>
 <div class="line"><a name="l00995"></a><span class="lineno">  995</span>&#160; </div>
 <div class="line"><a name="l00996"></a><span class="lineno">  996</span>&#160;        <span class="comment">// parse port map</span></div>
-<div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = parse_port_assign(instance.get()); res.is_error())</div>
+<div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = parse_port_assign(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>.get()); res.is_error())</div>
 <div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160;        {</div>
 <div class="line"><a name="l00999"></a><span class="lineno">  999</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(res.get_error(),</div>
-<div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160;                              <span class="stringliteral">&quot;could not parse instance &#39;&quot;</span> + instance-&gt;m_name + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance-&gt;m_type + <span class="stringliteral">&quot;&#39;: unable to parse port assignment (line &quot;</span> + std::to_string(line_number) + <span class="stringliteral">&quot;)&quot;</span>);</div>
+<div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160;                              <span class="stringliteral">&quot;could not parse instance &#39;&quot;</span> + <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type + <span class="stringliteral">&quot;&#39;: unable to parse port assignment (line &quot;</span> + std::to_string(line_number) + <span class="stringliteral">&quot;)&quot;</span>);</div>
 <div class="line"><a name="l01001"></a><span class="lineno"> 1001</span>&#160;        }</div>
 <div class="line"><a name="l01002"></a><span class="lineno"> 1002</span>&#160; </div>
 <div class="line"><a name="l01003"></a><span class="lineno"> 1003</span>&#160;        <span class="comment">// assign attributes to instance</span></div>
-<div class="line"><a name="l01004"></a><span class="lineno"> 1004</span>&#160;        instance-&gt;m_attributes = attributes;</div>
+<div class="line"><a name="l01004"></a><span class="lineno"> 1004</span>&#160;        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_attributes = attributes;</div>
 <div class="line"><a name="l01005"></a><span class="lineno"> 1005</span>&#160;        attributes.clear();</div>
 <div class="line"><a name="l01006"></a><span class="lineno"> 1006</span>&#160; </div>
-<div class="line"><a name="l01007"></a><span class="lineno"> 1007</span>&#160;        verilog_module-&gt;m_instances_by_name[instance-&gt;m_name] = instance.get();</div>
-<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160;        verilog_module-&gt;m_instances.push_back(std::move(instance));</div>
+<div class="line"><a name="l01007"></a><span class="lineno"> 1007</span>&#160;        verilog_module-&gt;m_instances_by_name[<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name] = <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>.get();</div>
+<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160;        verilog_module-&gt;m_instances.push_back(std::move(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>));</div>
 <div class="line"><a name="l01009"></a><span class="lineno"> 1009</span>&#160; </div>
 <div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>({});</div>
 <div class="line"><a name="l01011"></a><span class="lineno"> 1011</span>&#160;    }</div>
 <div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160; </div>
-<div class="line"><a name="l01013"></a><span class="lineno"> 1013</span>&#160;    Result&lt;std::monostate&gt; VerilogParser::parse_port_assign(VerilogInstance* instance)</div>
+<div class="line"><a name="l01013"></a><span class="lineno"> 1013</span>&#160;    Result&lt;std::monostate&gt; VerilogParser::parse_port_assign(VerilogInstance* <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>)</div>
 <div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160;    {</div>
 <div class="line"><a name="l01015"></a><span class="lineno"> 1015</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> line_number = m_token_stream.<a class="code" href="classhal_1_1_token_stream.html#a660cabea791d72b7980930d49e8f8ec9">peek</a>().number;</div>
 <div class="line"><a name="l01016"></a><span class="lineno"> 1016</span>&#160;        m_token_stream.<a class="code" href="classhal_1_1_token_stream.html#ac78663ded2f48ed5c0001f98e28aad7f">consume</a>(<span class="stringliteral">&quot;(&quot;</span>, <span class="keyword">true</span>);</div>
@@ -1126,7 +1126,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01036"></a><span class="lineno"> 1036</span>&#160;                {</div>
 <div class="line"><a name="l01037"></a><span class="lineno"> 1037</span>&#160;                    <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l01038"></a><span class="lineno"> 1038</span>&#160;                }</div>
-<div class="line"><a name="l01039"></a><span class="lineno"> 1039</span>&#160;                instance-&gt;m_port_assignments.push_back(std::move(port_assignment));</div>
+<div class="line"><a name="l01039"></a><span class="lineno"> 1039</span>&#160;                <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_port_assignments.push_back(std::move(port_assignment));</div>
 <div class="line"><a name="l01040"></a><span class="lineno"> 1040</span>&#160;            } <span class="keywordflow">while</span> (m_token_stream.<a class="code" href="classhal_1_1_token_stream.html#ac78663ded2f48ed5c0001f98e28aad7f">consume</a>(<span class="stringliteral">&quot;,&quot;</span>, <span class="keyword">false</span>));</div>
 <div class="line"><a name="l01041"></a><span class="lineno"> 1041</span>&#160;        }</div>
 <div class="line"><a name="l01042"></a><span class="lineno"> 1042</span>&#160;        <span class="keywordflow">else</span></div>
@@ -1146,7 +1146,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01056"></a><span class="lineno"> 1056</span>&#160;                {</div>
 <div class="line"><a name="l01057"></a><span class="lineno"> 1057</span>&#160;                    <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l01058"></a><span class="lineno"> 1058</span>&#160;                }</div>
-<div class="line"><a name="l01059"></a><span class="lineno"> 1059</span>&#160;                instance-&gt;m_port_assignments.push_back(std::move(port_assignment));</div>
+<div class="line"><a name="l01059"></a><span class="lineno"> 1059</span>&#160;                <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_port_assignments.push_back(std::move(port_assignment));</div>
 <div class="line"><a name="l01060"></a><span class="lineno"> 1060</span>&#160;            } <span class="keywordflow">while</span> (m_token_stream.<a class="code" href="classhal_1_1_token_stream.html#ac78663ded2f48ed5c0001f98e28aad7f">consume</a>(<span class="stringliteral">&quot;,&quot;</span>, <span class="keyword">false</span>));</div>
 <div class="line"><a name="l01061"></a><span class="lineno"> 1061</span>&#160;        }</div>
 <div class="line"><a name="l01062"></a><span class="lineno"> 1062</span>&#160; </div>
@@ -1217,12 +1217,12 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01127"></a><span class="lineno"> 1127</span>&#160;                }</div>
 <div class="line"><a name="l01128"></a><span class="lineno"> 1128</span>&#160;            }</div>
 <div class="line"><a name="l01129"></a><span class="lineno"> 1129</span>&#160; </div>
-<div class="line"><a name="l01130"></a><span class="lineno"> 1130</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; instance : <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_instances)</div>
+<div class="line"><a name="l01130"></a><span class="lineno"> 1130</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a> : <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_instances)</div>
 <div class="line"><a name="l01131"></a><span class="lineno"> 1131</span>&#160;            {</div>
-<div class="line"><a name="l01132"></a><span class="lineno"> 1132</span>&#160;                m_instance_name_occurences[instance-&gt;m_name]++;</div>
+<div class="line"><a name="l01132"></a><span class="lineno"> 1132</span>&#160;                m_instance_name_occurences[<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name]++;</div>
 <div class="line"><a name="l01133"></a><span class="lineno"> 1133</span>&#160; </div>
 <div class="line"><a name="l01134"></a><span class="lineno"> 1134</span>&#160;                <span class="comment">// add type of instance to q if it is a module</span></div>
-<div class="line"><a name="l01135"></a><span class="lineno"> 1135</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = m_modules_by_name.find(instance-&gt;m_type); it != m_modules_by_name.end())</div>
+<div class="line"><a name="l01135"></a><span class="lineno"> 1135</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = m_modules_by_name.find(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type); it != m_modules_by_name.end())</div>
 <div class="line"><a name="l01136"></a><span class="lineno"> 1136</span>&#160;                {</div>
 <div class="line"><a name="l01137"></a><span class="lineno"> 1137</span>&#160;                    q.push(it-&gt;second);</div>
 <div class="line"><a name="l01138"></a><span class="lineno"> 1138</span>&#160;                }</div>
@@ -1239,14 +1239,14 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01149"></a><span class="lineno"> 1149</span>&#160;            }</div>
 <div class="line"><a name="l01150"></a><span class="lineno"> 1150</span>&#160; </div>
 <div class="line"><a name="l01151"></a><span class="lineno"> 1151</span>&#160;            <span class="comment">// expand gate pin assignments</span></div>
-<div class="line"><a name="l01152"></a><span class="lineno"> 1152</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; instance : verilog_module-&gt;m_instances)</div>
+<div class="line"><a name="l01152"></a><span class="lineno"> 1152</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a> : verilog_module-&gt;m_instances)</div>
 <div class="line"><a name="l01153"></a><span class="lineno"> 1153</span>&#160;            {</div>
-<div class="line"><a name="l01154"></a><span class="lineno"> 1154</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> gate_type_it = m_gate_types.find(instance-&gt;m_type); gate_type_it != m_gate_types.end())</div>
+<div class="line"><a name="l01154"></a><span class="lineno"> 1154</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> gate_type_it = m_gate_types.find(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type); gate_type_it != m_gate_types.end())</div>
 <div class="line"><a name="l01155"></a><span class="lineno"> 1155</span>&#160;                {</div>
-<div class="line"><a name="l01156"></a><span class="lineno"> 1156</span>&#160;                    <span class="keywordflow">if</span> (!instance-&gt;m_port_assignments.empty())</div>
+<div class="line"><a name="l01156"></a><span class="lineno"> 1156</span>&#160;                    <span class="keywordflow">if</span> (!<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_port_assignments.empty())</div>
 <div class="line"><a name="l01157"></a><span class="lineno"> 1157</span>&#160;                    {</div>
 <div class="line"><a name="l01158"></a><span class="lineno"> 1158</span>&#160;                        <span class="comment">// all port assignments by name</span></div>
-<div class="line"><a name="l01159"></a><span class="lineno"> 1159</span>&#160;                        <span class="keywordflow">if</span> (instance-&gt;m_port_assignments.front().m_port_name.has_value())</div>
+<div class="line"><a name="l01159"></a><span class="lineno"> 1159</span>&#160;                        <span class="keywordflow">if</span> (<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_port_assignments.front().m_port_name.has_value())</div>
 <div class="line"><a name="l01160"></a><span class="lineno"> 1160</span>&#160;                        {</div>
 <div class="line"><a name="l01161"></a><span class="lineno"> 1161</span>&#160;                            <span class="comment">// cache pin groups</span></div>
 <div class="line"><a name="l01162"></a><span class="lineno"> 1162</span>&#160;                            std::unordered_map&lt;std::string, std::vector&lt;std::string&gt;&gt; pin_groups;</div>
@@ -1260,7 +1260,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01170"></a><span class="lineno"> 1170</span>&#160;                                }</div>
 <div class="line"><a name="l01171"></a><span class="lineno"> 1171</span>&#160;                            }</div>
 <div class="line"><a name="l01172"></a><span class="lineno"> 1172</span>&#160; </div>
-<div class="line"><a name="l01173"></a><span class="lineno"> 1173</span>&#160;                            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; port_assignment : instance-&gt;m_port_assignments)</div>
+<div class="line"><a name="l01173"></a><span class="lineno"> 1173</span>&#160;                            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; port_assignment : <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_port_assignments)</div>
 <div class="line"><a name="l01174"></a><span class="lineno"> 1174</span>&#160;                            {</div>
 <div class="line"><a name="l01175"></a><span class="lineno"> 1175</span>&#160;                                std::vector&lt;std::string&gt; right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);</div>
 <div class="line"><a name="l01176"></a><span class="lineno"> 1176</span>&#160;                                <span class="keywordflow">if</span> (!right_port.empty())</div>
@@ -1281,7 +1281,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01191"></a><span class="lineno"> 1191</span>&#160; </div>
 <div class="line"><a name="l01192"></a><span class="lineno"> 1192</span>&#160;                                    <span class="keywordflow">for</span> (<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> i = 0; i &lt; max_size; i++)</div>
 <div class="line"><a name="l01193"></a><span class="lineno"> 1193</span>&#160;                                    {</div>
-<div class="line"><a name="l01194"></a><span class="lineno"> 1194</span>&#160;                                        instance-&gt;m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));</div>
+<div class="line"><a name="l01194"></a><span class="lineno"> 1194</span>&#160;                                        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));</div>
 <div class="line"><a name="l01195"></a><span class="lineno"> 1195</span>&#160;                                    }</div>
 <div class="line"><a name="l01196"></a><span class="lineno"> 1196</span>&#160;                                }</div>
 <div class="line"><a name="l01197"></a><span class="lineno"> 1197</span>&#160;                            }</div>
@@ -1293,7 +1293,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01203"></a><span class="lineno"> 1203</span>&#160;                            std::vector&lt;std::string&gt; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9">pins</a> = gate_type_it-&gt;second-&gt;get_pin_names();</div>
 <div class="line"><a name="l01204"></a><span class="lineno"> 1204</span>&#160;                            <span class="keyword">auto</span> pin_it                   = <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9">pins</a>.begin();</div>
 <div class="line"><a name="l01205"></a><span class="lineno"> 1205</span>&#160; </div>
-<div class="line"><a name="l01206"></a><span class="lineno"> 1206</span>&#160;                            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; port_assignment : instance-&gt;m_port_assignments)</div>
+<div class="line"><a name="l01206"></a><span class="lineno"> 1206</span>&#160;                            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; port_assignment : <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_port_assignments)</div>
 <div class="line"><a name="l01207"></a><span class="lineno"> 1207</span>&#160;                            {</div>
 <div class="line"><a name="l01208"></a><span class="lineno"> 1208</span>&#160;                                std::vector&lt;std::string&gt; right_port = expand_assignment_expression(verilog_module, port_assignment.m_assignment);</div>
 <div class="line"><a name="l01209"></a><span class="lineno"> 1209</span>&#160;                                <span class="keywordflow">if</span> (!right_port.empty())</div>
@@ -1309,7 +1309,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01219"></a><span class="lineno"> 1219</span>&#160; </div>
 <div class="line"><a name="l01220"></a><span class="lineno"> 1220</span>&#160;                                    <span class="keywordflow">for</span> (<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> i = 0; i &lt; max_size; i++)</div>
 <div class="line"><a name="l01221"></a><span class="lineno"> 1221</span>&#160;                                    {</div>
-<div class="line"><a name="l01222"></a><span class="lineno"> 1222</span>&#160;                                        instance-&gt;m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));</div>
+<div class="line"><a name="l01222"></a><span class="lineno"> 1222</span>&#160;                                        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_expanded_port_assignments.push_back(std::make_pair(left_port.at(i), right_port.at(i)));</div>
 <div class="line"><a name="l01223"></a><span class="lineno"> 1223</span>&#160;                                    }</div>
 <div class="line"><a name="l01224"></a><span class="lineno"> 1224</span>&#160;                                }</div>
 <div class="line"><a name="l01225"></a><span class="lineno"> 1225</span>&#160;                            }</div>
@@ -1781,7 +1781,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01691"></a><span class="lineno"> 1691</span>&#160;        }</div>
 <div class="line"><a name="l01692"></a><span class="lineno"> 1692</span>&#160; </div>
 <div class="line"><a name="l01693"></a><span class="lineno"> 1693</span>&#160;        <span class="comment">// process instances i.e. gates or other entities</span></div>
-<div class="line"><a name="l01694"></a><span class="lineno"> 1694</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; instance : verilog_module-&gt;m_instances)</div>
+<div class="line"><a name="l01694"></a><span class="lineno"> 1694</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a> : verilog_module-&gt;m_instances)</div>
 <div class="line"><a name="l01695"></a><span class="lineno"> 1695</span>&#160;        {</div>
 <div class="line"><a name="l01696"></a><span class="lineno"> 1696</span>&#160;            <span class="comment">// will later hold either module or gate, so attributes can be assigned properly</span></div>
 <div class="line"><a name="l01697"></a><span class="lineno"> 1697</span>&#160;            DataContainer* container = <span class="keyword">nullptr</span>;</div>
@@ -1790,10 +1790,10 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01700"></a><span class="lineno"> 1700</span>&#160;            std::unordered_map&lt;std::string, std::string&gt; instance_assignments;</div>
 <div class="line"><a name="l01701"></a><span class="lineno"> 1701</span>&#160; </div>
 <div class="line"><a name="l01702"></a><span class="lineno"> 1702</span>&#160;            <span class="comment">// if the instance is another entity, recursively instantiate it</span></div>
-<div class="line"><a name="l01703"></a><span class="lineno"> 1703</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> module_it = m_modules_by_name.find(instance-&gt;m_type); module_it != m_modules_by_name.end())</div>
+<div class="line"><a name="l01703"></a><span class="lineno"> 1703</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> module_it = m_modules_by_name.find(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type); module_it != m_modules_by_name.end())</div>
 <div class="line"><a name="l01704"></a><span class="lineno"> 1704</span>&#160;            {</div>
 <div class="line"><a name="l01705"></a><span class="lineno"> 1705</span>&#160;                <span class="comment">// expand port assignments</span></div>
-<div class="line"><a name="l01706"></a><span class="lineno"> 1706</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [port, assignment] : instance-&gt;m_expanded_port_assignments)</div>
+<div class="line"><a name="l01706"></a><span class="lineno"> 1706</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [port, assignment] : <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_expanded_port_assignments)</div>
 <div class="line"><a name="l01707"></a><span class="lineno"> 1707</span>&#160;                {</div>
 <div class="line"><a name="l01708"></a><span class="lineno"> 1708</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> alias_it = signal_alias.find(assignment); alias_it != signal_alias.end())</div>
 <div class="line"><a name="l01709"></a><span class="lineno"> 1709</span>&#160;                    {</div>
@@ -1813,10 +1813,10 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01723"></a><span class="lineno"> 1723</span>&#160;                    }</div>
 <div class="line"><a name="l01724"></a><span class="lineno"> 1724</span>&#160;                }</div>
 <div class="line"><a name="l01725"></a><span class="lineno"> 1725</span>&#160; </div>
-<div class="line"><a name="l01726"></a><span class="lineno"> 1726</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = instantiate_module(instance-&gt;m_name, module_it-&gt;second, <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, instance_assignments); res.is_error())</div>
+<div class="line"><a name="l01726"></a><span class="lineno"> 1726</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = instantiate_module(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name, module_it-&gt;second, <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, instance_assignments); res.is_error())</div>
 <div class="line"><a name="l01727"></a><span class="lineno"> 1727</span>&#160;                {</div>
 <div class="line"><a name="l01728"></a><span class="lineno"> 1728</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a>(res.get_error(),</div>
-<div class="line"><a name="l01729"></a><span class="lineno"> 1729</span>&#160;                                      <span class="stringliteral">&quot;could not create instance &#39;&quot;</span> + instance_identifier + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance_type + <span class="stringliteral">&quot;&#39;: unable to create instance &#39;&quot;</span> + instance-&gt;m_name + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span></div>
+<div class="line"><a name="l01729"></a><span class="lineno"> 1729</span>&#160;                                      <span class="stringliteral">&quot;could not create instance &#39;&quot;</span> + instance_identifier + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance_type + <span class="stringliteral">&quot;&#39;: unable to create instance &#39;&quot;</span> + <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span></div>
 <div class="line"><a name="l01730"></a><span class="lineno"> 1730</span>&#160;                                          + module_it-&gt;second-&gt;m_name + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
 <div class="line"><a name="l01731"></a><span class="lineno"> 1731</span>&#160;                }</div>
 <div class="line"><a name="l01732"></a><span class="lineno"> 1732</span>&#160;                <span class="keywordflow">else</span></div>
@@ -1825,14 +1825,14 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01735"></a><span class="lineno"> 1735</span>&#160;                }</div>
 <div class="line"><a name="l01736"></a><span class="lineno"> 1736</span>&#160;            }</div>
 <div class="line"><a name="l01737"></a><span class="lineno"> 1737</span>&#160;            <span class="comment">// otherwise it has to be an element from the gate library</span></div>
-<div class="line"><a name="l01738"></a><span class="lineno"> 1738</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> gate_type_it = m_gate_types.find(instance-&gt;m_type); gate_type_it != m_gate_types.end())</div>
+<div class="line"><a name="l01738"></a><span class="lineno"> 1738</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> gate_type_it = m_gate_types.find(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type); gate_type_it != m_gate_types.end())</div>
 <div class="line"><a name="l01739"></a><span class="lineno"> 1739</span>&#160;            {</div>
 <div class="line"><a name="l01740"></a><span class="lineno"> 1740</span>&#160;                <span class="comment">// create the new gate</span></div>
-<div class="line"><a name="l01741"></a><span class="lineno"> 1741</span>&#160;                instance_alias[instance-&gt;m_name] = get_unique_alias(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df">get_name</a>(), instance-&gt;m_name, m_instance_name_occurences);</div>
-<div class="line"><a name="l01742"></a><span class="lineno"> 1742</span>&#160;                <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">Gate</a>* new_gate                   = m_netlist-&gt;<a class="code" href="classhal_1_1_netlist.html#aaeb832a880bee7804dd2bd7cfd6adfd4">create_gate</a>(gate_type_it-&gt;second, instance_alias.at(instance-&gt;m_name));</div>
+<div class="line"><a name="l01741"></a><span class="lineno"> 1741</span>&#160;                instance_alias[<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name] = get_unique_alias(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df">get_name</a>(), <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name, m_instance_name_occurences);</div>
+<div class="line"><a name="l01742"></a><span class="lineno"> 1742</span>&#160;                <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">Gate</a>* new_gate                   = m_netlist-&gt;<a class="code" href="classhal_1_1_netlist.html#aaeb832a880bee7804dd2bd7cfd6adfd4">create_gate</a>(gate_type_it-&gt;second, instance_alias.at(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name));</div>
 <div class="line"><a name="l01743"></a><span class="lineno"> 1743</span>&#160;                <span class="keywordflow">if</span> (new_gate == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l01744"></a><span class="lineno"> 1744</span>&#160;                {</div>
-<div class="line"><a name="l01745"></a><span class="lineno"> 1745</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not create instance &#39;&quot;</span> + instance_identifier + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance_type + <span class="stringliteral">&quot;&#39;: failed to create gate &#39;&quot;</span> + instance-&gt;m_name + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
+<div class="line"><a name="l01745"></a><span class="lineno"> 1745</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not create instance &#39;&quot;</span> + instance_identifier + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance_type + <span class="stringliteral">&quot;&#39;: failed to create gate &#39;&quot;</span> + <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
 <div class="line"><a name="l01746"></a><span class="lineno"> 1746</span>&#160;                }</div>
 <div class="line"><a name="l01747"></a><span class="lineno"> 1747</span>&#160; </div>
 <div class="line"><a name="l01748"></a><span class="lineno"> 1748</span>&#160;                <span class="keywordflow">if</span> (!<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#a5ed13732e904b8bf1b3bc670f637acc2">is_top_module</a>())</div>
@@ -1843,14 +1843,14 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01753"></a><span class="lineno"> 1753</span>&#160;                container = new_gate;</div>
 <div class="line"><a name="l01754"></a><span class="lineno"> 1754</span>&#160; </div>
 <div class="line"><a name="l01755"></a><span class="lineno"> 1755</span>&#160;                <span class="comment">// if gate is of a GND or VCC gate type, mark it as such</span></div>
-<div class="line"><a name="l01756"></a><span class="lineno"> 1756</span>&#160;                <span class="keywordflow">if</span> (m_vcc_gate_types.find(instance-&gt;m_type) != m_vcc_gate_types.end() &amp;&amp; !new_gate-&gt;mark_vcc_gate())</div>
+<div class="line"><a name="l01756"></a><span class="lineno"> 1756</span>&#160;                <span class="keywordflow">if</span> (m_vcc_gate_types.find(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type) != m_vcc_gate_types.end() &amp;&amp; !new_gate-&gt;mark_vcc_gate())</div>
 <div class="line"><a name="l01757"></a><span class="lineno"> 1757</span>&#160;                {</div>
-<div class="line"><a name="l01758"></a><span class="lineno"> 1758</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not create instance &#39;&quot;</span> + instance_identifier + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance_type + <span class="stringliteral">&quot;&#39;: failed to mark &#39;&quot;</span> + instance-&gt;m_name + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance-&gt;m_type</div>
+<div class="line"><a name="l01758"></a><span class="lineno"> 1758</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not create instance &#39;&quot;</span> + instance_identifier + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance_type + <span class="stringliteral">&quot;&#39;: failed to mark &#39;&quot;</span> + <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type</div>
 <div class="line"><a name="l01759"></a><span class="lineno"> 1759</span>&#160;                               + <span class="stringliteral">&quot;&#39; as GND gate&quot;</span>);</div>
 <div class="line"><a name="l01760"></a><span class="lineno"> 1760</span>&#160;                }</div>
-<div class="line"><a name="l01761"></a><span class="lineno"> 1761</span>&#160;                <span class="keywordflow">if</span> (m_gnd_gate_types.find(instance-&gt;m_type) != m_gnd_gate_types.end() &amp;&amp; !new_gate-&gt;mark_gnd_gate())</div>
+<div class="line"><a name="l01761"></a><span class="lineno"> 1761</span>&#160;                <span class="keywordflow">if</span> (m_gnd_gate_types.find(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type) != m_gnd_gate_types.end() &amp;&amp; !new_gate-&gt;mark_gnd_gate())</div>
 <div class="line"><a name="l01762"></a><span class="lineno"> 1762</span>&#160;                {</div>
-<div class="line"><a name="l01763"></a><span class="lineno"> 1763</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not create instance &#39;&quot;</span> + instance_identifier + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance_type + <span class="stringliteral">&quot;&#39;: failed to mark &#39;&quot;</span> + instance-&gt;m_name + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance-&gt;m_type</div>
+<div class="line"><a name="l01763"></a><span class="lineno"> 1763</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not create instance &#39;&quot;</span> + instance_identifier + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance_type + <span class="stringliteral">&quot;&#39;: failed to mark &#39;&quot;</span> + <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type</div>
 <div class="line"><a name="l01764"></a><span class="lineno"> 1764</span>&#160;                               + <span class="stringliteral">&quot;&#39; as VCC gate&quot;</span>);</div>
 <div class="line"><a name="l01765"></a><span class="lineno"> 1765</span>&#160;                }</div>
 <div class="line"><a name="l01766"></a><span class="lineno"> 1766</span>&#160; </div>
@@ -1862,7 +1862,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01772"></a><span class="lineno"> 1772</span>&#160;                }</div>
 <div class="line"><a name="l01773"></a><span class="lineno"> 1773</span>&#160; </div>
 <div class="line"><a name="l01774"></a><span class="lineno"> 1774</span>&#160;                <span class="comment">// expand pin assignments</span></div>
-<div class="line"><a name="l01775"></a><span class="lineno"> 1775</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [pin, assignment] : instance-&gt;m_expanded_port_assignments)</div>
+<div class="line"><a name="l01775"></a><span class="lineno"> 1775</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [pin, assignment] : <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_expanded_port_assignments)</div>
 <div class="line"><a name="l01776"></a><span class="lineno"> 1776</span>&#160;                {</div>
 <div class="line"><a name="l01777"></a><span class="lineno"> 1777</span>&#160;                    std::string signal;</div>
 <div class="line"><a name="l01778"></a><span class="lineno"> 1778</span>&#160; </div>
@@ -1881,7 +1881,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01791"></a><span class="lineno"> 1791</span>&#160;                    <span class="keywordflow">else</span></div>
 <div class="line"><a name="l01792"></a><span class="lineno"> 1792</span>&#160;                    {</div>
 <div class="line"><a name="l01793"></a><span class="lineno"> 1793</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not create instance &#39;&quot;</span> + instance_identifier + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance_type + <span class="stringliteral">&quot;&#39;: failed to assign &#39;&quot;</span> + assignment + <span class="stringliteral">&quot;&#39; to pin &#39;&quot;</span> + pin + <span class="stringliteral">&quot;&#39; of gate &#39;&quot;</span></div>
-<div class="line"><a name="l01794"></a><span class="lineno"> 1794</span>&#160;                                   + instance-&gt;m_name + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance-&gt;m_type + <span class="stringliteral">&quot;&#39; as the assignment is invalid&quot;</span>);</div>
+<div class="line"><a name="l01794"></a><span class="lineno"> 1794</span>&#160;                                   + <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type + <span class="stringliteral">&quot;&#39; as the assignment is invalid&quot;</span>);</div>
 <div class="line"><a name="l01795"></a><span class="lineno"> 1795</span>&#160;                    }</div>
 <div class="line"><a name="l01796"></a><span class="lineno"> 1796</span>&#160; </div>
 <div class="line"><a name="l01797"></a><span class="lineno"> 1797</span>&#160;                    <span class="comment">// get the respective net for the assignment</span></div>
@@ -1934,12 +1934,12 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01844"></a><span class="lineno"> 1844</span>&#160;            }</div>
 <div class="line"><a name="l01845"></a><span class="lineno"> 1845</span>&#160;            <span class="keywordflow">else</span></div>
 <div class="line"><a name="l01846"></a><span class="lineno"> 1846</span>&#160;            {</div>
-<div class="line"><a name="l01847"></a><span class="lineno"> 1847</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not create instance &#39;&quot;</span> + instance_identifier + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance_type + <span class="stringliteral">&quot;&#39;: failed to find gate type &#39;&quot;</span> + instance-&gt;m_type + <span class="stringliteral">&quot;&#39; in gate library &#39;&quot;</span></div>
+<div class="line"><a name="l01847"></a><span class="lineno"> 1847</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not create instance &#39;&quot;</span> + instance_identifier + <span class="stringliteral">&quot;&#39; of type &#39;&quot;</span> + instance_type + <span class="stringliteral">&quot;&#39;: failed to find gate type &#39;&quot;</span> + <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type + <span class="stringliteral">&quot;&#39; in gate library &#39;&quot;</span></div>
 <div class="line"><a name="l01848"></a><span class="lineno"> 1848</span>&#160;                           + m_netlist-&gt;<a class="code" href="classhal_1_1_netlist.html#adeae0f508eb65ca66c78d560f89340c2">get_gate_library</a>()-&gt;<a class="code" href="classhal_1_1_gate_library.html#aef64b8371779e27c778227552deb3a6d">get_name</a>() + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
 <div class="line"><a name="l01849"></a><span class="lineno"> 1849</span>&#160;            }</div>
 <div class="line"><a name="l01850"></a><span class="lineno"> 1850</span>&#160; </div>
 <div class="line"><a name="l01851"></a><span class="lineno"> 1851</span>&#160;            <span class="comment">// assign instance attributes</span></div>
-<div class="line"><a name="l01852"></a><span class="lineno"> 1852</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; attribute : instance-&gt;m_attributes)</div>
+<div class="line"><a name="l01852"></a><span class="lineno"> 1852</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; attribute : <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_attributes)</div>
 <div class="line"><a name="l01853"></a><span class="lineno"> 1853</span>&#160;            {</div>
 <div class="line"><a name="l01854"></a><span class="lineno"> 1854</span>&#160;                <span class="keywordflow">if</span> (!container-&gt;set_data(<span class="stringliteral">&quot;attribute&quot;</span>, attribute.m_name, attribute.m_type, attribute.m_value))</div>
 <div class="line"><a name="l01855"></a><span class="lineno"> 1855</span>&#160;                {</div>
@@ -1948,15 +1948,15 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01858"></a><span class="lineno"> 1858</span>&#160;                                attribute.m_name,</div>
 <div class="line"><a name="l01859"></a><span class="lineno"> 1859</span>&#160;                                attribute.m_value,</div>
 <div class="line"><a name="l01860"></a><span class="lineno"> 1860</span>&#160;                                attribute.m_type,</div>
-<div class="line"><a name="l01861"></a><span class="lineno"> 1861</span>&#160;                                instance-&gt;m_name,</div>
-<div class="line"><a name="l01862"></a><span class="lineno"> 1862</span>&#160;                                instance-&gt;m_type,</div>
+<div class="line"><a name="l01861"></a><span class="lineno"> 1861</span>&#160;                                <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name,</div>
+<div class="line"><a name="l01862"></a><span class="lineno"> 1862</span>&#160;                                <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type,</div>
 <div class="line"><a name="l01863"></a><span class="lineno"> 1863</span>&#160;                                instance_identifier,</div>
 <div class="line"><a name="l01864"></a><span class="lineno"> 1864</span>&#160;                                instance_type);</div>
 <div class="line"><a name="l01865"></a><span class="lineno"> 1865</span>&#160;                }</div>
 <div class="line"><a name="l01866"></a><span class="lineno"> 1866</span>&#160;            }</div>
 <div class="line"><a name="l01867"></a><span class="lineno"> 1867</span>&#160; </div>
 <div class="line"><a name="l01868"></a><span class="lineno"> 1868</span>&#160;            <span class="comment">// process generics</span></div>
-<div class="line"><a name="l01869"></a><span class="lineno"> 1869</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; parameter : instance-&gt;m_parameters)</div>
+<div class="line"><a name="l01869"></a><span class="lineno"> 1869</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; parameter : <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_parameters)</div>
 <div class="line"><a name="l01870"></a><span class="lineno"> 1870</span>&#160;            {</div>
 <div class="line"><a name="l01871"></a><span class="lineno"> 1871</span>&#160;                <span class="keywordflow">if</span> (!container-&gt;set_data(<span class="stringliteral">&quot;generic&quot;</span>, parameter.m_name, parameter.m_type, parameter.m_value))</div>
 <div class="line"><a name="l01872"></a><span class="lineno"> 1872</span>&#160;                {</div>
@@ -1965,8 +1965,8 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="line"><a name="l01875"></a><span class="lineno"> 1875</span>&#160;                                parameter.m_name,</div>
 <div class="line"><a name="l01876"></a><span class="lineno"> 1876</span>&#160;                                parameter.m_value,</div>
 <div class="line"><a name="l01877"></a><span class="lineno"> 1877</span>&#160;                                parameter.m_type,</div>
-<div class="line"><a name="l01878"></a><span class="lineno"> 1878</span>&#160;                                instance-&gt;m_name,</div>
-<div class="line"><a name="l01879"></a><span class="lineno"> 1879</span>&#160;                                instance-&gt;m_type,</div>
+<div class="line"><a name="l01878"></a><span class="lineno"> 1878</span>&#160;                                <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_name,</div>
+<div class="line"><a name="l01879"></a><span class="lineno"> 1879</span>&#160;                                <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>-&gt;m_type,</div>
 <div class="line"><a name="l01880"></a><span class="lineno"> 1880</span>&#160;                                instance_identifier,</div>
 <div class="line"><a name="l01881"></a><span class="lineno"> 1881</span>&#160;                                instance_type);</div>
 <div class="line"><a name="l01882"></a><span class="lineno"> 1882</span>&#160;                }</div>
@@ -2576,6 +2576,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8cpp_source.html','');
 <div class="ttc" id="anetlist__factory_8h_html"><div class="ttname"><a href="netlist__factory_8h.html">netlist_factory.h</a></div><div class="ttdoc">This file contains various functions to create and load netlists.</div></div>
 <div class="ttc" id="anetlist__preprocessing_8cpp_html_a48e60d765d82fd046fcd768268ce9dcc"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#a48e60d765d82fd046fcd768268ce9dcc">identifier</a></div><div class="ttdeci">std::string identifier</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01971">netlist_preprocessing.cpp:1971</a></div></div>
 <div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01972">netlist_preprocessing.cpp:1972</a></div></div>
+<div class="ttc" id="aplugin__system_2plugin__manager_8cpp_html_a62dbb26bbfa46d79426a59c805071f42"><div class="ttname"><a href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a></div><div class="ttdeci">std::unique_ptr&lt; BasePluginInterface &gt; instance</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00038">plugin_manager.cpp:38</a></div></div>
 <div class="ttc" id="averilog__parser_8h_html"><div class="ttname"><a href="verilog__parser_8h.html">verilog_parser.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

@@ -15,5 +15,7 @@ var plugin__system_2plugin__manager_8cpp =
     [ "load_all_plugins", "plugin__system_2plugin__manager_8cpp.html#a991b240018747caa41b17846d5b722b6", null ],
     [ "remove_model_changed_callback", "plugin__system_2plugin__manager_8cpp.html#ad66fea3d4017a3c7b058436924d3dda3", null ],
     [ "unload", "plugin__system_2plugin__manager_8cpp.html#a54caf767ba2c2f754875e9aad4849767", null ],
-    [ "unload_all_plugins", "plugin__system_2plugin__manager_8cpp.html#acb6d1f3c164b832fb19257b1df06aa53", null ]
+    [ "unload_all_plugins", "plugin__system_2plugin__manager_8cpp.html#acb6d1f3c164b832fb19257b1df06aa53", null ],
+    [ "instance", "plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42", null ],
+    [ "library", "plugin__system_2plugin__manager_8cpp.html#a439fffc14e5e1a766a5f59d58efa7747", null ]
 ];

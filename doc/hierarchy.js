@@ -89,6 +89,8 @@ var hierarchy =
       [ "hal::PinItem", "classhal_1_1_pin_item.html", null ],
       [ "hal::RootTreeItem", "classhal_1_1_root_tree_item.html", null ]
     ] ],
+    [ "hal::bitorder_propagation::BitOrder", "classhal_1_1bitorder__propagation_1_1_bit_order.html", null ],
+    [ "hal::bitorder_propagation::BitOrderResult", "classhal_1_1bitorder__propagation_1_1_bit_order_result.html", null ],
     [ "hal::BooleanFunction", "classhal_1_1_boolean_function.html", null ],
     [ "hal::BooleanFunctionDecorator", "classhal_1_1_boolean_function_decorator.html", null ],
     [ "hal::BooleanFunctionNetDecorator", "classhal_1_1_boolean_function_net_decorator.html", null ],

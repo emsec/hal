@@ -1,6 +1,10 @@
 var annotated_dup =
 [
     [ "hal", "namespacehal.html", [
+      [ "bitorder_propagation", "namespacehal_1_1bitorder__propagation.html", [
+        [ "BitOrder", "classhal_1_1bitorder__propagation_1_1_bit_order.html", "classhal_1_1bitorder__propagation_1_1_bit_order" ],
+        [ "BitOrderResult", "classhal_1_1bitorder__propagation_1_1_bit_order_result.html", "classhal_1_1bitorder__propagation_1_1_bit_order_result" ]
+      ] ],
       [ "BooleanFunctionParser", "namespacehal_1_1_boolean_function_parser.html", [
         [ "Token", "structhal_1_1_boolean_function_parser_1_1_token.html", "structhal_1_1_boolean_function_parser_1_1_token" ]
       ] ],

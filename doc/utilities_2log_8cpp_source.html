@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-87-gd9fa23e9c</span>
+   &#160;<span id="projectnumber">v4.5.0-93-g29685878a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -130,7 +130,7 @@ $(document).ready(function(){initNavTree('utilities_2log_8cpp_source.html',''); 
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            {<span class="stringliteral">&quot;stdout&quot;</span>, std::make_shared&lt;spdlog::logger&gt;(<span class="stringliteral">&quot;stdout&quot;</span>, stdout_init_list)},</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        };</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        spdlog::details::registry::instance().initialize_logger(m_logger.at(<span class="stringliteral">&quot;stdout&quot;</span>));</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">spdlog::details::registry::instance</a>().initialize_logger(m_logger.at(<span class="stringliteral">&quot;stdout&quot;</span>));</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        spdlog::set_error_handler([](<span class="keyword">const</span> std::string&amp; msg) { <span class="keywordflow">throw</span> std::invalid_argument(<span class="stringliteral">&quot;[!] internal log error: &quot;</span> + msg); });</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
@@ -204,7 +204,7 @@ $(document).ready(function(){initNavTree('utilities_2log_8cpp_source.html',''); 
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        m_logger[channel_name] = channel;</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        m_logger[channel_name]-&gt;flush_on(spdlog::level::info);</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        spdlog::details::registry::instance().initialize_logger(m_logger.at(channel_name));</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">spdlog::details::registry::instance</a>().initialize_logger(m_logger.at(channel_name));</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        m_logger_sinks[channel_name] = sinks;</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
@@ -578,6 +578,7 @@ $(document).ready(function(){initNavTree('utilities_2log_8cpp_source.html',''); 
 <div class="ttc" id="anamespacehal_1_1utils_html_a35ff967d30ff87d1273d853db1e488d8"><div class="ttname"><a href="namespacehal_1_1utils.html#a35ff967d30ff87d1273d853db1e488d8">hal::utils::get_default_log_directory</a></div><div class="ttdeci">std::filesystem::path get_default_log_directory(std::filesystem::path source_file=&quot;&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="src_2utilities_2utils_8cpp_source.html#l00179">utils.cpp:179</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a9b45b3e13bd9167aab02e17e08916231"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">netlist_serializer.cpp:58</a></div></div>
+<div class="ttc" id="aplugin__system_2plugin__manager_8cpp_html_a62dbb26bbfa46d79426a59c805071f42"><div class="ttname"><a href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a></div><div class="ttdeci">std::unique_ptr&lt; BasePluginInterface &gt; instance</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00038">plugin_manager.cpp:38</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

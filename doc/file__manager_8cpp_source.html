@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-87-gd9fa23e9c</span>
+   &#160;<span id="projectnumber">v4.5.0-93-g29685878a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -180,7 +180,7 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
 <div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classhal_1_1_file_manager.html#aa3e2d0ac5986fe0b8921745151df9deb">   91</a></span>&#160;    <span class="keywordtype">void</span> FileManager::autosave()</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    {</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <a class="code" href="classhal_1_1_project_manager.html">ProjectManager</a>* pm = ProjectManager::instance();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <a class="code" href="classhal_1_1_project_manager.html">ProjectManager</a>* pm = <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">ProjectManager::instance</a>();</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordflow">if</span> (pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#a554f192f625ac931206386efb359989f">get_project_status</a>() != ProjectManager::ProjectStatus::NONE &amp;&amp; mAutosaveEnabled)</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        {</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">gPythonContext</a>-&gt;<a class="code" href="classhal_1_1_python_context.html#a197fa69e0b47a78c31c9d908de22831c">pythonThread</a>())</div>
@@ -189,7 +189,7 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            }</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;gui&quot;</span>, <span class="stringliteral">&quot;saving a backup in case something goes wrong...&quot;</span>);</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            <span class="keywordflow">if</span> (!ProjectManager::instance()-&gt;serialize_project(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>, <span class="keyword">true</span>))</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            <span class="keywordflow">if</span> (!<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">ProjectManager::instance</a>()-&gt;serialize_project(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>, <span class="keyword">true</span>))</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;gui&quot;</span>, <span class="stringliteral">&quot;Autosave failed to create project backup to directory &#39;{}&#39;.&quot;</span>, pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#aa0b4d568444acf0e8ede1bfc5b7175a5">get_project_directory</a>().<a class="code" href="classhal_1_1_project_directory.html#af3601b7a6040a9c94cf07fadacce232b">get_shadow_dir</a>().string());</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        }</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    }</div>
@@ -245,7 +245,7 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        Q_EMIT projectOpened(projectDir, file);</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <a class="code" href="namespacehal.html#ac87c0ce709dc346017d7c2aff4aea006">gNetlistRelay</a>-&gt;<a class="code" href="classhal_1_1_netlist_relay.html#ad8f4bc9871e0dc257d637bbb2df61287">debugHandleFileOpened</a>();</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#a8ff143980197218dd6834a06165f0a5d">handleOpenDocument</a>(file);</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        ProjectManager::instance()-&gt;set_project_status(ProjectManager::ProjectStatus::OPENED);</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">ProjectManager::instance</a>()-&gt;set_project_status(ProjectManager::ProjectStatus::OPENED);</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    }</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
@@ -342,12 +342,12 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    {</div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        watchFile(file);</div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        Q_EMIT fileOpened(file);</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        ProjectManager::instance()-&gt;set_project_status(ProjectManager::ProjectStatus::OPENED);</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">ProjectManager::instance</a>()-&gt;set_project_status(ProjectManager::ProjectStatus::OPENED);</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    }</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keywordtype">void</span> FileManager::removeShadowDirectory()</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    {</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        ProjectManager* pm = ProjectManager::instance();</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        ProjectManager* pm = <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">ProjectManager::instance</a>();</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        <span class="keywordflow">if</span> (pm-&gt;get_project_status() == ProjectManager::ProjectStatus::NONE) <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qdir.html">QDir</a> shDir(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(pm-&gt;get_project_directory().get_shadow_dir()));</div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <span class="keywordflow">if</span> (shDir.exists())</div>
@@ -379,7 +379,7 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;            <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        }</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <a class="code" href="classhal_1_1_project_manager.html">ProjectManager</a>* pm = ProjectManager::instance();</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <a class="code" href="classhal_1_1_project_manager.html">ProjectManager</a>* pm = <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">ProjectManager::instance</a>();</div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        <span class="keywordflow">if</span> (!pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#a189c61c9b73c15b360018572ce9510d3">create_project_directory</a>(projdir.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>()))</div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        {</div>
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning</a>(qApp-&gt;activeWindow(),<span class="stringliteral">&quot;Aborted&quot;</span>, <span class="stringliteral">&quot;Error creating project directory &lt;&quot;</span> + projdir + <span class="stringliteral">&quot;&gt;&quot;</span>);</div>
@@ -461,7 +461,7 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;            }</div>
 <div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160; </div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;            <a class="code" href="classhal_1_1_project_manager.html">ProjectManager</a>* pm = ProjectManager::instance();</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;            <a class="code" href="classhal_1_1_project_manager.html">ProjectManager</a>* pm = <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">ProjectManager::instance</a>();</div>
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;            <span class="keywordflow">if</span> (!pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#a189c61c9b73c15b360018572ce9510d3">create_project_directory</a>(projdir.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>()))</div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;            {</div>
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning</a>(qApp-&gt;activeWindow(),<span class="stringliteral">&quot;Aborted&quot;</span>, <span class="stringliteral">&quot;Error creating project directory &lt;&quot;</span> + projdir +</div>
@@ -540,7 +540,7 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160; </div>
 <div class="line"><a name="l00451"></a><span class="lineno"><a class="line" href="classhal_1_1_file_manager.html#a31c55da323bf871b2837318178516463">  451</a></span>&#160;    <span class="keywordtype">void</span> FileManager::openProject(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> projPath)</div>
 <div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;    {</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        <a class="code" href="classhal_1_1_project_manager.html">ProjectManager</a>* pm = ProjectManager::instance();</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        <a class="code" href="classhal_1_1_project_manager.html">ProjectManager</a>* pm = <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">ProjectManager::instance</a>();</div>
 <div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;        pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#ae3e31c378bef8edc9b63f3308029c3eb">set_project_directory</a>(projPath.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>());</div>
 <div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160; </div>
 <div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qdir.html">QDir</a> shDir(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#aa0b4d568444acf0e8ede1bfc5b7175a5">get_project_directory</a>().<a class="code" href="classhal_1_1_project_directory.html#af3601b7a6040a9c94cf07fadacce232b">get_shadow_dir</a>()));</div>
@@ -783,7 +783,7 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;        <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a> = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160; </div>
 <div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;        <a class="code" href="namespacehal.html#ac87c0ce709dc346017d7c2aff4aea006">gNetlistRelay</a>-&gt;<a class="code" href="classhal_1_1_netlist_relay.html#a8f8aacd4af1c88532eaa8f1b8d6ff429">debugHandleFileClosed</a>();</div>
-<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;        ProjectManager::instance()-&gt;set_project_status(ProjectManager::ProjectStatus::NONE);</div>
+<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">ProjectManager::instance</a>()-&gt;set_project_status(ProjectManager::ProjectStatus::NONE);</div>
 <div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160; </div>
 <div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;        Q_EMIT fileClosed();</div>
 <div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;    }</div>
@@ -932,6 +932,7 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01972">netlist_preprocessing.cpp:1972</a></div></div>
 <div class="ttc" id="anetlist__serializer_8h_html"><div class="ttname"><a href="netlist__serializer_8h.html">netlist_serializer.h</a></div></div>
 <div class="ttc" id="anew__project__dialog_8h_html"><div class="ttname"><a href="new__project__dialog_8h.html">new_project_dialog.h</a></div></div>
+<div class="ttc" id="aplugin__system_2plugin__manager_8cpp_html_a62dbb26bbfa46d79426a59c805071f42"><div class="ttname"><a href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a></div><div class="ttdeci">std::unique_ptr&lt; BasePluginInterface &gt; instance</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00038">plugin_manager.cpp:38</a></div></div>
 <div class="ttc" id="aproject__directory_8h_html"><div class="ttname"><a href="project__directory_8h.html">project_directory.h</a></div></div>
 <div class="ttc" id="aproject__json_8h_html"><div class="ttname"><a href="project__json_8h.html">project_json.h</a></div></div>
 <div class="ttc" id="aproject__manager_8h_html"><div class="ttname"><a href="project__manager_8h.html">project_manager.h</a></div></div>

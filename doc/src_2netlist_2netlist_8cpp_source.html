@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-87-gd9fa23e9c</span>
+   &#160;<span id="projectnumber">v4.5.0-93-g29685878a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('src_2netlist_2netlist_8cpp_source.html
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;{</div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist.html#ae0cbe9fa2733455ca05be3655bd88585">   15</a></span>&#160;    <a class="code" href="classhal_1_1_netlist.html#ae0cbe9fa2733455ca05be3655bd88585">Netlist::Netlist</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* library) : m_gate_library(gate_library_manager::<a class="code" href="namespacehal_1_1gate__library__manager.html#a263a1bce3b00dc0bda917cd57f50b15a">get_owning</a>(library))</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist.html#ae0cbe9fa2733455ca05be3655bd88585">   15</a></span>&#160;    <a class="code" href="classhal_1_1_netlist.html#ae0cbe9fa2733455ca05be3655bd88585">Netlist::Netlist</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a439fffc14e5e1a766a5f59d58efa7747">library</a>) : m_gate_library(gate_library_manager::<a class="code" href="namespacehal_1_1gate__library__manager.html#a263a1bce3b00dc0bda917cd57f50b15a">get_owning</a>(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a439fffc14e5e1a766a5f59d58efa7747">library</a>))</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    {</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        m_event_handler    = std::make_unique&lt;EventHandler&gt;();</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        m_manager          = <span class="keyword">new</span> <a class="code" href="classhal_1_1_netlist.html#a71851ef81c1a491be6395f4c883218de">NetlistInternalManager</a>(<span class="keyword">this</span>, m_event_handler.get());</div>
@@ -1139,6 +1139,7 @@ $(document).ready(function(){initNavTree('src_2netlist_2netlist_8cpp_source.html
 <div class="ttc" id="anetlist__internal__manager_8h_html"><div class="ttname"><a href="netlist__internal__manager_8h.html">netlist_internal_manager.h</a></div></div>
 <div class="ttc" id="anetlist__preprocessing_8cpp_html_a04498d52117f705673d513847d9e0e6b"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#a04498d52117f705673d513847d9e0e6b">x</a></div><div class="ttdeci">u64 x</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l02213">netlist_preprocessing.cpp:2213</a></div></div>
 <div class="ttc" id="anetlist__preprocessing_8cpp_html_a239d98618fd31de7d8d7a94d7beb3ed7"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#a239d98618fd31de7d8d7a94d7beb3ed7">y</a></div><div class="ttdeci">u64 y</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l02214">netlist_preprocessing.cpp:2214</a></div></div>
+<div class="ttc" id="aplugin__system_2plugin__manager_8cpp_html_a439fffc14e5e1a766a5f59d58efa7747"><div class="ttname"><a href="plugin__system_2plugin__manager_8cpp.html#a439fffc14e5e1a766a5f59d58efa7747">library</a></div><div class="ttdeci">std::unique_ptr&lt; RuntimeLibrary &gt; library</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00039">plugin_manager.cpp:39</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

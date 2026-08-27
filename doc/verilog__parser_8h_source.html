@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-87-gd9fa23e9c</span>
+   &#160;<span id="projectnumber">v4.5.0-93-g29685878a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -278,7 +278,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8h_source.html',''); i
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        Result&lt;std::monostate&gt; parse_defparam(VerilogModule* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
 <div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="keywordtype">void</span> parse_attribute(std::vector&lt;VerilogDataEntry&gt;&amp; attributes);</div>
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        Result&lt;std::monostate&gt; parse_instance(VerilogModule* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, std::vector&lt;VerilogDataEntry&gt;&amp; attributes);</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        Result&lt;std::monostate&gt; parse_port_assign(VerilogInstance* instance);</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        Result&lt;std::monostate&gt; parse_port_assign(VerilogInstance* <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a>);</div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        Result&lt;std::vector&lt;VerilogDataEntry&gt;&gt; parse_parameter_assign();</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        <span class="comment">// construct netlist from intermediate format</span></div>
@@ -317,6 +317,7 @@ $(document).ready(function(){initNavTree('verilog__parser_8h_source.html',''); i
 <div class="ttc" id="anet_8h_html"><div class="ttname"><a href="net_8h.html">net.h</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a9b45b3e13bd9167aab02e17e08916231"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">netlist_serializer.cpp:58</a></div></div>
 <div class="ttc" id="anetlist__parser_8h_html"><div class="ttname"><a href="netlist__parser_8h.html">netlist_parser.h</a></div></div>
+<div class="ttc" id="aplugin__system_2plugin__manager_8cpp_html_a62dbb26bbfa46d79426a59c805071f42"><div class="ttname"><a href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a></div><div class="ttdeci">std::unique_ptr&lt; BasePluginInterface &gt; instance</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00038">plugin_manager.cpp:38</a></div></div>
 <div class="ttc" id="aspecial__strings_8h_html"><div class="ttname"><a href="special__strings_8h.html">special_strings.h</a></div></div>
 <div class="ttc" id="atoken__stream_8h_html"><div class="ttname"><a href="token__stream_8h.html">token_stream.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

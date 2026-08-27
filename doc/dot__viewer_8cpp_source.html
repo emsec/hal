@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-87-gd9fa23e9c</span>
+   &#160;<span id="projectnumber">v4.5.0-93-g29685878a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -168,10 +168,10 @@ $(document).ready(function(){initNavTree('dot__viewer_8cpp_source.html',''); ini
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <span class="keywordflow">switch</span> (istyle)</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            {</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                <span class="keywordflow">case</span> MainWindow::StyleSheetOption::Dark:</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                    QGVStyle::instance()-&gt;changeHalStyle(QGVStyle::Dark);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                    <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">QGVStyle::instance</a>()-&gt;changeHalStyle(QGVStyle::Dark);</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                <span class="keywordflow">case</span> MainWindow::StyleSheetOption::Light:</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                    QGVStyle::instance()-&gt;changeHalStyle(QGVStyle::Light);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                    <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">QGVStyle::instance</a>()-&gt;changeHalStyle(QGVStyle::Light);</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                <span class="keywordflow">default</span>:</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                    <span class="keywordflow">return</span>;</div>
@@ -276,13 +276,13 @@ $(document).ready(function(){initNavTree('dot__viewer_8cpp_source.html',''); ini
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            {</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html">QAction</a>* act = menu.<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html#addAction">addAction</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;HAL color style overwrites %1 attibute&quot;</span>).arg(target[i]));</div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;                act-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#checkable-prop">setCheckable</a>(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                act-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#checked-prop">setChecked</a>(QGVStyle::instance()-&gt;getStyle((QGVStyle::StyleTarget)i) != QGVStyle::Graphviz);</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                act-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#checked-prop">setChecked</a>(<a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">QGVStyle::instance</a>()-&gt;getStyle((QGVStyle::StyleTarget)i) != QGVStyle::Graphviz);</div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a> (act, &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html#triggered">QAction::triggered</a>, <span class="keyword">this</span>, [target,i,<span class="keyword">this</span>](<span class="keywordtype">bool</span> checked){</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;                    std::cerr &lt;&lt; <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;HAL color style overwrites %1 attibute =&gt; %2&quot;</span>).<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">arg</a>(target[i]).<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">arg</a>(checked?<span class="stringliteral">&quot;true&quot;</span>:<span class="stringliteral">&quot;false&quot;</span>).<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>() &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                    <span class="keywordflow">if</span> (checked)</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                        QGVStyle::instance()-&gt;setStyle((QGVStyle::StyleTarget)i, (QGVStyle::StyleType) <a class="code" href="classhal_1_1_main_window.html#ae93bf87dc40e044d6234f0061cfa1b3b">MainWindow::sSettingStyle</a>-&gt;value().toInt());</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">QGVStyle::instance</a>()-&gt;setStyle((QGVStyle::StyleTarget)i, (QGVStyle::StyleType) <a class="code" href="classhal_1_1_main_window.html#ae93bf87dc40e044d6234f0061cfa1b3b">MainWindow::sSettingStyle</a>-&gt;value().toInt());</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                        QGVStyle::instance()-&gt;setStyle((QGVStyle::StyleTarget)i, QGVStyle::Graphviz);</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">QGVStyle::instance</a>()-&gt;setStyle((QGVStyle::StyleTarget)i, QGVStyle::Graphviz);</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;                    this-&gt;mDotScene-&gt;update();</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;                });</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;            }</div>
@@ -343,6 +343,7 @@ $(document).ready(function(){initNavTree('dot__viewer_8cpp_source.html',''); ini
 <div class="ttc" id="anamespacehal_1_1gui__utility_html_a23e27c6df089a9e860e00ac4577a1894"><div class="ttname"><a href="namespacehal_1_1gui__utility.html#a23e27c6df089a9e860e00ac4577a1894">hal::gui_utility::getStyledSvgIcon</a></div><div class="ttdeci">QIcon getStyledSvgIcon(const QString &amp;from_to_colors_enabled, const QString &amp;svg_path, QString from_to_colors_disabled=QString())</div><div class="ttdef"><b>Definition:</b> <a href="graphics_8cpp_source.html#l00060">graphics.cpp:60</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anamespacehal_html_adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31"><div class="ttname"><a href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::GateTypeProperty::ff</a></div><div class="ttdeci">@ ff</div></div>
+<div class="ttc" id="aplugin__system_2plugin__manager_8cpp_html_a62dbb26bbfa46d79426a59c805071f42"><div class="ttname"><a href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">instance</a></div><div class="ttdeci">std::unique_ptr&lt; BasePluginInterface &gt; instance</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00038">plugin_manager.cpp:38</a></div></div>
 <div class="ttc" id="aqaction_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qaction.html">QAction</a></div></div>
 <div class="ttc" id="aqaction_html_checkable-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qaction.html#checkable-prop">QAction::setCheckable</a></div><div class="ttdeci">void setCheckable(bool)</div></div>
 <div class="ttc" id="aqaction_html_checked-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qaction.html#checked-prop">QAction::setChecked</a></div><div class="ttdeci">void setChecked(bool)</div></div>

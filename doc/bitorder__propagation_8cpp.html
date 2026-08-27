@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-87-gd9fa23e9c</span>
+   &#160;<span id="projectnumber">v4.5.0-93-g29685878a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -92,6 +92,7 @@ $(document).ready(function(){initNavTree('bitorder__propagation_8cpp.html',''); 
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="bitorder__propagation_8h_source.html">bitorder_propagation/bitorder_propagation.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="bit__order_8h_source.html">bitorder_propagation/bit_order.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="boolean__function__net__decorator_8h_source.html">hal_core/netlist/decorators/boolean_function_net_decorator.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate_8h_source.html">hal_core/netlist/gate.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="module_8h_source.html">hal_core/netlist/module.h</a>&quot;</code><br />
@@ -106,42 +107,43 @@ Include dependency graph for bitorder_propagation.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="bitorder__propagation_8cpp__incl.png" border="0" usemap="#aplugins_2bitorder__propagation_2src_2bitorder__propagation_8cpp" alt=""/></div>
 <map name="aplugins_2bitorder__propagation_2src_2bitorder__propagation_8cpp" id="aplugins_2bitorder__propagation_2src_2bitorder__propagation_8cpp">
-<area shape="rect" title=" " alt="" coords="3095,5,3307,47"/>
-<area shape="rect" href="bitorder__propagation_8h.html" title="This file contains functions for bit&#45;order propagation from pin groups of known bit order to pin grou..." alt="" coords="3799,348,3974,389"/>
-<area shape="rect" href="boolean__function__net__decorator_8h.html" title=" " alt="" coords="46,169,292,211"/>
-<area shape="rect" href="gate__pin_8h.html" title=" " alt="" coords="1510,348,1663,389"/>
-<area shape="rect" href="gate_8h.html" title=" " alt="" coords="811,177,978,203"/>
-<area shape="rect" href="module_8h.html" title=" " alt="" coords="2464,95,2650,121"/>
-<area shape="rect" href="module__pin_8h.html" title=" " alt="" coords="2899,169,3052,211"/>
-<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="3188,95,3366,121"/>
-<area shape="rect" title=" " alt="" coords="3650,95,3797,121"/>
-<area shape="rect" title=" " alt="" coords="3822,95,3884,121"/>
-<area shape="rect" title=" " alt="" coords="3908,95,3982,121"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="1088,705,1228,732"/>
-<area shape="rect" href="pin__group_8h.html" title=" " alt="" coords="2342,437,2495,479"/>
-<area shape="rect" title=" " alt="" coords="1950,705,2001,732"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="2350,527,2481,568"/>
-<area shape="rect" href="pin__direction_8h.html" title=" " alt="" coords="1453,527,1672,568"/>
-<area shape="rect" href="pin__type_8h.html" title=" " alt="" coords="1696,527,1887,568"/>
-<area shape="rect" title=" " alt="" coords="2505,534,2548,561"/>
-<area shape="rect" title=" " alt="" coords="2936,534,2994,561"/>
-<area shape="rect" title=" " alt="" coords="2151,534,2275,561"/>
-<area shape="rect" title=" " alt="" coords="1003,534,1066,561"/>
-<area shape="rect" href="enums_8h.html" title=" " alt="" coords="1497,616,1628,657"/>
-<area shape="rect" title=" " alt="" coords="2372,623,2459,650"/>
-<area shape="rect" title=" " alt="" coords="3614,623,3706,650"/>
-<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="698,348,877,389"/>
-<area shape="rect" href="net_8h.html" title=" " alt="" coords="1748,266,1907,293"/>
-<area shape="rect" title=" " alt="" coords="1757,445,1800,471"/>
-<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="1122,437,1277,479"/>
-<area shape="rect" title=" " alt="" coords="1323,534,1378,561"/>
-<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="2043,348,2228,389"/>
-<area shape="rect" title=" " alt="" coords="1256,355,1333,382"/>
-<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="404,266,598,293"/>
-<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="2314,259,2469,300"/>
-<area shape="rect" title=" " alt="" coords="2608,355,2722,382"/>
-<area shape="rect" href="pin__event_8h.html" title=" " alt="" coords="647,437,846,479"/>
-<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="3077,169,3240,211"/>
+<area shape="rect" title=" " alt="" coords="1656,5,1868,47"/>
+<area shape="rect" href="bitorder__propagation_8h.html" title="This file contains functions for bit&#45;order propagation from pin groups of known bit order to pin grou..." alt="" coords="238,259,413,300"/>
+<area shape="rect" href="bit__order_8h.html" title="This file contains the bit order of a module pin group and the collection of bit orders that a propag..." alt="" coords="246,348,405,389"/>
+<area shape="rect" href="boolean__function__net__decorator_8h.html" title=" " alt="" coords="717,169,964,211"/>
+<area shape="rect" href="gate__pin_8h.html" title=" " alt="" coords="633,348,786,389"/>
+<area shape="rect" href="gate_8h.html" title=" " alt="" coords="2464,177,2630,203"/>
+<area shape="rect" href="module_8h.html" title=" " alt="" coords="1668,95,1855,121"/>
+<area shape="rect" href="module__pin_8h.html" title=" " alt="" coords="988,169,1141,211"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="3286,95,3464,121"/>
+<area shape="rect" title=" " alt="" coords="3488,95,3635,121"/>
+<area shape="rect" title=" " alt="" coords="3660,95,3722,121"/>
+<area shape="rect" title=" " alt="" coords="3746,95,3820,121"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="601,705,741,732"/>
+<area shape="rect" href="pin__group_8h.html" title=" " alt="" coords="1116,437,1269,479"/>
+<area shape="rect" title=" " alt="" coords="3238,705,3288,732"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="1491,527,1622,568"/>
+<area shape="rect" title=" " alt="" coords="1646,534,1709,561"/>
+<area shape="rect" href="pin__direction_8h.html" title=" " alt="" coords="1182,527,1400,568"/>
+<area shape="rect" href="pin__type_8h.html" title=" " alt="" coords="916,527,1106,568"/>
+<area shape="rect" title=" " alt="" coords="1424,534,1467,561"/>
+<area shape="rect" title=" " alt="" coords="1734,534,1792,561"/>
+<area shape="rect" title=" " alt="" coords="2626,534,2750,561"/>
+<area shape="rect" href="enums_8h.html" title=" " alt="" coords="1956,616,2087,657"/>
+<area shape="rect" title=" " alt="" coords="2112,623,2198,650"/>
+<area shape="rect" title=" " alt="" coords="2222,623,2314,650"/>
+<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="2542,348,2720,389"/>
+<area shape="rect" href="net_8h.html" title=" " alt="" coords="932,266,1090,293"/>
+<area shape="rect" title=" " alt="" coords="2727,445,2770,471"/>
+<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="784,437,939,479"/>
+<area shape="rect" title=" " alt="" coords="837,534,892,561"/>
+<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="2129,348,2314,389"/>
+<area shape="rect" title=" " alt="" coords="2027,355,2104,382"/>
+<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="2390,623,2584,650"/>
+<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="2795,259,2950,300"/>
+<area shape="rect" title=" " alt="" coords="3251,355,3366,382"/>
+<area shape="rect" href="pin__event_8h.html" title=" " alt="" coords="1901,437,2100,479"/>
+<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="3354,169,3516,211"/>
 </map>
 </div>
 </div>
@@ -156,28 +158,29 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a3db853b74ac3a473b7468cb10849ae6f"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; MPG, std::map&lt; Net *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#a3db853b74ac3a473b7468cb10849ae6f">hal::bitorder_propagation::propagate_module_pingroup_bitorder</a> (const std::map&lt; MPG, std::map&lt; Net *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&gt; &amp;known_bitorders, const std::set&lt; MPG &gt; &amp;unknown_bitorders, const bool enforce_continuous_bitorders)</td></tr>
-<tr class="separator:a3db853b74ac3a473b7468cb10849ae6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ba6918bf3344347e81b1513f44f9862"><td class="memItemLeft" align="right" valign="top">Result&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#a5ba6918bf3344347e81b1513f44f9862">hal::bitorder_propagation::reorder_module_pin_groups</a> (const std::map&lt; MPG, std::map&lt; Net *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&gt; &amp;ordered_module_pin_groups)</td></tr>
-<tr class="separator:a5ba6918bf3344347e81b1513f44f9862"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16e714c1c35befde6f04ad4af3e78fef"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;, std::map&lt; Net *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#a16e714c1c35befde6f04ad4af3e78fef">hal::bitorder_propagation::propagate_bitorder</a> (Netlist *nl, const std::pair&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &amp;src, const std::pair&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &amp;dst)</td></tr>
-<tr class="memdesc:a16e714c1c35befde6f04ad4af3e78fef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate known bit-order information from one module pin group to another module pin group of unknown bit order.  <a href="namespacehal_1_1bitorder__propagation.html#a16e714c1c35befde6f04ad4af3e78fef">More...</a><br /></td></tr>
-<tr class="separator:a16e714c1c35befde6f04ad4af3e78fef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af43092380eef3ddf98e3279803cf67da"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;, std::map&lt; Net *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#af43092380eef3ddf98e3279803cf67da">hal::bitorder_propagation::propagate_bitorder</a> (const std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt; &amp;src, const std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt; &amp;dst)</td></tr>
-<tr class="memdesc:af43092380eef3ddf98e3279803cf67da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate known bit-order information from one module pin group to another module pin group of unknown bit order.  <a href="namespacehal_1_1bitorder__propagation.html#af43092380eef3ddf98e3279803cf67da">More...</a><br /></td></tr>
-<tr class="separator:af43092380eef3ddf98e3279803cf67da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afdd13c8ba0d5f0d1d22ce75a785a0289"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;, std::map&lt; Net *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#afdd13c8ba0d5f0d1d22ce75a785a0289">hal::bitorder_propagation::propagate_bitorder</a> (Netlist *nl, const std::vector&lt; std::pair&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt;&gt; &amp;src, const std::vector&lt; std::pair&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt;&gt; &amp;dst)</td></tr>
-<tr class="memdesc:afdd13c8ba0d5f0d1d22ce75a785a0289"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.  <a href="namespacehal_1_1bitorder__propagation.html#afdd13c8ba0d5f0d1d22ce75a785a0289">More...</a><br /></td></tr>
-<tr class="separator:afdd13c8ba0d5f0d1d22ce75a785a0289"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa804efc79d249ce7e0ccfecc7385317"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;, std::map&lt; Net *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#afa804efc79d249ce7e0ccfecc7385317">hal::bitorder_propagation::propagate_bitorder</a> (const std::vector&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;&gt; &amp;src, const std::vector&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;&gt; &amp;dst)</td></tr>
-<tr class="memdesc:afa804efc79d249ce7e0ccfecc7385317"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.  <a href="namespacehal_1_1bitorder__propagation.html#afa804efc79d249ce7e0ccfecc7385317">More...</a><br /></td></tr>
-<tr class="separator:afa804efc79d249ce7e0ccfecc7385317"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36e06011529d26135817a0b43de601d2"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#a36e06011529d26135817a0b43de601d2">hal::bitorder_propagation::export_bitorder_propagation_information</a> (const std::vector&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;&gt; &amp;src, const std::vector&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;&gt; &amp;dst, const std::string &amp;export_filepath)</td></tr>
-<tr class="memdesc:a36e06011529d26135817a0b43de601d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export word composition, known bitorder and connectivity in <code>.json</code> format to solve with external tools.  <a href="namespacehal_1_1bitorder__propagation.html#a36e06011529d26135817a0b43de601d2">More...</a><br /></td></tr>
-<tr class="separator:a36e06011529d26135817a0b43de601d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bc569f98307c45f27dedef2f30fc370"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#a6bc569f98307c45f27dedef2f30fc370">hal::bitorder_propagation::export_bitorder_propagation_information</a> (const std::map&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;, std::map&lt; Net *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&gt; &amp;src, const std::set&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;&gt; &amp;dst, const std::string &amp;export_filepath)</td></tr>
-<tr class="memdesc:a6bc569f98307c45f27dedef2f30fc370"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export word composition, known bitorder and connectivity in <code>.json</code> format to solve with external tools.  <a href="namespacehal_1_1bitorder__propagation.html#a6bc569f98307c45f27dedef2f30fc370">More...</a><br /></td></tr>
-<tr class="separator:a6bc569f98307c45f27dedef2f30fc370"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29e21dd2996b7bdb1781efbd85872e2e"><td class="memItemLeft" align="right" valign="top">Result&lt; BitOrderResult &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#a29e21dd2996b7bdb1781efbd85872e2e">hal::bitorder_propagation::propagate_module_pingroup_bitorder</a> (const BitOrderResult &amp;src, const std::set&lt; MPG &gt; &amp;unknown_bitorders, const bool enforce_continuous_bitorders)</td></tr>
+<tr class="separator:a29e21dd2996b7bdb1781efbd85872e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36983fb21d25bb7f8cb5eee95f912dc9"><td class="memItemLeft" align="right" valign="top">Result&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#a36983fb21d25bb7f8cb5eee95f912dc9">hal::bitorder_propagation::reorder_module_pin_groups</a> (const BitOrderResult &amp;ordered_module_pin_groups)</td></tr>
+<tr class="memdesc:a36983fb21d25bb7f8cb5eee95f912dc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reorder and rename the pins of the pin groups according to the provided bit-order information.  <a href="namespacehal_1_1bitorder__propagation.html#a36983fb21d25bb7f8cb5eee95f912dc9">More...</a><br /></td></tr>
+<tr class="separator:a36983fb21d25bb7f8cb5eee95f912dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2206f9b82b4467a2b82b83afa9ace434"><td class="memItemLeft" align="right" valign="top">Result&lt; BitOrderResult &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#a2206f9b82b4467a2b82b83afa9ace434">hal::bitorder_propagation::propagate_bitorder</a> (Netlist *nl, const std::pair&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &amp;src, const std::pair&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt; &amp;dst)</td></tr>
+<tr class="memdesc:a2206f9b82b4467a2b82b83afa9ace434"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate known bit-order information from one module pin group to another module pin group of unknown bit order.  <a href="namespacehal_1_1bitorder__propagation.html#a2206f9b82b4467a2b82b83afa9ace434">More...</a><br /></td></tr>
+<tr class="separator:a2206f9b82b4467a2b82b83afa9ace434"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9b1221ac8b4f15d13700b26c7eacff2"><td class="memItemLeft" align="right" valign="top">Result&lt; BitOrderResult &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#ab9b1221ac8b4f15d13700b26c7eacff2">hal::bitorder_propagation::propagate_bitorder</a> (const std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt; &amp;src, const std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt; &amp;dst)</td></tr>
+<tr class="memdesc:ab9b1221ac8b4f15d13700b26c7eacff2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate known bit-order information from one module pin group to another module pin group of unknown bit order.  <a href="namespacehal_1_1bitorder__propagation.html#ab9b1221ac8b4f15d13700b26c7eacff2">More...</a><br /></td></tr>
+<tr class="separator:ab9b1221ac8b4f15d13700b26c7eacff2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a849aa6477a50defc1a312659af164e83"><td class="memItemLeft" align="right" valign="top">Result&lt; BitOrderResult &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#a849aa6477a50defc1a312659af164e83">hal::bitorder_propagation::propagate_bitorder</a> (Netlist *nl, const std::vector&lt; std::pair&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt;&gt; &amp;src, const std::vector&lt; std::pair&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::string &gt;&gt; &amp;dst)</td></tr>
+<tr class="memdesc:a849aa6477a50defc1a312659af164e83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.  <a href="namespacehal_1_1bitorder__propagation.html#a849aa6477a50defc1a312659af164e83">More...</a><br /></td></tr>
+<tr class="separator:a849aa6477a50defc1a312659af164e83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a522662ff838c5a5c81718560ccb697e9"><td class="memItemLeft" align="right" valign="top">Result&lt; BitOrderResult &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#a522662ff838c5a5c81718560ccb697e9">hal::bitorder_propagation::propagate_bitorder</a> (const std::vector&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;&gt; &amp;src, const std::vector&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;&gt; &amp;dst)</td></tr>
+<tr class="memdesc:a522662ff838c5a5c81718560ccb697e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.  <a href="namespacehal_1_1bitorder__propagation.html#a522662ff838c5a5c81718560ccb697e9">More...</a><br /></td></tr>
+<tr class="separator:a522662ff838c5a5c81718560ccb697e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf853edb5894a1a709f0da1e30445b91"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;, WordIndex &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#adf853edb5894a1a709f0da1e30445b91">hal::bitorder_propagation::export_bitorder_propagation_information</a> (const std::vector&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;&gt; &amp;src, const std::vector&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;&gt; &amp;dst, const std::string &amp;export_filepath)</td></tr>
+<tr class="memdesc:adf853edb5894a1a709f0da1e30445b91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export word composition, known bitorder and connectivity in <code>.json</code> format to solve with external tools.  <a href="namespacehal_1_1bitorder__propagation.html#adf853edb5894a1a709f0da1e30445b91">More...</a><br /></td></tr>
+<tr class="separator:adf853edb5894a1a709f0da1e30445b91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a496a2399137a07c14e9fefc478245afc"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;, WordIndex &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1bitorder__propagation.html#a496a2399137a07c14e9fefc478245afc">hal::bitorder_propagation::export_bitorder_propagation_information</a> (const BitOrderResult &amp;src, const std::set&lt; std::pair&lt; Module *, PinGroup&lt; ModulePin &gt; * &gt;&gt; &amp;dst, const std::string &amp;export_filepath)</td></tr>
+<tr class="memdesc:a496a2399137a07c14e9fefc478245afc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export word composition, known bitorder and connectivity in <code>.json</code> format to solve with external tools.  <a href="namespacehal_1_1bitorder__propagation.html#a496a2399137a07c14e9fefc478245afc">More...</a><br /></td></tr>
+<tr class="separator:a496a2399137a07c14e9fefc478245afc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

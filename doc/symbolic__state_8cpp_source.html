@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-87-gd9fa23e9c</span>
+   &#160;<span id="projectnumber">v4.5.0-93-g29685878a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -129,13 +129,17 @@ $(document).ready(function(){initNavTree('symbolic__state_8cpp_source.html','');
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        {</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <span class="keywordflow">if</span> (key.<a class="code" href="classhal_1_1_boolean_function.html#a5d00c051b0f9666b68e726c679bcd950">is_variable</a>())</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                this-&gt;variable.emplace(std::move(key), std::move(value));</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            }</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        }</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    }    <span class="comment">// namespace SMT</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                <span class="comment">// insert_or_assign, not emplace: emplace leaves an existing binding untouched, so</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                <span class="comment">// setting a variable a second time did nothing and a loop that steps a state forward</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                <span class="comment">// silently kept the value it started with.</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                this-&gt;variable.insert_or_assign(key.<a class="code" href="classhal_1_1_boolean_function.html#aab3565a11f258580f68515f6dfaf0f0e">clone</a>(), value.<a class="code" href="classhal_1_1_boolean_function.html#aab3565a11f258580f68515f6dfaf0f0e">clone</a>());</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            }</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    }    <span class="comment">// namespace SMT</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html"><div class="ttname"><a href="classhal_1_1_boolean_function.html">hal::BooleanFunction</a></div><div class="ttdef"><b>Definition:</b> <a href="boolean__function_8h_source.html#l00054">boolean_function.h:55</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html_a5d00c051b0f9666b68e726c679bcd950"><div class="ttname"><a href="classhal_1_1_boolean_function.html#a5d00c051b0f9666b68e726c679bcd950">hal::BooleanFunction::is_variable</a></div><div class="ttdeci">bool is_variable() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00771">boolean_function.cpp:771</a></div></div>
+<div class="ttc" id="aclasshal_1_1_boolean_function_html_aab3565a11f258580f68515f6dfaf0f0e"><div class="ttname"><a href="classhal_1_1_boolean_function.html#aab3565a11f258580f68515f6dfaf0f0e">hal::BooleanFunction::clone</a></div><div class="ttdeci">BooleanFunction clone() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00748">boolean_function.cpp:748</a></div></div>
 <div class="ttc" id="aclasshal_1_1_s_m_t_1_1_symbolic_state_html_a1c9bd4903f4e05927b1f0012b03e7423"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_symbolic_state.html#a1c9bd4903f4e05927b1f0012b03e7423">hal::SMT::SymbolicState::get</a></div><div class="ttdeci">const BooleanFunction &amp; get(const BooleanFunction &amp;key) const</div><div class="ttdef"><b>Definition:</b> <a href="symbolic__state_8cpp_source.html#l00018">symbolic_state.cpp:18</a></div></div>
 <div class="ttc" id="aclasshal_1_1_s_m_t_1_1_symbolic_state_html_a7fb1525370359d297c994b5be0cd677f"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_symbolic_state.html#a7fb1525370359d297c994b5be0cd677f">hal::SMT::SymbolicState::get_bindings</a></div><div class="ttdeci">std::unordered_map&lt; std::string, const BooleanFunction * &gt; get_bindings() const</div><div class="ttdef"><b>Definition:</b> <a href="symbolic__state_8cpp_source.html#l00024">symbolic_state.cpp:24</a></div></div>
 <div class="ttc" id="aclasshal_1_1_s_m_t_1_1_symbolic_state_html_acb31d002d2e0140fa9c0ebbdf862b856"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_symbolic_state.html#acb31d002d2e0140fa9c0ebbdf862b856">hal::SMT::SymbolicState::SymbolicState</a></div><div class="ttdeci">SymbolicState(const std::vector&lt; BooleanFunction &gt; &amp;variables={})</div><div class="ttdef"><b>Definition:</b> <a href="symbolic__state_8cpp_source.html#l00007">symbolic_state.cpp:7</a></div></div>
