@@ -84,6 +84,7 @@ All notable changes to this project will be documented in this file.
   * dot viewer
     * added 'hover over node' feature in dot viewer
 * GUI
+  * changed major Qt version 5 -> 6
   * fixed the GUI hanging for minutes when a module with many gates is selected, `ModuleModel` emitted a row insert signal per item while the model was already being reset, which made the attached filter proxy remap its rows once per item
   * fixed the GUI stalling when a large module is unfolded, the tree views measured every row individually and shaped the text of each gate name just to learn how tall the row is
   * changed the module elements tree to not rebuild itself twice per selection change
