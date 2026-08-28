@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-93-g29685878a</span>
+   &#160;<span id="projectnumber">v4.5.0-124-g47ab54673</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -109,6 +109,8 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacehal_1_1_content_layout"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_content_layout.html">ContentLayout</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacehal_1_1core__strings"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1core__strings.html">core_strings</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacehal_1_1cte"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1cte.html">cte</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacehal_1_1dataflow"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1dataflow.html">dataflow</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -341,6 +343,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_influence_plugin.html">BooleanInfluencePlugin</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Plugin interface for the Boolean influence plugin.  <a href="classhal_1_1_boolean_influence_plugin.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_clock_tree_extractor_plugin.html">ClockTreeExtractorPlugin</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_cli_extension_dataflow.html">CliExtensionDataflow</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1888,6 +1892,8 @@ Functions</h2></td></tr>
 <tr class="separator:a4e45c1b95ca5659cce7098ca78a7d986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a130b3b2ea5e756dc624ad405996251"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a5a130b3b2ea5e756dc624ad405996251">PYBIND11_PLUGIN</a> (boolean_influence)</td></tr>
 <tr class="separator:a5a130b3b2ea5e756dc624ad405996251"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b3eaa95dabce4ffa9c02f2791c58dfa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a8b3eaa95dabce4ffa9c02f2791c58dfa">PYBIND11_PLUGIN</a> (clock_tree_extractor)</td></tr>
+<tr class="separator:a8b3eaa95dabce4ffa9c02f2791c58dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03ceb066126cbb00eb42bbfc12c0d503"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a03ceb066126cbb00eb42bbfc12c0d503">PYBIND11_PLUGIN</a> (dataflow)</td></tr>
 <tr class="separator:a03ceb066126cbb00eb42bbfc12c0d503"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f0d423c0fa3094f31c0290c3a64ffb6"><td class="memItemLeft" align="right" valign="top">QGVInteraction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a0f0d423c0fa3094f31c0290c3a64ffb6">constructClockTreeExtractorInteraction</a> (QGVScene *parent)</td></tr>
@@ -3010,7 +3016,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a4e45c1b95ca5659cce7098ca78a7d986"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e45c1b95ca5659cce7098ca78a7d986">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[1/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e45c1b95ca5659cce7098ca78a7d986">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[1/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3032,7 +3038,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a5a130b3b2ea5e756dc624ad405996251"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a130b3b2ea5e756dc624ad405996251">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[2/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a130b3b2ea5e756dc624ad405996251">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[2/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3053,8 +3059,30 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 
 </div>
 </div>
+<a id="a8b3eaa95dabce4ffa9c02f2791c58dfa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b3eaa95dabce4ffa9c02f2791c58dfa">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[3/21]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">hal::PYBIND11_PLUGIN </td>
+          <td>(</td>
+          <td class="paramtype">clock_tree_extractor&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="plugins_2clock__tree__extractor_2python_2python__bindings_8cpp_source.html#l00063">63</a> of file <a class="el" href="plugins_2clock__tree__extractor_2python_2python__bindings_8cpp_source.html">python_bindings.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="clock__tree_8cpp_source.html#l00160">hal::cte::ClockTree::from_netlist()</a>, <a class="el" href="clock__tree_8h_source.html#l00060">hal::cte::GATE</a>, <a class="el" href="plugin__clock__tree__extractor_8cpp_source.html#l00063">hal::ClockTreeExtractorPlugin::get_dependencies()</a>, <a class="el" href="plugin__clock__tree__extractor_8cpp_source.html#l00046">hal::ClockTreeExtractorPlugin::get_description()</a>, <a class="el" href="clock__tree_8cpp_source.html#l00757">hal::cte::ClockTree::get_gates()</a>, <a class="el" href="plugin__clock__tree__extractor_8cpp_source.html#l00036">hal::ClockTreeExtractorPlugin::get_name()</a>, <a class="el" href="clock__tree_8cpp_source.html#l00792">hal::cte::ClockTree::get_netlist()</a>, <a class="el" href="clock__tree_8cpp_source.html#l00772">hal::cte::ClockTree::get_nets()</a>, <a class="el" href="plugin__clock__tree__extractor_8cpp_source.html#l00041">hal::ClockTreeExtractorPlugin::get_version()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00751">hal::ShortestPath::module()</a>, <a class="el" href="clock__tree_8h_source.html#l00060">hal::cte::NET</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>.</p>
+
+</div>
+</div>
 <a id="a03ceb066126cbb00eb42bbfc12c0d503"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a03ceb066126cbb00eb42bbfc12c0d503">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[3/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a03ceb066126cbb00eb42bbfc12c0d503">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[4/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3076,7 +3104,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a4ab2b2711add96dbe54bf8dab1d2f266"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4ab2b2711add96dbe54bf8dab1d2f266">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[4/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ab2b2711add96dbe54bf8dab1d2f266">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[5/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3098,7 +3126,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a27dc861f2c1bdc933d75b8bfa2d33b5a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a27dc861f2c1bdc933d75b8bfa2d33b5a">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[5/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a27dc861f2c1bdc933d75b8bfa2d33b5a">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[6/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3120,7 +3148,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a75149032538edc19dd5073e7ef475ad4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a75149032538edc19dd5073e7ef475ad4">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[6/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a75149032538edc19dd5073e7ef475ad4">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[7/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3142,7 +3170,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a3e161865d274af214bc6cbf019f2d09d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e161865d274af214bc6cbf019f2d09d">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[7/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e161865d274af214bc6cbf019f2d09d">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[8/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3164,7 +3192,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a6fcde216ea5842cbba08e5dfbc7e435d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6fcde216ea5842cbba08e5dfbc7e435d">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[8/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fcde216ea5842cbba08e5dfbc7e435d">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[9/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3186,7 +3214,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a034467b937d9c580d84c198167d00929"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a034467b937d9c580d84c198167d00929">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[9/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a034467b937d9c580d84c198167d00929">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[10/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3208,7 +3236,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a9049dbcbc95d1f3b646a8f8ff71d0a12"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9049dbcbc95d1f3b646a8f8ff71d0a12">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[10/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9049dbcbc95d1f3b646a8f8ff71d0a12">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[11/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3230,7 +3258,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="ad4f5d8f909211452ac2b4911cc559076"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad4f5d8f909211452ac2b4911cc559076">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[11/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4f5d8f909211452ac2b4911cc559076">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[12/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3252,7 +3280,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a3694bc1e0d3dc6c3af7260886e1c2549"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3694bc1e0d3dc6c3af7260886e1c2549">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[12/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3694bc1e0d3dc6c3af7260886e1c2549">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[13/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3274,7 +3302,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a3a6fe941f023311edea3d935c879b214"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a6fe941f023311edea3d935c879b214">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[13/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a6fe941f023311edea3d935c879b214">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[14/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3296,7 +3324,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a26bda6d0370c590031bbfdac577ce4bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a26bda6d0370c590031bbfdac577ce4bc">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[14/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a26bda6d0370c590031bbfdac577ce4bc">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[15/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3318,7 +3346,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="ac1aa5ff1374bf6e2a190ccd431dc6921"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1aa5ff1374bf6e2a190ccd431dc6921">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[15/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1aa5ff1374bf6e2a190ccd431dc6921">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[16/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3340,7 +3368,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a8a1a6426ee607f1b0b46ec1e3a32765e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a1a6426ee607f1b0b46ec1e3a32765e">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[16/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a1a6426ee607f1b0b46ec1e3a32765e">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[17/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3362,7 +3390,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="aa0beecf81a444ab07294784926724675"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0beecf81a444ab07294784926724675">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[17/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0beecf81a444ab07294784926724675">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[18/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3384,7 +3412,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a7ebc756d6fcde90dac528da6ea651423"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ebc756d6fcde90dac528da6ea651423">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[18/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ebc756d6fcde90dac528da6ea651423">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[19/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3406,7 +3434,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="af75715351b492343ea055759ce20b0c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af75715351b492343ea055759ce20b0c5">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[19/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af75715351b492343ea055759ce20b0c5">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[20/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3428,7 +3456,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a395eddae0a8b81af7b00b23b0d0a02b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a395eddae0a8b81af7b00b23b0d0a02b3">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[20/20]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a395eddae0a8b81af7b00b23b0d0a02b3">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN() <span class="overload">[21/21]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

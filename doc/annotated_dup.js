@@ -11,6 +11,11 @@ var annotated_dup =
       [ "core_strings", "namespacehal_1_1core__strings.html", [
         [ "CaseInsensitiveCharTraits", "structhal_1_1core__strings_1_1_case_insensitive_char_traits.html", null ]
       ] ],
+      [ "cte", "namespacehal_1_1cte.html", [
+        [ "VoidPtrHash", "structhal_1_1cte_1_1_void_ptr_hash.html", "structhal_1_1cte_1_1_void_ptr_hash" ],
+        [ "PairPtrEq", "structhal_1_1cte_1_1_pair_ptr_eq.html", "structhal_1_1cte_1_1_pair_ptr_eq" ],
+        [ "ClockTree", "classhal_1_1cte_1_1_clock_tree.html", "classhal_1_1cte_1_1_clock_tree" ]
+      ] ],
       [ "dataflow", "namespacehal_1_1dataflow.html", [
         [ "evaluation", "namespacehal_1_1dataflow_1_1evaluation.html", [
           [ "Configuration", "structhal_1_1dataflow_1_1evaluation_1_1_configuration.html", "structhal_1_1dataflow_1_1evaluation_1_1_configuration" ],
@@ -174,6 +179,7 @@ var annotated_dup =
       [ "PyBasePluginInterface", "classhal_1_1_py_base_plugin_interface.html", "classhal_1_1_py_base_plugin_interface" ],
       [ "BitorderPropagationPlugin", "classhal_1_1_bitorder_propagation_plugin.html", "classhal_1_1_bitorder_propagation_plugin" ],
       [ "BooleanInfluencePlugin", "classhal_1_1_boolean_influence_plugin.html", "classhal_1_1_boolean_influence_plugin" ],
+      [ "ClockTreeExtractorPlugin", "classhal_1_1_clock_tree_extractor_plugin.html", "classhal_1_1_clock_tree_extractor_plugin" ],
       [ "CliExtensionDataflow", "classhal_1_1_cli_extension_dataflow.html", "classhal_1_1_cli_extension_dataflow" ],
       [ "GuiExtensionDataflow", "classhal_1_1_gui_extension_dataflow.html", "classhal_1_1_gui_extension_dataflow" ],
       [ "DataflowPlugin", "classhal_1_1_dataflow_plugin.html", "classhal_1_1_dataflow_plugin" ],

@@ -41,6 +41,7 @@ var namespacehal =
       [ "positionToString", "namespacehal_1_1_content_layout.html#adab5a69bccb6c19c9718ba082c55d1cf", null ]
     ] ],
     [ "core_strings", "namespacehal_1_1core__strings.html", "namespacehal_1_1core__strings" ],
+    [ "cte", "namespacehal_1_1cte.html", "namespacehal_1_1cte" ],
     [ "dataflow", "namespacehal_1_1dataflow.html", "namespacehal_1_1dataflow" ],
     [ "event_log", "namespacehal_1_1event__log.html", [
       [ "enable_event_log", "namespacehal_1_1event__log.html#a1173026c7030154bb50826f89064680b", null ],
@@ -309,6 +310,7 @@ var namespacehal =
     [ "PyBasePluginInterface", "classhal_1_1_py_base_plugin_interface.html", "classhal_1_1_py_base_plugin_interface" ],
     [ "BitorderPropagationPlugin", "classhal_1_1_bitorder_propagation_plugin.html", "classhal_1_1_bitorder_propagation_plugin" ],
     [ "BooleanInfluencePlugin", "classhal_1_1_boolean_influence_plugin.html", "classhal_1_1_boolean_influence_plugin" ],
+    [ "ClockTreeExtractorPlugin", "classhal_1_1_clock_tree_extractor_plugin.html", "classhal_1_1_clock_tree_extractor_plugin" ],
     [ "CliExtensionDataflow", "classhal_1_1_cli_extension_dataflow.html", "classhal_1_1_cli_extension_dataflow" ],
     [ "GuiExtensionDataflow", "classhal_1_1_gui_extension_dataflow.html", "classhal_1_1_gui_extension_dataflow" ],
     [ "DataflowPlugin", "classhal_1_1_dataflow_plugin.html", "classhal_1_1_dataflow_plugin" ],
@@ -1025,6 +1027,7 @@ var namespacehal =
     [ "project_manager_init", "group__pybind.html#gac072de2b8e9f09d8320090e5873be90d", null ],
     [ "PYBIND11_PLUGIN", "namespacehal.html#a4e45c1b95ca5659cce7098ca78a7d986", null ],
     [ "PYBIND11_PLUGIN", "namespacehal.html#a5a130b3b2ea5e756dc624ad405996251", null ],
+    [ "PYBIND11_PLUGIN", "namespacehal.html#a8b3eaa95dabce4ffa9c02f2791c58dfa", null ],
     [ "PYBIND11_PLUGIN", "namespacehal.html#a03ceb066126cbb00eb42bbfc12c0d503", null ],
     [ "PYBIND11_PLUGIN", "namespacehal.html#a4ab2b2711add96dbe54bf8dab1d2f266", null ],
     [ "PYBIND11_PLUGIN", "namespacehal.html#a27dc861f2c1bdc933d75b8bfa2d33b5a", null ],

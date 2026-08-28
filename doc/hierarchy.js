@@ -47,6 +47,7 @@ var hierarchy =
     [ "hal::BasePluginInterface", "classhal_1_1_base_plugin_interface.html", [
       [ "hal::BitorderPropagationPlugin", "classhal_1_1_bitorder_propagation_plugin.html", null ],
       [ "hal::BooleanInfluencePlugin", "classhal_1_1_boolean_influence_plugin.html", null ],
+      [ "hal::ClockTreeExtractorPlugin", "classhal_1_1_clock_tree_extractor_plugin.html", null ],
       [ "hal::DataflowPlugin", "classhal_1_1_dataflow_plugin.html", null ],
       [ "hal::DotViewerPlugin", "classhal_1_1_dot_viewer_plugin.html", null ],
       [ "hal::GenlibWriterPlugin", "classhal_1_1_genlib_writer_plugin.html", null ],
@@ -119,6 +120,7 @@ var hierarchy =
     ] ],
     [ "hal::hawkeye::CipherCandidate", "classhal_1_1hawkeye_1_1_cipher_candidate.html", null ],
     [ "hal::SimulationInput::Clock", "structhal_1_1_simulation_input_1_1_clock.html", null ],
+    [ "hal::cte::ClockTree", "classhal_1_1cte_1_1_clock_tree.html", null ],
     [ "hal::ClockTreeExtractorInteractionRegistration", "classhal_1_1_clock_tree_extractor_interaction_registration.html", null ],
     [ "hal::utils::Color", "structhal_1_1utils_1_1_color.html", null ],
     [ "hal::CommentEntry", "classhal_1_1_comment_entry.html", null ],
@@ -266,6 +268,7 @@ var hierarchy =
       [ "hal::SaleaeOutputFile", "classhal_1_1_saleae_output_file.html", null ]
     ] ],
     [ "hal::result_constructor_type::OK", "classhal_1_1result__constructor__type_1_1_o_k.html", null ],
+    [ "hal::cte::PairPtrEq", "structhal_1_1cte_1_1_pair_ptr_eq.html", null ],
     [ "hal::SMT::ModelParser::ParserContext", "structhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context.html", null ],
     [ "hal::dataflow::processing::PassConfiguration", "structhal_1_1dataflow_1_1processing_1_1_pass_configuration.html", null ],
     [ "std::filesystem::path", null, [
@@ -932,6 +935,7 @@ var hierarchy =
     [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
+    [ "hal::cte::VoidPtrHash", "structhal_1_1cte_1_1_void_ptr_hash.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ],
     [ "hal::WaveData", "classhal_1_1_wave_data.html", [
       [ "hal::WaveDataBoolean", "classhal_1_1_wave_data_boolean.html", null ],
