@@ -412,7 +412,7 @@ namespace hal
         py_netlist_traversal_decorator.def(
             "get_next_sequential_gates",
             [](NetlistTraversalDecorator& self, const Net* net, bool successors, const std::set<PinType>& forbidden_pins) -> std::optional<std::set<Gate*>> {
-                auto res = self.get_next_sequential_gates(net, successors, forbidden_pins, nullptr);
+                auto res = self.get_next_sequential_gates(net, successors, forbidden_pins);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -425,7 +425,7 @@ namespace hal
             },
             py::arg("net"),
             py::arg("successors"),
-            py::arg("forbidden_pins"),
+            py::arg("forbidden_pins") = std::set<PinType>(),
             borrowed(), R"(
             Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
             Traverse over gates that are not sequential until a sequential gate is found.
@@ -441,7 +441,7 @@ namespace hal
         py_netlist_traversal_decorator.def(
             "get_next_sequential_gates",
             [](NetlistTraversalDecorator& self, const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins) -> std::optional<std::set<Gate*>> {
-                auto res = self.get_next_sequential_gates(gate, successors, forbidden_pins, nullptr);
+                auto res = self.get_next_sequential_gates(gate, successors, forbidden_pins);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -454,7 +454,7 @@ namespace hal
             },
             py::arg("gate"),
             py::arg("successors"),
-            py::arg("forbidden_pins"),
+            py::arg("forbidden_pins") = std::set<PinType>(),
             borrowed(), R"(
             Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
             Traverse over gates that are not sequential until a sequential gate is found.
@@ -495,62 +495,62 @@ namespace hal
         )");
 
         py_netlist_traversal_decorator.def(
-            "get_next_combinational_gates",
+            "get_combinational_cone",
             [](NetlistTraversalDecorator& self, const Net* net, bool successors, const std::set<PinType>& forbidden_pins) -> std::optional<std::set<Gate*>> {
-                auto res = self.get_next_combinational_gates(net, successors, forbidden_pins, nullptr);
+                auto res = self.get_combinational_cone(net, successors, forbidden_pins);
                 if (res.is_ok())
                 {
                     return res.get();
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while getting next combinational gates:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while getting combinational cone:\n{}", res.get_error().get());
                     return std::nullopt;
                 }
             },
             py::arg("net"),
             py::arg("successors"),
-            py::arg("forbidden_pins"),
+            py::arg("forbidden_pins") = std::set<PinType>(),
             borrowed(), R"(
-            Starting from the given net, traverse the netlist and return all combinational successor/predecessor gates.
-            Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
+            Starting from the given net, collect the combinational cone in the given direction, i.e., the combinational fan-out (``successors = True``) or fan-in (``successors = False``) of the net.
+            Continue traversal as long as further combinational gates are found and stop at gates that are not combinational, so that the cone extends up to (but not including) the sequential boundary.
             All combinational gates found during traversal are added to the result.
             Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.
 
             :param hal_py.Net net: Start net.
-            :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
+            :param bool successors: Set ``True`` to get the fan-out cone, set ``False`` to get the fan-in cone.
             :param set[hal_py.PinType] forbidden_pins: Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.
-            :returns: The next combinational gates on success, ``None`` otherwise.
+            :returns: The gates of the combinational cone on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
         )");
 
         py_netlist_traversal_decorator.def(
-            "get_next_combinational_gates",
+            "get_combinational_cone",
             [](NetlistTraversalDecorator& self, const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins) -> std::optional<std::set<Gate*>> {
-                auto res = self.get_next_combinational_gates(gate, successors, forbidden_pins, nullptr);
+                auto res = self.get_combinational_cone(gate, successors, forbidden_pins);
                 if (res.is_ok())
                 {
                     return res.get();
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while getting next combinational gates:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while getting combinational cone:\n{}", res.get_error().get());
                     return std::nullopt;
                 }
             },
             py::arg("gate"),
             py::arg("successors"),
-            py::arg("forbidden_pins"),
+            py::arg("forbidden_pins") = std::set<PinType>(),
             borrowed(), R"(
-            Starting from the given gate, traverse the netlist and return all combinational successor/predecessor gates.
-            Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
+            Starting from the given gate, collect the combinational cone in the given direction, i.e., the combinational fan-out (``successors = True``) or fan-in (``successors = False``) of the gate.
+            Continue traversal as long as further combinational gates are found and stop at gates that are not combinational, so that the cone extends up to (but not including) the sequential boundary.
             All combinational gates found during traversal are added to the result.
             Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.
 
             :param hal_py.Gate gate: Start gate.
-            :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
+            :param bool successors: Set ``True`` to get the fan-out cone, set ``False`` to get the fan-in cone.
             :param set[hal_py.PinType] forbidden_pins: Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.
-            :returns: The next combinational gates on success, ``None`` otherwise.
+            :returns: The gates of the combinational cone on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
         )");
 

@@ -311,31 +311,27 @@ namespace hal
          * Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
          * Traverse over gates that are not sequential until a sequential gate is found.
          * Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
-         * Provide a cache to speed up traversal when calling this function multiple times on the same netlist using the same forbidden pins.
-         * 
+         * For repeated calls on the same netlist, seal the traversal into a reusable cache with `make_traversal_cache` and call `get_gates` with it instead.
+         *
          * @param[in] net - Start net.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
          * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result. Defaults to an empty set.
-         * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
          * @returns The next sequential gates on success, an error otherwise.
          */
-        Result<std::set<Gate*>>
-            get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+        Result<std::set<Gate*>> get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins = {}) const;
 
         /**
          * Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
          * Traverse over gates that are not sequential until a sequential gate is found.
          * Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
-         * Provide a cache to speed up traversal when calling this function multiple times on the same netlist using the same forbidden pins.
-         * 
+         * For repeated calls on the same netlist, seal the traversal into a reusable cache with `make_traversal_cache` and call `get_gates` with it instead.
+         *
          * @param[in] gate - Start gate.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
          * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result. Defaults to an empty set.
-         * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
          * @returns The next sequential gates on success, an error otherwise.
          */
-        Result<std::set<Gate*>>
-            get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+        Result<std::set<Gate*>> get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins = {}) const;
 
         /**
          * Get the next sequential gates for all sequential gates in the netlist by traversing through remaining logic (e.g., combinational logic).
@@ -349,36 +345,32 @@ namespace hal
         Result<std::map<Gate*, std::set<Gate*>>> get_next_sequential_gates_map(bool successors, const std::set<PinType>& forbidden_pins) const;
 
         /**
-         * Starting from the given net, traverse the netlist and return all combinational successor/predecessor gates.
-         * Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
+         * Starting from the given net, collect the combinational cone in the given direction, i.e., the combinational fan-out (`successors = true`) or fan-in (`successors = false`) of the net.
+         * Continue traversal as long as further combinational gates are found and stop at gates that are not combinational, so that the cone extends up to (but not including) the sequential boundary.
          * All combinational gates found during traversal are added to the result.
-         * Provide a cache to speed up traversal when calling this function multiple times on the same netlist.
          * Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.
-         * 
+         * For repeated calls on the same netlist, seal the traversal into a reusable cache with `make_traversal_cache` and call `get_gates` with it instead.
+         *
          * @param[in] net - Start net.
-         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] successors - Set `true` to get the fan-out cone, set `false` to get the fan-in cone.
          * @param[in] forbidden_pins - Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.
-         * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
-         * @returns The next combinational gates on success, an error otherwise.
+         * @returns The gates of the combinational cone on success, an error otherwise.
          */
-        Result<std::set<Gate*>>
-            get_next_combinational_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+        Result<std::set<Gate*>> get_combinational_cone(const Net* net, bool successors, const std::set<PinType>& forbidden_pins = {}) const;
 
         /**
-         * Starting from the given gate, traverse the netlist and return all combinational successor/predecessor gates.
-         * Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
+         * Starting from the given gate, collect the combinational cone in the given direction, i.e., the combinational fan-out (`successors = true`) or fan-in (`successors = false`) of the gate.
+         * Continue traversal as long as further combinational gates are found and stop at gates that are not combinational, so that the cone extends up to (but not including) the sequential boundary.
          * All combinational gates found during traversal are added to the result.
-         * Provide a cache to speed up traversal when calling this function multiple times on the same netlist.
          * Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.
-         * 
+         * For repeated calls on the same netlist, seal the traversal into a reusable cache with `make_traversal_cache` and call `get_gates` with it instead.
+         *
          * @param[in] gate - Start gate.
-         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] successors - Set `true` to get the fan-out cone, set `false` to get the fan-in cone.
          * @param[in] forbidden_pins - Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.
-         * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
-         * @returns The next combinational gates on success, an error otherwise.
+         * @returns The gates of the combinational cone on success, an error otherwise.
          */
-        Result<std::set<Gate*>>
-            get_next_combinational_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+        Result<std::set<Gate*>> get_combinational_cone(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins = {}) const;
 
         /**
          * Find the length of shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with the end gate. 

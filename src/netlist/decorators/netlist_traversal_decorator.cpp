@@ -626,18 +626,15 @@ namespace hal
     }    // namespace
 
     // The two traversals below are the memoized walk with their conditions pinned. They exist by name
-    // because the questions they answer are asked constantly, and they keep the caller-supplied store
-    // so that the Boolean influence plugin can share one across the flip-flops of a netlist.
-    Result<std::set<Gate*>>
-        NetlistTraversalDecorator::get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    // because the questions they answer are asked constantly; anyone asking them repeatedly holds a
+    // TraversalCache and calls get_gates with it instead.
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins) const
     {
         std::unordered_map<const Net*, std::set<Gate*>> local_store;
-        return get_gates_memoized(
-            net, successors, is_sequential, TraversalStop::at_match, forbidden_pin_filter(forbidden_pins), sequential_entry_filter(forbidden_pins), (cache != nullptr) ? *cache : local_store);
+        return get_gates_memoized(net, successors, is_sequential, TraversalStop::at_match, forbidden_pin_filter(forbidden_pins), sequential_entry_filter(forbidden_pins), local_store);
     }
 
-    Result<std::set<Gate*>>
-        NetlistTraversalDecorator::get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins) const
     {
         if (gate == nullptr)
         {
@@ -651,6 +648,8 @@ namespace hal
 
         std::set<Gate*> res;
         std::unordered_map<const Net*, std::set<Gate*>> local_store;
+        const auto exit_filter  = forbidden_pin_filter(forbidden_pins);
+        const auto entry_filter = sequential_entry_filter(forbidden_pins);
         for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
         {
             if (forbidden_pins.find(exit_ep->get_pin()->get_type()) != forbidden_pins.end())
@@ -658,7 +657,7 @@ namespace hal
                 continue;
             }
 
-            auto res_net = get_next_sequential_gates(exit_ep->get_net(), successors, forbidden_pins, (cache != nullptr) ? cache : &local_store);
+            auto res_net = get_gates_memoized(exit_ep->get_net(), successors, is_sequential, TraversalStop::at_match, exit_filter, entry_filter, local_store);
             if (res_net.is_error())
             {
                 return ERR_APPEND(res_net.get_error(), "cannot get next sequential gates of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
@@ -692,18 +691,16 @@ namespace hal
         return OK(std::move(seq_gate_map));
     }
 
-    Result<std::set<Gate*>>
-        NetlistTraversalDecorator::get_next_combinational_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_combinational_cone(const Net* net, bool successors, const std::set<PinType>& forbidden_pins) const
     {
         const auto match  = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); };
         const auto filter = forbidden_pin_filter(forbidden_pins);
 
         std::unordered_map<const Net*, std::set<Gate*>> local_store;
-        return get_gates_memoized(net, successors, match, TraversalStop::at_mismatch, filter, filter, (cache != nullptr) ? *cache : local_store);
+        return get_gates_memoized(net, successors, match, TraversalStop::at_mismatch, filter, filter, local_store);
     }
 
-    Result<std::set<Gate*>>
-        NetlistTraversalDecorator::get_next_combinational_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_combinational_cone(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins) const
     {
         if (gate == nullptr)
         {
@@ -717,6 +714,8 @@ namespace hal
 
         std::set<Gate*> res;
         std::unordered_map<const Net*, std::set<Gate*>> local_store;
+        const auto match  = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); };
+        const auto filter = forbidden_pin_filter(forbidden_pins);
         for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
         {
             if (forbidden_pins.find(exit_ep->get_pin()->get_type()) != forbidden_pins.end())
@@ -724,10 +723,10 @@ namespace hal
                 continue;
             }
 
-            auto res_net = get_next_combinational_gates(exit_ep->get_net(), successors, forbidden_pins, (cache != nullptr) ? cache : &local_store);
+            auto res_net = get_gates_memoized(exit_ep->get_net(), successors, match, TraversalStop::at_mismatch, filter, filter, local_store);
             if (res_net.is_error())
             {
-                return ERR_APPEND(res_net.get_error(), "cannot get next combinational gates of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
+                return ERR_APPEND(res_net.get_error(), "cannot get combinational cone of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
             }
             res.merge(res_net.get());
         }

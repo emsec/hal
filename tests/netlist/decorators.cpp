@@ -791,114 +791,109 @@ namespace hal {
 
                 // successors
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff0, true, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff0, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff4, dff5}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff2, true, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff2, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff5, dff6, dff7, dff3}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff4, true, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff4, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff8}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff8, true, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff8, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>());
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(sff0, true, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(sff0, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({sff1, dff0, dff1, dff2, dff3, dff4, dff5, dff6, dff7, dff8, dff9, dff10, dff11}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(sff0, true, {PinType::enable, PinType::reset}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(sff0, true, {PinType::enable, PinType::reset});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({sff1}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(sff1, true, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(sff1, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1, dff2, dff3, dff4, dff5, dff6, dff7, dff8, dff9, dff10, dff11}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(sff1, true, {PinType::enable, PinType::reset}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(sff1, true, {PinType::enable, PinType::reset});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_sequential_gates(dff1, true, {}, &cache);
+                    const auto res1 = trav_dec.get_next_sequential_gates(dff1, true, {});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({dff4, dff5, dff6, dff0}));
 
-                    const auto res2 = trav_dec.get_next_sequential_gates(dff2, true, {}, &cache);
+                    const auto res2 = trav_dec.get_next_sequential_gates(dff2, true, {});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({dff5, dff6, dff7, dff3}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_sequential_gates(dff3, true, {}, &cache);
+                    const auto res1 = trav_dec.get_next_sequential_gates(dff3, true, {});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({dff6, dff7, dff3}));
 
-                    const auto res2 = trav_dec.get_next_sequential_gates(dff2, true, {}, &cache);
+                    const auto res2 = trav_dec.get_next_sequential_gates(dff2, true, {});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({dff5, dff6, dff7, dff3}));
                 }
 
                 // predecessors
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff4, false, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff4, false, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1, sff0, sff1}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff4, false, {PinType::enable, PinType::reset, PinType::clock}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff4, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff5, false, {PinType::enable, PinType::reset, PinType::clock}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff5, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1, dff2}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff0, false, {PinType::enable, PinType::reset, PinType::clock}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff0, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_sequential_gates(dff5, false, {}, &cache);
+                    const auto res1 = trav_dec.get_next_sequential_gates(dff5, false, {});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({dff0, dff1, dff2, sff0, sff1}));
 
-                    const auto res2 = trav_dec.get_next_sequential_gates(dff6, false, {}, &cache);
+                    const auto res2 = trav_dec.get_next_sequential_gates(dff6, false, {});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({dff1, dff2, dff3, sff0, sff1}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_sequential_gates(dff5, false, {PinType::enable, PinType::reset, PinType::clock}, &cache);
+                    const auto res1 = trav_dec.get_next_sequential_gates(dff5, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({dff0, dff1, dff2}));
 
-                    const auto res2 = trav_dec.get_next_sequential_gates(dff6, false, {PinType::enable, PinType::reset, PinType::clock}, &cache);
+                    const auto res2 = trav_dec.get_next_sequential_gates(dff6, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({dff1, dff2, dff3}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_sequential_gates(dff6, false, {PinType::enable, PinType::reset, PinType::clock}, &cache);
+                    const auto res1 = trav_dec.get_next_sequential_gates(dff6, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({dff1, dff2, dff3}));
 
-                    const auto res2 = trav_dec.get_next_sequential_gates(dff7, false, {PinType::enable, PinType::reset, PinType::clock}, &cache);
+                    const auto res2 = trav_dec.get_next_sequential_gates(dff7, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({dff2, dff3}));
                 }
@@ -996,59 +991,57 @@ namespace hal {
                 }
             }
             {
-                // test NetlistModificationDecorator::get_next_combinational_gates
+                // test NetlistModificationDecorator::get_combinational_cone
                 const auto trav_dec = NetlistTraversalDecorator(*(nl.get()));
 
                 // successors
                 {
-                    const auto res = trav_dec.get_next_combinational_gates(dff4, true, {}, nullptr);
+                    const auto res = trav_dec.get_combinational_cone(dff4, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({inv2}));
                 }
                 {
-                    const auto res = trav_dec.get_next_combinational_gates(dff0, true, {}, nullptr);
+                    const auto res = trav_dec.get_combinational_cone(dff0, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({inv0, and0, or2, or3, or0}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_combinational_gates(dff1, true, {}, &cache);
+                    const auto res1 = trav_dec.get_combinational_cone(dff1, true, {});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({and0, or2, or3, and1, or4, or0}));
 
-                    const auto res2 = trav_dec.get_next_combinational_gates(dff2, true, {}, &cache);
+                    const auto res2 = trav_dec.get_combinational_cone(dff2, true, {});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({and1, or3, or4, and2, or5, or1}));
                 }
 
                 // predecessors
                 {
-                    const auto res = trav_dec.get_next_combinational_gates(dff4, false, {}, nullptr);
+                    const auto res = trav_dec.get_combinational_cone(dff4, false, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({inv0, and0, or2, inv6}));
                 }
                 {
-                    const auto res = trav_dec.get_next_combinational_gates(dff4, false, {PinType::enable, PinType::reset, PinType::clock, PinType::set}, nullptr);
+                    const auto res = trav_dec.get_combinational_cone(dff4, false, {PinType::enable, PinType::reset, PinType::clock, PinType::set});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({inv0, and0, or2}));
                 }
                 {
-                    const auto res = trav_dec.get_next_combinational_gates(dff4, false, {PinType::none}, nullptr);
+                    const auto res = trav_dec.get_combinational_cone(dff4, false, {PinType::none});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({}));
                 }
                 {
-                    const auto res = trav_dec.get_next_combinational_gates(dff0, false, {}, nullptr);
+                    const auto res = trav_dec.get_combinational_cone(dff0, false, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({inv0, and0, or2, or0, inv6}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_combinational_gates(dff5, false, {}, &cache);
+                    const auto res1 = trav_dec.get_combinational_cone(dff5, false, {});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({or3, and0, and1, inv6}));
 
-                    const auto res2 = trav_dec.get_next_combinational_gates(dff6, false, {}, &cache);
+                    const auto res2 = trav_dec.get_combinational_cone(dff6, false, {});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({or4, and1, and2, inv6}));
                 }
@@ -1264,7 +1257,7 @@ namespace hal {
                 ASSERT_TRUE(res.is_ok());
                 EXPECT_EQ(res.get(), (std::set<Gate*>({inv0, inv1, inv2})));
 
-                auto named = dec.get_next_combinational_gates(ff0, true, {});
+                auto named = dec.get_combinational_cone(ff0, true, {});
                 ASSERT_TRUE(named.is_ok());
                 EXPECT_EQ(res.get(), named.get());
             }
@@ -1370,7 +1363,7 @@ namespace hal {
      * through a side path then returned a result with gates missing, which is how the Boolean
      * influence plugin produced a wrong dependency matrix on netlists with combinational cycles.
      *
-     * Functions: get_next_sequential_gates, get_next_combinational_gates, get_next_sequential_gates_map
+     * Functions: get_next_sequential_gates, get_combinational_cone, get_next_sequential_gates_map, make_traversal_cache, get_gates
      */
     TEST_F(DecoratorTest, check_netlist_traversal_decorator_cache_survives_cycles)
     {
@@ -1411,12 +1404,15 @@ namespace hal {
 
             NetlistTraversalDecorator dec(*nl_raw);
 
+            const auto is_seq_gate  = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); };
+            const auto is_comb_gate = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); };
+
             {
                 // one cache shared across two calls, the way the Boolean influence plugin shares one
                 // across the flip-flops of a netlist
-                std::unordered_map<const Net*, std::set<Gate*>> cache;
-                auto first_cached = dec.get_next_sequential_gates(ff_first, false, {}, &cache);
-                auto second_cached = dec.get_next_sequential_gates(ff_second, false, {}, &cache);
+                auto cache = dec.make_traversal_cache(TraversalDirection::backward, is_seq_gate, TraversalStop::at_match);
+                auto first_cached = dec.get_gates(ff_first, cache);
+                auto second_cached = dec.get_gates(ff_second, cache);
                 auto first_fresh  = dec.get_next_sequential_gates(ff_first, false, {});
                 auto second_fresh = dec.get_next_sequential_gates(ff_second, false, {});
                 ASSERT_TRUE(first_cached.is_ok());
@@ -1431,10 +1427,10 @@ namespace hal {
             }
             {
                 // the combinational region seen through a shared cache covers the whole cycle as well
-                std::unordered_map<const Net*, std::set<Gate*>> cache;
-                auto first_cached  = dec.get_next_combinational_gates(ff_first, false, {}, &cache);
-                auto second_cached = dec.get_next_combinational_gates(ff_second, false, {}, &cache);
-                auto second_fresh  = dec.get_next_combinational_gates(ff_second, false, {});
+                auto cache = dec.make_traversal_cache(TraversalDirection::backward, is_comb_gate, TraversalStop::at_mismatch);
+                auto first_cached  = dec.get_gates(ff_first, cache);
+                auto second_cached = dec.get_gates(ff_second, cache);
+                auto second_fresh  = dec.get_combinational_cone(ff_second, false, {});
                 ASSERT_TRUE(first_cached.is_ok());
                 ASSERT_TRUE(second_cached.is_ok());
                 ASSERT_TRUE(second_fresh.is_ok());

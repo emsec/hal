@@ -382,7 +382,7 @@ int main(int argc, char *argv[]) {
                 }
 
                 // Extract all gates in front of the data port and iterate backwards until another flip flop is found.
-                const auto function_gates_res = NetlistTraversalDecorator(*(gate->get_netlist())).get_next_combinational_gates(data_net, false);
+                const auto function_gates_res = NetlistTraversalDecorator(*(gate->get_netlist())).get_combinational_cone(data_net, false);
                 if (function_gates_res.is_error())
                 {
                     return ERR_APPEND(function_gates_res.get_error(),
