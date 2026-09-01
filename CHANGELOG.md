@@ -33,6 +33,8 @@ All notable changes to this project will be documented in this file.
   * gate library
     * fixed reloading a gate library destroying the library a netlist was built against, which silently replaced every gate type of that netlist. Gate libraries are now owned through a `shared_ptr` and outlive both the netlists and the Python handles that refer to them
 * Boolean functions
+  * added `to_string` to `SMT::QueryConfig`, `SMT::Model` and `SMT::SolverResult`, so that all four SMT types offer it the way `SMT::Constraint` already did instead of only an `operator<<`
+  * fixed the printed form of an `SMT::Model` starting with a stray comma, `{, A:5}` instead of `{A:5}`
   * sped up `BooleanFunction::compute_truth_table` by evaluating 64 rows of the table at once instead of running a symbolic execution per row, which walks and simplifies the entire node list every single time. Applies to single-bit functions of bitwise operations whose variables are all part of the truth table, everything else keeps using the previous implementation
   * raised the limit on the number of variables a truth table may be computed for from 10 to 20, see `BooleanFunction::MAX_TRUTH_TABLE_VARIABLES`
   * sped up the evaluation of Boolean functions, `BooleanFunction::operator<` compared two functions by building and comparing their reverse polish notation strings, which the symbolic state hit on every variable lookup
@@ -60,6 +62,7 @@ All notable changes to this project will be documented in this file.
   * changed every binding that hands out a borrowed object to keep its **owner** alive rather than the object it was read from, through the new `hal::borrowed()` call policy that replaces `py::return_value_policy::reference_internal` at 241 places. The policy was only applied while a wrapper was being created, so whether an object was protected depended on which binding happened to hand it over first, and a module read from a gate was tied to that gate although the netlist is what owns it
   * fixed `DataContainer`, `ProjectDirectory`, `hawkeye.DetectionConfiguration`, `hawkeye.SBoxDatabase` and `dataflow.Configuration` leaking every instance created from Python, as each was bound with a holder that never frees. `SBoxDatabase.from_file` leaked 25 KB per call, and `ProjectManager.get_project_directory` leaked a copy on every call, as pybind11 copies a returned reference by default
   * fixed three enum values that were bound to a different value of their own enum, which made them indistinguishable from Python: `GateTypeProperty.fifo` was bound to `ram`, `module_identification.CandidateType.addition_offset` to `addition`, and `gui_extension_demo.ParameterType.Module` to `Gate`
+  * added `to_string` and `__str__` to `SMT.QueryConfig`, `SMT.Constraint`, `SMT.Model` and `SMT.SolverResult`, printing any of them showed an object address before
 * Plugins
   * Boolean influence
     * fixed `get_ff_dependency_matrix` dereferencing an uninitialized pointer on every call, which segfaulted before it returned anything. The cache it passes on was never initialized, and a pointer that is not null passed the callee's check for one
