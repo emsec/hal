@@ -5,6 +5,8 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 
+#include <deque>
+
 namespace hal
 {
     NetlistTraversalDecorator::NetlistTraversalDecorator(const Netlist& netlist) : m_netlist(netlist)
