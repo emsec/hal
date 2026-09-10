@@ -89,7 +89,7 @@ namespace hal
             :type: hal_py.Netlist
         )");
 
-        py_solve_fsm_configuration.def_readwrite("state_register", &solve_fsm::Configuration::state_register, R"(
+        py_solve_fsm_configuration.def_readwrite("state_register", &solve_fsm::Configuration::state_register, borrowed(), R"(
             The flip-flops that make up the state register of the FSM.
 
             The first flip-flop provides the least significant bit of the state.
@@ -98,7 +98,7 @@ namespace hal
             :type: list[hal_py.Gate]
         )");
 
-        py_solve_fsm_configuration.def_readwrite("transition_logic", &solve_fsm::Configuration::transition_logic, R"(
+        py_solve_fsm_configuration.def_readwrite("transition_logic", &solve_fsm::Configuration::transition_logic, borrowed(), R"(
             The combinational gates that compute the next state of the FSM.
 
             Defaults to an empty list, but transition logic is required for the solver to run.
@@ -106,7 +106,7 @@ namespace hal
             :type: list[hal_py.Gate]
         )");
 
-        py_solve_fsm_configuration.def_readwrite("outputs", &solve_fsm::Configuration::outputs, R"(
+        py_solve_fsm_configuration.def_readwrite("outputs", &solve_fsm::Configuration::outputs, borrowed(), R"(
             The outputs of the FSM, each given as a name and the nets that make up that output.
 
             The first net of an output provides its least significant bit, so a single-bit output is a list holding one net.
@@ -115,7 +115,7 @@ namespace hal
             :type: list[tuple(str,list[hal_py.Net])]
         )");
 
-        py_solve_fsm_configuration.def_readwrite("initial_state", &solve_fsm::Configuration::initial_state, R"(
+        py_solve_fsm_configuration.def_readwrite("initial_state", &solve_fsm::Configuration::initial_state, borrowed(), R"(
             The initial value of each flip-flop of the state register.
 
             Only states reachable from the resulting initial state are explored.
@@ -219,7 +219,7 @@ namespace hal
             :type: hal_py.Netlist
         )");
 
-        py_state_transition_graph.def_readonly("state_register", &solve_fsm::StateTransitionGraph::state_register, R"(
+        py_state_transition_graph.def_readonly("state_register", &solve_fsm::StateTransitionGraph::state_register, borrowed(), R"(
             The flip-flops that make up the state register, in the order that determines the encoding of a state.
 
             The first flip-flop provides the least significant bit, so this is what maps a state back to the netlist.
@@ -227,7 +227,7 @@ namespace hal
             :type: list[hal_py.Gate]
         )");
 
-        py_state_transition_graph.def_readonly("output_nets", &solve_fsm::StateTransitionGraph::output_nets, R"(
+        py_state_transition_graph.def_readonly("output_nets", &solve_fsm::StateTransitionGraph::output_nets, borrowed(), R"(
             The outputs of the FSM, each given as a name and the nets that make up that output.
 
             The first net of an output provides its least significant bit. Empty unless outputs were configured.
