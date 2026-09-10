@@ -4,11 +4,39 @@
 #include "hal_core/netlist/netlist.h"
 #include "xilinx_toolbox/plugin_xilinx_toolbox.h"
 
+#include <functional>
+
 namespace hal
 {
     namespace xilinx_toolbox
     {
-        Result<u32> split_luts(Netlist* nl)
+        namespace
+        {
+            /**
+             * All gates within the caller's scope that also pass the given type filter. An empty scope means the
+             * entire netlist, which is what the preprocessing functions default to. The scope only ever restricts
+             * which gates are considered, it never widens what a function operates on.
+             */
+            std::vector<Gate*> gates_in_scope(const Netlist* nl, const std::vector<Gate*>& gates, const std::function<bool(const Gate*)>& type_filter)
+            {
+                if (gates.empty())
+                {
+                    return nl->get_gates(type_filter);
+                }
+
+                std::vector<Gate*> res;
+                for (auto* g : gates)
+                {
+                    if (type_filter(g))
+                    {
+                        res.push_back(g);
+                    }
+                }
+                return res;
+            }
+        }    // namespace
+
+        Result<u32> split_luts(Netlist* nl, const std::vector<Gate*>& gates)
         {
             u32 deleted_gates = 0;
             u32 new_gates     = 0;
@@ -17,7 +45,7 @@ namespace hal
             const auto lut6_type = nl->get_gate_library()->get_gate_type_by_name("LUT6");
             const auto lut5_type = nl->get_gate_library()->get_gate_type_by_name("LUT5");
 
-            const auto lut6_2_gates = nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "LUT6_2"; });
+            const auto lut6_2_gates = gates_in_scope(nl, gates, [](const Gate* g) { return g->get_type()->get_name() == "LUT6_2"; });
 
             for (const auto& g : lut6_2_gates)
             {
@@ -38,7 +66,8 @@ namespace hal
                     continue;
                 }
 
-                if (o5->get_num_of_destinations() > 0)
+                // 'O5' or 'O6' may be entirely unconnected, which is the common case this function is meant to handle
+                if (o5 != nullptr && o5->get_num_of_destinations() > 0)
                 {
                     // create LUT5
                     auto* lut5 = nl->create_gate(lut5_type, g->get_name() + "_split_O5");
@@ -64,7 +93,7 @@ namespace hal
                     o5->add_source(lut5, "O");
                 }
 
-                if (o6->get_num_of_destinations() > 0)
+                if (o6 != nullptr && o6->get_num_of_destinations() > 0)
                 {
                     // create LUT6
                     auto* lut6 = nl->create_gate(lut6_type, g->get_name() + "_split_O6");
@@ -109,7 +138,7 @@ namespace hal
             return OK(deleted_gates);
         }
 
-        Result<u32> split_shift_registers(Netlist* nl)
+        Result<u32> split_shift_registers(Netlist* nl, const std::vector<Gate*>& gates)
         {
             u32 deleted_gates = 0;
             u32 new_gates     = 0;
@@ -122,7 +151,7 @@ namespace hal
             }
 
             // iterate over all shift registers of type 'SRL16E' or 'SRLC32E'
-            for (const auto& gate : nl->get_gates([](const auto& g) { return g->get_type()->get_name() == "SRL16E" || g->get_type()->get_name() == "SRLC32E"; }))
+            for (const auto& gate : gates_in_scope(nl, gates, [](const Gate* g) { return g->get_type()->get_name() == "SRL16E" || g->get_type()->get_name() == "SRLC32E"; }))
             {
                 auto control_pins = gate->get_type()->get_pins([](const auto& pg) { return (pg->get_direction() == PinDirection::input) && (pg->get_type() == PinType::control); });
                 if (control_pins.size() != 4 && gate->get_type()->get_name() == "SRLC16E" || control_pins.size() != 5 && gate->get_type()->get_name() == "SRLC32E")
@@ -241,6 +270,12 @@ namespace hal
                     const std::string ff_name = gate->get_name() + "_split_ff_" + std::to_string(ff_idx);
                     Gate* new_gate            = nl->create_gate(ff_gt, ff_name);
                     new_gates++;
+
+                    // keep the replacement within the module of the gate it replaces instead of the top module
+                    if (auto* mod = gate->get_module(); !mod->is_top_module())
+                    {
+                        mod->assign_gate(new_gate);
+                    }
 
                     clk_in->add_destination(new_gate, "C");
                     enable_in->add_destination(new_gate, "CE");

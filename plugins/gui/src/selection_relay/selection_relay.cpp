@@ -418,7 +418,7 @@ namespace hal
         if (it != mSelectedNets.end())
         {
             initializeAction();
-            mAction->mGates.remove(id);
+            mAction->mNets.remove(id);
             executeAction();
         }
     }

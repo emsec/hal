@@ -33,8 +33,11 @@
 #include "hal_core/defines.h"
 #include "hal_core/utilities/result.h"
 
+#include <vector>
+
 namespace hal
 {
+    class Gate;
     class Netlist;
 
     namespace xilinx_toolbox
@@ -45,19 +48,22 @@ namespace hal
          * Replaces `LUT6_2` with a `LUT6` and a `LUT5` gate if the respective outputs of the `LUT6_2` are actually used, i.e., connected to other gates.
          * 
          * @param[in] nl - The netlist to operate on. 
+         * @param[in] gates - The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered.
          * @returns The number of split `LUT6_2` gates on success, an error otherwise.
          */
-        Result<u32> split_luts(Netlist* nl);
+        Result<u32> split_luts(Netlist* nl, const std::vector<Gate*>& gates = {});
 
         /**
          * @brief Split shift register primitives and replaces them with equivalent flip-flops chains.
          * 
-         * Currently only implemented for gate type `SRL16E`.
+         * Currently only implemented for gate types `SRL16E` and `SRLC32E`.
+         * The created flip-flops are assigned to the module of the shift register gate that they replace.
          * 
          * @param[in] nl - The netlist to operate on. 
+         * @param[in] gates - The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered.
          * @return The number of split shift registers on success, an error otherwise.
          */
-        Result<u32> split_shift_registers(Netlist* nl);
+        Result<u32> split_shift_registers(Netlist* nl, const std::vector<Gate*>& gates = {});
 
         /**
          * @brief Parse an `.xdc` file and extract the position LOC and BEL data of each gate.

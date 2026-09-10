@@ -24,35 +24,49 @@
 // SOFTWARE.
 
 /**
- * @file solve_fsm.h
- * @brief This file contains the function to recover the state transition graph of a finite state machine.
+ * @file gui_layout_locker.h
+ * @brief This file contains a helper that suppresses layout updates of the GUI.
  */
 
 #pragma once
 
-#include "hal_core/utilities/result.h"
-#include "solve_fsm/configuration.h"
-#include "solve_fsm/state_transition_graph.h"
+#include "hal_core/defines.h"
 
 namespace hal
 {
-    /**
-     * @brief Recovers the state transition graph of a finite state machine from the gate-level netlist that implements it.
-     */
-    namespace solve_fsm
+    class UIPluginInterface;
+
+    namespace netlist_preprocessing
     {
         /**
-         * @brief Recover the state transition graph of an FSM from the netlist that implements it.
+         * @class GuiLayoutLocker
+         * @brief Suppresses layout updates of the GUI for as long as the object exists.
          *
-         * Explores the states that are reachable from the initial state and determines, for each of them, which
-         * successor states it can reach and under which condition. If outputs are configured, the value of each output
-         * in each state is computed as well.
+         * A netlist modification that touches many gates makes the GUI re-layout its graph views once per change,
+         * which can dominate the runtime of the modification itself. Holding a locker defers those updates until it
+         * goes out of scope, at which point every affected view is updated once.
          *
-         * No file is written. Use `StateTransitionGraph::generate_dot_graph` on the result to render the graph.
-         *
-         * @param[in] config - The configuration of the FSM solver run.
-         * @returns OK() and the state transition graph of the FSM on success, an error otherwise.
+         * Locks nest, so it is safe to hold more than one at a time. Does nothing if no GUI is running, which makes
+         * it safe to use from code that also runs headless.
          */
-        Result<StateTransitionGraph> solve_fsm(const Configuration& config);
-    }    // namespace solve_fsm
+        class GuiLayoutLocker
+        {
+        public:
+            /**
+             * @brief Suppress layout updates of the GUI until the locker is destroyed.
+             */
+            GuiLayoutLocker();
+
+            /**
+             * @brief Release the lock and let the GUI update the views that changed in the meantime.
+             */
+            ~GuiLayoutLocker();
+
+            GuiLayoutLocker(const GuiLayoutLocker&)            = delete;
+            GuiLayoutLocker& operator=(const GuiLayoutLocker&) = delete;
+
+        private:
+            UIPluginInterface* m_gui_plugin;
+        };
+    }    // namespace netlist_preprocessing
 }    // namespace hal

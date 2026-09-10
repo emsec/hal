@@ -92,8 +92,26 @@ All notable changes to this project will be documented in this file.
     * added `NetlistGraph::from_gates` that builds a graph from a subset of the gates of a netlist, optionally representing a gate by a primary and a shadow vertex so that feedback through it does not close a cycle
   * dataflow analysis
     * fixed broken initialization of DANA plugin when starting via CLI
+  * FSM solver
+    * reworked the API of `solve_fsm` into a single function that is set up through a `Configuration` object, which also selects between the SMT and the brute force approach
+    * changed `solve_fsm` to report the value of each configured output of the FSM in each state, annotating the states of the DOT graph with it
+    * changed `solve_fsm` to no longer write a file on its own, the DOT graph is now rendered by calling `generate_dot_graph` on the returned state transition graph
+    * changed `solve_fsm` to no longer open the graph in the dot viewer behind the user's back, use `dot_viewer.load_dot_file` to display it
+    * added `to_string` and `write_txt` to the state transition graph, printing the full conditions of all transitions together with a legend that maps the state bits, the outputs, and every net variable of a Boolean function back to the netlist
+    * split the `solve_fsm` API into one header per struct, mirroring the layout of the dataflow analysis plugin
+    * removed the debug output that `solve_fsm` printed to stdout on every run
+    * fixed `solve_fsm` interpreting a user-provided initial state with the wrong bit order, which made the exploration start from a different state than the one requested
+    * added tests for the `solve_fsm` plugin, which had none so far
   * netlist preprocessing
     * fixed `remove_redundant_gates` treating two flip-flops as duplicates although they start out at different values, as the fingerprint it groups them by covers the gate type and the fan-in but not the initial value, and flip-flops are merged on that fingerprint alone without the equivalence check that combinational gates get. This affects 11 of the 13 flip-flop types of the Xilinx UNISIM library, all of which carry an `INIT` value
+    * added an optional gate scope to the preprocessing functions of `netlist_preprocessing` and `xilinx_toolbox`, restricting which gates may be modified or deleted and defaulting to the entire netlist
+    * changed `split_shift_registers` and `unify_ff_outputs` to assign newly created gates to the module of the gate they replace instead of always to the top module
+    * fixed `simplify_lut_inits` crashing on a LUT whose output pin is unconnected
+    * fixed `remove_unconnected_gates` looping forever if a gate could not be deleted
+  * Xilinx toolbox
+    * fixed `split_luts` crashing on a `LUT6_2` that only uses one of its two output pins, which is the common case the function is meant to handle
+    * fixed the documentation of `split_shift_registers`, which claimed that only `SRL16E` is supported although `SRLC32E` is handled as well
+    * added tests for the `xilinx_toolbox` plugin, which had none so far
   * bit-order propagation
     * changed the interface to speak in a `BitOrder`, which is the order of one module pin group, and a `BitOrderResult`, which is what a propagation reports, in place of a map from pairs of module and pin group to a map from net to index. A bit order is now an object rather than a container, so Python can be given one without losing track of the netlist it belongs to, and a result iterates by module and pin group ID rather than by the addresses they happen to sit at
     * added tests for the plugin, which had none
@@ -104,6 +122,7 @@ All notable changes to this project will be documented in this file.
     * fixed the documentation of `NetlistSimulatorController::initialize`, which described the behaviour of the legacy `NetlistSimulator`: it claimed that no gates or clocks may be added afterwards and that `simulate` calls it automatically, neither of which holds since its body became empty
   * dot viewer
     * added 'hover over node' feature in dot viewer
+    * fixed the DOT viewer drawing the line break escapes of a node label verbatim instead of breaking the line, and drawing a red debug rectangle around any label that does not fit its node
 * GUI
   * fixed the GUI hanging for minutes when a module with many gates is selected, `ModuleModel` emitted a row insert signal per item while the model was already being reset, which made the attached filter proxy remap its rows once per item
   * fixed the GUI stalling when a large module is unfolded, the tree views measured every row individually and shaped the text of each gate name just to learn how tall the row is
@@ -113,6 +132,9 @@ All notable changes to this project will be documented in this file.
   * added option to focus on pin in pin context menu
   * changed default order to 'descending' when creating a pin group via Python command
   * changed behavior of GUI plugin manager to keep only those plugins loaded which are requested by user
+  * fixed the GUI dropping an unrelated gate from the selection instead of the net itself when a selected net is deleted
+  * fixed the GUI re-laying out its graph views once per gate while a preprocessing function invoked from a context menu deletes or replaces many of them
+  * added context menu entries to the GUI for `remove_buffers`, `unify_ff_outputs`, `split_luts`, and `split_shift_registers`, each applicable to the current selection or to the entire netlist
   * module pin groups
     * fixed bug in pin model which must not crash when deleting a non-empty pin group
     * fixed bug by disallowing deletion of group comprising a single pin with same name

@@ -23,36 +23,50 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/**
- * @file solve_fsm.h
- * @brief This file contains the function to recover the state transition graph of a finite state machine.
- */
-
-#pragma once
-
-#include "hal_core/utilities/result.h"
 #include "solve_fsm/configuration.h"
-#include "solve_fsm/state_transition_graph.h"
 
 namespace hal
 {
-    /**
-     * @brief Recovers the state transition graph of a finite state machine from the gate-level netlist that implements it.
-     */
     namespace solve_fsm
     {
-        /**
-         * @brief Recover the state transition graph of an FSM from the netlist that implements it.
-         *
-         * Explores the states that are reachable from the initial state and determines, for each of them, which
-         * successor states it can reach and under which condition. If outputs are configured, the value of each output
-         * in each state is computed as well.
-         *
-         * No file is written. Use `StateTransitionGraph::generate_dot_graph` on the result to render the graph.
-         *
-         * @param[in] config - The configuration of the FSM solver run.
-         * @returns OK() and the state transition graph of the FSM on success, an error otherwise.
-         */
-        Result<StateTransitionGraph> solve_fsm(const Configuration& config);
+        Configuration::Configuration(Netlist* nl) : netlist(nl)
+        {
+        }
+
+        Configuration& Configuration::with_state_register(const std::vector<Gate*>& state_register)
+        {
+            this->state_register = state_register;
+            return *this;
+        }
+
+        Configuration& Configuration::with_transition_logic(const std::vector<Gate*>& transition_logic)
+        {
+            this->transition_logic = transition_logic;
+            return *this;
+        }
+
+        Configuration& Configuration::with_outputs(const std::vector<std::pair<std::string, std::vector<Net*>>>& outputs)
+        {
+            this->outputs = outputs;
+            return *this;
+        }
+
+        Configuration& Configuration::with_initial_state(const std::map<Gate*, bool>& initial_state)
+        {
+            this->initial_state = initial_state;
+            return *this;
+        }
+
+        Configuration& Configuration::with_timeout(const u32 timeout)
+        {
+            this->timeout = timeout;
+            return *this;
+        }
+
+        Configuration& Configuration::with_brute_force(const bool brute_force)
+        {
+            this->brute_force = brute_force;
+            return *this;
+        }
     }    // namespace solve_fsm
 }    // namespace hal
