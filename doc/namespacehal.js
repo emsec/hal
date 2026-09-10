@@ -116,26 +116,7 @@ var namespacehal =
       [ "register_parser", "namespacehal_1_1netlist__parser__manager.html#a4e5c20961cc7019c6e983cabee8df76a", null ],
       [ "unregister_parser", "namespacehal_1_1netlist__parser__manager.html#ad31d29eb845c61a4ae5edcf7c0d029dd", null ]
     ] ],
-    [ "netlist_preprocessing", "namespacehal_1_1netlist__preprocessing.html", [
-      [ "create_multi_bit_gate_modules", "namespacehal_1_1netlist__preprocessing.html#afa1d85923d1d257ccb3b04af870275c3", null ],
-      [ "create_nets_at_unconnected_pins", "namespacehal_1_1netlist__preprocessing.html#a4c9f643c59e3f4e8be8d1fdf6b4eab6f", null ],
-      [ "manual_mux_optimizations", "namespacehal_1_1netlist__preprocessing.html#a253153ce056212893d6e3b2fd1f2a4ef", null ],
-      [ "parse_def_file", "namespacehal_1_1netlist__preprocessing.html#a19b3eaff25a24e863cfe3d76e7c466f2", null ],
-      [ "propagate_constants", "namespacehal_1_1netlist__preprocessing.html#ab5ea71a783788a35a265a3c908434480", null ],
-      [ "reconstruct_indexed_ff_identifiers", "namespacehal_1_1netlist__preprocessing.html#aeba531d7452793af68138725b2d32d2d", null ],
-      [ "reconstruct_top_module_pin_groups", "namespacehal_1_1netlist__preprocessing.html#a90cec7c506602c93b4483b47dcb031ba", null ],
-      [ "remove_buffers", "namespacehal_1_1netlist__preprocessing.html#aaed1c4941851f0d87dbf17202d5e4c7a", null ],
-      [ "remove_consecutive_inverters", "namespacehal_1_1netlist__preprocessing.html#aeeb87ca0ed5bdfd7d15989ef165c3f83", null ],
-      [ "remove_redundant_gates", "namespacehal_1_1netlist__preprocessing.html#a926dc5e4f4ea3099519a5f15d3ca20d3", null ],
-      [ "remove_redundant_logic_trees", "namespacehal_1_1netlist__preprocessing.html#a744a3acfaaae736ac526458cdd2560a4", null ],
-      [ "remove_redundant_loops", "namespacehal_1_1netlist__preprocessing.html#a5d9d632b96e6b54e7ca1057440946246", null ],
-      [ "remove_unconnected_gates", "namespacehal_1_1netlist__preprocessing.html#a1989a8353f281ca2fbff11d9d64048ae", null ],
-      [ "remove_unconnected_looped", "namespacehal_1_1netlist__preprocessing.html#adcf4bd9cc324d6fd5605a85394cec83e", null ],
-      [ "remove_unconnected_nets", "namespacehal_1_1netlist__preprocessing.html#ae4ce786f9754756f93e96fd805b4322b", null ],
-      [ "remove_unused_lut_inputs", "namespacehal_1_1netlist__preprocessing.html#ac7306052489ca31bcb191899f2c727c8", null ],
-      [ "simplify_lut_inits", "namespacehal_1_1netlist__preprocessing.html#a41ee76bfe0148c3f7a5e40268dda7f14", null ],
-      [ "unify_ff_outputs", "namespacehal_1_1netlist__preprocessing.html#afe12a588f07c9251ea8f4eaa06aeb29b", null ]
-    ] ],
+    [ "netlist_preprocessing", "namespacehal_1_1netlist__preprocessing.html", "namespacehal_1_1netlist__preprocessing" ],
     [ "netlist_serializer", "namespacehal_1_1netlist__serializer.html", [
       [ "deserialize_from_file", "namespacehal_1_1netlist__serializer.html#ad14a8adbbfe36c02d6ab63e54a22b566", null ],
       [ "deserialize_from_string", "namespacehal_1_1netlist__serializer.html#a1ed187249b3589e6ec363ab9a8c8bb18", null ],
@@ -222,11 +203,7 @@ var namespacehal =
       [ "values_to_int", "namespacehal_1_1simulation__utils.html#aaff736212c3454ae94ac758f80af2b3d", null ]
     ] ],
     [ "SMT", "namespacehal_1_1_s_m_t.html", "namespacehal_1_1_s_m_t" ],
-    [ "solve_fsm", "namespacehal_1_1solve__fsm.html", [
-      [ "generate_dot_graph", "namespacehal_1_1solve__fsm.html#a24f943c01e42614c046aa7e611791508", null ],
-      [ "solve_fsm", "namespacehal_1_1solve__fsm.html#a7a1322acc23dc95f262d57df42cf9b5c", null ],
-      [ "solve_fsm_brute_force", "namespacehal_1_1solve__fsm.html#a9cbe139c5b06c205079be2e675b8cdc1", null ]
-    ] ],
+    [ "solve_fsm", "namespacehal_1_1solve__fsm.html", "namespacehal_1_1solve__fsm" ],
     [ "sse", "namespacehal_1_1sse.html", [
       [ "get_value_at_z3", "namespacehal_1_1sse.html#a2dc9cdbc5af2296090c5d6eb9fe1af5e", null ],
       [ "get_word_values_at_z3", "namespacehal_1_1sse.html#a6b080c07996b1408210263288898e0b7", null ],
@@ -754,6 +731,7 @@ var namespacehal =
     [ "GuiExtensionModuleIdentification", "classhal_1_1_gui_extension_module_identification.html", "classhal_1_1_gui_extension_module_identification" ],
     [ "ModuleIdentificationPlugin", "classhal_1_1_module_identification_plugin.html", "classhal_1_1_module_identification_plugin" ],
     [ "NetlistPreprocessingPlugin", "classhal_1_1_netlist_preprocessing_plugin.html", "classhal_1_1_netlist_preprocessing_plugin" ],
+    [ "GuiExtensionNetlistPreprocessing", "classhal_1_1_gui_extension_netlist_preprocessing.html", "classhal_1_1_gui_extension_netlist_preprocessing" ],
     [ "CliExtensionsPerfTest", "classhal_1_1_cli_extensions_perf_test.html", "classhal_1_1_cli_extensions_perf_test" ],
     [ "PerfTestPlugin", "classhal_1_1_perf_test_plugin.html", "classhal_1_1_perf_test_plugin" ],
     [ "CliExtensionPythonShell", "classhal_1_1_cli_extension_python_shell.html", "classhal_1_1_cli_extension_python_shell" ],
@@ -882,6 +860,7 @@ var namespacehal =
     [ "VHDLParserPlugin", "classhal_1_1_v_h_d_l_parser_plugin.html", "classhal_1_1_v_h_d_l_parser_plugin" ],
     [ "VHDLParser", "classhal_1_1_v_h_d_l_parser.html", "classhal_1_1_v_h_d_l_parser" ],
     [ "XilinxToolboxPlugin", "classhal_1_1_xilinx_toolbox_plugin.html", "classhal_1_1_xilinx_toolbox_plugin" ],
+    [ "GuiExtensionXilinxToolbox", "classhal_1_1_gui_extension_xilinx_toolbox.html", "classhal_1_1_gui_extension_xilinx_toolbox" ],
     [ "Z3UtilsPlugin", "classhal_1_1_z3_utils_plugin.html", "classhal_1_1_z3_utils_plugin" ],
     [ "error_code", "namespacehal.html#a12b4c436625fa7f009bc4e5015e5e01c", null ],
     [ "handle_ptr_t", "namespacehal.html#a974188318f6c3613e6fa1993cea21a1e", null ],

@@ -1,0 +1,3 @@
+<map id="hal::xilinx_toolbox::GuiLayoutLocker" name="hal::xilinx_toolbox::GuiLayoutLocker">
+<area shape="rect" id="node1" title="Suppresses layout updates of the GUI for as long as the object exists." alt="" coords="5,5,172,141"/>
+</map>

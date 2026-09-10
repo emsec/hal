@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-128-g078b17d00</span>
+   &#160;<span id="projectnumber">v4.5.0-129-gc8ba6b195</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -196,7 +196,7 @@ $(document).ready(function(){initNavTree('functions_func_w.html',''); initResiza
 : <a class="el" href="classhal_1_1_wave_edit_table.html#a00148a07065f82f88a3783ae94b24947">hal::WaveEditTable</a>
 </li>
 <li>WaveFormPainted()
-: <a class="el" href="classhal_1_1_wave_form_painted.html#ad0853ffd43d263ae76e9056dee56576a">hal::WaveFormPainted</a>
+: <a class="el" href="classhal_1_1_wave_form_painted.html#ad4318232d1b103f4805b867c0f4269e9">hal::WaveFormPainted</a>
 </li>
 <li>WaveFormPrimitive()
 : <a class="el" href="classhal_1_1_wave_form_primitive.html#aad34237e4691408f3eff26880bb1d0ae">hal::WaveFormPrimitive</a>
@@ -229,7 +229,7 @@ $(document).ready(function(){initNavTree('functions_func_w.html',''); initResiza
 : <a class="el" href="classhal_1_1_wave_graphics_canvas.html#a3a018b723837b136f6b48c2fba5bbdfa">hal::WaveGraphicsCanvas</a>
 </li>
 <li>WaveGroupValue()
-: <a class="el" href="classhal_1_1_wave_group_value.html#a46f775b7c06e20e1be2e3f37f1b16cde">hal::WaveGroupValue</a>
+: <a class="el" href="classhal_1_1_wave_group_value.html#ac67a168d8ba08cb9b389c158d7ee41fc">hal::WaveGroupValue</a>
 </li>
 <li>waveIndex()
 : <a class="el" href="classhal_1_1_wave_tree_model.html#a8f23baf07f21564685bab51570780221">hal::WaveTreeModel</a>
@@ -361,6 +361,9 @@ $(document).ready(function(){initNavTree('functions_func_w.html',''); initResiza
 <li>with_blocked_base_candidates()
 : <a class="el" href="structhal_1_1module__identification_1_1_configuration.html#a7ca85db2350fdf9fee3de66d20de04ec">hal::module_identification::Configuration</a>
 </li>
+<li>with_brute_force()
+: <a class="el" href="structhal_1_1solve__fsm_1_1_configuration.html#a06986137bdf4cb3d51ff6486246ec8b9">hal::solve_fsm::Configuration</a>
+</li>
 <li>with_call()
 : <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html#aeb675d740cbc23801eb805217f389301">hal::SMT::QueryConfig</a>
 </li>
@@ -382,14 +385,17 @@ $(document).ready(function(){initNavTree('functions_func_w.html',''); initResiza
 <li>with_gate_types()
 : <a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a7470668e97d5cc200a2beaf25b992526">hal::dataflow::Configuration</a>
 </li>
+<li>with_initial_state()
+: <a class="el" href="structhal_1_1solve__fsm_1_1_configuration.html#aa8b6a68b85bdd17f99911943f633e720">hal::solve_fsm::Configuration</a>
+</li>
 <li>with_known_groups()
-: <a class="el" href="structhal_1_1dataflow_1_1_configuration.html#ac8dc0b65ab0fc0f38b40b6bb1ef143fb">hal::dataflow::Configuration</a>
+: <a class="el" href="structhal_1_1dataflow_1_1_configuration.html#aa1d4e787c4d5804d51e058f70bff2820">hal::dataflow::Configuration</a>
 </li>
 <li>with_known_registers()
 : <a class="el" href="structhal_1_1module__identification_1_1_configuration.html#a6dee660443f15655a4a4b0d1d91d93c4">hal::module_identification::Configuration</a>
 </li>
 <li>with_known_structures()
-: <a class="el" href="structhal_1_1dataflow_1_1_configuration.html#aff23226db5f15fdac64162bf83bf4117">hal::dataflow::Configuration</a>
+: <a class="el" href="structhal_1_1dataflow_1_1_configuration.html#ac7a0ac61d612e75a2aea96fa851c1291">hal::dataflow::Configuration</a>
 </li>
 <li>with_local_solver()
 : <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html#a930cd1ebf9c0f063b45f9a7f4ef193dc">hal::SMT::QueryConfig</a>
@@ -409,6 +415,9 @@ $(document).ready(function(){initNavTree('functions_func_w.html',''); initResiza
 <li>with_multithreading_priority()
 : <a class="el" href="structhal_1_1module__identification_1_1_configuration.html#a0fdcb1b01bc544c339dca16fa2b5fc91">hal::module_identification::Configuration</a>
 </li>
+<li>with_outputs()
+: <a class="el" href="structhal_1_1solve__fsm_1_1_configuration.html#a6145d21cbdedb8d17ba977a03a7242cb">hal::solve_fsm::Configuration</a>
+</li>
 <li>with_remote_solver()
 : <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html#a0ed739cb7573fbc9a8bf53afbea1429a">hal::SMT::QueryConfig</a>
 </li>
@@ -418,8 +427,15 @@ $(document).ready(function(){initNavTree('functions_func_w.html',''); initResiza
 <li>with_stage_identification()
 : <a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a9011817a65762bf64b4c10b8e86e1ba6">hal::dataflow::Configuration</a>
 </li>
+<li>with_state_register()
+: <a class="el" href="structhal_1_1solve__fsm_1_1_configuration.html#a8aefef057fccbbeb5ec17059d928ff72">hal::solve_fsm::Configuration</a>
+</li>
 <li>with_timeout()
 : <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html#a95eff43ad1efa4dfb0405caa8cbc19eb">hal::SMT::QueryConfig</a>
+, <a class="el" href="structhal_1_1solve__fsm_1_1_configuration.html#a21c3d2facf60c1bb25fdb0f18f0f1793">hal::solve_fsm::Configuration</a>
+</li>
+<li>with_transition_logic()
+: <a class="el" href="structhal_1_1solve__fsm_1_1_configuration.html#a1f0912f72c7d28ee72a920cdcfe99b0c">hal::solve_fsm::Configuration</a>
 </li>
 <li>with_type_consistency()
 : <a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a3ca6cecdb7810944b1eb54487d145039">hal::dataflow::Configuration</a>
@@ -447,6 +463,7 @@ $(document).ready(function(){initNavTree('functions_func_w.html',''); initResiza
 </li>
 <li>write_txt()
 : <a class="el" href="classhal_1_1dataflow_1_1_result.html#a673304b1b81b995234c3321384df6e36">hal::dataflow::Result</a>
+, <a class="el" href="structhal_1_1solve__fsm_1_1_state_transition_graph.html#ae84d2655b4318b5278e6f8fe40c56f6b">hal::solve_fsm::StateTransitionGraph</a>
 </li>
 <li>writeParentObjectToXml()
 : <a class="el" href="classhal_1_1_user_action.html#a3cec3c2f826595eec152331e9dfbaeb7">hal::UserAction</a>

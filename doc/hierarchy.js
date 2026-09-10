@@ -25,7 +25,9 @@ var hierarchy =
         [ "hal::GuiExtensionDotViewer", "classhal_1_1_gui_extension_dot_viewer.html", null ],
         [ "hal::GuiExtensionLogicEvaluator", "classhal_1_1_gui_extension_logic_evaluator.html", null ],
         [ "hal::GuiExtensionModuleIdentification", "classhal_1_1_gui_extension_module_identification.html", null ],
-        [ "hal::GuiExtensionSimulator", "classhal_1_1_gui_extension_simulator.html", null ]
+        [ "hal::GuiExtensionNetlistPreprocessing", "classhal_1_1_gui_extension_netlist_preprocessing.html", null ],
+        [ "hal::GuiExtensionSimulator", "classhal_1_1_gui_extension_simulator.html", null ],
+        [ "hal::GuiExtensionXilinxToolbox", "classhal_1_1_gui_extension_xilinx_toolbox.html", null ]
       ] ]
     ] ],
     [ "hal::AbstractFactoryProvider", "classhal_1_1_abstract_factory_provider.html", [
@@ -130,6 +132,7 @@ var hierarchy =
     [ "hal::dataflow::evaluation::Configuration", "structhal_1_1dataflow_1_1evaluation_1_1_configuration.html", null ],
     [ "hal::dataflow::processing::Configuration", "structhal_1_1dataflow_1_1processing_1_1_configuration.html", null ],
     [ "hal::module_identification::Configuration", "structhal_1_1module__identification_1_1_configuration.html", null ],
+    [ "hal::solve_fsm::Configuration", "structhal_1_1solve__fsm_1_1_configuration.html", null ],
     [ "hal::SMT::Constraint", "structhal_1_1_s_m_t_1_1_constraint.html", null ],
     [ "hal::ContentAnchor", "classhal_1_1_content_anchor.html", [
       [ "hal::SplitterAnchor", "classhal_1_1_splitter_anchor.html", null ],
@@ -196,6 +199,8 @@ var hierarchy =
     [ "hal::GroupingEvent", "classhal_1_1_grouping_event.html", null ],
     [ "hal::GroupingTableEntry", "classhal_1_1_grouping_table_entry.html", null ],
     [ "hal::GuiExtensionPythonBase", "classhal_1_1_gui_extension_python_base.html", null ],
+    [ "hal::netlist_preprocessing::GuiLayoutLocker", "classhal_1_1netlist__preprocessing_1_1_gui_layout_locker.html", null ],
+    [ "hal::xilinx_toolbox::GuiLayoutLocker", "classhal_1_1xilinx__toolbox_1_1_gui_layout_locker.html", null ],
     [ "hal::GuiPluginEntry", "classhal_1_1_gui_plugin_entry.html", null ],
     [ "std::hash< hal::core_strings::CaseInsensitiveString >", "structstd_1_1hash_3_01hal_1_1core__strings_1_1_case_insensitive_string_01_4.html", null ],
     [ "hal::StandardGraphicsNet::HLine", "structhal_1_1_standard_graphics_net_1_1_h_line.html", null ],
@@ -860,6 +865,7 @@ var hierarchy =
     [ "hal::SolveFsmInteractionRegistration", "classhal_1_1_solve_fsm_interaction_registration.html", null ],
     [ "hal::SMT::Solver", "classhal_1_1_s_m_t_1_1_solver.html", null ],
     [ "hal::SMT::SolverResult", "structhal_1_1_s_m_t_1_1_solver_result.html", null ],
+    [ "hal::solve_fsm::StateTransitionGraph", "structhal_1_1solve__fsm_1_1_state_transition_graph.html", null ],
     [ "hal::module_identification::Statistics", "structhal_1_1module__identification_1_1_statistics.html", null ],
     [ "hal::module_identification::StructuralCandidate", "classhal_1_1module__identification_1_1_structural_candidate.html", null ],
     [ "hal::SubgraphNetlistDecorator", "classhal_1_1_subgraph_netlist_decorator.html", null ],

@@ -2,6 +2,7 @@ var namespacehal_1_1xilinx__toolbox =
 [
     [ "LOC", "structhal_1_1xilinx__toolbox_1_1_l_o_c.html", "structhal_1_1xilinx__toolbox_1_1_l_o_c" ],
     [ "CellData", "structhal_1_1xilinx__toolbox_1_1_cell_data.html", "structhal_1_1xilinx__toolbox_1_1_cell_data" ],
+    [ "GuiLayoutLocker", "classhal_1_1xilinx__toolbox_1_1_gui_layout_locker.html", "classhal_1_1xilinx__toolbox_1_1_gui_layout_locker" ],
     [ "BELType", "namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51", [
       [ "A6LUT", "namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51aed2d88f58d320cfa0f2405af657127ce", null ],
       [ "B6LUT", "namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51a10ac6e6f0fb88fbd2ef475ca8ed197ae", null ],
@@ -34,6 +35,6 @@ var namespacehal_1_1xilinx__toolbox =
       [ "PIN", "namespacehal_1_1xilinx__toolbox.html#a0e338163becdb40d57a89352258b4475adc001bdc15b8d978d78e63815cca5a67", null ]
     ] ],
     [ "parse_xdc_file", "namespacehal_1_1xilinx__toolbox.html#aa9cbe87076ce843d6b78da1391dad61c", null ],
-    [ "split_luts", "namespacehal_1_1xilinx__toolbox.html#a59f138192bc52f09f2f633e850222d40", null ],
-    [ "split_shift_registers", "namespacehal_1_1xilinx__toolbox.html#ad5a7abafdb5c8726f3f73da4ceec91fe", null ]
+    [ "split_luts", "namespacehal_1_1xilinx__toolbox.html#ac42334eb4dcc126be846d54ca9cc813f", null ],
+    [ "split_shift_registers", "namespacehal_1_1xilinx__toolbox.html#add3096d73b5fa5e1a093c8ebff0f0b95", null ]
 ];

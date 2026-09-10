@@ -60,6 +60,9 @@ var annotated_dup =
         [ "VerifiedCandidate", "classhal_1_1module__identification_1_1_verified_candidate.html", "classhal_1_1module__identification_1_1_verified_candidate" ],
         [ "Statistics", "structhal_1_1module__identification_1_1_statistics.html", "structhal_1_1module__identification_1_1_statistics" ]
       ] ],
+      [ "netlist_preprocessing", "namespacehal_1_1netlist__preprocessing.html", [
+        [ "GuiLayoutLocker", "classhal_1_1netlist__preprocessing_1_1_gui_layout_locker.html", "classhal_1_1netlist__preprocessing_1_1_gui_layout_locker" ]
+      ] ],
       [ "plugin_manager", "namespacehal_1_1plugin__manager.html", [
         [ "PluginFeature", "structhal_1_1plugin__manager_1_1_plugin_feature.html", "structhal_1_1plugin__manager_1_1_plugin_feature" ]
       ] ],
@@ -79,6 +82,10 @@ var annotated_dup =
         [ "Model", "structhal_1_1_s_m_t_1_1_model.html", "structhal_1_1_s_m_t_1_1_model" ],
         [ "SolverResult", "structhal_1_1_s_m_t_1_1_solver_result.html", "structhal_1_1_s_m_t_1_1_solver_result" ]
       ] ],
+      [ "solve_fsm", "namespacehal_1_1solve__fsm.html", [
+        [ "Configuration", "structhal_1_1solve__fsm_1_1_configuration.html", "structhal_1_1solve__fsm_1_1_configuration" ],
+        [ "StateTransitionGraph", "structhal_1_1solve__fsm_1_1_state_transition_graph.html", "structhal_1_1solve__fsm_1_1_state_transition_graph" ]
+      ] ],
       [ "user_feedback", "namespacehal_1_1user__feedback.html", [
         [ "LayoutLocker", "classhal_1_1user__feedback_1_1_layout_locker.html", "classhal_1_1user__feedback_1_1_layout_locker" ],
         [ "ProgressScope", "classhal_1_1user__feedback_1_1_progress_scope.html", "classhal_1_1user__feedback_1_1_progress_scope" ],
@@ -95,7 +102,8 @@ var annotated_dup =
       ] ],
       [ "xilinx_toolbox", "namespacehal_1_1xilinx__toolbox.html", [
         [ "LOC", "structhal_1_1xilinx__toolbox_1_1_l_o_c.html", "structhal_1_1xilinx__toolbox_1_1_l_o_c" ],
-        [ "CellData", "structhal_1_1xilinx__toolbox_1_1_cell_data.html", "structhal_1_1xilinx__toolbox_1_1_cell_data" ]
+        [ "CellData", "structhal_1_1xilinx__toolbox_1_1_cell_data.html", "structhal_1_1xilinx__toolbox_1_1_cell_data" ],
+        [ "GuiLayoutLocker", "classhal_1_1xilinx__toolbox_1_1_gui_layout_locker.html", "classhal_1_1xilinx__toolbox_1_1_gui_layout_locker" ]
       ] ],
       [ "z3_utils", "namespacehal_1_1z3__utils.html", [
         [ "Converter", "classhal_1_1z3__utils_1_1_converter.html", "classhal_1_1z3__utils_1_1_converter" ],
@@ -612,6 +620,7 @@ var annotated_dup =
       [ "GuiExtensionModuleIdentification", "classhal_1_1_gui_extension_module_identification.html", "classhal_1_1_gui_extension_module_identification" ],
       [ "ModuleIdentificationPlugin", "classhal_1_1_module_identification_plugin.html", "classhal_1_1_module_identification_plugin" ],
       [ "NetlistPreprocessingPlugin", "classhal_1_1_netlist_preprocessing_plugin.html", "classhal_1_1_netlist_preprocessing_plugin" ],
+      [ "GuiExtensionNetlistPreprocessing", "classhal_1_1_gui_extension_netlist_preprocessing.html", "classhal_1_1_gui_extension_netlist_preprocessing" ],
       [ "CliExtensionsPerfTest", "classhal_1_1_cli_extensions_perf_test.html", "classhal_1_1_cli_extensions_perf_test" ],
       [ "PerfTestPlugin", "classhal_1_1_perf_test_plugin.html", "classhal_1_1_perf_test_plugin" ],
       [ "CliExtensionPythonShell", "classhal_1_1_cli_extension_python_shell.html", "classhal_1_1_cli_extension_python_shell" ],
@@ -740,6 +749,7 @@ var annotated_dup =
       [ "VHDLParserPlugin", "classhal_1_1_v_h_d_l_parser_plugin.html", "classhal_1_1_v_h_d_l_parser_plugin" ],
       [ "VHDLParser", "classhal_1_1_v_h_d_l_parser.html", "classhal_1_1_v_h_d_l_parser" ],
       [ "XilinxToolboxPlugin", "classhal_1_1_xilinx_toolbox_plugin.html", "classhal_1_1_xilinx_toolbox_plugin" ],
+      [ "GuiExtensionXilinxToolbox", "classhal_1_1_gui_extension_xilinx_toolbox.html", "classhal_1_1_gui_extension_xilinx_toolbox" ],
       [ "Z3UtilsPlugin", "classhal_1_1_z3_utils_plugin.html", "classhal_1_1_z3_utils_plugin" ]
     ] ],
     [ "pybind11", "namespacepybind11.html", [

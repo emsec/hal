@@ -1,0 +1,5 @@
+<map id="hal::GuiExtensionNetlistPreprocessing" name="hal::GuiExtensionNetlistPreprocessing">
+<area shape="rect" id="node1" title="GUI extension interface for the netlist preprocessing plugin." alt="" coords="5,344,272,465"/>
+<area shape="rect" id="node2" href="$classhal_1_1_gui_extension_interface.html" title=" " alt="" coords="27,145,251,296"/>
+<area shape="rect" id="node3" href="$classhal_1_1_abstract_extension_interface.html" title=" " alt="" coords="21,5,256,97"/>
+</map>

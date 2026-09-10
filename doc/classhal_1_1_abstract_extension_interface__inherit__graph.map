@@ -2,7 +2,7 @@
 <area shape="rect" id="node1" title=" " alt="" coords="1468,5,1703,97"/>
 <area shape="rect" id="node2" href="$classhal_1_1_cli_extension_interface.html" title=" " alt="" coords="448,182,637,289"/>
 <area shape="rect" id="node7" href="$classhal_1_1_fac_extension_interface.html" title=" " alt="" coords="1472,145,1699,325"/>
-<area shape="rect" id="node15" href="$classhal_1_1_gui_extension_interface.html" title=" " alt="" coords="2812,160,3036,311"/>
+<area shape="rect" id="node15" href="$classhal_1_1_gui_extension_interface.html" title=" " alt="" coords="3055,160,3279,311"/>
 <area shape="rect" id="node3" href="$classhal_1_1_cli_extension_dataflow.html" title=" " alt="" coords="5,395,195,502"/>
 <area shape="rect" id="node4" href="$classhal_1_1_cli_extension_python_shell.html" title=" " alt="" coords="219,388,435,509"/>
 <area shape="rect" id="node5" href="$classhal_1_1_cli_extensions_gui.html" title=" " alt="" coords="459,388,627,509"/>
@@ -19,5 +19,7 @@
 <area shape="rect" id="node18" href="$classhal_1_1_gui_extension_dot_viewer.html" title=" " alt="" coords="2822,388,3026,509"/>
 <area shape="rect" id="node19" href="$classhal_1_1_gui_extension_logic_evaluator.html" title=" " alt="" coords="3051,373,3283,524"/>
 <area shape="rect" id="node20" href="$classhal_1_1_gui_extension_module_identification.html" title="GUI extension interface for the module identification plugin." alt="" coords="3307,381,3576,517"/>
-<area shape="rect" id="node21" href="$classhal_1_1_gui_extension_simulator.html" title=" " alt="" coords="3601,395,3799,502"/>
+<area shape="rect" id="node21" href="$classhal_1_1_gui_extension_netlist_preprocessing.html" title="GUI extension interface for the netlist preprocessing plugin." alt="" coords="3600,388,3867,509"/>
+<area shape="rect" id="node22" href="$classhal_1_1_gui_extension_simulator.html" title=" " alt="" coords="3891,395,4090,502"/>
+<area shape="rect" id="node23" href="$classhal_1_1_gui_extension_xilinx_toolbox.html" title="GUI extension interface for the Xilinx toolbox plugin." alt="" coords="4114,395,4337,502"/>
 </map>

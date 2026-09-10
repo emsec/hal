@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-128-g078b17d00</span>
+   &#160;<span id="projectnumber">v4.5.0-129-gc8ba6b195</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -98,14 +98,16 @@ Inheritance diagram for hal::GuiExtensionInterface:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_gui_extension_interface__inherit__graph.png" border="0" usemap="#ahal_1_1_gui_extension_interface_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_gui_extension_interface_inherit__map" id="ahal_1_1_gui_extension_interface_inherit__map">
-<area shape="rect" title=" " alt="" coords="570,145,794,296"/>
+<area shape="rect" title=" " alt="" coords="829,145,1053,296"/>
 <area shape="rect" href="classhal_1_1_gui_extension_context.html" title=" " alt="" coords="5,344,215,495"/>
 <area shape="rect" href="classhal_1_1_gui_extension_dataflow.html" title=" " alt="" coords="239,359,434,480"/>
 <area shape="rect" href="classhal_1_1_gui_extension_dot_viewer.html" title=" " alt="" coords="459,359,663,480"/>
 <area shape="rect" href="classhal_1_1_gui_extension_logic_evaluator.html" title=" " alt="" coords="687,344,919,495"/>
 <area shape="rect" href="classhal_1_1_gui_extension_module_identification.html" title="GUI extension interface for the module identification plugin." alt="" coords="943,351,1213,487"/>
-<area shape="rect" href="classhal_1_1_gui_extension_simulator.html" title=" " alt="" coords="1237,366,1436,473"/>
-<area shape="rect" href="classhal_1_1_abstract_extension_interface.html" title=" " alt="" coords="565,5,799,97"/>
+<area shape="rect" href="classhal_1_1_gui_extension_netlist_preprocessing.html" title="GUI extension interface for the netlist preprocessing plugin." alt="" coords="1237,359,1503,480"/>
+<area shape="rect" href="classhal_1_1_gui_extension_simulator.html" title=" " alt="" coords="1528,366,1727,473"/>
+<area shape="rect" href="classhal_1_1_gui_extension_xilinx_toolbox.html" title="GUI extension interface for the Xilinx toolbox plugin." alt="" coords="1751,366,1973,473"/>
+<area shape="rect" href="classhal_1_1_abstract_extension_interface.html" title=" " alt="" coords="823,5,1058,97"/>
 </map>
 </div>
 <div class="dynheader">
@@ -304,7 +306,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_module_identification.html#a74e947c3c28557d308fdb36aea1e7130">hal::GuiExtensionModuleIdentification</a>, <a class="el" href="classhal_1_1_gui_extension_logic_evaluator.html#a4788e18368dd3c2d2b3f200770ce88ad">hal::GuiExtensionLogicEvaluator</a>, <a class="el" href="classhal_1_1_gui_extension_context.html#ac1ebae27126641fb4177f230520a62c0">hal::GuiExtensionContext</a>, and <a class="el" href="classhal_1_1_gui_extension_dataflow.html#a5712e954f109aefc6a6a1a1eb833a112">hal::GuiExtensionDataflow</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_xilinx_toolbox.html#a3c397eb08dabc2c297d360b506a6b959">hal::GuiExtensionXilinxToolbox</a>, <a class="el" href="classhal_1_1_gui_extension_netlist_preprocessing.html#af15869cf4b3bd458e0c70f72f5fd505d">hal::GuiExtensionNetlistPreprocessing</a>, <a class="el" href="classhal_1_1_gui_extension_module_identification.html#a74e947c3c28557d308fdb36aea1e7130">hal::GuiExtensionModuleIdentification</a>, <a class="el" href="classhal_1_1_gui_extension_logic_evaluator.html#a4788e18368dd3c2d2b3f200770ce88ad">hal::GuiExtensionLogicEvaluator</a>, <a class="el" href="classhal_1_1_gui_extension_context.html#ac1ebae27126641fb4177f230520a62c0">hal::GuiExtensionContext</a>, and <a class="el" href="classhal_1_1_gui_extension_dataflow.html#a5712e954f109aefc6a6a1a1eb833a112">hal::GuiExtensionDataflow</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="gui__extension__interface_8cpp_source.html#l00018">18</a> of file <a class="el" href="gui__extension__interface_8cpp_source.html">gui_extension_interface.cpp</a>.</p>
 
@@ -369,7 +371,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_logic_evaluator.html#a6b0e0acac87c6fb30c642c5e972751b1">hal::GuiExtensionLogicEvaluator</a>, <a class="el" href="classhal_1_1_gui_extension_context.html#af31567a7f0d17f072d0fc8fffb5a962b">hal::GuiExtensionContext</a>, and <a class="el" href="classhal_1_1_gui_extension_module_identification.html#a164ad9a39d0667af1180bfc9752c5ca7">hal::GuiExtensionModuleIdentification</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_xilinx_toolbox.html#a073420fbd5f556a0b86f63cd8977444d">hal::GuiExtensionXilinxToolbox</a>, <a class="el" href="classhal_1_1_gui_extension_netlist_preprocessing.html#ab030e8b75372393cb90218b02115c235">hal::GuiExtensionNetlistPreprocessing</a>, <a class="el" href="classhal_1_1_gui_extension_logic_evaluator.html#a6b0e0acac87c6fb30c642c5e972751b1">hal::GuiExtensionLogicEvaluator</a>, <a class="el" href="classhal_1_1_gui_extension_context.html#af31567a7f0d17f072d0fc8fffb5a962b">hal::GuiExtensionContext</a>, and <a class="el" href="classhal_1_1_gui_extension_module_identification.html#a164ad9a39d0667af1180bfc9752c5ca7">hal::GuiExtensionModuleIdentification</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="gui__extension__interface_8cpp_source.html#l00010">10</a> of file <a class="el" href="gui__extension__interface_8cpp_source.html">gui_extension_interface.cpp</a>.</p>
 

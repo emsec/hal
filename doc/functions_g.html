@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-128-g078b17d00</span>
+   &#160;<span id="projectnumber">v4.5.0-129-gc8ba6b195</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -370,6 +370,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>generate_assignment()
 : <a class="el" href="classhal_1_1z3__utils_1_1_converter.html#acefa413134d7ce8334cae99aad75c29e">hal::z3_utils::Converter</a>
 </li>
+<li>generate_dot_graph()
+: <a class="el" href="structhal_1_1solve__fsm_1_1_state_transition_graph.html#a2fd00d80f6ec960eaf066b29bc6fcdc9">hal::solve_fsm::StateTransitionGraph</a>
+</li>
 <li>generate_function()
 : <a class="el" href="classhal_1_1z3__utils_1_1_converter.html#aa30a5697c640428c73151caa7d3c89aa">hal::z3_utils::Converter</a>
 </li>
@@ -468,8 +471,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_r_a_m_component.html#a485a103ce9412f33a7aa968874af7d11">hal::RAMComponent</a>
 </li>
 <li>get_boolean_function()
-: <a class="el" href="classhal_1_1_gate.html#aaa9db7587dbb39363453303d368330be">hal::Gate</a>
-, <a class="el" href="classhal_1_1_gate_type.html#ab844cc0777899ae022db1e2cc30355b9">hal::GateType</a>
+: <a class="el" href="classhal_1_1_gate.html#a09610256a3b39521b1325ea095a38b62">hal::Gate</a>
+, <a class="el" href="classhal_1_1_gate_type.html#af14f2febe7d501c08291f38f68c97869">hal::GateType</a>
 , <a class="el" href="structhal_1_1module__identification_1_1_candidate_context.html#ac95b242aace25534fd58ba183839bf71">hal::module_identification::CandidateContext</a>
 </li>
 <li>get_boolean_function_const()
@@ -597,6 +600,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 , <a class="el" href="classhal_1_1_gui_extension_interface.html#a1c3bc15ce0f1f96d2a54ace22dfa9477">hal::GuiExtensionInterface</a>
 , <a class="el" href="classhal_1_1_gui_extension_logic_evaluator.html#a6b0e0acac87c6fb30c642c5e972751b1">hal::GuiExtensionLogicEvaluator</a>
 , <a class="el" href="classhal_1_1_gui_extension_module_identification.html#a164ad9a39d0667af1180bfc9752c5ca7">hal::GuiExtensionModuleIdentification</a>
+, <a class="el" href="classhal_1_1_gui_extension_netlist_preprocessing.html#ab030e8b75372393cb90218b02115c235">hal::GuiExtensionNetlistPreprocessing</a>
+, <a class="el" href="classhal_1_1_gui_extension_xilinx_toolbox.html#a073420fbd5f556a0b86f63cd8977444d">hal::GuiExtensionXilinxToolbox</a>
 </li>
 <li>get_control_inputs()
 : <a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html#a28afb44cc318bf53a982e7b44178d16c">hal::hawkeye::CipherCandidate</a>
@@ -741,7 +746,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_gate.html#a0ad132c9fe3ce0f9d9a4ada9e1c59d33">hal::Gate</a>
 </li>
 <li>get_fan_out_endpoint()
-: <a class="el" href="classhal_1_1_gate.html#af465d80e0ce1a2777f3fde0783d39363">hal::Gate</a>
+: <a class="el" href="classhal_1_1_gate.html#a373448d4daae156cce9be3c7b6a2fcba">hal::Gate</a>
 </li>
 <li>get_fan_out_endpoints()
 : <a class="el" href="classhal_1_1_gate.html#a2145f24fcfc657d151fac1382755e6a6">hal::Gate</a>
@@ -857,7 +862,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1dataflow_1_1_result.html#a1c89579d95b9645da1fac384dff2d886">hal::dataflow::Result</a>
 </li>
 <li>get_gates_set_from_vertices()
-: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a5df5d6856a1d13e94c7c374cc07e5b5d">hal::graph_algorithm::NetlistGraph</a>
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#abaf6d2cb92adb15342169c827c12ae44">hal::graph_algorithm::NetlistGraph</a>
 </li>
 <li>get_gates_set_from_vertices_igraph()
 : <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a646fc79778a638095f61ffa39f554ab5">hal::graph_algorithm::NetlistGraph</a>
@@ -1127,7 +1132,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_simulation_input.html#a0f735e3e70945ca51e334e882463057b">hal::SimulationInput</a>
 </li>
 <li>get_net_id_from()
-: <a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a1a09460ce6c2af3c0026033b07f3181b">hal::BooleanFunctionNetDecorator</a>
+: <a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a3cdeeb518c6358b237e3183be89ac10b">hal::BooleanFunctionNetDecorator</a>
 </li>
 <li>get_net_ids()
 : <a class="el" href="classhal_1_1_grouping.html#a524384c5f0299a2bca63564d859f2f45">hal::Grouping</a>
@@ -1155,8 +1160,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>get_nets()
 : <a class="el" href="classhal_1_1cte_1_1_clock_tree.html#a7bb4ce3a03b94e0f01a355c85b0c035f">hal::cte::ClockTree</a>
-, <a class="el" href="classhal_1_1_grouping.html#a0cae62bd10c79df0ffe48949031a896e">hal::Grouping</a>
-, <a class="el" href="classhal_1_1_module.html#ab6ab9367628bacdef899f288ab3cbcea">hal::Module</a>
+, <a class="el" href="classhal_1_1_grouping.html#aa16f132783753289a1b7e355ccff5c61">hal::Grouping</a>
+, <a class="el" href="classhal_1_1_module.html#a00f21d72e6698eeecab5a719b9acdd6a">hal::Module</a>
 , <a class="el" href="classhal_1_1_netlist.html#a6dd4ee37aa00167c92cde9df37da72c6">hal::Netlist</a>
 , <a class="el" href="structhal_1_1_simulation_input_1_1_net_group.html#a976862d40487a3975579c5541a3787f6">hal::SimulationInput::NetGroup</a>
 </li>
@@ -1185,7 +1190,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_netlist.html#a730c75bae75323000569ced56870e395">hal::Netlist</a>
 </li>
 <li>get_next_sequential_gates()
-: <a class="el" href="classhal_1_1_netlist_traversal_decorator.html#aa1c548ced063ae75a0e003e8d3ad6779">hal::NetlistTraversalDecorator</a>
+: <a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a6df4962f950af15f9ea4be54cffd21e6">hal::NetlistTraversalDecorator</a>
 </li>
 <li>get_next_sequential_gates_map()
 : <a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a3b17ad3e798cb28fa1ee0bfd57929bff">hal::NetlistTraversalDecorator</a>
@@ -1434,8 +1439,11 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>get_state_outputs()
 : <a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html#a54eaae3e01b6446f83c5330237bc12a8">hal::hawkeye::CipherCandidate</a>
 </li>
+<li>get_state_size()
+: <a class="el" href="structhal_1_1solve__fsm_1_1_state_transition_graph.html#a776e80c89c560f4b46777601557ea288">hal::solve_fsm::StateTransitionGraph</a>
+</li>
 <li>get_subgraph_function()
-: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#ae8245fa6d538060a09860b7d747b7d6a">hal::SubgraphNetlistDecorator</a>
+: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a2b39747caa8d3f4680b32af151d03639">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_subgraph_function_inputs()
 : <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a602fe3be3c5979579024b42b8c4439eb">hal::SubgraphNetlistDecorator</a>
@@ -2279,7 +2287,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_user_action.html#a8ecbac748ec2ffd926d9793e2ce159ce">hal::UserAction</a>
 </li>
 <li>GridPlacement()
-: <a class="el" href="classhal_1_1_grid_placement.html#a433078f1aec251e1d726e11bb42b864e">hal::GridPlacement</a>
+: <a class="el" href="classhal_1_1_grid_placement.html#a994800301fa4b52826fb52281f6f202d">hal::GridPlacement</a>
 </li>
 <li>gridPlacementFactory()
 : <a class="el" href="classhal_1_1_graph_layouter.html#a950db7401f5f1c2a5cb5cff0511ca0b7">hal::GraphLayouter</a>
@@ -2485,6 +2493,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>GuiExtensionModuleIdentification()
 : <a class="el" href="classhal_1_1_gui_extension_module_identification.html#a314d3b2be25cc85cdae15f4608ce50d7">hal::GuiExtensionModuleIdentification</a>
 </li>
+<li>GuiExtensionNetlistPreprocessing()
+: <a class="el" href="classhal_1_1_gui_extension_netlist_preprocessing.html#a4c6ead9818143a19121dc7de6218d0ce">hal::GuiExtensionNetlistPreprocessing</a>
+</li>
 <li>GuiExtensionPythonBase
 : <a class="el" href="classhal_1_1_gui_extension_demo_plugin.html#a5763042f6e9e673c8628e78c19a5f84d">hal::GuiExtensionDemoPlugin</a>
 , <a class="el" href="classhal_1_1_gui_extension_python_base.html#a5afc3bbafb74c41d25441391fe1c9f9d">hal::GuiExtensionPythonBase</a>
@@ -2498,6 +2509,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>guiExtensionState()
 : <a class="el" href="classhal_1_1_gui_plugin_table.html#a49861ce4efb518c79a0e27220ee80491">hal::GuiPluginTable</a>
 </li>
+<li>GuiExtensionXilinxToolbox()
+: <a class="el" href="classhal_1_1_gui_extension_xilinx_toolbox.html#ae6766a7bdfdf02dcd9e460a01fc96bb5">hal::GuiExtensionXilinxToolbox</a>
+</li>
 <li>guiIconDisabledPath()
 : <a class="el" href="classhal_1_1_gui_plugin_manager.html#acbdfccb300509b745e4b7c391198927e">hal::GuiPluginManager</a>
 </li>
@@ -2509,6 +2523,10 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>guiIconEnabledStyle()
 : <a class="el" href="classhal_1_1_gui_plugin_manager.html#acba5de307d95c87dc381d346f27cbfa9">hal::GuiPluginManager</a>
+</li>
+<li>GuiLayoutLocker()
+: <a class="el" href="classhal_1_1netlist__preprocessing_1_1_gui_layout_locker.html#a49e99e1d2bae8bc11ea62329ccc17bf1">hal::netlist_preprocessing::GuiLayoutLocker</a>
+, <a class="el" href="classhal_1_1xilinx__toolbox_1_1_gui_layout_locker.html#a2051b0106cf9c89b1d2cad572c1100dd">hal::xilinx_toolbox::GuiLayoutLocker</a>
 </li>
 <li>GuiPluginDelegate()
 : <a class="el" href="classhal_1_1_gui_plugin_delegate.html#a22251255840777bfc1791d024c52cfaf">hal::GuiPluginDelegate</a>

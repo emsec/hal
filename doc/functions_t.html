@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-128-g078b17d00</span>
+   &#160;<span id="projectnumber">v4.5.0-129-gc8ba6b195</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -215,6 +215,7 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 </li>
 <li>timeout
 : <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#ac37565326a476662dd586275376c2469">hal::hawkeye::DetectionConfiguration</a>
+, <a class="el" href="structhal_1_1solve__fsm_1_1_configuration.html#a222c78884705d7ef2ff58d080b7657dc">hal::solve_fsm::Configuration</a>
 </li>
 <li>timeout_in_seconds
 : <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html#a4d22bcaa540b788ec804f6df24a5df15">hal::SMT::QueryConfig</a>
@@ -256,6 +257,7 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 , <a class="el" href="structhal_1_1_s_m_t_1_1_model.html#affeed8fee80d8f1133f73c64e1be2aff">hal::SMT::Model</a>
 , <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html#a8a7b9e2a15553e233db69bc3b181b6e2">hal::SMT::QueryConfig</a>
 , <a class="el" href="structhal_1_1_s_m_t_1_1_solver_result.html#a16b75405944bd48d4b1a002a79e6cb04">hal::SMT::SolverResult</a>
+, <a class="el" href="structhal_1_1solve__fsm_1_1_state_transition_graph.html#acf0930e53cf0e1651652625241514d5c">hal::solve_fsm::StateTransitionGraph</a>
 </li>
 <li>to_u64()
 : <a class="el" href="classhal_1_1_boolean_function.html#adbb8cd1823360db7046cd7fc1f1cde80">hal::BooleanFunction</a>
@@ -408,6 +410,12 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 <li>transform()
 : <a class="el" href="classhal_1_1_wave_graphics_canvas.html#a93b36bd688fe945113b738a01412bf97">hal::WaveGraphicsCanvas</a>
 </li>
+<li>transition_logic
+: <a class="el" href="structhal_1_1solve__fsm_1_1_configuration.html#afc7fd2856db56bf73c574471598faf04">hal::solve_fsm::Configuration</a>
+</li>
+<li>transitions
+: <a class="el" href="structhal_1_1solve__fsm_1_1_state_transition_graph.html#a74038b07407768453529a31c66895496">hal::solve_fsm::StateTransitionGraph</a>
+</li>
 <li>transitionToValue()
 : <a class="el" href="classhal_1_1_trigger_dialog.html#a4ed76db9b363bc4fd4fa1297f5b52086">hal::TriggerDialog</a>
 </li>
@@ -529,13 +537,13 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 </li>
 <li>Type
 : <a class="el" href="classhal_1_1_endpoint_table_model.html#aa915111b587c5f60f5d78ecd2edcb915">hal::EndpointTableModel</a>
-, <a class="el" href="classhal_1_1_gate_pins_tree_item.html#afd1c930c8f5350d067b5597c379db722">hal::GatePinsTreeItem</a>
 </li>
 <li>type()
 : <a class="el" href="classhal_1_1_gate_pins_tree_item.html#a38664b5176723c073c6fb4d6c4f86b7e">hal::GatePinsTreeItem</a>
 </li>
 <li>Type
-: <a class="el" href="classhal_1_1_module_pins_tree_item.html#a8033a5382fc80c4d6527db151d8e109b">hal::ModulePinsTreeItem</a>
+: <a class="el" href="classhal_1_1_gate_pins_tree_item.html#afd1c930c8f5350d067b5597c379db722">hal::GatePinsTreeItem</a>
+, <a class="el" href="classhal_1_1_module_pins_tree_item.html#a8033a5382fc80c4d6527db151d8e109b">hal::ModulePinsTreeItem</a>
 , <a class="el" href="classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html#af2155b10356f0b7d1edd19a93e58832f">hal::NetLayoutJunctionOccupiedHash::AddOrMerge</a>
 </li>
 <li>type()
@@ -544,11 +552,15 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 </li>
 <li>Type
 : <a class="el" href="classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2">hal::PinActionType</a>
-, <a class="el" href="classhal_1_1_saleae_directory_net_entry.html#a3a5e294bf2230252fc9aebf9f104656a">hal::SaleaeDirectoryNetEntry</a>
 </li>
 <li>type()
 : <a class="el" href="classhal_1_1_saleae_directory_net_entry.html#ac6dfd2e796739b5749e2fa77b42497b8">hal::SaleaeDirectoryNetEntry</a>
-, <a class="el" href="structhal_1_1_s_m_t_1_1_solver_result.html#ae045691db29e432f98f57bf59a899d10">hal::SMT::SolverResult</a>
+</li>
+<li>Type
+: <a class="el" href="classhal_1_1_saleae_directory_net_entry.html#a3a5e294bf2230252fc9aebf9f104656a">hal::SaleaeDirectoryNetEntry</a>
+</li>
+<li>type
+: <a class="el" href="structhal_1_1_s_m_t_1_1_solver_result.html#ae045691db29e432f98f57bf59a899d10">hal::SMT::SolverResult</a>
 , <a class="el" href="classhal_1_1_user_action_object.html#acf15334af2fe764397770e03085e7b87">hal::UserActionObject</a>
 </li>
 <li>Type

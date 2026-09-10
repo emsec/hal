@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-128-g078b17d00</span>
+   &#160;<span id="projectnumber">v4.5.0-129-gc8ba6b195</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -96,14 +96,16 @@ $(document).ready(function(){initNavTree('preprocessing_8h.html',''); initResiza
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="defines_8h_source.html">hal_core/defines.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">hal_core/utilities/result.h</a>&quot;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for preprocessing.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="preprocessing_8h__incl.png" border="0" usemap="#aplugins_2xilinx__toolbox_2include_2xilinx__toolbox_2preprocessing_8h" alt=""/></div>
 <map name="aplugins_2xilinx__toolbox_2include_2xilinx__toolbox_2preprocessing_8h" id="aplugins_2xilinx__toolbox_2include_2xilinx__toolbox_2preprocessing_8h">
-<area shape="rect" title="This file contains functions specifically designed to preprocess Xilinx FPGA netlists." alt="" coords="159,5,329,61"/>
+<area shape="rect" title="This file contains functions specifically designed to preprocess Xilinx FPGA netlists." alt="" coords="303,5,473,61"/>
 <area shape="rect" href="defines_8h.html" title=" " alt="" coords="149,288,289,315"/>
 <area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="323,109,453,151"/>
+<area shape="rect" title=" " alt="" coords="478,117,541,143"/>
 <area shape="rect" title=" " alt="" coords="5,363,96,389"/>
 <area shape="rect" title=" " alt="" coords="121,363,207,389"/>
 <area shape="rect" title=" " alt="" coords="231,363,318,389"/>
@@ -126,12 +128,12 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a59f138192bc52f09f2f633e850222d40"><td class="memItemLeft" align="right" valign="top">Result&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#a59f138192bc52f09f2f633e850222d40">hal::xilinx_toolbox::split_luts</a> (Netlist *nl)</td></tr>
-<tr class="memdesc:a59f138192bc52f09f2f633e850222d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split LUTs with two outputs into two separate LUT gates.  <a href="namespacehal_1_1xilinx__toolbox.html#a59f138192bc52f09f2f633e850222d40">More...</a><br /></td></tr>
-<tr class="separator:a59f138192bc52f09f2f633e850222d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5a7abafdb5c8726f3f73da4ceec91fe"><td class="memItemLeft" align="right" valign="top">Result&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#ad5a7abafdb5c8726f3f73da4ceec91fe">hal::xilinx_toolbox::split_shift_registers</a> (Netlist *nl)</td></tr>
-<tr class="memdesc:ad5a7abafdb5c8726f3f73da4ceec91fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split shift register primitives and replaces them with equivalent flip-flops chains.  <a href="namespacehal_1_1xilinx__toolbox.html#ad5a7abafdb5c8726f3f73da4ceec91fe">More...</a><br /></td></tr>
-<tr class="separator:ad5a7abafdb5c8726f3f73da4ceec91fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac42334eb4dcc126be846d54ca9cc813f"><td class="memItemLeft" align="right" valign="top">Result&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#ac42334eb4dcc126be846d54ca9cc813f">hal::xilinx_toolbox::split_luts</a> (Netlist *nl, const std::vector&lt; Gate * &gt; &amp;gates={})</td></tr>
+<tr class="memdesc:ac42334eb4dcc126be846d54ca9cc813f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split LUTs with two outputs into two separate LUT gates.  <a href="namespacehal_1_1xilinx__toolbox.html#ac42334eb4dcc126be846d54ca9cc813f">More...</a><br /></td></tr>
+<tr class="separator:ac42334eb4dcc126be846d54ca9cc813f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add3096d73b5fa5e1a093c8ebff0f0b95"><td class="memItemLeft" align="right" valign="top">Result&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#add3096d73b5fa5e1a093c8ebff0f0b95">hal::xilinx_toolbox::split_shift_registers</a> (Netlist *nl, const std::vector&lt; Gate * &gt; &amp;gates={})</td></tr>
+<tr class="memdesc:add3096d73b5fa5e1a093c8ebff0f0b95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split shift register primitives and replaces them with equivalent flip-flops chains.  <a href="namespacehal_1_1xilinx__toolbox.html#add3096d73b5fa5e1a093c8ebff0f0b95">More...</a><br /></td></tr>
+<tr class="separator:add3096d73b5fa5e1a093c8ebff0f0b95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9cbe87076ce843d6b78da1391dad61c"><td class="memItemLeft" align="right" valign="top">Result&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#aa9cbe87076ce843d6b78da1391dad61c">hal::xilinx_toolbox::parse_xdc_file</a> (Netlist *nl, const std::filesystem::path &amp;xdc_file)</td></tr>
 <tr class="memdesc:aa9cbe87076ce843d6b78da1391dad61c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse an <code>.xdc</code> file and extract the position <a class="el" href="structhal_1_1xilinx__toolbox_1_1_l_o_c.html" title="Information on a LOC.">LOC</a> and BEL data of each gate.  <a href="namespacehal_1_1xilinx__toolbox.html#aa9cbe87076ce843d6b78da1391dad61c">More...</a><br /></td></tr>
 <tr class="separator:aa9cbe87076ce843d6b78da1391dad61c"><td class="memSeparator" colspan="2">&#160;</td></tr>

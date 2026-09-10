@@ -1,7 +1,8 @@
 <map id="plugins/xilinx_toolbox/include/xilinx_toolbox/preprocessing.h" name="plugins/xilinx_toolbox/include/xilinx_toolbox/preprocessing.h">
-<area shape="rect" id="node1" title="This file contains functions specifically designed to preprocess Xilinx FPGA netlists." alt="" coords="159,5,329,61"/>
+<area shape="rect" id="node1" title="This file contains functions specifically designed to preprocess Xilinx FPGA netlists." alt="" coords="303,5,473,61"/>
 <area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,288,289,315"/>
 <area shape="rect" id="node7" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="323,109,453,151"/>
+<area shape="rect" id="node12" title=" " alt="" coords="478,117,541,143"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,363,96,389"/>
 <area shape="rect" id="node4" title=" " alt="" coords="121,363,207,389"/>
 <area shape="rect" id="node5" title=" " alt="" coords="231,363,318,389"/>
