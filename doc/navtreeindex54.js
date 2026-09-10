@@ -1,5 +1,6 @@
 var NAVTREEINDEX54 =
 {
+"structhal_1_1hawkeye_1_1_s_box.html#ab772a4cc9836cb3b533b3dd27a3b663d":[9,0,0,8,1,3],
 "structhal_1_1hawkeye_1_1_s_box.html#ad4f395e867a77a8849d85093f3a51313":[9,0,0,8,1,5],
 "structhal_1_1hawkeye_1_1_s_box.html#addb2b84d611597ac11668410eda5296d":[9,0,0,8,1,0],
 "structhal_1_1module__identification_1_1_candidate_context.html":[9,0,0,9,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX54 =
 "verilator_8h.html#a010e2b8171460e8d6e926700c5c455d9":[10,0,1,21,2,0,0,3,2],
 "verilator_8h.html#a1bc01790846e968e248ca57d4d266985":[10,0,1,21,2,0,0,3,11],
 "verilator_8h.html#a1cd9de1b793056c3d02f27d1202e58f3":[10,0,1,21,2,0,0,3,7],
-"verilator_8h.html#a4a948d01fd415e91da335f494e364233":[10,0,1,21,2,0,0,3,12],
-"verilator_8h.html#a57612b6fb69fd61d067f8869c8392057":[10,0,1,21,2,0,0,3,5]
+"verilator_8h.html#a4a948d01fd415e91da335f494e364233":[10,0,1,21,2,0,0,3,12]
 };

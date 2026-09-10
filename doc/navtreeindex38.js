@@ -1,5 +1,6 @@
 var NAVTREEINDEX38 =
 {
+"namespacehal_1_1graph__algorithm.html#ae0479edf1ae69e563ea0d4f85dc3c45c":[8,0,0,12,6],
 "namespacehal_1_1graph__algorithm.html#ae0b293f87c1d1b354258b37a6a68e058":[8,0,0,12,5],
 "namespacehal_1_1graph__widget__constants.html":[8,0,0,13],
 "namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79":[8,0,0,13,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX38 =
 "namespacehal_1_1utils.html#ab23286230cc054fcaa3dcffdd4f2c1d1":[8,0,0,38,41],
 "namespacehal_1_1utils.html#ac849ed8f13bec503f9d223d5a87af9dd":[8,0,0,38,38],
 "namespacehal_1_1utils.html#acb305474aa5f3ed169ba3e7302b599b0":[8,0,0,38,30],
-"namespacehal_1_1utils.html#acbdd92cdaa605c9686aa1afc89ccd289":[8,0,0,38,5],
-"namespacehal_1_1utils.html#ad5404c6eab703aa306f6769ae81ce7ec":[8,0,0,38,44]
+"namespacehal_1_1utils.html#acbdd92cdaa605c9686aa1afc89ccd289":[8,0,0,38,5]
 };

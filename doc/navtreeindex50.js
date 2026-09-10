@@ -1,5 +1,6 @@
 var NAVTREEINDEX50 =
 {
+"settings__item__dropdown_8h.html":[10,0,1,8,0,0,44,0,2],
 "settings__item__dropdown_8h_source.html":[10,0,1,8,0,0,44,0,2],
 "settings__item__keybind_8cpp.html":[10,0,1,8,2,43,0,2],
 "settings__item__keybind_8cpp_source.html":[10,0,1,8,2,43,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX50 =
 "solve__fsm_8cpp_source.html":[10,0,1,22,2,1],
 "solve__fsm_8h.html":[10,0,1,22,0,0,1],
 "solve__fsm_8h.html#a24f943c01e42614c046aa7e611791508":[10,0,1,22,0,0,1,0],
-"solve__fsm_8h.html#a7a1322acc23dc95f262d57df42cf9b5c":[10,0,1,22,0,0,1,1],
-"solve__fsm_8h.html#a9cbe139c5b06c205079be2e675b8cdc1":[10,0,1,22,0,0,1,2]
+"solve__fsm_8h.html#a7a1322acc23dc95f262d57df42cf9b5c":[10,0,1,22,0,0,1,1]
 };

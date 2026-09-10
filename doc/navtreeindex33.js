@@ -1,5 +1,6 @@
 var NAVTREEINDEX33 =
 {
+"gatelibrary__proxy__model_8h_source.html":[10,0,1,8,0,0,18,7],
 "gatelibrary__selection_8cpp.html":[10,0,1,8,2,18,8],
 "gatelibrary__selection_8cpp_source.html":[10,0,1,8,2,18,8],
 "gatelibrary__selection_8h.html":[10,0,1,8,0,0,18,8],
@@ -236,18 +237,17 @@ var NAVTREEINDEX33 =
 "group__decorators.html#gga10a0dbae61e1d4d1c8d2310ce40947c6a18947431379f80a0e31ad6557a93da1a":[7,0,0,0,7,0],
 "group__decorators.html#gga10a0dbae61e1d4d1c8d2310ce40947c6ac7561db7a418dd39b2201dfe110ab4a4":[8,0,0,695,2],
 "group__decorators.html#gga10a0dbae61e1d4d1c8d2310ce40947c6ac7561db7a418dd39b2201dfe110ab4a4":[7,0,0,0,7,2],
-"group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da195fe59b6f103787a914aead0f3db502":[7,0,0,0,6,1],
 "group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da195fe59b6f103787a914aead0f3db502":[8,0,0,694,1],
+"group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da195fe59b6f103787a914aead0f3db502":[7,0,0,0,6,1],
 "group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da965dbaac085fc891bfbbd4f9d145bbc8":[7,0,0,0,6,0],
 "group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da965dbaac085fc891bfbbd4f9d145bbc8":[8,0,0,694,0],
-"group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489daf6cb3e816496528d4187db53bc66567f":[8,0,0,694,2],
 "group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489daf6cb3e816496528d4187db53bc66567f":[7,0,0,0,6,2],
+"group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489daf6cb3e816496528d4187db53bc66567f":[8,0,0,694,2],
 "group__docking.html":[7,1,2],
 "group__docking.html#ga96c899c45d7192341d04caf575c7f02c":[7,1,2,8],
 "group__docking.html#ga96c899c45d7192341d04caf575c7f02c":[8,0,0,688],
 "group__docking.html#gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f":[7,1,2,8,0],
 "group__docking.html#gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f":[8,0,0,688,0],
 "group__docking.html#gga96c899c45d7192341d04caf575c7f02ca6f50993948b855a8efa011b6915164d6":[7,1,2,8,1],
-"group__docking.html#gga96c899c45d7192341d04caf575c7f02ca6f50993948b855a8efa011b6915164d6":[8,0,0,688,1],
-"group__docking.html#gga96c899c45d7192341d04caf575c7f02cae2a44fa65a0cf99e723e1887fc5eda0a":[7,1,2,8,2]
+"group__docking.html#gga96c899c45d7192341d04caf575c7f02ca6f50993948b855a8efa011b6915164d6":[8,0,0,688,1]
 };

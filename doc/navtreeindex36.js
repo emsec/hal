@@ -1,5 +1,6 @@
 var NAVTREEINDEX36 =
 {
+"minimap__scrollbar_8cpp.html":[10,0,1,8,2,3,5],
 "minimap__scrollbar_8cpp_source.html":[10,0,1,8,2,3,5],
 "minimap__scrollbar_8h.html":[10,0,1,8,0,0,3,5],
 "minimap__scrollbar_8h_source.html":[10,0,1,8,0,0,3,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX36 =
 "namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bafc5364bf9dbfa34954526becad136d4b":[8,0,0,693,20],
 "namespacehal.html#ae9eb93dc7dd8514d3afb4c935a09a9a0":[8,0,0,787],
 "namespacehal.html#af1388a5c4377a81f3215cac5d274fd60":[8,0,0,684],
-"namespacehal.html#af1492e12ad434bac4f058b6493b195dc":[8,0,0,772],
-"namespacehal.html#af2311dac7f63baf41157fb36e3702036":[8,0,0,769]
+"namespacehal.html#af1492e12ad434bac4f058b6493b195dc":[8,0,0,772]
 };

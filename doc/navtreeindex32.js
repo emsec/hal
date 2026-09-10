@@ -1,5 +1,6 @@
 var NAVTREEINDEX32 =
 {
+"functions_eval_w.html":[9,3,5,21],
 "functions_eval_x.html":[9,3,5,22],
 "functions_eval_z.html":[9,3,5,23],
 "functions_f.html":[9,3,0,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX32 =
 "gatelibrary__manager_8h_source.html":[10,0,1,8,0,0,18,6],
 "gatelibrary__proxy__model_8cpp.html":[10,0,1,8,2,18,7],
 "gatelibrary__proxy__model_8cpp_source.html":[10,0,1,8,2,18,7],
-"gatelibrary__proxy__model_8h.html":[10,0,1,8,0,0,18,7],
-"gatelibrary__proxy__model_8h_source.html":[10,0,1,8,0,0,18,7]
+"gatelibrary__proxy__model_8h.html":[10,0,1,8,0,0,18,7]
 };
