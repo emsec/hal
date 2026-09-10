@@ -1,17 +1,27 @@
 var classhal_1_1_netlist_traversal_decorator =
 [
     [ "NetlistTraversalDecorator", "classhal_1_1_netlist_traversal_decorator.html#a126a3148fa0457449c524263444dce28", null ],
-    [ "get_next_combinational_gates", "classhal_1_1_netlist_traversal_decorator.html#ae3677964003410e4de7c04f302ec5abf", null ],
-    [ "get_next_combinational_gates", "classhal_1_1_netlist_traversal_decorator.html#ac9019a807f99e85e2efd6434b44d02d7", null ],
+    [ "get_combinational_cone", "classhal_1_1_netlist_traversal_decorator.html#a9de5ec8c0559befe78f222805b736df3", null ],
+    [ "get_combinational_cone", "classhal_1_1_netlist_traversal_decorator.html#ac17b7e3a71e2222a8fd766ad02d1eae8", null ],
+    [ "get_common_inputs", "classhal_1_1_netlist_traversal_decorator.html#a07adf1a66ce403d3aa0f39d2c926075f", null ],
+    [ "get_complex_gate_chain", "classhal_1_1_netlist_traversal_decorator.html#a98593e7d73b77953e24ffd48c33cb436", null ],
+    [ "get_gate_chain", "classhal_1_1_netlist_traversal_decorator.html#ae08c873ed4db5244623dca5503d00a34", null ],
+    [ "get_gates", "classhal_1_1_netlist_traversal_decorator.html#a508ec58b1a00e3662e6f35390bfa2e84", null ],
+    [ "get_gates", "classhal_1_1_netlist_traversal_decorator.html#aaef2ea6bc8325da1df1a5693f1675058", null ],
+    [ "get_gates", "classhal_1_1_netlist_traversal_decorator.html#a3e372424530bf7b19ab779f05b03b32e", null ],
+    [ "get_gates", "classhal_1_1_netlist_traversal_decorator.html#aba2e592de8e28a035fb32d5dd9110b7d", null ],
     [ "get_next_matching_gates", "classhal_1_1_netlist_traversal_decorator.html#a7fe26441b61a515744dfcace48c3337c", null ],
     [ "get_next_matching_gates", "classhal_1_1_netlist_traversal_decorator.html#a386ec552b68d4e0d8220fa3b5e5c0859", null ],
     [ "get_next_matching_gates_until", "classhal_1_1_netlist_traversal_decorator.html#adb811634ef40a3ac5f0143a06002c7a9", null ],
     [ "get_next_matching_gates_until", "classhal_1_1_netlist_traversal_decorator.html#a1459985cc317dcf26510b2331a850b63", null ],
     [ "get_next_matching_gates_until_depth", "classhal_1_1_netlist_traversal_decorator.html#a3f1f940e001d182c0bfdc3836fc2e5ee", null ],
     [ "get_next_matching_gates_until_depth", "classhal_1_1_netlist_traversal_decorator.html#aa4fbd6366666a6cbf4c079a4e2be8594", null ],
-    [ "get_next_sequential_gates", "classhal_1_1_netlist_traversal_decorator.html#a5c082c011bd52ce96562dbfb34dbfb76", null ],
-    [ "get_next_sequential_gates", "classhal_1_1_netlist_traversal_decorator.html#a9cc3a9a04e6ac8328e7f26b3a953eb98", null ],
+    [ "get_next_sequential_gates", "classhal_1_1_netlist_traversal_decorator.html#a6df4962f950af15f9ea4be54cffd21e6", null ],
+    [ "get_next_sequential_gates", "classhal_1_1_netlist_traversal_decorator.html#aa1c548ced063ae75a0e003e8d3ad6779", null ],
     [ "get_next_sequential_gates_map", "classhal_1_1_netlist_traversal_decorator.html#a3b17ad3e798cb28fa1ee0bfd57929bff", null ],
     [ "get_shortest_path", "classhal_1_1_netlist_traversal_decorator.html#a48225221197ade6cf2bda52593c91392", null ],
-    [ "get_shortest_path_distance", "classhal_1_1_netlist_traversal_decorator.html#ae9f881d3f790b23eecfb90d93e47c34f", null ]
+    [ "get_shortest_path", "classhal_1_1_netlist_traversal_decorator.html#ade91abdf654715374317512ad7e62d41", null ],
+    [ "get_shortest_path", "classhal_1_1_netlist_traversal_decorator.html#a2168c4edbe0725264e5c1c11e425c644", null ],
+    [ "get_shortest_path_distance", "classhal_1_1_netlist_traversal_decorator.html#ae9f881d3f790b23eecfb90d93e47c34f", null ],
+    [ "make_traversal_cache", "classhal_1_1_netlist_traversal_decorator.html#a526c0d5acc7c19c0d47d6bafcd289b57", null ]
 ];

@@ -22,6 +22,8 @@ var namespacehal_1_1utils =
     [ "get_unique_temp_directory", "namespacehal_1_1utils.html#a56ad6ff5b170e8601914b52d775e4e28", null ],
     [ "get_user_config_directory", "namespacehal_1_1utils.html#af26065b993bd3dcb5d3a0ab60db751f3", null ],
     [ "get_user_share_directory", "namespacehal_1_1utils.html#aeed9440c9520fc5c1297906c2487253b", null ],
+    [ "indexed_vector_erase", "namespacehal_1_1utils.html#aa3a85b60f16e4dd4fa8bbad2dfd9b874", null ],
+    [ "indexed_vector_push_back", "namespacehal_1_1utils.html#a2582b5b7a603326ec9f19fbe1e9f3c5a", null ],
     [ "is_digits", "namespacehal_1_1utils.html#a1e4d29d84c6e4683a71e0767b189427c", null ],
     [ "is_floating_point", "namespacehal_1_1utils.html#a772421aed42cd1ebe50eb26005672548", null ],
     [ "is_integer", "namespacehal_1_1utils.html#af1ed788367eeb31ddfadfab86e6ae9ce", null ],

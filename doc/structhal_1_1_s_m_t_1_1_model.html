@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-124-g47ab54673</span>
+   &#160;<span id="projectnumber">v4.5.0-125-gb22dacb1a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -101,7 +101,7 @@ Collaboration diagram for hal::SMT::Model:</div>
 <div class="dyncontent">
 <div class="center"><img src="structhal_1_1_s_m_t_1_1_model__coll__graph.png" border="0" usemap="#ahal_1_1_s_m_t_1_1_model_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1_s_m_t_1_1_model_coll__map" id="ahal_1_1_s_m_t_1_1_model_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,131,141"/>
+<area shape="rect" title=" " alt="" coords="5,5,131,156"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -113,6 +113,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af46a846018c43ce39d768d8ff452ea63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67d2af2431b357a27f78b421b3bd0797"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_s_m_t_1_1_model.html#a67d2af2431b357a27f78b421b3bd0797">operator!=</a> (const <a class="el" href="structhal_1_1_s_m_t_1_1_model.html">Model</a> &amp;other) const</td></tr>
 <tr class="separator:a67d2af2431b357a27f78b421b3bd0797"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affeed8fee80d8f1133f73c64e1be2aff"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_s_m_t_1_1_model.html#affeed8fee80d8f1133f73c64e1be2aff">to_string</a> () const</td></tr>
+<tr class="separator:affeed8fee80d8f1133f73c64e1be2aff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab972d570eef3cf49a748c957da931d48"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_s_m_t_1_1_model.html#ab972d570eef3cf49a748c957da931d48">evaluate</a> (const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;bf) const</td></tr>
 <tr class="separator:ab972d570eef3cf49a748c957da931d48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -135,7 +137,7 @@ Friends</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents a list of assignments for variable nodes that yield a satisfiable assignment for a given list of constraints. </p>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00229">229</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00236">236</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1506b3f752877c5c87ee1163d69437e0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1506b3f752877c5c87ee1163d69437e0">&#9670;&nbsp;</a></span>Model()</h2>
@@ -160,9 +162,9 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00196">196</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00203">203</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00220">parse()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00234">parse()</a>.</p>
 
 </div>
 </div>
@@ -191,9 +193,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The evaluated function on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00261">261</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00275">275</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00253">hal::BooleanFunction::build()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00270">hal::BooleanFunction::Const()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00064">ERR_APPEND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00856">hal::BooleanFunction::get_nodes()</a>, <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00236">model</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00253">hal::BooleanFunction::build()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00270">hal::BooleanFunction::Const()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00064">ERR_APPEND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00856">hal::BooleanFunction::get_nodes()</a>, <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00243">model</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -221,7 +223,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if both models are unequal, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00205">205</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00212">212</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
 </div>
 </div>
@@ -249,9 +251,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if both models are equal, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00200">200</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00207">207</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00236">model</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00243">model</a>.</p>
 
 </div>
 </div>
@@ -298,9 +300,32 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The model on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00220">220</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00234">234</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa98254531be138d1bf820b43b303a64d4">hal::SMT::Bitwuzla</a>, <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">hal::SMT::Boolector</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00081">hal::SMT::ModelParser::BOOLECTOR_MODEL_GRAMMAR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00236">model</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00196">Model()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00031">hal::SMT::ModelParser::parser_context</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>, <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed">hal::SMT::Z3</a>, and <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00086">hal::SMT::ModelParser::Z3_MODEL_GRAMMAR</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa98254531be138d1bf820b43b303a64d4">hal::SMT::Bitwuzla</a>, <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">hal::SMT::Boolector</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00081">hal::SMT::ModelParser::BOOLECTOR_MODEL_GRAMMAR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00243">model</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00203">Model()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00031">hal::SMT::ModelParser::parser_context</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>, <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed">hal::SMT::Z3</a>, and <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00086">hal::SMT::ModelParser::Z3_MODEL_GRAMMAR</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
+
+</div>
+</div>
+<a id="affeed8fee80d8f1133f73c64e1be2aff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affeed8fee80d8f1133f73c64e1be2aff">&#9670;&nbsp;</a></span>to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string hal::SMT::Model::to_string </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Translate the <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> model into its string representation.</p>
+<dl class="section return"><dt>Returns</dt><dd>A string representing the <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> model. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00227">227</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -350,7 +375,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the output stream. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00210">210</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00217">217</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
 </div>
 </div>
@@ -369,9 +394,9 @@ Friends</h2></td></tr>
 
 <p>maps variable identifiers to a (1) value and (2) its bit-size. </p>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00236">236</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00243">243</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00261">evaluate()</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00200">operator==()</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00220">parse()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00275">evaluate()</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00207">operator==()</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00234">parse()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
 </div>
 </div>

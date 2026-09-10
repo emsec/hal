@@ -873,6 +873,7 @@ var hierarchy =
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< T >::TokenStreamException", "structhal_1_1_token_stream_1_1_token_stream_exception.html", null ],
+    [ "hal::TraversalCache", "classhal_1_1_traversal_cache.html", null ],
     [ "std::unordered_map", null, [
       [ "hal::SimulationInputNetEvent", "classhal_1_1_simulation_input_net_event.html", null ]
     ] ],

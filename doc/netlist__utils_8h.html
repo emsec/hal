@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-124-g47ab54673</span>
+   &#160;<span id="projectnumber">v4.5.0-125-gb22dacb1a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -179,10 +179,6 @@ Functions</h2></td></tr>
 <tr class="separator:aea70c3bec835e4f88d4e208c59f5edee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac697b6f91cdf40de86672f35d0317237"><td class="memItemLeft" align="right" valign="top">Result&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#ac697b6f91cdf40de86672f35d0317237">hal::netlist_utils::replace_gate</a> (Gate *gate, GateType *target_type, std::map&lt; GatePin *, GatePin * &gt; pin_map)</td></tr>
 <tr class="separator:ac697b6f91cdf40de86672f35d0317237"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ebaa80d5e0b2e73d48b71d2f9b3639e"><td class="memItemLeft" align="right" valign="top">Result&lt; std::vector&lt; Gate * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#a1ebaa80d5e0b2e73d48b71d2f9b3639e">hal::netlist_utils::get_gate_chain</a> (Gate *start_gate, const std::vector&lt; const GatePin * &gt; &amp;input_pins={}, const std::vector&lt; const GatePin * &gt; &amp;output_pins={}, const std::function&lt; bool(const Gate *)&gt; &amp;filter=nullptr)</td></tr>
-<tr class="separator:a1ebaa80d5e0b2e73d48b71d2f9b3639e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c4ea0dd29bd644bfef98f098b1b9b06"><td class="memItemLeft" align="right" valign="top">Result&lt; std::vector&lt; Gate * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#a5c4ea0dd29bd644bfef98f098b1b9b06">hal::netlist_utils::get_complex_gate_chain</a> (Gate *start_gate, const std::vector&lt; GateType * &gt; &amp;chain_types, const std::map&lt; GateType *, std::vector&lt; const GatePin * &gt;&gt; &amp;input_pins, const std::map&lt; GateType *, std::vector&lt; const GatePin * &gt;&gt; &amp;output_pins, const std::function&lt; bool(const Gate *)&gt; &amp;filter=nullptr)</td></tr>
-<tr class="separator:a5c4ea0dd29bd644bfef98f098b1b9b06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91bb261a58a12d895627aa4d55a67e8c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gate * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#a91bb261a58a12d895627aa4d55a67e8c">hal::netlist_utils::get_shortest_path</a> (Gate *start_gate, Gate *end_gate, bool search_both_directions=false)</td></tr>
 <tr class="separator:a91bb261a58a12d895627aa4d55a67e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64a67599a3c88d65fadf2030cbf3052e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gate * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__utils.html#a64a67599a3c88d65fadf2030cbf3052e">hal::netlist_utils::get_shortest_path</a> (Gate *start_gate, Module *end_module, bool forward_direction)</td></tr>

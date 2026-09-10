@@ -144,9 +144,7 @@ var namespacehal =
     [ "netlist_utils", "namespacehal_1_1netlist__utils.html", [
       [ "copy_netlist", "namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90", null ],
       [ "get_common_inputs", "namespacehal_1_1netlist__utils.html#aea70c3bec835e4f88d4e208c59f5edee", null ],
-      [ "get_complex_gate_chain", "namespacehal_1_1netlist__utils.html#a5c4ea0dd29bd644bfef98f098b1b9b06", null ],
       [ "get_ff_dependency_matrix", "namespacehal_1_1netlist__utils.html#af2c5370e1cfb407c98dd5c855e1e9022", null ],
-      [ "get_gate_chain", "namespacehal_1_1netlist__utils.html#a1ebaa80d5e0b2e73d48b71d2f9b3639e", null ],
       [ "get_nets_at_pins", "namespacehal_1_1netlist__utils.html#adfa7f9849d87135f19d69b492c988331", null ],
       [ "get_next_gates", "namespacehal_1_1netlist__utils.html#a256ff2dcf6b6f02c3f5e7eae5ac5a32f", null ],
       [ "get_next_gates", "namespacehal_1_1netlist__utils.html#a9c850b7764d91068f0e209b47de7b596", null ],
@@ -238,6 +236,7 @@ var namespacehal =
     [ "BooleanFunctionDecorator", "classhal_1_1_boolean_function_decorator.html", "classhal_1_1_boolean_function_decorator" ],
     [ "BooleanFunctionNetDecorator", "classhal_1_1_boolean_function_net_decorator.html", "classhal_1_1_boolean_function_net_decorator" ],
     [ "NetlistModificationDecorator", "classhal_1_1_netlist_modification_decorator.html", "classhal_1_1_netlist_modification_decorator" ],
+    [ "TraversalCache", "classhal_1_1_traversal_cache.html", "classhal_1_1_traversal_cache" ],
     [ "NetlistTraversalDecorator", "classhal_1_1_netlist_traversal_decorator.html", "classhal_1_1_netlist_traversal_decorator" ],
     [ "SubgraphNetlistDecorator", "classhal_1_1_subgraph_netlist_decorator.html", "classhal_1_1_subgraph_netlist_decorator" ],
     [ "Endpoint", "classhal_1_1_endpoint.html", "classhal_1_1_endpoint" ],
@@ -974,6 +973,16 @@ var namespacehal =
       [ "error_detection", "namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05f4129fc2919400006be8bec6215343", null ],
       [ "done", "namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba6b2ded51d81a4403d8a4bd25fa1e57ee", null ],
       [ "control", "namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bafc5364bf9dbfa34954526becad136d4b", null ]
+    ] ],
+    [ "TraversalDirection", "group__decorators.html#gabf9ea95cf437527b2fd8929ae3d7489d", [
+      [ "forward", "group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da965dbaac085fc891bfbbd4f9d145bbc8", null ],
+      [ "backward", "group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da195fe59b6f103787a914aead0f3db502", null ],
+      [ "both", "group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489daf6cb3e816496528d4187db53bc66567f", null ]
+    ] ],
+    [ "TraversalStop", "group__decorators.html#ga10a0dbae61e1d4d1c8d2310ce40947c6", [
+      [ "at_match", "group__decorators.html#gga10a0dbae61e1d4d1c8d2310ce40947c6a18947431379f80a0e31ad6557a93da1a", null ],
+      [ "at_mismatch", "group__decorators.html#gga10a0dbae61e1d4d1c8d2310ce40947c6a17bfc0c4ea85d792afc1c24aedd566fa", null ],
+      [ "never", "group__decorators.html#gga10a0dbae61e1d4d1c8d2310ce40947c6ac7561db7a418dd39b2201dfe110ab4a4", null ]
     ] ],
     [ "base_pin_init", "group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c", null ],
     [ "boolean_function_decorator_init", "group__pybind.html#gadcbe9ddba67d0061af0b3f101c727c6e", null ],

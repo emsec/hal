@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-124-g47ab54673</span>
+   &#160;<span id="projectnumber">v4.5.0-125-gb22dacb1a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -111,7 +111,7 @@ $(document).ready(function(){initNavTree('common__successor__predecessor_8cpp_so
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_gate.html">Gate</a>* <a class="code" href="netlist__preprocessing_8cpp.html#a985c304e5c2ab9a0895677493d4cbd0d">origin</a> : mQueue)</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_gate.html">Gate</a>*g : <a class="code" href="namespacehal_1_1netlist__utils.html#a256ff2dcf6b6f02c3f5e7eae5ac5a32f">netlist_utils::get_next_gates</a>(<a class="code" href="netlist__preprocessing_8cpp.html#a985c304e5c2ab9a0895677493d4cbd0d">origin</a>, forward, 1))</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_gate.html">Gate</a>*g : <a class="code" href="namespacehal_1_1netlist__utils.html#a256ff2dcf6b6f02c3f5e7eae5ac5a32f">netlist_utils::get_next_gates</a>(<a class="code" href="netlist__preprocessing_8cpp.html#a985c304e5c2ab9a0895677493d4cbd0d">origin</a>, <a class="code" href="group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da965dbaac085fc891bfbbd4f9d145bbc8">forward</a>, 1))</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            {</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                <span class="keywordflow">if</span> (mLastWaypoint.contains(g)) <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                mLastWaypoint[g] = <a class="code" href="netlist__preprocessing_8cpp.html#a985c304e5c2ab9a0895677493d4cbd0d">origin</a>;</div>
@@ -195,6 +195,7 @@ $(document).ready(function(){initNavTree('common__successor__predecessor_8cpp_so
 <div class="ttc" id="aclasshal_1_1_netlist_html_a26d0f67be01c66f22422f40938e29237"><div class="ttname"><a href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">hal::Netlist::get_gate_by_id</a></div><div class="ttdeci">Gate * get_gate_by_id(const u32 gate_id) const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00195">netlist.cpp:195</a></div></div>
 <div class="ttc" id="acommon__successor__predecessor_8h_html"><div class="ttname"><a href="common__successor__predecessor_8h.html">common_successor_predecessor.h</a></div></div>
 <div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
+<div class="ttc" id="agroup__decorators_html_ggabf9ea95cf437527b2fd8929ae3d7489da965dbaac085fc891bfbbd4f9d145bbc8"><div class="ttname"><a href="group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da965dbaac085fc891bfbbd4f9d145bbc8">hal::TraversalDirection::forward</a></div><div class="ttdeci">@ forward</div></div>
 <div class="ttc" id="agroup__utilities_html_ga5a10e8bbe0ebf932e114b116b32d7ed2"><div class="ttname"><a href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a></div><div class="ttdeci">#define log_info(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00070">log.h:70</a></div></div>
 <div class="ttc" id="agroup__utilities_html_gaccc921ec8323d53efb57a21a8d4be735"><div class="ttname"><a href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a></div><div class="ttdeci">#define log_warning(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00076">log.h:76</a></div></div>
 <div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>

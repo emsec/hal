@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; hal_py v4.5.0-124-g47ab54673 documentation</title>
+  <title>Index &mdash; hal_py v4.5.0-125-gb22dacb1a documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -24,7 +24,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-124-g47ab54673
+                v4.5.0-125-gb22dacb1a
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -363,7 +363,15 @@
 </li>
         <li><a href="boolean_function.html#hal_py.BooleanFunction.Value.__str__">(hal_py.BooleanFunction.Value method)</a>
 </li>
+        <li><a href="smt.html#hal_py.SMT.Constraint.__str__">(hal_py.SMT.Constraint method)</a>
+</li>
+        <li><a href="smt.html#hal_py.SMT.Model.__str__">(hal_py.SMT.Model method)</a>
+</li>
+        <li><a href="smt.html#hal_py.SMT.QueryConfig.__str__">(hal_py.SMT.QueryConfig method)</a>
+</li>
         <li><a href="smt.html#hal_py.SMT.SolverCall.__str__">(hal_py.SMT.SolverCall method)</a>
+</li>
+        <li><a href="smt.html#hal_py.SMT.SolverResult.__str__">(hal_py.SMT.SolverResult method)</a>
 </li>
         <li><a href="smt.html#hal_py.SMT.SolverResultType.__str__">(hal_py.SMT.SolverResultType method)</a>
 </li>
@@ -1125,11 +1133,17 @@
         <li><a href="gate_type_component.html#hal_py.RAMPortComponent.get_clock_function">(hal_py.RAMPortComponent method)</a>
 </li>
       </ul></li>
+      <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.get_combinational_cone">get_combinational_cone() (hal_py.NetlistTraversalDecorator method)</a>
+</li>
       <li><a href="hawkeye.html#hawkeye.SBox.get_combinational_gates">get_combinational_gates() (hawkeye.SBox method)</a>
 </li>
-      <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_common_inputs">get_common_inputs() (in module hal_py.NetlistUtils)</a>
+      <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.get_common_inputs">get_common_inputs() (hal_py.NetlistTraversalDecorator method)</a>
+
+      <ul>
+        <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_common_inputs">(in module hal_py.NetlistUtils)</a>
 </li>
-      <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_complex_gate_chain">get_complex_gate_chain() (in module hal_py.NetlistUtils)</a>
+      </ul></li>
+      <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.get_complex_gate_chain">get_complex_gate_chain() (hal_py.NetlistTraversalDecorator method)</a>
 </li>
       <li><a href="gate_type.html#hal_py.GateType.get_component">get_component() (hal_py.GateType method)</a>
 
@@ -1317,7 +1331,7 @@
         <li><a href="netlist.html#hal_py.Netlist.get_gate_by_id">(hal_py.Netlist method)</a>
 </li>
       </ul></li>
-      <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_gate_chain">get_gate_chain() (in module hal_py.NetlistUtils)</a>
+      <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.get_gate_chain">get_gate_chain() (hal_py.NetlistTraversalDecorator method)</a>
 </li>
       <li><a href="dataflow.html#dataflow.Result.get_gate_control_nets">get_gate_control_nets() (dataflow.Result method)</a>
 </li>
@@ -1359,6 +1373,8 @@
         <li><a href="module.html#hal_py.Module.get_gates">(hal_py.Module method)</a>
 </li>
         <li><a href="netlist.html#hal_py.Netlist.get_gates">(hal_py.Netlist method)</a>
+</li>
+        <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.get_gates">(hal_py.NetlistTraversalDecorator method)</a>
 </li>
         <li><a href="hawkeye.html#hawkeye.CipherCandidate.get_gates">(hawkeye.CipherCandidate method)</a>
 </li>
@@ -1519,12 +1535,12 @@
       </ul></li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.get_max_simulated_time">get_max_simulated_time() (netlist_simulator_controller.NetlistSimulatorController method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_identification.html#module_identification.VerifiedCandidate.get_merged_word_level_operation">get_merged_word_level_operation() (module_identification.VerifiedCandidate method)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.get_module">get_module() (hal_py.Gate method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist.html#hal_py.Netlist.get_module_by_id">get_module_by_id() (hal_py.Netlist method)</a>
 </li>
       <li><a href="grouping.html#hal_py.Grouping.get_module_ids">get_module_ids() (hal_py.Grouping method)</a>
@@ -1646,8 +1662,6 @@
 </li>
       </ul></li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_nets_at_pins">get_nets_at_pins() (in module hal_py.NetlistUtils)</a>
-</li>
-      <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.get_next_combinational_gates">get_next_combinational_gates() (hal_py.NetlistTraversalDecorator method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_next_gate_id">get_next_gate_id() (hal_py.Netlist method)</a>
 </li>
@@ -2542,6 +2556,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type_component.html#hal_py.MACComponent">MACComponent (class in hal_py)</a>
 </li>
+      <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.make_traversal_cache">make_traversal_cache() (hal_py.NetlistTraversalDecorator method)</a>
+</li>
       <li><a href="netlist_preprocessing.html#netlist_preprocessing.manual_mux_optimizations">manual_mux_optimizations() (in module netlist_preprocessing)</a>
 </li>
       <li><a href="net.html#hal_py.Net.mark_global_input_net">mark_global_input_net() (hal_py.Net method)</a>
@@ -2746,6 +2762,10 @@
         <li><a href="smt.html#hal_py.SMT.SolverResultType.name">(hal_py.SMT.SolverResultType property)</a>
 </li>
         <li><a href="smt.html#hal_py.SMT.SolverType.name">(hal_py.SMT.SolverType property)</a>
+</li>
+        <li><a href="netlist_traversal_decorator.html#hal_py.TraversalDirection.name">(hal_py.TraversalDirection property)</a>
+</li>
+        <li><a href="netlist_traversal_decorator.html#hal_py.TraversalStop.name">(hal_py.TraversalStop property)</a>
 </li>
         <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.Components.name">(hawkeye.DetectionConfiguration.Components property)</a>
 </li>
@@ -3484,7 +3504,17 @@
       <li><a href="smt.html#hal_py.SMT.Solver.to_smt2">to_smt2() (hal_py.SMT.Solver method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.to_string">to_string() (hal_py.BooleanFunction static method)</a>
+
+      <ul>
+        <li><a href="smt.html#hal_py.SMT.Constraint.to_string">(hal_py.SMT.Constraint method)</a>
 </li>
+        <li><a href="smt.html#hal_py.SMT.Model.to_string">(hal_py.SMT.Model method)</a>
+</li>
+        <li><a href="smt.html#hal_py.SMT.QueryConfig.to_string">(hal_py.SMT.QueryConfig method)</a>
+</li>
+        <li><a href="smt.html#hal_py.SMT.SolverResult.to_string">(hal_py.SMT.SolverResult method)</a>
+</li>
+      </ul></li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.to_u64">to_u64() (hal_py.BooleanFunction static method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.top_level_node">top_level_node (hal_py.BooleanFunction property)</a>
@@ -3498,6 +3528,14 @@
       <li><a href="module_identification.html#module_identification.VerifiedCandidate.total_input_nets">total_input_nets (module_identification.VerifiedCandidate property)</a>
 </li>
       <li><a href="module_identification.html#module_identification.VerifiedCandidate.total_output_nets">total_output_nets (module_identification.VerifiedCandidate property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="netlist_traversal_decorator.html#hal_py.TraversalCache">TraversalCache (class in hal_py)</a>
+</li>
+      <li><a href="netlist_traversal_decorator.html#hal_py.TraversalDirection">TraversalDirection (class in hal_py)</a>
+</li>
+      <li><a href="netlist_traversal_decorator.html#hal_py.TraversalStop">TraversalStop (class in hal_py)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Node.type">type (hal_py.BooleanFunction.Node property)</a>
 
@@ -3523,8 +3561,6 @@
         <li><a href="smt.html#hal_py.SMT.SolverResult.type">(hal_py.SMT.SolverResult property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_identification.html#module_identification.VerifiedCandidate.types">types (module_identification.VerifiedCandidate property)</a>
 </li>
       <li><a href="module_identification.html#module_identification.Configuration.types_to_check">types_to_check (module_identification.Configuration property)</a>

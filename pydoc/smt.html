@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SMT &mdash; hal_py v4.5.0-124-g47ab54673 documentation</title>
+  <title>SMT &mdash; hal_py v4.5.0-125-gb22dacb1a documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-124-g47ab54673
+                v4.5.0-125-gb22dacb1a
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -157,6 +157,20 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 <span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hal_py.SMT'</span></em><a class="headerlink" href="#hal_py.SMT.Constraint.__module__" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.Constraint.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.Constraint" title="hal_py.SMT.Constraint"><span class="pre">hal_py.SMT.Constraint</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#hal_py.SMT.Constraint.__str__" title="Permalink to this definition"></a></dt>
+<dd><p>Translates the SMT constraint into its string representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A string representing the SMT constraint.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="hal_py.SMT.Constraint.constraint">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">constraint</span></span><a class="headerlink" href="#hal_py.SMT.Constraint.constraint" title="Permalink to this definition"></a></dt>
@@ -206,6 +220,20 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.Constraint.to_string">
+<span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.Constraint" title="hal_py.SMT.Constraint"><span class="pre">hal_py.SMT.Constraint</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#hal_py.SMT.Constraint.to_string" title="Permalink to this definition"></a></dt>
+<dd><p>Translates the SMT constraint into its string representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A string representing the SMT constraint.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -271,6 +299,20 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.Model.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.Model" title="hal_py.SMT.Model"><span class="pre">hal_py.SMT.Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#hal_py.SMT.Model.__str__" title="Permalink to this definition"></a></dt>
+<dd><p>Translates the SMT model into its string representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A string representing the SMT model.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="hal_py.SMT.Model.evaluate">
 <span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.Model" title="hal_py.SMT.Model"><span class="pre">hal_py.SMT.Model</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.SMT.Model.evaluate" title="Permalink to this definition"></a></dt>
 <dd><p>Evaluates the given Boolean function by replacing all variables contained in the model with their corresponding value and simplifying the result.</p>
@@ -318,6 +360,20 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.Model.to_string">
+<span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.Model" title="hal_py.SMT.Model"><span class="pre">hal_py.SMT.Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#hal_py.SMT.Model.to_string" title="Permalink to this definition"></a></dt>
+<dd><p>Translates the SMT model into its string representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A string representing the SMT model.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -339,6 +395,20 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 <dt class="sig sig-object py" id="hal_py.SMT.QueryConfig.__module__">
 <span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hal_py.SMT'</span></em><a class="headerlink" href="#hal_py.SMT.QueryConfig.__module__" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.QueryConfig.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig"><span class="pre">hal_py.SMT.QueryConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#hal_py.SMT.QueryConfig.__str__" title="Permalink to this definition"></a></dt>
+<dd><p>Translates the SMT query configuration into its string representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A string representing the SMT query configuration.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="hal_py.SMT.QueryConfig.generate_model">
@@ -380,6 +450,20 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.QueryConfig.to_string">
+<span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig"><span class="pre">hal_py.SMT.QueryConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#hal_py.SMT.QueryConfig.to_string" title="Permalink to this definition"></a></dt>
+<dd><p>Translates the SMT query configuration into its string representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A string representing the SMT query configuration.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -565,7 +649,7 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.SMT.Solver.query">
-<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.SMT.Solver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config:</span> <span class="pre">hal_py.SMT.QueryConfig</span> <span class="pre">=</span> <span class="pre">&lt;hal_py.SMT.QueryConfig</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7f6c23530170&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hal_py.SMT.SolverResult" title="hal_py.SMT.SolverResult"><span class="pre">hal_py.SMT.SolverResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.SMT.Solver.query" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.SMT.Solver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config:</span> <span class="pre">hal_py.SMT.QueryConfig</span> <span class="pre">=</span> <span class="pre">&lt;hal_py.SMT.QueryConfig</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7f5c5b772cf0&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hal_py.SMT.SolverResult" title="hal_py.SMT.SolverResult"><span class="pre">hal_py.SMT.SolverResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.SMT.Solver.query" title="Permalink to this definition"></a></dt>
 <dd><p>Queries an SMT solver with the specified query configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -852,6 +936,20 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.SolverResult.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.SolverResult" title="hal_py.SMT.SolverResult"><span class="pre">hal_py.SMT.SolverResult</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#hal_py.SMT.SolverResult.__str__" title="Permalink to this definition"></a></dt>
+<dd><p>Translates the SMT result into its string representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A string representing the SMT result.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="hal_py.SMT.SolverResult.is">
 <span class="sig-name descname"><span class="pre">is</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.SolverResult" title="hal_py.SMT.SolverResult"><span class="pre">hal_py.SMT.SolverResult</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.SolverResultType" title="hal_py.SMT.SolverResultType"><span class="pre">hal_py.SMT.SolverResultType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.SMT.SolverResult.is" title="Permalink to this definition"></a></dt>
 <dd><p>Checks whether the result is of a specific type.</p>
@@ -917,6 +1015,20 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#hal_py.SMT.Model" title="hal_py.SMT.Model">hal_py.SMT.Model</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.SolverResult.to_string">
+<span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.SolverResult" title="hal_py.SMT.SolverResult"><span class="pre">hal_py.SMT.SolverResult</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#hal_py.SMT.SolverResult.to_string" title="Permalink to this definition"></a></dt>
+<dd><p>Translates the SMT result into its string representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A string representing the SMT result.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>

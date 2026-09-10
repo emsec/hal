@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-124-g47ab54673</span>
+   &#160;<span id="projectnumber">v4.5.0-125-gb22dacb1a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -552,73 +552,75 @@ $(document).ready(function(){initNavTree('plugins_2netlist__preprocessing_2pytho
 <div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;            },</div>
 <div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;            py::arg(<span class="stringliteral">&quot;nl&quot;</span>),</div>
 <div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;            py::arg(<span class="stringliteral">&quot;concatenated_pin_groups&quot;</span>),</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;<span class="stringliteral">                Create modules from large gates like RAMs and DSPs with the option to concatenate multiple gate pin groups into larger consecutive pin groups.</span></div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;<span class="stringliteral">                :param hal_py.Netlist nl: The netlist to operate on.</span></div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;<span class="stringliteral">                :param dict[str,dict[str,list[str]]] concatenated_pin_groups: A dict from gate type name to a dict from the name of the resulting pin group to the names of the pin groups it is concatenated from.</span></div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;<span class="stringliteral">                :returns: The created modules on success, an empty list otherwise.</span></div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;<span class="stringliteral">                :rtype: list[hal_py.Module]</span></div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;<span class="stringliteral">        m.def(</span></div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;create_nets_at_unconnected_pins&quot;</span>,</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;            [](<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* nl) -&gt; std::vector&lt;Net*&gt; {</div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;                <span class="keyword">auto</span> res = <a class="code" href="namespacehal_1_1netlist__preprocessing.html#a4c9f643c59e3f4e8be8d1fdf6b4eab6f">netlist_preprocessing::create_nets_at_unconnected_pins</a>(nl);</div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;                {</div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;                }</div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;                {</div>
-<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;                    <span class="keywordflow">return</span> {};</div>
-<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;                }</div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;            },</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;            py::arg(<span class="stringliteral">&quot;nl&quot;</span>),</div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;<span class="stringliteral">                Create a new net for every unconnected output pin of every gate of the netlist.</span></div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;<span class="stringliteral">                The new nets are named ``HAL_UNCONNECTED_&lt;net_id&gt;``.</span></div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;<span class="stringliteral">                :param hal_py.Netlist nl: The netlist to operate on.</span></div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;<span class="stringliteral">                :returns: The created nets on success, an empty list otherwise.</span></div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;<span class="stringliteral">                :rtype: list[hal_py.Net]</span></div>
-<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;<span class="stringliteral">        m.def(</span></div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;unify_ff_outputs&quot;</span>,</div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;            [](<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* nl, <span class="keyword">const</span> std::vector&lt;Gate*&gt;&amp; ffs = {}, <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* inverter_type = <span class="keyword">nullptr</span>) -&gt; std::optional&lt;u32&gt; {</div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;                <span class="keyword">auto</span> res = <a class="code" href="namespacehal_1_1netlist__preprocessing.html#afe12a588f07c9251ea8f4eaa06aeb29b">netlist_preprocessing::unify_ff_outputs</a>(nl, ffs, inverter_type);</div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;                {</div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;                }</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;                {</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;                }</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;            },</div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;            py::arg(<span class="stringliteral">&quot;nl&quot;</span>),</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;            py::arg(<span class="stringliteral">&quot;ffs&quot;</span>)           = std::vector&lt;Gate*&gt;(),</div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;            py::arg(<span class="stringliteral">&quot;inverter_type&quot;</span>) = <span class="keyword">nullptr</span>,</div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;<span class="stringliteral">                Iterates all flip-flops of the netlist or specified by the user.</span></div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;<span class="stringliteral">                If a flip-flop has a ``state`` and a ``neg_state`` output, a new inverter gate is created and connected to the ``state`` output net as an additional destination.</span></div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;<span class="stringliteral">                Finally, the ``neg_state`` output net is disconnected from the ``neg_state`` pin and re-connected to the new inverter gate&#39;s output. </span></div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;<span class="stringliteral">                :param hal_py.Netlist nl: The netlist to operate on. </span></div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;<span class="stringliteral">                :param list[hal_py.Gate] ffs: The flip-flops to operate on. Defaults to an empty vector, in which case all flip-flops of the netlist are considered.</span></div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;<span class="stringliteral">                :param hal_py.GateType inverter_type:  The inverter gate type to use. Defaults to a ``None``, in which case the first inverter type found in the gate library is used.</span></div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;<span class="stringliteral">                :returns: The number of rerouted ``neg_state`` outputs on success, ``None`` otherwise.</span></div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;<span class="stringliteral">                :rtype: int or ``None``</span></div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;<span class="stringliteral"></span><span class="preprocessor">#ifndef PYBIND11_MODULE</span></div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;        <span class="keywordflow">return</span> m.ptr();</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;<span class="preprocessor">#endif    </span><span class="comment">// PYBIND11_MODULE</span></div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;    }</div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(),</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;<span class="stringliteral">                Create modules from large gates like RAMs and DSPs with the option to concatenate multiple gate pin groups into larger consecutive pin groups.</span></div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;<span class="stringliteral">                :param hal_py.Netlist nl: The netlist to operate on.</span></div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;<span class="stringliteral">                :param dict[str,dict[str,list[str]]] concatenated_pin_groups: A dict from gate type name to a dict from the name of the resulting pin group to the names of the pin groups it is concatenated from.</span></div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;<span class="stringliteral">                :returns: The created modules on success, an empty list otherwise.</span></div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;<span class="stringliteral">                :rtype: list[hal_py.Module]</span></div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;<span class="stringliteral">        m.def(</span></div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;create_nets_at_unconnected_pins&quot;</span>,</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;            [](<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* nl) -&gt; std::vector&lt;Net*&gt; {</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;                <span class="keyword">auto</span> res = <a class="code" href="namespacehal_1_1netlist__preprocessing.html#a4c9f643c59e3f4e8be8d1fdf6b4eab6f">netlist_preprocessing::create_nets_at_unconnected_pins</a>(nl);</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;                {</div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;                }</div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;                {</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;                    <span class="keywordflow">return</span> {};</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;                }</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;            },</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;            py::arg(<span class="stringliteral">&quot;nl&quot;</span>),</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;            <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(),</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;<span class="stringliteral">                Create a new net for every unconnected output pin of every gate of the netlist.</span></div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;<span class="stringliteral">                The new nets are named ``HAL_UNCONNECTED_&lt;net_id&gt;``.</span></div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;<span class="stringliteral">                :param hal_py.Netlist nl: The netlist to operate on.</span></div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;<span class="stringliteral">                :returns: The created nets on success, an empty list otherwise.</span></div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;<span class="stringliteral">                :rtype: list[hal_py.Net]</span></div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;<span class="stringliteral">        m.def(</span></div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;unify_ff_outputs&quot;</span>,</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;            [](<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* nl, <span class="keyword">const</span> std::vector&lt;Gate*&gt;&amp; ffs = {}, <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* inverter_type = <span class="keyword">nullptr</span>) -&gt; std::optional&lt;u32&gt; {</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;                <span class="keyword">auto</span> res = <a class="code" href="namespacehal_1_1netlist__preprocessing.html#afe12a588f07c9251ea8f4eaa06aeb29b">netlist_preprocessing::unify_ff_outputs</a>(nl, ffs, inverter_type);</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;                {</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;                }</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;                {</div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;                }</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;            },</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;            py::arg(<span class="stringliteral">&quot;nl&quot;</span>),</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;            py::arg(<span class="stringliteral">&quot;ffs&quot;</span>)           = std::vector&lt;Gate*&gt;(),</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;            py::arg(<span class="stringliteral">&quot;inverter_type&quot;</span>) = <span class="keyword">nullptr</span>,</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;<span class="stringliteral">                Iterates all flip-flops of the netlist or specified by the user.</span></div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;<span class="stringliteral">                If a flip-flop has a ``state`` and a ``neg_state`` output, a new inverter gate is created and connected to the ``state`` output net as an additional destination.</span></div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;<span class="stringliteral">                Finally, the ``neg_state`` output net is disconnected from the ``neg_state`` pin and re-connected to the new inverter gate&#39;s output. </span></div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;<span class="stringliteral">                :param hal_py.Netlist nl: The netlist to operate on. </span></div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;<span class="stringliteral">                :param list[hal_py.Gate] ffs: The flip-flops to operate on. Defaults to an empty vector, in which case all flip-flops of the netlist are considered.</span></div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;<span class="stringliteral">                :param hal_py.GateType inverter_type:  The inverter gate type to use. Defaults to a ``None``, in which case the first inverter type found in the gate library is used.</span></div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;<span class="stringliteral">                :returns: The number of rerouted ``neg_state`` outputs on success, ``None`` otherwise.</span></div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;<span class="stringliteral">                :rtype: int or ``None``</span></div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;<span class="stringliteral"></span><span class="preprocessor">#ifndef PYBIND11_MODULE</span></div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;        <span class="keywordflow">return</span> m.ptr();</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;<span class="preprocessor">#endif    </span><span class="comment">// PYBIND11_MODULE</span></div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;    }</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_base_plugin_interface_html"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00058">plugin_interface_base.h:59</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_html"><div class="ttname"><a href="classhal_1_1_gate.html">hal::Gate</a></div><div class="ttdef"><b>Definition:</b> <a href="gate_8h_source.html#l00057">gate.h:58</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_html"><div class="ttname"><a href="classhal_1_1_gate_library.html">hal::GateLibrary</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__library_8h_source.html#l00043">gate_library.h:44</a></div></div>
@@ -650,10 +652,11 @@ $(document).ready(function(){initNavTree('plugins_2netlist__preprocessing_2pytho
 <div class="ttc" id="anamespacehal_1_1netlist__preprocessing_html_afe12a588f07c9251ea8f4eaa06aeb29b"><div class="ttname"><a href="namespacehal_1_1netlist__preprocessing.html#afe12a588f07c9251ea8f4eaa06aeb29b">hal::netlist_preprocessing::unify_ff_outputs</a></div><div class="ttdeci">Result&lt; u32 &gt; unify_ff_outputs(Netlist *nl, const std::vector&lt; Gate * &gt; &amp;ffs={}, GateType *inverter_type=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l02492">netlist_preprocessing.cpp:2492</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anamespacehal_html_a034467b937d9c580d84c198167d00929"><div class="ttname"><a href="namespacehal.html#a034467b937d9c580d84c198167d00929">hal::PYBIND11_PLUGIN</a></div><div class="ttdeci">PYBIND11_PLUGIN(hal_py)</div><div class="ttdef"><b>Definition:</b> <a href="src_2python__bindings_2python__bindings_8cpp_source.html#l00010">python_bindings.cpp:10</a></div></div>
-<div class="ttc" id="anamespacepybind11_html"><div class="ttname"><a href="namespacepybind11.html">pybind11</a></div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_8h_source.html#l00249">python_bindings.h:250</a></div></div>
+<div class="ttc" id="anamespacepybind11_html"><div class="ttname"><a href="namespacepybind11.html">pybind11</a></div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_8h_source.html#l00251">python_bindings.h:252</a></div></div>
 <div class="ttc" id="anetlist__preprocessing_8h_html"><div class="ttname"><a href="netlist__preprocessing_8h.html">netlist_preprocessing.h</a></div></div>
 <div class="ttc" id="aplugin__netlist__preprocessing_8h_html"><div class="ttname"><a href="plugin__netlist__preprocessing_8h.html">plugin_netlist_preprocessing.h</a></div><div class="ttdoc">This file contains all functions related to the HAL plugin API.</div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
+<div class="ttc" id="astructhal_1_1borrowed_html"><div class="ttname"><a href="structhal_1_1borrowed.html">hal::borrowed</a></div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_8h_source.html#l00129">python_bindings.h:130</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -1,16 +1,16 @@
 var searchData=
 [
-  ['gatetypeproperty_42798',['GateTypeProperty',['../namespacehal.html#adb8da04d2161f277bd489e806a2721ca',1,'hal']]],
-  ['gesturecancelpolicy_42799',['GestureCancelPolicy',['https://doc.qt.io/qt-5/qgesture.html#GestureCancelPolicy-enum',1,'QGesture']]],
-  ['gestureflag_42800',['GestureFlag',['https://doc.qt.io/qt-5/qt.html#GestureFlag-enum',1,'Qt']]],
-  ['gesturestate_42801',['GestureState',['https://doc.qt.io/qt-5/qt.html#GestureState-enum',1,'Qt']]],
-  ['gesturetype_42802',['GestureType',['https://doc.qt.io/qt-5/qt.html#GestureType-enum',1,'Qt']]],
-  ['globalcolor_42803',['GlobalColor',['https://doc.qt.io/qt-5/qt.html#GlobalColor-enum',1,'Qt']]],
-  ['glyphrunflag_42804',['GlyphRunFlag',['https://doc.qt.io/qt-5/qglyphrun.html#GlyphRunFlag-enum',1,'QGlyphRun']]],
-  ['graphcursor_42805',['GraphCursor',['../classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5',1,'hal::GraphTabWidget']]],
-  ['graphicsitemchange_42806',['GraphicsItemChange',['https://doc.qt.io/qt-5/qgraphicsitem.html#GraphicsItemChange-enum',1,'QGraphicsItem']]],
-  ['graphicsitemflag_42807',['GraphicsItemFlag',['https://doc.qt.io/qt-5/qgraphicsitem.html#GraphicsItemFlag-enum',1,'QGraphicsItem']]],
-  ['grid_5ftype_42808',['grid_type',['../namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79',1,'hal::graph_widget_constants']]],
-  ['gridtype_42809',['GridType',['../classhal_1_1_graphics_scene.html#a389c6d75b6d7acbb83523ba1a62637fd',1,'hal::GraphicsScene']]],
-  ['guiextensionstate_42810',['GuiExtensionState',['../classhal_1_1_gui_plugin_entry.html#ae865e9624e14ac4d8fbdbb93a4298766',1,'hal::GuiPluginEntry']]]
+  ['gatetypeproperty_42807',['GateTypeProperty',['../namespacehal.html#adb8da04d2161f277bd489e806a2721ca',1,'hal']]],
+  ['gesturecancelpolicy_42808',['GestureCancelPolicy',['https://doc.qt.io/qt-5/qgesture.html#GestureCancelPolicy-enum',1,'QGesture']]],
+  ['gestureflag_42809',['GestureFlag',['https://doc.qt.io/qt-5/qt.html#GestureFlag-enum',1,'Qt']]],
+  ['gesturestate_42810',['GestureState',['https://doc.qt.io/qt-5/qt.html#GestureState-enum',1,'Qt']]],
+  ['gesturetype_42811',['GestureType',['https://doc.qt.io/qt-5/qt.html#GestureType-enum',1,'Qt']]],
+  ['globalcolor_42812',['GlobalColor',['https://doc.qt.io/qt-5/qt.html#GlobalColor-enum',1,'Qt']]],
+  ['glyphrunflag_42813',['GlyphRunFlag',['https://doc.qt.io/qt-5/qglyphrun.html#GlyphRunFlag-enum',1,'QGlyphRun']]],
+  ['graphcursor_42814',['GraphCursor',['../classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5',1,'hal::GraphTabWidget']]],
+  ['graphicsitemchange_42815',['GraphicsItemChange',['https://doc.qt.io/qt-5/qgraphicsitem.html#GraphicsItemChange-enum',1,'QGraphicsItem']]],
+  ['graphicsitemflag_42816',['GraphicsItemFlag',['https://doc.qt.io/qt-5/qgraphicsitem.html#GraphicsItemFlag-enum',1,'QGraphicsItem']]],
+  ['grid_5ftype_42817',['grid_type',['../namespacehal_1_1graph__widget__constants.html#aa49af72ecf7fb11de1d671177803ce79',1,'hal::graph_widget_constants']]],
+  ['gridtype_42818',['GridType',['../classhal_1_1_graphics_scene.html#a389c6d75b6d7acbb83523ba1a62637fd',1,'hal::GraphicsScene']]],
+  ['guiextensionstate_42819',['GuiExtensionState',['../classhal_1_1_gui_plugin_entry.html#ae865e9624e14ac4d8fbdbb93a4298766',1,'hal::GuiPluginEntry']]]
 ];

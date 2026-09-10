@@ -107,6 +107,7 @@ var annotated_dup =
       [ "BooleanFunctionDecorator", "classhal_1_1_boolean_function_decorator.html", "classhal_1_1_boolean_function_decorator" ],
       [ "BooleanFunctionNetDecorator", "classhal_1_1_boolean_function_net_decorator.html", "classhal_1_1_boolean_function_net_decorator" ],
       [ "NetlistModificationDecorator", "classhal_1_1_netlist_modification_decorator.html", "classhal_1_1_netlist_modification_decorator" ],
+      [ "TraversalCache", "classhal_1_1_traversal_cache.html", "classhal_1_1_traversal_cache" ],
       [ "NetlistTraversalDecorator", "classhal_1_1_netlist_traversal_decorator.html", "classhal_1_1_netlist_traversal_decorator" ],
       [ "SubgraphNetlistDecorator", "classhal_1_1_subgraph_netlist_decorator.html", "classhal_1_1_subgraph_netlist_decorator" ],
       [ "Endpoint", "classhal_1_1_endpoint.html", "classhal_1_1_endpoint" ],

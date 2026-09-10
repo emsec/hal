@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-124-g47ab54673</span>
+   &#160;<span id="projectnumber">v4.5.0-125-gb22dacb1a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -85,7 +85,8 @@ $(document).ready(function(){initNavTree('group__decorators.html',''); initResiz
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">Decorators<div class="ingroups"><a class="el" href="group__core.html">HAL Core</a> &raquo; <a class="el" href="group__netlist.html">Netlist</a></div></div>  </div>
 </div><!--header-->
@@ -108,12 +109,95 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_modification_decorator.html">hal::NetlistModificationDecorator</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_traversal_cache.html">hal::TraversalCache</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html">hal::NetlistTraversalDecorator</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_subgraph_netlist_decorator.html">hal::SubgraphNetlistDecorator</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:gabf9ea95cf437527b2fd8929ae3d7489d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__decorators.html#gabf9ea95cf437527b2fd8929ae3d7489d">hal::TraversalDirection</a> { <a class="el" href="group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da965dbaac085fc891bfbbd4f9d145bbc8">hal::forward</a>
+, <a class="el" href="group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da195fe59b6f103787a914aead0f3db502">hal::backward</a>
+, <a class="el" href="group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489daf6cb3e816496528d4187db53bc66567f">hal::both</a>
+ }</td></tr>
+<tr class="separator:gabf9ea95cf437527b2fd8929ae3d7489d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga10a0dbae61e1d4d1c8d2310ce40947c6"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__decorators.html#ga10a0dbae61e1d4d1c8d2310ce40947c6">hal::TraversalStop</a> { <a class="el" href="group__decorators.html#gga10a0dbae61e1d4d1c8d2310ce40947c6a18947431379f80a0e31ad6557a93da1a">hal::at_match</a>
+, <a class="el" href="group__decorators.html#gga10a0dbae61e1d4d1c8d2310ce40947c6a17bfc0c4ea85d792afc1c24aedd566fa">hal::at_mismatch</a>
+, <a class="el" href="group__decorators.html#gga10a0dbae61e1d4d1c8d2310ce40947c6ac7561db7a418dd39b2201dfe110ab4a4">hal::never</a>
+ }</td></tr>
+<tr class="separator:ga10a0dbae61e1d4d1c8d2310ce40947c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="gabf9ea95cf437527b2fd8929ae3d7489d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabf9ea95cf437527b2fd8929ae3d7489d">&#9670;&nbsp;</a></span>TraversalDirection</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="group__decorators.html#gabf9ea95cf437527b2fd8929ae3d7489d">hal::TraversalDirection</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The direction in which a netlist is traversed. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ggabf9ea95cf437527b2fd8929ae3d7489da965dbaac085fc891bfbbd4f9d145bbc8"></a>forward&#160;</td><td class="fielddoc"><p>Follow the fan-out, i.e., towards the successors of a gate. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggabf9ea95cf437527b2fd8929ae3d7489da195fe59b6f103787a914aead0f3db502"></a>backward&#160;</td><td class="fielddoc"><p>Follow the fan-in, i.e., towards the predecessors of a gate. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggabf9ea95cf437527b2fd8929ae3d7489daf6cb3e816496528d4187db53bc66567f"></a>both&#160;</td><td class="fielddoc"><p>Follow both, and report the union of the two. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="netlist__traversal__decorator_8h_source.html#l00041">41</a> of file <a class="el" href="netlist__traversal__decorator_8h_source.html">netlist_traversal_decorator.h</a>.</p>
+
+</div>
+</div>
+<a id="ga10a0dbae61e1d4d1c8d2310ce40947c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga10a0dbae61e1d4d1c8d2310ce40947c6">&#9670;&nbsp;</a></span>TraversalStop</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="group__decorators.html#ga10a0dbae61e1d4d1c8d2310ce40947c6">hal::TraversalStop</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Where a traversal stops relative to the gates it is looking for.</p>
+<p>A traversal walks the netlist collecting the gates a filter accepts. What separates one traversal from another is not what it collects but where it comes to a halt, and these are the three ways that can be answered. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga10a0dbae61e1d4d1c8d2310ce40947c6a18947431379f80a0e31ad6557a93da1a"></a>at_match&#160;</td><td class="fielddoc"><p>Stop at a gate the filter accepts. The gates collected are the boundary of the search: they are reported but not traversed through, so what lies behind them is not reached. This is how one asks for the next flip-flops behind a cone of combinational logic. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga10a0dbae61e1d4d1c8d2310ce40947c6a17bfc0c4ea85d792afc1c24aedd566fa"></a>at_mismatch&#160;</td><td class="fielddoc"><p>Stop at a gate the filter rejects. Only gates the filter accepts are traversed through, so the gates collected form one connected region of them. This is how one asks for the combinational logic between two registers. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga10a0dbae61e1d4d1c8d2310ce40947c6ac7561db7a418dd39b2201dfe110ab4a4"></a>never&#160;</td><td class="fielddoc"><p>Do not stop at a gate at all. Everything reachable is traversed and every gate the filter accepts is collected on the way. Bound this with a depth or with the endpoint filters, or it walks to the edges of the netlist. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="netlist__traversal__decorator_8h_source.html#l00057">57</a> of file <a class="el" href="netlist__traversal__decorator_8h_source.html">netlist_traversal_decorator.h</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

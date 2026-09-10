@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-124-g47ab54673</span>
+   &#160;<span id="projectnumber">v4.5.0-125-gb22dacb1a</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -106,6 +106,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ad5404c6eab703aa306f6769ae81ce7ec"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ad5404c6eab703aa306f6769ae81ce7ec"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#ad5404c6eab703aa306f6769ae81ce7ec">unordered_vector_erase</a> (std::vector&lt; T &gt; &amp;vec, T element)</td></tr>
 <tr class="separator:ad5404c6eab703aa306f6769ae81ce7ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2582b5b7a603326ec9f19fbe1e9f3c5a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a2582b5b7a603326ec9f19fbe1e9f3c5a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a2582b5b7a603326ec9f19fbe1e9f3c5a">indexed_vector_push_back</a> (std::vector&lt; T &gt; &amp;vec, std::unordered_map&lt; T, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;positions, T element)</td></tr>
+<tr class="separator:a2582b5b7a603326ec9f19fbe1e9f3c5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3a85b60f16e4dd4fa8bbad2dfd9b874"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aa3a85b60f16e4dd4fa8bbad2dfd9b874"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#aa3a85b60f16e4dd4fa8bbad2dfd9b874">indexed_vector_erase</a> (std::vector&lt; T &gt; &amp;vec, std::unordered_map&lt; T, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;positions, T element)</td></tr>
+<tr class="separator:aa3a85b60f16e4dd4fa8bbad2dfd9b874"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a387d8f01579a42674ccd58d8651d9342"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a387d8f01579a42674ccd58d8651d9342"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a387d8f01579a42674ccd58d8651d9342">vectors_have_same_content</a> (std::vector&lt; T &gt; vec_1, std::vector&lt; T &gt; vec_2)</td></tr>
 <tr class="separator:a387d8f01579a42674ccd58d8651d9342"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -259,7 +265,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The manipulated value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00124">124</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00168">168</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist__preprocessing_8cpp_source.html#l01972">index</a>.</p>
 
@@ -302,7 +308,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if <code>s</code> ends with <code>end</code>, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00149">149</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00193">193</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugin__python__shell_8cpp_source.html#l00040">hal::PluginPythonShell::exec()</a>, and <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00138">hal::plugin_manager::has_valid_file_extension()</a>.</p>
 
@@ -466,7 +472,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The specified bit (0 or 1). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00100">100</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00144">144</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist__preprocessing_8cpp_source.html#l01972">index</a>.</p>
 
@@ -818,6 +824,123 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="aa3a85b60f16e4dd4fa8bbad2dfd9b874"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3a85b60f16e4dd4fa8bbad2dfd9b874">&#9670;&nbsp;</a></span>indexed_vector_erase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::utils::indexed_vector_erase </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::unordered_map&lt; T, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>positions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>element</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Erase an element from an unordered vector whose element positions are tracked in a map, in constant time. The last element takes the erased element's place, as with <code>unordered_vector_erase</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">vec</td><td>- The unordered vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">positions</td><td>- The position of every element of the vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">element</td><td>- The element to delete. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> if the element is not in the vector. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00097">97</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist__preprocessing_8cpp_source.html#l01972">index</a>, and <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2module_8cpp_source.html#l00171">hal::Module::set_parent_module()</a>.</p>
+
+</div>
+</div>
+<a id="a2582b5b7a603326ec9f19fbe1e9f3c5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2582b5b7a603326ec9f19fbe1e9f3c5a">&#9670;&nbsp;</a></span>indexed_vector_push_back()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::utils::indexed_vector_push_back </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::unordered_map&lt; T, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>positions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>element</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Append an element to an unordered vector whose element positions are tracked in a map.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">vec</td><td>- The unordered vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">positions</td><td>- The position of every element of the vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">element</td><td>- The element to append. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00081">81</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2module_8cpp_source.html#l00171">hal::Module::set_parent_module()</a>.</p>
+
+</div>
+</div>
 <a id="a1e4d29d84c6e4683a71e0767b189427c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1e4d29d84c6e4683a71e0767b189427c">&#9670;&nbsp;</a></span>is_digits()</h2>
 
@@ -844,7 +967,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if <code>s</code> contains only digits, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00188">188</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00232">232</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -874,7 +997,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if <code>s</code> contains a real number, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00220">220</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00264">264</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -904,7 +1027,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if <code>s</code> contains an integer, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00200">200</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00244">244</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -945,7 +1068,7 @@ template&lt;typename T1 , typename T2 &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the subset container actually is a subset of the superset, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00541">541</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00585">585</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="module__identification_2src_2api_2result_8cpp_source.html#l00426">hal::module_identification::Result::create_modules_in_netlist()</a>.</p>
 
@@ -1002,9 +1125,9 @@ template&lt;typename Iterator , class Transform &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The joined string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00414">414</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00458">458</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="create__functional__candidates_8cpp_source.html#l02066">hal::module_identification::FunctionalCandidate::add_all_shifted_operand()</a>, <a class="el" href="create__functional__candidates_8cpp_source.html#l01920">hal::module_identification::FunctionalCandidate::add_selected_shifted_operand()</a>, <a class="el" href="dataflow_8cpp_source.html#l00013">hal::dataflow::analyze()</a>, <a class="el" href="module__identification_2src_2api_2result_8cpp_source.html#l00426">hal::module_identification::Result::create_modules_in_netlist()</a>, <a class="el" href="functional__candidate_8cpp_source.html#l00061">hal::module_identification::FunctionalCandidate::get_candidate_info()</a>, <a class="el" href="verified__candidate_8cpp_source.html#l00048">hal::module_identification::VerifiedCandidate::get_candidate_info()</a>, <a class="el" href="verified__candidate_8cpp_source.html#l00186">hal::module_identification::VerifiedCandidate::get_name()</a>, <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00440">join()</a>, <a class="el" href="utilities_2program__options_8cpp_source.html#l00027">hal::ProgramOptions::parse()</a>, <a class="el" href="program__arguments_8cpp_source.html#l00053">hal::ProgramArguments::set_option()</a>, and <a class="el" href="dataflow__analysis_2src_2api_2result_8cpp_source.html#l00346">hal::dataflow::Result::write_txt()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="create__functional__candidates_8cpp_source.html#l02066">hal::module_identification::FunctionalCandidate::add_all_shifted_operand()</a>, <a class="el" href="create__functional__candidates_8cpp_source.html#l01920">hal::module_identification::FunctionalCandidate::add_selected_shifted_operand()</a>, <a class="el" href="dataflow_8cpp_source.html#l00013">hal::dataflow::analyze()</a>, <a class="el" href="module__identification_2src_2api_2result_8cpp_source.html#l00426">hal::module_identification::Result::create_modules_in_netlist()</a>, <a class="el" href="functional__candidate_8cpp_source.html#l00061">hal::module_identification::FunctionalCandidate::get_candidate_info()</a>, <a class="el" href="verified__candidate_8cpp_source.html#l00048">hal::module_identification::VerifiedCandidate::get_candidate_info()</a>, <a class="el" href="verified__candidate_8cpp_source.html#l00186">hal::module_identification::VerifiedCandidate::get_name()</a>, <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00484">join()</a>, <a class="el" href="utilities_2program__options_8cpp_source.html#l00027">hal::ProgramOptions::parse()</a>, <a class="el" href="program__arguments_8cpp_source.html#l00053">hal::ProgramArguments::set_option()</a>, and <a class="el" href="dataflow__analysis_2src_2api_2result_8cpp_source.html#l00346">hal::dataflow::Result::write_txt()</a>.</p>
 
 </div>
 </div>
@@ -1045,9 +1168,9 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The joined string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00453">453</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00497">497</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00414">join()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00458">join()</a>.</p>
 
 </div>
 </div>
@@ -1095,9 +1218,9 @@ template&lt;typename T , class Transform &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The joined string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00440">440</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00484">484</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00414">join()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00458">join()</a>.</p>
 
 </div>
 </div>
@@ -1138,7 +1261,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The trimmed string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00316">316</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00360">360</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
@@ -1181,7 +1304,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of occurrences. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00494">494</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00538">538</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -1229,7 +1352,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>String with replaced substrings. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00384">384</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00428">428</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
@@ -1274,7 +1397,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The trimmed string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00338">338</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00382">382</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
@@ -1325,7 +1448,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The manipulated value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00112">112</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00156">156</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist__preprocessing_8cpp_source.html#l01972">index</a>.</p>
 
@@ -1377,7 +1500,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The vector of strings. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00239">239</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00283">283</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
@@ -1422,7 +1545,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if <code>s</code> begins with <code>start</code>, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00169">169</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00213">213</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="dataflow__analysis_2src_2api_2result_8cpp_source.html#l00447">hal::dataflow::Result::create_modules()</a>.</p>
 
@@ -1454,7 +1577,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The lower case string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00479">479</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00523">523</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
@@ -1496,7 +1619,7 @@ template&lt;typename T , template&lt; typename, typename... &gt; class Container
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The set containing all items copied from the collection. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00527">527</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00571">571</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -1526,7 +1649,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The upper case string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00465">465</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00509">509</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
@@ -1566,7 +1689,7 @@ template&lt;typename T , template&lt; typename, typename... &gt; class Container
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The vector containing all items copied from the collection. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00515">515</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00559">559</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__comparison_8cpp_source.html#l00466">hal::z3_utils::compare_netlists()</a>, <a class="el" href="z3__utils_2src_2converter_2converter_8cpp_source.html#l00294">hal::z3_utils::Converter::convert_z3_expr_to_func()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00287">hal::Gate::get_resolved_boolean_function()</a>, <a class="el" href="lut__table__model_8cpp_source.html#l00078">hal::LUTTableModel::setBooleanFunction()</a>, and <a class="el" href="solve__fsm_8cpp_source.html#l00310">hal::solve_fsm::solve_fsm_brute_force()</a>.</p>
 
@@ -1615,7 +1738,7 @@ template&lt;typename T , template&lt; typename, typename... &gt; class Container
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The manipulated value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00136">136</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00180">180</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist__preprocessing_8cpp_source.html#l01972">index</a>.</p>
 
@@ -1658,11 +1781,11 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The trimmed string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00360">360</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00404">404</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="utilities_2program__options_8cpp_source.html#l00139">hal::ProgramOptions::add_flags()</a>, <a class="el" href="gate__library__parser__manager_8cpp_source.html#l00040">hal::gate_library_parser_manager::register_parser()</a>, <a class="el" href="netlist__parser__manager_8cpp_source.html#l00148">hal::netlist_parser_manager::register_parser()</a>, <a class="el" href="gate__library__writer__manager_8cpp_source.html#l00040">hal::gate_library_writer_manager::register_writer()</a>, <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00053">hal::netlist_writer_manager::register_writer()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00110">hal::Gate::set_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00092">hal::Module::set_name()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00103">hal::Net::set_name()</a>, and <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00027">hal::Grouping::set_name()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="utilities_2program__options_8cpp_source.html#l00139">hal::ProgramOptions::add_flags()</a>, <a class="el" href="gate__library__parser__manager_8cpp_source.html#l00040">hal::gate_library_parser_manager::register_parser()</a>, <a class="el" href="netlist__parser__manager_8cpp_source.html#l00148">hal::netlist_parser_manager::register_parser()</a>, <a class="el" href="gate__library__writer__manager_8cpp_source.html#l00040">hal::gate_library_writer_manager::register_writer()</a>, <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00053">hal::netlist_writer_manager::register_writer()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00110">hal::Gate::set_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00093">hal::Module::set_name()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00103">hal::Net::set_name()</a>, and <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00027">hal::Grouping::set_name()</a>.</p>
 
 </div>
 </div>
@@ -1711,7 +1834,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00060">60</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00061">61</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -1752,7 +1875,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the vectors have the same content, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00080">80</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00124">124</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -1793,7 +1916,7 @@ template&lt;typename T &gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00243">243</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00239">split()</a>, and <a class="el" href="defines_8h_source.html#l00049">UNUSED</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00283">split()</a>, and <a class="el" href="defines_8h_source.html#l00049">UNUSED</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00100">get_base_directory()</a>.</p>
 

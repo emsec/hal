@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netlist Traversal Decorator &mdash; hal_py v4.5.0-124-g47ab54673 documentation</title>
+  <title>Netlist Traversal Decorator &mdash; hal_py v4.5.0-125-gb22dacb1a documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-124-g47ab54673
+                v4.5.0-125-gb22dacb1a
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -126,14 +126,14 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.get_next_combinational_gates">
-<span class="sig-name descname"><span class="pre">get_next_combinational_gates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_combinational_gates" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.get_combinational_cone">
+<span class="sig-name descname"><span class="pre">get_combinational_cone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_combinational_cone" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p>get_next_combinational_gates(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, forbidden_pins: Set[hal_py.PinType]) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_combinational_cone(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, forbidden_pins: Set[hal_py.PinType] = set()) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
-<div><p>Starting from the given net, traverse the netlist and return all combinational successor/predecessor gates.
-Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
+<div><p>Starting from the given net, collect the combinational cone in the given direction, i.e., the combinational fan-out (<code class="docutils literal notranslate"><span class="pre">successors</span> <span class="pre">=</span> <span class="pre">True</span></code>) or fan-in (<code class="docutils literal notranslate"><span class="pre">successors</span> <span class="pre">=</span> <span class="pre">False</span></code>) of the net.
+Continue traversal as long as further combinational gates are found and stop at gates that are not combinational, so that the cone extends up to (but not including) the sequential boundary.
 All combinational gates found during traversal are added to the result.
 Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.</p>
 <dl class="field-list simple">
@@ -141,13 +141,13 @@ Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front o
 <dd class="field-odd"><p>Start net.</p>
 </dd>
 <dt class="field-even">param bool successors</dt>
-<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get the fan-out cone, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get the fan-in cone.</p>
 </dd>
 <dt class="field-odd">param set[hal_py.PinType] forbidden_pins</dt>
 <dd class="field-odd"><p>Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The next combinational gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+<dd class="field-even"><p>The gates of the combinational cone on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>set[hal_py.Gate] or None</p>
@@ -155,10 +155,10 @@ Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front o
 </dl>
 </div></blockquote>
 </li>
-<li><p>get_next_combinational_gates(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, forbidden_pins: Set[hal_py.PinType]) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_combinational_cone(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, forbidden_pins: Set[hal_py.PinType] = set()) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
-<div><p>Starting from the given gate, traverse the netlist and return all combinational successor/predecessor gates.
-Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
+<div><p>Starting from the given gate, collect the combinational cone in the given direction, i.e., the combinational fan-out (<code class="docutils literal notranslate"><span class="pre">successors</span> <span class="pre">=</span> <span class="pre">True</span></code>) or fan-in (<code class="docutils literal notranslate"><span class="pre">successors</span> <span class="pre">=</span> <span class="pre">False</span></code>) of the gate.
+Continue traversal as long as further combinational gates are found and stop at gates that are not combinational, so that the cone extends up to (but not including) the sequential boundary.
 All combinational gates found during traversal are added to the result.
 Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.</p>
 <dl class="field-list simple">
@@ -166,13 +166,166 @@ Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front o
 <dd class="field-odd"><p>Start gate.</p>
 </dd>
 <dt class="field-even">param bool successors</dt>
-<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get the fan-out cone, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get the fan-in cone.</p>
 </dd>
 <dt class="field-odd">param set[hal_py.PinType] forbidden_pins</dt>
 <dd class="field-odd"><p>Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The next combinational gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+<dd class="field-even"><p>The gates of the combinational cone on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>set[hal_py.Gate] or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.get_common_inputs">
+<span class="sig-name descname"><span class="pre">get_common_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.NetlistTraversalDecorator" title="hal_py.NetlistTraversalDecorator"><span class="pre">hal_py.NetlistTraversalDecorator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_common_inputs" title="Permalink to this definition"></a></dt>
+<dd><p>Get the nets that are inputs to at least <code class="docutils literal notranslate"><span class="pre">threshold</span></code> of the given gates.</p>
+<p>Shared inputs across a group of gates typically indicate a shared control signal, so this is a cheap way to test whether a set of gates belongs together. Nets driven by GND or VCC gates do not count.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates to inspect.</p></li>
+<li><p><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The number of gates a net has to feed. <code class="docutils literal notranslate"><span class="pre">0</span></code> to require all of them. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The common input nets on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.get_complex_gate_chain">
+<span class="sig-name descname"><span class="pre">get_complex_gate_chain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.NetlistTraversalDecorator" title="hal_py.NetlistTraversalDecorator"><span class="pre">hal_py.NetlistTraversalDecorator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_gate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">chain_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_pins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><span class="pre">hal_py.GatePin</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_pins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><span class="pre">hal_py.GatePin</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_complex_gate_chain" title="Permalink to this definition"></a></dt>
+<dd><p>Find a sequence of gates (of the specified sequence of gate types) that are connected via the specified input and output pins.
+The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
+However, the start gate must be of the first gate type within the repeating sequence.
+If input and/or output pins are specified for a gate type, the gates must be connected through one of the input pins and/or one of the output pins.
+The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate at which to start the chain detection.</p></li>
+<li><p><strong>chain_types</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>]</em>) – The sequence of gate types that is expected to make up the gate chain.</p></li>
+<li><p><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.14)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – The input pins (of every gate type of the sequence) through which the gates must be connected.</p></li>
+<li><p><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.14)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – The output pins (of every gate type of the sequence) through which the gates must be connected.</p></li>
+<li><p><strong>filter</strong> (<em>lambda</em>) – An optional filter function to be evaluated on each gate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of gates that form a chain on success, an empty list on error.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.get_gate_chain">
+<span class="sig-name descname"><span class="pre">get_gate_chain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.NetlistTraversalDecorator" title="hal_py.NetlistTraversalDecorator"><span class="pre">hal_py.NetlistTraversalDecorator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_gate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_pins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><span class="pre">hal_py.GatePin</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_pins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><span class="pre">hal_py.GatePin</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_gate_chain" title="Permalink to this definition"></a></dt>
+<dd><p>Find a sequence of identical gates that are connected via the specified input and output pins.
+The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
+If input and/or output pins are specified, the gates must be connected through one of the input pins and/or one of the output pins.
+The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate at which to start the chain detection.</p></li>
+<li><p><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – The input pins through which the gates must be connected. Defaults to an empty list.</p></li>
+<li><p><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.14)"><em>set</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – The output pins through which the gates must be connected. Defaults to an empty list.</p></li>
+<li><p><strong>filter</strong> (<em>lambda</em>) – An optional filter function to be evaluated on each gate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of gates that form a chain on success, an empty list on error.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.get_gates">
+<span class="sig-name descname"><span class="pre">get_gates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_gates" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p>get_gates(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, cache: hal_py.TraversalCache) -&gt; Optional[Set[hal_py.Gate]]</p>
+<blockquote>
+<div><p>Traverse the netlist from the given gate, sharing results through the cache: what an earlier call worked out is not walked again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Gate gate</dt>
+<dd class="field-odd"><p>The gate to start from.</p>
+</dd>
+<dt class="field-even">param hal_py.TraversalCache cache</dt>
+<dd class="field-even"><p>The cache holding the traversal and its results.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The collected gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>set[hal_py.Gate] or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>get_gates(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, cache: hal_py.TraversalCache) -&gt; Optional[Set[hal_py.Gate]]</p>
+<blockquote>
+<div><p>Traverse the netlist from the given net, sharing results through the cache: what an earlier call worked out is not walked again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Net net</dt>
+<dd class="field-odd"><p>The net to start from.</p>
+</dd>
+<dt class="field-even">param hal_py.TraversalCache cache</dt>
+<dd class="field-even"><p>The cache holding the traversal and its results.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The collected gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>set[hal_py.Gate] or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>get_gates(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, direction: hal_py.TraversalDirection, match: Callable[[hal_py.Gate], bool], stop: hal_py.TraversalStop, max_depth: int = 0, exit_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None, entry_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None) -&gt; Optional[Set[hal_py.Gate]]</p>
+<blockquote>
+<div><p>Traverse the netlist from the given gate, collecting the gates that <code class="docutils literal notranslate"><span class="pre">match</span></code> accepts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Gate gate</dt>
+<dd class="field-odd"><p>The gate to start from.</p>
+</dd>
+<dt class="field-even">param hal_py.TraversalDirection direction</dt>
+<dd class="field-even"><p>The direction to traverse in.</p>
+</dd>
+<dt class="field-odd">param lambda match</dt>
+<dd class="field-odd"><p>The condition a gate has to meet to be collected.</p>
+</dd>
+<dt class="field-even">param hal_py.TraversalStop stop</dt>
+<dd class="field-even"><p>Where to stop traversing, relative to the gates that <code class="docutils literal notranslate"><span class="pre">match</span></code> accepts.</p>
+</dd>
+<dt class="field-odd">param int max_depth</dt>
+<dd class="field-odd"><p>The maximum number of gates to traverse through. <code class="docutils literal notranslate"><span class="pre">0</span></code> for no limit.</p>
+</dd>
+<dt class="field-even">param lambda exit_endpoint_filter</dt>
+<dd class="field-even"><p>Condition that has to hold to leave a gate.</p>
+</dd>
+<dt class="field-odd">param lambda entry_endpoint_filter</dt>
+<dd class="field-odd"><p>Condition that has to hold to enter a gate.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The collected gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>set[hal_py.Gate] or None</p>
@@ -408,7 +561,7 @@ The target_gate_filter may be omitted in which case all traversed gates will be 
 <span class="sig-name descname"><span class="pre">get_next_sequential_gates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_sequential_gates" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p>get_next_sequential_gates(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, forbidden_pins: Set[hal_py.PinType]) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_next_sequential_gates(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, forbidden_pins: Set[hal_py.PinType] = set()) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
 <div><p>Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
 Traverse over gates that are not sequential until a sequential gate is found.
@@ -432,7 +585,7 @@ Stop traversal at all sequential gates, but only adds those to the result that h
 </dl>
 </div></blockquote>
 </li>
-<li><p>get_next_sequential_gates(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, forbidden_pins: Set[hal_py.PinType]) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_next_sequential_gates(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, forbidden_pins: Set[hal_py.PinType] = set()) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
 <div><p>Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
 Traverse over gates that are not sequential until a sequential gate is found.
@@ -483,27 +636,96 @@ Stop traversal at all sequential gates, but only adds those to the result that h
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.get_shortest_path">
-<span class="sig-name descname"><span class="pre">get_shortest_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.NetlistTraversalDecorator" title="hal_py.NetlistTraversalDecorator"><span class="pre">hal_py.NetlistTraversalDecorator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_gate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_gate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><span class="pre">hal_py.PinDirection</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_endpoint_filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint"><span class="pre">hal_py.Endpoint</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_endpoint_filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint"><span class="pre">hal_py.Endpoint</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_shortest_path" title="Permalink to this definition"></a></dt>
-<dd><p>Find the shortest path (i.e., the smallest number of gates) that connects the start gate with the end gate.
+<span class="sig-name descname"><span class="pre">get_shortest_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_shortest_path" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p>get_shortest_path(self: hal_py.NetlistTraversalDecorator, start_gate: hal_py.Gate, end_gate: hal_py.Gate, direction: hal_py.PinDirection, exit_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None, entry_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None) -&gt; Optional[List[hal_py.Gate]]</p>
+<blockquote>
+<div><p>Find the shortest path (i.e., the smallest number of gates) that connects the start gate with the end gate.
 The gate where the search started from will be the first in the result list, the end gate will be the last.
 If there is no such path, <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned. If there is more than one path with the same length, only the first one is returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>start_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to start from.</p></li>
-<li><p><strong>end_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to connect to.</p></li>
-<li><p><strong>direction</strong> (<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><em>hal_py.PinDirection</em></a>) – The direction to search in. Can be <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.input</span></code>, <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.output</span></code> or <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.inout</span></code> to search both directions and return the shorter one.</p></li>
-<li><p><strong>exit_endpoint_filter</strong> (<em>lambda</em>) – Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</p></li>
-<li><p><strong>entry_endpoint_filter</strong> (<em>lambda</em>) – Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</p></li>
-</ul>
+<dt class="field-odd">param hal_py.Gate start_gate</dt>
+<dd class="field-odd"><p>The gate to start from.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">param hal_py.Gate end_gate</dt>
+<dd class="field-even"><p>The gate to connect to.</p>
+</dd>
+<dt class="field-odd">param hal_py.PinDirection direction</dt>
+<dd class="field-odd"><p>The direction to search in. Can be <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.input</span></code>, <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.output</span></code> or <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.inout</span></code> to search both directions and return the shorter one.</p>
+</dd>
+<dt class="field-even">param lambda exit_endpoint_filter</dt>
+<dd class="field-even"><p>Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</p>
+</dd>
+<dt class="field-odd">param lambda entry_endpoint_filter</dt>
+<dd class="field-odd"><p>Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</p>
+</dd>
+<dt class="field-even">returns</dt>
 <dd class="field-even"><p>A list of gates that connect the start with end gate on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)">None</a></p>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>list[hal_py.Gate] or None</p>
 </dd>
 </dl>
+</div></blockquote>
+</li>
+<li><p>get_shortest_path(self: hal_py.NetlistTraversalDecorator, start_gate: hal_py.Gate, end_module: hal_py.Module, direction: hal_py.PinDirection, exit_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None, entry_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None) -&gt; Optional[List[hal_py.Gate]]</p>
+<blockquote>
+<div><p>Find the shortest path that connects the start gate with any gate of the given module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Gate start_gate</dt>
+<dd class="field-odd"><p>The gate to start from.</p>
+</dd>
+<dt class="field-even">param hal_py.Module end_module</dt>
+<dd class="field-even"><p>The module to connect to. Gates of its submodules count as belonging to it.</p>
+</dd>
+<dt class="field-odd">param hal_py.PinDirection direction</dt>
+<dd class="field-odd"><p>The direction to search in.</p>
+</dd>
+<dt class="field-even">param lambda exit_endpoint_filter</dt>
+<dd class="field-even"><p>Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</p>
+</dd>
+<dt class="field-odd">param lambda entry_endpoint_filter</dt>
+<dd class="field-odd"><p>Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The path on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>list[hal_py.Gate] or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>get_shortest_path(self: hal_py.NetlistTraversalDecorator, start_module: hal_py.Module, end_module: hal_py.Module, direction: hal_py.PinDirection, exit_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None, entry_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None) -&gt; Optional[List[List[hal_py.Gate]]]</p>
+<blockquote>
+<div><p>Find every shortest path that connects the start module with the end module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Module start_module</dt>
+<dd class="field-odd"><p>The module to start from. Gates of its submodules count as belonging to it.</p>
+</dd>
+<dt class="field-even">param hal_py.Module end_module</dt>
+<dd class="field-even"><p>The module to connect to. Gates of its submodules count as belonging to it.</p>
+</dd>
+<dt class="field-odd">param hal_py.PinDirection direction</dt>
+<dd class="field-odd"><p>The direction to search in.</p>
+</dd>
+<dt class="field-even">param lambda exit_endpoint_filter</dt>
+<dd class="field-even"><p>Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</p>
+</dd>
+<dt class="field-odd">param lambda entry_endpoint_filter</dt>
+<dd class="field-odd"><p>Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The shortest paths on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>list[list[hal_py.Gate]] or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="py method">
@@ -531,6 +753,71 @@ Computing only the shortest distance to a gate is faster than computing the shor
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.make_traversal_cache">
+<span class="sig-name descname"><span class="pre">make_traversal_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.NetlistTraversalDecorator" title="hal_py.NetlistTraversalDecorator"><span class="pre">hal_py.NetlistTraversalDecorator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.TraversalDirection" title="hal_py.TraversalDirection"><span class="pre">hal_py.TraversalDirection</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.TraversalStop" title="hal_py.TraversalStop"><span class="pre">hal_py.TraversalStop</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_endpoint_filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint"><span class="pre">hal_py.Endpoint</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_endpoint_filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint"><span class="pre">hal_py.Endpoint</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hal_py.TraversalCache" title="hal_py.TraversalCache"><span class="pre">hal_py.TraversalCache</span></a></span></span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.make_traversal_cache" title="Permalink to this definition"></a></dt>
+<dd><p>Create a cache for one specific traversal, to be handed to <code class="docutils literal notranslate"><span class="pre">get_gates</span></code> in place of the traversal’s parameters.</p>
+<p>The direction must be <code class="docutils literal notranslate"><span class="pre">TraversalDirection.forward</span></code> or <code class="docutils literal notranslate"><span class="pre">backward</span></code>. The endpoint filters receive no depth and there is no depth limit, as either would make the cached answers depend on how a net was reached.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>direction</strong> (<a class="reference internal" href="#hal_py.TraversalDirection" title="hal_py.TraversalDirection"><em>hal_py.TraversalDirection</em></a>) – The direction to traverse in.</p></li>
+<li><p><strong>match</strong> (<em>lambda</em>) – The condition a gate has to meet to be collected.</p></li>
+<li><p><strong>stop</strong> (<a class="reference internal" href="#hal_py.TraversalStop" title="hal_py.TraversalStop"><em>hal_py.TraversalStop</em></a>) – Where to stop traversing, relative to the gates that <code class="docutils literal notranslate"><span class="pre">match</span></code> accepts.</p></li>
+<li><p><strong>exit_endpoint_filter</strong> (<em>lambda</em>) – Condition that has to hold to leave a gate.</p></li>
+<li><p><strong>entry_endpoint_filter</strong> (<em>lambda</em>) – Condition that has to hold to enter a gate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The cache.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#hal_py.TraversalCache" title="hal_py.TraversalCache">hal_py.TraversalCache</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hal_py.TraversalDirection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hal_py.</span></span><span class="sig-name descname"><span class="pre">TraversalDirection</span></span><a class="headerlink" href="#hal_py.TraversalDirection" title="Permalink to this definition"></a></dt>
+<dd><p>The direction in which a netlist is traversed.</p>
+<p>Members:</p>
+<blockquote>
+<div><p>forward : Follow the fan-out, i.e., towards the successors of a gate.</p>
+<p>backward : Follow the fan-in, i.e., towards the predecessors of a gate.</p>
+<p>both : Follow both directions.</p>
+</div></blockquote>
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.TraversalDirection.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#hal_py.TraversalDirection.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hal_py.TraversalStop">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hal_py.</span></span><span class="sig-name descname"><span class="pre">TraversalStop</span></span><a class="headerlink" href="#hal_py.TraversalStop" title="Permalink to this definition"></a></dt>
+<dd><p>Where a traversal stops relative to the gates it is looking for.</p>
+<p>Members:</p>
+<blockquote>
+<div><p>at_match : Stop at a gate the filter accepts, so the collected gates bound the search.</p>
+<p>at_mismatch : Stop at a gate the filter rejects, so the collected gates form a connected region.</p>
+<p>never : Do not stop at a gate; bound the traversal with a depth or the endpoint filters.</p>
+</div></blockquote>
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.TraversalStop.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#hal_py.TraversalStop.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hal_py.TraversalCache">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hal_py.</span></span><span class="sig-name descname"><span class="pre">TraversalCache</span></span><a class="headerlink" href="#hal_py.TraversalCache" title="Permalink to this definition"></a></dt>
+<dd><p>A reusable store for the results of one specific traversal, handed to <code class="docutils literal notranslate"><span class="pre">NetlistTraversalDecorator.get_gates</span></code>.</p>
+<p>The traversal a cache belongs to is sealed in when it is created and the cache can only ever be used for exactly that traversal, which is what makes reuse sound. Create one with <code class="docutils literal notranslate"><span class="pre">NetlistTraversalDecorator.make_traversal_cache</span></code> and drop it when the netlist is modified.</p>
 </dd></dl>
 
 </section>
