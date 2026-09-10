@@ -264,6 +264,13 @@ namespace pybind11
 
             static void postcall(function_call& call, handle ret)
             {
+                // Since pybind11 3.1 the hook also runs for an overload whose arguments did not load,
+                // and is then handed the try-next-overload sentinel rather than an object.
+                if (!ret || ret.ptr() == PYBIND11_TRY_NEXT_OVERLOAD)
+                {
+                    return;
+                }
+
                 // Only a method has a receiver worth falling back to. The first argument of a free
                 // function is just an argument and need not own anything that is returned.
                 // size(), not empty(): pybind11 changed args from a std::vector to a small_vector that has no empty()
