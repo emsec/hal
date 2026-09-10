@@ -240,7 +240,7 @@ namespace hal {
             setState(Painted);
         }
         else
-            qDebug() << mData->fileIndex() << "invalid state when terminating thread" << mState << hex << (quintptr) mLoader << dec;
+            qDebug() << mData->fileIndex() << "invalid state when terminating thread" << mState << QString::number((quintptr) mLoader, 16);
         mLoader->deleteLater();
         mLoader = nullptr;
         mMutex.unlock();

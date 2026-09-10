@@ -1,13 +1,13 @@
 option(PL_GEXF_WRITER "PL_GEXF_WRITER" ON)
 if(PL_GEXF_WRITER OR BUILD_ALL_PLUGINS)
 
-    find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
+    find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
 
-    if(Qt5Core_FOUND)
-        message(VERBOSE "Qt5Core_INCLUDE_DIRS: ${Qt5Core_INCLUDE_DIRS}")
-    elseif(NOT Qt5Core_FOUND)
-        message(STATUS "Qt5Core not found for gexf")
-    endif(Qt5Core_FOUND)
+    if(Qt6Core_FOUND)
+        message(VERBOSE "Qt6Core_INCLUDE_DIRS: ${Qt6Core_INCLUDE_DIRS}")
+    elseif(NOT Qt6Core_FOUND)
+        message(STATUS "Qt6Core not found for gexf")
+    endif(Qt6Core_FOUND)
 
     file(GLOB_RECURSE GEXF_WRITER_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
     file(GLOB_RECURSE GEXF_WRITER_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
@@ -45,9 +45,9 @@ if(PL_GEXF_WRITER OR BUILD_ALL_PLUGINS)
 
     target_link_libraries(gexf_writer
                           PUBLIC gui
-                          Qt5::Core
-                          Qt5::Gui
-                          Qt5::Widgets
+                          Qt6::Core
+                          Qt6::Gui
+                          Qt6::Widgets
                           ${ARG_LINK_LIBRARIES})
 
     install(TARGETS gexf_writer LIBRARY DESTINATION ${PLUGIN_LIBRARY_INSTALL_DIRECTORY} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE INCLUDES DESTINATION ${PLUGIN_INCLUDE_INSTALL_DIRECTORY})

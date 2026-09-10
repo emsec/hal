@@ -30,8 +30,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QComboBox>
-
-class QStringList;
+#include <QStringList>
 
 namespace hal
 {

@@ -234,14 +234,14 @@ namespace hal
 
         for (const ModulePin& input_pin : mInputPins)
         {
-            qreal width = pin_fm.width(input_pin.name);
+            qreal width = pin_fm.horizontalAdvance(input_pin.name);
             if (width > max_pin_width)
                 max_pin_width = width;
         }
 
         for (const ModulePin& output_pin : mOutputPins)
         {
-            qreal width = pin_fm.width(output_pin.name);
+            qreal width = pin_fm.horizontalAdvance(output_pin.name);
             if (width > max_pin_width)
                 max_pin_width = width;
         }

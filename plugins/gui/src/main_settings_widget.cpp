@@ -5,6 +5,7 @@
 
 #include "gui/expanding_list/expanding_list_button.h"
 #include "gui/expanding_list/expanding_list_widget.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include "gui/gui_globals.h"
 //#include "checkbox_setting.h"
 //#include "dropdown_setting.h"
@@ -170,8 +171,8 @@ namespace hal
     void MainSettingsWidget::initWidgets()
     {
         AssignedKeybindMap::instance()->initMap();
-        QSet<const SettingsItem*> registeredItems = QSet<const SettingsItem*>::fromList(mSettingsList.getItems());
-        QSet<QString> registeredCategories = QSet<QString>::fromList(mSectionNames.values());
+        QSet<const SettingsItem*> registeredItems = QtCompat::listToSet<const SettingsItem*>(mSettingsList.getItems());
+        QSet<QString> registeredCategories = QtCompat::listToSet<QString>(mSectionNames.values());
         for (SettingsItem* si : SettingsManager::instance()->mSettingsList)
         {
             if (registeredItems.contains(si))

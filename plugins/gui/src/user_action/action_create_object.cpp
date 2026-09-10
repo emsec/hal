@@ -48,11 +48,11 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            if (xmlIn.name() == "objectname")
+            if (xmlIn.name() == QString("objectname"))
                 mObjectName = xmlIn.readElementText();
-            if (xmlIn.name() == "parentid")
+            if (xmlIn.name() == QString("parentid"))
                 mParentId = xmlIn.readElementText().toInt();
-            if (xmlIn.name() == "linkedid")
+            if (xmlIn.name() == QString("linkedid"))
                 mLinkedObjectId = xmlIn.readElementText().toInt();
         }
     }

@@ -2,6 +2,7 @@
 
 #include "hal_core/utilities/log.h"
 #include "gui/gui_globals.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 
 #include <QKeyEvent>
 #include <QHBoxLayout>
@@ -205,7 +206,7 @@ namespace hal
     void PythonConsole::mousePressEvent(QMouseEvent* event)
     {
         //        m_position = textCursor().position();
-        //        if (event->button() == Qt::MidButton)
+        //        if (event->button() == Qt::MiddleButton)
         //        {
         //            copy();
         //            QTextCursor cursor = cursorForPosition(event->pos());
@@ -474,7 +475,7 @@ namespace hal
         setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
         setLineWidth(2);
         QHBoxLayout* layout = new QHBoxLayout(this);
-        layout->setMargin(2);
+        QtCompat::setMarginWidth(layout,2);
         mLabel = new QLabel(this);
         layout->addWidget(mLabel);
         mAbortButton = new QPushButton("Abort", this);

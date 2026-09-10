@@ -440,7 +440,6 @@ namespace hal
 
     SaleaeOutputFile::~SaleaeOutputFile()
     {
-        //  qDebug()  << good() << "~SaleaeOutputFile" << hex << (quintptr) this;
         if (good()) close();
     }
 

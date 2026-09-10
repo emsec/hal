@@ -76,7 +76,7 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            if (xmlIn.name() == "placement")
+            if (xmlIn.name() == QString("placement"))
             {
                 u32 id                                = xmlIn.attributes().value("id").toInt();
                 UserActionObjectType::ObjectType tp   = UserActionObjectType::fromString(xmlIn.attributes().value("type").toString());
@@ -84,18 +84,18 @@ namespace hal
                 mPlacementHint                        = PlacementHint(mode, Node(id, UserActionObjectType::toNodeType(tp)));
                 xmlIn.skipCurrentElement();    // no text body to read
             }
-            else if (xmlIn.name() == "gridposition")
+            else if (xmlIn.name() == QString("gridposition"))
             {
                 GridPlacement gp(gridFromText(xmlIn.readElementText()));
                 mPlacementHint = PlacementHint(gp);
             }
-            else if (xmlIn.name() == "modules")
+            else if (xmlIn.name() == QString("modules"))
                 mModules = setFromText(xmlIn.readElementText());
-            else if (xmlIn.name() == "gates")
+            else if (xmlIn.name() == QString("gates"))
                 mGates = setFromText(xmlIn.readElementText());
-            else if (xmlIn.name() == "nets")
+            else if (xmlIn.name() == QString("nets"))
                 mNets = setFromText(xmlIn.readElementText());
-            else if (xmlIn.name() == "pins")
+            else if (xmlIn.name() == QString("pins"))
                 mPins = setFromText(xmlIn.readElementText());
         }
     }

@@ -658,7 +658,7 @@ namespace hal {
             reStr = "Default (.*) Parser";
         else if (mFeature == FacExtensionInterface::FacGatelibWriter || mFeature == FacExtensionInterface::FacNetlistWriter)
             reStr = "Default (.*) Writer";
-        QRegExp re(reStr, Qt::CaseInsensitive);
+        QRegularExpression reFileType(reStr, QRegularExpression::CaseInsensitiveOption);
 
         QString retval;
 
@@ -676,9 +676,10 @@ namespace hal {
         for (auto it = pluginMap.constBegin(); it != pluginMap.constEnd(); ++it)
         {
             QString label = it.value();
-            QString fileFmt = (re.indexIn(label) < 0)
-                    ? label.remove(QChar(':'))
-                    : re.cap(1) + QString(" files ");
+            QRegularExpressionMatch reFileTypeMatch = reFileType.match(label);
+            QString fileFmt = (reFileTypeMatch.hasMatch())
+                      ? reFileTypeMatch.captured(1) + QString(" files ")
+                      : label.remove(QChar(':'));
             if (formatMap.contains(fileFmt))
                 formatMap[fileFmt] += " *" + it.key();
             else

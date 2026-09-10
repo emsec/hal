@@ -41,7 +41,7 @@ namespace hal {
         else
             yText = 0;
         if (autoFillBackground())
-            painter.fillRect(rect(),palette().color(QPalette::Background));
+            painter.fillRect(rect(),palette().color(QPalette::Window));
         int p0 = 0;
         for (QPair<int,int> p1 : mMatchPositions)
         {

@@ -1,0 +1,91 @@
+// MIT License
+//
+// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
+// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#pragma once
+
+#include <QRect>
+#include <QSet>
+#include <QList>
+#include <QVector>
+#include <vector>
+#include <QLayout>
+#include <QStyleOption>
+#include <QWidget>
+#include <QPoint>
+#include <QDateTime>
+
+namespace hal {
+    namespace QtCompat {
+        QRect desktopAvailableGeometry();
+
+        QRect widgetAvailableGeometry(QWidget* widget);
+
+        QRect desktopScreenGeometry();
+
+        uint qHashPoint(const QPoint& p);
+
+        void styleOptionInit(QStyleOption& opt, QWidget* widget);
+
+        void setMarginWidth(QLayout* layout, int marginWidth);
+
+        QString dateToLocaleString(const QDateTime &dt);
+
+        template<typename T> extern QSet<T> listToSet(const QList<T>& list)
+        {
+        #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+                    return QSet<T>(list.constBegin(),list.constEnd());
+        #else
+                    return QSet<T>::fromList(list);
+        #endif
+        }
+
+        template<typename T> extern QList<T> setToList(const QSet<T>& cset)
+        {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+            return QList<T>(cset.constBegin(),cset.constEnd());
+#else
+            return QList<T>::fromset(list);
+#endif
+        }
+
+        template<typename T> extern QVector<T> listToVector(const QList<T>& list)
+        {
+        #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+                    return QVector<T>(list.constBegin(),list.constEnd());
+        #else
+                    return QVector<T>::fromList(list);
+        #endif
+        }
+
+        template<typename T> extern QVector<T> stdVectorToVector(const std::vector<T>& vec)
+        {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+            return QVector<T>(vec.begin(),vec.end());
+#else
+            return QVector<T>::fromStdVector(vec);
+#endif
+        }
+    }
+}

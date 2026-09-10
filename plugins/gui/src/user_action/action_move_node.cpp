@@ -108,7 +108,7 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            if (xmlIn.name() == "to")
+            if (xmlIn.name() == QString("to"))
                 mTo = parseFromString(xmlIn.readElementText());
         }
     }

@@ -2,6 +2,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QtGlobal>
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include "hal_core/netlist/net.h"
 
 namespace hal {
@@ -38,7 +39,7 @@ namespace hal {
         : QWidget(parent), mLabel(nullptr), mSpinBox(nullptr)
     {
         QVBoxLayout* layout = new QVBoxLayout(this);
-        layout->setMargin(0);
+        QtCompat::setMarginWidth(layout,0);
         if (nbits > 1)
         {
             mSpinBox = new LogicEvaluatorHexSpinbox(this);
@@ -115,7 +116,7 @@ namespace hal {
         topLayout->setContentsMargins(mOutput?0:8,4,mOutput?8:0,4);
         QVBoxLayout* valLayout = new QVBoxLayout;
         valLayout->setSpacing(4);
-        valLayout->setMargin(0);
+        QtCompat::setMarginWidth(valLayout,0);
 
         if (!grpName.isEmpty())
         {

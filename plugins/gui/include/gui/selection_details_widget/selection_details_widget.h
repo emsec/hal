@@ -28,8 +28,7 @@
 #include "gui/content_widget/content_widget.h"
 #include "gui/module_model/module_model.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
-#include "hal_core/defines.h"
-
+#include <QShortcut>
 
 class QTableWidget;
 class QStackedWidget;

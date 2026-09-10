@@ -36,7 +36,6 @@
 */
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QOpenGLWidget>
 
 namespace hal
 {
