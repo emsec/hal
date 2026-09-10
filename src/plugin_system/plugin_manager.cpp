@@ -27,15 +27,8 @@ namespace hal
     {
         namespace
         {
-            // stores library and factory identified by plugin name
-            //
-            // Deliberately leaked: destroying it at process exit would run plugin destructors and close plugin
-            // libraries during static destruction, when what they depend on (Qt's thread state, the log manager)
-            // may already be gone, and while the parser and writer managers still hold factory callbacks that
-            // live in plugin code. Whoever wants plugins unloaded calls unload_all_plugins() before exiting;
-            // otherwise the process ends with the libraries still mapped, which is always safe.
-            std::unordered_map<std::string, std::tuple<std::unique_ptr<BasePluginInterface>, std::unique_ptr<RuntimeLibrary>>>& m_loaded_plugins =
-                *new std::unordered_map<std::string, std::tuple<std::unique_ptr<BasePluginInterface>, std::unique_ptr<RuntimeLibrary>>>();
+            // stores library and factory identified by plugin name)
+            std::unordered_map<std::string, std::tuple<std::unique_ptr<BasePluginInterface>, std::unique_ptr<RuntimeLibrary>>> m_loaded_plugins;
 
             // stores special features offered by plugin
             std::unordered_map<std::string, std::vector<PluginFeature>> m_plugin_features;
