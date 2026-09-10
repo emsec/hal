@@ -263,8 +263,6 @@ namespace hal
 
         QAction* mFilterAction;
 
-        QList<QRegExp*> mRegexps;
-
         bool mIgnoreSelectionChange;
 
         ModuleModel* mModuleModel;

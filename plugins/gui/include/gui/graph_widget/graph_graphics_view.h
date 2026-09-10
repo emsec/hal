@@ -195,8 +195,6 @@ namespace hal
         void mousePressEventNotItemDrag(QMouseEvent* event);
         void showContextMenu(const QPoint& pos);
 
-        void updateMatrix(const int delta);
-
         void toggleAntialiasing();
 
         bool itemDraggable(GraphicsItem* item);

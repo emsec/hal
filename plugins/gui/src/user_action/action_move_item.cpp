@@ -45,9 +45,9 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            if (xmlIn.name() == "target_parent_id")
+            if (xmlIn.name() == QString("target_parent_id"))
                 mTargetParentId = xmlIn.readElementText().toUInt();
-            if (xmlIn.name() == "source_parent_id")
+            if (xmlIn.name() == QString("source_parent_id"))
                 mSourceParentId = xmlIn.readElementText().toUInt();
         }
     }

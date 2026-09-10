@@ -105,7 +105,7 @@ namespace hal
          * @param pos - The position to snap to the grid
          * @returns the closest position on the grid
          */
-        static QPointF snapToGrid(const QPointF& pos) Q_DECL_DEPRECATED;
+        static QPointF snapToGrid(const QPointF& pos);
 
         /**
          * Constructor.

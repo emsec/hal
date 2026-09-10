@@ -2,7 +2,6 @@
 #include "gui/main_window/main_window.h"
 #include "gui/gui_utils/graphics.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
-#include "gui/gatelibrary_management/gatelibrary_content_widget.h"
 #include "gui/file_status_manager/file_status_manager.h"
 #include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/gui_globals.h"
