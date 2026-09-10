@@ -110,6 +110,20 @@ namespace hal
             :rtype: hal_py.SMT.QueryConfig
         )");
 
+        py_smt_query_config.def("to_string", &SMT::QueryConfig::to_string, R"(
+            Translates the SMT query configuration into its string representation.
+
+            :returns: A string representing the SMT query configuration.
+            :rtype: str
+        )");
+
+        py_smt_query_config.def("__str__", [](const SMT::QueryConfig& config) { return config.to_string(); }, R"(
+            Translates the SMT query configuration into its string representation.
+
+            :returns: A string representing the SMT query configuration.
+            :rtype: str
+        )");
+
         py::class_<SMT::Constraint> py_smt_constraint(py_smt, "Constraint", R"(
             Represents a constraint to the SMT query.
             A constraint is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar.
@@ -181,6 +195,20 @@ namespace hal
 
             :returns: The function constraint on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_smt_constraint.def("to_string", &SMT::Constraint::to_string, R"(
+            Translates the SMT constraint into its string representation.
+
+            :returns: A string representing the SMT constraint.
+            :rtype: str
+        )");
+
+        py_smt_constraint.def("__str__", [](const SMT::Constraint& constraint) { return constraint.to_string(); }, R"(
+            Translates the SMT constraint into its string representation.
+
+            :returns: A string representing the SMT constraint.
+            :rtype: str
         )");
 
         py::enum_<SMT::SolverResultType> py_smt_result_type(py_smt, "SolverResultType", R"(
@@ -270,6 +298,20 @@ namespace hal
             :rtype: hal_py.BooleanFunction or None
         )");
 
+        py_smt_model.def("to_string", &SMT::Model::to_string, R"(
+            Translates the SMT model into its string representation.
+
+            :returns: A string representing the SMT model.
+            :rtype: str
+        )");
+
+        py_smt_model.def("__str__", [](const SMT::Model& model) { return model.to_string(); }, R"(
+            Translates the SMT model into its string representation.
+
+            :returns: A string representing the SMT model.
+            :rtype: str
+        )");
+
         py::class_<SMT::SolverResult> py_smt_result(py_smt, "SolverResult", R"(
             Represents the result of an SMT query.
         )");
@@ -335,6 +377,20 @@ namespace hal
 
             :returns: ``True`` in case result is unknown, ``False`` otherwise.
             :rtype: bool
+        )");
+
+        py_smt_result.def("to_string", &SMT::SolverResult::to_string, R"(
+            Translates the SMT result into its string representation.
+
+            :returns: A string representing the SMT result.
+            :rtype: str
+        )");
+
+        py_smt_result.def("__str__", [](const SMT::SolverResult& result) { return result.to_string(); }, R"(
+            Translates the SMT result into its string representation.
+
+            :returns: A string representing the SMT result.
+            :rtype: str
         )");
 
         py::class_<SMT::Solver> py_smt_solver(py_smt, "Solver", R"(

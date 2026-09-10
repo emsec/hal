@@ -17,6 +17,7 @@ docstring rather than guessed, because calling a binding that wants arguments ra
 that looks exactly like a real failure.
 """
 
+import faulthandler
 import os
 import re
 import sys
@@ -185,7 +186,7 @@ def run_checks(hal_py):
     called = []
 
     imported = import_plugin_modules(failures)
-    print(f"imported {len(imported)} plugin modules")
+    print(f"imported {len(imported)} plugin modules", flush=True)
 
     objects = build_netlist(hal_py)
     for label, obj in objects.items():
@@ -223,4 +224,7 @@ def run_checks(hal_py):
 
 
 if __name__ == "__main__":
+    # A crash inside a binding would otherwise leave no trace of which binding it was: the test's own
+    # output is block-buffered when ctest captures it. This prints the Python stack on a fatal signal.
+    faulthandler.enable()
     sys.exit(main())

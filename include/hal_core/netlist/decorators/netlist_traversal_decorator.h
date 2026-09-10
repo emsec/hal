@@ -34,6 +34,99 @@
 namespace hal
 {
     /**
+     * The direction in which a netlist is traversed.
+     *
+     * @ingroup decorators
+     */
+    enum class TraversalDirection
+    {
+        forward,  /**< Follow the fan-out, i.e., towards the successors of a gate. */
+        backward, /**< Follow the fan-in, i.e., towards the predecessors of a gate. */
+        both,     /**< Follow both, and report the union of the two. */
+    };
+
+    /**
+     * Where a traversal stops relative to the gates it is looking for.
+     *
+     * A traversal walks the netlist collecting the gates a filter accepts. What separates one
+     * traversal from another is not what it collects but where it comes to a halt, and these are the
+     * three ways that can be answered.
+     *
+     * @ingroup decorators
+     */
+    enum class TraversalStop
+    {
+        /**
+         * Stop at a gate the filter accepts. The gates collected are the boundary of the search: they
+         * are reported but not traversed through, so what lies behind them is not reached. This is
+         * how one asks for the next flip-flops behind a cone of combinational logic.
+         */
+        at_match,
+
+        /**
+         * Stop at a gate the filter rejects. Only gates the filter accepts are traversed through, so
+         * the gates collected form one connected region of them. This is how one asks for the
+         * combinational logic between two registers.
+         */
+        at_mismatch,
+
+        /**
+         * Do not stop at a gate at all. Everything reachable is traversed and every gate the filter
+         * accepts is collected on the way. Bound this with a depth or with the endpoint filters,
+         * or it walks to the edges of the netlist.
+         */
+        never,
+    };
+
+    /**
+     * A reusable store for the results of one specific traversal, handed to `NetlistTraversalDecorator::get_gates`.
+     *
+     * The traversal a cache belongs to is sealed in when it is created: the direction, the match
+     * condition, the stop rule and the endpoint filters all become part of the cache, and the cache
+     * can only ever be used for exactly that traversal. This is what makes reuse sound -- an entry
+     * for a net is the complete answer for that net, so it must never be consulted by a walk that
+     * asks a different question.
+     *
+     * Two things are excluded on purpose, because either would make the answer for a net depend on
+     * how the net was reached: there is no depth limit, and the endpoint filters receive no depth.
+     *
+     * The cache belongs to the netlist it was created for and must be dropped when the netlist is
+     * modified, as its entries are not invalidated by netlist events.
+     *
+     * @ingroup decorators
+     */
+    class NETLIST_API TraversalCache
+    {
+    public:
+        TraversalCache(TraversalCache&&)            = default;
+        TraversalCache& operator=(TraversalCache&&) = default;
+        TraversalCache(const TraversalCache&)       = delete;
+        TraversalCache& operator=(const TraversalCache&) = delete;
+
+    private:
+        friend class NetlistTraversalDecorator;
+
+        TraversalCache(const Netlist* netlist,
+                       TraversalDirection direction,
+                       std::function<bool(const Gate*)> match,
+                       TraversalStop stop,
+                       std::function<bool(const Endpoint*)> exit_endpoint_filter,
+                       std::function<bool(const Endpoint*)> entry_endpoint_filter)
+            : m_netlist(netlist), m_direction(direction), m_match(std::move(match)), m_stop(stop), m_exit_endpoint_filter(std::move(exit_endpoint_filter)),
+              m_entry_endpoint_filter(std::move(entry_endpoint_filter))
+        {
+        }
+
+        const Netlist* m_netlist;
+        TraversalDirection m_direction;
+        std::function<bool(const Gate*)> m_match;
+        TraversalStop m_stop;
+        std::function<bool(const Endpoint*)> m_exit_endpoint_filter;
+        std::function<bool(const Endpoint*)> m_entry_endpoint_filter;
+        std::unordered_map<const Net*, std::set<Gate*>> m_store;
+    };
+
+    /**
      * A netlist decorator that provides functionality to traverse the associated netlist without making any modifications.
      *
      * @ingroup decorators
@@ -49,8 +142,58 @@ namespace hal
         NetlistTraversalDecorator(const Netlist& netlist);
 
         /**
+         * Traverse the netlist from the given net, collecting the gates that `match` accepts.
+         *
+         * This is the traversal that the other functions of this decorator are written in terms of. What
+         * distinguishes them from one another is `stop`, which says where the walk halts relative to the
+         * gates being looked for, see `TraversalStop`.
+         *
+         * @param[in] net - The net to start from.
+         * @param[in] direction - The direction to traverse in.
+         * @param[in] match - The condition a gate has to meet to be collected.
+         * @param[in] stop - Where to stop traversing, relative to the gates that `match` accepts.
+         * @param[in] max_depth - The maximum number of gates to traverse through, counted from 1 for the direct neighbours of the start. `0` for no limit.
+         * @param[in] exit_endpoint_filter - Condition that has to hold to leave a gate through a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Condition that has to hold to enter a gate through a successor/predecessor endpoint.
+         * @returns The gates that were collected on success, an error otherwise.
+         */
+        Result<std::set<Gate*>> get_gates(const Net* net,
+                                          TraversalDirection direction,
+                                          const std::function<bool(const Gate*)>& match,
+                                          TraversalStop stop,
+                                          u32 max_depth                                                                                = 0,
+                                          const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                          const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * Traverse the netlist from the given gate, collecting the gates that `match` accepts.
+         *
+         * This is the traversal that the other functions of this decorator are written in terms of. What
+         * distinguishes them from one another is `stop`, which says where the walk halts relative to the
+         * gates being looked for, see `TraversalStop`.
+         *
+         * @param[in] gate - The gate to start from.
+         * @param[in] direction - The direction to traverse in.
+         * @param[in] match - The condition a gate has to meet to be collected.
+         * @param[in] stop - Where to stop traversing, relative to the gates that `match` accepts.
+         * @param[in] max_depth - The maximum number of gates to traverse through, counted from 1 for the direct neighbours of the start. `0` for no limit.
+         * @param[in] exit_endpoint_filter - Condition that has to hold to leave a gate through a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Condition that has to hold to enter a gate through a successor/predecessor endpoint.
+         * @returns The gates that were collected on success, an error otherwise.
+         */
+        Result<std::set<Gate*>> get_gates(const Gate* gate,
+                                          TraversalDirection direction,
+                                          const std::function<bool(const Gate*)>& match,
+                                          TraversalStop stop,
+                                          u32 max_depth                                                                                = 0,
+                                          const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                          const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
          * Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
          * Traverse over gates that do not meet the `target_gate_filter` condition.
+         *
+         * Equivalent to `get_gates` with a `TraversalStop` of `at_match`, or of `never` when `continue_on_match` is set.
          * Stop traversal if (1) `continue_on_match` is `false` the `target_gate_filter` evaluates to `true`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
          * Both the `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
          * 
@@ -168,31 +311,27 @@ namespace hal
          * Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
          * Traverse over gates that are not sequential until a sequential gate is found.
          * Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
-         * Provide a cache to speed up traversal when calling this function multiple times on the same netlist using the same forbidden pins.
-         * 
+         * For repeated calls on the same netlist, seal the traversal into a reusable cache with `make_traversal_cache` and call `get_gates` with it instead.
+         *
          * @param[in] net - Start net.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
          * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result. Defaults to an empty set.
-         * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
          * @returns The next sequential gates on success, an error otherwise.
          */
-        Result<std::set<Gate*>>
-            get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+        Result<std::set<Gate*>> get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins = {}) const;
 
         /**
          * Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
          * Traverse over gates that are not sequential until a sequential gate is found.
          * Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
-         * Provide a cache to speed up traversal when calling this function multiple times on the same netlist using the same forbidden pins.
-         * 
+         * For repeated calls on the same netlist, seal the traversal into a reusable cache with `make_traversal_cache` and call `get_gates` with it instead.
+         *
          * @param[in] gate - Start gate.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
          * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result. Defaults to an empty set.
-         * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
          * @returns The next sequential gates on success, an error otherwise.
          */
-        Result<std::set<Gate*>>
-            get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+        Result<std::set<Gate*>> get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins = {}) const;
 
         /**
          * Get the next sequential gates for all sequential gates in the netlist by traversing through remaining logic (e.g., combinational logic).
@@ -206,36 +345,32 @@ namespace hal
         Result<std::map<Gate*, std::set<Gate*>>> get_next_sequential_gates_map(bool successors, const std::set<PinType>& forbidden_pins) const;
 
         /**
-         * Starting from the given net, traverse the netlist and return all combinational successor/predecessor gates.
-         * Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
+         * Starting from the given net, collect the combinational cone in the given direction, i.e., the combinational fan-out (`successors = true`) or fan-in (`successors = false`) of the net.
+         * Continue traversal as long as further combinational gates are found and stop at gates that are not combinational, so that the cone extends up to (but not including) the sequential boundary.
          * All combinational gates found during traversal are added to the result.
-         * Provide a cache to speed up traversal when calling this function multiple times on the same netlist.
          * Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.
-         * 
+         * For repeated calls on the same netlist, seal the traversal into a reusable cache with `make_traversal_cache` and call `get_gates` with it instead.
+         *
          * @param[in] net - Start net.
-         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] successors - Set `true` to get the fan-out cone, set `false` to get the fan-in cone.
          * @param[in] forbidden_pins - Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.
-         * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
-         * @returns The next combinational gates on success, an error otherwise.
+         * @returns The gates of the combinational cone on success, an error otherwise.
          */
-        Result<std::set<Gate*>>
-            get_next_combinational_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+        Result<std::set<Gate*>> get_combinational_cone(const Net* net, bool successors, const std::set<PinType>& forbidden_pins = {}) const;
 
         /**
-         * Starting from the given gate, traverse the netlist and return all combinational successor/predecessor gates.
-         * Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
+         * Starting from the given gate, collect the combinational cone in the given direction, i.e., the combinational fan-out (`successors = true`) or fan-in (`successors = false`) of the gate.
+         * Continue traversal as long as further combinational gates are found and stop at gates that are not combinational, so that the cone extends up to (but not including) the sequential boundary.
          * All combinational gates found during traversal are added to the result.
-         * Provide a cache to speed up traversal when calling this function multiple times on the same netlist.
          * Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.
-         * 
+         * For repeated calls on the same netlist, seal the traversal into a reusable cache with `make_traversal_cache` and call `get_gates` with it instead.
+         *
          * @param[in] gate - Start gate.
-         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] successors - Set `true` to get the fan-out cone, set `false` to get the fan-in cone.
          * @param[in] forbidden_pins - Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.
-         * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
-         * @returns The next combinational gates on success, an error otherwise.
+         * @returns The gates of the combinational cone on success, an error otherwise.
          */
-        Result<std::set<Gate*>>
-            get_next_combinational_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+        Result<std::set<Gate*>> get_combinational_cone(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins = {}) const;
 
         /**
          * Find the length of shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with the end gate. 
@@ -273,9 +408,168 @@ namespace hal
                                                                     const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                                     const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
-        // TODO move get_gate_chain and get_complex_gate_chain here
+        /**
+         * Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate
+         * with any gate of the given module. The start gate will be the first in the result vector, the gate reached
+         * within the module the last. If there is no such path an empty optional is returned. If there is more than
+         * one path with the same length only the first one is returned. A start gate that already belongs to the
+         * module yields a path consisting of that gate alone.
+         *
+         * @param[in] start_gate - The gate to start from.
+         * @param[in] end_module - The module to connect to. Gates of its submodules count as belonging to it.
+         * @param[in] direction - The direction to search in. Can be PinDirection::input, PinDirection::output or PinDirection::inout to search both directions and return the shorter one.
+         * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+         * @return An optional vector of gates that connect the start gate with the module on success, an error otherwise.
+         */
+        Result<std::optional<std::vector<Gate*>>> get_shortest_path(const Gate* start_gate,
+                                                                    const Module* end_module,
+                                                                    const PinDirection& direction,
+                                                                    const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                                    const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * Find every shortest path (i.e., the result sets with the lowest number of gates) that connects the start
+         * module with the end module. There may be more than one such path, so every path of that length is returned;
+         * each runs from a gate of the start module to a gate of the end module. If there is no such path an empty
+         * vector is returned.
+         *
+         * @param[in] start_module - The module to start from. Gates of its submodules count as belonging to it.
+         * @param[in] end_module - The module to connect to. Gates of its submodules count as belonging to it.
+         * @param[in] direction - The direction to search in. Can be PinDirection::input, PinDirection::output or PinDirection::inout to search both directions and return the shorter one.
+         * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+         * @return A vector of the shortest paths connecting the two modules on success, an error otherwise.
+         */
+        Result<std::vector<std::vector<Gate*>>> get_shortest_path(const Module* start_module,
+                                                                  const Module* end_module,
+                                                                  const PinDirection& direction,
+                                                                  const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                                  const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * Find a chain of gates of the same type, starting at the given gate and following its output pins.
+         *
+         * @param[in] start_gate - The gate to start from.
+         * @param[in] input_pins - The input pins to follow. Defaults to all of them.
+         * @param[in] output_pins - The output pins to follow. Defaults to all of them.
+         * @param[in] filter - An optional filter a gate has to pass to be part of the chain.
+         * @returns The gates of the chain in order on success, an error otherwise.
+         */
+        Result<std::vector<Gate*>> get_gate_chain(Gate* start_gate,
+                                                  const std::vector<const GatePin*>& input_pins  = {},
+                                                  const std::vector<const GatePin*>& output_pins = {},
+                                                  const std::function<bool(const Gate*)>& filter = nullptr) const;
+
+        /**
+         * Find a chain of gates that repeats the given sequence of gate types, starting at the given gate.
+         *
+         * @param[in] start_gate - The gate to start from.
+         * @param[in] chain_types - The gate types the chain repeats, in order.
+         * @param[in] input_pins - The input pins to follow, per gate type. Defaults to all of them.
+         * @param[in] output_pins - The output pins to follow, per gate type. Defaults to all of them.
+         * @param[in] filter - An optional filter a gate has to pass to be part of the chain.
+         * @returns The gates of the chain in order on success, an error otherwise.
+         */
+        Result<std::vector<Gate*>> get_complex_gate_chain(Gate* start_gate,
+                                                          const std::vector<GateType*>& chain_types,
+                                                          const std::map<GateType*, std::vector<const GatePin*>>& input_pins  = {},
+                                                          const std::map<GateType*, std::vector<const GatePin*>>& output_pins = {},
+                                                          const std::function<bool(const Gate*)>& filter                      = nullptr) const;
+
+        /**
+         * Get the nets that are inputs to at least `threshold` of the given gates.
+         *
+         * Shared inputs across a group of gates typically indicate a shared control signal, so this is
+         * a cheap way to test whether a set of gates belongs together. A `threshold` of `0` requires a
+         * net to feed every single one of the gates. Nets driven by GND or VCC gates do not count.
+         *
+         * @param[in] gates - The gates to inspect.
+         * @param[in] threshold - The number of gates a net has to feed. `0` to require all of them. Defaults to `0`.
+         * @returns The common input nets on success, an error otherwise.
+         */
+        Result<std::vector<Net*>> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0) const;
+
+        /**
+         * Create a cache for one specific traversal, to be handed to `get_gates` in place of the
+         * traversal's parameters.
+         *
+         * The direction must be `TraversalDirection::forward` or `backward`; a cache cannot hold
+         * both directions at once. The endpoint filters receive no depth, and there is no depth
+         * limit, as either would make the cached answers depend on how a net was reached.
+         *
+         * @param[in] direction - The direction to traverse in.
+         * @param[in] match - The condition a gate has to meet to be collected.
+         * @param[in] stop - Where to stop traversing, relative to the gates that `match` accepts.
+         * @param[in] exit_endpoint_filter - Condition that has to hold to leave a gate through a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Condition that has to hold to enter a gate through a successor/predecessor endpoint.
+         * @returns The cache.
+         */
+        TraversalCache make_traversal_cache(TraversalDirection direction,
+                                            std::function<bool(const Gate*)> match,
+                                            TraversalStop stop,
+                                            std::function<bool(const Endpoint*)> exit_endpoint_filter  = nullptr,
+                                            std::function<bool(const Endpoint*)> entry_endpoint_filter = nullptr) const;
+
+        /**
+         * Traverse the netlist from the given net, collecting the gates that the cache's traversal collects.
+         *
+         * The parameters of the walk live in the cache, see `make_traversal_cache`, and results are
+         * shared through it: what an earlier call worked out is not walked again.
+         *
+         * @param[in] net - The net to start from.
+         * @param[in] cache - The cache holding the traversal and its results.
+         * @returns The gates that were collected on success, an error otherwise.
+         */
+        Result<std::set<Gate*>> get_gates(const Net* net, TraversalCache& cache) const;
+
+        /**
+         * Traverse the netlist from the given gate, collecting the gates that the cache's traversal collects.
+         *
+         * The parameters of the walk live in the cache, see `make_traversal_cache`, and results are
+         * shared through it: what an earlier call worked out is not walked again.
+         *
+         * @param[in] gate - The gate to start from.
+         * @param[in] cache - The cache holding the traversal and its results.
+         * @returns The gates that were collected on success, an error otherwise.
+         */
+        Result<std::set<Gate*>> get_gates(const Gate* gate, TraversalCache& cache) const;
 
     private:
+        /**
+         * The walk behind the cached traversals: memoized reachability over the nets, sharing its
+         * results through `store` across calls.
+         *
+         * An entry is published into `store` only once the exploration of its net is complete, with
+         * the nets of a cycle published together once their strongly connected component is done.
+         * Publishing earlier is what made the previous cache silently wrong: a cycle led the walk
+         * back to a net whose entry was still partial, the partial answer was taken, and the net
+         * being explored at the time kept a truncated entry forever.
+         *
+         * The parameters deliberately exclude everything that would make a per-net entry depend on
+         * how the net was reached: there is no depth limit, and the endpoint filters do not receive
+         * a depth. Entries already in `store` are trusted, so a store must only ever be reused with
+         * the same match condition, stop rule, direction and filters.
+         */
+        Result<std::set<Gate*>> get_gates_memoized(const Net* start,
+                                                   bool successors,
+                                                   const std::function<bool(const Gate*)>& match,
+                                                   TraversalStop stop,
+                                                   const std::function<bool(const Endpoint*)>& exit_endpoint_filter,
+                                                   const std::function<bool(const Endpoint*)>& entry_endpoint_filter,
+                                                   std::unordered_map<const Net*, std::set<Gate*>>& store) const;
+
+        /**
+         * The breadth-first search behind every get_shortest_path overload, stopping at the first gate the given
+         * condition accepts. Kept in one place so that searching for one gate and searching for any gate of a module
+         * cannot drift apart.
+         */
+        Result<std::optional<std::vector<Gate*>>> get_shortest_path_to(const Gate* start_gate,
+                                                                       const std::function<bool(const Gate*)>& is_target,
+                                                                       const PinDirection& direction,
+                                                                       const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                       const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const;
+
         const Netlist& m_netlist;
     };
 }    // namespace hal

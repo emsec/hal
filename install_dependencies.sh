@@ -122,6 +122,6 @@ elif [[ "$platform" == 'docker' ]]; then
     ninja-build lcov gcovr python3-sphinx \
     doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
     pybind11-dev python3-pybind11 python3-dateutil rapidjson-dev \
-    libspdlog-dev libz3-dev libreadline-dev libxcb-xkb-dev \
+    libspdlog-dev libz3-dev libreadline-dev libxcb-xkb-dev libgraphviz-dev \
     graphviz libomp-dev libsuitesparse-dev # For documentation
 fi

@@ -82,8 +82,10 @@ namespace hal
          * @param[in] nl - The netlist to extract the dependency matrix from.
          * @returns A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
          *          IDs to the ones in the matrix, and a std::vector<std::vector<int>, which is the ff dependency matrix
+         * \deprecated This function is deprecated, use `boolean_influence::get_ff_dependency_matrix` instead.
          */
-        std::pair<std::map<u32, Gate*>, std::vector<std::vector<int>>> get_ff_dependency_matrix(const Netlist* nl);
+        [[deprecated("Will be removed in a future version, use boolean_influence::get_ff_dependency_matrix instead.")]] std::pair<std::map<u32, Gate*>, std::vector<std::vector<int>>>
+            get_ff_dependency_matrix(const Netlist* nl);
 
         /**
          * \deprecated
@@ -201,8 +203,9 @@ namespace hal
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @param[inout] cache - The cache. 
          * @returns All gates on the predecessor or successor path of the gate.
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_gates` with a negated condition and `TraversalStop::at_mismatch` instead.
          */
-        CORE_API std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_gates instead.")]] CORE_API std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache);
 
         /**
          * Find all gates on the predeccessor or successor path of a gate.
@@ -213,8 +216,9 @@ namespace hal
          * @param[in] get_successors - If `true`, the successor path is returned, otherwise the predecessor path is returned.
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @returns All gates on the predecessor or successor path of the gate.
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_gates` with a negated condition and `TraversalStop::at_mismatch` instead.
          */
-        CORE_API std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_gates instead.")]] CORE_API std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties);
 
         /**
          * Find all gates on the predecessor or successor path of a net.
@@ -228,8 +232,9 @@ namespace hal
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @param[inout] cache - The cache. 
          * @returns All gates on the predecessor or successor path of the net.
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_gates` with a negated condition and `TraversalStop::at_mismatch` instead.
          */
-        CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_gates instead.")]] CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache);
 
         /**
          * Find all gates on the predecessor or successor path of a net.
@@ -239,8 +244,9 @@ namespace hal
          * @param[in] get_successors - If `true`, the successor path is returned, otherwise the predecessor path is returned.
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @returns All gates on the predecessor or successor path of the net.
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_gates` with a negated condition and `TraversalStop::at_mismatch` instead.
          */
-        CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_gates instead.")]] CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties);
 
         /**
          * Get the nets that are connected to a subset of pins of the specified gate.
@@ -248,8 +254,9 @@ namespace hal
          * @param[in] gate - The gate.
          * @param[in] pins - The targeted pins.
          * @returns A vector of nets connected to the pins.
+         * \deprecated This function is deprecated. Iterate the pins and use `Gate::get_fan_in_net` or `Gate::get_fan_out_net`, depending on each pin's direction.
          */
-        CORE_API std::vector<Net*> get_nets_at_pins(Gate* gate, std::vector<GatePin*> pins);
+        [[deprecated("Will be removed in a future version, iterate the pins and use Gate::get_fan_in_net or Gate::get_fan_out_net instead.")]] CORE_API std::vector<Net*> get_nets_at_pins(Gate* gate, std::vector<GatePin*> pins);
 
         /**
          * \deprecated
@@ -280,9 +287,10 @@ namespace hal
          * @param[in] gates - The gates.
          * @param[in] threshold - The threshold value, defaults to 0.
          * @returns The common input nets.
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_common_inputs` instead.
          */
         // TODO move to SubgraphNetlistDecorator
-        CORE_API std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_common_inputs instead.")]] CORE_API std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0);
 
         /**
          * \deprecated
@@ -299,43 +307,6 @@ namespace hal
             replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map);
 
         /**
-         * Find a sequence of identical gates that are connected via the specified input and output pins.
-         * The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
-         * If input and/or output pins are specified, the gates must be connected through one of the input pins and/or one of the output pins.
-         * The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
-         * 
-         * @param[in] start_gate - The gate at which to start the chain detection.
-         * @param[in] input_pins - The input pins through which the gates must be connected. Defaults to an empty vector.
-         * @param[in] output_pins - The output pins through which the gates must be connected. Defaults to an empty vector.
-         * @param[in] filter - An optional filter function to be evaluated on each gate.
-         * @returns A vector of gates that form a chain on success, an error otherwise.
-         */
-        CORE_API Result<std::vector<Gate*>> get_gate_chain(Gate* start_gate,
-                                                           const std::vector<const GatePin*>& input_pins  = {},
-                                                           const std::vector<const GatePin*>& output_pins = {},
-                                                           const std::function<bool(const Gate*)>& filter = nullptr);
-
-        /**
-         * Find a sequence of gates (of the specified sequence of gate types) that are connected via the specified input and output pins.
-         * The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
-         * However, the start gate must be of the first gate type within the repeating sequence.
-         * If input and/or output pins are specified for a gate type, the gates must be connected through one of the input pins and/or one of the output pins.
-         * The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
-         * 
-         * @param[in] start_gate - The gate at which to start the chain detection.
-         * @param[in] chain_types - The sequence of gate types that is expected to make up the gate chain.
-         * @param[in] input_pins - The input pins (of every gate type of the sequence) through which the gates must be connected.
-         * @param[in] output_pins - The output pins (of every gate type of the sequence) through which the gates must be connected.
-         * @param[in] filter - An optional filter function to be evaluated on each gate.
-         * @returns A vector of gates that form a chain on success, an error otherwise.
-         */
-        CORE_API Result<std::vector<Gate*>> get_complex_gate_chain(Gate* start_gate,
-                                                                   const std::vector<GateType*>& chain_types,
-                                                                   const std::map<GateType*, std::vector<const GatePin*>>& input_pins,
-                                                                   const std::map<GateType*, std::vector<const GatePin*>>& output_pins,
-                                                                   const std::function<bool(const Gate*)>& filter = nullptr);
-
-        /**
          * Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with the end gate. 
          * The gate where the search started from will be the first in the result vector, the end gate will be the last. 
          * If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
@@ -344,8 +315,9 @@ namespace hal
          * @param[in] end_gate - The gate to connect to.
          * @param[in] search_both_directions - `true` to additionally check whether a shorter path from end to start exists, `false` otherwise.
          * @return A vector of gates that connect the start with end gate (possibly in reverse order).
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_shortest_path` instead.
          */
-        CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_shortest_path instead.")]] CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);
 
         /**
          * Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with any gate from the given module.
@@ -356,8 +328,9 @@ namespace hal
          * @param[in] end_module - The module to connect to.
          * @param[in] forward_direction - `true` to search along the fan-out nets of the start gate, `false` to search along its fan-in nets.
          * @return A vector of gates that connect the start with end gate (possibly in reverse order).
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_shortest_path` instead.
          */
-        CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Module* end_module, bool forward_direction);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_shortest_path instead.")]] CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Module* end_module, bool forward_direction);
 
 
         /**
@@ -369,7 +342,8 @@ namespace hal
          * @param[in] start_module - The module to start from.
          * @param[in] end_module - The module to connect to.
          * @return A vector of connecting vectors with gates that connect the start with end gate.
+         * \deprecated This function is deprecated, use `NetlistTraversalDecorator::get_shortest_path` instead.
          */
-        CORE_API std::vector<std::vector<Gate*> > get_shortest_path(Module* start_module, Module* end_module);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_shortest_path instead.")]] CORE_API std::vector<std::vector<Gate*> > get_shortest_path(Module* start_module, Module* end_module);
     }    // namespace netlist_utils
 }    // namespace hal

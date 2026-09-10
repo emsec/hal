@@ -141,6 +141,13 @@ namespace hal
              * @returns A reference to the output stream.
              */
             friend std::ostream& operator<<(std::ostream& out, const QueryConfig& config);
+
+            /**
+             * Translate the SMT query configuration into its string representation.
+             *
+             * @returns A string representing the SMT query configuration.
+             */
+            std::string to_string() const;
         };
 
         /**
@@ -271,6 +278,13 @@ namespace hal
              */
             friend std::ostream& operator<<(std::ostream& out, const Model& model);
 
+            /**
+             * Translate the SMT model into its string representation.
+             *
+             * @returns A string representing the SMT model.
+             */
+            std::string to_string() const;
+
             ////////////////////////////////////////////////////////////////////////
             // Interface
             ////////////////////////////////////////////////////////////////////////
@@ -375,6 +389,13 @@ namespace hal
              * @returns A reference to output stream.
              */
             friend std::ostream& operator<<(std::ostream& out, const SolverResult& result);
+
+            /**
+             * Translate the SMT result into its string representation.
+             *
+             * @returns A string representing the SMT result.
+             */
+            std::string to_string() const;
 
         private:
             /// Constructor to initialize a 'Result.

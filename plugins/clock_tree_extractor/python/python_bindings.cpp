@@ -1,0 +1,342 @@
+// MIT License
+//
+// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
+// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
+// Copyright (c) 2025-2026 Sascha Tommasone. All rights reserved.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#include "hal_core/python_bindings/python_bindings.h"
+
+#include "clock_tree_extractor/clock_tree.h"
+#include "clock_tree_extractor/plugin_clock_tree_extractor.h"
+#include "pybind11/pybind11.h"
+
+#include <igraph/igraph.h>
+#include <pybind11/detail/descr.h>
+#include <pybind11/pytypes.h>
+#include <set>
+#include <string>
+#include <vector>
+
+namespace hal
+{
+    class BasePluginInterface;
+}
+namespace hal
+{
+    class Netlist;
+}
+
+namespace py = pybind11;
+
+namespace hal
+{
+
+    // the name in PYBIND11_MODULE/PYBIND11_PLUGIN *MUST* match the filename of the output library (without extension),
+    // otherwise you will get "ImportError: dynamic module does not define module export function" when importing the
+    // module
+
+#ifdef PYBIND11_MODULE
+    PYBIND11_MODULE( clock_tree_extractor, m )
+    {
+        m.doc() = "";
+#else
+    PYBIND11_PLUGIN( clock_tree_extractor )
+    {
+        py::module m( "clock_tree_extractor", "" );
+#endif  // ifdef PYBIND11_MODULE
+
+        py::class_<ClockTreeExtractorPlugin, RawPtrWrapper<ClockTreeExtractorPlugin>, BasePluginInterface>
+            py_clock_tree_extractor_plugin( m, "ClockTreeExtractorPlugin", "" );
+
+        py_clock_tree_extractor_plugin.def_property_readonly( "name", &ClockTreeExtractorPlugin::get_name, R"(
+        The name of the plugin.
+
+        :type: str
+    )" );
+
+        py_clock_tree_extractor_plugin.def( "get_name", &ClockTreeExtractorPlugin::get_name, R"(
+    Get the name of the plugin.
+
+    :returns: The name of the plugin.
+    :rtype: str
+    )" );
+
+        py_clock_tree_extractor_plugin.def_property_readonly( "version", &ClockTreeExtractorPlugin::get_version, R"(
+    The version of the plugin.
+
+    :type: str
+    )" );
+
+        py_clock_tree_extractor_plugin.def( "get_version", &ClockTreeExtractorPlugin::get_version, R"(
+    Get the version of the plugin.
+
+    :returns: The version of the plugin.
+    :rtype: str
+    )" );
+
+        py_clock_tree_extractor_plugin.def_property_readonly(
+            "description", &ClockTreeExtractorPlugin::get_description, R"(
+    The description of the plugin.
+
+    :type: str
+    )" );
+
+        py_clock_tree_extractor_plugin.def( "get_description", &ClockTreeExtractorPlugin::get_description, R"(
+    Get the description of the plugin.
+
+    :returns: The description of the plugin.
+    :rtype: str
+    )" );
+
+        py_clock_tree_extractor_plugin.def_property_readonly(
+            "dependencies", &ClockTreeExtractorPlugin::get_dependencies, R"(
+    A set of plugin names that this plugin depends on.
+
+    :type: set[str]
+    )" );
+
+        py_clock_tree_extractor_plugin.def( "get_dependencies", &ClockTreeExtractorPlugin::get_dependencies, R"(
+    Get a set of plugin names that this plugin depends on.
+
+    :returns: A set of plugin names that this plugin depends on.
+    :rtype: set[str]
+    )" );
+
+        py::class_<cte::ClockTree>( m, "ClockTree", R"()" )
+            .def_static(
+                "from_netlist",
+                []( const Netlist *netlist ) -> std::unique_ptr<cte::ClockTree> {
+                    auto result = cte::ClockTree::from_netlist( netlist );
+                    if( result.is_ok() )
+                    {
+                        return result.get();
+                    }
+
+                    log_error( "clock_tree_extractor", "{}", result.get_error().get() );
+                    return nullptr;
+                },
+                py::arg( "netlist" ),
+                py::return_value_policy::move,
+                R"()" )
+            .def(
+                "export",
+                []( const cte::ClockTree &self, const std::string &pathname ) -> bool {
+                    auto result = self.export_dot( pathname );
+                    if( result.is_ok() )
+                    {
+                        return true;
+                    }
+
+                    log_error( "clock_tree_extractor", "{}", result.get_error().get() );
+                    return false;
+                },
+                py::arg( "pathname" ),
+                R"()" )
+            .def(
+                "get_subtree",
+                []( const cte::ClockTree &self,
+                    const void *ptr,
+                    const bool parent ) -> std::unique_ptr<cte::ClockTree> {
+                    auto result = self.get_subtree( ptr, parent );
+                    if( result.is_ok() )
+                    {
+                        return result.get();
+                    }
+
+                    log_error( "clock_tree_extractor", "{}", result.get_error().get() );
+                    return nullptr;
+                },
+                py::arg( "ptr" ),
+                py::arg( "parent" ) = false,
+                py::return_value_policy::move,
+                R"()" )
+            .def(
+                "get_all",
+                []( const cte::ClockTree &self ) -> py::list {
+                    py::list result;
+                    const auto &map = self.get_all();
+                    for( auto &[ptr, type] : map )
+                    {
+                        if( type == cte::PtrType::GATE )
+                        {
+                            result.append( py::cast( (const Gate *) ptr ) );
+                        }
+                        else if( type == cte::PtrType::NET )
+                        {
+                            result.append( py::cast( (const Net *) ptr ) );
+                        }
+                    }
+                    return result;
+                },
+                borrowed(),
+                R"()" )
+            .def(
+                "get_vertex_from_ptr",
+                []( const cte::ClockTree &self, const void *ptr ) -> py::object {
+                    auto result = self.get_vertex_from_ptr( ptr );
+                    if( result.is_ok() )
+                    {
+                        return py::int_( result.get() );
+                    }
+                    log_error( "clock_tree_extractor", "{}", result.get_error().get() );
+                    return py::none();
+                },
+                py::arg( "ptr" ),
+                R"()" )
+            .def(
+                "get_ptr_from_vertex",
+                []( const cte::ClockTree &self, const igraph_integer_t vertex ) -> py::object {
+                    auto result = self.get_ptr_from_vertex( vertex );
+                    if( result.is_ok() )
+                    {
+                        auto [ptr, type] = result.get();
+                        if( type == cte::PtrType::GATE )
+                        {
+                            return py::cast( (const Gate *) ptr );
+                        }
+                        else if( type == cte::PtrType::NET )
+                        {
+                            return py::cast( (const Net *) ptr );
+                        }
+                        return py::none();
+                    }
+                    log_error( "clock_tree_extractor", "{}", result.get_error().get() );
+                    return py::none();
+                },
+                py::arg( "vertex" ),
+                borrowed(),
+                R"()" )
+            .def(
+                "get_vertices_from_ptrs",
+                []( const cte::ClockTree &self, const std::vector<const void *> &ptrs ) -> py::list {
+                    auto result = self.get_vertices_from_ptrs( ptrs );
+                    if( result.is_ok() )
+                    {
+                        return py::cast( result.get() );
+                    }
+                    log_error( "clock_tree_extractor", "{}", result.get_error().get() );
+                    return py::none();
+                },
+                py::arg( "ptrs" ),
+                R"()" )
+            .def(
+                "get_ptrs_from_vertices",
+                []( const cte::ClockTree &self, const std::vector<igraph_integer_t> &vertices ) -> py::list {
+                    auto res = self.get_ptrs_from_vertices( vertices );
+                    if( res.is_ok() )
+                    {
+                        py::list result;
+                        for( const auto &[ptr, type] : res.get() )
+                        {
+                            if( type == cte::PtrType::GATE )
+                            {
+                                result.append( py::cast( (const Gate *) ptr ) );
+                            }
+                            else if( type == cte::PtrType::NET )
+                            {
+                                result.append( py::cast( (const Net *) ptr ) );
+                            }
+                            else
+                            {
+                                log_error( "clock_tree_extractor", "unknown ptr type" );
+                                return py::none();
+                            }
+                        }
+                        return result;
+                    }
+                    log_error( "clock_tree_extractor", "{}", res.get_error().get() );
+                    return py::none();
+                },
+                py::arg( "vertices" ),
+                R"()" )
+            .def(
+                "get_parents",
+                []( const cte::ClockTree &self, const void *ptr ) -> py::list {
+                    auto res = self.get_neighbors( ptr, IGRAPH_IN );
+                    if( res.is_ok() )
+                    {
+                        py::list result;
+                        for( const auto &[ptr, type] : res.get() )
+                        {
+                            if( type == cte::PtrType::GATE )
+                            {
+                                result.append( py::cast( (const Gate *) ptr ) );
+                            }
+                            else if( type == cte::PtrType::NET )
+                            {
+                                result.append( py::cast( (const Net *) ptr ) );
+                            }
+                            else
+                            {
+                                log_error( "clock_tree_extractor", "unknown ptr type" );
+                                return py::none();
+                            }
+                        }
+                        return result;
+                    }
+                    log_error( "clock_tree_extractor", "{}", res.get_error().get() );
+                    return py::none();
+                },
+                py::arg( "ptr" ),
+                borrowed(),
+                R"()" )
+            .def(
+                "get_childs",
+                []( const cte::ClockTree &self, const void *ptr ) -> py::list {
+                    auto res = self.get_neighbors( ptr, IGRAPH_OUT );
+                    if( res.is_ok() )
+                    {
+                        py::list result;
+                        for( const auto &[ptr, type] : res.get() )
+                        {
+                            if( type == cte::PtrType::GATE )
+                            {
+                                result.append( py::cast( (const Gate *) ptr ) );
+                            }
+                            else if( type == cte::PtrType::NET )
+                            {
+                                result.append( py::cast( (const Net *) ptr ) );
+                            }
+                            else
+                            {
+                                log_error( "clock_tree_extractor", "unknown ptr type" );
+                                return py::none();
+                            }
+                        }
+                        return result;
+                    }
+                    log_error( "clock_tree_extractor", "{}", res.get_error().get() );
+                    return py::none();
+                },
+                py::arg( "ptr" ),
+                borrowed(),
+                R"()" )
+            .def( "get_gates", &cte::ClockTree::get_gates, borrowed(), R"()" )
+            .def( "get_nets", &cte::ClockTree::get_nets, borrowed(), R"()" )
+            .def( "get_netlist", &cte::ClockTree::get_netlist, borrowed(), R"()" );
+
+#ifndef PYBIND11_MODULE
+        return m.ptr();
+#endif  // PYBIND11_MODULE
+    }
+}  // namespace hal

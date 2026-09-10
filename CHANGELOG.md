@@ -19,9 +19,22 @@ All notable changes to this project will be documented in this file.
     * fixed the progress overlay of the graph view being dismissed while the layout updates deferred during a dataflow analysis were still being applied, which left the graph view showing its spinner
   * program options
     * added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
+  * netlist traversal
+    * deprecated `netlist_utils::get_nets_at_pins` without a relocation: it is a per-pin lookup that `Gate::get_fan_in_net` and `get_fan_out_net` already provide, and it has no callers
+    * moved `get_common_inputs` from `netlist_utils` onto `NetlistTraversalDecorator` and deprecated the original
+    * added `NetlistTraversalDecorator::make_traversal_cache` and `get_gates` overloads that share results across calls through a `TraversalCache`. The traversal a cache answers for is sealed in at creation -- direction, match condition, stop rule and endpoint filters -- so a cache can never be consulted by a walk asking a different question, and everything that would make a cached answer depend on how a net was reached is excluded by construction
+    * fixed `get_next_sequential_gates`, `get_combinational_cone` and `get_next_sequential_gates_map` returning results with gates missing through a shared cache when the netlist contains a combinational cycle. Cache entries were written while a net was still being explored, and a cycle that led the walk back to such a net baked the partial answer into the entries of the nets in flight, so a later call reaching one of them through a side path was silently wrong -- which is how the Boolean influence plugin produced a wrong flip-flop dependency matrix on such netlists. An entry is now published only once its net, and any cycle it belongs to, is fully explored
+    * deprecated the four `netlist_utils::get_path` overloads, which despite the name return every gate of a cone rather than a path, in favour of `NetlistTraversalDecorator::get_gates` with a negated condition and `TraversalStop::at_mismatch`
+    * added `NetlistTraversalDecorator::get_gates`, the traversal that the other traversals of the decorator are special cases of. What separated them from one another was never what they collect but where they stop relative to it, which is now said out loud by a `TraversalStop` of `at_match`, `at_mismatch` or `never` rather than implied by a pair of booleans named one syllable apart. Direction is a `TraversalDirection` rather than a bare `bool successors`
+    * deprecated the three `netlist_utils::get_shortest_path` overloads in favour of `NetlistTraversalDecorator::get_shortest_path`, and `netlist_utils::get_ff_dependency_matrix` in favour of the one in the Boolean influence plugin, which also reports how strongly each flip-flop depends on another rather than only whether it does
+    * moved `get_gate_chain` and `get_complex_gate_chain` from `netlist_utils` onto `NetlistTraversalDecorator`, where the rest of the traversal lives and where a binding can keep the netlist alive for as long as Python refers to the gates it returns
+    * renamed `NetlistTraversalDecorator::get_next_combinational_gates` to `get_combinational_cone`, which is what it returns -- every combinational gate up to the sequential boundary, not a next layer of anything -- and removed the raw result-map cache parameter from it and from `get_next_sequential_gates`, whose reuse contract nothing enforced. Repeated traversals share results through a sealed `TraversalCache` instead. The Python bindings of both now also default `forbidden_pins` to an empty set like the C++ side always did
+    * added `NetlistTraversalDecorator::get_shortest_path` overloads that end at any gate of a module and that connect two modules, which existed only as free functions in `netlist_utils` before
   * gate library
     * fixed reloading a gate library destroying the library a netlist was built against, which silently replaced every gate type of that netlist. Gate libraries are now owned through a `shared_ptr` and outlive both the netlists and the Python handles that refer to them
 * Boolean functions
+  * added `to_string` to `SMT::QueryConfig`, `SMT::Model` and `SMT::SolverResult`, so that all four SMT types offer it the way `SMT::Constraint` already did instead of only an `operator<<`
+  * fixed the printed form of an `SMT::Model` starting with a stray comma, `{, A:5}` instead of `{A:5}`
   * sped up `BooleanFunction::compute_truth_table` by evaluating 64 rows of the table at once instead of running a symbolic execution per row, which walks and simplifies the entire node list every single time. Applies to single-bit functions of bitwise operations whose variables are all part of the truth table, everything else keeps using the previous implementation
   * raised the limit on the number of variables a truth table may be computed for from 10 to 20, see `BooleanFunction::MAX_TRUTH_TABLE_VARIABLES`
   * sped up the evaluation of Boolean functions, `BooleanFunction::operator<` compared two functions by building and comparing their reverse polish notation strings, which the symbolic state hit on every variable lookup
@@ -33,6 +46,10 @@ All notable changes to this project will be documented in this file.
   * fixed `SMT::SymbolicState::set` using `emplace`, which leaves an existing binding untouched, so setting a variable a second time did nothing and a loop stepping a symbolic state forward silently kept the value it started with
   * added simplification rules for the word level operations, which the single-bit simplification through ABC cannot reach: extensions to the width the value already has, nested extensions and slices, slices that fall into one half of a concatenation or into either part of an extension, unsigned comparisons against zero and the maximum, equality of a value with its own negation, and single bit equalities and selections
 * Python bindings
+  * fixed the four `boolean_influence` functions that return influences per net handing out the nets without keeping the netlist alive: they return dicts keyed by net, and nothing protected a borrowed object sitting in a dict key
+  * added a warning, once per function and process, when a deprecated `NetlistUtils` function is called from Python, naming its replacement. `[[deprecated]]` warns whoever compiles, and a script has no compiler
+  * fixed the deprecated `NetlistUtils` bindings handing out gates and nets without keeping the netlist alive for as long as Python refers to them, which they keep doing until they are removed
+  * fixed `netlist_preprocessing.create_multi_bit_gate_modules` and `create_nets_at_unconnected_pins` handing out modules and nets without keeping the netlist alive: the `hal::borrowed()` call policy ties each returned object to the netlist that owns it, which works on a module-level function as well, as the owner is found through the wrapper the caller necessarily passed in
   * fixed the Python bindings handing out gates, nets, modules, endpoints and pins without tying them to the netlist that owns them, so that dropping the netlist left them pointing into freed memory. Reading 500 gates and 500 nets of a dropped netlist returned the wrong name and ID for 184 and 230 of them respectively, silently rather than by crashing
   * fixed the decorators storing a reference to the netlist or net they were constructed from without keeping it alive
   * fixed `NetlistGraph` never being freed by Python: its factories hand over ownership but it was bound with a non-owning holder, so every graph built from a netlist leaked, more than a gigabyte over 1500 graphs on a 3458 gate netlist
@@ -51,7 +68,10 @@ All notable changes to this project will be documented in this file.
   * fixed a Python interpreter that loaded the HAL plugins segfaulting on the way out unless it unloaded them again by hand, as the plugin libraries were closed while the parser and writer registries still held a factory function out of each of them
   * added Python bindings for `SMT.SolverCall` and `SMT.Solver.to_smt2`, and the missing `Bitwuzla` value of `SMT.SolverType`. Without `SolverCall`, neither `QueryConfig.with_call` nor `Solver.has_local_solver_for` could be called at all although both were bound
   * fixed three enum values that were bound to a different value of their own enum, which made them indistinguishable from Python: `GateTypeProperty.fifo` was bound to `ram`, `module_identification.CandidateType.addition_offset` to `addition`, and `gui_extension_demo.ParameterType.Module` to `Gate`
+  * added `to_string` and `__str__` to `SMT.QueryConfig`, `SMT.Constraint`, `SMT.Model` and `SMT.SolverResult`, printing any of them showed an object address before
 * Plugins
+  * Boolean influence
+    * fixed `get_ff_dependency_matrix` dereferencing an uninitialized pointer on every call, which segfaulted before it returned anything. The cache it passes on was never initialized, and a pointer that is not null passed the callee's check for one
   * HAWKEYE
     * replaced `RegisterCandidate`, `RoundCandidate` and the free S-box functions of HAWKEYE with a single `CipherCandidate` that analyzes a candidate in place instead of copying it into a netlist of its own, so its gates and nets are the ones of the netlist under analysis and no longer have to be mapped back
     * added `CipherCandidate::identify_sboxes` that identifies every S-box of a candidate at once and annotates it with the outcome, grouping the variants the search produces of one and the same S-box and leaving a group as soon as one of them matches
@@ -84,7 +104,6 @@ All notable changes to this project will be documented in this file.
   * dot viewer
     * added 'hover over node' feature in dot viewer
 * GUI
-  * changed major Qt version 5 -> 6
   * fixed the GUI hanging for minutes when a module with many gates is selected, `ModuleModel` emitted a row insert signal per item while the model was already being reset, which made the attached filter proxy remap its rows once per item
   * fixed the GUI stalling when a large module is unfolded, the tree views measured every row individually and shaped the text of each gate name just to learn how tall the row is
   * changed the module elements tree to not rebuild itself twice per selection change
@@ -97,7 +116,8 @@ All notable changes to this project will be documented in this file.
     * fixed bug in pin model which must not crash when deleting a non-empty pin group
     * fixed bug by disallowing deletion of group comprising a single pin with same name
 * Build and dependencies
-  * added a test that checks the Python bindings never hand out a borrowed pointer without keeping its owner alive, and never give a class bound with a non-owning holder to a factory that returns a `unique_ptr`. It covers plugins kept in a repository of their own as well
+  * changed the GUI from Qt 5 to Qt 6, which is now required to build the GUI
+  * added a test that checks the Python bindings never hand out a borrowed pointer without keeping its owner alive, and never give a class bound with a non-owning holder to a factory that returns a `unique_ptr`. It covers plugins kept in a repository of their own as well, and holds free, static and submodule-level functions to the same rule as methods, which `hal::borrowed()` made fixable
   * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
   * removed the tests below `tests/python_binding`, which were neither referenced by the build nor by any workflow and called API that no longer exists
 

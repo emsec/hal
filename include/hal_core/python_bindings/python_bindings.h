@@ -218,8 +218,10 @@ namespace hal
 
             if (py::isinstance<py::dict>(value))
             {
+                // Keys as well as values: a dict from net to influence, say, borrows through its keys.
                 for (auto item : py::reinterpret_borrow<py::dict>(value))
                 {
+                    keep_owner_alive(call, item.first, receiver);
                     keep_owner_alive(call, item.second, receiver);
                 }
                 return;
