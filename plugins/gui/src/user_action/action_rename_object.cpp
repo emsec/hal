@@ -40,7 +40,7 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            if (xmlIn.name() == "name")
+            if (xmlIn.name() == QString("name"))
                 mNewName = xmlIn.readElementText();
         }
     }

@@ -69,7 +69,7 @@ namespace hal
             QWheelEvent* wheel = static_cast<QWheelEvent*>(event);
             if (wheel->modifiers() == Qt::ControlModifier)
             {
-                if (wheel->delta() > 0)
+                if (wheel->angleDelta().y() > 0)
                     zoomIn(2);
                 else
                     zoomOut(2);
@@ -120,7 +120,7 @@ namespace hal
     {
         // WARNING FUNCTION ONLY RETURNS CORRECT VALUES FOR MONOSPACE FONTS !
         QFontMetrics fm(mLineNumberFont);
-        return mLineNumberArea->leftOffset() + fm.width(QString::number(blockCount())) + mLineNumberArea->rightOffset();
+        return mLineNumberArea->leftOffset() + fm.horizontalAdvance(QString::number(blockCount())) + mLineNumberArea->rightOffset();
     }
 
     int CodeEditor::minimapWidth()

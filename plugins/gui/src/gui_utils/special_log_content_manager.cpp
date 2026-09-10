@@ -53,7 +53,7 @@ namespace hal
             }
         }
 
-        QString fileName = "Screenshot_" +QString::number(QDateTime::currentDateTime().toTime_t());
+        QString fileName = "Screenshot_" +QString::number(QDateTime::currentDateTime().toSecsSinceEpoch());
         QString fileType = "png";
 
         QList<QPixmap> pixmapList;
@@ -107,7 +107,7 @@ namespace hal
         }
 
         QTabWidget* pythonTabWidget = mPythonEditor->getTabWidget();
-        QString fileName = "Pythoncodeeditors_" + QString::number(QDateTime::currentDateTime().toTime_t());
+        QString fileName = "Pythoncodeeditors_" + QString::number(QDateTime::currentDateTime().toSecsSinceEpoch());
         QString fileType = "txt";
         QFile file(pythonEditorDumpPath + "/" + fileName + "." + fileType);
 

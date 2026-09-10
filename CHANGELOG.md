@@ -138,6 +138,7 @@ All notable changes to this project will be documented in this file.
     * fixed bug in pin model which must not crash when deleting a non-empty pin group
     * fixed bug by disallowing deletion of group comprising a single pin with same name
 * Build and dependencies
+  * changed the GUI from Qt 5 to Qt 6, which is now required to build the GUI
   * added a test that checks the Python bindings never hand out a borrowed pointer without keeping its owner alive, and never give a class bound with a non-owning holder to a factory that returns a `unique_ptr`. It covers plugins kept in a repository of their own as well, and holds free, static and submodule-level functions to the same rule as methods, which `hal::borrowed()` made fixable
   * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
   * removed the tests below `tests/python_binding`, which were neither referenced by the build nor by any workflow and called API that no longer exists

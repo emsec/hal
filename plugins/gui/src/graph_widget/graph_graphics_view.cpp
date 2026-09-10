@@ -262,7 +262,7 @@ namespace hal
             return;
 
         if ((event->modifiers() == mPanModifier && event->button() == Qt::LeftButton) ||
-                (event->button() == Qt::MidButton && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
+                (event->button() == Qt::MiddleButton && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
         {
             mMovePosition = event->pos();
         }
@@ -314,7 +314,7 @@ namespace hal
         }
 
         if ((event->buttons().testFlag(Qt::LeftButton) && event->modifiers() == mPanModifier) ||
-                (event->buttons().testFlag(Qt::MidButton) && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
+                (event->buttons().testFlag(Qt::MiddleButton) && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
         {
             QScrollBar* hBar  = horizontalScrollBar();
             QScrollBar* vBar  = verticalScrollBar();
@@ -437,7 +437,7 @@ namespace hal
     {
         if (QApplication::keyboardModifiers() == mZoomModifier)
         {
-            if (event->orientation() == Qt::Vertical)
+            if (event->angleDelta().y() != 0)
             {
                 qreal angle  = event->angleDelta().y();
                 qreal factor = qPow(mZoomFactorBase, angle);
@@ -694,15 +694,6 @@ namespace hal
                                             gSelectionRelay->selectedNetsVector());
         if (gPythonContext->pythonThread())
             gPythonContext->pythonThread()->unlock();
-    }
-
-    void GraphGraphicsView::updateMatrix(const int delta)
-    {
-        qreal scale = qPow(2.0, delta / 100.0);
-
-        QMatrix matrix;
-        matrix.scale(scale, scale);
-        setMatrix(matrix);
     }
 
     void GraphGraphicsView::toggleAntialiasing()
@@ -1560,15 +1551,19 @@ namespace hal
         for (const Module* m : modSet)
             if (m) modDepth.insertMulti(m->get_submodule_depth(),m);
 
-        QMapIterator<int,const Module*> it(modDepth);
-        it.toBack();
-        while (it.hasPrevious())
+        if (!modDepth.empty())
         {
-            it.previous();
-            const Module* m = it.value();
-            ActionFoldModule* act = new ActionFoldModule(m->get_id());
-            act->setContextId(context->id());
-            act->exec();
+            auto it = modDepth.constEnd();
+            for (;;)
+            {
+                --it;
+                const Module* m = it.value();
+                ActionFoldModule* act = new ActionFoldModule(m->get_id());
+                act->setContextId(context->id());
+                act->exec();
+                if (it == modDepth.constBegin())
+                    break;
+            }
         }
     }
 

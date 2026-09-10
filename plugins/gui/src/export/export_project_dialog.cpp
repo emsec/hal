@@ -9,7 +9,7 @@
 #include <QDir>
 #include <QDirIterator>
 #include <QFile>
-#include <JlCompress.h> // deps/quazip-1.3
+#include <JlCompress.h> // deps/quazip-1.5
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>

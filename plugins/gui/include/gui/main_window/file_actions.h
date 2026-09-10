@@ -26,7 +26,7 @@
 #pragma once
 #include "gui/action/action.h"
 #include <QString>
-
+#include <QWidget>
 
 namespace hal {
     class MainWindow;
