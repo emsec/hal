@@ -41,6 +41,133 @@ namespace hal
             }
         }
 
+        Result<std::unique_ptr<NetlistGraph>> NetlistGraph::from_gates(const std::vector<Gate*>& gates, const std::set<Gate*>& split_gates, const std::function<bool(const Net*)>& filter)
+        {
+            if (gates.empty())
+            {
+                return ERR("no gates given");
+            }
+
+            Netlist* nl = gates.front()->get_netlist();
+            std::unordered_set<Gate*> in_scope;
+            for (auto* g : gates)
+            {
+                if (g == nullptr)
+                {
+                    return ERR("gate is a nullptr");
+                }
+                if (g->get_netlist() != nl)
+                {
+                    return ERR("gates belong to different netlists");
+                }
+                if (!in_scope.insert(g).second)
+                {
+                    return ERR("gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " was given more than once");
+                }
+            }
+
+            auto graph = std::unique_ptr<NetlistGraph>(new NetlistGraph(nl));
+
+            // the primary node of a gate carries its outgoing edges, so it is the only node reachable by gate
+            u32 node_counter = 0;
+            for (auto* g : gates)
+            {
+                const u32 node                = node_counter++;
+                graph->m_gates_to_nodes[g]    = node;
+                graph->m_nodes_to_gates[node] = g;
+            }
+
+            // collect the edges before creating the shadow nodes, as a gate only gets one if it has incoming edges
+            // within the graph. Nets are sorted by ID so that the graph does not depend on the addresses of the nets.
+            std::vector<Net*> nets;
+            std::unordered_set<Net*> visited_nets;
+            for (auto* g : gates)
+            {
+                for (auto* n : g->get_fan_out_nets())
+                {
+                    if ((filter == nullptr || filter(n)) && visited_nets.insert(n).second)
+                    {
+                        nets.push_back(n);
+                    }
+                }
+            }
+            std::sort(nets.begin(), nets.end(), [](const Net* lhs, const Net* rhs) { return lhs->get_id() < rhs->get_id(); });
+
+            std::vector<std::pair<Gate*, Gate*>> edges;
+            std::unordered_set<Gate*> has_incoming_edge;
+            for (const auto* net : nets)
+            {
+                for (const auto* src_ep : net->get_sources())
+                {
+                    auto* src_gate = src_ep->get_gate();
+                    if (in_scope.find(src_gate) == in_scope.end())
+                    {
+                        continue;
+                    }
+
+                    for (const auto* dst_ep : net->get_destinations())
+                    {
+                        auto* dst_gate = dst_ep->get_gate();
+                        if (in_scope.find(dst_gate) == in_scope.end())
+                        {
+                            continue;
+                        }
+
+                        edges.push_back({src_gate, dst_gate});
+                        has_incoming_edge.insert(dst_gate);
+                    }
+                }
+            }
+
+            // a gate is only split if it actually has incoming edges, as an isolated shadow node would merely show up
+            // as a spurious connected component. Iterate `gates` rather than `split_gates` to keep node numbering
+            // independent of the addresses of the gates.
+            std::unordered_map<Gate*, u32> shadow_of;
+            for (auto* g : gates)
+            {
+                if (split_gates.find(g) == split_gates.end() || has_incoming_edge.find(g) == has_incoming_edge.end())
+                {
+                    continue;
+                }
+
+                const u32 shadow_node                       = node_counter++;
+                graph->m_nodes_to_gates[shadow_node]        = g;
+                graph->m_shadow_nodes_to_nodes[shadow_node] = graph->m_gates_to_nodes.at(g);
+                shadow_of[g]                                = shadow_node;
+            }
+
+            igraph_vector_int_t igraph_edges;
+            auto err = igraph_vector_int_init(&igraph_edges, 2 * edges.size());
+            if (err != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(err));
+            }
+
+            // an edge always leaves the primary node of its source and arrives at the shadow node of its destination if
+            // there is one, which turns a split gate into a pure source plus a pure sink
+            u32 edge_index = 0;
+            for (const auto& [src_gate, dst_gate] : edges)
+            {
+                const auto shadow_it               = shadow_of.find(dst_gate);
+                VECTOR(igraph_edges)[edge_index++] = graph->m_gates_to_nodes.at(src_gate);
+                VECTOR(igraph_edges)[edge_index++] = (shadow_it != shadow_of.end()) ? shadow_it->second : graph->m_gates_to_nodes.at(dst_gate);
+            }
+
+            graph->m_graph_ptr = &(graph->m_graph);
+            err                = igraph_create(graph->m_graph_ptr, &igraph_edges, node_counter, IGRAPH_DIRECTED);
+
+            igraph_vector_int_destroy(&igraph_edges);
+
+            if (err != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(err));
+            }
+
+            graph->m_graph_initialized = true;
+
+            return OK(std::move(graph));
+        }
+
         Result<std::unique_ptr<NetlistGraph>> NetlistGraph::from_netlist(Netlist* nl, bool create_dummy_vertices, const std::function<bool(const Net*)>& filter)
         {
             if (!nl)
@@ -498,6 +625,30 @@ namespace hal
             }
 
             return OK(res.get().front());
+        }
+
+        bool NetlistGraph::is_shadow_vertex(const u32 vertex) const
+        {
+            return m_shadow_nodes_to_nodes.find(vertex) != m_shadow_nodes_to_nodes.end();
+        }
+
+        Result<std::vector<u32>> NetlistGraph::get_all_vertices_from_gate(Gate* g) const
+        {
+            const auto node_it = m_gates_to_nodes.find(g);
+            if (node_it == m_gates_to_nodes.end())
+            {
+                return ERR("no vertex exists for gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
+            }
+
+            std::vector<u32> res = {node_it->second};
+            for (const auto& [shadow_node, node] : m_shadow_nodes_to_nodes)
+            {
+                if (node == node_it->second)
+                {
+                    res.push_back(shadow_node);
+                }
+            }
+            return OK(res);
         }
 
         u32 NetlistGraph::get_num_vertices(bool only_connected) const

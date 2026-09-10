@@ -1,4 +1,5 @@
 #include "hal_core/netlist/module.h"
+#include "hal_core/utilities/utils.h"
 
 #include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate.h"
@@ -199,26 +200,28 @@ namespace hal
             new_parent->set_parent_module(m_parent);
         }
 
-        m_parent->m_submodules_map.erase(m_id);
-        m_parent->m_submodules.erase(std::find(m_parent->m_submodules.begin(), m_parent->m_submodules.end(), this));
+        // detach completely before the old parent re-checks its nets: is_parent_module_of() walks up the parent
+        // chain, so the moved subtree must already read as external to the old parent
+        Module* old_parent = m_parent;
+        old_parent->m_submodules_map.erase(m_id);
+        utils::indexed_vector_erase(old_parent->m_submodules, old_parent->m_submodule_positions, this);
+        m_parent = new_parent;
 
         if (m_internal_manager->m_net_checks_enabled)
         {
             for (Net* net : get_nets(nullptr, true))
             {
-                if (auto res = m_parent->check_net(net, true); res.is_error())
+                if (auto res = old_parent->check_net(net, true); res.is_error())
                 {
                     log_error("module", "{}", res.get_error().get());
                 }
             }
         }
 
-        m_event_handler->notify(ModuleEvent::event::submodule_removed, m_parent, m_id);
-
-        m_parent = new_parent;
+        m_event_handler->notify(ModuleEvent::event::submodule_removed, old_parent, m_id);
 
         m_parent->m_submodules_map[m_id] = this;
-        m_parent->m_submodules.push_back(this);
+        utils::indexed_vector_push_back(m_parent->m_submodules, m_parent->m_submodule_positions, this);
 
         if (m_internal_manager->m_net_checks_enabled)
         {
@@ -243,18 +246,22 @@ namespace hal
         {
             return false;
         }
-        for (auto sm : m_submodules)
+        // walk up the parent chain of the given module rather than down this module's subtree: the chain is
+        // at most as long as the hierarchy is deep, whereas the subtree of a module near the root can hold most
+        // of the netlist, and this query runs once per endpoint when module nets are recomputed
+        const Module* parent = module->m_parent;
+        if (!recursive)
         {
-            if (sm == module)
-            {
-                return true;
-            }
-            else if (recursive && sm->is_parent_module_of(module, true))
-            {
-                return true;
-            }
+            return parent == this;
         }
-
+        while (parent != nullptr)
+        {
+            if (parent == this)
+            {
+                return true;
+            }
+            parent = parent->m_parent;
+        }
         return false;
     }
 
@@ -1024,9 +1031,9 @@ namespace hal
             return nullptr;
         }
 
-        if (const auto it = std::find_if(m_pins.begin(), m_pins.end(), [net](const std::unique_ptr<ModulePin>& pin) { return pin->get_net() == net; }); it != m_pins.end())
+        if (const auto it = m_pin_nets_map.find(net); it != m_pin_nets_map.end())
         {
-            return it->get();
+            return it->second;
         }
 
         log_debug("module", "could not get pin by net for module '{}' with ID {}: no pin belongs to net '{}' with ID {}", m_name, m_id, net->get_name(), net->get_id());
@@ -1790,6 +1797,7 @@ namespace hal
         m_pins.push_back(std::move(pin_owner));
         m_pins_map[id]        = pin;
         m_pin_names_map[name] = pin;
+        m_pin_nets_map[net]   = pin;
 
         // mark pin ID as used
         if (auto free_id_it = m_free_pin_ids.find(id); free_id_it != m_free_pin_ids.end())
@@ -1820,6 +1828,7 @@ namespace hal
         const std::string& del_name = pin->get_name();
         m_pins_map.erase(del_id);
         m_pin_names_map.erase(del_name);
+        m_pin_nets_map.erase(pin->get_net());
         m_pins.erase(std::find_if(m_pins.begin(), m_pins.end(), [pin](const auto& p) { return p.get() == pin; }));
 
         // free pin ID

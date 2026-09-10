@@ -4,7 +4,7 @@
 #include "dataflow_analysis/common/netlist_abstraction.h"
 #include "dataflow_analysis/processing/passes/group_by_control_signals.h"
 #include "dataflow_analysis/utils/parallel_for_each.h"
-#include "dataflow_analysis/utils/progress_printer.h"
+#include "hal_core/plugin_system/user_feedback.h"
 #include "dataflow_analysis/utils/timing_utils.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
@@ -127,12 +127,10 @@ namespace hal
 
                     // scan groups until all or done
                     float original_size = sorted_results.size();
-                    ProgressPrinter progress_bar;
-                    progress_bar.print_message_to_gui("dataflow: evaluate results …");
+                    user_feedback::ProgressPrinter progress_bar("dataflow: evaluate results …");
                     while (!sorted_results.empty())
                     {
-                        progress_bar.print_progress_to_stderr((original_size - sorted_results.size()) / original_size);
-                        progress_bar.print_progress_to_gui();
+                        progress_bar.report((original_size - sorted_results.size()) / original_size);
 
                         // precompute the group indices of each gate
                         std::unordered_map<u32, u32> max_group_size_of_gate;

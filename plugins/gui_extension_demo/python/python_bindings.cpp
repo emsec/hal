@@ -58,7 +58,7 @@ namespace hal
                 .value("Float",       PluginParameter::Float,       R"(Floating point number.)")
                 .value("Gate",        PluginParameter::Gate,        R"(Gate ID.)")
                 .value("Integer",     PluginParameter::Integer,     R"(Integer number.)")
-                .value("Module",      PluginParameter::Gate,        R"(Module ID.)")
+                .value("Module",      PluginParameter::Module,      R"(Module ID.)")
                 .value("NewFile",     PluginParameter::NewFile,     R"(New file name.)")
                 .value("PushButton",  PluginParameter::PushButton,  R"(Push Button.)")
                 .value("Label",       PluginParameter::Label,       R"(Text Label.)")

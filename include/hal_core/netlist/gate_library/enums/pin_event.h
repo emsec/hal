@@ -53,8 +53,15 @@ namespace hal
         PinDirChange,                   /// changed PinDirection attribute of pin (like input)
         PinReorder,                     /// moved pin to a new position within containing group
         PinDelete,                      /// pin deleted
-        GroupDelete                     /// group deleted
+        GroupDelete,                    /// group deleted
+        PinsReload                      /// all pins and pin groups of the module changed, re-read them from scratch
     };
+
+    /**
+     * The pin event is encoded in the four least significant bits of the associated event data,
+     * so there is room for at most 16 distinct values.
+     */
+    static_assert((u32)PinEvent::PinsReload <= 0xF, "PinEvent no longer fits into the 4 bit of associated data");
 
     template<>
     std::map<PinEvent, std::string> EnumStrings<PinEvent>::data;
@@ -70,6 +77,7 @@ namespace hal
     {
         friend bool pin_event_order(const PinChangedEvent& a, const PinChangedEvent& b);
         friend class PinChangedEventScope;
+        friend class PinChangedBulkScope;
 
         /**
          * Subclass for event stack.
@@ -84,9 +92,15 @@ namespace hal
             int m_count;
 
             /**
+             * Sticky stacks are owned by an enclosing PinChangedBulkScope and outlive the
+             * PinChangedEventScope that happened to create them.
+             */
+            bool m_sticky;
+
+            /**
              * Construct empty stack
              */
-            EventStack() : m_count(0) {;}
+            EventStack() : m_count(0), m_sticky(false) {;}
 
             /**
              * Attempts to send events, typically at the end of a pin-changing subroutine.
@@ -97,6 +111,7 @@ namespace hal
 
         static std::unordered_map<Module*,EventStack*> s_event_stack;
         static u64 s_order;
+        static int s_bulk_depth;
 
         Module* m_module;
         PinEvent m_event;
@@ -131,6 +146,13 @@ namespace hal
          * If this routine or any calling routine wants to collect events the event gets written on stack instead.
          */
         void send();
+
+        /**
+         * Drops all events collected for a module without sending them.
+         * Must be called when a module gets destroyed so that no event refers to a dangling module.
+         * @param m The module comprising pins and pin groups
+         */
+        static void discard(Module* m);
     };
 
     /**
@@ -156,6 +178,30 @@ namespace hal
          * Attempts to send all stacked events. Will do nothing if not issued from top-level scope.
          */
         void send_events();
+    };
+
+    /**
+     * By creating an instance of this class all pin events of a bulk operation get collected, no matter which
+     * module they belong to. Upon destruction of the outermost instance each affected module receives a single
+     * PinEvent::PinsReload event instead of the individual events.
+     *
+     * Bulk operations like assigning thousands of gates to a module emit several pin events per pin, which is
+     * both expensive to deliver and useless to a listener that has to re-read the whole module anyway.
+     * Interactive, single-step pin changes are not covered by a bulk scope and keep their fine grained events.
+     */
+    class PinChangedBulkScope
+    {
+    public:
+        /**
+         * Constructor for bulk scope instance incrementing bulk scope count
+         */
+        PinChangedBulkScope();
+
+        /**
+         * Destructor for bulk scope instance decrementing bulk scope count.
+         * Sends the coalesced events if this was the outermost bulk scope.
+         */
+        ~PinChangedBulkScope();
     };
 
     /**

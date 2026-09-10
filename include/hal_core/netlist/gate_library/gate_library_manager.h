@@ -105,5 +105,16 @@ namespace hal
          */
         NETLIST_API std::vector<GateLibrary*> get_gate_libraries();
 
+        /**
+         * Get the owning pointer to a gate library, so that it can be kept alive independently of the manager.
+         *
+         * Reloading a library replaces it in the manager and destroys the one loaded before, which would leave
+         * every netlist built against it pointing into freed memory. Holding the owning pointer prevents that.
+         *
+         * @param[in] gate_lib - The gate library.
+         * @returns The owning pointer, non-owning if the library is not managed here.
+         */
+        NETLIST_API std::shared_ptr<GateLibrary> get_owning(const GateLibrary* gate_lib);
+
     }    // namespace gate_library_manager
 }    // namespace hal

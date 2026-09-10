@@ -39,7 +39,10 @@ namespace hal
         {
             if (key.is_variable())
             {
-                this->variable.emplace(std::move(key), std::move(value));
+                // insert_or_assign, not emplace: emplace leaves an existing binding untouched, so
+                // setting a variable a second time did nothing and a loop that steps a state forward
+                // silently kept the value it started with.
+                this->variable.insert_or_assign(key.clone(), value.clone());
             }
         }
     }    // namespace SMT

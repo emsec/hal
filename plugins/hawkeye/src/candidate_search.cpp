@@ -5,6 +5,11 @@
 #include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/plugin_system/user_feedback.h"
+#include "hawkeye/cipher_candidate.h"
+
+#include <algorithm>
 
 namespace hal
 {
@@ -309,7 +314,7 @@ namespace hal
             }
         }    // namespace
 
-        Result<std::vector<RegisterCandidate>> detect_candidates(Netlist* nl, const std::vector<DetectionConfiguration>& configs, u32 min_state_size, const std::vector<Gate*>& start_ffs)
+        Result<std::vector<CipherCandidate>> CipherCandidate::detect(Netlist* nl, const std::vector<DetectionConfiguration>& configs, u32 min_state_size, const std::vector<Gate*>& start_ffs)
         {
             if (nl == nullptr)
             {
@@ -318,6 +323,8 @@ namespace hal
 
             log_info("hawkeye", "start detecting state register candidates...");
             auto start = std::chrono::system_clock::now();
+
+            const user_feedback::ProgressScope progress("hawkeye: detecting candidates …");
 
             const auto nl_dec = NetlistTraversalDecorator(*nl);
             std::map<Gate*, std::set<Gate*>> ff_map;
@@ -351,7 +358,20 @@ namespace hal
             }
             auto start_vertices = start_vertices_res.get();
 
-            std::set<RegisterCandidate> candidates;
+            // A candidate is keyed by the gate IDs of its registers, so that the same candidate found by several
+            // configurations is only kept once and the order does not depend on where the gates are allocated.
+            const auto sorted_ids = [](const std::set<Gate*>& gates) {
+                std::vector<u32> res;
+                res.reserve(gates.size());
+                for (const auto* g : gates)
+                {
+                    res.push_back(g->get_id());
+                }
+                std::sort(res.begin(), res.end());
+                return res;
+            };
+
+            std::map<std::pair<std::vector<u32>, std::vector<u32>>, CipherCandidate> unique_candidates;
             for (const auto& config : configs)
             {
                 auto tmp_graph_res = base_graph->copy();
@@ -605,15 +625,17 @@ namespace hal
 
                     if (gc.in_reg == gc.out_reg)
                     {
-                        candidates.insert(RegisterCandidate(out_reg));
+                        auto key = std::make_pair(sorted_ids(out_reg), sorted_ids(out_reg));
+                        unique_candidates.try_emplace(std::move(key), CipherCandidate(out_reg));
                     }
                     else
                     {
                         std::set<Gate*> in_reg;
                         if (auto in_reg_res = tmp_graph->get_gates_set_from_vertices(gc.in_reg); in_reg_res.is_ok())
                         {
-                            in_reg = in_reg_res.get();
-                            candidates.insert(RegisterCandidate(in_reg, out_reg));
+                            in_reg   = in_reg_res.get();
+                            auto key = std::make_pair(sorted_ids(in_reg), sorted_ids(out_reg));
+                            unique_candidates.try_emplace(std::move(key), CipherCandidate(in_reg, out_reg));
                         }
                         else
                         {
@@ -623,28 +645,56 @@ namespace hal
                 }
             }
 
-            std::set<const RegisterCandidate*> candidates_to_delete;
-            for (auto outer_it = candidates.begin(); outer_it != candidates.end(); outer_it++)
+            // order the candidates by size, as the reduction below relies on a candidate being visited before the
+            // smaller candidates that it may contain
+            std::vector<CipherCandidate> candidates;
+            candidates.reserve(unique_candidates.size());
+            for (auto& [_, candidate] : unique_candidates)
             {
-                for (auto inner_it = std::next(outer_it, 1); inner_it != candidates.end(); inner_it++)
+                candidates.push_back(std::move(candidate));
+            }
+            std::sort(candidates.begin(), candidates.end(), [](const CipherCandidate& lhs, const CipherCandidate& rhs) { return lhs < rhs; });
+
+            // Discard the candidates that are too small to hold a cryptographic state, as well as those whose output
+            // register fully contains that of another candidate, keeping the smaller and hence more specific one.
+            const auto by_id = [](const Gate* lhs, const Gate* rhs) { return lhs->get_id() < rhs->get_id(); };
+            std::vector<bool> discard(candidates.size(), false);
+            for (u32 i = 0; i < candidates.size(); i++)
+            {
+                if (candidates.at(i).get_size() < min_state_size)
                 {
-                    if (std::includes(outer_it->get_output_reg().begin(), outer_it->get_output_reg().end(), inner_it->get_output_reg().begin(), inner_it->get_output_reg().end()))
+                    discard[i] = true;
+                    continue;
+                }
+
+                const auto& outer = candidates.at(i).get_output_reg();
+                for (u32 j = i + 1; j < candidates.size(); j++)
+                {
+                    const auto& inner = candidates.at(j).get_output_reg();
+                    if (std::includes(outer.begin(), outer.end(), inner.begin(), inner.end(), by_id))
                     {
-                        candidates_to_delete.insert(&(*outer_it));
+                        discard[i] = true;
                         break;
                     }
                 }
-
-                if (outer_it->get_size() < min_state_size)
-                {
-                    candidates_to_delete.insert(&(*outer_it));
-                }
             }
 
-            for (const auto* c : candidates_to_delete)
+            u32 kept = 0;
+            for (u32 i = 0; i < candidates.size(); i++)
             {
-                candidates.erase(*c);
+                if (discard[i])
+                {
+                    continue;
+                }
+
+                // moving a candidate onto itself is not guaranteed to leave it intact
+                if (kept != i)
+                {
+                    candidates[kept] = std::move(candidates[i]);
+                }
+                kept++;
             }
+            candidates.resize(kept);
 
             auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
             if (candidates.size() == 1)
@@ -656,7 +706,7 @@ namespace hal
                 log_info("hawkeye", "detected {} state register candidates in {} seconds", candidates.size(), duration_in_seconds);
             }
 
-            return OK(std::vector<RegisterCandidate>(candidates.begin(), candidates.end()));
+            return OK(std::move(candidates));
         }
     }    // namespace hawkeye
 

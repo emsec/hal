@@ -717,6 +717,7 @@ namespace hal
         Module* m_parent;
         std::unordered_map<u32, Module*> m_submodules_map;
         std::vector<Module*> m_submodules;
+        std::unordered_map<Module*, u32> m_submodule_positions;    // position of every submodule in m_submodules, for constant-time removal
 
         // pins
         u32 m_next_pin_id;
@@ -733,6 +734,8 @@ namespace hal
         std::vector<std::unique_ptr<ModulePin>> m_pins;
         std::unordered_map<u32, ModulePin*> m_pins_map;
         std::unordered_map<std::string, ModulePin*> m_pin_names_map;
+        // the net of a pin never changes, so this index only needs to be maintained on pin creation and deletion
+        std::unordered_map<const Net*, ModulePin*> m_pin_nets_map;
         std::vector<std::unique_ptr<PinGroup<ModulePin>>> m_pin_groups;
         std::unordered_map<u32, PinGroup<ModulePin>*> m_pin_groups_map;
         std::unordered_map<std::string, PinGroup<ModulePin>*> m_pin_group_names_map;
@@ -741,6 +744,7 @@ namespace hal
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;
         std::vector<Gate*> m_gates;
+        std::unordered_map<Gate*, u32> m_gate_positions;    // position of every gate in m_gates, for constant-time removal
 
         std::unordered_set<Net*> m_nets;
         std::unordered_set<Net*> m_input_nets;

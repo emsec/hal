@@ -21,11 +21,13 @@ namespace hal {
         {PinEvent::PinRename, "PinRename"},
         {PinEvent::PinTypeChange, "PinTypeChange"},
         {PinEvent::PinDirChange, "PinDirChange"},
-        {PinEvent::PinDelete, "PinDelete"}
+        {PinEvent::PinDelete, "PinDelete"},
+        {PinEvent::PinsReload, "PinsReload"}
     };
 
     std::unordered_map<Module*,PinChangedEvent::EventStack*> PinChangedEvent::s_event_stack;
     u64 PinChangedEvent::s_order = 0;
+    int PinChangedEvent::s_bulk_depth = 0;
 
     PinChangedEvent::PinChangedEvent(Module* m, PinEvent pev, u32 id)
         : m_module(m), m_event(pev), m_id(id), m_order(++s_order)
@@ -36,13 +38,29 @@ namespace hal {
         auto it = s_event_stack.find(m_module);
         if (it == s_event_stack.end())
         {
-            // not stacked, send event immediately
-            m_module->get_event_handler()->notify(ModuleEvent::event::pin_changed, m_module, associated_data());
-            return;
+            if (s_bulk_depth <= 0)
+            {
+                // not stacked, send event immediately
+                m_module->get_event_handler()->notify(ModuleEvent::event::pin_changed, m_module, associated_data());
+                return;
+            }
+
+            // within a bulk scope every module collects its events, the bulk scope owns the stack
+            it              = s_event_stack.emplace(m_module, new EventStack).first;
+            it->second->m_sticky = true;
         }
 
         // put event on stack to emit it later
         it->second->push_back(*this);
+    }
+
+    void PinChangedEvent::discard(Module* m)
+    {
+        auto it = s_event_stack.find(m);
+        if (it == s_event_stack.end())
+            return;
+        delete it->second;
+        s_event_stack.erase(it);
     }
 
     Module* PinChangedEvent::get_module() const
@@ -76,7 +94,11 @@ namespace hal {
     {
         auto it = PinChangedEvent::s_event_stack.find(m);
         if (it == PinChangedEvent::s_event_stack.end())
-            PinChangedEvent::s_event_stack[m] = new PinChangedEvent::EventStack;
+        {
+            auto* stack      = new PinChangedEvent::EventStack;
+            stack->m_sticky  = (PinChangedEvent::s_bulk_depth > 0);
+            PinChangedEvent::s_event_stack[m] = stack;
+        }
         else
             ++it->second->m_count;
     }
@@ -84,10 +106,11 @@ namespace hal {
     PinChangedEventScope::~PinChangedEventScope()
     {
         auto it = PinChangedEvent::s_event_stack.find(m_module);
-        assert(it != PinChangedEvent::s_event_stack.end());
+        if (it == PinChangedEvent::s_event_stack.end())
+            return;    // module got destroyed within the scope, stack has been discarded
         if (it->second->m_count > 0)
             --it->second->m_count;
-        else
+        else if (!it->second->m_sticky)  // sticky stacks are owned by the enclosing bulk scope
         {
             delete it->second;
             PinChangedEvent::s_event_stack.erase(it);
@@ -97,9 +120,34 @@ namespace hal {
     void PinChangedEventScope::send_events()
     {
         auto it = PinChangedEvent::s_event_stack.find(m_module);
-        assert(it != PinChangedEvent::s_event_stack.end());
+        if (it == PinChangedEvent::s_event_stack.end())
+            return;    // module got destroyed within the scope, stack has been discarded
         if (it->second->m_count > 0)  // do not send yet
             return;
+        if (it->second->m_sticky)     // coalesced and sent by the enclosing bulk scope
+            return;
         it->second->send_events(m_module);
+    }
+
+    PinChangedBulkScope::PinChangedBulkScope()
+    {
+        ++PinChangedEvent::s_bulk_depth;
+    }
+
+    PinChangedBulkScope::~PinChangedBulkScope()
+    {
+        if (--PinChangedEvent::s_bulk_depth > 0)
+            return;
+
+        // hand the stacks over before sending, listeners are free to change pins from within their handler
+        std::unordered_map<Module*,PinChangedEvent::EventStack*> stacks;
+        stacks.swap(PinChangedEvent::s_event_stack);
+
+        for (auto& [module, stack] : stacks)
+        {
+            if (!stack->empty())
+                module->get_event_handler()->notify(ModuleEvent::event::pin_changed, module, PinChangedEvent(module, PinEvent::PinsReload, 0).associated_data());
+            delete stack;
+        }
     }
 }

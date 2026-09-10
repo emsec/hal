@@ -812,8 +812,12 @@ namespace hal
         bool load_gate_locations_from_data(const std::string& data_category = "", const std::pair<std::string, std::string>& data_identifiers = std::pair<std::string, std::string>());
 
     private:
-        /* stores the gate library */
-        const GateLibrary* m_gate_library;
+        /*
+         * Stores the gate library, owning it rather than pointing at it: reloading a library replaces it in the
+         * gate library manager and destroys the one that was loaded before, which would leave every gate of this
+         * netlist pointing at a freed gate type.
+         */
+        std::shared_ptr<const GateLibrary> m_gate_library;
 
         /* stores the netlist id */
         u32 m_netlist_id;
@@ -852,16 +856,19 @@ namespace hal
         std::unordered_map<u32, std::unique_ptr<Module>> m_modules_map;
         std::unordered_set<const Module*> m_modules_set;
         std::vector<Module*> m_modules;
+        std::unordered_map<Module*, u32> m_module_positions;    // position of every module in m_modules, for constant-time removal
 
         /* stores the nets */
         std::unordered_map<u32, std::unique_ptr<Net>> m_nets_map;
         std::unordered_set<const Net*> m_nets_set;
         std::vector<Net*> m_nets;
+        std::unordered_map<Net*, u32> m_net_positions;    // position of every net in m_nets, for constant-time removal
 
         /* stores the gates */
         std::unordered_map<u32, std::unique_ptr<Gate>> m_gates_map;
         std::unordered_set<const Gate*> m_gates_set;
         std::vector<Gate*> m_gates;
+        std::unordered_map<Gate*, u32> m_gate_positions;    // position of every gate in m_gates, for constant-time removal
 
         /* stores the groupings */
         std::unordered_map<u32, std::unique_ptr<Grouping>> m_groupings_map;

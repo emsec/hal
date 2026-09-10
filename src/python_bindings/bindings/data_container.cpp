@@ -4,7 +4,7 @@ namespace hal
 {
     void data_container_init(py::module& m)
     {
-        py::class_<DataContainer, RawPtrWrapper<DataContainer>> py_data_container(m, "DataContainer", R"(
+        py::class_<DataContainer> py_data_container(m, "DataContainer", R"(
             Container to hold data that is associated with an entity.
         )");
 

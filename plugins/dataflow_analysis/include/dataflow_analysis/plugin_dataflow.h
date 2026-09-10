@@ -114,14 +114,6 @@ namespace hal
          * @param[in] nets - Net IDs (ignored).
          */
         void execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
-
-        /**
-         * Register function to indicate work progress when busy
-         * @param pif Progress Indicator Function to register
-         */
-        virtual void register_progress_indicator(std::function<void(int, const std::string&)> pif) override;
-
-        static std::function<void(int, const std::string&)> s_progress_indicator_function;
     };
 
     /**

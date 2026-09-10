@@ -10,7 +10,7 @@ namespace hal
             A netlist decorator that operates on an existing subgraph of the associated netlist to, e.g., copy the subgraph as a new netlist object or compute a Boolean function describing the subgraph.
         )");
 
-        py_subgraph_netlist_decorator.def(py::init<const Netlist&>(), py::arg("netlist"), R"(
+        py_subgraph_netlist_decorator.def(py::init<const Netlist&>(), py::arg("netlist"), py::keep_alive<1, 2>(), R"(
             Construct new SubgraphNetlistDecorator object.
 
             :param hal_py.Netlist netlist: The netlist to operate on.
@@ -194,7 +194,7 @@ namespace hal
             },
             py::arg("subgraph_gates"),
             py::arg("subgraph_output"),
-            R"(
+            borrowed(), R"(
             Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
             This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
 
@@ -220,7 +220,7 @@ namespace hal
             },
             py::arg("subgraph_module"),
             py::arg("subgraph_output"),
-            R"(
+            borrowed(), R"(
             Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
             This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
 

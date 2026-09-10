@@ -17,7 +17,7 @@ namespace hal
             .value("SAVED", ProjectManager::ProjectStatus::SAVED, R"(Represents a saved project state.)")
             .export_values();
 
-        py::class_<ProjectDirectory, RawPtrWrapper<ProjectDirectory>> py_project_directory(m, "ProjectDirectory", R"(
+        py::class_<ProjectDirectory> py_project_directory(m, "ProjectDirectory", R"(
             Represents a project directory.
         )");
 

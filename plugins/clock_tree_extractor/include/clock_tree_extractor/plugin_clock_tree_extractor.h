@@ -4,6 +4,7 @@
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 // Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 // Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
+// Copyright (c) 2025-2026 Sascha Tommasone. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,25 +27,32 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
+
+#include <set>
+#include <string>
 
 namespace hal
 {
-    class UIPluginInterface;
-
-    namespace dataflow
+    class PLUGIN_API ClockTreeExtractorPlugin : public BasePluginInterface
     {
-        /**
-         * Suppresses layout updates of the GUI for as long as the object exists.
-         * This keeps a long-running analysis from triggering a re-layout on every single netlist change.
-         */
-        class GuiLayoutLocker
-        {
-            /** The GUI plugin whose layout updates are suppressed, `nullptr` if the GUI is not loaded. */
-            UIPluginInterface* mGuiPlugin;
+      public:
+        ClockTreeExtractorPlugin() = default;
 
-        public:
-            GuiLayoutLocker();
-            ~GuiLayoutLocker();
-        };
-    }    // namespace dataflow
-}    // namespace hal
+        ~ClockTreeExtractorPlugin() = default;
+
+        std::string get_name() const override;
+
+        std::string get_version() const override;
+
+        std::string get_description() const override;
+
+        std::set<std::string> get_dependencies() const override;
+
+        void initialize() override;
+
+        void on_load() override;
+
+        void on_unload() override;
+    };
+}  // namespace hal

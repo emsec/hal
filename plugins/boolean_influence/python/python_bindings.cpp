@@ -176,6 +176,7 @@ namespace hal
             py::arg("gates"),
             py::arg("start_net"),
             py::arg("num_evaluations") = 32000,
+            borrowed(),
             R"(
             Compute the Boolean influence of each input net of a subcircuit on one of its output nets.
             The Boolean function of the start net is built from the given gates, translated into C code, and then compiled and executed for speed.
@@ -204,6 +205,7 @@ namespace hal
             },
             py::arg("gate"),
             py::arg("num_evaluations") = 32000,
+            borrowed(),
             R"(
             Compute the Boolean influence of each net that drives the data input of the given flip-flop.
             The Boolean function of the data input net is built, translated into C code, and then compiled and executed for speed.
@@ -256,6 +258,7 @@ namespace hal
             },
             py::arg("gates"),
             py::arg("start_net"),
+            borrowed(),
             R"(
             Compute the exact Boolean influence of each input net of a subcircuit on one of its output nets.
             In contrast to ``get_boolean_influences_of_subcircuit``, the function is evaluated on every possible input assignment instead of a random sample.
@@ -282,6 +285,7 @@ namespace hal
                 }
             },
             py::arg("gate"),
+            borrowed(),
             R"(
             Compute the exact Boolean influence of each net that drives the data input of the given flip-flop.
             In contrast to ``get_boolean_influences_of_gate``, the function is evaluated on every possible input assignment instead of a random sample.

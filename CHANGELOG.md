@@ -2,60 +2,145 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-* fixed the GUI dropping an unrelated gate from the selection instead of the net itself when a selected net is deleted
-* fixed the GUI re-laying out its graph views once per gate while a preprocessing function invoked from a context menu deletes or replaces many of them
-* fixed the DOT viewer drawing the line break escapes of a node label verbatim instead of breaking the line, and drawing a red debug rectangle around any label that does not fit its node
-* reworked the API of `solve_fsm` into a single function that is set up through a `Configuration` object, which also selects between the SMT and the brute force approach
-* changed `solve_fsm` to report the value of each configured output of the FSM in each state, annotating the states of the DOT graph with it
-* changed `solve_fsm` to no longer write a file on its own, the DOT graph is now rendered by calling `generate_dot_graph` on the returned state transition graph
-* changed `solve_fsm` to no longer open the graph in the dot viewer behind the user's back, use `dot_viewer.load_dot_file` to display it
-* added `to_string` and `write_txt` to the state transition graph, printing the full conditions of all transitions together with a legend that maps the state bits, the outputs, and every net variable of a Boolean function back to the netlist
-* split the `solve_fsm` API into one header per struct, mirroring the layout of the dataflow analysis plugin
-* removed the debug output that `solve_fsm` printed to stdout on every run
-* fixed `solve_fsm` interpreting a user-provided initial state with the wrong bit order, which made the exploration start from a different state than the one requested
-* added tests for the `solve_fsm` plugin, which had none so far
-* added an optional gate scope to the preprocessing functions of `netlist_preprocessing` and `xilinx_toolbox`, restricting which gates may be modified or deleted and defaulting to the entire netlist
-* changed `split_shift_registers` and `unify_ff_outputs` to assign newly created gates to the module of the gate they replace instead of always to the top module
-* fixed `simplify_lut_inits` crashing on a LUT whose output pin is unconnected
-* fixed `split_luts` crashing on a `LUT6_2` that only uses one of its two output pins, which is the common case the function is meant to handle
-* fixed `remove_unconnected_gates` looping forever if a gate could not be deleted
-* fixed the documentation of `split_shift_registers`, which claimed that only `SRL16E` is supported although `SRLC32E` is handled as well
-* added context menu entries to the GUI for `remove_buffers`, `unify_ff_outputs`, `split_luts`, and `split_shift_registers`, each applicable to the current selection or to the entire netlist
-* added tests for the `xilinx_toolbox` plugin, which had none so far
-* added Python bindings for `ProgramOptions`, `ProgramArguments`, and `FacExtensionInterface`
-* added Python bindings for the remaining functions of `plugin_manager` and exposed the `initialize` and `silent` parameters of `get_plugin_instance`
-* added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
-* fixed crash when passing a `nullptr` pin to `Net::remove_source` or `Net::remove_destination`, which is also reachable from Python
-* changed `Net` and `Gate` to identify a pin by pointer identity instead of by value when looking up an endpoint
-* GUI
-  * fixed the GUI hanging for minutes when a module with many gates is selected, `ModuleModel` emitted a row insert signal per item while the model was already being reset, which made the attached filter proxy remap its rows once per item
-  * fixed the GUI stalling when a large module is unfolded, the tree views measured every row individually and shaped the text of each gate name just to learn how tall the row is
-  * changed the module elements tree to not rebuild itself twice per selection change
-* sped up the evaluation of Boolean functions, `BooleanFunction::operator<` compared two functions by building and comparing their reverse polish notation strings, which the symbolic state hit on every variable lookup
-* added the HAWKEYE S-box database to the build directory so that it is found at runtime, and clarified that `identify_sbox` returning an empty string means no match rather than an error
-* removed the tests below `tests/python_binding`, which were neither referenced by the build nor by any workflow and called API that no longer exists
-* updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
-* fixed bug in code and comment editor: avoid hang ups when RegExp-search returns zero-length matches
-* added information to GUI setting file so that widgets position and size from previous session gets restored
-* added option to focus on pin in pin context menu
-* changed default order to 'descending' when creating a pin group via Python command
-* module pin groups
-  * fixed bug in pin model which must not crash when deleting a non-empty pin group
-  * fixed bug by disallowing deletion of group comprising a single pin with same name
+<!--
+  Entries are grouped by what they affect: Core, Boolean functions, Python bindings, Plugins (one
+  sub-heading per plugin), GUI, and Build and dependencies. Add a new entry under the group it
+  belongs to rather than at the top of the section, and create the group if it is not there yet.
+-->
+* Core
+  * fixed crash when passing a `nullptr` pin to `Net::remove_source` or `Net::remove_destination`, which is also reachable from Python
+  * changed `Net` and `Gate` to identify a pin by pointer identity instead of by value when looking up an endpoint
+  * progress and layout reporting
+    * added `ProgressScope` and `LayoutLocker` to the core, which report progress and suppress layout updates through the user interface plugin looked up at runtime, replacing the copies of `GuiLayoutLocker` in the dataflow analysis and module identification plugins
+    * added `UIPluginInterface::set_progress` and `plugin_manager::get_ui_plugin`, so that a plugin no longer needs to provide a `GuiExtensionInterface` and register a callback just to report its progress
+    * moved the progress bar of the dataflow analysis into the core as `user_feedback::ProgressPrinter`, which reports to the terminal and to the user interface at once and brackets the operation like a `ProgressScope` does, so that a plugin reports its progress once and reaches whoever is watching
+    * fixed the progress overlay of the graph view staying up until it is clicked away after a dataflow analysis that was started from a script instead of from the plugin dialog, only the dialog reported the analysis as finished although both report its progress
+    * fixed the progress overlay of the graph view never being dismissed after a module identification run, the call reporting the analysis as finished was commented out
+    * fixed the progress overlay of the graph view being dismissed while the layout updates deferred during a dataflow analysis were still being applied, which left the graph view showing its spinner
+  * program options
+    * added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
+  * netlist traversal
+    * deprecated `netlist_utils::get_nets_at_pins` without a relocation: it is a per-pin lookup that `Gate::get_fan_in_net` and `get_fan_out_net` already provide, and it has no callers
+    * moved `get_common_inputs` from `netlist_utils` onto `NetlistTraversalDecorator` and deprecated the original
+    * added `NetlistTraversalDecorator::make_traversal_cache` and `get_gates` overloads that share results across calls through a `TraversalCache`. The traversal a cache answers for is sealed in at creation -- direction, match condition, stop rule and endpoint filters -- so a cache can never be consulted by a walk asking a different question, and everything that would make a cached answer depend on how a net was reached is excluded by construction
+    * fixed `get_next_sequential_gates`, `get_combinational_cone` and `get_next_sequential_gates_map` returning results with gates missing through a shared cache when the netlist contains a combinational cycle. Cache entries were written while a net was still being explored, and a cycle that led the walk back to such a net baked the partial answer into the entries of the nets in flight, so a later call reaching one of them through a side path was silently wrong -- which is how the Boolean influence plugin produced a wrong flip-flop dependency matrix on such netlists. An entry is now published only once its net, and any cycle it belongs to, is fully explored
+    * deprecated the four `netlist_utils::get_path` overloads, which despite the name return every gate of a cone rather than a path, in favour of `NetlistTraversalDecorator::get_gates` with a negated condition and `TraversalStop::at_mismatch`
+    * added `NetlistTraversalDecorator::get_gates`, the traversal that the other traversals of the decorator are special cases of. What separated them from one another was never what they collect but where they stop relative to it, which is now said out loud by a `TraversalStop` of `at_match`, `at_mismatch` or `never` rather than implied by a pair of booleans named one syllable apart. Direction is a `TraversalDirection` rather than a bare `bool successors`
+    * deprecated the three `netlist_utils::get_shortest_path` overloads in favour of `NetlistTraversalDecorator::get_shortest_path`, and `netlist_utils::get_ff_dependency_matrix` in favour of the one in the Boolean influence plugin, which also reports how strongly each flip-flop depends on another rather than only whether it does
+    * moved `get_gate_chain` and `get_complex_gate_chain` from `netlist_utils` onto `NetlistTraversalDecorator`, where the rest of the traversal lives and where a binding can keep the netlist alive for as long as Python refers to the gates it returns
+    * renamed `NetlistTraversalDecorator::get_next_combinational_gates` to `get_combinational_cone`, which is what it returns -- every combinational gate up to the sequential boundary, not a next layer of anything -- and removed the raw result-map cache parameter from it and from `get_next_sequential_gates`, whose reuse contract nothing enforced. Repeated traversals share results through a sealed `TraversalCache` instead. The Python bindings of both now also default `forbidden_pins` to an empty set like the C++ side always did
+    * added `NetlistTraversalDecorator::get_shortest_path` overloads that end at any gate of a module and that connect two modules, which existed only as free functions in `netlist_utils` before
+  * gate library
+    * fixed reloading a gate library destroying the library a netlist was built against, which silently replaced every gate type of that netlist. Gate libraries are now owned through a `shared_ptr` and outlive both the netlists and the Python handles that refer to them
 * Boolean functions
+  * added `to_string` to `SMT::QueryConfig`, `SMT::Model` and `SMT::SolverResult`, so that all four SMT types offer it the way `SMT::Constraint` already did instead of only an `operator<<`
+  * fixed the printed form of an `SMT::Model` starting with a stray comma, `{, A:5}` instead of `{A:5}`
+  * sped up `BooleanFunction::compute_truth_table` by evaluating 64 rows of the table at once instead of running a symbolic execution per row, which walks and simplifies the entire node list every single time. Applies to single-bit functions of bitwise operations whose variables are all part of the truth table, everything else keeps using the previous implementation
+  * raised the limit on the number of variables a truth table may be computed for from 10 to 20, see `BooleanFunction::MAX_TRUTH_TABLE_VARIABLES`
+  * sped up the evaluation of Boolean functions, `BooleanFunction::operator<` compared two functions by building and comparing their reverse polish notation strings, which the symbolic state hit on every variable lookup
   * fixed silent truncation of additions and subtractions, results of operands wider than 32 bit lost their upper bits
   * fixed `Eq` reporting a definite inequality when an undefined bit could have made the two values equal, it now reports an undefined result like the other comparisons do
   * added constant folding for the `Sdiv`, `Udiv`, `Srem` and `Urem` operations, which were not implemented and made evaluation of any function containing them fail, following the SMT-LIB definitions these operations are translated to
   * sped up evaluation with constant inputs by about 3x by folding the values directly instead of building a Boolean function per operation, which dominates the runtime of `compute_truth_table()` and thereby of the HAWKEYE S-box identification
+  * fixed `SMT::Solver::has_local_solver_for` testing `SolverCall::Binary` in both of its branches, so the branch for `SolverCall::Library` was unreachable and library availability always reported `false`
+  * fixed `SMT::SymbolicState::set` using `emplace`, which leaves an existing binding untouched, so setting a variable a second time did nothing and a loop stepping a symbolic state forward silently kept the value it started with
   * added simplification rules for the word level operations, which the single-bit simplification through ABC cannot reach: extensions to the width the value already has, nested extensions and slices, slices that fall into one half of a concatenation or into either part of an extension, unsigned comparisons against zero and the maximum, equality of a value with its own negation, and single bit equalities and selections
-* plugins
+* Python bindings
+  * fixed the four `boolean_influence` functions that return influences per net handing out the nets without keeping the netlist alive: they return dicts keyed by net, and nothing protected a borrowed object sitting in a dict key
+  * added a warning, once per function and process, when a deprecated `NetlistUtils` function is called from Python, naming its replacement. `[[deprecated]]` warns whoever compiles, and a script has no compiler
+  * fixed the deprecated `NetlistUtils` bindings handing out gates and nets without keeping the netlist alive for as long as Python refers to them, which they keep doing until they are removed
+  * fixed `netlist_preprocessing.create_multi_bit_gate_modules` and `create_nets_at_unconnected_pins` handing out modules and nets without keeping the netlist alive: the `hal::borrowed()` call policy ties each returned object to the netlist that owns it, which works on a module-level function as well, as the owner is found through the wrapper the caller necessarily passed in
+  * fixed the Python bindings handing out gates, nets, modules, endpoints and pins without tying them to the netlist that owns them, so that dropping the netlist left them pointing into freed memory. Reading 500 gates and 500 nets of a dropped netlist returned the wrong name and ID for 184 and 230 of them respectively, silently rather than by crashing
+  * fixed the decorators storing a reference to the netlist or net they were constructed from without keeping it alive
+  * fixed `NetlistGraph` never being freed by Python: its factories hand over ownership but it was bound with a non-owning holder, so every graph built from a netlist leaked, more than a gigabyte over 1500 graphs on a 3458 gate netlist
+  * fixed `GateLibrary::get_path` and the `path` property returning the name of the library instead of its path
+  * fixed `GuiApi::getSelectedModules` and `getSelectedItems` not tying the returned modules to the netlist
+  * added Python bindings for `NetlistGraph::from_gates`, `is_shadow_vertex`, and `get_all_vertices_from_gate`
+  * added Python bindings for `ProgramOptions`, `ProgramArguments`, and `FacExtensionInterface`
+  * added Python bindings for the remaining functions of `plugin_manager` and exposed the `initialize` and `silent` parameters of `get_plugin_instance`
+  * fixed `GateLibraryManager.get_gate_libraries` handing each library to Python as a newly constructed `shared_ptr` over a pointer it had only borrowed, which opened a second ownership group over a library the manager already owned and freed it twice
+  * fixed `Module.pins`, `Module.pin_groups` and `GateType.components` raising a `TypeError` whenever they were read, as each was bound to a method whose only parameter has a default in C++, which pybind11 exposes as a required argument that a property cannot pass
+  * added a test that calls every no-argument binding reachable from a small netlist and imports every plugin module, so that a binding which compiles and only fails when called is caught
+  * changed every binding that hands out a borrowed object to keep its **owner** alive rather than the object it was read from, through the new `hal::borrowed()` call policy that replaces `py::return_value_policy::reference_internal` at 241 places. The policy was only applied while a wrapper was being created, so whether an object was protected depended on which binding happened to hand it over first, and a module read from a gate was tied to that gate although the netlist is what owns it
+  * fixed `DataContainer`, `ProjectDirectory`, `hawkeye.DetectionConfiguration`, `hawkeye.SBoxDatabase` and `dataflow.Configuration` leaking every instance created from Python, as each was bound with a holder that never frees. `SBoxDatabase.from_file` leaked 25 KB per call, and `ProjectManager.get_project_directory` leaked a copy on every call, as pybind11 copies a returned reference by default
+  * fixed `SMT.SymbolicExecution.evaluate` raising a `TypeError` on every call: both overloads were bound directly, so they returned an unregistered `Result`, where every other binding in that file unwraps it
+  * fixed the `hal::borrowed()` call policy having no effect on any of the 55 properties it was given to, so those still handed out a borrowed object without keeping its owner alive. `def_property_readonly` builds the getter itself before it forwards the attributes that follow, so a call policy given to a property never reaches the function that performs the call
+  * fixed a Python interpreter that loaded the HAL plugins segfaulting on the way out unless it unloaded them again by hand, as the plugin libraries were closed while the parser and writer registries still held a factory function out of each of them
+  * added Python bindings for `SMT.SolverCall` and `SMT.Solver.to_smt2`, and the missing `Bitwuzla` value of `SMT.SolverType`. Without `SolverCall`, neither `QueryConfig.with_call` nor `Solver.has_local_solver_for` could be called at all although both were bound
+  * fixed three enum values that were bound to a different value of their own enum, which made them indistinguishable from Python: `GateTypeProperty.fifo` was bound to `ram`, `module_identification.CandidateType.addition_offset` to `addition`, and `gui_extension_demo.ParameterType.Module` to `Gate`
+  * added `to_string` and `__str__` to `SMT.QueryConfig`, `SMT.Constraint`, `SMT.Model` and `SMT.SolverResult`, printing any of them showed an object address before
+* Plugins
+  * Boolean influence
+    * fixed `get_ff_dependency_matrix` dereferencing an uninitialized pointer on every call, which segfaulted before it returned anything. The cache it passes on was never initialized, and a pointer that is not null passed the callee's check for one
+  * HAWKEYE
+    * replaced `RegisterCandidate`, `RoundCandidate` and the free S-box functions of HAWKEYE with a single `CipherCandidate` that analyzes a candidate in place instead of copying it into a netlist of its own, so its gates and nets are the ones of the netlist under analysis and no longer have to be mapped back
+    * added `CipherCandidate::identify_sboxes` that identifies every S-box of a candidate at once and annotates it with the outcome, grouping the variants the search produces of one and the same S-box and leaving a group as soon as one of them matches
+    * added `CipherCandidate::create_modules` that writes a candidate back into the netlist as a module hierarchy of the candidate, its state register, and one submodule per identified S-box
+    * fixed the candidates of HAWKEYE being ordered by the addresses of their gates, which made the result of `detect_candidates` depend on where the gates of the netlist happened to be allocated and hence differ between runs of the same binary. Two candidates sharing size and input register could also compare equal and silently discard one another, which cost an entire candidate and the S-box identification that depended on it
+    * fixed `RegisterCandidate::operator==` never reporting a round-based candidate as equal to itself
+    * fixed the S-box search of HAWKEYE calling `std::includes` on the unsorted result of `get_unique_predecessors`, which decided by an order that is not guaranteed which inverters it drops from an S-box. This made the number of located S-boxes differ between runs of the same binary, 476 to 1508 across three runs of a netlist that holds 16
+    * fixed the round function of HAWKEYE walking every path from each flip-flop of the register rather than every gate, which is exponential in a cone of logic that reconverges. Computing it for a 514 flip-flop candidate took 179 seconds and now takes 0.21 seconds with an unchanged result
+    * fixed the linear independence check of HAWKEYE shifting by more than the width of its type for S-boxes of more than 6 bits, which is undefined and made the check operate on garbage for 7-bit and 8-bit S-boxes
+    * sped up the S-box identification of HAWKEYE by tabulating each output over the state and the control inputs together and reading the assignment of the control inputs out of that one table, instead of substituting the control values and tabulating anew for each of up to 256 assignments
+    * changed the round function of a HAWKEYE candidate to determine which flip-flops each of its gates depends on only when the S-box search asks for it, as that is the most expensive part of analyzing a candidate and nothing else reads the result
+    * fixed `SBoxDatabase::lookup` never terminating for an 8-bit S-box that is not contained in the database, as it counted the constant it adds to the outputs in a `u8`, which never reaches 256
+    * fixed `SBoxDatabase::store` reporting a failure although it had written the database, and made it report one if the file cannot be opened
+    * added a limit to the canonical form search behind an S-box lookup, which finishes quickly for a real S-box but does not terminate in reasonable time for a table that is close to linear, such as two 4-bit S-boxes glued into an 8-bit one by the surrounding logic
+    * added the HAWKEYE S-box database to the build directory so that it is found at runtime, and clarified that `identify_sbox` returning an empty string means no match rather than an error
+  * graph algorithm
+    * added `NetlistGraph::from_gates` that builds a graph from a subset of the gates of a netlist, optionally representing a gate by a primary and a shadow vertex so that feedback through it does not close a cycle
+  * dataflow analysis
+    * fixed broken initialization of DANA plugin when starting via CLI
+  * FSM solver
+    * reworked the API of `solve_fsm` into a single function that is set up through a `Configuration` object, which also selects between the SMT and the brute force approach
+    * changed `solve_fsm` to report the value of each configured output of the FSM in each state, annotating the states of the DOT graph with it
+    * changed `solve_fsm` to no longer write a file on its own, the DOT graph is now rendered by calling `generate_dot_graph` on the returned state transition graph
+    * changed `solve_fsm` to no longer open the graph in the dot viewer behind the user's back, use `dot_viewer.load_dot_file` to display it
+    * added `to_string` and `write_txt` to the state transition graph, printing the full conditions of all transitions together with a legend that maps the state bits, the outputs, and every net variable of a Boolean function back to the netlist
+    * split the `solve_fsm` API into one header per struct, mirroring the layout of the dataflow analysis plugin
+    * removed the debug output that `solve_fsm` printed to stdout on every run
+    * fixed `solve_fsm` interpreting a user-provided initial state with the wrong bit order, which made the exploration start from a different state than the one requested
+    * added tests for the `solve_fsm` plugin, which had none so far
+  * netlist preprocessing
+    * fixed `remove_redundant_gates` treating two flip-flops as duplicates although they start out at different values, as the fingerprint it groups them by covers the gate type and the fan-in but not the initial value, and flip-flops are merged on that fingerprint alone without the equivalence check that combinational gates get. This affects 11 of the 13 flip-flop types of the Xilinx UNISIM library, all of which carry an `INIT` value
+    * added an optional gate scope to the preprocessing functions of `netlist_preprocessing` and `xilinx_toolbox`, restricting which gates may be modified or deleted and defaulting to the entire netlist
+    * changed `split_shift_registers` and `unify_ff_outputs` to assign newly created gates to the module of the gate they replace instead of always to the top module
+    * fixed `simplify_lut_inits` crashing on a LUT whose output pin is unconnected
+    * fixed `remove_unconnected_gates` looping forever if a gate could not be deleted
+  * Xilinx toolbox
+    * fixed `split_luts` crashing on a `LUT6_2` that only uses one of its two output pins, which is the common case the function is meant to handle
+    * fixed the documentation of `split_shift_registers`, which claimed that only `SRL16E` is supported although `SRLC32E` is handled as well
+    * added tests for the `xilinx_toolbox` plugin, which had none so far
+  * bit-order propagation
+    * changed the interface to speak in a `BitOrder`, which is the order of one module pin group, and a `BitOrderResult`, which is what a propagation reports, in place of a map from pairs of module and pin group to a map from net to index. A bit order is now an object rather than a container, so Python can be given one without losing track of the netlist it belongs to, and a result iterates by module and pin group ID rather than by the addresses they happen to sit at
+    * added tests for the plugin, which had none
+    * fixed bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
   * simulation
     * added feature, selecting a waveform in viewer selects net in graph view as well
     * fixed bug in waveform viewer, make sure that deleting a controller causes closing the tab
-  * added 'hover over node' feature in dot viewer
-  * fixed broken initialization of DANA plugin when starting via CLI
+    * fixed the documentation of `NetlistSimulatorController::initialize`, which described the behaviour of the legacy `NetlistSimulator`: it claimed that no gates or clocks may be added afterwards and that `simulate` calls it automatically, neither of which holds since its body became empty
+  * dot viewer
+    * added 'hover over node' feature in dot viewer
+    * fixed the DOT viewer drawing the line break escapes of a node label verbatim instead of breaking the line, and drawing a red debug rectangle around any label that does not fit its node
+* GUI
+  * fixed the GUI hanging for minutes when a module with many gates is selected, `ModuleModel` emitted a row insert signal per item while the model was already being reset, which made the attached filter proxy remap its rows once per item
+  * fixed the GUI stalling when a large module is unfolded, the tree views measured every row individually and shaped the text of each gate name just to learn how tall the row is
+  * changed the module elements tree to not rebuild itself twice per selection change
+  * fixed bug in code and comment editor: avoid hang ups when RegExp-search returns zero-length matches
+  * added information to GUI setting file so that widgets position and size from previous session gets restored
+  * added option to focus on pin in pin context menu
+  * changed default order to 'descending' when creating a pin group via Python command
   * changed behavior of GUI plugin manager to keep only those plugins loaded which are requested by user
-  * fixed bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
+  * fixed the GUI dropping an unrelated gate from the selection instead of the net itself when a selected net is deleted
+  * fixed the GUI re-laying out its graph views once per gate while a preprocessing function invoked from a context menu deletes or replaces many of them
+  * added context menu entries to the GUI for `remove_buffers`, `unify_ff_outputs`, `split_luts`, and `split_shift_registers`, each applicable to the current selection or to the entire netlist
+  * module pin groups
+    * fixed bug in pin model which must not crash when deleting a non-empty pin group
+    * fixed bug by disallowing deletion of group comprising a single pin with same name
+* Build and dependencies
+  * added a test that checks the Python bindings never hand out a borrowed pointer without keeping its owner alive, and never give a class bound with a non-owning holder to a factory that returns a `unique_ptr`. It covers plugins kept in a repository of their own as well, and holds free, static and submodule-level functions to the same rule as methods, which `hal::borrowed()` made fixable
+  * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
+  * removed the tests below `tests/python_binding`, which were neither referenced by the build nor by any workflow and called API that no longer exists
 
 ## [4.5.0](v4.5.0) - 2025-09-23 12:00:00+02:00 (urgency: medium)
 * plugins

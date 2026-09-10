@@ -108,5 +108,14 @@ namespace hal
          * @param[in] enable Enable lock on `true`, disable on `false`
          */
         void set_layout_locker(bool enable) override;
+
+        /**
+         * Call to report the progress of a long-running operation to the user.
+         *
+         * Forwards to the progress overlay of the graph view. A percentage of 100 dismisses the overlay again.
+         * @param[in] percent - The progress in percent, where 100 means done.
+         * @param[in] message - The message to display alongside the progress.
+         */
+        void set_progress(int percent, const std::string& message) override;
     };
 }    // namespace hal

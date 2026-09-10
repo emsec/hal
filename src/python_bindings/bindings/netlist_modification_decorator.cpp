@@ -8,7 +8,7 @@ namespace hal
             A netlist decorator that provides functionality to modify the associated netlist.
         )");
 
-        py_netlist_modification_decorator.def(py::init<Netlist&>(), py::arg("netlist"), R"(
+        py_netlist_modification_decorator.def(py::init<Netlist&>(), py::arg("netlist"), py::keep_alive<1, 2>(), R"(
             Construct new NetlistModificationDecorator object.
 
             :param hal_py.Netlist netlist: The netlist to operate on.
@@ -55,7 +55,7 @@ namespace hal
             py::arg("gate"),
             py::arg("target_type"),
             py::arg("pin_map"),
-            R"(
+            borrowed(), R"(
             Replace the given gate with a gate of the specified gate type.
             A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs.
             A pin can be omitted if no connection at that pin is desired.
@@ -85,7 +85,7 @@ namespace hal
             py::arg("src_pin"),
             py::arg("dst_gate"),
             py::arg("dst_pin"),
-            R"(
+            borrowed(), R"(
             Connects two gates through the specified pins.
             If both pins are not yet connected to a net, a new net is created to connect both pins.
             If one of the pins is already connected to a net, that net is connected to the other pin.
@@ -115,7 +115,7 @@ namespace hal
             },
             py::arg("master_net"),
             py::arg("slave_net"),
-            R"(
+            borrowed(), R"(
             Connects (and thereby merges) two nets.
             All properties of the slave net are transfered to the master net and the slave net is subsequently deleted.
 

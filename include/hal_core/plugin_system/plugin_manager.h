@@ -39,6 +39,8 @@
 
 namespace hal
 {
+    class UIPluginInterface;
+
     /**
      * The plugin manager takes care of loading and unloading plugins at runtime.
      *
@@ -145,6 +147,16 @@ namespace hal
         {
             return dynamic_cast<T*>(get_plugin_instance(plugin_name, initialize));
         }
+
+        /**
+         * Gets the user interface plugin, i.e., the first loaded plugin implementing the `UIPluginInterface`.
+         *
+         * Does not initialize the plugin and does not log an error if no such plugin is loaded, as running without a
+         * user interface is the normal case for scripts and for the command line.
+         *
+         * @returns The user interface plugin, or `nullptr` if none is loaded.
+         */
+        UIPluginInterface* get_ui_plugin();
 
         /**
          * Get first plugin extension of given type T.

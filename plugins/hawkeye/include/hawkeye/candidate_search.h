@@ -24,30 +24,27 @@
 // SOFTWARE.
 
 /**
- * @file candidate_search.h 
- * @brief This file contains the function for HAWKEYE's candidate search as well as a struct for configuring the search algorithm.
+ * @file candidate_search.h
+ * @brief This file contains the struct for configuring HAWKEYE's candidate search, see `CipherCandidate::detect`.
  */
 
 #pragma once
 
 #include "hal_core/utilities/enums.h"
-#include "hal_core/utilities/result.h"
-#include "hawkeye/register_candidate.h"
 
+#include <map>
+#include <string>
 #include <vector>
 
 namespace hal
 {
-    class Netlist;
-    class Gate;
-
     namespace hawkeye
     {
         /**
          * @struct DetectionConfiguration
-         * @brief Configuration to set up the register candidate search.
+         * @brief Configuration to set up the candidate search.
          * 
-         * This struct holds important parameters that configure the candidate search of HAWKEYE.
+         * This struct holds important parameters that configure the candidate search of HAWKEYE, see `CipherCandidate::detect`.
          */
         struct DetectionConfiguration
         {
@@ -110,28 +107,10 @@ namespace hal
             u32 timeout = 10;
 
             /**
-             * @brief Minimum number of flip-flops for a register candidate to be created.
+             * @brief Minimum number of flip-flops of a register for a candidate to be created from it.
              */
             u32 min_register_size = 10;
         };
-
-        /**
-         * @brief Attempt to locate candidates for symmetric cryptographic implementations within a gate-level netlist.
-         * 
-         * Search operates only on an abstraction of the netlist that contains only flip-flops as nodes and connections through combinational logic as edges.
-         * The algorithm computes the k-neighborhood of each flip-flop for `k = 1, ..., config.timeout` and stops when the neighborhood size saturates.
-         * Depending on the `config`, additional criteria are used to narrow down the search space, see `DetectionConfiguration::Control` and `DetectionConfiguration::Components` for details.
-         * When the neighborhood size saturates, a register candidate is created if the last neighborhood size is larger than `config.min_register_size`.
-         * After the candidates have been identified, they are reduced further to produce the final set of register candidates.
-         * To this end, large candidates that fully contain a smaller candidate and candidates that are smaller than `min_state_size` are discarded.
-         * 
-         * @param[in] nl - The netlist to operate on.
-         * @param[in] configs - The configurations of the detection approaches to be executed one after another on each start flip-flop.
-         * @param[in] min_state_size - The minimum size of a register candidate to be considered a cryptographic state register. Defaults to `40`.
-         * @param[in] start_ffs - The flip-flops to analyze. Defaults to an empty vector, i.e., all flip-flops in the netlist will be analyzed.
-         * @returns Ok() and a vector of candidates on success, an error otherwise.
-         */
-        Result<std::vector<RegisterCandidate>> detect_candidates(Netlist* nl, const std::vector<DetectionConfiguration>& configs, u32 min_state_size = 40, const std::vector<Gate*>& start_ffs = {});
     }    // namespace hawkeye
 
     template<>
