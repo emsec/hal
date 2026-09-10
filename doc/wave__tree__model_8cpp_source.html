@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -98,13 +98,13 @@ $(document).ready(function(){initNavTree('wave__tree__model_8cpp_source.html',''
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="wave__graphics__canvas_8h.html">waveform_viewer/wave_graphics_canvas.h</a>&quot;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="json__write__document_8h.html">hal_core/utilities/json_write_document.h</a>&quot;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;rapidjson/document.h&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;rapidjson/reader.h&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;rapidjson/filereadstream.h&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QApplication&gt;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QFont&gt;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;QMimeData&gt;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;QAction&gt;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;rapidjson/filereadstream.h&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QApplication&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QFont&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QMimeData&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;QAction&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;QRandomGenerator&gt;</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a> {</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
@@ -560,7 +560,7 @@ $(document).ready(function(){initNavTree('wave__tree__model_8cpp_source.html',''
 <div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_wave_tree_model.html#a3facefdfdf8c24c63fb7fc8492965d61">index</a>.<a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html#column">column</a>() != 2) <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>();</div>
 <div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;            <span class="keywordtype">int</span> v = valueAtCursor(<a class="code" href="classhal_1_1_wave_tree_model.html#a3facefdfdf8c24c63fb7fc8492965d61">index</a>);</div>
 <div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;            <span class="keywordflow">if</span> (v == <a class="code" href="classhal_1_1_saleae_data_tuple.html#a09e78b8491458ee5978fe8f3c3b6eddc">SaleaeDataTuple::sReadError</a>)</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;                <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html#fromRgb">QColor::fromRgb</a>(255,255,qrand()%256);</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;                <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html#fromRgb">QColor::fromRgb</a>(255,255,<a class="codeRef" href="https://doc.qt.io/qt-5/qrandomgenerator.html#global">QRandomGenerator::global</a>()-&gt;bounded(256));</div>
 <div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;            <span class="keywordflow">if</span> (v&lt;-1) v=-1;</div>
 <div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;            <span class="keywordflow">if</span> (v&gt;1) v=1;</div>
 <div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;            <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(<a class="code" href="classhal_1_1_netlist_simulator_controller_plugin.html#a4865bea1883c0191058fb54ed3667c35">NetlistSimulatorControllerPlugin::sSimulationSettings</a>-&gt;color((<a class="code" href="classhal_1_1_simulation_settings.html#aea6d64b3d45d254fff239aff2d1207d9">SimulationSettings::ColorSetting</a>) (<a class="code" href="classhal_1_1_simulation_settings.html#aea6d64b3d45d254fff239aff2d1207d9ad51121b00ef82e734b8c8242c1978b44">SimulationSettings::Value0</a>+v)));</div>
@@ -1465,6 +1465,7 @@ $(document).ready(function(){initNavTree('wave__tree__model_8cpp_source.html',''
 <div class="ttc" id="aqobject_html_connect"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect</a></div><div class="ttdeci">QMetaObject::Connection connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type)</div></div>
 <div class="ttc" id="aqobject_html_deleteLater"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#deleteLater">QObject::deleteLater</a></div><div class="ttdeci">void deleteLater()</div></div>
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
+<div class="ttc" id="aqrandomgenerator_html_global"><div class="ttname"><a href="https://doc.qt.io/qt-5/qrandomgenerator.html#global">QRandomGenerator::global</a></div><div class="ttdeci">QRandomGenerator * global()</div></div>
 <div class="ttc" id="aqset_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html">QSet&lt; u32 &gt;</a></div></div>
 <div class="ttc" id="aqset_html_contains"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains</a></div><div class="ttdeci">bool contains(const T &amp;value) const const</div></div>
 <div class="ttc" id="aqset_html_insert"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert</a></div><div class="ttdeci">QSet::iterator insert(const T &amp;value)</div></div>

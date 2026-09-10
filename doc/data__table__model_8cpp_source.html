@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -212,7 +212,7 @@ $(document).ready(function(){initNavTree('data__table__model_8cpp_source.html','
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            mDataEntries.append(e);</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        }</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="comment">// The data is sorted by category first and then by key. However the category generic is always displayed first.</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        qSort(mDataEntries.begin(), mDataEntries.end(), </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        std::sort(mDataEntries.begin(), mDataEntries.end(),</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="structhal_1_1_data_table_model_1_1_data_entry.html">DataEntry</a> a, <span class="keyword">const</span> <a class="code" href="structhal_1_1_data_table_model_1_1_data_entry.html">DataEntry</a> b) -&gt; <span class="keywordtype">bool</span> </div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                { </div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
@@ -235,7 +235,7 @@ $(document).ready(function(){initNavTree('data__table__model_8cpp_source.html','
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordtype">int</span> rowIdx = 0;</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">const</span> DataEntry&amp; entry : mDataEntries)</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        {</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            mEntryToRowStyle[<a class="codeRef" href="https://doc.qt.io/qt-5/qpair.html">QPair</a>(entry.category, entry.key)] = getRowStyleByEntry(entry, rowIdx);</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            mEntryToRowStyle[<a class="codeRef" href="https://doc.qt.io/qt-5/qpair.html">QPair&lt;QString,QString&gt;</a>(entry.category, entry.key)] = getRowStyleByEntry(entry, rowIdx);</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            rowIdx++;</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        }</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>

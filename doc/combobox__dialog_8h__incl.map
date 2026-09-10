@@ -1,8 +1,9 @@
 <map id="plugins/gui/include/gui/input_dialog/combobox_dialog.h" name="plugins/gui/include/gui/input_dialog/combobox_dialog.h">
-<area shape="rect" id="node1" title=" " alt="" coords="172,5,375,61"/>
+<area shape="rect" id="node1" title=" " alt="" coords="227,5,429,61"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,109,80,136"/>
 <area shape="rect" id="node3" title=" " alt="" coords="105,109,215,136"/>
 <area shape="rect" id="node4" title=" " alt="" coords="240,109,307,136"/>
 <area shape="rect" id="node5" title=" " alt="" coords="331,109,437,136"/>
 <area shape="rect" id="node6" title=" " alt="" coords="462,109,565,136"/>
+<area shape="rect" id="node7" title=" " alt="" coords="589,109,683,136"/>
 </map>

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -88,14 +88,14 @@ $(document).ready(function(){initNavTree('splitter__anchor_8cpp_source.html','')
 <div class="title">splitter_anchor.cpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="splitter__anchor_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="splitter__anchor_8h.html">gui/docking_system/splitter_anchor.h</a>&quot;</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__frame_8h.html">gui/content_frame/content_frame.h</a>&quot;</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__widget_8h.html">gui/content_widget/content_widget.h</a>&quot;</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__drag__relay_8h.html">gui/docking_system/content_drag_relay.h</a>&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="dock__bar_8h.html">gui/docking_system/dock_bar.h</a>&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="splitter_8h.html">gui/splitter/splitter.h</a>&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;QApplication&gt;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;QDesktopWidget&gt;</span></div>
+<a href="splitter__anchor_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__frame_8h.html">gui/content_frame/content_frame.h</a>&quot;</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__widget_8h.html">gui/content_widget/content_widget.h</a>&quot;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__drag__relay_8h.html">gui/docking_system/content_drag_relay.h</a>&quot;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="dock__bar_8h.html">gui/docking_system/dock_bar.h</a>&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="splitter__anchor_8h.html">gui/docking_system/splitter_anchor.h</a>&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="hal__qt__compat_8h.html">gui/hal_qt_compat/hal_qt_compat.h</a>&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="splitter_8h.html">gui/splitter/splitter.h</a>&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;QApplication&gt;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;QStyle&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
@@ -141,7 +141,7 @@ $(document).ready(function(){initNavTree('splitter__anchor_8cpp_source.html','')
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        widget-&gt;<a class="code" href="classhal_1_1_widget.html#a4c519723792aa2638567d9cc73121853">hide</a>();</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        widget-&gt;<a class="code" href="classhal_1_1_widget.html#a42086b09f344735dd189aa4f388e6246">setParent</a>(<span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="code" href="classhal_1_1_content_frame.html">ContentFrame</a>* frame = <span class="keyword">new</span> <a class="code" href="classhal_1_1_content_frame.html">ContentFrame</a>(widget, <span class="keyword">false</span>, <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        frame-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setGeometry-1">setGeometry</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstyle.html#alignedRect">QStyle::alignedRect</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#LayoutDirection-enum">Qt::LeftToRight</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignCenter</a>, frame-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#size-prop">size</a>(), qApp-&gt;desktop()-&gt;availableGeometry()));</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        frame-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setGeometry-1">setGeometry</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstyle.html#alignedRect">QStyle::alignedRect</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#LayoutDirection-enum">Qt::LeftToRight</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignCenter</a>, frame-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#size-prop">size</a>(), <a class="code" href="namespacehal_1_1_qt_compat.html#a4d474b2fbbfee7f0e061ed198a0f1bcf">QtCompat::desktopAvailableGeometry</a>()));</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        frame-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#show">show</a>();</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">if</span> (mSplitter-&gt;<a class="code" href="classhal_1_1_splitter.html#a383657b0b717428f497ede0bda4b56be">unused</a>())</div>
@@ -247,7 +247,9 @@ $(document).ready(function(){initNavTree('splitter__anchor_8cpp_source.html','')
 <div class="ttc" id="acontent__frame_8h_html"><div class="ttname"><a href="content__frame_8h.html">content_frame.h</a></div></div>
 <div class="ttc" id="acontent__widget_8h_html"><div class="ttname"><a href="content__widget_8h.html">content_widget.h</a></div></div>
 <div class="ttc" id="adock__bar_8h_html"><div class="ttname"><a href="dock__bar_8h.html">dock_bar.h</a></div></div>
+<div class="ttc" id="ahal__qt__compat_8h_html"><div class="ttname"><a href="hal__qt__compat_8h.html">hal_qt_compat.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_content_layout_html_ad42c41e586a705a081ce0dee0578377c"><div class="ttname"><a href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377c">hal::ContentLayout::Position</a></div><div class="ttdeci">Position</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00044">content_anchor.h:44</a></div></div>
+<div class="ttc" id="anamespacehal_1_1_qt_compat_html_a4d474b2fbbfee7f0e061ed198a0f1bcf"><div class="ttname"><a href="namespacehal_1_1_qt_compat.html#a4d474b2fbbfee7f0e061ed198a0f1bcf">hal::QtCompat::desktopAvailableGeometry</a></div><div class="ttdeci">QRect desktopAvailableGeometry()</div><div class="ttdef"><b>Definition:</b> <a href="hal__qt__compat_8cpp_source.html#l00010">hal_qt_compat.cpp:10</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01972">netlist_preprocessing.cpp:1972</a></div></div>
 <div class="ttc" id="aqobject_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div></div>

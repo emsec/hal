@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -89,9 +89,9 @@ $(document).ready(function(){initNavTree('geometry_8cpp_source.html',''); initRe
 </div><!--header-->
 <div class="contents">
 <a href="geometry_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="geometry_8h.html">gui/gui_utils/geometry.h</a>&quot;</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;QApplication&gt;</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;QDesktopWidget&gt;</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="hal__qt__compat_8h.html">gui/hal_qt_compat/hal_qt_compat.h</a>&quot;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;QApplication&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;QWidget&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
@@ -100,7 +100,7 @@ $(document).ready(function(){initNavTree('geometry_8cpp_source.html',''); initRe
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    {</div>
 <div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="group__gui.html#ga284a43cae48443fa22ac672a8b6ea8a0">   11</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="group__gui.html#ga284a43cae48443fa22ac672a8b6ea8a0">ensureOnScreen</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* w)</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            <span class="keyword">auto</span> boundingRect = <a class="codeRef" href="https://doc.qt.io/qt-5/qapplication-obsolete.html#desktop">QApplication::desktop</a>()-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdesktopwidget.html#availableGeometry-1">availableGeometry</a>(w);</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            <span class="keyword">auto</span> boundingRect = <a class="code" href="namespacehal_1_1_qt_compat.html#a59ab8b56403373a3094ccb66a4987385">QtCompat::widgetAvailableGeometry</a>(w);</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;            <span class="keyword">auto</span> requiredRect = w-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#geometry-prop">geometry</a>();</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;            <span class="comment">// Try fitting vertically, prioritizing top on screen</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            <span class="keywordflow">if</span> (boundingRect.top() &gt; requiredRect.top())</div>
@@ -119,9 +119,9 @@ $(document).ready(function(){initNavTree('geometry_8cpp_source.html',''); initRe
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;}</div>
 <div class="ttc" id="ageometry_8h_html"><div class="ttname"><a href="geometry_8h.html">geometry.h</a></div></div>
 <div class="ttc" id="agroup__gui_html_ga284a43cae48443fa22ac672a8b6ea8a0"><div class="ttname"><a href="group__gui.html#ga284a43cae48443fa22ac672a8b6ea8a0">hal::gui_utility::ensureOnScreen</a></div><div class="ttdeci">void ensureOnScreen(QWidget *w)</div><div class="ttdoc">(Fully) displays the widget by moving it.</div><div class="ttdef"><b>Definition:</b> <a href="geometry_8cpp_source.html#l00011">geometry.cpp:11</a></div></div>
+<div class="ttc" id="ahal__qt__compat_8h_html"><div class="ttname"><a href="hal__qt__compat_8h.html">hal_qt_compat.h</a></div></div>
+<div class="ttc" id="anamespacehal_1_1_qt_compat_html_a59ab8b56403373a3094ccb66a4987385"><div class="ttname"><a href="namespacehal_1_1_qt_compat.html#a59ab8b56403373a3094ccb66a4987385">hal::QtCompat::widgetAvailableGeometry</a></div><div class="ttdeci">QRect widgetAvailableGeometry(QWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="hal__qt__compat_8cpp_source.html#l00028">hal_qt_compat.cpp:28</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
-<div class="ttc" id="aqapplication-obsolete_html_desktop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qapplication-obsolete.html#desktop">QApplication::desktop</a></div><div class="ttdeci">QDesktopWidget * desktop()</div></div>
-<div class="ttc" id="aqdesktopwidget_html_availableGeometry-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdesktopwidget.html#availableGeometry-1">QDesktopWidget::availableGeometry</a></div><div class="ttdeci">const QRect availableGeometry(const QWidget *widget) const const</div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
 <div class="ttc" id="aqwidget_html_geometry-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#geometry-prop">QWidget::geometry</a></div><div class="ttdeci">geometry</div></div>
 <div class="ttc" id="aqwidget_html_move-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#move-1">QWidget::move</a></div><div class="ttdeci">void move(int x, int y)</div></div>

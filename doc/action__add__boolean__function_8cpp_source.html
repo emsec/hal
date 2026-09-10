@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -141,9 +141,9 @@ $(document).ready(function(){initNavTree('action__add__boolean__function_8cpp_so
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordflow">while</span>(xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#readNextStartElement">readNextStartElement</a>())</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        {</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">if</span>(xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#name">name</a>() == <span class="stringliteral">&quot;name&quot;</span>)</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">if</span>(xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#name">name</a>() == <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;name&quot;</span>))</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                mName = xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#readElementText">readElementText</a>();</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">if</span>(xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#name">name</a>() == <span class="stringliteral">&quot;bf&quot;</span>)</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">if</span>(xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#name">name</a>() == <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;bf&quot;</span>))</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            {</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                <span class="keyword">auto</span> res = <a class="code" href="classhal_1_1_boolean_function.html#a9c83dda09f69fb886f33d792cfb8fa6f">BooleanFunction::from_string</a>(xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#readElementText">readElementText</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>());</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <span class="keywordflow">if</span>(res.is_ok())</div>

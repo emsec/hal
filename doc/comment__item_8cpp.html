@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -95,6 +95,7 @@ $(document).ready(function(){initNavTree('comment__item_8cpp.html',''); initResi
 <code>#include &quot;<a class="el" href="comment__dialog_8h_source.html">gui/comment_system/widgets/comment_dialog.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="searchable__label_8h_source.html">gui/searchbar/searchable_label.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gui__globals_8h_source.html">gui/gui_globals.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="hal__qt__compat_8h_source.html">gui/hal_qt_compat/hal_qt_compat.h</a>&quot;</code><br />
 <code>#include &lt;QToolBar&gt;</code><br />
 <code>#include &lt;QVBoxLayout&gt;</code><br />
 <code>#include &lt;QHBoxLayout&gt;</code><br />
@@ -109,46 +110,55 @@ Include dependency graph for comment_item.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="comment__item_8cpp__incl.png" border="0" usemap="#aplugins_2gui_2src_2comment__system_2widgets_2comment__item_8cpp" alt=""/></div>
 <map name="aplugins_2gui_2src_2comment__system_2widgets_2comment__item_8cpp" id="aplugins_2gui_2src_2comment__system_2widgets_2comment__item_8cpp">
-<area shape="rect" title=" " alt="" coords="2507,5,2705,61"/>
-<area shape="rect" href="comment__item_8h.html" title=" " alt="" coords="137,109,329,151"/>
-<area shape="rect" href="comment__entry_8h.html" title=" " alt="" coords="1926,288,2089,329"/>
-<area shape="rect" title=" " alt="" coords="1753,452,1827,479"/>
-<area shape="rect" href="comment__dialog_8h.html" title=" " alt="" coords="2706,109,2909,151"/>
-<area shape="rect" title=" " alt="" coords="2784,206,2895,233"/>
-<area shape="rect" title=" " alt="" coords="3019,206,3129,233"/>
-<area shape="rect" href="searchable__label_8h.html" title=" " alt="" coords="540,109,725,151"/>
-<area shape="rect" title=" " alt="" coords="453,206,519,233"/>
-<area shape="rect" href="gui__globals_8h.html" title=" " alt="" coords="1529,117,1661,143"/>
-<area shape="rect" title=" " alt="" coords="2983,117,3063,143"/>
-<area shape="rect" title=" " alt="" coords="3088,117,3161,143"/>
-<area shape="rect" title=" " alt="" coords="3186,117,3287,143"/>
-<area shape="rect" href="graphics_8h.html" title=" " alt="" coords="2459,117,2631,143"/>
-<area shape="rect" title=" " alt="" coords="3312,117,3465,143"/>
-<area shape="rect" title=" " alt="" coords="5,206,79,233"/>
-<area shape="rect" title=" " alt="" coords="103,206,187,233"/>
-<area shape="rect" href="searchoptions_8h.html" title=" " alt="" coords="211,206,428,233"/>
-<area shape="rect" title=" " alt="" coords="903,295,957,322"/>
-<area shape="rect" href="gui__def_8h.html" title=" " alt="" coords="1388,377,1493,404"/>
-<area shape="rect" title=" " alt="" coords="2192,377,2263,404"/>
-<area shape="rect" title=" " alt="" coords="1855,377,1951,404"/>
-<area shape="rect" title=" " alt="" coords="1975,377,2077,404"/>
-<area shape="rect" title=" " alt="" coords="2919,206,2994,233"/>
-<area shape="rect" title=" " alt="" coords="549,295,605,322"/>
-<area shape="rect" title=" " alt="" coords="594,206,671,233"/>
-<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="1018,206,1197,233"/>
-<area shape="rect" href="file__status__manager_8h.html" title=" " alt="" coords="2098,199,2277,240"/>
-<area shape="rect" href="graph__context__manager_8h.html" title=" " alt="" coords="1221,199,1396,240"/>
-<area shape="rect" href="content__manager_8h.html" title=" " alt="" coords="1421,199,1581,240"/>
-<area shape="rect" href="netlist__relay_8h.html" title=" " alt="" coords="1151,288,1323,329"/>
-<area shape="rect" href="plugin__relay_8h.html" title=" " alt="" coords="1605,199,1775,240"/>
-<area shape="rect" href="python__context_8h.html" title=" " alt="" coords="2194,295,2402,322"/>
-<area shape="rect" href="selection__relay_8h.html" title=" " alt="" coords="747,199,892,240"/>
-<area shape="rect" href="gui__api_8h.html" title=" " alt="" coords="640,295,796,322"/>
-<area shape="rect" href="comment__manager_8h.html" title=" " alt="" coords="1909,199,2073,240"/>
-<area shape="rect" title=" " alt="" coords="1799,206,1885,233"/>
-<area shape="rect" title=" " alt="" coords="2610,206,2677,233"/>
-<area shape="rect" title=" " alt="" coords="2701,206,2759,233"/>
-<area shape="rect" title=" " alt="" coords="2504,206,2585,233"/>
+<area shape="rect" title=" " alt="" coords="2884,5,3083,61"/>
+<area shape="rect" href="comment__item_8h.html" title=" " alt="" coords="555,109,747,151"/>
+<area shape="rect" href="comment__entry_8h.html" title=" " alt="" coords="1954,288,2117,329"/>
+<area shape="rect" title=" " alt="" coords="2249,452,2323,479"/>
+<area shape="rect" href="comment__dialog_8h.html" title=" " alt="" coords="3145,109,3347,151"/>
+<area shape="rect" title=" " alt="" coords="3227,206,3337,233"/>
+<area shape="rect" title=" " alt="" coords="3461,206,3572,233"/>
+<area shape="rect" href="searchable__label_8h.html" title=" " alt="" coords="817,109,1003,151"/>
+<area shape="rect" title=" " alt="" coords="973,206,1039,233"/>
+<area shape="rect" href="gui__globals_8h.html" title=" " alt="" coords="1920,117,2052,143"/>
+<area shape="rect" href="hal__qt__compat_8h.html" title=" " alt="" coords="132,199,299,240"/>
+<area shape="rect" title=" " alt="" coords="3422,117,3502,143"/>
+<area shape="rect" title=" " alt="" coords="3527,117,3600,143"/>
+<area shape="rect" title=" " alt="" coords="3625,117,3726,143"/>
+<area shape="rect" href="graphics_8h.html" title=" " alt="" coords="2897,117,3069,143"/>
+<area shape="rect" title=" " alt="" coords="3751,117,3904,143"/>
+<area shape="rect" title=" " alt="" coords="672,206,745,233"/>
+<area shape="rect" title=" " alt="" coords="564,206,648,233"/>
+<area shape="rect" href="searchoptions_8h.html" title=" " alt="" coords="323,206,540,233"/>
+<area shape="rect" title=" " alt="" coords="1253,295,1308,322"/>
+<area shape="rect" href="gui__def_8h.html" title=" " alt="" coords="1661,377,1767,404"/>
+<area shape="rect" title=" " alt="" coords="2553,377,2624,404"/>
+<area shape="rect" title=" " alt="" coords="1091,377,1187,404"/>
+<area shape="rect" title=" " alt="" coords="1985,377,2086,404"/>
+<area shape="rect" title=" " alt="" coords="861,452,927,479"/>
+<area shape="rect" title=" " alt="" coords="1591,452,1645,479"/>
+<area shape="rect" title=" " alt="" coords="3362,206,3437,233"/>
+<area shape="rect" title=" " alt="" coords="1333,295,1389,322"/>
+<area shape="rect" title=" " alt="" coords="871,206,949,233"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="1961,206,2139,233"/>
+<area shape="rect" href="file__status__manager_8h.html" title=" " alt="" coords="2347,199,2526,240"/>
+<area shape="rect" href="graph__context__manager_8h.html" title=" " alt="" coords="1173,199,1348,240"/>
+<area shape="rect" href="content__manager_8h.html" title=" " alt="" coords="2163,199,2323,240"/>
+<area shape="rect" href="netlist__relay_8h.html" title=" " alt="" coords="1757,288,1929,329"/>
+<area shape="rect" href="plugin__relay_8h.html" title=" " alt="" coords="2550,199,2721,240"/>
+<area shape="rect" href="python__context_8h.html" title=" " alt="" coords="2559,295,2767,322"/>
+<area shape="rect" href="selection__relay_8h.html" title=" " alt="" coords="1372,199,1517,240"/>
+<area shape="rect" href="gui__api_8h.html" title=" " alt="" coords="1541,206,1697,233"/>
+<area shape="rect" href="comment__manager_8h.html" title=" " alt="" coords="1721,199,1885,240"/>
+<area shape="rect" title=" " alt="" coords="1063,206,1149,233"/>
+<area shape="rect" title=" " alt="" coords="1156,295,1229,322"/>
+<area shape="rect" title=" " alt="" coords="1413,295,1476,322"/>
+<area shape="rect" title=" " alt="" coords="291,295,353,322"/>
+<area shape="rect" title=" " alt="" coords="428,295,504,322"/>
+<area shape="rect" title=" " alt="" coords="5,295,113,322"/>
+<area shape="rect" title=" " alt="" coords="137,295,216,322"/>
+<area shape="rect" title=" " alt="" coords="2947,206,3014,233"/>
+<area shape="rect" title=" " alt="" coords="3038,206,3097,233"/>
+<area shape="rect" title=" " alt="" coords="3121,206,3203,233"/>
 </map>
 </div>
 </div>

@@ -1,9 +1,10 @@
 <map id="plugins/gui/include/gui/settings/main_settings_widget.h" name="plugins/gui/include/gui/settings/main_settings_widget.h">
-<area shape="rect" id="node1" title=" " alt="" coords="368,5,567,61"/>
-<area shape="rect" id="node2" href="$expanding__list__button_8h.html" title=" " alt="" coords="5,109,188,151"/>
-<area shape="rect" id="node4" href="$searchoptions_8h.html" title=" " alt="" coords="212,117,429,143"/>
-<area shape="rect" id="node5" title=" " alt="" coords="367,199,421,225"/>
-<area shape="rect" id="node6" title=" " alt="" coords="505,117,565,143"/>
-<area shape="rect" id="node7" title=" " alt="" coords="589,117,668,143"/>
-<area shape="rect" id="node3" title=" " alt="" coords="60,199,133,225"/>
+<area shape="rect" id="node1" title=" " alt="" coords="369,5,568,61"/>
+<area shape="rect" id="node2" href="$expanding__list__button_8h.html" title=" " alt="" coords="7,109,189,151"/>
+<area shape="rect" id="node5" href="$searchoptions_8h.html" title=" " alt="" coords="213,117,431,143"/>
+<area shape="rect" id="node6" title=" " alt="" coords="368,199,423,225"/>
+<area shape="rect" id="node7" title=" " alt="" coords="507,117,567,143"/>
+<area shape="rect" id="node8" title=" " alt="" coords="591,117,669,143"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,199,79,225"/>
+<area shape="rect" id="node4" title=" " alt="" coords="103,199,205,225"/>
 </map>

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -126,7 +126,7 @@ $(document).ready(function(){initNavTree('labeled__separated__net_8cpp_source.ht
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordflow">if</span> (ipos &gt;= 0)</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            mText = mText.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#mid">mid</a>(ipos+1);</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qfontmetricsf.html">QFontMetricsF</a> fm(sFont);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        mTextWidth = fm.<a class="codeRef" href="https://doc.qt.io/qt-5/qfontmetricsf-obsolete.html#width">width</a>(mText);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        mTextWidth = fm.<a class="codeRef" href="https://doc.qt.io/qt-5/qfontmetricsf.html#horizontalAdvance">horizontalAdvance</a>(mText);</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    }</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
 <div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classhal_1_1_labeled_separated_net.html#a66d4e97967b6d16131887c6e6e4105ad">   42</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_labeled_separated_net.html#a66d4e97967b6d16131887c6e6e4105ad">LabeledSeparatedNet::paint</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a>* painter, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html">QStyleOptionGraphicsItem</a>* option, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* widget)</div>
@@ -288,10 +288,10 @@ $(document).ready(function(){initNavTree('labeled__separated__net_8cpp_source.ht
 <div class="ttc" id="aqcolor_html_setAlphaF"><div class="ttname"><a href="https://doc.qt.io/qt-5/qcolor.html#setAlphaF">QColor::setAlphaF</a></div><div class="ttdeci">void setAlphaF(qreal alpha)</div></div>
 <div class="ttc" id="aqfont_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfont.html">QFont</a></div></div>
 <div class="ttc" id="aqfont_html_setPixelSize"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfont.html#setPixelSize">QFont::setPixelSize</a></div><div class="ttdeci">void setPixelSize(int pixelSize)</div></div>
-<div class="ttc" id="aqfontmetricsf-obsolete_html_width"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfontmetricsf-obsolete.html#width">QFontMetricsF::width</a></div><div class="ttdeci">qreal width(const QString &amp;text) const const</div></div>
 <div class="ttc" id="aqfontmetricsf_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfontmetricsf.html">QFontMetricsF</a></div></div>
 <div class="ttc" id="aqfontmetricsf_html_ascent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfontmetricsf.html#ascent">QFontMetricsF::ascent</a></div><div class="ttdeci">qreal ascent() const const</div></div>
 <div class="ttc" id="aqfontmetricsf_html_height"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfontmetricsf.html#height">QFontMetricsF::height</a></div><div class="ttdeci">qreal height() const const</div></div>
+<div class="ttc" id="aqfontmetricsf_html_horizontalAdvance"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfontmetricsf.html#horizontalAdvance">QFontMetricsF::horizontalAdvance</a></div><div class="ttdeci">qreal horizontalAdvance(const QString &amp;text, int length) const const</div></div>
 <div class="ttc" id="aqgraphicsitem_html_mapFromScene"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsitem.html#mapFromScene">QGraphicsItem::mapFromScene</a></div><div class="ttdeci">QPointF mapFromScene(const QPointF &amp;point) const const</div></div>
 <div class="ttc" id="aqpainter_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a></div></div>
 <div class="ttc" id="aqpainter_html_drawLine"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpainter.html#drawLine">QPainter::drawLine</a></div><div class="ttdeci">void drawLine(const QLineF &amp;line)</div></div>

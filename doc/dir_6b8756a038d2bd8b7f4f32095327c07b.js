@@ -26,6 +26,7 @@ var dir_6b8756a038d2bd8b7f4f32095327c07b =
     [ "grouping_dialog", "dir_b6c8f38d784c87840afe2f32da84a524.html", "dir_b6c8f38d784c87840afe2f32da84a524" ],
     [ "gui_api", "dir_d4d719f4bc5e792bb78511b2b7480de6.html", "dir_d4d719f4bc5e792bb78511b2b7480de6" ],
     [ "gui_utils", "dir_c64fca93e3f36ffbc8b598153575cd3b.html", "dir_c64fca93e3f36ffbc8b598153575cd3b" ],
+    [ "hal_qt_compat", "dir_f4ee408dd4d3373b521d8bca3c5bec97.html", "dir_f4ee408dd4d3373b521d8bca3c5bec97" ],
     [ "implementations", "dir_6cbd43be8cf8ad497c5fccf5ae040b08.html", "dir_6cbd43be8cf8ad497c5fccf5ae040b08" ],
     [ "input_dialog", "dir_bffddff9b80a154c8bde275883b2a740.html", "dir_bffddff9b80a154c8bde275883b2a740" ],
     [ "keybind_edit", "dir_d1288518e2a5e87f9edb7866296a3d6c.html", "dir_d1288518e2a5e87f9edb7866296a3d6c" ],

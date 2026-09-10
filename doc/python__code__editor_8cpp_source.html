@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -95,9 +95,9 @@ $(document).ready(function(){initNavTree('python__code__editor_8cpp_source.html'
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="project__manager_8h.html">hal_core/netlist/project_manager.h</a>&quot;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="log_8h.html">hal_core/utilities/log.h</a>&quot;</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gui__globals_8h.html">gui/gui_globals.h</a>&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;QApplication&gt;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;QDesktopWidget&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="hal__qt__compat_8h.html">gui/hal_qt_compat/hal_qt_compat.h</a>&quot;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;QApplication&gt;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;QTextDocumentFragment&gt;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QVBoxLayout&gt;</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QShortcut&gt;</span></div>
@@ -245,8 +245,8 @@ $(document).ready(function(){initNavTree('python__code__editor_8cpp_source.html'
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                <span class="keyword">auto</span> menu_width  = dialog-&gt;width();</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;                <span class="keyword">auto</span> menu_height = dialog-&gt;height();</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                <span class="keyword">auto</span> desk_rect   = <a class="codeRef" href="https://doc.qt.io/qt-5/qapplication-obsolete.html#desktop">QApplication::desktop</a>()-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdesktopwidget.html#screenGeometry-1">screenGeometry</a>();</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                <span class="keyword">auto</span> desk_width  = desk_rect.<a class="codeRef" href="https://doc.qt.io/qt-5/qrect.html#width">width</a>();</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                <span class="keyword">auto</span> desk_rect   = <a class="code" href="namespacehal_1_1_qt_compat.html#a7f5de451d18733e2968cbc09fbe79fa7">QtCompat::desktopScreenGeometry</a>();</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                <span class="keyword">auto</span> desk_width  = desk_rect.width();</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                <span class="keyword">auto</span> desk_height = desk_rect.height();</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                <span class="keyword">auto</span> anchor      = this-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#cursorRect-1">cursorRect</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qrect.html#bottomRight">bottomRight</a>();</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                anchor.<a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html#setX">setX</a>(anchor.x() + <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewportMargins">viewportMargins</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#left">left</a>());</div>
@@ -446,7 +446,9 @@ $(document).ready(function(){initNavTree('python__code__editor_8cpp_source.html'
 <div class="ttc" id="aclasshal_1_1_python_editor_code_completion_dialog_html_aae39d19ee17ac9a2db53de7b8a246883"><div class="ttname"><a href="classhal_1_1_python_editor_code_completion_dialog.html#aae39d19ee17ac9a2db53de7b8a246883">hal::PythonEditorCodeCompletionDialog::completionSelected</a></div><div class="ttdeci">void completionSelected(std::tuple&lt; std::string, std::string &gt; selected)</div></div>
 <div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
 <div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
+<div class="ttc" id="ahal__qt__compat_8h_html"><div class="ttname"><a href="hal__qt__compat_8h.html">hal_qt_compat.h</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
+<div class="ttc" id="anamespacehal_1_1_qt_compat_html_a7f5de451d18733e2968cbc09fbe79fa7"><div class="ttname"><a href="namespacehal_1_1_qt_compat.html#a7f5de451d18733e2968cbc09fbe79fa7">hal::QtCompat::desktopScreenGeometry</a></div><div class="ttdeci">QRect desktopScreenGeometry()</div><div class="ttdef"><b>Definition:</b> <a href="hal__qt__compat_8cpp_source.html#l00019">hal_qt_compat.cpp:19</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anamespacehal_html_a178bb1ac9a8ee6bbbec41ddb2e84250a"><div class="ttname"><a href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">hal::gPythonContext</a></div><div class="ttdeci">PythonContext * gPythonContext</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00089">plugin_gui.cpp:89</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a9b45b3e13bd9167aab02e17e08916231"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">netlist_serializer.cpp:58</a></div></div>
@@ -455,9 +457,7 @@ $(document).ready(function(){initNavTree('python__code__editor_8cpp_source.html'
 <div class="ttc" id="apython__editor__code__completion__dialog_8h_html"><div class="ttname"><a href="python__editor__code__completion__dialog_8h.html">python_editor_code_completion_dialog.h</a></div></div>
 <div class="ttc" id="apython__syntax__highlighter_8h_html"><div class="ttname"><a href="python__syntax__highlighter_8h.html">python_syntax_highlighter.h</a></div></div>
 <div class="ttc" id="aqabstractscrollarea_html_viewportMargins"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewportMargins">QAbstractScrollArea::viewportMargins</a></div><div class="ttdeci">QMargins viewportMargins() const const</div></div>
-<div class="ttc" id="aqapplication-obsolete_html_desktop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qapplication-obsolete.html#desktop">QApplication::desktop</a></div><div class="ttdeci">QDesktopWidget * desktop()</div></div>
 <div class="ttc" id="aqchar_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qchar.html">QChar</a></div></div>
-<div class="ttc" id="aqdesktopwidget_html_screenGeometry-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdesktopwidget.html#screenGeometry-1">QDesktopWidget::screenGeometry</a></div><div class="ttdeci">const QRect screenGeometry(const QWidget *widget) const const</div></div>
 <div class="ttc" id="aqdir_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdir.html">QDir</a></div></div>
 <div class="ttc" id="aqdir_html_absoluteFilePath"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath</a></div><div class="ttdeci">QString absoluteFilePath(const QString &amp;fileName) const const</div></div>
 <div class="ttc" id="aqkeyevent_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qkeyevent.html">QKeyEvent</a></div></div>
@@ -476,7 +476,6 @@ $(document).ready(function(){initNavTree('python__code__editor_8cpp_source.html'
 <div class="ttc" id="aqplaintextedit_html_textCursor"><div class="ttname"><a href="https://doc.qt.io/qt-5/qplaintextedit.html#textCursor">QPlainTextEdit::textCursor</a></div><div class="ttdeci">QTextCursor textCursor() const const</div></div>
 <div class="ttc" id="aqpoint_html_setX"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpoint.html#setX">QPoint::setX</a></div><div class="ttdeci">void setX(int x)</div></div>
 <div class="ttc" id="aqrect_html_bottomRight"><div class="ttname"><a href="https://doc.qt.io/qt-5/qrect.html#bottomRight">QRect::bottomRight</a></div><div class="ttdeci">QPoint bottomRight() const const</div></div>
-<div class="ttc" id="aqrect_html_width"><div class="ttname"><a href="https://doc.qt.io/qt-5/qrect.html#width">QRect::width</a></div><div class="ttdeci">int width() const const</div></div>
 <div class="ttc" id="aqshortcut_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qshortcut.html">QShortcut</a></div></div>
 <div class="ttc" id="aqshortcut_html_activated"><div class="ttname"><a href="https://doc.qt.io/qt-5/qshortcut.html#activated">QShortcut::activated</a></div><div class="ttdeci">void activated()</div></div>
 <div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>

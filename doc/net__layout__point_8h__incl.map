@@ -1,8 +1,9 @@
 <map id="plugins/gui/include/gui/graph_widget/layouters/net_layout_point.h" name="plugins/gui/include/gui/graph_widget/layouters/net_layout_point.h">
-<area shape="rect" id="node1" title=" " alt="" coords="118,5,321,61"/>
+<area shape="rect" id="node1" title=" " alt="" coords="158,5,361,61"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,109,71,136"/>
 <area shape="rect" id="node3" title=" " alt="" coords="95,109,168,136"/>
 <area shape="rect" id="node4" title=" " alt="" coords="192,109,247,136"/>
 <area shape="rect" id="node5" title=" " alt="" coords="271,109,331,136"/>
 <area shape="rect" id="node6" title=" " alt="" coords="355,109,420,136"/>
+<area shape="rect" id="node7" title=" " alt="" coords="444,109,515,136"/>
 </map>

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -208,7 +208,7 @@ $(document).ready(function(){initNavTree('user__action_8cpp_source.html',''); in
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
 <div class="line"><a name="l00119"></a><span class="lineno"><a class="line" href="classhal_1_1_user_action.html#a20078295a03bb71886a9abfd2665f843">  119</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_user_action.html#a20078295a03bb71886a9abfd2665f843">UserAction::readParentObjectFromXml</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html">QXmlStreamReader</a> &amp;xmlIn)</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    {</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordflow">if</span>(xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#name">name</a>() == <span class="stringliteral">&quot;parentObj&quot;</span>)</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordflow">if</span>(xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#name">name</a>() == <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;parentObj&quot;</span>))</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        {</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            <a class="code" href="classhal_1_1_user_action.html#a7fa9e9eccea97bdae03784e2f8c09168">mParentObject</a>.<a class="code" href="classhal_1_1_user_action_object.html#a6a3ef305390aa2a384c0ca9e95d17f02">readFromXml</a>(xmlIn);</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#readNext">readNext</a>();<span class="comment">//to read the corresponding EndElement</span></div>

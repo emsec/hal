@@ -181,6 +181,19 @@ var namespacehal =
       [ "keep_owner_alive", "namespacehal_1_1python__bindings__detail.html#a87b5266ffcae4637294892c4e38f4cbd", null ],
       [ "owner_of", "namespacehal_1_1python__bindings__detail.html#ac1e6aab1a379aadd0322f626d54ebe64", null ]
     ] ],
+    [ "QtCompat", "namespacehal_1_1_qt_compat.html", [
+      [ "dateToLocaleString", "namespacehal_1_1_qt_compat.html#a2886a7a64ffbb6e3a4454f3ac67756c8", null ],
+      [ "desktopAvailableGeometry", "namespacehal_1_1_qt_compat.html#a4d474b2fbbfee7f0e061ed198a0f1bcf", null ],
+      [ "desktopScreenGeometry", "namespacehal_1_1_qt_compat.html#a7f5de451d18733e2968cbc09fbe79fa7", null ],
+      [ "listToSet", "namespacehal_1_1_qt_compat.html#a3f2b32699682666a35c3759214972581", null ],
+      [ "listToVector", "namespacehal_1_1_qt_compat.html#af8f25b62dfbd0b5a61bae437100f840a", null ],
+      [ "qHashPoint", "namespacehal_1_1_qt_compat.html#a64460cbc2e2ee401861be829f0386f81", null ],
+      [ "setMarginWidth", "namespacehal_1_1_qt_compat.html#a9d9835bfab729b31e68dddada4a1b7f8", null ],
+      [ "setToList", "namespacehal_1_1_qt_compat.html#a590e81816b14652288a0394e19e724db", null ],
+      [ "stdVectorToVector", "namespacehal_1_1_qt_compat.html#afb99334d05bd69847dbd16929682b81f", null ],
+      [ "styleOptionInit", "namespacehal_1_1_qt_compat.html#aff5ecc76d6728554e9903661f1e91bce", null ],
+      [ "widgetAvailableGeometry", "namespacehal_1_1_qt_compat.html#a59ab8b56403373a3094ccb66a4987385", null ]
+    ] ],
     [ "result_constructor_type", "namespacehal_1_1result__constructor__type.html", "namespacehal_1_1result__constructor__type" ],
     [ "resynthesis", "namespacehal_1_1resynthesis.html", [
       [ "decompose_gate", "namespacehal_1_1resynthesis.html#a05a373c0eed40bf9bc4ebc5eedcda0f9", null ],

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -108,7 +108,7 @@ $(document).ready(function(){initNavTree('settings__widget__dropdown_8cpp_source
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    {</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        mComboBox = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcombobox.html">QComboBox</a>(<span class="keyword">this</span>);</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        mComboBox-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qcombobox.html#addItems">addItems</a>(mOptions);</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a>(mComboBox, QOverload&lt;const QString &amp;&gt;::of(&amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qcombobox.html#currentIndexChanged">QComboBox::currentIndexChanged</a>), <span class="keyword">this</span>, &amp;SettingsWidgetDropdown::on_index_changed);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a>(mComboBox, QOverload&lt;int&gt;::of(&amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qcombobox.html#currentIndexChanged">QComboBox::currentIndexChanged</a>), <span class="keyword">this</span>, &amp;SettingsWidgetDropdown::on_index_changed);</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <a class="code" href="classhal_1_1_settings_widget.html#adee63eab01b1bb092d55799cc235ee2a">mContainer</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(mComboBox);</div>
@@ -130,9 +130,9 @@ $(document).ready(function(){initNavTree('settings__widget__dropdown_8cpp_source
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">return</span> mComboBox-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qcombobox.html#currentIndex-prop">currentIndex</a>();</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordtype">void</span> SettingsWidgetDropdown::on_index_changed(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> text)</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordtype">void</span> SettingsWidgetDropdown::on_index_changed(<span class="keywordtype">int</span> inx)</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    {</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        Q_UNUSED(text);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        Q_UNUSED(inx);</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        this-&gt;<a class="code" href="classhal_1_1_settings_widget.html#a75c0386ddd6075d77b0f4c50521792f1">trigger_setting_updated</a>();</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    }</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;}</div>
@@ -155,7 +155,6 @@ $(document).ready(function(){initNavTree('settings__widget__dropdown_8cpp_source
 <div class="ttc" id="aqlist_html_at"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#at">QList::at</a></div><div class="ttdeci">const T &amp; at(int i) const const</div></div>
 <div class="ttc" id="aqlist_html_size"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#size">QList::size</a></div><div class="ttdeci">int size() const const</div></div>
 <div class="ttc" id="aqobject_html_connect"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect</a></div><div class="ttdeci">QMetaObject::Connection connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type)</div></div>
-<div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>
 <div class="ttc" id="aqstyle_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstyle.html">QStyle</a></div></div>
 <div class="ttc" id="aqstyle_html_polish"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstyle.html#polish">QStyle::polish</a></div><div class="ttdeci">virtual void polish(QWidget *widget)</div></div>
 <div class="ttc" id="aqstyle_html_unpolish"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstyle.html#unpolish">QStyle::unpolish</a></div><div class="ttdeci">virtual void unpolish(QWidget *widget)</div></div>

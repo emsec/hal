@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -330,8 +330,8 @@ $(document).ready(function(){initNavTree('wave__item_8cpp_source.html',''); init
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            <a class="code" href="classhal_1_1_wave_item.html#a2560267e1829f5f937038ad4e24de125">setState</a>(<a class="code" href="classhal_1_1_wave_item.html#a17c9c97a613a537acaaaae0a27053d28abb50db191f38b391f185c52831e5b97c">Painted</a>);</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        }</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            qDebug() &lt;&lt; mData-&gt;<a class="code" href="classhal_1_1_wave_data.html#a905b08f6596881996c967166e8d1756d">fileIndex</a>() &lt;&lt; <span class="stringliteral">&quot;invalid state when terminating thread&quot;</span> &lt;&lt; mState &lt;&lt; hex &lt;&lt; (quintptr) mLoader &lt;&lt; dec;</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        mLoader-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">deleteLater</a>();</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            qDebug() &lt;&lt; mData-&gt;<a class="code" href="classhal_1_1_wave_data.html#a905b08f6596881996c967166e8d1756d">fileIndex</a>() &lt;&lt; <span class="stringliteral">&quot;invalid state when terminating thread&quot;</span> &lt;&lt; mState &lt;&lt; <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#number-1">QString::number</a>((quintptr) mLoader, 16);</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        mLoader-&gt;deleteLater();</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        mLoader = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <a class="code" href="classhal_1_1_wave_item.html#abf5139540460ac90f97e288548aff2b9">mMutex</a>.<a class="codeRef" href="https://doc.qt.io/qt-5/qmutex.html#unlock">unlock</a>();</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="keywordflow">if</span> (mState == <a class="code" href="classhal_1_1_wave_item.html#a17c9c97a613a537acaaaae0a27053d28abb50db191f38b391f185c52831e5b97c">Painted</a> &amp;&amp; <a class="code" href="classhal_1_1_wave_item.html#a9e90cf5bdd9b6b1d73bc521c7418f3a5">mVisibleRange</a>)</div>
@@ -571,6 +571,7 @@ $(document).ready(function(){initNavTree('wave__item_8cpp_source.html',''); init
 <div class="ttc" id="aqset_html_insert"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert</a></div><div class="ttdeci">QSet::iterator insert(const T &amp;value)</div></div>
 <div class="ttc" id="aqset_html_size"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#size">QSet::size</a></div><div class="ttdeci">int size() const const</div></div>
 <div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>
+<div class="ttc" id="aqstring_html_number-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html#number-1">QString::number</a></div><div class="ttdeci">QString number(int n, int base)</div></div>
 <div class="ttc" id="aqtextstream_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtextstream.html">QTextStream</a></div></div>
 <div class="ttc" id="aqthread_html_finished"><div class="ttname"><a href="https://doc.qt.io/qt-5/qthread.html#finished">QThread::finished</a></div><div class="ttdeci">void finished()</div></div>
 <div class="ttc" id="aqthread_html_start"><div class="ttname"><a href="https://doc.qt.io/qt-5/qthread.html#start">QThread::start</a></div><div class="ttdeci">void start(QThread::Priority priority)</div></div>

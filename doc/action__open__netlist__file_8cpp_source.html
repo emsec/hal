@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -152,9 +152,9 @@ $(document).ready(function(){initNavTree('action__open__netlist__file_8cpp_sourc
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        mMethod = <a class="code" href="classhal_1_1_action_open_netlist_file.html#a6e9ea22754c75f08038b3241ffab9002a80abaf86b9c279ec9179cfd58cbe3e58">Undefined</a>;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">while</span> (xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#readNextStartElement">readNextStartElement</a>())</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        {</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">if</span> (xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#name">name</a>() == <span class="stringliteral">&quot;filename&quot;</span>)</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">if</span> (xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#name">name</a>() == <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;filename&quot;</span>))</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                mFilename = xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#readElementText">readElementText</a>();</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordflow">if</span> (xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#name">name</a>() == <span class="stringliteral">&quot;method&quot;</span>)</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordflow">if</span> (xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#name">name</a>() == <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;method&quot;</span>))</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            {</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> meth = xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#readElementText">readElementText</a>();</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; <a class="code" href="namespacehal.html#a2920c40f8d677cd4749e841f24654f89">sOpenMethodsPersist</a>[i]; i++)</div>

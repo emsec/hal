@@ -1,9 +1,10 @@
 <map id="plugins/gui/src/expanding_list/expanding_list_item.cpp" name="plugins/gui/src/expanding_list/expanding_list_item.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="192,5,404,47"/>
-<area shape="rect" id="node2" href="$expanding__list__item_8h.html" title=" " alt="" coords="213,95,383,136"/>
-<area shape="rect" id="node6" href="$expanding__list__button_8h.html" title=" " alt="" coords="5,95,188,136"/>
-<area shape="rect" id="node7" title=" " alt="" coords="408,102,473,129"/>
-<area shape="rect" id="node3" title=" " alt="" coords="116,184,189,211"/>
-<area shape="rect" id="node4" title=" " alt="" coords="216,184,271,211"/>
-<area shape="rect" id="node5" title=" " alt="" coords="295,184,407,211"/>
+<area shape="rect" id="node1" title=" " alt="" coords="236,5,448,47"/>
+<area shape="rect" id="node2" href="$expanding__list__item_8h.html" title=" " alt="" coords="55,95,226,136"/>
+<area shape="rect" id="node6" href="$expanding__list__button_8h.html" title=" " alt="" coords="251,95,433,136"/>
+<area shape="rect" id="node8" title=" " alt="" coords="457,102,523,129"/>
+<area shape="rect" id="node3" title=" " alt="" coords="221,184,295,211"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,184,60,211"/>
+<area shape="rect" id="node5" title=" " alt="" coords="85,184,197,211"/>
+<area shape="rect" id="node7" title=" " alt="" coords="319,184,421,211"/>
 </map>

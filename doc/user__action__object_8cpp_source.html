@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -202,14 +202,14 @@ $(document).ready(function(){initNavTree('user__action__object_8cpp_source.html'
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
 <div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="classhal_1_1_user_action_object.html#a6a3ef305390aa2a384c0ca9e95d17f02">  113</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_user_action_object.html#a6a3ef305390aa2a384c0ca9e95d17f02">UserActionObject::readFromXml</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html">QXmlStreamReader</a>&amp; xmlIn)</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    {</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstringref.html">QStringRef</a> srId = xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#attributes">attributes</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamattributes.html#value">value</a>(<span class="stringliteral">&quot;id&quot;</span>);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keywordflow">if</span> (srId.<a class="codeRef" href="https://doc.qt.io/qt-5/qstringref.html#isNull">isNull</a>() || srId.<a class="codeRef" href="https://doc.qt.io/qt-5/qstringref.html#isEmpty">isEmpty</a>()) <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstringref.html">QStringRef</a> srTp = xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#attributes">attributes</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamattributes.html#value">value</a>(<span class="stringliteral">&quot;type&quot;</span>);</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordflow">if</span> (srTp.<a class="codeRef" href="https://doc.qt.io/qt-5/qstringref.html#isNull">isNull</a>() || srTp.<a class="codeRef" href="https://doc.qt.io/qt-5/qstringref.html#isEmpty">isEmpty</a>()) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keyword">auto</span> srId = xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#attributes">attributes</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamattributes.html#value">value</a>(<span class="stringliteral">&quot;id&quot;</span>);   <span class="comment">// Qt5: QStringRef    Qt6: QStringView</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keywordflow">if</span> (srId.isNull() || srId.isEmpty()) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keyword">auto</span> srTp = xmlIn.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#attributes">attributes</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamattributes.html#value">value</a>(<span class="stringliteral">&quot;type&quot;</span>);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordflow">if</span> (srTp.isNull() || srTp.isEmpty()) <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="keywordtype">bool</span> ok = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        mId = srId.<a class="codeRef" href="https://doc.qt.io/qt-5/qstringref.html#toInt">toInt</a>(&amp;ok);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        mId = srId.toInt(&amp;ok);</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordflow">if</span> (!ok) <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        mType = <a class="code" href="classhal_1_1_user_action_object_type.html#a6fc94ab22c58877864b90d3bfabe43bd">UserActionObjectType::fromString</a>(srTp.<a class="codeRef" href="https://doc.qt.io/qt-5/qstringref.html#toString">toString</a>());</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        mType = <a class="code" href="classhal_1_1_user_action_object_type.html#a6fc94ab22c58877864b90d3bfabe43bd">UserActionObjectType::fromString</a>(srTp.toString());</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    }</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;}</div>
 <div class="ttc" id="aclasshal_1_1_node_html_a6c45a5cdff7a8605756256c939244e34"><div class="ttname"><a href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34">hal::Node::NodeType</a></div><div class="ttdeci">NodeType</div><div class="ttdef"><b>Definition:</b> <a href="gui__def_8h_source.html#l00063">gui_def.h:63</a></div></div>
@@ -250,11 +250,6 @@ $(document).ready(function(){initNavTree('user__action__object_8cpp_source.html'
 <div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>
 <div class="ttc" id="aqstring_html_arg-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg</a></div><div class="ttdeci">QString arg(qlonglong a, int fieldWidth, int base, QChar fillChar) const const</div></div>
 <div class="ttc" id="aqstring_html_number-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html#number-1">QString::number</a></div><div class="ttdeci">QString number(int n, int base)</div></div>
-<div class="ttc" id="aqstringref_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstringref.html">QStringRef</a></div></div>
-<div class="ttc" id="aqstringref_html_isEmpty"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstringref.html#isEmpty">QStringRef::isEmpty</a></div><div class="ttdeci">bool isEmpty() const const</div></div>
-<div class="ttc" id="aqstringref_html_isNull"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstringref.html#isNull">QStringRef::isNull</a></div><div class="ttdeci">bool isNull() const const</div></div>
-<div class="ttc" id="aqstringref_html_toInt"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstringref.html#toInt">QStringRef::toInt</a></div><div class="ttdeci">int toInt(bool *ok, int base) const const</div></div>
-<div class="ttc" id="aqstringref_html_toString"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstringref.html#toString">QStringRef::toString</a></div><div class="ttdeci">QString toString() const const</div></div>
 <div class="ttc" id="aqxmlstreamattributes_html_value"><div class="ttname"><a href="https://doc.qt.io/qt-5/qxmlstreamattributes.html#value">QXmlStreamAttributes::value</a></div><div class="ttdeci">QStringRef value(const QString &amp;namespaceUri, const QString &amp;name) const const</div></div>
 <div class="ttc" id="aqxmlstreamreader_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qxmlstreamreader.html">QXmlStreamReader</a></div></div>
 <div class="ttc" id="aqxmlstreamreader_html_attributes"><div class="ttname"><a href="https://doc.qt.io/qt-5/qxmlstreamreader.html#attributes">QXmlStreamReader::attributes</a></div><div class="ttdeci">QXmlStreamAttributes attributes() const const</div></div>

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -93,9 +93,9 @@ $(document).ready(function(){initNavTree('settings__manager_8cpp_source.html',''
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__widget_8h.html">gui/content_widget/content_widget.h</a>&quot;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__frame_8h.html">gui/content_frame/content_frame.h</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__manager_8h.html">gui/content_manager/content_manager.h</a>&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;QDir&gt;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;QApplication&gt;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;QDesktopWidget&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="hal__qt__compat_8h.html">gui/hal_qt_compat/hal_qt_compat.h</a>&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;QDir&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;QApplication&gt;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;QRect&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
@@ -170,7 +170,7 @@ $(document).ready(function(){initNavTree('settings__manager_8cpp_source.html',''
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
 <div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classhal_1_1_settings_manager.html#add001bf6cbff37262612014f4239c871">   81</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qsize.html">QSize</a> <a class="code" href="classhal_1_1_settings_manager.html#add001bf6cbff37262612014f4239c871">SettingsManager::mainWindowSize</a>()<span class="keyword"> const</span></div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qrect.html">QRect</a> rect = <a class="codeRef" href="https://doc.qt.io/qt-5/qapplication-obsolete.html#desktop">QApplication::desktop</a>()-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdesktopwidget.html#screenGeometry-1">screenGeometry</a>();</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qrect.html">QRect</a> rect = <a class="code" href="namespacehal_1_1_qt_compat.html#a7f5de451d18733e2968cbc09fbe79fa7">QtCompat::desktopScreenGeometry</a>();</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordflow">return</span> mUserSettingsFile-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#value">value</a>(<span class="stringliteral">&quot;MainWindow/size&quot;</span>, rect.<a class="codeRef" href="https://doc.qt.io/qt-5/qrect.html#size">size</a>()).<a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html#toSize">toSize</a>();</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    }</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
@@ -298,16 +298,16 @@ $(document).ready(function(){initNavTree('settings__manager_8cpp_source.html',''
 <div class="ttc" id="acontent__frame_8h_html"><div class="ttname"><a href="content__frame_8h.html">content_frame.h</a></div></div>
 <div class="ttc" id="acontent__manager_8h_html"><div class="ttname"><a href="content__manager_8h.html">content_manager.h</a></div></div>
 <div class="ttc" id="acontent__widget_8h_html"><div class="ttname"><a href="content__widget_8h.html">content_widget.h</a></div></div>
+<div class="ttc" id="ahal__qt__compat_8h_html"><div class="ttname"><a href="hal__qt__compat_8h.html">hal_qt_compat.h</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2utilities_2utils_8h_html"><div class="ttname"><a href="include_2hal__core_2utilities_2utils_8h.html">utils.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_content_layout_html_a85162361ddf93adbe2a7328a717a9716"><div class="ttname"><a href="namespacehal_1_1_content_layout.html#a85162361ddf93adbe2a7328a717a9716">hal::ContentLayout::positionFromString</a></div><div class="ttdeci">Position positionFromString(const QString &amp;s)</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8cpp_source.html#l00030">content_anchor.cpp:30</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_content_layout_html_ad42c41e586a705a081ce0dee0578377c"><div class="ttname"><a href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377c">hal::ContentLayout::Position</a></div><div class="ttdeci">Position</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00044">content_anchor.h:44</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_content_layout_html_adab5a69bccb6c19c9718ba082c55d1cf"><div class="ttname"><a href="namespacehal_1_1_content_layout.html#adab5a69bccb6c19c9718ba082c55d1cf">hal::ContentLayout::positionToString</a></div><div class="ttdeci">QString positionToString(Position pos)</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8cpp_source.html#l00024">content_anchor.cpp:24</a></div></div>
+<div class="ttc" id="anamespacehal_1_1_qt_compat_html_a7f5de451d18733e2968cbc09fbe79fa7"><div class="ttname"><a href="namespacehal_1_1_qt_compat.html#a7f5de451d18733e2968cbc09fbe79fa7">hal::QtCompat::desktopScreenGeometry</a></div><div class="ttdeci">QRect desktopScreenGeometry()</div><div class="ttdef"><b>Definition:</b> <a href="hal__qt__compat_8cpp_source.html#l00019">hal_qt_compat.cpp:19</a></div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a04466a8dc8315116fb04b5181d8e234a"><div class="ttname"><a href="namespacehal_1_1utils.html#a04466a8dc8315116fb04b5181d8e234a">hal::utils::get_config_directory</a></div><div class="ttdeci">std::filesystem::path get_config_directory()</div><div class="ttdef"><b>Definition:</b> <a href="src_2utilities_2utils_8cpp_source.html#l00164">utils.cpp:164</a></div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_af26065b993bd3dcb5d3a0ab60db751f3"><div class="ttname"><a href="namespacehal_1_1utils.html#af26065b993bd3dcb5d3a0ab60db751f3">hal::utils::get_user_config_directory</a></div><div class="ttdeci">std::filesystem::path get_user_config_directory()</div><div class="ttdef"><b>Definition:</b> <a href="src_2utilities_2utils_8cpp_source.html#l00172">utils.cpp:172</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01972">netlist_preprocessing.cpp:1972</a></div></div>
-<div class="ttc" id="aqapplication-obsolete_html_desktop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qapplication-obsolete.html#desktop">QApplication::desktop</a></div><div class="ttdeci">QDesktopWidget * desktop()</div></div>
-<div class="ttc" id="aqdesktopwidget_html_screenGeometry-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdesktopwidget.html#screenGeometry-1">QDesktopWidget::screenGeometry</a></div><div class="ttdeci">const QRect screenGeometry(const QWidget *widget) const const</div></div>
 <div class="ttc" id="aqdir_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdir.html">QDir</a></div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList&lt; int &gt;</a></div></div>
 <div class="ttc" id="aqlist_html_append"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#append">QList::append</a></div><div class="ttdeci">void append(const T &amp;value)</div></div>

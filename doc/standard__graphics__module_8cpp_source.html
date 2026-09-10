@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -324,14 +324,14 @@ $(document).ready(function(){initNavTree('standard__graphics__module_8cpp_source
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <a class="code" href="classhal_1_1_module_pin.html">ModulePin</a>&amp; input_pin : <a class="code" href="classhal_1_1_graphics_module.html#aa3f7578175071c4a1c2c361ca2d7a04f">mInputPins</a>)</div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        {</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            qreal <a class="code" href="classhal_1_1_graphics_node.html#a4ce794805fad439ac26dd10210a67dba">width</a> = pin_fm.width(input_pin.name);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            qreal <a class="code" href="classhal_1_1_graphics_node.html#a4ce794805fad439ac26dd10210a67dba">width</a> = pin_fm.horizontalAdvance(input_pin.name);</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_graphics_node.html#a4ce794805fad439ac26dd10210a67dba">width</a> &gt; max_pin_width)</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                max_pin_width = <a class="code" href="classhal_1_1_graphics_node.html#a4ce794805fad439ac26dd10210a67dba">width</a>;</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        }</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> ModulePin&amp; output_pin : <a class="code" href="classhal_1_1_graphics_module.html#a80e360aff271c10c1b11f41865463144">mOutputPins</a>)</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        {</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            qreal <a class="code" href="classhal_1_1_graphics_node.html#a4ce794805fad439ac26dd10210a67dba">width</a> = pin_fm.width(output_pin.name);</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            qreal <a class="code" href="classhal_1_1_graphics_node.html#a4ce794805fad439ac26dd10210a67dba">width</a> = pin_fm.horizontalAdvance(output_pin.name);</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_graphics_node.html#a4ce794805fad439ac26dd10210a67dba">width</a> &gt; max_pin_width)</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                max_pin_width = <a class="code" href="classhal_1_1_graphics_node.html#a4ce794805fad439ac26dd10210a67dba">width</a>;</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        }</div>

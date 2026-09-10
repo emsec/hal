@@ -2,7 +2,7 @@ var classhal_1_1_get_in_touch_item =
 [
     [ "GetInTouchItem", "classhal_1_1_get_in_touch_item.html#a4069da2b43a09de51adb6b13ed81cf2e", null ],
     [ "clicked", "classhal_1_1_get_in_touch_item.html#ae4f2606cd231a410b151be10de505020", null ],
-    [ "enterEvent", "classhal_1_1_get_in_touch_item.html#a6be34ef58d3960ad2f3f2cf88cfcc2d3", null ],
+    [ "enterEvent", "classhal_1_1_get_in_touch_item.html#a3a5afe8419f456067a20798ae9e172fd", null ],
     [ "hover", "classhal_1_1_get_in_touch_item.html#a33767cf0d434c82dcceced8533679801", null ],
     [ "iconPath", "classhal_1_1_get_in_touch_item.html#a1b4420a3f5d56dbd83d18d5ce5e81f32", null ],
     [ "iconStyle", "classhal_1_1_get_in_touch_item.html#aa14958c6f546e4bc26113f858220f545", null ],

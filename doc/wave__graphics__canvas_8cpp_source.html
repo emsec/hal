@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -334,7 +334,7 @@ $(document).ready(function(){initNavTree('wave__graphics__canvas_8cpp_source.htm
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <span class="keywordflow">if</span> (newScale &gt;= 100) <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keywordflow">if</span> (newScale*mTransform.<a class="code" href="classhal_1_1_wave_transform.html#a15508265cd96b95a347be874fa1d5e74">deltaT</a>()*1.2&lt;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewport">viewport</a>()-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#width-prop">width</a>() &amp;&amp; newScale &lt; oldScale) <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keywordtype">double</span> tEvent = (evt-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qinputevent.html#modifiers">modifiers</a>() &amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::ShiftModifier</a>)</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                ? mScrollbar-&gt;<a class="code" href="classhal_1_1_wave_scrollbar.html#a55d1cc353e84d45d005c997b3f9ba24f">tPosF</a>(evt-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwheelevent-obsolete.html#pos">pos</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html#x">x</a>())</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                ? mScrollbar-&gt;<a class="code" href="classhal_1_1_wave_scrollbar.html#a55d1cc353e84d45d005c997b3f9ba24f">tPosF</a>(evt-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwheelevent.html#position">position</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html#x">x</a>())</div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;                : mCursorTime;</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        mTransform.<a class="code" href="classhal_1_1_wave_transform.html#a7956a480b09a0ab78e5b6177d3f4989d">setScale</a>(newScale);</div>
@@ -518,6 +518,7 @@ $(document).ready(function(){initNavTree('wave__graphics__canvas_8cpp_source.htm
 <div class="ttc" id="aqpoint_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a></div></div>
 <div class="ttc" id="aqpoint_html_x"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpoint.html#x">QPoint::x</a></div><div class="ttdeci">int x() const const</div></div>
 <div class="ttc" id="aqpoint_html_y"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpoint.html#y">QPoint::y</a></div><div class="ttdeci">int y() const const</div></div>
+<div class="ttc" id="aqpointf_html_x"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpointf.html#x">QPointF::x</a></div><div class="ttdeci">qreal x() const const</div></div>
 <div class="ttc" id="aqrect_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qrect.html">QRect</a></div></div>
 <div class="ttc" id="aqrect_html_contains-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qrect.html#contains-1">QRect::contains</a></div><div class="ttdeci">bool contains(const QRect &amp;rectangle, bool proper) const const</div></div>
 <div class="ttc" id="aqrect_html_left"><div class="ttname"><a href="https://doc.qt.io/qt-5/qrect.html#left">QRect::left</a></div><div class="ttdeci">int left() const const</div></div>
@@ -533,9 +534,9 @@ $(document).ready(function(){initNavTree('wave__graphics__canvas_8cpp_source.htm
 <div class="ttc" id="aqt_html_KeyboardModifier-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qt.html#KeyboardModifier-enum">Qt::ShiftModifier</a></div><div class="ttdeci">ShiftModifier</div></div>
 <div class="ttc" id="aqt_html_MouseButton-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qt.html#MouseButton-enum">Qt::LeftButton</a></div><div class="ttdeci">LeftButton</div></div>
 <div class="ttc" id="aqt_html_ScrollBarPolicy-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qt.html#ScrollBarPolicy-enum">Qt::ScrollBarAlwaysOn</a></div><div class="ttdeci">ScrollBarAlwaysOn</div></div>
-<div class="ttc" id="aqwheelevent-obsolete_html_pos"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwheelevent-obsolete.html#pos">QWheelEvent::pos</a></div><div class="ttdeci">QPoint pos() const const</div></div>
 <div class="ttc" id="aqwheelevent_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwheelevent.html">QWheelEvent</a></div></div>
 <div class="ttc" id="aqwheelevent_html_angleDelta"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwheelevent.html#angleDelta">QWheelEvent::angleDelta</a></div><div class="ttdeci">QPoint angleDelta() const const</div></div>
+<div class="ttc" id="aqwheelevent_html_position"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwheelevent.html#position">QWheelEvent::position</a></div><div class="ttdeci">QPointF position() const const</div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
 <div class="ttc" id="aqwidget_html_QWidget"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#QWidget">QWidget::QWidget</a></div><div class="ttdeci">QWidget(QWidget *parent, Qt::WindowFlags f)</div></div>
 <div class="ttc" id="aqwidget_html_contentsRect"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#contentsRect">QWidget::contentsRect</a></div><div class="ttdeci">QRect contentsRect() const const</div></div>

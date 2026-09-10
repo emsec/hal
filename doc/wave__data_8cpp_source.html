@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -1815,38 +1815,41 @@ $(document).ready(function(){initNavTree('wave__data_8cpp_source.html',''); init
 <div class="line"><a name="l01725"></a><span class="lineno"><a class="line" href="classhal_1_1_wave_data_list.html#ac6984c086b93133ddacb2b2954f49337"> 1725</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> <a class="code" href="classhal_1_1_wave_data_list.html#ac6984c086b93133ddacb2b2954f49337">WaveDataList::toSet</a>()<span class="keyword"> const</span></div>
 <div class="line"><a name="l01726"></a><span class="lineno"> 1726</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l01727"></a><span class="lineno"> 1727</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;u32&gt;</a> keyList = mIds.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#keys">keys</a>();</div>
-<div class="line"><a name="l01728"></a><span class="lineno"> 1728</span>&#160;        <span class="keywordflow">return</span> keyList.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#toSet">toSet</a>();</div>
-<div class="line"><a name="l01729"></a><span class="lineno"> 1729</span>&#160;        <span class="comment">// return QSet&lt;u32&gt;(keyList.begin(),keyList.end());</span></div>
-<div class="line"><a name="l01730"></a><span class="lineno"> 1730</span>&#160;    }</div>
-<div class="line"><a name="l01731"></a><span class="lineno"> 1731</span>&#160; </div>
-<div class="line"><a name="l01732"></a><span class="lineno"><a class="line" href="classhal_1_1_wave_data_list.html#a8e5a47dc7846464c7d78cba9f859417e"> 1732</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_wave_data_list.html#a8e5a47dc7846464c7d78cba9f859417e">WaveDataList::remove</a>(<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>)</div>
-<div class="line"><a name="l01733"></a><span class="lineno"> 1733</span>&#160;    {</div>
-<div class="line"><a name="l01734"></a><span class="lineno"> 1734</span>&#160;        <span class="keyword">auto</span> it = mIds.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#find">find</a>(<span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l01735"></a><span class="lineno"> 1735</span>&#160;        <span class="keywordflow">if</span> (it == mIds.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#end">end</a>()) <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l01736"></a><span class="lineno"> 1736</span>&#160;        <span class="keywordtype">int</span> inx = it.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap-iterator.html#value">value</a>();</div>
-<div class="line"><a name="l01737"></a><span class="lineno"> 1737</span>&#160;        <a class="code" href="classhal_1_1_wave_data.html">WaveData</a>* toDelete = <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#at">at</a>(inx);</div>
-<div class="line"><a name="l01738"></a><span class="lineno"> 1738</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#removeAt">removeAt</a>(inx);</div>
-<div class="line"><a name="l01739"></a><span class="lineno"> 1739</span>&#160;        restoreIndex();</div>
-<div class="line"><a name="l01740"></a><span class="lineno"> 1740</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_wave_data_list.html#a57467e2b84d51add44104d0f178f0afe">waveRemoved</a>(inx);</div>
-<div class="line"><a name="l01741"></a><span class="lineno"> 1741</span>&#160;        mTrashCan.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#append">append</a>(toDelete);</div>
-<div class="line"><a name="l01742"></a><span class="lineno"> 1742</span>&#160;    }</div>
-<div class="line"><a name="l01743"></a><span class="lineno"> 1743</span>&#160; </div>
-<div class="line"><a name="l01744"></a><span class="lineno"><a class="line" href="classhal_1_1_wave_data_list.html#a614f2fd5850cfc8c978d23f4ac3bf5c4"> 1744</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_wave_data_list.html#a614f2fd5850cfc8c978d23f4ac3bf5c4">WaveDataList::setValueForEmpty</a>(<span class="keywordtype">int</span> val)</div>
-<div class="line"><a name="l01745"></a><span class="lineno"> 1745</span>&#160;    {</div>
-<div class="line"><a name="l01746"></a><span class="lineno"> 1746</span>&#160;        <span class="keywordtype">int</span> inx = 0;</div>
-<div class="line"><a name="l01747"></a><span class="lineno"> 1747</span>&#160; </div>
-<div class="line"><a name="l01748"></a><span class="lineno"> 1748</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#constBegin">constBegin</a>(); it!= <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#constEnd">constEnd</a>(); ++it)</div>
-<div class="line"><a name="l01749"></a><span class="lineno"> 1749</span>&#160;        {</div>
-<div class="line"><a name="l01750"></a><span class="lineno"> 1750</span>&#160;            <span class="keywordflow">if</span> ((*it)-&gt;data().isEmpty())</div>
-<div class="line"><a name="l01751"></a><span class="lineno"> 1751</span>&#160;            {</div>
-<div class="line"><a name="l01752"></a><span class="lineno"> 1752</span>&#160;                (*it)-&gt;insert(0,val);</div>
-<div class="line"><a name="l01753"></a><span class="lineno"> 1753</span>&#160;                <a class="code" href="classhal_1_1_wave_data_list.html#a2266aa948977dfb04dd47c1deccad686">emitWaveUpdated</a>(inx);</div>
-<div class="line"><a name="l01754"></a><span class="lineno"> 1754</span>&#160;            }</div>
-<div class="line"><a name="l01755"></a><span class="lineno"> 1755</span>&#160;            ++inx;</div>
-<div class="line"><a name="l01756"></a><span class="lineno"> 1756</span>&#160;        }</div>
-<div class="line"><a name="l01757"></a><span class="lineno"> 1757</span>&#160;    }</div>
-<div class="line"><a name="l01758"></a><span class="lineno"> 1758</span>&#160; </div>
-<div class="line"><a name="l01759"></a><span class="lineno"> 1759</span>&#160;}</div>
+<div class="line"><a name="l01728"></a><span class="lineno"> 1728</span>&#160;<span class="preprocessor">#if QT_VERSION &gt;= QT_VERSION_CHECK(5, 14, 0)</span></div>
+<div class="line"><a name="l01729"></a><span class="lineno"> 1729</span>&#160;        <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>(keyList.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#constBegin">constBegin</a>(),keyList.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#constEnd">constEnd</a>());</div>
+<div class="line"><a name="l01730"></a><span class="lineno"> 1730</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l01731"></a><span class="lineno"> 1731</span>&#160;        <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#fromList">QSet&lt;u32&gt;::fromList</a>(keyList);</div>
+<div class="line"><a name="l01732"></a><span class="lineno"> 1732</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l01733"></a><span class="lineno"> 1733</span>&#160;    }</div>
+<div class="line"><a name="l01734"></a><span class="lineno"> 1734</span>&#160; </div>
+<div class="line"><a name="l01735"></a><span class="lineno"><a class="line" href="classhal_1_1_wave_data_list.html#a8e5a47dc7846464c7d78cba9f859417e"> 1735</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_wave_data_list.html#a8e5a47dc7846464c7d78cba9f859417e">WaveDataList::remove</a>(<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>)</div>
+<div class="line"><a name="l01736"></a><span class="lineno"> 1736</span>&#160;    {</div>
+<div class="line"><a name="l01737"></a><span class="lineno"> 1737</span>&#160;        <span class="keyword">auto</span> it = mIds.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#find">find</a>(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l01738"></a><span class="lineno"> 1738</span>&#160;        <span class="keywordflow">if</span> (it == mIds.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#end">end</a>()) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l01739"></a><span class="lineno"> 1739</span>&#160;        <span class="keywordtype">int</span> inx = it.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap-iterator.html#value">value</a>();</div>
+<div class="line"><a name="l01740"></a><span class="lineno"> 1740</span>&#160;        <a class="code" href="classhal_1_1_wave_data.html">WaveData</a>* toDelete = <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#at">at</a>(inx);</div>
+<div class="line"><a name="l01741"></a><span class="lineno"> 1741</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#removeAt">removeAt</a>(inx);</div>
+<div class="line"><a name="l01742"></a><span class="lineno"> 1742</span>&#160;        restoreIndex();</div>
+<div class="line"><a name="l01743"></a><span class="lineno"> 1743</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_wave_data_list.html#a57467e2b84d51add44104d0f178f0afe">waveRemoved</a>(inx);</div>
+<div class="line"><a name="l01744"></a><span class="lineno"> 1744</span>&#160;        mTrashCan.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#append">append</a>(toDelete);</div>
+<div class="line"><a name="l01745"></a><span class="lineno"> 1745</span>&#160;    }</div>
+<div class="line"><a name="l01746"></a><span class="lineno"> 1746</span>&#160; </div>
+<div class="line"><a name="l01747"></a><span class="lineno"><a class="line" href="classhal_1_1_wave_data_list.html#a614f2fd5850cfc8c978d23f4ac3bf5c4"> 1747</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_wave_data_list.html#a614f2fd5850cfc8c978d23f4ac3bf5c4">WaveDataList::setValueForEmpty</a>(<span class="keywordtype">int</span> val)</div>
+<div class="line"><a name="l01748"></a><span class="lineno"> 1748</span>&#160;    {</div>
+<div class="line"><a name="l01749"></a><span class="lineno"> 1749</span>&#160;        <span class="keywordtype">int</span> inx = 0;</div>
+<div class="line"><a name="l01750"></a><span class="lineno"> 1750</span>&#160; </div>
+<div class="line"><a name="l01751"></a><span class="lineno"> 1751</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#constBegin">constBegin</a>(); it!= <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#constEnd">constEnd</a>(); ++it)</div>
+<div class="line"><a name="l01752"></a><span class="lineno"> 1752</span>&#160;        {</div>
+<div class="line"><a name="l01753"></a><span class="lineno"> 1753</span>&#160;            <span class="keywordflow">if</span> ((*it)-&gt;data().isEmpty())</div>
+<div class="line"><a name="l01754"></a><span class="lineno"> 1754</span>&#160;            {</div>
+<div class="line"><a name="l01755"></a><span class="lineno"> 1755</span>&#160;                (*it)-&gt;insert(0,val);</div>
+<div class="line"><a name="l01756"></a><span class="lineno"> 1756</span>&#160;                <a class="code" href="classhal_1_1_wave_data_list.html#a2266aa948977dfb04dd47c1deccad686">emitWaveUpdated</a>(inx);</div>
+<div class="line"><a name="l01757"></a><span class="lineno"> 1757</span>&#160;            }</div>
+<div class="line"><a name="l01758"></a><span class="lineno"> 1758</span>&#160;            ++inx;</div>
+<div class="line"><a name="l01759"></a><span class="lineno"> 1759</span>&#160;        }</div>
+<div class="line"><a name="l01760"></a><span class="lineno"> 1760</span>&#160;    }</div>
+<div class="line"><a name="l01761"></a><span class="lineno"> 1761</span>&#160; </div>
+<div class="line"><a name="l01762"></a><span class="lineno"> 1762</span>&#160;}</div>
 <div class="ttc" id="acandidate__search_8cpp_html_acfd6273064c5acdcfc39a23a69dd4343"><div class="ttname"><a href="candidate__search_8cpp.html#acfd6273064c5acdcfc39a23a69dd4343">size</a></div><div class="ttdeci">u32 size</div><div class="ttdef"><b>Definition:</b> <a href="candidate__search_8cpp_source.html#l00067">candidate_search.cpp:67</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html_a9c83dda09f69fb886f33d792cfb8fa6f"><div class="ttname"><a href="classhal_1_1_boolean_function.html#a9c83dda09f69fb886f33d792cfb8fa6f">hal::BooleanFunction::from_string</a></div><div class="ttdeci">static Result&lt; BooleanFunction &gt; from_string(const std::string &amp;expression)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l01063">boolean_function.cpp:1063</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html_aac7bb4fda3bf06664f6bc717c3be92fb"><div class="ttname"><a href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">hal::BooleanFunction::Value</a></div><div class="ttdeci">Value</div><div class="ttdoc">represents the type of the node</div><div class="ttdef"><b>Definition:</b> <a href="boolean__function_8h_source.html#l00073">boolean_function.h:74</a></div></div>
@@ -2018,12 +2021,12 @@ $(document).ready(function(){initNavTree('wave__data_8cpp_source.html',''); init
 <div class="ttc" id="aclasshal_1_1_wave_data_list_html_a57467e2b84d51add44104d0f178f0afe"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a57467e2b84d51add44104d0f178f0afe">hal::WaveDataList::waveRemoved</a></div><div class="ttdeci">void waveRemoved(int inx)</div></div>
 <div class="ttc" id="aclasshal_1_1_wave_data_list_html_a590ff7c154885d2050beca1f827680c3"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a590ff7c154885d2050beca1f827680c3">hal::WaveDataList::~WaveDataList</a></div><div class="ttdeci">~WaveDataList()</div><div class="ttdef"><b>Definition:</b> <a href="wave__data_8cpp_source.html#l01273">wave_data.cpp:1273</a></div></div>
 <div class="ttc" id="aclasshal_1_1_wave_data_list_html_a5ffefda4de1598984a9ba24c136d25b6"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a5ffefda4de1598984a9ba24c136d25b6">hal::WaveDataList::waveRenamed</a></div><div class="ttdeci">void waveRenamed(int iwave)</div></div>
-<div class="ttc" id="aclasshal_1_1_wave_data_list_html_a614f2fd5850cfc8c978d23f4ac3bf5c4"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a614f2fd5850cfc8c978d23f4ac3bf5c4">hal::WaveDataList::setValueForEmpty</a></div><div class="ttdeci">void setValueForEmpty(int val)</div><div class="ttdef"><b>Definition:</b> <a href="wave__data_8cpp_source.html#l01744">wave_data.cpp:1744</a></div></div>
+<div class="ttc" id="aclasshal_1_1_wave_data_list_html_a614f2fd5850cfc8c978d23f4ac3bf5c4"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a614f2fd5850cfc8c978d23f4ac3bf5c4">hal::WaveDataList::setValueForEmpty</a></div><div class="ttdeci">void setValueForEmpty(int val)</div><div class="ttdef"><b>Definition:</b> <a href="wave__data_8cpp_source.html#l01747">wave_data.cpp:1747</a></div></div>
 <div class="ttc" id="aclasshal_1_1_wave_data_list_html_a6e3cdc3900bbff86bf4cb0d268fad0b0"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a6e3cdc3900bbff86bf4cb0d268fad0b0">hal::WaveDataList::waveDataById</a></div><div class="ttdeci">WaveData * waveDataById(const int id)</div><div class="ttdef"><b>Definition:</b> <a href="wave__data_8cpp_source.html#l01673">wave_data.cpp:1673</a></div></div>
 <div class="ttc" id="aclasshal_1_1_wave_data_list_html_a7d4d9c77da8b4db121b786d0059705ce"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a7d4d9c77da8b4db121b786d0059705ce">hal::WaveDataList::dump</a></div><div class="ttdeci">void dump() const</div><div class="ttdef"><b>Definition:</b> <a href="wave__data_8cpp_source.html#l01333">wave_data.cpp:1333</a></div></div>
 <div class="ttc" id="aclasshal_1_1_wave_data_list_html_a808faecb8599d8206653c8ba37bfc682"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a808faecb8599d8206653c8ba37bfc682">hal::WaveDataList::clearAll</a></div><div class="ttdeci">void clearAll()</div><div class="ttdef"><b>Definition:</b> <a href="wave__data_8cpp_source.html#l01320">wave_data.cpp:1320</a></div></div>
 <div class="ttc" id="aclasshal_1_1_wave_data_list_html_a83ebaee0ec1df13fca3383ca38d3eb86"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a83ebaee0ec1df13fca3383ca38d3eb86">hal::WaveDataList::timeframeChanged</a></div><div class="ttdeci">void timeframeChanged(const hal::WaveDataTimeframe *tframe)</div></div>
-<div class="ttc" id="aclasshal_1_1_wave_data_list_html_a8e5a47dc7846464c7d78cba9f859417e"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a8e5a47dc7846464c7d78cba9f859417e">hal::WaveDataList::remove</a></div><div class="ttdeci">void remove(u32 id)</div><div class="ttdef"><b>Definition:</b> <a href="wave__data_8cpp_source.html#l01732">wave_data.cpp:1732</a></div></div>
+<div class="ttc" id="aclasshal_1_1_wave_data_list_html_a8e5a47dc7846464c7d78cba9f859417e"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a8e5a47dc7846464c7d78cba9f859417e">hal::WaveDataList::remove</a></div><div class="ttdeci">void remove(u32 id)</div><div class="ttdef"><b>Definition:</b> <a href="wave__data_8cpp_source.html#l01735">wave_data.cpp:1735</a></div></div>
 <div class="ttc" id="aclasshal_1_1_wave_data_list_html_a8f3000bac933ff61655b27d6f1171b70"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a8f3000bac933ff61655b27d6f1171b70">hal::WaveDataList::updateFromSaleae</a></div><div class="ttdeci">void updateFromSaleae()</div><div class="ttdef"><b>Definition:</b> <a href="wave__data_8cpp_source.html#l01586">wave_data.cpp:1586</a></div></div>
 <div class="ttc" id="aclasshal_1_1_wave_data_list_html_a924994aa07aeb03306b32a99efce3d62"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a924994aa07aeb03306b32a99efce3d62">hal::WaveDataList::waveAdded</a></div><div class="ttdeci">void waveAdded(int inx)</div></div>
 <div class="ttc" id="aclasshal_1_1_wave_data_list_html_a94315a8c55df0e281792fc86eb64176d"><div class="ttname"><a href="classhal_1_1_wave_data_list.html#a94315a8c55df0e281792fc86eb64176d">hal::WaveDataList::timeFrame</a></div><div class="ttdeci">const WaveDataTimeframe &amp; timeFrame() const</div><div class="ttdef"><b>Definition:</b> <a href="wave__data_8h_source.html#l00233">wave_data.h:233</a></div></div>
@@ -2102,7 +2105,6 @@ $(document).ready(function(){initNavTree('wave__data_8cpp_source.html',''); init
 <div class="ttc" id="aqlist_html_operator-5b-5d-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#operator-5b-5d-1">QList&lt; WaveData * &gt;::operator[]</a></div><div class="ttdeci">const T &amp; operator[](int i) const const</div></div>
 <div class="ttc" id="aqlist_html_removeAt"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#removeAt">QList::removeAt</a></div><div class="ttdeci">void removeAt(int i)</div></div>
 <div class="ttc" id="aqlist_html_size"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#size">QList::size</a></div><div class="ttdeci">int size() const const</div></div>
-<div class="ttc" id="aqlist_html_toSet"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#toSet">QList::toSet</a></div><div class="ttdeci">QSet&lt; T &gt; toSet() const const</div></div>
 <div class="ttc" id="aqmap-const-iterator_html_key"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmap-const-iterator.html#key">QMap::const_iterator::key</a></div><div class="ttdeci">const Key &amp; key() const const</div></div>
 <div class="ttc" id="aqmap-iterator_html_key"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmap-iterator.html#key">QMap::iterator::key</a></div><div class="ttdeci">const Key &amp; key() const const</div></div>
 <div class="ttc" id="aqmap-iterator_html_value"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmap-iterator.html#value">QMap::iterator::value</a></div><div class="ttdeci">T &amp; value() const const</div></div>
@@ -2131,6 +2133,7 @@ $(document).ready(function(){initNavTree('wave__data_8cpp_source.html',''); init
 <div class="ttc" id="aqobject_html_Q_EMIT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT</a></div><div class="ttdeci">Q_EMITQ_EMIT</div></div>
 <div class="ttc" id="aqset_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html">QSet&lt; QString &gt;</a></div></div>
 <div class="ttc" id="aqset_html_contains"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains</a></div><div class="ttdeci">bool contains(const T &amp;value) const const</div></div>
+<div class="ttc" id="aqset_html_fromList"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#fromList">QSet::fromList</a></div><div class="ttdeci">QSet&lt; T &gt; fromList(const QList&lt; T &gt; &amp;list)</div></div>
 <div class="ttc" id="aqset_html_insert"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert</a></div><div class="ttdeci">QSet::iterator insert(const T &amp;value)</div></div>
 <div class="ttc" id="aqset_html_isEmpty"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty</a></div><div class="ttdeci">bool isEmpty() const const</div></div>
 <div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>

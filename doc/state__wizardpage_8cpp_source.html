@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-126-g20ffa0a34</span>
+   &#160;<span id="projectnumber">v4.5.0-127-g52d171207</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -116,8 +116,8 @@ $(document).ready(function(){initNavTree('state__wizardpage_8cpp_source.html',''
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a>(mStateIdentifier, &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qlineedit.html#textChanged">QLineEdit::textChanged</a>, <span class="keyword">this</span>, &amp;StateWizardPage::handleTextChanged);</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a>(mNegStateIdentifier, &amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qlineedit.html#textChanged">QLineEdit::textChanged</a>, <span class="keyword">this</span>, &amp;StateWizardPage::handleNegTextChanged);</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qregexp.html">QRegExp</a> rx(<span class="stringliteral">&quot;[A-z]([A-z]|\\d|_)*&quot;</span>);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        mValidator = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qregexpvalidator.html">QRegExpValidator</a>(rx, <span class="keyword">this</span>);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qregularexpression.html">QRegularExpression</a> rx(<span class="stringliteral">&quot;^[A-z]([A-z]|\\d|_)*$&quot;</span>);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        mValidator = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qregularexpressionvalidator.html">QRegularExpressionValidator</a>(rx, <span class="keyword">this</span>);</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        mStateIdentifier-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qlineedit.html#setValidator">setValidator</a>(mValidator);</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        mNegStateIdentifier-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qlineedit.html#setValidator">setValidator</a>(mValidator);</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    }</div>
@@ -196,8 +196,8 @@ $(document).ready(function(){initNavTree('state__wizardpage_8cpp_source.html',''
 <div class="ttc" id="aqlineedit_html_textChanged"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlineedit.html#textChanged">QLineEdit::textChanged</a></div><div class="ttdeci">void textChanged(const QString &amp;text)</div></div>
 <div class="ttc" id="aqobject_html_Q_EMIT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT</a></div><div class="ttdeci">Q_EMITQ_EMIT</div></div>
 <div class="ttc" id="aqobject_html_connect"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect</a></div><div class="ttdeci">QMetaObject::Connection connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type)</div></div>
-<div class="ttc" id="aqregexp_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qregexp.html">QRegExp</a></div></div>
-<div class="ttc" id="aqregexpvalidator_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qregexpvalidator.html">QRegExpValidator</a></div></div>
+<div class="ttc" id="aqregularexpression_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qregularexpression.html">QRegularExpression</a></div></div>
+<div class="ttc" id="aqregularexpressionvalidator_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qregularexpressionvalidator.html">QRegularExpressionValidator</a></div></div>
 <div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>
 <div class="ttc" id="aqstring_html_fromStdString"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a></div><div class="ttdeci">QString fromStdString(const std::string &amp;str)</div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>

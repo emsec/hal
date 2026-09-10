@@ -2,7 +2,7 @@ var classhal_1_1_expanding_list_button =
 [
     [ "ExpandingListButton", "classhal_1_1_expanding_list_button.html#ab64c4d4f28033c0a473449c8d16bf08f", null ],
     [ "clicked", "classhal_1_1_expanding_list_button.html#a1d56eaf3f1c22532220a33d588a7ef8d", null ],
-    [ "enterEvent", "classhal_1_1_expanding_list_button.html#ac36a1452e0c809229ec5dd3475bdef54", null ],
+    [ "enterEvent", "classhal_1_1_expanding_list_button.html#ad8e5a93197a35d0b7d04c9f08b4da03a", null ],
     [ "hover", "classhal_1_1_expanding_list_button.html#a62fb01130a3156c5eafc382639016072", null ],
     [ "iconStyle", "classhal_1_1_expanding_list_button.html#ae7f8504fe6b4349fc730cd3fd2287438", null ],
     [ "leaveEvent", "classhal_1_1_expanding_list_button.html#afdf291d930841b31fdbd3a72dbe84022", null ],
