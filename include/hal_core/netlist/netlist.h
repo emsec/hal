@@ -856,16 +856,19 @@ namespace hal
         std::unordered_map<u32, std::unique_ptr<Module>> m_modules_map;
         std::unordered_set<const Module*> m_modules_set;
         std::vector<Module*> m_modules;
+        std::unordered_map<Module*, u32> m_module_positions;    // position of every module in m_modules, for constant-time removal
 
         /* stores the nets */
         std::unordered_map<u32, std::unique_ptr<Net>> m_nets_map;
         std::unordered_set<const Net*> m_nets_set;
         std::vector<Net*> m_nets;
+        std::unordered_map<Net*, u32> m_net_positions;    // position of every net in m_nets, for constant-time removal
 
         /* stores the gates */
         std::unordered_map<u32, std::unique_ptr<Gate>> m_gates_map;
         std::unordered_set<const Gate*> m_gates_set;
         std::vector<Gate*> m_gates;
+        std::unordered_map<Gate*, u32> m_gate_positions;    // position of every gate in m_gates, for constant-time removal
 
         /* stores the groupings */
         std::unordered_map<u32, std::unique_ptr<Grouping>> m_groupings_map;
