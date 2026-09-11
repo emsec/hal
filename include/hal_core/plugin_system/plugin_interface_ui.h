@@ -43,12 +43,12 @@ namespace hal
         virtual ~UIPluginInterface() = default;
 
         /**
-         * Generic call to run the interactive UI.
+         * Run the user interface until it ends.
          *
          * @param[in] args - Program options for HAL.
-         * @returns `true` on success, `false` otherwise.
+         * @returns The exit code of the process: 0 on success, the code of a script that ended through `sys.exit` or `hal_gui.quit`, 1 on any other error.
          */
-        virtual bool exec(ProgramArguments& args) = 0;
+        virtual int exec(ProgramArguments& args) = 0;
 
         /**
          * Generic call to block layouter.

@@ -52,6 +52,8 @@ void initialize_cli_options(ProgramOptions& cli_options)
     generic_options.add({"-e", "--empty-project"}, "create an empty project (requires gate library to be specified)");
     generic_options.add("--volatile-mode", "prevent HAL from creating a .hal progress file (e.g., for cluster use)");
     generic_options.add("--no-log", "prevent hal from creating a .log file");
+    generic_options.add("--python-script", "run a Python script; inside the GUI once the netlist is open when combined with --gui, otherwise without a GUI", {ProgramOptions::A_REQUIRED_PARAMETER});
+    generic_options.add({"--python-args", "--py-args"}, "arguments handed to the Python script as sys.argv; quote several in one string separated by spaces", {ProgramOptions::A_REQUIRED_PARAMETER});
 
     /* initialize netlist parser options */
     generic_options.add(netlist_parser_manager::get_cli_options());
@@ -176,6 +178,12 @@ int main(int argc, const char* argv[])
             }
         }
 
+        // a script without a user interface option runs in the headless Python shell
+        if (plugins_to_execute.empty() && args.is_option_set("--python-script"))
+        {
+            plugins_to_execute.push_back("python_shell");
+        }
+
         if (plugins_to_execute.size() > 1)
         {
             log_error("core", "passed options for multiple ui plugins: {}", utils::join(", ", plugins_to_execute));
@@ -213,9 +221,7 @@ int main(int argc, const char* argv[])
             /* add timestamp to log output */
             LogManager::get_instance()->set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
 
-            auto ret = plugin->exec(args);
-
-            return cleanup(ret ? ERROR : SUCCESS);
+            return cleanup(plugin->exec(args));
         }
     }
 

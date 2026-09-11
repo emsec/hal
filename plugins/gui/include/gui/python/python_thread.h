@@ -67,6 +67,7 @@ namespace hal {
         QString mScript;
         QString mErrorMessage;
         QString mResult;
+        int mExitCode = 0;
         QString mStdoutBuffer;
         unsigned long mPythonThreadID;
         QVariant mInput;
@@ -85,6 +86,11 @@ namespace hal {
         void run() override;
         void interrupt();
         QString errorMessage() const { return mErrorMessage; }
+
+        /**
+         * The exit code the script ended with: 0 when it ran to its end or called `sys.exit()` without a code, the code it gave `sys.exit`, or 1 on an unhandled exception.
+         */
+        int exitCode() const { return mExitCode; }
         QString result() const { return mResult; }
         void handleStdout(const QString& output) override;
         void handleError(const QString& output) override;

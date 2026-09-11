@@ -99,7 +99,7 @@ namespace hal
          * @param args - The given program arguments.
          * @return `true` on success, `false` otherwise.
          */
-        bool exec(ProgramArguments& args) override;
+        int exec(ProgramArguments& args) override;
 
         /**
          * Call to block layouter.

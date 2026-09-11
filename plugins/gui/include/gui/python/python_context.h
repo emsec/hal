@@ -126,6 +126,38 @@ namespace hal
         void interpretScript(QObject* caller, const QString& input);
 
         /**
+         * Runs a Python script file the way `--python-script` does: on the Python thread, with its output mirrored to
+         * the terminal, and with its exit code kept for the end of the process.
+         *
+         * @param path - The path of the script file.
+         * @param arguments - What the script sees as `sys.argv`.
+         */
+        void runScriptFile(const QString& path, const QStringList& arguments = QStringList());
+
+        /**
+         * Copy everything the console shows to the standard output and error streams of the process as well.
+         *
+         * @param enable - Set `true` to mirror, `false` to stop.
+         */
+        void setMirrorToTerminal(bool enable);
+
+        /**
+         * The exit code of the last script run through `runScriptFile`, or the code handed to `requestQuit`, 0 otherwise.
+         *
+         * @returns The exit code.
+         */
+        int scriptExitCode() const;
+
+        /**
+         * Ask the application to end with the given exit code, from any thread.
+         *
+         * @param exitCode - The exit code of the process.
+         * @param discardChanges - Set `true` to skip the prompt for unsaved changes, `false` to close the main window as the user would.
+         */
+        void requestQuit(int exitCode, bool discardChanges);
+
+
+        /**
          * Forwards standard output to the python console.
          *
          * @param output - The output
@@ -206,6 +238,7 @@ namespace hal
 
     private Q_SLOTS:
         void handleThreadFinished();
+        void performQuit();
         void handleScriptOutput(const QString& txt);
         void handleScriptError(const QString& txt);
         void handleInputRequired(int type, const QString& prompt, const QVariant& defaultValue);
@@ -232,6 +265,11 @@ namespace hal
         bool mThreadAborted;
         PyThreadState* mMainThreadState;
         QObject* mInterpreterCaller;
+        bool mMirrorToTerminal  = false;
+        bool mQuitRequested     = false;
+        bool mQuitDiscards      = false;
+        bool mScriptFileRunning = false;
+        int mScriptExitCode     = 0;
 
         void startThread(const QString& input, bool singleStatement);
     };

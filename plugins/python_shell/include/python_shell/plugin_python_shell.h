@@ -91,7 +91,7 @@ namespace hal
          * @param[in] args - The command line parameters.
          * @returns `true` on success, `false` otherwise.
          */
-        bool exec(ProgramArguments& args) override;
+        int exec(ProgramArguments& args) override;
 
         /**
          * Nothing to do for GUI layout locker.

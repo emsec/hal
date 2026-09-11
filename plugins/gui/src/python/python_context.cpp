@@ -7,6 +7,7 @@
 #include "gui/module_dialog/gate_dialog.h"
 #include "gui/module_dialog/module_dialog.h"
 #include "gui/graph_widget/layout_locker.h"
+#include "gui/main_window/main_window.h"
 #include "hal_core/python_bindings/python_bindings.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
@@ -17,6 +18,9 @@
 #include <QApplication>
 #include <QFileDialog>
 #include <fstream>
+#include <iostream>
+#include <QFile>
+#include <QMetaObject>
 #include <gui/python/python_context.h>
 
 // Following is needed for PythonContext::checkCompleteStatement
@@ -159,7 +163,8 @@ namespace hal
                               "import io, sys, threading\n"
                               "from hal_gui.console import reset\n"
                               "from hal_gui.console import clear\n"
-                              "import hal_py\n";
+                              "import hal_py\n"
+                              "from hal_py import *\n";    // as the headless shell does, so a script runs unchanged in both
 
         py::exec(command, *context, *context);
 
@@ -308,6 +313,87 @@ namespace hal
         startThread(input,false);
     }
 
+    void PythonContext::runScriptFile(const QString& path, const QStringList& arguments)
+    {
+        if (mThread)
+        {
+            log_warning("python", "Not executed, python script already running");
+            return;
+        }
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            forwardError("cannot read python script '" + path + "'\n");
+            mScriptExitCode = 1;
+            return;
+        }
+        const QString script = QString::fromUtf8(file.readAll());
+
+        {
+            // sys.argv is interpreter-wide, so it is set here rather than in the script's own context
+            PyGILState_STATE state = PyGILState_Ensure();
+            {
+                // the Python objects must be gone before the GIL is released again
+                py::list argv;
+                for (const QString& argument : arguments)
+                {
+                    argv.append(argument.toStdString());
+                }
+                py::module_::import("sys").attr("argv") = argv;
+            }
+            PyGILState_Release(state);
+        }
+        mInterpreterCaller   = nullptr;
+        mScriptFileRunning   = true;
+        startThread(script, false);
+    }
+
+    void PythonContext::setMirrorToTerminal(bool enable)
+    {
+        mMirrorToTerminal = enable;
+    }
+
+    int PythonContext::scriptExitCode() const
+    {
+        return mScriptExitCode;
+    }
+
+    void PythonContext::requestQuit(int exitCode, bool discardChanges)
+    {
+        mScriptExitCode = exitCode;
+        mQuitRequested  = true;
+        mQuitDiscards   = discardChanges;
+        if (mThread && QThread::currentThread() == mThread)
+        {
+            // called from a running script: the script ends first, and handleThreadFinished quits once its output is out
+            return;
+        }
+        performQuit();
+    }
+
+    void PythonContext::performQuit()
+    {
+        mQuitRequested = false;
+        QMetaObject::invokeMethod(
+            qApp,
+            [discardChanges = mQuitDiscards]() {
+                if (!discardChanges)
+                {
+                    for (QWidget* widget : qApp->topLevelWidgets())
+                    {
+                        if (auto* mainWindow = dynamic_cast<MainWindow*>(widget))
+                        {
+                            // goes through the close prompt for unsaved changes; the user may cancel
+                            mainWindow->close();
+                            return;
+                        }
+                    }
+                }
+                qApp->quit();
+            },
+            Qt::QueuedConnection);
+    }
+
     void PythonContext::handleScriptOutput(const QString& txt)
     {
         if (!txt.isEmpty())
@@ -417,6 +503,7 @@ namespace hal
             mThreadAborted = false;
             return;
         }
+        const bool aborted = mThreadAborted;
         if (!mThreadAborted)
         {
             errmsg = mThread->errorMessage();
@@ -429,6 +516,16 @@ namespace hal
         {
             forwardError("\nPython thread aborted\n");
             mThreadAborted = false;
+        }
+
+        if (mScriptFileRunning)
+        {
+            mScriptExitCode    = aborted ? 1 : mQuitRequested ? mScriptExitCode : mThread->exitCode();
+            mScriptFileRunning = false;
+        }
+        if (mQuitRequested)
+        {
+            performQuit();
         }
 
         mThread->deleteLater();
@@ -472,6 +569,10 @@ namespace hal
         {
             log_info("python", "{}", utils::rtrim(output.toStdString(), "\r\n"));
         }
+        if (mMirrorToTerminal)
+        {
+            std::cout << output.toStdString() << std::flush;
+        }
         if (mConsole)
         {
             mConsole->handleStdout(output);
@@ -481,6 +582,10 @@ namespace hal
     void PythonContext::forwardError(const QString& output)
     {
         log_error("python", "{}", output.toStdString());
+        if (mMirrorToTerminal)
+        {
+            std::cerr << output.toStdString() << std::flush;
+        }
         if (mConsole)
         {
             mConsole->handleError(output);

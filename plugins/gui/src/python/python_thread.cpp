@@ -59,15 +59,36 @@ namespace hal {
         }
         catch (py::error_already_set& e)
         {
-            qDebug() << "AlreadySet";
-            mErrorMessage = QString::fromStdString(std::string(e.what()) + "\n");
+            if (e.matches(PyExc_SystemExit))
+            {
+                // sys.exit() ends the script, not the GUI: None is 0, an int is the code, anything else is printed and is 1
+                py::object code = e.value().attr("code");
+                if (code.is_none())
+                {
+                    mExitCode = 0;
+                }
+                else if (py::isinstance<py::int_>(code))
+                {
+                    mExitCode = code.cast<int>();
+                }
+                else
+                {
+                    mErrorMessage = QString::fromStdString(py::str(code).cast<std::string>() + "\n");
+                    mExitCode     = 1;
+                }
+            }
+            else
+            {
+                mErrorMessage = QString::fromStdString(std::string(e.what()) + "\n");
+                mExitCode     = 1;
+            }
             e.restore();
             PyErr_Clear();
         }
         catch (std::exception& e)
         {
-            qDebug() << "Exception";
             mErrorMessage = QString::fromStdString(std::string(e.what()) + "#\n");
+            mExitCode     = 1;
         }
 
        // running out of scope calls PyGILState_Release(state);

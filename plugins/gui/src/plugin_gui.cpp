@@ -11,6 +11,8 @@
 #include "gui/plugin_relay/plugin_relay.h"
 #include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/python/python_context.h"
+
+#include <memory>
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/user_action/user_action_manager.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
@@ -165,7 +167,7 @@ namespace hal
         return;
     }
 
-    bool PluginGui::exec(ProgramArguments& args)
+    int PluginGui::exec(ProgramArguments& args)
     {
         int argc;
         const char** argv;
@@ -266,8 +268,38 @@ namespace hal
         MainWindow w;
         handleProgramArguments(args);
         w.show();
-        auto ret = a.exec();
-        return ret;
+
+        if (args.is_option_set("--python-script"))
+        {
+            // the same script a headless run gets, started once the netlist named on the command line is open
+            const QString scriptPath = QString::fromStdString(args.get_parameter("--python-script"));
+            // split the way the headless shell does, so that sys.argv is the same in both
+            QStringList scriptArguments;
+            if (args.is_option_set("--python-args"))
+            {
+                for (const std::string& argument : utils::split(args.get_parameter("--python-args"), ' '))
+                {
+                    scriptArguments.append(QString::fromStdString(argument));
+                }
+            }
+            gPythonContext->setMirrorToTerminal(true);
+            const bool opening = args.is_option_set("--project-dir") || args.is_option_set("--import-netlist");
+            if (!opening || FileManager::get_instance()->fileOpen())
+            {
+                gPythonContext->runScriptFile(scriptPath, scriptArguments);
+            }
+            else
+            {
+                auto connection = std::make_shared<QMetaObject::Connection>();
+                *connection     = QObject::connect(FileManager::get_instance(), &FileManager::fileOpened, [scriptPath, scriptArguments, connection](const QString&) {
+                    QObject::disconnect(*connection);
+                    gPythonContext->runScriptFile(scriptPath, scriptArguments);
+                });
+            }
+        }
+
+        const int ret = a.exec();
+        return ret != 0 ? ret : gPythonContext->scriptExitCode();
     }
 
     std::string PluginGui::get_name() const

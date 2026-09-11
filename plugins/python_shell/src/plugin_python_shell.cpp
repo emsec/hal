@@ -7,6 +7,12 @@
 #include <Python.h>
 #include <cstring>
 #include <fstream>
+#include <iostream>
+
+#include "pybind11/embed.h"
+#include "pybind11/eval.h"
+
+namespace py = pybind11;
 
 namespace hal
 {
@@ -20,9 +26,6 @@ namespace hal
         ProgramOptions description;
 
         description.add("--python", "start python shell");
-        description.add("--python-script", "run a python script in HAL. to pass args use --python-args", {ProgramOptions::A_REQUIRED_PARAMETER});
-        description.add(
-            {"--python-args", "--py-args"}, "supply arguments to the python invocation. to provide multiple arguments use '\"' and separate them with spaces", {ProgramOptions::A_REQUIRED_PARAMETER});
 
         return description;
     }
@@ -37,7 +40,47 @@ namespace hal
         return std::string("0.1");
     }
 
-    bool PluginPythonShell::exec(ProgramArguments& args)
+    namespace
+    {
+        /// Python code that binds `netlist` to the project or netlist named on the command line, or to None.
+        std::string netlist_loader(const ProgramArguments& args)
+        {
+            const auto quote = [](const std::string& text) { return "r'''" + text + "'''"; };
+
+            if (args.is_option_set("--project-dir"))
+            {
+                return "netlist = hal_py.NetlistFactory.load_hal_project(" + quote(args.get_parameter("--project-dir")) + ")\n";
+            }
+            if (args.is_option_set("--import-netlist"))
+            {
+                std::string code = "netlist = hal_py.NetlistFactory.load_netlist(" + quote(args.get_parameter("--import-netlist"));
+                if (args.is_option_set("--gate-library"))
+                {
+                    code += ", " + quote(args.get_parameter("--gate-library"));
+                }
+                return code + ")\n";
+            }
+            return "netlist = None\n";
+        }
+
+        /// The exit code a script asked for through SystemExit: None is 0, an int is itself, anything else is printed and is 1.
+        int exit_code_of(py::error_already_set& e)
+        {
+            py::object code = e.value().attr("code");
+            if (code.is_none())
+            {
+                return 0;
+            }
+            if (py::isinstance<py::int_>(code))
+            {
+                return code.cast<int>();
+            }
+            std::cerr << py::str(code).cast<std::string>() << std::endl;
+            return 1;
+        }
+    }    // namespace
+
+    int PluginPythonShell::exec(ProgramArguments& args)
     {
         int argc       = 0;
         wchar_t** argv = nullptr;
@@ -68,8 +111,19 @@ namespace hal
                 if (argv[i] == nullptr)
                 {
                     log_error(get_name(), "unable to convert argument '{}' for Python", py_args[i]);
-                    return false;
+                    return 1;
                 }
+            }
+        }
+
+        std::string script_path;
+        if (args.is_option_set("--python-script"))
+        {
+            script_path = args.get_parameter("--python-script");
+            if (!std::filesystem::exists(script_path) || std::filesystem::is_directory(script_path) || !utils::ends_with(script_path, std::string(".py")))
+            {
+                log_error(get_name(), "'{}' is not a python script file", script_path);
+                return 1;
             }
         }
 
@@ -78,36 +132,47 @@ namespace hal
 
         PySys_SetArgv(argc, argv);
 
-        PyRun_SimpleString("import sys");
-        PyRun_SimpleString(std::string("sys.path.append(\"" + utils::get_library_directory().string() + "\")").c_str());
-        PyRun_SimpleString("from hal_py import *");
-        PyRun_SimpleString("import hal_py");
-
-        // changing cwd not required
-        // PyRun_SimpleString("import os");
-        // PyRun_SimpleString(("os.chdir(\""+ std::filesystem::current_path().string() +"\")").c_str());
-
-        if (args.is_option_set("--python-script"))
+        int exit_code = 0;
         {
-            auto file_path = args.get_parameter("--python-script");
-            if (!std::filesystem::exists(file_path) || std::filesystem::is_directory(file_path) || !utils::ends_with(file_path, std::string(".py")))
+            // the scope ends before Py_Finalize, so that no Python object outlives the interpreter
+            py::dict globals = py::module_::import("__main__").attr("__dict__");
+            try
             {
-                log_error(get_name(), "'{}' is not a python script file", file_path);
-                return false;
+                py::exec("import sys\n"
+                         "sys.path.append(r'''" + utils::get_library_directory().string() + "''')\n"
+                         "from hal_py import *\n"
+                         "import hal_py\n"
+                         + netlist_loader(args),
+                         globals);
+
+                if (script_path.empty())
+                {
+                    // interactive shell; Py_Main takes over stdin until the user leaves it
+                    Py_Main(argc, argv);
+                }
+                else if (globals["netlist"].is_none() && (args.is_option_set("--project-dir") || args.is_option_set("--import-netlist")))
+                {
+                    log_error(get_name(), "could not load the netlist, the script is not run");
+                    exit_code = 1;
+                }
+                else
+                {
+                    py::eval_file(script_path, globals);
+                }
             }
-
-            std::ifstream stream(file_path);
-            std::string str;
-            stream.seekg(0, std::ios::end);
-            str.reserve(stream.tellg());
-            stream.seekg(0, std::ios::beg);
-            str.assign((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
-
-            PyRun_SimpleString(str.c_str());
-        }
-        else
-        {
-            Py_Main(argc, argv);
+            catch (py::error_already_set& e)
+            {
+                if (e.matches(PyExc_SystemExit))
+                {
+                    exit_code = exit_code_of(e);
+                }
+                else
+                {
+                    e.restore();
+                    PyErr_Print();
+                    exit_code = 1;
+                }
+            }
         }
 
         Py_Finalize();
@@ -118,6 +183,6 @@ namespace hal
             PyMem_RawFree(argv[i]);
         }
         delete[] argv;
-        return 0;
+        return exit_code;
     }
 }    // namespace hal
