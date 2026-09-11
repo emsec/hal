@@ -54,6 +54,18 @@ try:
         view_id = hal.eval("gui.View.isolate_in_new([], netlist.get_gates()[:3])")
         expect("view created", isinstance(view_id, int) and view_id > 0, str(view_id))
         expect("view holds the gates", hal.eval(f"len(gui.View.get_gates({view_id}))") == 3)
+        expect("view can be shown", hal.eval(f"gui.View.show({view_id})") is True)
+        expect("unknown view is refused", hal.eval("gui.View.show(999999)") is False)
+        named = hal.eval("gui.View.isolate_in_new([], netlist.get_gates()[:2], 'probe view')")
+        expect("named view", hal.eval(f"gui.View.get_name({named})") == "probe view")
+
+        graph_png, window_png = WORK / "graph.png", WORK / "window.png"
+        for png in (graph_png, window_png):
+            png.unlink(missing_ok=True)
+        expect("graph screenshot", hal.screenshot(graph_png, view_id) is True)
+        expect("graph screenshot is a PNG", graph_png.exists() and graph_png.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n" and graph_png.stat().st_size > 1000, str(graph_png.stat().st_size if graph_png.exists() else None))
+        expect("window screenshot", hal.window_screenshot(window_png) is True)
+        expect("window screenshot is a PNG", window_png.exists() and window_png.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n" and window_png.stat().st_size > 1000)
 
         # requests queue behind one another: the second waits for the first
         exit_code, out, _ = hal.run("import time; time.sleep(1); print('first')")

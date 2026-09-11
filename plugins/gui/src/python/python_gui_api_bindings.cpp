@@ -145,14 +145,22 @@ PYBIND11_PLUGIN(hal_gui)
             )");
 
     py::class_<GuiApiClasses::View>(py_gui_api, "View")
-    .def_static("isolate_in_new", &GuiApiClasses::View::isolateInNew, py::arg("modules"), py::arg("gates"),R"(
-        Isolates given modules and gates into a new view
+    .def_static("isolate_in_new", &GuiApiClasses::View::isolateInNew, py::arg("modules"), py::arg("gates"), py::arg("name") = std::string(), R"(
+        Isolates given modules and gates into a new view.
 
-        :param list[hal_py.module] modules: List of modules to be added.
-        :param list[hal_py.Gate] gates: List of gates to be added.
-        :returns: ID of created view or the existing one if view is exclusively bound to a module.
+        :param list[hal_py.Module] modules: The modules to isolate.
+        :param list[hal_py.Gate] gates: The gates to isolate.
+        :param str name: The name of the new view. A name that is taken gets a number appended. Defaults to ``Isolated View`` with a number, or to the module's name if exactly one module and no gates are given.
+        :returns: The ID of the new view, 0 on failure.
         :rtype: int
-)")
+    )")
+    .def_static("show", &GuiApiClasses::View::show, py::arg("id"), R"(
+        Shows the view with the given ID in the graph tab widget, opening a tab for it if there is none.
+
+        :param int id: The ID of the view.
+        :returns: ``True`` on success, ``False`` if there is no such view.
+        :rtype: bool
+    )")
     .def_static("rename", &GuiApiClasses::View::setName, py::arg("id"), py::arg("name"),R"(
         Renames the view specified by the given ID.
 
@@ -695,6 +703,25 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("deselect_all_items", py::overload_cast<>(&GuiApi::deselectAllItems), R"(
        Deselect all gates, nets and modules in the graph view of the GUI.
+)");
+
+    py_gui_api.def("grab_graph_view", &GuiApi::grabGraphView, py::arg("path"), py::arg("view_id") = 0, R"(
+       Render the graph of a view to an image file.
+
+       The view is shown first if it is not, and its layout is awaited. The whole graph is rendered, scaled down if it would exceed 4096 pixels on a side.
+
+       :param str path: The file to write, its extension selects the format, e.g. ``.png``.
+       :param int view_id: The ID of the view, 0 for the view currently shown. Defaults to 0.
+       :returns: ``True`` on success, ``False`` otherwise.
+       :rtype: bool
+)");
+
+    py_gui_api.def("grab_window", &GuiApi::grabWindow, py::arg("path"), R"(
+       Save a picture of the whole main window to an image file.
+
+       :param str path: The file to write, its extension selects the format, e.g. ``.png``.
+       :returns: ``True`` on success, ``False`` otherwise.
+       :rtype: bool
 )");
 
 

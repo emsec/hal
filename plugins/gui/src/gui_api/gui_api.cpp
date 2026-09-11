@@ -18,6 +18,18 @@
 #include "gui/context_manager_widget/models/context_tree_model.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/netlist/netlist_utils.h"
+#include "gui/content_manager/content_manager.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/graph_widget.h"
+#include "gui/graph_widget/graphics_scene.h"
+#include "gui/main_window/main_window.h"
+
+#include <QApplication>
+#include <QElapsedTimer>
+#include <QImage>
+#include <QPainter>
+#include <QThread>
 
 #include <algorithm>
 
@@ -506,7 +518,129 @@ namespace hal
     }
 
 
-    int GuiApiClasses::View::isolateInNew(std::vector<Module*> modules, std::vector<Gate*> gates)
+    namespace
+    {
+        /// Runs `function` on the GUI thread and returns its result, from any thread.
+        template<typename Function>
+        auto runOnGuiThread(Function&& function) -> decltype(function())
+        {
+            if (QThread::currentThread() == qApp->thread())
+            {
+                return function();
+            }
+            decltype(function()) result{};
+            QMetaObject::invokeMethod(qApp, [&]() { result = function(); }, Qt::BlockingQueuedConnection);
+            return result;
+        }
+
+        /// Waits until the layouter of the context is done, processing events meanwhile; `false` on timeout.
+        bool waitForLayout(GraphContext* context)
+        {
+            QElapsedTimer timer;
+            timer.start();
+            while (context->sceneUpdateInProgress() && timer.elapsed() < 300000)
+            {
+                QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
+            }
+            return !context->sceneUpdateInProgress();
+        }
+    }    // namespace
+
+    bool GuiApiClasses::View::show(int id)
+    {
+        return runOnGuiThread([id]() {
+            GraphContext* context = gGraphContextManager->getContextById(id);
+            if (!context)
+            {
+                log_warning("gui", "no view with ID {}", id);
+                return false;
+            }
+            gContentManager->getGraphTabWidget()->showContext(context);
+            return true;
+        });
+    }
+
+    bool GuiApi::grabGraphView(const std::string& path, u32 viewId)
+    {
+        return runOnGuiThread([&]() {
+            GraphContext* context = nullptr;
+            if (viewId == 0)
+            {
+                for (GraphContext* candidate : gGraphContextManager->getContexts())
+                {
+                    if (gContentManager->getGraphTabWidget()->visibleStatus(candidate) > 0)
+                    {
+                        context = candidate;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                context = gGraphContextManager->getContextById(viewId);
+            }
+            if (!context)
+            {
+                log_warning("gui", "no view to render, view ID {}", viewId);
+                return false;
+            }
+            gContentManager->getGraphTabWidget()->showContext(context);
+            if (!waitForLayout(context))
+            {
+                log_warning("gui", "the layout of view '{}' did not finish", context->name().toStdString());
+                return false;
+            }
+            GraphicsScene* scene = context->scene();
+            if (!scene)
+            {
+                log_warning("gui", "view '{}' has no scene", context->name().toStdString());
+                return false;
+            }
+            const QRectF area = scene->itemsBoundingRect().adjusted(-50, -50, 50, 50);
+            if (area.isEmpty())
+            {
+                log_warning("gui", "view '{}' shows nothing", context->name().toStdString());
+                return false;
+            }
+            const qreal scale = std::min(1.0, 4096.0 / std::max(area.width(), area.height()));
+            QImage image(QSize(std::max(1, int(area.width() * scale)), std::max(1, int(area.height() * scale))), QImage::Format_ARGB32);
+            image.fill(scene->backgroundBrush().style() == Qt::NoBrush ? qApp->palette().color(QPalette::Window) : scene->backgroundBrush().color());
+            QPainter painter(&image);
+            painter.setRenderHint(QPainter::Antialiasing);
+            painter.setRenderHint(QPainter::TextAntialiasing);
+            scene->render(&painter, QRectF(), area);
+            painter.end();
+            if (!image.save(QString::fromStdString(path)))
+            {
+                log_warning("gui", "cannot write image '{}'", path);
+                return false;
+            }
+            return true;
+        });
+    }
+
+    bool GuiApi::grabWindow(const std::string& path)
+    {
+        return runOnGuiThread([&]() {
+            for (QWidget* widget : qApp->topLevelWidgets())
+            {
+                if (auto* window = dynamic_cast<MainWindow*>(widget))
+                {
+                    QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
+                    if (!window->grab().save(QString::fromStdString(path)))
+                    {
+                        log_warning("gui", "cannot write image '{}'", path);
+                        return false;
+                    }
+                    return true;
+                }
+            }
+            log_warning("gui", "no main window to grab");
+            return false;
+        });
+    }
+
+    int GuiApiClasses::View::isolateInNew(std::vector<Module*> modules, std::vector<Gate*> gates, const std::string& name)
     {
         //check if the inputs are valid
         for(Module* mod : modules)
@@ -526,7 +660,7 @@ namespace hal
                 return 0;
             }
         }
-        QString name;
+        QString viewName;
 
         bool isModuleExclusive = false;
 
@@ -535,23 +669,27 @@ namespace hal
             return 0;
 
         //Check if view should be bound exclusively to module
-        if(modules.size() == 1 && gates.empty() && modules[0]){
-            name = QString::fromStdString(modules[0]->get_name()) + QString(" (ID: %1)").arg(modules[0]->get_id());
+        if(name.empty() && modules.size() == 1 && gates.empty() && modules[0]){
+            viewName = QString::fromStdString(modules[0]->get_name()) + QString(" (ID: %1)").arg(modules[0]->get_id());
             isModuleExclusive = true;
             //If the view already exists then return existing id
-            if(gGraphContextManager->contextWithNameExists(name)){
+            if(gGraphContextManager->contextWithNameExists(viewName)){
                 for(GraphContext* ctx : gGraphContextManager->getContexts()){
-                    if(ctx->name() == name){
+                    if(ctx->name() == viewName){
                         return ctx->id();
                     }
                 }
                 return 0;
             }
         }
+        else if (!name.empty() && !gGraphContextManager->contextWithNameExists(QString::fromStdString(name)))
+        {
+            viewName = QString::fromStdString(name);
+        }
         else
         {
             //Get the number which has to be appended to name
-            name   = gGraphContextManager->nextViewName("Isolated View");
+            viewName = gGraphContextManager->nextViewName(name.empty() ? "Isolated View" : QString::fromStdString(name));
         }
         GuiApiClasses::View::ModuleGateIdPair pair = GuiApiClasses::View::getValidObjects(0, modules, gates);
 
@@ -564,7 +702,7 @@ namespace hal
 
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
+        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, viewName));
         act->addAction(new ActionAddItemsToObject(moduleIds, gateIds));
         UserActionManager::instance()->executeActionBlockThread(act);
 

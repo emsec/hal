@@ -89,6 +89,14 @@ class HalRemote:
         """Interrupt whatever is running."""
         return self._request({"abort": True})
 
+    def screenshot(self, path, view_id=0):
+        """Render the graph of a view (the shown one by default) to an image file the GUI can write; returns True on success."""
+        return self.eval(f"gui.grab_graph_view({str(path)!r}, {int(view_id)})")
+
+    def window_screenshot(self, path):
+        """Save a picture of the whole main window to an image file the GUI can write; returns True on success."""
+        return self.eval(f"gui.grab_window({str(path)!r})")
+
     def quit(self, exit_code=0, discard_changes=False):
         """Close the GUI; the process ends with the given code."""
         return self.run(f"import hal_gui; hal_gui.quit({int(exit_code)}, {bool(discard_changes)})")

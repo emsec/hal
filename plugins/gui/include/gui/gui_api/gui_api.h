@@ -60,7 +60,15 @@ namespace hal
              * 
              * @return The id of the requested view. Returns 0 if the view could not be created.
              */
-            static int isolateInNew(const std::vector<Module*> modules, const std::vector<Gate*> gates);
+            static int isolateInNew(const std::vector<Module*> modules, const std::vector<Gate*> gates, const std::string& name = "");
+
+            /**
+             * Shows the view with the given ID in the graph tab widget, opening a tab for it if there is none.
+             *
+             * @param id - The ID of the view.
+             * @returns `true` on success, `false` if there is no such view.
+             */
+            static bool show(int id);
             /**
              * Deletes a view.
              * 
@@ -268,6 +276,26 @@ namespace hal
         Q_OBJECT
 
     public:
+        /**
+         * Renders the graph of a view to an image file.
+         *
+         * The view is shown first if it is not, and its layout is awaited. The whole graph is rendered, scaled down if
+         * it would exceed 4096 pixels on a side.
+         *
+         * @param path - The file to write, its extension selects the format, e.g. `.png`.
+         * @param viewId - The ID of the view, 0 for the view currently shown.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool grabGraphView(const std::string& path, u32 viewId = 0);
+
+        /**
+         * Saves a picture of the whole main window to an image file.
+         *
+         * @param path - The file to write, its extension selects the format, e.g. `.png`.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool grabWindow(const std::string& path);
+
         /**
          * Constructor.
          */
