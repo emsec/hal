@@ -23,45 +23,45 @@ if [[ "$platform" == 'macOS' ]]; then
     pip3 install -r requirements.txt
     BREW_PREFIX=$(brew --prefix)
     if [ -n "$($SHELL -c 'echo $ZSH_VERSION')" ]; then
-        grep -Fxq 'export PATH="$BREW_PREFIX/opt/qt/bin:$PATH"' ~/.zshrc
+        grep -Fxq "export PATH=\"$BREW_PREFIX/opt/qt/bin:\$PATH\"" ~/.zshrc
         if ! [[ $? -eq 0 ]]; then
-            echo 'export PATH="$BREW_PREFIX/opt/qt/bin:$PATH"' >> ~/.zshrc
+            echo "export PATH=\"$BREW_PREFIX/opt/qt/bin:\$PATH\"" >> ~/.zshrc
         fi
 
-        grep -Fxq 'export PATH="$BREW_PREFIX/opt/llvm@14/bin:$PATH"' ~/.zshrc
+        grep -Fxq "export PATH=\"$BREW_PREFIX/opt/llvm@14/bin:\$PATH\"" ~/.zshrc
         if ! [[ $? -eq 0 ]]; then
-            echo 'export PATH="$BREW_PREFIX/opt/llvm@14/bin:$PATH"' >> ~/.zshrc
+            echo "export PATH=\"$BREW_PREFIX/opt/llvm@14/bin:\$PATH\"" >> ~/.zshrc
         fi
 
-        grep -Fxq 'export PATH="$BREW_PREFIX/opt/flex/bin:$PATH"' ~/.zshrc
+        grep -Fxq "export PATH=\"$BREW_PREFIX/opt/flex/bin:\$PATH\"" ~/.zshrc
         if ! [[ $? -eq 0 ]]; then
-            echo 'export PATH="$BREW_PREFIX/opt/flex/bin:$PATH"' >> ~/.zshrc
+            echo "export PATH=\"$BREW_PREFIX/opt/flex/bin:\$PATH\"" >> ~/.zshrc
         fi
 
-        grep -Fxq 'export PATH="$BREW_PREFIX/opt/bison/bin:$PATH"' ~/.zshrc
+        grep -Fxq "export PATH=\"$BREW_PREFIX/opt/bison/bin:\$PATH\"" ~/.zshrc
         if ! [[ $?  -eq 0 ]]; then
-            echo 'export PATH="$BREW_PREFIX/opt/bison/bin:$PATH"' >> ~/.zshrc
+            echo "export PATH=\"$BREW_PREFIX/opt/bison/bin:\$PATH\"" >> ~/.zshrc
         fi
         source ~/.zshrc
     elif [ -n "$($SHELL -c 'echo $BASH_VERSION')" ]; then
-        grep -Fxq 'export PATH="$BREW_PREFIX/opt/qt/bin:$PATH"' ~/.bash_profile
+        grep -Fxq "export PATH=\"$BREW_PREFIX/opt/qt/bin:\$PATH\"" ~/.bash_profile
         if ! [[ $? -eq 0 ]]; then
-            echo 'export PATH="$BREW_PREFIX/opt/qt/bin:$PATH"' >> ~/.bash_profile
+            echo "export PATH=\"$BREW_PREFIX/opt/qt/bin:\$PATH\"" >> ~/.bash_profile
         fi
 
-        grep -Fxq 'export PATH="$BREW_PREFIX/opt/llvm@14/bin:$PATH"' ~/.bash_profile
+        grep -Fxq "export PATH=\"$BREW_PREFIX/opt/llvm@14/bin:\$PATH\"" ~/.bash_profile
         if ! [[ $? -eq 0 ]]; then
-            echo 'export PATH="$BREW_PREFIX/opt/llvm@14/bin:$PATH"' >> ~/.bash_profile
+            echo "export PATH=\"$BREW_PREFIX/opt/llvm@14/bin:\$PATH\"" >> ~/.bash_profile
         fi
 
-        grep -Fxq 'export PATH="$BREW_PREFIX/opt/flex/bin:$PATH"' ~/.bash_profile
+        grep -Fxq "export PATH=\"$BREW_PREFIX/opt/flex/bin:\$PATH\"" ~/.bash_profile
         if ! [[ $? -eq 0 ]]; then
-            echo 'export PATH="$BREW_PREFIX/opt/flex/bin:$PATH"' >> ~/.bash_profile
+            echo "export PATH=\"$BREW_PREFIX/opt/flex/bin:\$PATH\"" >> ~/.bash_profile
         fi
 
-        grep -Fxq 'export PATH="$BREW_PREFIX/opt/bison/bin:$PATH"' ~/.bash_profile
+        grep -Fxq "export PATH=\"$BREW_PREFIX/opt/bison/bin:\$PATH\"" ~/.bash_profile
         if ! [[ $?  -eq 0 ]]; then
-            echo 'export PATH="$BREW_PREFIX/opt/bison/bin:$PATH"' >> ~/.bash_profile
+            echo "export PATH=\"$BREW_PREFIX/opt/bison/bin:\$PATH\"" >> ~/.bash_profile
         fi
         source ~/.bash_profile
     else
