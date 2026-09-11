@@ -728,8 +728,8 @@ namespace hal
             :param list[hal_py.ModulePin] pins: The pins to be assigned to the pin group. Defaults to an empty list.
             :param hal_py.PinDirection direction: The direction of the pin group, if any. Defaults to ``hal_py.PinDirection.none``.
             :param hal_py.PinType type: The type of the pin group, if any. Defaults to ``hal_py.PinType.none``.
-            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.
-            :param int start_index: The start index of the pin group. Defaults to ``0``.
+            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``False``.
+            :param int start_index: The start index of the pin group. Defaults to ``0`` for an ascending group and to the index of the last pin for a descending one.
             :param bool delete_empty_groups: Set ``True`` to delete groups that are empty after the pins have been assigned to the new group, ``False`` to keep empty groups. Defaults to ``True``.
             :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to ``False``.
             :returns: The pin group on success, ``None`` otherwise.
@@ -781,9 +781,9 @@ namespace hal
             :param list[hal_py.ModulePin] pins: The pins to be assigned to the pin group. Defaults to an empty list.
             :param hal_py.PinDirection direction: The direction of the pin group, if any. Defaults to ``hal_py.PinDirection.none``.
             :param hal_py.PinType type: The type of the pin group, if any. Defaults to ``hal_py.PinType.none``.
-            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.
-            :param int start_index: The start index of the pin group. Defaults to ``0``.
-            :param bool delete_empty_groups: Set ``True``` to delete groups that are empty after the pins have been assigned to the new group, ```False``` to keep empty groups. Defaults to ```True```.
+            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``False``.
+            :param int start_index: The start index of the pin group. Defaults to ``0`` for an ascending group and to the index of the last pin for a descending one.
+            :param bool delete_empty_groups: Set ``True`` to delete groups that are empty after the pins have been assigned to the new group, ``False`` to keep empty groups. Defaults to ``True``.
             :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to ``False``.
             :returns: The pin group on success, ``None`` otherwise.
             :rtype: hal_py.ModulePinGroup or None
