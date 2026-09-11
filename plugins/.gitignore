@@ -3,6 +3,8 @@
 !bitorder_propagation/**/*
 !boolean_influence*
 !boolean_influence/**/*
+!clock_tree_extractor*
+!clock_tree_extractor/**/*
 !dataflow_analysis*
 !dataflow_analysis/**/*
 !dot_viewer*
