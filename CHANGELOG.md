@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file.
 * Core
   * fixed crash when passing a `nullptr` pin to `Net::remove_source` or `Net::remove_destination`, which is also reachable from Python
   * changed `Net` and `Gate` to identify a pin by pointer identity instead of by value when looking up an endpoint
+  * sped up deleting gates, nets and modules, which searched the object vectors of the netlist and of the owning module linearly for the element to remove; every such vector now keeps the position of its elements in a map (`utils::indexed_vector_push_back` and `indexed_vector_erase`) and removal is a constant-time swap with the last element
+  * sped up `Module::is_parent_module_of`, which walked the whole subtree of the module, for a top-level module the entire hierarchy, once per endpoint whenever module nets are recomputed; it now walks up the parent chain of the queried module, bounded by the depth of the hierarchy. Together with the constant-time removal, parsing the 216 MB OpenTitan Earl Grey Verilog netlist of 25,906 modules and 2.3 million endpoints went from 709 s to 31 s
+  * fixed `utils::split` reading the last character of an empty string, which is undefined behaviour
   * progress and layout reporting
     * added `ProgressScope` and `LayoutLocker` to the core, which report progress and suppress layout updates through the user interface plugin looked up at runtime, replacing the copies of `GuiLayoutLocker` in the dataflow analysis and module identification plugins
     * added `UIPluginInterface::set_progress` and `plugin_manager::get_ui_plugin`, so that a plugin no longer needs to provide a `GuiExtensionInterface` and register a callback just to report its progress
@@ -17,6 +20,7 @@ All notable changes to this project will be documented in this file.
     * fixed the progress overlay of the graph view staying up until it is clicked away after a dataflow analysis that was started from a script instead of from the plugin dialog, only the dialog reported the analysis as finished although both report its progress
     * fixed the progress overlay of the graph view never being dismissed after a module identification run, the call reporting the analysis as finished was commented out
     * fixed the progress overlay of the graph view being dismissed while the layout updates deferred during a dataflow analysis were still being applied, which left the graph view showing its spinner
+    * fixed the GUI freezing while a dataflow analysis started from its dialog reported its progress: the worker threads of the analysis updated the progress overlay directly, called `processEvents` from a thread that is not the GUI thread, and did so while holding the mutex that guards the results. Progress reported from another thread is now posted to the GUI thread, and the overlay names the phase of the analysis instead of a generic message
   * program options
     * added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
   * netlist traversal
@@ -29,9 +33,16 @@ All notable changes to this project will be documented in this file.
     * deprecated the three `netlist_utils::get_shortest_path` overloads in favour of `NetlistTraversalDecorator::get_shortest_path`, and `netlist_utils::get_ff_dependency_matrix` in favour of the one in the Boolean influence plugin, which also reports how strongly each flip-flop depends on another rather than only whether it does
     * moved `get_gate_chain` and `get_complex_gate_chain` from `netlist_utils` onto `NetlistTraversalDecorator`, where the rest of the traversal lives and where a binding can keep the netlist alive for as long as Python refers to the gates it returns
     * renamed `NetlistTraversalDecorator::get_next_combinational_gates` to `get_combinational_cone`, which is what it returns -- every combinational gate up to the sequential boundary, not a next layer of anything -- and removed the raw result-map cache parameter from it and from `get_next_sequential_gates`, whose reuse contract nothing enforced. Repeated traversals share results through a sealed `TraversalCache` instead. The Python bindings of both now also default `forbidden_pins` to an empty set like the C++ side always did
-    * added `NetlistTraversalDecorator::get_shortest_path` overloads that end at any gate of a module and that connect two modules, which existed only as free functions in `netlist_utils` before
+    * added `NetlistTraversalDecorator::get_shortest_path` overloads that end at any gate of a module and that connect two modules. The former existed only as a free function in `netlist_utils` before, the latter is new
   * gate library
     * fixed reloading a gate library destroying the library a netlist was built against, which silently replaced every gate type of that netlist. Gate libraries are now owned through a `shared_ptr` and outlive both the netlists and the Python handles that refer to them
+    * added the `GateTypeProperty::delay` gate type property for dedicated delay cells, such as those of a clock distribution network, which HGL files read and write as `delay`
+  * module pins
+    * sped up assigning gates to a module and removing them from it, `Module::get_pin_by_net` scanned every pin of the module and runs for every net of every gate that enters or leaves it; the pins are now indexed by net
+    * added `PinChangedBulkScope`, which collects the pin events of a bulk operation and sends a single `PinEvent::PinsReload` per affected module in their place, telling a listener to re-read the pins of that module. Assigning gates to modules opens one, which took creating and deleting 24 modules on a 7144 gate netlist from 43040 `pin_changed` events to 48; each event triggered from a Python script cost a round trip to the GUI thread, which was 91% of the script's runtime. Interactive pin changes keep their fine-grained events, and the pins tree of the GUI keeps its expanded groups and its selection across the reload
+    * fixed `Module::set_pin_group_direction` sending a `GroupTypeChange` pin event instead of `GroupDirChange`, so the pins tree of the GUI did not show the new direction of the group
+    * fixed the pin events collected while several pins are assigned to a group being delivered in pin ID order rather than in the order the rows come into being, so the pins tree of the GUI could insert a pin at a row its group item did not have yet and crash or show the pins out of order; an out-of-range row is now clamped as well
+    * changed the default pin order of both `Module::create_pin_group` overloads from ascending to descending, in C++ and in Python, matching the order the GUI, the dataflow analysis and the module identification produce. In Python, `start_index` now defaults to the index of the last pin for a descending group and to 0 for an ascending one
 * Boolean functions
   * added `to_string` to `SMT::QueryConfig`, `SMT::Model` and `SMT::SolverResult`, so that all four SMT types offer it the way `SMT::Constraint` already did instead of only an `operator<<`
   * fixed the printed form of an `SMT::Model` starting with a stray comma, `{, A:5}` instead of `{A:5}`
@@ -45,6 +56,9 @@ All notable changes to this project will be documented in this file.
   * fixed `SMT::Solver::has_local_solver_for` testing `SolverCall::Binary` in both of its branches, so the branch for `SolverCall::Library` was unreachable and library availability always reported `false`
   * fixed `SMT::SymbolicState::set` using `emplace`, which leaves an existing binding untouched, so setting a variable a second time did nothing and a loop stepping a symbolic state forward silently kept the value it started with
   * added simplification rules for the word level operations, which the single-bit simplification through ABC cannot reach: extensions to the width the value already has, nested extensions and slices, slices that fall into one half of a concatenation or into either part of an extension, unsigned comparisons against zero and the maximum, equality of a value with its own negation, and single bit equalities and selections
+  * fixed `BooleanFunction::to_string` reading past the end of its digit table when a bit-vector that contains an `X` or `Z` is converted to an octal or hexadecimal string, the undefined bit was folded into the table index before the digit was replaced by `X`
+  * fixed `BooleanFunction::from_string` rejecting Liberty expressions that combine Liberty-only syntax such as `A'` or `+` with spaces around the operators, which the Liberty grammar reads as additional AND operations; if neither grammar accepts an expression, it is parsed once more with every space removed, added as `BooleanFunctionParser::ParserType::LibertyNoSpace`
+  * added `SMT::SymbolicState::get_bindings`, which returns the variables bound in a symbolic state indexed by their name, so that a caller resolving many variables of one state no longer builds a Boolean function as the lookup key for each
 * Python bindings
   * fixed the four `boolean_influence` functions that return influences per net handing out the nets without keeping the netlist alive: they return dicts keyed by net, and nothing protected a borrowed object sitting in a dict key
   * added a warning, once per function and process, when a deprecated `NetlistUtils` function is called from Python, naming its replacement. `[[deprecated]]` warns whoever compiles, and a script has no compiler
@@ -55,6 +69,7 @@ All notable changes to this project will be documented in this file.
   * fixed `NetlistGraph` never being freed by Python: its factories hand over ownership but it was bound with a non-owning holder, so every graph built from a netlist leaked, more than a gigabyte over 1500 graphs on a 3458 gate netlist
   * fixed `GateLibrary::get_path` and the `path` property returning the name of the library instead of its path
   * fixed `GuiApi::getSelectedModules` and `getSelectedItems` not tying the returned modules to the netlist
+  * fixed `GuiApi::selectGate`, `selectNet` and `selectModule` with `clear_current_selection` set, which is the default, keeping the previous selection: the pending selection was cleared but the current one was united back into it right afterwards
   * added Python bindings for `NetlistGraph::from_gates`, `is_shadow_vertex`, and `get_all_vertices_from_gate`
   * added Python bindings for `ProgramOptions`, `ProgramArguments`, and `FacExtensionInterface`
   * added Python bindings for the remaining functions of `plugin_manager` and exposed the `initialize` and `silent` parameters of `get_plugin_instance`
@@ -70,6 +85,11 @@ All notable changes to this project will be documented in this file.
   * fixed three enum values that were bound to a different value of their own enum, which made them indistinguishable from Python: `GateTypeProperty.fifo` was bound to `ram`, `module_identification.CandidateType.addition_offset` to `addition`, and `gui_extension_demo.ParameterType.Module` to `Gate`
   * added `to_string` and `__str__` to `SMT.QueryConfig`, `SMT.Constraint`, `SMT.Model` and `SMT.SolverResult`, printing any of them showed an object address before
   * fixed every binding that carries the `hal::borrowed()` call policy segfaulting when it is called with arguments that its first overload does not accept, which happens with pybind11 3.1 and newer: the post-call hook is now also run for an overload whose arguments did not load and is handed a sentinel instead of an object. `Netlist.create_module` with a name, a parent, and a list of gates was the first such call in the binding smoke test, which is why the macOS CI, whose Homebrew pybind11 moved to 3.1.0 in September 2026, failed while the Ubuntu jobs on older pybind11 did not
+  * added `log_trace`, `log_debug`, `log_info`, `log_warning`, `log_error` and `log_critical` to `hal_py`, which take the channel first like the C++ macros and prefix every severity but `info` with the file and line of the calling Python code
+  * changed `BooleanFunction.nodes` from a method to a read-only property, which is what its documentation always claimed
+  * fixed `GateLibrary.get_gate_location_data_identifiers` being unreachable from Python, as it was registered under the name of `get_gate_location_data_category`
+  * fixed keyword arguments that did not match the documentation: `GateType.add_boolean_function(name)` was `pin_name`, `Module.contains_module(recursive)` was spelled `recusive`, `NetlistFactory.load_netlist_from_string(netlist_string)` was `hdl_string`, and `GateType.has_property(property)` had no keyword at all
+  * added the missing `delay` value of `GateTypeProperty`, which the enum gained in C++ but the binding never listed
 * Plugins
   * Boolean influence
     * fixed `get_ff_dependency_matrix` dereferencing an uninitialized pointer on every call, which segfaulted before it returned anything. The cache it passes on was never initialized, and a pointer that is not null passed the callee's check for one
@@ -90,8 +110,22 @@ All notable changes to this project will be documented in this file.
     * added the HAWKEYE S-box database to the build directory so that it is found at runtime, and clarified that `identify_sbox` returning an empty string means no match rather than an error
   * graph algorithm
     * added `NetlistGraph::from_gates` that builds a graph from a subset of the gates of a netlist, optionally representing a gate by a primary and a shadow vertex so that feedback through it does not close a cycle
+    * fixed `NetlistGraph` destroying an igraph graph that was never created when `from_netlist` or `copy` fail before creating it, and made `NetlistGraph` non-copyable, as the implicitly generated copy shared the igraph internals between two objects that both freed them
+  * clock tree extractor
+    * added the `clock_tree_extractor` plugin, which recovers the clock distribution network of a gate-level netlist. Starting at the clock pin of every flip-flop it walks against the signal direction through buffers, inverters, delay gates, clock gates and toggle-flip-flop clock dividers up to the global input nets that drive them, and returns the result as a `ClockTree`, a directed igraph graph whose vertices are gates and nets of the netlist. Reconvergent clock networks, i.e. meshes, are extracted as well. Available from Python as the `clock_tree_extractor` module
+    * added `ClockTree::from_netlist` that extracts the clock tree of a netlist, leaving out latches, power and ground nets, and the control inputs of clock gates, and reporting every unrouted or multi-driven clock net it skips as a warning
+    * added `ClockTree::export_dot` that writes the tree as a DOT graph, in which every gate carries its instance name, gate type and, where the netlist provides them, its `X` and `Y` coordinates as node attributes, is shaped by kind (buffer, inverter, delay gate, flip-flop, clock gate), and every edge downstream of an inverter switches colour, so that the polarity of the clock at each gate can be read off the graph
+    * added `ClockTree::get_subtree` that returns the clock tree below a gate or net as a `ClockTree` of its own, optionally starting one level up at the parent of the given object if it has exactly one
+    * added `ClockTree::get_neighbors`, bound to Python as `get_parents` and `get_childs`, that returns the gates and nets directly upstream or downstream of an object in the clock tree
+    * added `ClockTree::get_gates`, `get_nets`, `get_all` and `get_netlist` that list the gates and nets of a clock tree and hand back the netlist it was built from
+    * added `ClockTree::get_vertex_from_ptr`, `get_ptr_from_vertex`, `get_vertices_from_ptrs` and `get_ptrs_from_vertices` that translate between gates or nets and their igraph vertex IDs, and `ClockTree::get_igraph` that exposes the underlying `igraph_t` to C++ callers, so that any igraph algorithm can be run on the clock tree
   * dataflow analysis
-    * fixed broken initialization of DANA plugin when starting via CLI
+    * fixed running the dataflow analysis from the command line with `--dataflow`, which failed with "no gate types specified" as the CLI path configured neither the gate types nor the control pin types that the plugin dialog sets, and wrote no result. It now analyzes flip-flops with clock, enable, reset and set as control pins and writes `graph.dot` and `groups.txt` to the directory given by `--path`. `write_dot` and `write_txt` also no longer report "replacing invalid file extension" for a path whose extension is already correct
+    * fixed the dataflow analysis blocking a thread when it wrote its results, progress was reported while the lock that guards the results was held
+    * changed `create_modules` to create the pin groups of a DANA module in descending order, listing the highest index first as the GUI does by default, instead of renaming the single-pin group that the module already carried. The pin indices are unchanged
+    * added `Result::open_dot_in_viewer`, which the plugin dialog calls after writing the `.dot` file so that the dataflow graph opens in the DOT viewer if that plugin is loaded. `Result::write_dot` now returns the path it wrote to, as it replaces a wrong extension
+  * module identification
+    * changed the pin groups of an identified module to be descending, listing the highest index first as the GUI does by default. The pin indices are unchanged, and the `CTRL` group is now of type `control` instead of `enable`
   * FSM solver
     * reworked the API of `solve_fsm` into a single function that is set up through a `Configuration` object, which also selects between the SMT and the brute force approach
     * changed `solve_fsm` to report the value of each configured output of the FSM in each state, annotating the states of the DOT graph with it
@@ -102,6 +136,8 @@ All notable changes to this project will be documented in this file.
     * removed the debug output that `solve_fsm` printed to stdout on every run
     * fixed `solve_fsm` interpreting a user-provided initial state with the wrong bit order, which made the exploration start from a different state than the one requested
     * added tests for the `solve_fsm` plugin, which had none so far
+  * Liberty parser
+    * fixed the Liberty parser rejecting a `type` group that declares `bit_to`, the value was left in the token stream after the attribute was read and parsing then failed on what it took to be the end of the statement. The value is implied by `bit_from`, `bit_width` and `downto` and is still ignored
   * netlist preprocessing
     * fixed `remove_redundant_gates` treating two flip-flops as duplicates although they start out at different values, as the fingerprint it groups them by covers the gate type and the fan-in but not the initial value, and flip-flops are merged on that fingerprint alone without the equivalence check that combinational gates get. This affects 11 of the 13 flip-flop types of the Xilinx UNISIM library, all of which carry an `INIT` value
     * added an optional gate scope to the preprocessing functions of `netlist_preprocessing` and `xilinx_toolbox`, restricting which gates may be modified or deleted and defaulting to the entire netlist
@@ -112,36 +148,59 @@ All notable changes to this project will be documented in this file.
     * fixed `split_luts` crashing on a `LUT6_2` that only uses one of its two output pins, which is the common case the function is meant to handle
     * fixed the documentation of `split_shift_registers`, which claimed that only `SRL16E` is supported although `SRLC32E` is handled as well
     * added tests for the `xilinx_toolbox` plugin, which had none so far
+    * changed the members of `xilinx_toolbox::LOC` to be default-initialised, `loc_type` to `PIN` and both coordinates to `0`, so that the LOC of a package pin, for which the XDC parser sets no coordinates, no longer carries uninitialised values
   * bit-order propagation
     * changed the interface to speak in a `BitOrder`, which is the order of one module pin group, and a `BitOrderResult`, which is what a propagation reports, in place of a map from pairs of module and pin group to a map from net to index. A bit order is now an object rather than a container, so Python can be given one without losing track of the netlist it belongs to, and a result iterates by module and pin group ID rather than by the addresses they happen to sit at
     * added tests for the plugin, which had none
     * fixed bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
   * simulation
-    * added feature, selecting a waveform in viewer selects net in graph view as well
-    * fixed bug in waveform viewer, make sure that deleting a controller causes closing the tab
+    * added selecting the nets of the waveforms selected in the waveform viewer in the graph view as well, and removed the debug dump of the SALEAE directory that was printed to the console whenever waveforms were loaded
+    * fixed the waveform viewer keeping the tab of a simulation controller that was deleted, e.g. from Python, and dereferencing the deleted controller from it
+    * fixed the value of a waveform group being computed with the first net as LSB in `WaveDataGroup::recalcData`, `WaveDataProviderGroup` and `WaveGroupValue` while the rest of the viewer takes the first net as MSB since 4.5.0, so the same group showed different values depending on where it was evaluated
+    * changed the input columns of the simulation wizard to list the nets of a descending pin group from the highest index down, so that the bits of an entered value land on the nets in the order the group declares
+    * fixed the waveform tree losing the expanded or collapsed state of its groups whenever its items are reordered, e.g. after a drag and drop
+    * fixed dropping a waveform onto a group in the waveform tree always inserting it as the first entry of the group regardless of the drop position
+    * simulation wizard
+      * added `Load data from file` to the manual input page, which fills the input table from a SALEAE directory, a VCD or a CSV file so that the data can be edited before simulating
+      * added a `Display values as hex numbers` switch to the input table, and changed the table to accept values in the `0x`, `0o`, `0b` and the Verilog `'h`, `'o`, `'b`, `'d` notations as well as `"<character>` for the code of a character, each checked against the width of the pin group; before, a multi-bit column only took a bare hexadecimal number
+      * fixed editing a time in the middle of the input table replacing it with the previous time plus 1000 as if it were the last row; it is now kept if it lies between its neighbours and replaced by their midpoint otherwise
+      * fixed the wizard starting with the wave data and net groups of the previous run, its SALEAE directory and the controller are now reset when the wizard opens
+      * changed the window title from `Empty Wizard` to `Simulation Wizard` and greyed out the input method that is not selected
     * fixed the documentation of `NetlistSimulatorController::initialize`, which described the behaviour of the legacy `NetlistSimulator`: it claimed that no gates or clocks may be added afterwards and that `simulate` calls it automatically, neither of which holds since its body became empty
   * dot viewer
-    * added 'hover over node' feature in dot viewer
-    * fixed the DOT viewer drawing the line break escapes of a node label verbatim instead of breaking the line, and drawing a red debug rectangle around any label that does not fit its node
+    * added the `dot_viewer` plugin, which renders a Graphviz `.dot` file inside the GUI and, for a file written by another HAL plugin, ties the graph to the netlist. Its Python module is `dot_viewer` and its one function `load_dot_file(path, creator_plugin="")` returns whether the file was displayed. The viewer is opened from the plugin dialog or from `load_dot_file`, zooms with the mouse wheel and the zoom shortcuts of the graph view, pans by dragging with Shift held or with the middle mouse button if the graph view's middle-button panning is enabled, highlights the node under the mouse together with its edges, offers a grid toggle and a toolbar menu that chooses per node and edge whether the colors come from the DOT file or from the dark or light style of HAL, and honours the `\n` line breaks of a node label. The plugin that wrote the file is taken from the `creator_plugin` argument, else from a `created by HAL plugin` comment in the file, else asked for in a dialog. For a dataflow analysis graph, selecting a node selects the module in HAL and the other way round, a node follows its module when the module is renamed, and the context menu of an edge isolates the shortest path between its two modules in a new view; for an FSM solver graph, selecting a transition puts every net into a `0 state`, `1 state` or `x state` grouping according to the value the transition condition requires of it, the context menu of a transition lists those nets, and selecting a net in HAL highlights it in every transition it appears in
+    * renamed `DotViewerCallFromTread` to `DotViewerCallFromThread`
 * GUI
   * fixed the GUI hanging for minutes when a module with many gates is selected, `ModuleModel` emitted a row insert signal per item while the model was already being reset, which made the attached filter proxy remap its rows once per item
   * fixed the GUI stalling when a large module is unfolded, the tree views measured every row individually and shaped the text of each gate name just to learn how tall the row is
   * changed the module elements tree to not rebuild itself twice per selection change
-  * fixed bug in code and comment editor: avoid hang ups when RegExp-search returns zero-length matches
-  * added information to GUI setting file so that widgets position and size from previous session gets restored
-  * added option to focus on pin in pin context menu
-  * changed default order to 'descending' when creating a pin group via Python command
-  * changed behavior of GUI plugin manager to keep only those plugins loaded which are requested by user
+  * fixed the Python editor and the comment editor hanging when the search string is empty or the regular expression matches an empty string, `find` returned the same zero-length match forever; an empty search string now clears the highlighting
+  * added restoring the layout of the previous session on start: for every widget, plugin widgets included, its dock area, position, visibility, size and, if it was detached, the position of its window are written to the user settings file together with the splitter sizes when a netlist is closed and applied when the next one is opened
+  * added `Set focus to pin` to the context menu of a pin in the pin tree of a gate and of a module, which moves the sub-focus of the graph view to that pin
+  * changed the plugin manager of the GUI to unload a plugin, and the dependencies it pulled in, right after loading it to read its description, so that only plugins requested by the user or required by such a plugin stay loaded
   * fixed the GUI dropping an unrelated gate from the selection instead of the net itself when a selected net is deleted
   * fixed the GUI re-laying out its graph views once per gate while a preprocessing function invoked from a context menu deletes or replaces many of them
   * added context menu entries to the GUI for `remove_buffers`, `unify_ff_outputs`, `split_luts`, and `split_shift_registers`, each applicable to the current selection or to the entire netlist
+  * fixed the GUI crashing when the selection is to be brought into view before the graph view has rendered its layout, e.g. by `GuiApi::selectGate` with `navigate_to_selection` set right after opening a netlist, the scene had no item for the selected element yet
+  * fixed unloading the waveform viewer or the DOT viewer plugin leaving its dock button behind, the widget was deleted without being removed from its anchor
+  * changed duplicating a view to place the modules and gates of the copy where they are in the original instead of laying the copy out anew
+  * fixed a module that reuses the ID of a deleted module being shown with the colour icon of the deleted one in the selection details, the icon cache was never told about removed modules
+  * fixed the GUI at times not registering the first change to a netlist after start, and so not offering to save it on close, the flag that guards the notification was never initialized
   * module pin groups
-    * fixed bug in pin model which must not crash when deleting a non-empty pin group
-    * fixed bug by disallowing deletion of group comprising a single pin with same name
+    * fixed the GUI crashing when a pin group that still holds pins is deleted: the pins tree removed the group item while the pin items still hung below it, and the events that followed for those pins looked them up through the detached group
+    * fixed the GUI crashing when `Delete pin group` is chosen for a group that holds a single pin named like the group: there is nothing to do for such a group and the action built for it was a null pointer that was then dereferenced; the entry now does nothing for such a group
+    * changed the pin tree of a module to show the number of pins of each group and its order, ↑ for ascending and ↓ for descending, in a `Size/Index` column right after the name, which also holds the index of each pin; the pin tree of a gate shows the number of pins and the order of each group in its `Index` column
+    * fixed toggling a pin group between ascending and descending losing the direction and the type of the group, and deleting a pin group creating the single-pin groups for its pins without direction and type
+    * added `Automatically rename pins` to the context menu of a pin group, which renames every pin of the group to `<group name>(<index>)`
 * Build and dependencies
   * changed the GUI from Qt 5 to Qt 6, which is now required to build the GUI
+  * updated the vendored QuaZip from 1.3 to 1.5 as part of the move to Qt 6
+  * added the Graphviz development libraries to the build dependencies, `libgraphviz-dev` on Ubuntu, which the DOT viewer plugin links against and which is built by default; pass `-DPL_DOT_VIEWER=OFF` to build without them
+  * added support for Ubuntu 26.04, which is now built and tested in CI next to 22.04, 24.04 and macOS
+  * fixed `install_dependencies.sh` on macOS writing the Homebrew prefix into the shell configuration as the unexpanded text `$BREW_PREFIX`, so the `PATH` entries it added for Qt, LLVM, flex and bison pointed nowhere; a line that was added this way is left in place and can be deleted
+  * fixed the documentation build: Sphinx is now run through the Python interpreter that `hal_py` is linked against, as an unrelated `sphinx-build` crashed on importing it, and `hal_py` is imported before autodoc touches a plugin module, without which the `boolean_influence`, `dataflow` and `module_identification` pages were empty. Doxygen warnings went from 295 to 2 and Sphinx warnings from 15 to 0, and every namespace, class and struct now carries a description
   * added a test that checks the Python bindings never hand out a borrowed pointer without keeping its owner alive, and never give a class bound with a non-owning holder to a factory that returns a `unique_ptr`. It covers plugins kept in a repository of their own as well, and holds free, static and submodule-level functions to the same rule as methods, which `hal::borrowed()` made fixable
-  * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
+  * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API; building against a system igraph (`USE_VENDORED_IGRAPH=OFF`) now requires igraph 1.0, and the vendored igraph is no longer built with warnings as errors, which is what broke the macOS build once Apple clang 18 added `-Wuninitialized-const-pointer`
   * removed the tests below `tests/python_binding`, which were neither referenced by the build nor by any workflow and called API that no longer exists
 
 ## [4.5.0](v4.5.0) - 2025-09-23 12:00:00+02:00 (urgency: medium)
