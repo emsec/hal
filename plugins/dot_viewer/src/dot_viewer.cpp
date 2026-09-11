@@ -184,11 +184,10 @@ namespace hal
             const char* target[] = {"node", "edge", nullptr };
             for (int i=0; target[i]; i++)
             {
-                QAction* act = menu.addAction(QString("HAL color style overwrites %1 attibute").arg(target[i]));
+                QAction* act = menu.addAction(QString("HAL color style overwrites %1 attribute").arg(target[i]));
                 act->setCheckable(true);
                 act->setChecked(QGVStyle::instance()->getStyle((QGVStyle::StyleTarget)i) != QGVStyle::Graphviz);
                 connect (act, &QAction::triggered, this, [target,i,this](bool checked){
-                    std::cerr << QString("HAL color style overwrites %1 attibute => %2").arg(target[i]).arg(checked?"true":"false").toStdString() << std::endl;
                     if (checked)
                         QGVStyle::instance()->setStyle((QGVStyle::StyleTarget)i, (QGVStyle::StyleType) MainWindow::sSettingStyle->value().toInt());
                     else

@@ -85,7 +85,7 @@ public:
 
     static Agraph_t *agmemread2(const char *cp)
     {
-#ifdef HAS_AGDISK_MEM
+#ifdef HAS_AGDISC_MEM
         Agraph_t* g;
         rdr_t rdr;
         Agdisc_t disc;
