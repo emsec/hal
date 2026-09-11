@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-129-gc8ba6b195</span>
+   &#160;<span id="projectnumber">v4.5.0-130-g83e8bfb3f</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -471,8 +471,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_r_a_m_component.html#a485a103ce9412f33a7aa968874af7d11">hal::RAMComponent</a>
 </li>
 <li>get_boolean_function()
-: <a class="el" href="classhal_1_1_gate.html#a09610256a3b39521b1325ea095a38b62">hal::Gate</a>
-, <a class="el" href="classhal_1_1_gate_type.html#af14f2febe7d501c08291f38f68c97869">hal::GateType</a>
+: <a class="el" href="classhal_1_1_gate.html#aaa9db7587dbb39363453303d368330be">hal::Gate</a>
+, <a class="el" href="classhal_1_1_gate_type.html#ab844cc0777899ae022db1e2cc30355b9">hal::GateType</a>
 , <a class="el" href="structhal_1_1module__identification_1_1_candidate_context.html#ac95b242aace25534fd58ba183839bf71">hal::module_identification::CandidateContext</a>
 </li>
 <li>get_boolean_function_const()
@@ -717,7 +717,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_simulation_engine.html#aa1937fb96d379423c99506463a8e6cd2">hal::SimulationEngine</a>
 </li>
 <li>get_error()
-: <a class="el" href="classhal_1_1_result.html#a9a85e813a3f52096c1ca54dee1494923">hal::Result&lt; T &gt;</a>
+: <a class="el" href="classhal_1_1_result.html#a1946ab6735ef28b2e15f52b6b3c218bb">hal::Result&lt; T &gt;</a>
 </li>
 <li>get_event_handler()
 : <a class="el" href="classhal_1_1_module.html#aceeb47293e56ff3ed6ea7d2023319621">hal::Module</a>
@@ -862,7 +862,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1dataflow_1_1_result.html#a1c89579d95b9645da1fac384dff2d886">hal::dataflow::Result</a>
 </li>
 <li>get_gates_set_from_vertices()
-: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#abaf6d2cb92adb15342169c827c12ae44">hal::graph_algorithm::NetlistGraph</a>
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a5df5d6856a1d13e94c7c374cc07e5b5d">hal::graph_algorithm::NetlistGraph</a>
 </li>
 <li>get_gates_set_from_vertices_igraph()
 : <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a646fc79778a638095f61ffa39f554ab5">hal::graph_algorithm::NetlistGraph</a>
@@ -1132,7 +1132,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_simulation_input.html#a0f735e3e70945ca51e334e882463057b">hal::SimulationInput</a>
 </li>
 <li>get_net_id_from()
-: <a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a3cdeeb518c6358b237e3183be89ac10b">hal::BooleanFunctionNetDecorator</a>
+: <a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a1a09460ce6c2af3c0026033b07f3181b">hal::BooleanFunctionNetDecorator</a>
 </li>
 <li>get_net_ids()
 : <a class="el" href="classhal_1_1_grouping.html#a524384c5f0299a2bca63564d859f2f45">hal::Grouping</a>
@@ -1190,7 +1190,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_netlist.html#a730c75bae75323000569ced56870e395">hal::Netlist</a>
 </li>
 <li>get_next_sequential_gates()
-: <a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a6df4962f950af15f9ea4be54cffd21e6">hal::NetlistTraversalDecorator</a>
+: <a class="el" href="classhal_1_1_netlist_traversal_decorator.html#aa1c548ced063ae75a0e003e8d3ad6779">hal::NetlistTraversalDecorator</a>
 </li>
 <li>get_next_sequential_gates_map()
 : <a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a3b17ad3e798cb28fa1ee0bfd57929bff">hal::NetlistTraversalDecorator</a>
@@ -2303,12 +2303,10 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>gridPosition()
 : <a class="el" href="classhal_1_1_node_box.html#ac6c6fde7e4fe21bec776050f6debd747">hal::NodeBox</a>
+, <a class="el" href="classhal_1_1_placement_hint.html#addeee89e239e71feffce0f710595207d">hal::PlacementHint</a>
 </li>
 <li>GridPosition
 : <a class="el" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a30472caec088342be6e3c336a35fcfbc">hal::PlacementHint</a>
-</li>
-<li>gridPosition()
-: <a class="el" href="classhal_1_1_placement_hint.html#addeee89e239e71feffce0f710595207d">hal::PlacementHint</a>
 </li>
 <li>gridToText()
 : <a class="el" href="classhal_1_1_user_action.html#a40cf24ca7394f5976d20987f57801b31">hal::UserAction</a>

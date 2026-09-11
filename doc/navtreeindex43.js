@@ -1,6 +1,5 @@
 var NAVTREEINDEX43 =
 {
-"plugins_2simulator_2verilator_2python_2python__bindings_8cpp.html#a7ebc756d6fcde90dac528da6ea651423":[10,0,1,21,2,1,0,0],
 "plugins_2simulator_2verilator_2python_2python__bindings_8cpp_source.html":[10,0,1,21,2,1,0],
 "plugins_2solve__fsm_2python_2python__bindings_8cpp.html":[10,0,1,22,1,0],
 "plugins_2solve__fsm_2python_2python__bindings_8cpp.html#aa0beecf81a444ab07294784926724675":[10,0,1,22,1,0,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX43 =
 "python__console__qss__adapter_8h.html":[10,0,1,8,0,0,41,4],
 "python__console__qss__adapter_8h_source.html":[10,0,1,8,0,0,41,4],
 "python__console__widget_8cpp.html":[10,0,1,8,2,40,5],
-"python__console__widget_8cpp_source.html":[10,0,1,8,2,40,5]
+"python__console__widget_8cpp_source.html":[10,0,1,8,2,40,5],
+"python__console__widget_8h.html":[10,0,1,8,0,0,41,5]
 };

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Module &mdash; hal_py v4.5.0-129-gc8ba6b195 documentation</title>
+  <title>Module &mdash; hal_py v4.5.0-130-g83e8bfb3f documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-129-gc8ba6b195
+                v4.5.0-130-g83e8bfb3f
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -338,10 +338,10 @@ All pins to be added to the pin group must have the same direction and type.</p>
 <dd class="field-odd"><p>The type of the pin group, if any. Defaults to <code class="docutils literal notranslate"><span class="pre">hal_py.PinType.none</span></code>.</p>
 </dd>
 <dt class="field-even">param bool ascending</dt>
-<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> for ascending pin order (from 0 to n-1), <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise (from n-1 to 0). Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> for ascending pin order (from 0 to n-1), <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise (from n-1 to 0). Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
 <dt class="field-odd">param int start_index</dt>
-<dd class="field-odd"><p>The start index of the pin group. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+<dd class="field-odd"><p>The start index of the pin group. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code> for an ascending group and to the index of the last pin for a descending one.</p>
 </dd>
 <dt class="field-even">param bool delete_empty_groups</dt>
 <dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to delete groups that are empty after the pins have been assigned to the new group, <code class="docutils literal notranslate"><span class="pre">False</span></code> to keep empty groups. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
@@ -376,13 +376,13 @@ All pins to be added to the pin group must have the same direction and type.</p>
 <dd class="field-even"><p>The type of the pin group, if any. Defaults to <code class="docutils literal notranslate"><span class="pre">hal_py.PinType.none</span></code>.</p>
 </dd>
 <dt class="field-odd">param bool ascending</dt>
-<dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> for ascending pin order (from 0 to n-1), <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise (from n-1 to 0). Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> for ascending pin order (from 0 to n-1), <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise (from n-1 to 0). Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
 <dt class="field-even">param int start_index</dt>
-<dd class="field-even"><p>The start index of the pin group. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+<dd class="field-even"><p>The start index of the pin group. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code> for an ascending group and to the index of the last pin for a descending one.</p>
 </dd>
 <dt class="field-odd">param bool delete_empty_groups</dt>
-<dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True`</span></code> to delete groups that are empty after the pins have been assigned to the new group, <code class="docutils literal notranslate"><span class="pre">`False`</span></code> to keep empty groups. Defaults to <code class="docutils literal notranslate"><span class="pre">`True`</span></code>.</p>
+<dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to delete groups that are empty after the pins have been assigned to the new group, <code class="docutils literal notranslate"><span class="pre">False</span></code> to keep empty groups. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt class="field-even">param bool force_name</dt>
 <dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>

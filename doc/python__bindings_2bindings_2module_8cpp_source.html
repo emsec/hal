@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-129-gc8ba6b195</span>
+   &#160;<span id="projectnumber">v4.5.0-130-g83e8bfb3f</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -818,8 +818,8 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2module_8cp
 <div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;<span class="stringliteral">            :param list[hal_py.ModulePin] pins: The pins to be assigned to the pin group. Defaults to an empty list.</span></div>
 <div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;<span class="stringliteral">            :param hal_py.PinDirection direction: The direction of the pin group, if any. Defaults to ``hal_py.PinDirection.none``.</span></div>
 <div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;<span class="stringliteral">            :param hal_py.PinType type: The type of the pin group, if any. Defaults to ``hal_py.PinType.none``.</span></div>
-<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;<span class="stringliteral">            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.</span></div>
-<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;<span class="stringliteral">            :param int start_index: The start index of the pin group. Defaults to ``0``.</span></div>
+<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;<span class="stringliteral">            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``False``.</span></div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;<span class="stringliteral">            :param int start_index: The start index of the pin group. Defaults to ``0`` for an ascending group and to the index of the last pin for a descending one.</span></div>
 <div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;<span class="stringliteral">            :param bool delete_empty_groups: Set ``True`` to delete groups that are empty after the pins have been assigned to the new group, ``False`` to keep empty groups. Defaults to ``True``.</span></div>
 <div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;<span class="stringliteral">            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to ``False``.</span></div>
 <div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;<span class="stringliteral">            :returns: The pin group on success, ``None`` otherwise.</span></div>
@@ -871,9 +871,9 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2module_8cp
 <div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;<span class="stringliteral">            :param list[hal_py.ModulePin] pins: The pins to be assigned to the pin group. Defaults to an empty list.</span></div>
 <div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;<span class="stringliteral">            :param hal_py.PinDirection direction: The direction of the pin group, if any. Defaults to ``hal_py.PinDirection.none``.</span></div>
 <div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;<span class="stringliteral">            :param hal_py.PinType type: The type of the pin group, if any. Defaults to ``hal_py.PinType.none``.</span></div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;<span class="stringliteral">            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.</span></div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;<span class="stringliteral">            :param int start_index: The start index of the pin group. Defaults to ``0``.</span></div>
-<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;<span class="stringliteral">            :param bool delete_empty_groups: Set ``True``` to delete groups that are empty after the pins have been assigned to the new group, ```False``` to keep empty groups. Defaults to ```True```.</span></div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;<span class="stringliteral">            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``False``.</span></div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;<span class="stringliteral">            :param int start_index: The start index of the pin group. Defaults to ``0`` for an ascending group and to the index of the last pin for a descending one.</span></div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;<span class="stringliteral">            :param bool delete_empty_groups: Set ``True`` to delete groups that are empty after the pins have been assigned to the new group, ``False`` to keep empty groups. Defaults to ``True``.</span></div>
 <div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;<span class="stringliteral">            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to ``False``.</span></div>
 <div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;<span class="stringliteral">            :returns: The pin group on success, ``None`` otherwise.</span></div>
 <div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;<span class="stringliteral">            :rtype: hal_py.ModulePinGroup or None</span></div>
