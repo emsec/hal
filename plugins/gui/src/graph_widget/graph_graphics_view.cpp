@@ -57,6 +57,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QMimeData>
+#include <QPixmap>
 #include <QScrollBar>
 #include <QStyleOptionGraphicsItem>
 #include <QWheelEvent>
@@ -330,10 +331,15 @@ namespace hal
                 QDrag* drag         = new QDrag(this);
                 QMimeData* mimeData = new QMimeData;
 
-                // TODO set MIME type and icon
-                mimeData->setText("dragTest");
+                // the drop side recognises the drag by its source and action, the mime data only has to exist; a text
+                // would be drawn next to the cursor by the system, so a private type without content is used instead
+                mimeData->setData("application/x-hal-graph-node", QByteArray());
                 drag->setMimeData(mimeData);
-                // drag->setPixmap(iconPixmap);
+
+                // the scene draws the node being moved itself, the system should draw nothing
+                QPixmap nothing(1, 1);
+                nothing.fill(Qt::transparent);
+                drag->setPixmap(nothing);
 
                 // enable DragMoveEvents until mouse released
                 drag->exec(Qt::MoveAction);

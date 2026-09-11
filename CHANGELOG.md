@@ -202,6 +202,7 @@ All notable changes to this project will be documented in this file.
     * fixed the module tree to not rebuild itself twice per selection change
     * fixed `GuiApi.selectGate`, `selectNet` and `selectModule` with `clear_current_selection` set, which is the default, keeping the previous selection
     * fixed `GuiApi.getSelectedModules` and `getSelectedItems` not tying the returned modules to the netlist
+    * fixed tooltip `dragTest` being shown whenever dragging gates in the graph view
 * Build and dependencies
   * changed the GUI from Qt 5 to Qt 6
   * updated the vendored QuaZip from 1.3 to 1.5 as part of the move to Qt 6
