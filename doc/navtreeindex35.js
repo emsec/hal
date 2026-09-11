@@ -1,6 +1,5 @@
 var NAVTREEINDEX35 =
 {
-"hexadecimal__validator_8cpp_source.html":[10,0,1,8,2,51,1],
 "hexadecimal__validator_8h.html":[10,0,1,8,0,0,53,1],
 "hexadecimal__validator_8h_source.html":[10,0,1,8,0,0,53,1],
 "hgl__parser_8cpp.html":[10,0,1,11,1,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX35 =
 "main__settings__widget_8cpp_source.html":[10,0,1,8,2,54],
 "main__settings__widget_8h.html":[10,0,1,8,0,0,45,3],
 "main__settings__widget_8h_source.html":[10,0,1,8,0,0,45,3],
-"main__window_8cpp.html":[10,0,1,8,2,31,4]
+"main__window_8cpp.html":[10,0,1,8,2,31,4],
+"main__window_8cpp.html#a0e50ae83293af552d8b06e2de9881b59":[10,0,1,8,2,31,4,1]
 };

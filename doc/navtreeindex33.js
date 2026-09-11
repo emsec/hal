@@ -1,6 +1,5 @@
 var NAVTREEINDEX33 =
 {
-"gatelibrary__frame__ram__port_8cpp.html":[10,0,1,8,2,18,0,6],
 "gatelibrary__frame__ram__port_8cpp_source.html":[10,0,1,8,2,18,0,6],
 "gatelibrary__frame__ram__port_8h.html":[10,0,1,8,0,0,18,0,6],
 "gatelibrary__frame__ram__port_8h_source.html":[10,0,1,8,0,0,18,0,6],
@@ -249,5 +248,6 @@ var NAVTREEINDEX33 =
 "group__by__successors__predecessors__iteratively_8h.html#abbdebd2cd88ca1fd78558577a197856a":[10,0,1,3,0,0,4,0,4,0],
 "group__by__successors__predecessors__iteratively_8h_source.html":[10,0,1,3,0,0,4,0,4],
 "group__core.html":[7,0],
-"group__decorators.html":[7,0,0,0]
+"group__decorators.html":[7,0,0,0],
+"group__decorators.html#ga10a0dbae61e1d4d1c8d2310ce40947c6":[7,0,0,0,7]
 };
