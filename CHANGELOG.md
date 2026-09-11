@@ -70,6 +70,8 @@ All notable changes to this project will be documented in this file.
     * fixed the progress overlay being dismissed while the layout updates deferred during a dataflow analysis were still being applied
     * fixed the GUI freezing while a dataflow analysis reported its progress from its worker threads; progress reported from another thread is now posted to the GUI thread
   * plugin system
+    * changed `--python-script` and `--python-args` into options of HAL itself, so that a script runs the same way headless and inside the GUI: with `-p` or `-i` the netlist is loaded first and handed to the script as `netlist`, `hal_py` is imported with `from hal_py import *` in both, `sys.argv` holds the arguments in both, and the script's output reaches the terminal in both. Before, the options belonged to the Python shell, which took over before any project was loaded, so a script could not be combined with `-p` or `-i` and had to load the netlist itself. The interactive `--python` shell loads the netlist the same way now
+    * changed the exit code of `hal --python-script` to be the exit code of the script: 0 when it runs to its end, the number given to `sys.exit`, and 1 on an unhandled exception, which used to exit with 0 after printing the traceback. `UIPluginInterface::exec` returns that code instead of a `bool`
     * added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
     * added Python bindings for `ProgramOptions`, `ProgramArguments` and `FacExtensionInterface`, and for the remaining functions of `plugin_manager`, exposing the `initialize` and `silent` parameters of `get_plugin_instance`
     * added `log_trace`, `log_debug`, `log_info`, `log_warning`, `log_error` and `log_critical` to `hal_py`, which take the channel first like the C++ macros and prefix every severity but `info` with the file and line of the calling Python code
@@ -177,6 +179,11 @@ All notable changes to this project will be documented in this file.
     * fixed `ParameterType.Module` being bound to `Gate` in Python, which made the two indistinguishable
     
 * GUI
+  * Python API
+    * added `-g --python-script`, which runs the script inside the GUI once the project is open, with `netlist` and `gui` predefined as in the Python editor and its output mirrored to the terminal; the GUI stays open when the script ends
+    * added `hal_gui.quit(exit_code, discard_changes)`, which ends the calling script, closes the main window with the usual prompt for unsaved changes unless told to discard them, and ends HAL with the given exit code
+    * added a test that runs the same script headless and inside the offscreen GUI and checks that both see the same netlist and arguments and end the same way
+    * changed every function of the `hal_gui` module to the snake_case naming of `hal_py`, e.g. `gui.select_gate` and `gui.View.isolate_in_new` instead of `gui.selectGate` and `gui.View.isolateInNew`, and the camel-case argument names with them. The old names still work but warn once per name and process, and are removed in the release after next
   * module and gate pins
     * changed the pin tree of a module to show the number of pins of each group and its order, ↑ for ascending and ↓ for descending, in a `Size/Index` column right after the name, which also holds the index of each pin; the pin tree of a gate shows the number of pins and the order of each group in its `Index` column
     * added `Automatically rename pins` to the context menu of a pin group, which renames every pin of the group to `<group name>(<index>)`
