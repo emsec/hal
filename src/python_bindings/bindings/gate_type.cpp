@@ -22,6 +22,7 @@ namespace hal
             .value("pll", GateTypeProperty::pll, R"(PLL gate type.)")
             .value("oscillator", GateTypeProperty::oscillator, R"(Oscillator gate type.)")
             .value("scan", GateTypeProperty::scan, R"(Scan gate type.)")
+            .value("delay", GateTypeProperty::delay, R"(Delay gate type.)")
             .value("c_buffer", GateTypeProperty::c_buffer, R"(Buffer gate type.)")
             .value("c_inverter", GateTypeProperty::c_inverter, R"(Inverter gate type.)")
             .value("c_and", GateTypeProperty::c_and, R"(AND gate type.)")

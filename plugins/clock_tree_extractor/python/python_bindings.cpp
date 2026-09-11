@@ -122,7 +122,9 @@ namespace hal
     :rtype: set[str]
     )" );
 
-        py::class_<cte::ClockTree>( m, "ClockTree", R"()" )
+        py::class_<cte::ClockTree>( m, "ClockTree", R"(
+            The clock distribution network of a netlist as a directed graph whose vertices are gates and nets.
+        )" )
             .def_static(
                 "from_netlist",
                 []( const Netlist *netlist ) -> std::unique_ptr<cte::ClockTree> {
@@ -137,7 +139,16 @@ namespace hal
                 },
                 py::arg( "netlist" ),
                 py::return_value_policy::move,
-                R"()" )
+                py::keep_alive<0, 1>(),
+                R"(
+                Extract the clock tree of a netlist.
+
+                Starting at the clock pin of every flip-flop, the extraction walks against the signal direction through buffers, inverters, delay gates, clock gates and toggle flip-flops up to the global input nets that drive them.
+
+                :param hal_py.Netlist netlist: The netlist.
+                :returns: The clock tree on success, ``None`` otherwise.
+                :rtype: clock_tree_extractor.ClockTree or None
+            )" )
             .def(
                 "export",
                 []( const cte::ClockTree &self, const std::string &pathname ) -> bool {
@@ -151,7 +162,13 @@ namespace hal
                     return false;
                 },
                 py::arg( "pathname" ),
-                R"()" )
+                R"(
+                Write the clock tree to a DOT file.
+
+                :param str pathname: The path of the file to write.
+                :returns: ``True`` on success, ``False`` otherwise.
+                :rtype: bool
+            )" )
             .def(
                 "get_subtree",
                 []( const cte::ClockTree &self,
@@ -169,7 +186,16 @@ namespace hal
                 py::arg( "ptr" ),
                 py::arg( "parent" ) = false,
                 py::return_value_policy::move,
-                R"()" )
+                py::keep_alive<0, 1>(),
+                R"(
+                Get the clock tree below a gate or net as a clock tree of its own.
+
+                :param ptr: The gate or net.
+                :type ptr: hal_py.Gate or hal_py.Net
+                :param bool parent: Set ``True`` to start one level up, at the parent of the given object, if it has exactly one. Defaults to ``False``.
+                :returns: The subtree on success, ``None`` otherwise.
+                :rtype: clock_tree_extractor.ClockTree or None
+            )" )
             .def(
                 "get_all",
                 []( const cte::ClockTree &self ) -> py::list {
@@ -189,7 +215,12 @@ namespace hal
                     return result;
                 },
                 borrowed(),
-                R"()" )
+                R"(
+                Get all gates and nets of the clock tree.
+
+                :returns: A list of gates and nets.
+                :rtype: list[hal_py.Gate or hal_py.Net]
+            )" )
             .def(
                 "get_vertex_from_ptr",
                 []( const cte::ClockTree &self, const void *ptr ) -> py::object {
@@ -202,7 +233,14 @@ namespace hal
                     return py::none();
                 },
                 py::arg( "ptr" ),
-                R"()" )
+                R"(
+                Get the igraph vertex ID of a gate or net of the clock tree.
+
+                :param ptr: The gate or net.
+                :type ptr: hal_py.Gate or hal_py.Net
+                :returns: The vertex ID on success, ``None`` otherwise.
+                :rtype: int or None
+            )" )
             .def(
                 "get_ptr_from_vertex",
                 []( const cte::ClockTree &self, const igraph_integer_t vertex ) -> py::object {
@@ -225,7 +263,13 @@ namespace hal
                 },
                 py::arg( "vertex" ),
                 borrowed(),
-                R"()" )
+                R"(
+                Get the gate or net behind an igraph vertex ID of the clock tree.
+
+                :param int vertex: The vertex ID.
+                :returns: The gate or net on success, ``None`` otherwise.
+                :rtype: hal_py.Gate or hal_py.Net or None
+            )" )
             .def(
                 "get_vertices_from_ptrs",
                 []( const cte::ClockTree &self, const std::vector<const void *> &ptrs ) -> py::list {
@@ -238,7 +282,13 @@ namespace hal
                     return py::none();
                 },
                 py::arg( "ptrs" ),
-                R"()" )
+                R"(
+                Get the igraph vertex IDs of gates and nets of the clock tree.
+
+                :param list[hal_py.Gate or hal_py.Net] ptrs: The gates and nets.
+                :returns: The vertex IDs on success, ``None`` otherwise.
+                :rtype: list[int] or None
+            )" )
             .def(
                 "get_ptrs_from_vertices",
                 []( const cte::ClockTree &self, const std::vector<igraph_integer_t> &vertices ) -> py::list {
@@ -268,7 +318,14 @@ namespace hal
                     return py::none();
                 },
                 py::arg( "vertices" ),
-                R"()" )
+                borrowed(),
+                R"(
+                Get the gates and nets behind igraph vertex IDs of the clock tree.
+
+                :param list[int] vertices: The vertex IDs.
+                :returns: The gates and nets on success, ``None`` otherwise.
+                :rtype: list[hal_py.Gate or hal_py.Net] or None
+            )" )
             .def(
                 "get_parents",
                 []( const cte::ClockTree &self, const void *ptr ) -> py::list {
@@ -299,7 +356,14 @@ namespace hal
                 },
                 py::arg( "ptr" ),
                 borrowed(),
-                R"()" )
+                R"(
+                Get the gates and nets directly upstream of a gate or net in the clock tree.
+
+                :param ptr: The gate or net.
+                :type ptr: hal_py.Gate or hal_py.Net
+                :returns: The neighbors on success, ``None`` otherwise.
+                :rtype: list[hal_py.Gate or hal_py.Net] or None
+            )" )
             .def(
                 "get_childs",
                 []( const cte::ClockTree &self, const void *ptr ) -> py::list {
@@ -330,10 +394,32 @@ namespace hal
                 },
                 py::arg( "ptr" ),
                 borrowed(),
-                R"()" )
-            .def( "get_gates", &cte::ClockTree::get_gates, borrowed(), R"()" )
-            .def( "get_nets", &cte::ClockTree::get_nets, borrowed(), R"()" )
-            .def( "get_netlist", &cte::ClockTree::get_netlist, borrowed(), R"()" );
+                R"(
+                Get the gates and nets directly downstream of a gate or net in the clock tree.
+
+                :param ptr: The gate or net.
+                :type ptr: hal_py.Gate or hal_py.Net
+                :returns: The neighbors on success, ``None`` otherwise.
+                :rtype: list[hal_py.Gate or hal_py.Net] or None
+            )" )
+            .def( "get_gates", &cte::ClockTree::get_gates, borrowed(), R"(
+                Get all gates of the clock tree.
+
+                :returns: The gates.
+                :rtype: list[hal_py.Gate]
+            )" )
+            .def( "get_nets", &cte::ClockTree::get_nets, borrowed(), R"(
+                Get all nets of the clock tree.
+
+                :returns: The nets.
+                :rtype: list[hal_py.Net]
+            )" )
+            .def( "get_netlist", &cte::ClockTree::get_netlist, borrowed(), R"(
+                Get the netlist the clock tree was extracted from.
+
+                :returns: The netlist.
+                :rtype: hal_py.Netlist
+            )" );
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

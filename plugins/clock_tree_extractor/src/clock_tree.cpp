@@ -224,8 +224,10 @@ namespace hal
                 }
                 else if( clk->is_global_input_net() )
                 {
+                    // the flip-flop is clocked straight from the outside: the net is the root and the flip-flop its only child
                     vertices.insert( (void *) clk );
                     ptrs_to_type[(void *) clk] = PtrType::NET;
+                    edges.insert( { (void *) clk, (void *) ff } );
                     continue;
                 }
                 else if( clk->get_num_of_sources() == 0 )

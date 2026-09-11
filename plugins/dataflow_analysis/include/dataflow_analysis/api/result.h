@@ -149,13 +149,6 @@ namespace hal
             hal::Result<std::unordered_set<Gate*>> get_gate_predecessors(const Gate* gate) const;
 
             /**
-             * @brief Open DOT graph in dot viewer if appropriate plugin was loaded.
-             *
-             * @param[in] out_path - The output path.
-             */
-            void open_dot_in_viewer(const std::filesystem::path& out_path) const;
-
-            /**
              * @brief Write the dataflow graph as a DOT graph to the specified location.
              * 
              * @param[in] out_path - The output path.

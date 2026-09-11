@@ -92,7 +92,7 @@ jobs:
           cd build
           export PATH="$(brew --prefix qt)/bin:$PATH"
           export LDFLAGS="-L$(brew --prefix qt)/lib -Wl,-rpath,$(brew --prefix llvm)/lib"
-          cmake -G Ninja .. -DQt5_DIR="$(brew --prefix qt)/lib/cmake" -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DPL_GUI=ON
+          cmake -G Ninja .. -DQt6_DIR="$(brew --prefix qt)/lib/cmake/Qt6" -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DPL_GUI=ON
         env:
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           CCACHE_DIR: ${{runner.workspace}}/.ccache

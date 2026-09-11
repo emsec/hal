@@ -264,7 +264,6 @@ namespace hal
 
             Each state becomes a node labeled with its value and, if outputs were computed, with the value of every output in that state.
             Each transition becomes an edge labeled with its condition.
-            If the ``dot_viewer`` plugin is available, the written graph is additionally offered to it for display.
 
             :param pathlib.Path graph_path: The file path at which to store the graph. No file is written if the path is left empty. Defaults to an empty path.
             :param int max_condition_length: The maximum number of characters printed for a Boolean function. Defaults to 128.

@@ -18,7 +18,8 @@ if(PL_CLOCK_TREE_EXTRACTOR OR BUILD_ALL_PLUGINS)
                     HEADER ${CLOCK_TREE_EXTRACTOR_INC}
                     SOURCES ${CLOCK_TREE_EXTRACTOR_SRC} ${CLOCK_TREE_EXTRACTOR_PYTHON_SRC}
                     LINK_LIBRARIES graph_algorithm
-                    COMPILE_OPTIONS "-march=native"
                 )
+
+    add_subdirectory(test)
 
 endif()

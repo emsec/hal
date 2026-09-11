@@ -50,6 +50,11 @@ ADD_DEFINITIONS(-DQGVCORE_LIB -D_PACKAGE_ast -D_dll_import -D_BLD_cdt -D_DLL_BLD
 
 ADD_DEFINITIONS(-DQVGCORE_LIB)
 
+# Graphviz up to 13 lets a reader supply its own memory discipline, later versions dropped it
+if(HAS_AGDISC_MEM)
+    ADD_DEFINITIONS(-DHAS_AGDISC_MEM)
+endif()
+
   QT6_WRAP_UI(QGVLIB_UI_H ${qgvlib_UI})
 	QT6_ADD_RESOURCES(qgvlib_RCCS ${qgvlib_QRC})
 
