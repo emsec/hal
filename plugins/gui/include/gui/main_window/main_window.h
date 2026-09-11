@@ -388,6 +388,11 @@ namespace hal
         void handleActionCloseFile();
 
         /**
+         * Close the window, and with it the application, without asking about unsaved changes.
+         */
+        void closeDiscardingChanges();
+
+        /**
          * Q_SLOT to start macro recording. Internally only a marker is set
          * since user interactions are recorded anyhow.
          */
@@ -451,6 +456,9 @@ namespace hal
          * @param event - Qts close event
          */
         void closeEvent(QCloseEvent* event);
+
+        /** Set while the window closes on behalf of a script that chose to discard unsaved changes. */
+        bool mDiscardChangesOnClose = false;
 
         bool tryToCloseFile();
 

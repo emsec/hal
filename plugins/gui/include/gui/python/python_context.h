@@ -135,6 +135,22 @@ namespace hal
         void runScriptFile(const QString& path, const QStringList& arguments = QStringList());
 
         /**
+         * Runs Python code on the Python thread, as the Python editor would, and reports how it went through
+         * `scriptOutput` and `scriptFinished`. Nothing happens if a script or command is already running.
+         *
+         * @param code - The Python code.
+         * @returns `true` if the code was started, `false` if something else is still running.
+         */
+        bool runScript(const QString& code);
+
+        /**
+         * Set what a script sees as `sys.argv`.
+         *
+         * @param arguments - The arguments.
+         */
+        void setScriptArguments(const QStringList& arguments);
+
+        /**
          * Copy everything the console shows to the standard output and error streams of the process as well.
          *
          * @param enable - Set `true` to mirror, `false` to stop.
@@ -235,6 +251,23 @@ namespace hal
         void abortThread();
         void abortThreadAndWait();
         bool isThreadRunning() const { return mThread != nullptr; }
+
+    Q_SIGNALS:
+        /**
+         * Emitted for every piece of output the console shows.
+         *
+         * @param text - The output.
+         * @param isError - `true` for standard error, `false` for standard output.
+         */
+        void scriptOutput(const QString& text, bool isError);
+
+        /**
+         * Emitted when a script or command run on the Python thread has finished.
+         *
+         * @param exitCode - 0 when it ran to its end, the code given to `sys.exit`, 1 on an unhandled exception or an abort.
+         * @param errorMessage - The traceback or message, empty if there was none.
+         */
+        void scriptFinished(int exitCode, const QString& errorMessage);
 
     private Q_SLOTS:
         void handleThreadFinished();

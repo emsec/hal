@@ -961,9 +961,16 @@ namespace hal
         qApp->quit();
     }
 
+    void MainWindow::closeDiscardingChanges()
+    {
+        mDiscardChangesOnClose = true;
+        close();
+        mDiscardChangesOnClose = false;
+    }
+
     bool MainWindow::tryToCloseFile()
     {
-        if (gFileStatusManager->modifiedFilesExisting() || gFileStatusManager->isGatelibModified())
+        if (!mDiscardChangesOnClose && (gFileStatusManager->modifiedFilesExisting() || gFileStatusManager->isGatelibModified()))
         {
             QMessageBox msgBox(this);
             msgBox.setStyleSheet("QLabel{min-width: 600px;}");

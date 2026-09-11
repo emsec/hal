@@ -11,7 +11,9 @@
 #include "gui/plugin_relay/plugin_relay.h"
 #include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/python/python_context.h"
+#include "gui/remote_control/remote_control.h"
 
+#include <iostream>
 #include <memory>
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/user_action/user_action_manager.h"
@@ -269,6 +271,18 @@ namespace hal
         handleProgramArguments(args);
         w.show();
 
+        if (args.is_option_set("--remote"))
+        {
+            const QString socketPath = QString::fromStdString(args.get_parameter("--remote"));
+            auto* remote             = new RemoteControl(gPythonContext, &w);
+            if (!remote->listen(socketPath))
+            {
+                return 1;
+            }
+            // a driver waits for this line to know that the socket accepts connections
+            std::cout << "remote control socket: " << socketPath.toStdString() << std::endl;
+        }
+
         if (args.is_option_set("--python-script"))
         {
             // the same script a headless run gets, started once the netlist named on the command line is open
@@ -329,6 +343,7 @@ namespace hal
         ProgramOptions mDescription;
 
         mDescription.add({"--gui", "-g"}, "start graphical user interface");
+        mDescription.add("--remote", "let another process run Python inside the GUI through the local socket at the given path", {ProgramOptions::A_REQUIRED_PARAMETER});
 
         return mDescription;
     }

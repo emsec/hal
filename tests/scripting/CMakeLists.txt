@@ -16,4 +16,11 @@ if(BUILD_TESTS AND (PL_GUI OR BUILD_ALL_PLUGINS) AND (PL_PYTHON_SHELL OR BUILD_A
     set_tests_properties(runTest-python_script_modes PROPERTIES
                          ENVIRONMENT "HAL_BASE_PATH=${CMAKE_BINARY_DIR};QT_QPA_PLATFORM=offscreen"
                          TIMEOUT 900)
+
+    add_test(NAME runTest-remote_control
+             COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_remote_control.py
+                     ${CMAKE_BINARY_DIR}/bin/hal ${SCRIPTING_TEST_DIR}/fsm ${SCRIPTING_TEST_DIR}/work_remote)
+    set_tests_properties(runTest-remote_control PROPERTIES
+                         ENVIRONMENT "HAL_BASE_PATH=${CMAKE_BINARY_DIR};QT_QPA_PLATFORM=offscreen"
+                         TIMEOUT 600)
 endif()

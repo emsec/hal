@@ -327,25 +327,41 @@ namespace hal
             mScriptExitCode = 1;
             return;
         }
+        setScriptArguments(arguments);
         const QString script = QString::fromUtf8(file.readAll());
-
-        {
-            // sys.argv is interpreter-wide, so it is set here rather than in the script's own context
-            PyGILState_STATE state = PyGILState_Ensure();
-            {
-                // the Python objects must be gone before the GIL is released again
-                py::list argv;
-                for (const QString& argument : arguments)
-                {
-                    argv.append(argument.toStdString());
-                }
-                py::module_::import("sys").attr("argv") = argv;
-            }
-            PyGILState_Release(state);
-        }
-        mInterpreterCaller   = nullptr;
         mScriptFileRunning   = true;
-        startThread(script, false);
+        if (!runScript(script))
+        {
+            mScriptFileRunning = false;
+        }
+    }
+
+    bool PythonContext::runScript(const QString& code)
+    {
+        if (mThread)
+        {
+            log_warning("python", "Not executed, python script already running");
+            return false;
+        }
+        mInterpreterCaller = nullptr;
+        startThread(code, false);
+        return true;
+    }
+
+    void PythonContext::setScriptArguments(const QStringList& arguments)
+    {
+        // sys.argv is interpreter-wide, so it is set here rather than in the script's own context
+        PyGILState_STATE state = PyGILState_Ensure();
+        {
+            // the Python objects must be gone before the GIL is released again
+            py::list argv;
+            for (const QString& argument : arguments)
+            {
+                argv.append(argument.toStdString());
+            }
+            py::module_::import("sys").attr("argv") = argv;
+        }
+        PyGILState_Release(state);
     }
 
     void PythonContext::setMirrorToTerminal(bool enable)
@@ -377,16 +393,21 @@ namespace hal
         QMetaObject::invokeMethod(
             qApp,
             [discardChanges = mQuitDiscards]() {
-                if (!discardChanges)
+                for (QWidget* widget : qApp->topLevelWidgets())
                 {
-                    for (QWidget* widget : qApp->topLevelWidgets())
+                    if (auto* mainWindow = dynamic_cast<MainWindow*>(widget))
                     {
-                        if (auto* mainWindow = dynamic_cast<MainWindow*>(widget))
+                        // qApp->quit() would close the window as well and hang on the prompt for unsaved changes, so the
+                        // window is closed directly, with or without that prompt
+                        if (discardChanges)
                         {
-                            // goes through the close prompt for unsaved changes; the user may cancel
-                            mainWindow->close();
-                            return;
+                            mainWindow->closeDiscardingChanges();
                         }
+                        else
+                        {
+                            mainWindow->close();
+                        }
+                        return;
                     }
                 }
                 qApp->quit();
@@ -518,9 +539,10 @@ namespace hal
             mThreadAborted = false;
         }
 
+        const int exitCode = aborted ? 1 : mQuitRequested ? mScriptExitCode : mThread->exitCode();
         if (mScriptFileRunning)
         {
-            mScriptExitCode    = aborted ? 1 : mQuitRequested ? mScriptExitCode : mThread->exitCode();
+            mScriptExitCode    = exitCode;
             mScriptFileRunning = false;
         }
         if (mQuitRequested)
@@ -534,6 +556,9 @@ namespace hal
 
         if (!errmsg.isEmpty())
             forwardError(errmsg);
+
+        // after the traceback, so that a listener has seen all output when it learns the run is over
+        Q_EMIT scriptFinished(exitCode, errmsg);
 
         if (calledFromEditor)
         {
@@ -573,6 +598,7 @@ namespace hal
         {
             std::cout << output.toStdString() << std::flush;
         }
+        Q_EMIT scriptOutput(output, false);
         if (mConsole)
         {
             mConsole->handleStdout(output);
@@ -586,6 +612,7 @@ namespace hal
         {
             std::cerr << output.toStdString() << std::flush;
         }
+        Q_EMIT scriptOutput(output, true);
         if (mConsole)
         {
             mConsole->handleError(output);
