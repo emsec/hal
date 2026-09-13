@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-131-gda71a6012</span>
+   &#160;<span id="projectnumber">v4.5.0-132-gd47655de5</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -224,36 +224,64 @@ $(document).ready(function(){initNavTree('plugins_2xilinx__toolbox_2python_2pyth
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="stringliteral">        m.def(</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;parse_xdc_file&quot;</span>,</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;            [](<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* nl, <span class="keyword">const</span> std::filesystem::path&amp; xdc_file) -&gt; <span class="keywordtype">bool</span> {</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                <span class="keyword">auto</span> res = <a class="code" href="namespacehal_1_1xilinx__toolbox.html#aa9cbe87076ce843d6b78da1391dad61c">xilinx_toolbox::parse_xdc_file</a>(nl, xdc_file);</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;remove_no_load_wires&quot;</span>,</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;            [](<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* nl, <span class="keyword">const</span> std::vector&lt;Net*&gt;&amp; nets) -&gt; std::optional&lt;u32&gt; {</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                <span class="keyword">auto</span> res = <a class="code" href="namespacehal_1_1xilinx__toolbox.html#a10a671ffba408be19f47837793e2c615">xilinx_toolbox::remove_no_load_wires</a>(nl, nets);</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;                {</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;                }</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                {</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                }</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            },</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;            py::arg(<span class="stringliteral">&quot;nl&quot;</span>),</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;            py::arg(<span class="stringliteral">&quot;xdc_file&quot;</span>),</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;            py::arg(<span class="stringliteral">&quot;nets&quot;</span>) = std::vector&lt;Net*&gt;(),</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="stringliteral">            Parse an ``.xdc`` file and extract the position LOC and BEL data of each gate.</span></div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="stringliteral">            Translates the coordinates extracted from the ``.xdc`` file into integer values.</span></div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="stringliteral">            :param hal_py.Netlist nl: The netlist to operate on. </span></div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="stringliteral">            :param path xdc_file: The path to the ``.xdc`` file.</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="stringliteral">            :returns: ``True`` on success, ``False`` otherwise.</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="stringliteral">            :rtype: bool </span></div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="stringliteral"></span><span class="preprocessor">#ifndef PYBIND11_MODULE</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        <span class="keywordflow">return</span> m.ptr();</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="preprocessor">#endif    </span><span class="comment">// PYBIND11_MODULE</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    }</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="stringliteral">            Remove the &quot;no load wire&quot; nets that Vivado writes for unused output pins.</span></div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="stringliteral">            Vivado names such nets ``NLW_&lt;instance&gt;_&lt;pin&gt;_UNCONNECTED`` and only connects them to the output pin they stand in for.</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="stringliteral">            A net is removed if its name starts with ``NLW_`` (or has ``NLW_`` right after a ``/`` in a flattened path) and ends with ``_UNCONNECTED``, optionally followed by a bit index such as ``(2)`` or ``[2]``, it has no destinations, and it is not a global output.</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="stringliteral">            The output pins that drove the removed nets are left unconnected.</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="stringliteral">            :param hal_py.Netlist nl: The netlist to operate on. </span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="stringliteral">            :param list[hal_py.Net] nets: The nets to consider. Defaults to an empty list, in which case all nets of the netlist are considered.</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="stringliteral">            :returns: The number of removed nets on success, ``None`` otherwise.</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="stringliteral">            :rtype: int or None</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="stringliteral">        m.def(</span></div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;parse_xdc_file&quot;</span>,</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;            [](<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* nl, <span class="keyword">const</span> std::filesystem::path&amp; xdc_file) -&gt; <span class="keywordtype">bool</span> {</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                <span class="keyword">auto</span> res = <a class="code" href="namespacehal_1_1xilinx__toolbox.html#aa9cbe87076ce843d6b78da1391dad61c">xilinx_toolbox::parse_xdc_file</a>(nl, xdc_file);</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                {</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                }</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                {</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                }</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;            },</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            py::arg(<span class="stringliteral">&quot;nl&quot;</span>),</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;            py::arg(<span class="stringliteral">&quot;xdc_file&quot;</span>),</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="stringliteral">            Parse an ``.xdc`` file and extract the position LOC and BEL data of each gate.</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="stringliteral">            Translates the coordinates extracted from the ``.xdc`` file into integer values.</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="stringliteral">            :param hal_py.Netlist nl: The netlist to operate on. </span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="stringliteral">            :param path xdc_file: The path to the ``.xdc`` file.</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="stringliteral">            :returns: ``True`` on success, ``False`` otherwise.</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="stringliteral">            :rtype: bool </span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="stringliteral"></span><span class="preprocessor">#ifndef PYBIND11_MODULE</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="keywordflow">return</span> m.ptr();</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="preprocessor">#endif    </span><span class="comment">// PYBIND11_MODULE</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    }</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_base_plugin_interface_html"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00058">plugin_interface_base.h:59</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html"><div class="ttname"><a href="classhal_1_1_netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2netlist_2netlist_8h_source.html#l00055">netlist.h:56</a></div></div>
 <div class="ttc" id="aclasshal_1_1_xilinx_toolbox_plugin_html_a141e123e559e0ddb6d114559dca2f037"><div class="ttname"><a href="classhal_1_1_xilinx_toolbox_plugin.html#a141e123e559e0ddb6d114559dca2f037">hal::XilinxToolboxPlugin::get_name</a></div><div class="ttdeci">std::string get_name() const override</div><div class="ttdoc">Get the name of the plugin.</div><div class="ttdef"><b>Definition:</b> <a href="plugin__xilinx__toolbox_8cpp_source.html#l00023">plugin_xilinx_toolbox.cpp:23</a></div></div>
@@ -262,6 +290,7 @@ $(document).ready(function(){initNavTree('plugins_2xilinx__toolbox_2python_2pyth
 <div class="ttc" id="aclasshal_1_1_xilinx_toolbox_plugin_html_aec213465840d82ffeb95f62c8d7420ea"><div class="ttname"><a href="classhal_1_1_xilinx_toolbox_plugin.html#aec213465840d82ffeb95f62c8d7420ea">hal::XilinxToolboxPlugin::get_description</a></div><div class="ttdeci">std::string get_description() const override</div><div class="ttdoc">Get a short description of the plugin.</div><div class="ttdef"><b>Definition:</b> <a href="plugin__xilinx__toolbox_8cpp_source.html#l00033">plugin_xilinx_toolbox.cpp:33</a></div></div>
 <div class="ttc" id="agroup__utilities_html_ga522d6d0c8a408128993be37c86656280"><div class="ttname"><a href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a></div><div class="ttdeci">#define log_error(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00078">log.h:78</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00748">graph_graphics_view.cpp:748</a></div></div>
+<div class="ttc" id="anamespacehal_1_1xilinx__toolbox_html_a10a671ffba408be19f47837793e2c615"><div class="ttname"><a href="namespacehal_1_1xilinx__toolbox.html#a10a671ffba408be19f47837793e2c615">hal::xilinx_toolbox::remove_no_load_wires</a></div><div class="ttdeci">Result&lt; u32 &gt; remove_no_load_wires(Netlist *nl, const std::vector&lt; Net * &gt; &amp;nets={})</div><div class="ttdoc">Remove the &quot;no load wire&quot; nets that Vivado writes for unused output pins.</div><div class="ttdef"><b>Definition:</b> <a href="preprocessing_8cpp_source.html#l00331">preprocessing.cpp:331</a></div></div>
 <div class="ttc" id="anamespacehal_1_1xilinx__toolbox_html_aa9cbe87076ce843d6b78da1391dad61c"><div class="ttname"><a href="namespacehal_1_1xilinx__toolbox.html#aa9cbe87076ce843d6b78da1391dad61c">hal::xilinx_toolbox::parse_xdc_file</a></div><div class="ttdeci">Result&lt; std::monostate &gt; parse_xdc_file(Netlist *nl, const std::filesystem::path &amp;xdc_file)</div><div class="ttdoc">Parse an .xdc file and extract the position LOC and BEL data of each gate.</div><div class="ttdef"><b>Definition:</b> <a href="xdc__parser_8cpp_source.html#l00220">xdc_parser.cpp:220</a></div></div>
 <div class="ttc" id="anamespacehal_1_1xilinx__toolbox_html_ac42334eb4dcc126be846d54ca9cc813f"><div class="ttname"><a href="namespacehal_1_1xilinx__toolbox.html#ac42334eb4dcc126be846d54ca9cc813f">hal::xilinx_toolbox::split_luts</a></div><div class="ttdeci">Result&lt; u32 &gt; split_luts(Netlist *nl, const std::vector&lt; Gate * &gt; &amp;gates={})</div><div class="ttdoc">Split LUTs with two outputs into two separate LUT gates.</div><div class="ttdef"><b>Definition:</b> <a href="preprocessing_8cpp_source.html#l00039">preprocessing.cpp:39</a></div></div>
 <div class="ttc" id="anamespacehal_1_1xilinx__toolbox_html_add3096d73b5fa5e1a093c8ebff0f0b95"><div class="ttname"><a href="namespacehal_1_1xilinx__toolbox.html#add3096d73b5fa5e1a093c8ebff0f0b95">hal::xilinx_toolbox::split_shift_registers</a></div><div class="ttdeci">Result&lt; u32 &gt; split_shift_registers(Netlist *nl, const std::vector&lt; Gate * &gt; &amp;gates={})</div><div class="ttdoc">Split shift register primitives and replaces them with equivalent flip-flops chains.</div><div class="ttdef"><b>Definition:</b> <a href="preprocessing_8cpp_source.html#l00141">preprocessing.cpp:141</a></div></div>

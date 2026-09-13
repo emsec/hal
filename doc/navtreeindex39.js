@@ -79,6 +79,7 @@ var NAVTREEINDEX39 =
 "namespacehal_1_1xilinx__toolbox.html#a0e338163becdb40d57a89352258b4475ac5c646d462d8a95864f19eaedb046912":[8,0,0,41,4,0],
 "namespacehal_1_1xilinx__toolbox.html#a0e338163becdb40d57a89352258b4475adaefdd180dc95b45236714f6c7f96efd":[8,0,0,41,4,2],
 "namespacehal_1_1xilinx__toolbox.html#a0e338163becdb40d57a89352258b4475adc001bdc15b8d978d78e63815cca5a67":[8,0,0,41,4,3],
+"namespacehal_1_1xilinx__toolbox.html#a10a671ffba408be19f47837793e2c615":[8,0,0,41,6],
 "namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51":[8,0,0,41,3],
 "namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51a10ac6e6f0fb88fbd2ef475ca8ed197ae":[8,0,0,41,3,1],
 "namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51a15b319eca6422ee378faaae0c599d53b":[8,0,0,41,3,16],
@@ -104,8 +105,8 @@ var NAVTREEINDEX39 =
 "namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51aed2d88f58d320cfa0f2405af657127ce":[8,0,0,41,3,0],
 "namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51af4d16d10eb318db993c33a7b3a7275cd":[8,0,0,41,3,18],
 "namespacehal_1_1xilinx__toolbox.html#aa9cbe87076ce843d6b78da1391dad61c":[8,0,0,41,5],
-"namespacehal_1_1xilinx__toolbox.html#ac42334eb4dcc126be846d54ca9cc813f":[8,0,0,41,6],
-"namespacehal_1_1xilinx__toolbox.html#add3096d73b5fa5e1a093c8ebff0f0b95":[8,0,0,41,7],
+"namespacehal_1_1xilinx__toolbox.html#ac42334eb4dcc126be846d54ca9cc813f":[8,0,0,41,7],
+"namespacehal_1_1xilinx__toolbox.html#add3096d73b5fa5e1a093c8ebff0f0b95":[8,0,0,41,8],
 "namespacehal_1_1yosys.html":[8,0,0,42],
 "namespacehal_1_1yosys.html#a0e0558018cb726c02c0050aaa374ec12":[8,0,0,42,1],
 "namespacehal_1_1yosys.html#aa92e26f3e8fa949cd7c1036b1028d84d":[8,0,0,42,0],
@@ -127,8 +128,8 @@ var NAVTREEINDEX39 =
 "namespacehal_1_1z3__utils.html#aad93f28b0f6e45f9408a286938795451":[8,0,0,43,13],
 "namespacehal_1_1z3__utils.html#ac0cb03d509ab0a729d054d2f6ae2a776":[8,0,0,43,19],
 "namespacehal_1_1z3__utils.html#afb4c8313030fe22c6e0370040c7a9602":[8,0,0,43,15],
-"namespacemembers.html":[8,1,0],
 "namespacemembers.html":[8,1,0,0],
+"namespacemembers.html":[8,1,0],
 "namespacemembers_b.html":[8,1,0,1],
 "namespacemembers_c.html":[8,1,0,2],
 "namespacemembers_d.html":[8,1,0,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX39 =
 "netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html":[10,0,2,0,1,1],
 "netlist_2decorators_2netlist__modification__decorator_8cpp.html":[10,0,2,0,1,2],
 "netlist_2decorators_2netlist__modification__decorator_8cpp_source.html":[10,0,2,0,1,2],
-"netlist_2decorators_2netlist__traversal__decorator_8cpp.html":[10,0,2,0,1,3],
-"netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html":[10,0,2,0,1,3]
+"netlist_2decorators_2netlist__traversal__decorator_8cpp.html":[10,0,2,0,1,3]
 };

@@ -1,13 +1,13 @@
 var searchData=
 [
-  ['genericiconname_43928',['genericIconName',['https://doc.qt.io/qt-5/qmimetype.html#genericIconName-prop',1,'QMimeType']]],
-  ['geometry_43929',['geometry',['https://doc.qt.io/qt-5/qscreen.html#geometry-prop',1,'QScreen::geometry()'],['https://doc.qt.io/qt-5/qgraphicswidget.html#geometry-prop',1,'QGraphicsWidget::geometry()'],['https://doc.qt.io/qt-5/qwidget.html#geometry-prop',1,'QWidget::geometry()']]],
-  ['gesturecancelpolicy_43930',['gestureCancelPolicy',['https://doc.qt.io/qt-5/qgesture.html#gestureCancelPolicy-prop',1,'QGesture']]],
-  ['gesturetype_43931',['gestureType',['https://doc.qt.io/qt-5/qgesture.html#gestureType-prop',1,'QGesture']]],
-  ['globalrestorepolicy_43932',['globalRestorePolicy',['https://doc.qt.io/qt-5/qstatemachine.html#globalRestorePolicy-prop',1,'QStateMachine']]],
-  ['globalstrut_43933',['globalStrut',['https://doc.qt.io/qt-5/qapplication-obsolete.html#globalStrut-prop',1,'QApplication']]],
-  ['globpatterns_43934',['globPatterns',['https://doc.qt.io/qt-5/qmimetype.html#globPatterns-prop',1,'QMimeType']]],
-  ['gridsize_43935',['gridSize',['https://doc.qt.io/qt-5/qlistview.html#gridSize-prop',1,'QListView']]],
-  ['gridstyle_43936',['gridStyle',['https://doc.qt.io/qt-5/qtableview.html#gridStyle-prop',1,'QTableView']]],
-  ['gridvisible_43937',['gridVisible',['https://doc.qt.io/qt-5/qcalendarwidget.html#gridVisible-prop',1,'QCalendarWidget']]]
+  ['genericiconname_43929',['genericIconName',['https://doc.qt.io/qt-5/qmimetype.html#genericIconName-prop',1,'QMimeType']]],
+  ['geometry_43930',['geometry',['https://doc.qt.io/qt-5/qscreen.html#geometry-prop',1,'QScreen::geometry()'],['https://doc.qt.io/qt-5/qgraphicswidget.html#geometry-prop',1,'QGraphicsWidget::geometry()'],['https://doc.qt.io/qt-5/qwidget.html#geometry-prop',1,'QWidget::geometry()']]],
+  ['gesturecancelpolicy_43931',['gestureCancelPolicy',['https://doc.qt.io/qt-5/qgesture.html#gestureCancelPolicy-prop',1,'QGesture']]],
+  ['gesturetype_43932',['gestureType',['https://doc.qt.io/qt-5/qgesture.html#gestureType-prop',1,'QGesture']]],
+  ['globalrestorepolicy_43933',['globalRestorePolicy',['https://doc.qt.io/qt-5/qstatemachine.html#globalRestorePolicy-prop',1,'QStateMachine']]],
+  ['globalstrut_43934',['globalStrut',['https://doc.qt.io/qt-5/qapplication-obsolete.html#globalStrut-prop',1,'QApplication']]],
+  ['globpatterns_43935',['globPatterns',['https://doc.qt.io/qt-5/qmimetype.html#globPatterns-prop',1,'QMimeType']]],
+  ['gridsize_43936',['gridSize',['https://doc.qt.io/qt-5/qlistview.html#gridSize-prop',1,'QListView']]],
+  ['gridstyle_43937',['gridStyle',['https://doc.qt.io/qt-5/qtableview.html#gridStyle-prop',1,'QTableView']]],
+  ['gridvisible_43938',['gridVisible',['https://doc.qt.io/qt-5/qcalendarwidget.html#gridVisible-prop',1,'QCalendarWidget']]]
 ];

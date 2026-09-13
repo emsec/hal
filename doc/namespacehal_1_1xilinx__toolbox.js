@@ -35,6 +35,7 @@ var namespacehal_1_1xilinx__toolbox =
       [ "PIN", "namespacehal_1_1xilinx__toolbox.html#a0e338163becdb40d57a89352258b4475adc001bdc15b8d978d78e63815cca5a67", null ]
     ] ],
     [ "parse_xdc_file", "namespacehal_1_1xilinx__toolbox.html#aa9cbe87076ce843d6b78da1391dad61c", null ],
+    [ "remove_no_load_wires", "namespacehal_1_1xilinx__toolbox.html#a10a671ffba408be19f47837793e2c615", null ],
     [ "split_luts", "namespacehal_1_1xilinx__toolbox.html#ac42334eb4dcc126be846d54ca9cc813f", null ],
     [ "split_shift_registers", "namespacehal_1_1xilinx__toolbox.html#add3096d73b5fa5e1a093c8ebff0f0b95", null ]
 ];
