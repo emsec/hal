@@ -3,6 +3,7 @@
 #include "netlist_test_utils.h"
 #include "gate_library_test_utils.h"
 
+#include <cstdlib>
 #include <filesystem>
 
 namespace hal {
@@ -19,6 +20,27 @@ namespace hal {
         virtual void TearDown() 
         {
             test_utils::remove_sandbox_directory();
+        }
+
+        /**
+         * Parse and instantiate a VHDL netlist given as a string against the test gate library.
+         */
+        Result<std::unique_ptr<Netlist>> parse(const std::string& netlist, const std::string& file_name = "netlist.vhd")
+        {
+            VHDLParser parser;
+            return parser.parse_and_instantiate(test_utils::create_sandbox_file(file_name, netlist), test_utils::get_gate_library());
+        }
+
+        Gate* gate_by_name(const Netlist* nl, const std::string& name)
+        {
+            const auto gates = nl->get_gates([&name](const Gate* g) { return g->get_name() == name; });
+            return gates.size() == 1 ? gates.front() : nullptr;
+        }
+
+        Net* net_by_name(const Netlist* nl, const std::string& name)
+        {
+            const auto nets = nl->get_nets([&name](const Net* n) { return n->get_name() == name; });
+            return nets.size() == 1 ? nets.front() : nullptr;
         }
     };
 
@@ -2811,6 +2833,797 @@ namespace hal {
                 VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_error());
+            }
+        TEST_END
+    }
+
+    /* ------------------------------------------------------------------------------------------------------------------
+     * Edge cases added for the netlist parser rework. Every case is small on purpose so that the ones the legacy parser
+     * cannot pass can be skipped individually; each of them describes behavior the new parsers must provide. Set
+     * HAL_LEGACY_PARSER_STRICT to run the skipped ones anyway.
+     * ------------------------------------------------------------------------------------------------------------------ */
+#define SKIP_ON_LEGACY_PARSER(reason)                                                       \
+    if (std::getenv("HAL_LEGACY_PARSER_STRICT") == nullptr)                                 \
+    {                                                                                       \
+        GTEST_SKIP() << "the legacy VHDL parser does not support " << reason;               \
+    }
+
+    /**
+     * Basic identifiers and keywords are case-insensitive: a reference in any letter case resolves to the declaration,
+     * pin and type names resolve against the gate library regardless of case, and a name keeps the spelling of its
+     * declaration.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_case_insensitive_identifiers)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("case-insensitive entity names, it resolves 'top' against 'Top' case-sensitively");
+            auto nl_res = parse("ENTITY Top IS\n"
+                                "  Port ( Sig_A : IN std_logic;\n"
+                                "         sig_b : in STD_LOGIC;\n"
+                                "         Y : out std_logic );\n"
+                                "END Top;\n"
+                                "ARCHITECTURE rtl OF top IS\n"
+                                "  signal Mid : std_logic;\n"
+                                "BEGIN\n"
+                                "  g0 : and2 PORT MAP ( i0 => SIG_A, I1 => sig_B, o => mid );\n"
+                                "  G1 : Buf port map ( I => MID, O => y );\n"
+                                "END rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            Gate* g0 = gate_by_name(nl.get(), "g0");
+            Gate* g1 = gate_by_name(nl.get(), "G1");
+            ASSERT_NE(g0, nullptr);
+            ASSERT_NE(g1, nullptr);
+            EXPECT_EQ(g0->get_type()->get_name(), "AND2");
+            EXPECT_EQ(g1->get_type()->get_name(), "BUF");
+
+            ASSERT_NE(g0->get_fan_in_net("I0"), nullptr);
+            ASSERT_NE(g0->get_fan_in_net("I1"), nullptr);
+            ASSERT_NE(g0->get_fan_out_net("O"), nullptr);
+            EXPECT_EQ(g0->get_fan_in_net("I0")->get_name(), "Sig_A");
+            EXPECT_EQ(g0->get_fan_in_net("I1")->get_name(), "sig_b");
+            EXPECT_EQ(g0->get_fan_out_net("O")->get_name(), "Mid");
+            EXPECT_EQ(g1->get_fan_in_net("I"), g0->get_fan_out_net("O"));
+            ASSERT_NE(g1->get_fan_out_net("O"), nullptr);
+            EXPECT_EQ(g1->get_fan_out_net("O")->get_name(), "Y");
+            EXPECT_TRUE(nl->is_global_input_net(g0->get_fan_in_net("I0")));
+            EXPECT_TRUE(nl->is_global_output_net(g1->get_fan_out_net("O")));
+            EXPECT_EQ(nl->get_nets().size(), 4);
+            EXPECT_EQ(nl->get_design_name(), "Top");
+        TEST_END
+    }
+
+    /**
+     * Extended identifiers are case-sensitive and may contain slashes, brackets, dots and spaces; the enclosing
+     * backslashes are not part of the name.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_extended_identifiers)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("case-sensitive extended identifiers, it folds them like basic identifiers");
+            auto nl_res = parse("entity top is\n"
+                                "  port ( \\A\\ : in std_logic;\n"
+                                "         \\a\\ : in std_logic;\n"
+                                "         \\NLW_x/y[3]\\ : out std_logic;\n"
+                                "         \\with space\\ : out std_logic );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "  signal \\Mid.x\\ : std_logic;\n"
+                                "begin\n"
+                                "  g0 : AND2 port map ( I0 => \\A\\, I1 => \\a\\, O => \\Mid.x\\ );\n"
+                                "  \\g/1\\ : BUF port map ( I => \\Mid.x\\, O => \\NLW_x/y[3]\\ );\n"
+                                "  g2 : BUF port map ( I => \\Mid.x\\, O => \\with space\\ );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            Gate* g0 = gate_by_name(nl.get(), "g0");
+            Gate* g1 = gate_by_name(nl.get(), "g/1");
+            Gate* g2 = gate_by_name(nl.get(), "g2");
+            ASSERT_NE(g0, nullptr);
+            ASSERT_NE(g1, nullptr);
+            ASSERT_NE(g2, nullptr);
+
+            Net* upper = g0->get_fan_in_net("I0");
+            Net* lower = g0->get_fan_in_net("I1");
+            ASSERT_NE(upper, nullptr);
+            ASSERT_NE(lower, nullptr);
+            EXPECT_NE(upper, lower);
+            EXPECT_EQ(upper->get_name(), "A");
+            EXPECT_EQ(lower->get_name(), "a");
+            EXPECT_EQ(nl->get_global_input_nets().size(), 2);
+
+            ASSERT_NE(g0->get_fan_out_net("O"), nullptr);
+            EXPECT_EQ(g0->get_fan_out_net("O")->get_name(), "Mid.x");
+            ASSERT_NE(g1->get_fan_out_net("O"), nullptr);
+            EXPECT_EQ(g1->get_fan_out_net("O")->get_name(), "NLW_x/y[3]");
+            ASSERT_NE(g2->get_fan_out_net("O"), nullptr);
+            EXPECT_EQ(g2->get_fan_out_net("O")->get_name(), "with space");
+        TEST_END
+    }
+
+    /**
+     * The long and the bare forms of `end` are accepted for entities, architectures and components.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_end_forms)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("'end entity', 'end architecture' and 'end component' with a name");
+            auto nl_res = parse("entity sub is\n"
+                                "  port ( i : in std_logic; o : out std_logic );\n"
+                                "end entity sub;\n"
+                                "architecture rtl of sub is\n"
+                                "begin\n"
+                                "  g : BUF port map ( I => i, O => o );\n"
+                                "end architecture rtl;\n"
+                                "entity top is\n"
+                                "  port ( a : in std_logic; y : out std_logic );\n"
+                                "end entity;\n"
+                                "architecture rtl of top is\n"
+                                "  component sub\n"
+                                "    port ( i : in std_logic; o : out std_logic );\n"
+                                "  end component sub;\n"
+                                "begin\n"
+                                "  s : sub port map ( i => a, o => y );\n"
+                                "end;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            EXPECT_EQ(nl->get_gates().size(), 1);
+            EXPECT_EQ(nl->get_modules().size(), 2);
+            EXPECT_EQ(nl->get_design_name(), "top");
+        TEST_END
+    }
+
+    /**
+     * Instantiation forms: through a component declaration, with the `component` keyword, and directly as
+     * `entity work.name`, with and without a named architecture.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_instantiation_forms)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("direct instantiation with an architecture name");
+            auto nl_res = parse("entity sub is\n"
+                                "  port ( i : in std_logic; o : out std_logic );\n"
+                                "end sub;\n"
+                                "architecture rtl of sub is\n"
+                                "begin\n"
+                                "  g : BUF port map ( I => i, O => o );\n"
+                                "end rtl;\n"
+                                "entity top is\n"
+                                "  port ( a : in std_logic; y0, y1, y2, y3 : out std_logic );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "  component sub\n"
+                                "    port ( i : in std_logic; o : out std_logic );\n"
+                                "  end component;\n"
+                                "begin\n"
+                                "  s0 : sub port map ( i => a, o => y0 );\n"
+                                "  s1 : component sub port map ( i => a, o => y1 );\n"
+                                "  s2 : entity work.sub port map ( i => a, o => y2 );\n"
+                                "  s3 : entity work.sub(rtl) port map ( i => a, o => y3 );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            EXPECT_EQ(nl->get_gates().size(), 4);
+            ASSERT_EQ(nl->get_top_module()->get_submodules().size(), 4);
+            for (const Module* m : nl->get_top_module()->get_submodules())
+            {
+                EXPECT_EQ(m->get_type(), "sub");
+                EXPECT_EQ(m->get_gates().size(), 1);
+            }
+            EXPECT_EQ(nl->get_global_output_nets().size(), 4);
+        TEST_END
+    }
+
+    /**
+     * An entity may be instantiated before its declaration appears in the file.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_forward_entity_reference)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("instantiating an entity declared later in the file");
+            auto nl_res = parse("entity top is\n"
+                                "  port ( a : in std_logic; y : out std_logic );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "begin\n"
+                                "  l : entity work.later port map ( i => a, o => y );\n"
+                                "end rtl;\n"
+                                "entity later is\n"
+                                "  port ( i : in std_logic; o : out std_logic );\n"
+                                "end later;\n"
+                                "architecture rtl of later is\n"
+                                "begin\n"
+                                "  g : BUF port map ( I => i, O => o );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            EXPECT_EQ(nl->get_design_name(), "top");
+            ASSERT_EQ(nl->get_top_module()->get_submodules().size(), 1);
+            EXPECT_EQ(nl->get_top_module()->get_submodules().front()->get_type(), "later");
+            EXPECT_EQ(nl->get_gates().size(), 1);
+        TEST_END
+    }
+
+    /**
+     * Concatenation in a port map fills a pin group from the left, i.e., the last element lands on bit 0.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_port_map_concatenation)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("concatenation in a port map");
+            auto nl_res = parse("entity top is\n"
+                                "  port ( a, b : in std_logic; v : in std_logic_vector(1 downto 0); y : out std_logic_vector(3 downto 0) );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "begin\n"
+                                "  r : RAM port map ( DATA_IN => a & v & b, DATA_OUT => y );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            Gate* r = gate_by_name(nl.get(), "r");
+            ASSERT_NE(r, nullptr);
+            ASSERT_NE(r->get_fan_in_net("DATA_IN(0)"), nullptr);
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(0)")->get_name(), "b");
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(1)")->get_name(), "v(0)");
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(2)")->get_name(), "v(1)");
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(3)")->get_name(), "a");
+        TEST_END
+    }
+
+    /**
+     * Aggregates in a port map: a positional aggregate lists the bits from the highest index down, and
+     * `(others => '0')` ties every bit to ground.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_port_map_aggregates)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("aggregates in a port map");
+            auto nl_res = parse("entity top is\n"
+                                "  port ( a, b, c, d : in std_logic; y : out std_logic_vector(3 downto 0) );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "begin\n"
+                                "  r : RAM port map ( ADDR => (a, b, c, d), DATA_IN => (others => '0'), DATA_OUT => y );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            Gate* r = gate_by_name(nl.get(), "r");
+            ASSERT_NE(r, nullptr);
+            ASSERT_NE(r->get_fan_in_net("ADDR(0)"), nullptr);
+            EXPECT_EQ(r->get_fan_in_net("ADDR(0)")->get_name(), "d");
+            EXPECT_EQ(r->get_fan_in_net("ADDR(3)")->get_name(), "a");
+            for (const std::string pin : {"DATA_IN(0)", "DATA_IN(1)", "DATA_IN(2)", "DATA_IN(3)"})
+            {
+                ASSERT_NE(r->get_fan_in_net(pin), nullptr) << pin;
+                EXPECT_TRUE(r->get_fan_in_net(pin)->is_gnd_net()) << pin;
+            }
+        TEST_END
+    }
+
+    /**
+     * `open` on an output pin, on a whole pin group, and on one element of a vector port leaves those pins unconnected.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_open_on_outputs_and_vectors)
+    {
+        TEST_START
+            auto nl_res = parse("entity top is\n"
+                                "  port ( a : in std_logic; v : in std_logic_vector(3 downto 0); y : out std_logic_vector(3 downto 0) );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "begin\n"
+                                "  b : BUF port map ( I => a, O => open );\n"
+                                "  r : RAM port map ( ADDR => v, DATA_IN => open, DATA_OUT(3 downto 1) => y(3 downto 1), DATA_OUT(0) => open );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            Gate* b = gate_by_name(nl.get(), "b");
+            Gate* r = gate_by_name(nl.get(), "r");
+            ASSERT_NE(b, nullptr);
+            ASSERT_NE(r, nullptr);
+            EXPECT_EQ(b->get_fan_out_net("O"), nullptr);
+            EXPECT_EQ(r->get_fan_in_nets().size(), 4);
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(0)"), nullptr);
+            EXPECT_EQ(r->get_fan_out_net("DATA_OUT(0)"), nullptr);
+            ASSERT_NE(r->get_fan_out_net("DATA_OUT(1)"), nullptr);
+            EXPECT_EQ(r->get_fan_out_net("DATA_OUT(1)")->get_name(), "y(1)");
+            EXPECT_EQ(nl->get_global_output_nets().size(), 3);
+        TEST_END
+    }
+
+    /**
+     * String literals in a port map: an unbased bit string, a based one with `X` and `Z` bits (which leave the pin
+     * open), and a hexadecimal one.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_port_map_string_literals)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("based string literals in a port map");
+            auto nl_res = parse("entity top is\n"
+                                "  port ( y0, y1 : out std_logic_vector(3 downto 0) );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "begin\n"
+                                "  r0 : RAM port map ( ADDR => \"0110\", DATA_IN => B\"01ZX\", DATA_OUT => y0 );\n"
+                                "  r1 : RAM port map ( ADDR => X\"A\", DATA_OUT => y1 );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            Gate* r0 = gate_by_name(nl.get(), "r0");
+            Gate* r1 = gate_by_name(nl.get(), "r1");
+            ASSERT_NE(r0, nullptr);
+            ASSERT_NE(r1, nullptr);
+            for (const auto& [pin, vcc] : std::vector<std::pair<std::string, bool>>{{"ADDR(0)", false}, {"ADDR(1)", true}, {"ADDR(2)", true}, {"ADDR(3)", false}})
+            {
+                ASSERT_NE(r0->get_fan_in_net(pin), nullptr) << pin;
+                EXPECT_EQ(r0->get_fan_in_net(pin)->is_vcc_net(), vcc) << pin;
+            }
+            EXPECT_EQ(r0->get_fan_in_net("DATA_IN(0)"), nullptr);    // X
+            EXPECT_EQ(r0->get_fan_in_net("DATA_IN(1)"), nullptr);    // Z
+            ASSERT_NE(r0->get_fan_in_net("DATA_IN(2)"), nullptr);
+            EXPECT_TRUE(r0->get_fan_in_net("DATA_IN(2)")->is_vcc_net());
+            ASSERT_NE(r0->get_fan_in_net("DATA_IN(3)"), nullptr);
+            EXPECT_TRUE(r0->get_fan_in_net("DATA_IN(3)")->is_gnd_net());
+            for (const auto& [pin, vcc] : std::vector<std::pair<std::string, bool>>{{"ADDR(0)", false}, {"ADDR(1)", true}, {"ADDR(2)", false}, {"ADDR(3)", true}})
+            {
+                ASSERT_NE(r1->get_fan_in_net(pin), nullptr) << pin;
+                EXPECT_EQ(r1->get_fan_in_net(pin)->is_vcc_net(), vcc) << pin;
+            }
+        TEST_END
+    }
+
+    /**
+     * The weak std_logic values: 'H' counts as '1', 'L' as '0', and 'U', 'W' and '-' leave the pin open like 'X'.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_weak_std_logic_values)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("the weak std_logic values");
+            auto nl_res = parse("entity top is\n"
+                                "  port ( y : out std_logic_vector(3 downto 0) );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "begin\n"
+                                "  r : RAM port map ( ADDR(0) => 'H', ADDR(1) => 'L', ADDR(2) => 'U', ADDR(3) => 'W', DATA_IN(0) => '-', DATA_OUT => y );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            Gate* r = gate_by_name(nl.get(), "r");
+            ASSERT_NE(r, nullptr);
+            ASSERT_NE(r->get_fan_in_net("ADDR(0)"), nullptr);
+            EXPECT_TRUE(r->get_fan_in_net("ADDR(0)")->is_vcc_net());
+            ASSERT_NE(r->get_fan_in_net("ADDR(1)"), nullptr);
+            EXPECT_TRUE(r->get_fan_in_net("ADDR(1)")->is_gnd_net());
+            EXPECT_EQ(r->get_fan_in_net("ADDR(2)"), nullptr);
+            EXPECT_EQ(r->get_fan_in_net("ADDR(3)"), nullptr);
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(0)"), nullptr);
+        TEST_END
+    }
+
+    /**
+     * Generics declared on an entity and overridden on an entity instance end up on the module; further value forms
+     * of generic maps on gates: negative numbers, underscores, based integers, times with small units, lowercase
+     * base letters.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_generic_forms)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("generics on entity instances and integers with underscores or a base");
+            auto nl_res = parse("entity sub is\n"
+                                "  generic ( WIDTH : integer := 4; MODE : string := \"fast\" );\n"
+                                "  port ( i : in std_logic; o : out std_logic );\n"
+                                "end sub;\n"
+                                "architecture rtl of sub is\n"
+                                "begin\n"
+                                "  g : BUF generic map ( neg => -1, big => 1_000, based => 16#FF#, delay => 10 ns, hex => x\"ab\" ) port map ( I => i, O => o );\n"
+                                "end rtl;\n"
+                                "entity top is\n"
+                                "  port ( a : in std_logic; y : out std_logic );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "begin\n"
+                                "  s : entity work.sub generic map ( WIDTH => 8 ) port map ( i => a, o => y );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            ASSERT_EQ(nl->get_top_module()->get_submodules().size(), 1);
+            const Module* s = nl->get_top_module()->get_submodules().front();
+            EXPECT_EQ(s->get_data("generic", "WIDTH"), std::make_tuple(std::string("integer"), std::string("8")));
+
+            Gate* g = gate_by_name(nl.get(), "g");
+            ASSERT_NE(g, nullptr);
+            EXPECT_EQ(g->get_data("generic", "neg"), std::make_tuple(std::string("integer"), std::string("-1")));
+            EXPECT_EQ(g->get_data("generic", "big"), std::make_tuple(std::string("integer"), std::string("1000")));
+            EXPECT_EQ(g->get_data("generic", "based"), std::make_tuple(std::string("integer"), std::string("255")));
+            EXPECT_EQ(g->get_data("generic", "delay"), std::make_tuple(std::string("time"), std::string("10ns")));
+            EXPECT_EQ(g->get_data("generic", "hex"), std::make_tuple(std::string("bit_vector"), std::string("AB")));
+        TEST_END
+    }
+
+    /**
+     * Signal and port declaration variants: several names in one declaration, a single-element vector, a vector that
+     * does not start at zero, initial values, `buffer` mode, and `std_ulogic`.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_declaration_variants)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("'std_ulogic', 'buffer' ports and initial values");
+            auto nl_res = parse("entity top is\n"
+                                "  port ( a : in std_ulogic; y : buffer std_logic; z : out std_logic );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "  signal m, n : std_logic := '0';\n"
+                                "  signal one : std_logic_vector(0 downto 0);\n"
+                                "  signal high : std_logic_vector(7 downto 6) := (others => '0');\n"
+                                "begin\n"
+                                "  g0 : BUF port map ( I => a, O => m );\n"
+                                "  g1 : BUF port map ( I => m, O => n );\n"
+                                "  g2 : BUF port map ( I => n, O => one(0) );\n"
+                                "  g3 : BUF port map ( I => one(0), O => high(7) );\n"
+                                "  g4 : BUF port map ( I => high(7), O => y );\n"
+                                "  g5 : BUF port map ( I => y, O => z );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            EXPECT_EQ(nl->get_gates().size(), 6);
+            Gate* g2 = gate_by_name(nl.get(), "g2");
+            Gate* g3 = gate_by_name(nl.get(), "g3");
+            Gate* g5 = gate_by_name(nl.get(), "g5");
+            ASSERT_NE(g2, nullptr);
+            ASSERT_NE(g3, nullptr);
+            ASSERT_NE(g5, nullptr);
+            ASSERT_NE(g2->get_fan_out_net("O"), nullptr);
+            EXPECT_EQ(g2->get_fan_out_net("O")->get_name(), "one(0)");
+            ASSERT_NE(g3->get_fan_out_net("O"), nullptr);
+            EXPECT_EQ(g3->get_fan_out_net("O")->get_name(), "high(7)");
+            EXPECT_EQ(net_by_name(nl.get(), "high(6)"), nullptr);
+            // a buffer port is read inside the entity and still is an output of the design
+            EXPECT_TRUE(nl->is_global_output_net(g5->get_fan_in_net("I")));
+            EXPECT_TRUE(nl->is_global_output_net(g5->get_fan_out_net("O")));
+        TEST_END
+    }
+
+    /**
+     * Concurrent assignment variants: literals, `(others => '0')`, concatenation, and indexed and sliced targets.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_assignment_variants)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("'(others => '0')' and concatenation in assignments");
+            auto nl_res = parse("entity top is\n"
+                                "  port ( p, q : in std_logic; y : out std_logic_vector(3 downto 0) );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "  signal zero, one : std_logic;\n"
+                                "  signal pair : std_logic_vector(1 downto 0);\n"
+                                "  signal zeros : std_logic_vector(1 downto 0);\n"
+                                "  signal w : std_logic_vector(3 downto 0);\n"
+                                "begin\n"
+                                "  zero <= '0';\n"
+                                "  one <= '1';\n"
+                                "  zeros <= (others => '0');\n"
+                                "  pair <= p & q;\n"
+                                "  w(0) <= one;\n"
+                                "  w(3 downto 2) <= pair;\n"
+                                "  r : RAM port map ( ADDR => zero & one & zeros, DATA_IN => w, DATA_OUT => y );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            Gate* r = gate_by_name(nl.get(), "r");
+            ASSERT_NE(r, nullptr);
+            for (const auto& [pin, vcc] : std::vector<std::pair<std::string, bool>>{{"ADDR(0)", false}, {"ADDR(1)", false}, {"ADDR(2)", true}, {"ADDR(3)", false}, {"DATA_IN(0)", true}})
+            {
+                ASSERT_NE(r->get_fan_in_net(pin), nullptr) << pin;
+                EXPECT_EQ(r->get_fan_in_net(pin)->is_vcc_net(), vcc) << pin;
+                EXPECT_EQ(r->get_fan_in_net(pin)->is_gnd_net(), !vcc) << pin;
+            }
+            // w(1) is never driven, w(3 downto 2) are aliases of the ports p and q
+            ASSERT_NE(r->get_fan_in_net("DATA_IN(1)"), nullptr);
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(1)")->get_num_of_sources(), 0);
+            ASSERT_NE(r->get_fan_in_net("DATA_IN(2)"), nullptr);
+            ASSERT_NE(r->get_fan_in_net("DATA_IN(3)"), nullptr);
+            EXPECT_NE(r->get_fan_in_net("DATA_IN(2)"), r->get_fan_in_net("DATA_IN(3)"));
+            EXPECT_TRUE(nl->is_global_input_net(r->get_fan_in_net("DATA_IN(2)")));
+            EXPECT_TRUE(nl->is_global_input_net(r->get_fan_in_net("DATA_IN(3)")));
+        TEST_END
+    }
+
+    /**
+     * Attributes on an entity instance label and on a vector signal, and an attribute class the netlist has no place
+     * for is ignored rather than rejected.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_attributes_on_instances_and_vectors)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("attributes on entity instance labels and vector signals");
+            auto nl_res = parse("entity sub is\n"
+                                "  port ( i : in std_logic; o : out std_logic );\n"
+                                "end sub;\n"
+                                "architecture rtl of sub is\n"
+                                "begin\n"
+                                "  g : BUF port map ( I => i, O => o );\n"
+                                "end rtl;\n"
+                                "entity top is\n"
+                                "  port ( a : in std_logic; y : out std_logic_vector(1 downto 0) );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "  signal v : std_logic_vector(1 downto 0);\n"
+                                "  attribute keep : string;\n"
+                                "  attribute keep of v : signal is \"true\";\n"
+                                "  attribute keep of s : label is \"yes\";\n"
+                                "  attribute keep of rtl : architecture is \"ignored\";\n"
+                                "begin\n"
+                                "  s : entity work.sub port map ( i => a, o => v(0) );\n"
+                                "  b : BUF port map ( I => a, O => v(1) );\n"
+                                "  c0 : BUF port map ( I => v(0), O => y(0) );\n"
+                                "  c1 : BUF port map ( I => v(1), O => y(1) );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            ASSERT_EQ(nl->get_top_module()->get_submodules().size(), 1);
+            const Module* s = nl->get_top_module()->get_submodules().front();
+            EXPECT_EQ(std::get<1>(s->get_data("attribute", "keep")), "yes");
+            Gate* c0 = gate_by_name(nl.get(), "c0");
+            Gate* c1 = gate_by_name(nl.get(), "c1");
+            ASSERT_NE(c0, nullptr);
+            ASSERT_NE(c1, nullptr);
+            EXPECT_EQ(std::get<1>(c0->get_fan_in_net("I")->get_data("attribute", "keep")), "true");
+            EXPECT_EQ(std::get<1>(c1->get_fan_in_net("I")->get_data("attribute", "keep")), "true");
+        TEST_END
+    }
+
+    /**
+     * Line endings and strings: CRLF files, a byte order mark, a last line without newline, comment markers inside a
+     * string, doubled quotes, and a comment at the end of a port map line.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_line_endings_and_strings)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("comment markers and doubled quotes inside strings");
+            const std::string body = "entity top is\n"
+                                     "  port ( a : in std_logic; -- trailing\n"
+                                     "         y : out std_logic );\n"
+                                     "end top;\n"
+                                     "architecture rtl of top is\n"
+                                     "  signal m : std_logic;\n"
+                                     "begin\n"
+                                     "  g : BUF generic map ( note => \"a--b\", quoted => \"say \"\"hi\"\"\" ) port map ( I => a, -- inside the map\n"
+                                     "                                                                                  O => m );\n"
+                                     "  h : BUF port map ( I => m, O => y );\n"
+                                     "end rtl;";
+
+            for (const int variant : {0, 1, 2})
+            {
+                std::string text = body;
+                if (variant == 1)
+                {
+                    std::string converted;
+                    for (const char c : text)
+                    {
+                        if (c == '\n')
+                        {
+                            converted += '\r';
+                        }
+                        converted += c;
+                    }
+                    text = converted;
+                }
+                else if (variant == 2)
+                {
+                    text = "\xEF\xBB\xBF" + text + "\n";
+                }
+
+                auto nl_res = parse(text);
+                ASSERT_TRUE(nl_res.is_ok()) << "variant " << variant << ": " << nl_res.get_error().get();
+                auto nl = nl_res.get();
+                EXPECT_EQ(nl->get_gates().size(), 2);
+                Gate* g = gate_by_name(nl.get(), "g");
+                Gate* h = gate_by_name(nl.get(), "h");
+                ASSERT_NE(g, nullptr);
+                ASSERT_NE(h, nullptr);
+                EXPECT_EQ(h->get_fan_in_net("I"), g->get_fan_out_net("O"));
+                EXPECT_EQ(std::get<1>(g->get_data("generic", "note")), "a--b");
+                EXPECT_EQ(std::get<1>(g->get_data("generic", "quoted")), "say \"hi\"");
+            }
+        TEST_END
+    }
+
+    /**
+     * Library clauses in their other forms, a component declared in a package, and a package made visible with a use
+     * clause.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_packages_and_use_clauses)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("package declarations");
+            auto nl_res = parse("library ieee;\n"
+                                "use ieee.std_logic_1164.std_logic;\n"
+                                "library work;\n"
+                                "use work.all;\n"
+                                "package comps is\n"
+                                "  component sub\n"
+                                "    port ( i : in std_logic; o : out std_logic );\n"
+                                "  end component;\n"
+                                "end package comps;\n"
+                                "entity sub is\n"
+                                "  port ( i : in std_logic; o : out std_logic );\n"
+                                "end sub;\n"
+                                "architecture rtl of sub is\n"
+                                "begin\n"
+                                "  g : BUF port map ( I => i, O => o );\n"
+                                "end rtl;\n"
+                                "use work.comps.all;\n"
+                                "entity top is\n"
+                                "  port ( a : in std_logic; y : out std_logic );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "begin\n"
+                                "  s : sub port map ( i => a, o => y );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            EXPECT_EQ(nl->get_gates().size(), 1);
+            EXPECT_EQ(nl->get_modules().size(), 2);
+            EXPECT_EQ(nl->get_design_name(), "top");
+        TEST_END
+    }
+
+    /**
+     * A port of the top entity that nothing inside touches still is part of the interface: its net stays and is a
+     * global input or output.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_unconnected_top_port_kept)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("keeping a top-level port that nothing inside touches");
+            auto nl_res = parse("entity top is\n"
+                                "  port ( a, unused_in : in std_logic; y, unused_out : out std_logic );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "begin\n"
+                                "  g : BUF port map ( I => a, O => y );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            Net* unused_in  = net_by_name(nl.get(), "unused_in");
+            Net* unused_out = net_by_name(nl.get(), "unused_out");
+            ASSERT_NE(unused_in, nullptr);
+            ASSERT_NE(unused_out, nullptr);
+            EXPECT_TRUE(nl->is_global_input_net(unused_in));
+            EXPECT_TRUE(nl->is_global_output_net(unused_out));
+            EXPECT_EQ(nl->get_global_input_nets().size(), 2);
+            EXPECT_EQ(nl->get_global_output_nets().size(), 2);
+        TEST_END
+    }
+
+    /**
+     * Duplicate declarations of a signal, an entity, or an instance label are errors.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_duplicate_declarations_rejected)
+    {
+        TEST_START
+            NO_COUT_TEST_BLOCK;
+            {
+                auto nl_res = parse("entity top is\n"
+                                    "  port ( a : in std_logic; y : out std_logic );\n"
+                                    "end top;\n"
+                                    "architecture rtl of top is\n"
+                                    "begin\n"
+                                    "  g : BUF port map ( I => a, O => y );\n"
+                                    "end rtl;\n"
+                                    "entity top is\n"
+                                    "  port ( a : in std_logic; y : out std_logic );\n"
+                                    "end top;\n"
+                                    "architecture rtl of top is\n"
+                                    "begin\n"
+                                    "  g : INV port map ( I => a, O => y );\n"
+                                    "end rtl;\n");
+                EXPECT_TRUE(nl_res.is_error()) << "accepted an entity declared twice";
+            }
+            SKIP_ON_LEGACY_PARSER("rejecting a signal or a label that is declared twice");
+            {
+                auto nl_res = parse("entity top is\n"
+                                    "  port ( a : in std_logic; y : out std_logic );\n"
+                                    "end top;\n"
+                                    "architecture rtl of top is\n"
+                                    "  signal m : std_logic;\n"
+                                    "  signal m : std_logic;\n"
+                                    "begin\n"
+                                    "  g : BUF port map ( I => a, O => m );\n"
+                                    "  h : BUF port map ( I => m, O => y );\n"
+                                    "end rtl;\n");
+                EXPECT_TRUE(nl_res.is_error()) << "accepted a signal declared twice";
+            }
+            {
+                auto nl_res = parse("entity top is\n"
+                                    "  port ( a : in std_logic; y, z : out std_logic );\n"
+                                    "end top;\n"
+                                    "architecture rtl of top is\n"
+                                    "begin\n"
+                                    "  g : BUF port map ( I => a, O => y );\n"
+                                    "  g : BUF port map ( I => a, O => z );\n"
+                                    "end rtl;\n");
+                EXPECT_TRUE(nl_res.is_error()) << "accepted a label used twice";
+            }
+        TEST_END
+    }
+
+    /**
+     * With two architectures for one entity, a direct instantiation that names an architecture selects it, and a
+     * plain instantiation takes the last one declared.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_architecture_selection)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("several architectures for one entity");
+            auto nl_res = parse("entity sub is\n"
+                                "  port ( i : in std_logic; o : out std_logic );\n"
+                                "end sub;\n"
+                                "architecture first of sub is\n"
+                                "begin\n"
+                                "  g : BUF port map ( I => i, O => o );\n"
+                                "end first;\n"
+                                "architecture second of sub is\n"
+                                "begin\n"
+                                "  g : INV port map ( I => i, O => o );\n"
+                                "end second;\n"
+                                "entity top is\n"
+                                "  port ( a : in std_logic; y0, y1, y2 : out std_logic );\n"
+                                "end top;\n"
+                                "architecture rtl of top is\n"
+                                "begin\n"
+                                "  s0 : entity work.sub(first) port map ( i => a, o => y0 );\n"
+                                "  s1 : entity work.sub(second) port map ( i => a, o => y1 );\n"
+                                "  s2 : entity work.sub port map ( i => a, o => y2 );\n"
+                                "end rtl;\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            ASSERT_EQ(nl->get_top_module()->get_submodules().size(), 3);
+            for (const Module* m : nl->get_top_module()->get_submodules())
+            {
+                ASSERT_EQ(m->get_gates().size(), 1) << m->get_name();
+                const std::string expected = (m->get_name() == "s0") ? "BUF" : "INV";
+                EXPECT_EQ(m->get_gates().front()->get_type()->get_name(), expected) << m->get_name();
             }
         TEST_END
     }

@@ -4,6 +4,7 @@
 #include "gate_library_test_utils.h"
 
 #include <bitset>
+#include <cstdlib>
 #include <filesystem>
 
 namespace hal {
@@ -20,6 +21,27 @@ namespace hal {
         virtual void TearDown() 
         {
             test_utils::remove_sandbox_directory();
+        }
+
+        /**
+         * Parse and instantiate a Verilog netlist given as a string against the test gate library.
+         */
+        Result<std::unique_ptr<Netlist>> parse(const std::string& netlist, const std::string& file_name = "netlist.v")
+        {
+            VerilogParser parser;
+            return parser.parse_and_instantiate(test_utils::create_sandbox_file(file_name, netlist), test_utils::get_gate_library());
+        }
+
+        Gate* gate_by_name(const Netlist* nl, const std::string& name)
+        {
+            const auto gates = nl->get_gates([&name](const Gate* g) { return g->get_name() == name; });
+            return gates.size() == 1 ? gates.front() : nullptr;
+        }
+
+        Net* net_by_name(const Netlist* nl, const std::string& name)
+        {
+            const auto nets = nl->get_nets([&name](const Net* n) { return n->get_name() == name; });
+            return nets.size() == 1 ? nets.front() : nullptr;
         }
     };
 
@@ -3535,6 +3557,810 @@ namespace hal {
                 auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_ok());
             }
+        TEST_END
+    }
+
+    /* ------------------------------------------------------------------------------------------------------------------
+     * Edge cases added for the netlist parser rework. Every case is small on purpose so that the ones the legacy parser
+     * cannot pass can be skipped individually; each of them describes behavior the new parsers must provide. Set
+     * HAL_LEGACY_PARSER_STRICT to run the skipped ones anyway.
+     * ------------------------------------------------------------------------------------------------------------------ */
+#define SKIP_ON_LEGACY_PARSER(reason)                                                       \
+    if (std::getenv("HAL_LEGACY_PARSER_STRICT") == nullptr)                                 \
+    {                                                                                       \
+        GTEST_SKIP() << "the legacy Verilog parser does not support " << reason;            \
+    }
+
+    /**
+     * Escaped identifiers may contain brackets, parentheses, commas and keywords; an escaped `\bus[3]` is a scalar and
+     * distinct from bit 3 of a vector `bus`, and the trailing space that ends an escaped identifier never becomes part
+     * of its name.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_escaped_identifier_forms)
+    {
+        TEST_START
+            auto nl_res = parse("module top (\\a[3] , \\bus[3] , \\wire , out);\n"
+                                "  input \\a[3] ;\n"
+                                "  input \\bus[3] ;\n"
+                                "  input \\wire ;\n"
+                                "  output out;\n"
+                                "  wire [3:0] bus;\n"
+                                "  wire \\x(y) ;\n"
+                                "  wire \\p,q ;\n"
+                                "  BUF g0 (.I(\\a[3] ), .O(bus[3]));\n"
+                                "  AND2 g1 (.I0(bus[3]), .I1(\\bus[3] ), .O(\\x(y) ));\n"
+                                "  AND2 \\g,2 (.I0(\\x(y) ), .I1(\\wire ), .O(out));\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            Gate* g0 = gate_by_name(nl.get(), "g0");
+            Gate* g1 = gate_by_name(nl.get(), "g1");
+            Gate* g2 = gate_by_name(nl.get(), "g,2");
+            ASSERT_NE(g0, nullptr);
+            ASSERT_NE(g1, nullptr);
+            ASSERT_NE(g2, nullptr);
+
+            // the escaped name keeps its brackets and is a global input, the vector bit is a different net
+            ASSERT_NE(g0->get_fan_in_net("I"), nullptr);
+            EXPECT_EQ(g0->get_fan_in_net("I")->get_name(), "a[3]");
+            EXPECT_TRUE(nl->is_global_input_net(g0->get_fan_in_net("I")));
+            ASSERT_NE(g0->get_fan_out_net("O"), nullptr);
+            EXPECT_EQ(g0->get_fan_out_net("O")->get_name(), "bus(3)");
+            EXPECT_EQ(g1->get_fan_in_net("I0"), g0->get_fan_out_net("O"));
+            ASSERT_NE(g1->get_fan_in_net("I1"), nullptr);
+            EXPECT_EQ(g1->get_fan_in_net("I1")->get_name(), "bus[3]");
+            EXPECT_NE(g1->get_fan_in_net("I1"), g1->get_fan_in_net("I0"));
+
+            // parentheses, commas and keywords inside escaped names survive
+            ASSERT_NE(g1->get_fan_out_net("O"), nullptr);
+            EXPECT_EQ(g1->get_fan_out_net("O")->get_name(), "x(y)");
+            EXPECT_EQ(g2->get_fan_in_net("I0"), g1->get_fan_out_net("O"));
+            ASSERT_NE(g2->get_fan_in_net("I1"), nullptr);
+            EXPECT_EQ(g2->get_fan_in_net("I1")->get_name(), "wire");
+            EXPECT_TRUE(nl->is_global_input_net(g2->get_fan_in_net("I1")));
+
+            // the unused bits of the vector are dropped, the used one stays
+            EXPECT_EQ(net_by_name(nl.get(), "bus(0)"), nullptr);
+            EXPECT_EQ(nl->get_nets().size(), 6);
+        TEST_END
+    }
+
+    /**
+     * Verilog identifiers are case-sensitive: `a` and `A` are different nets and `g` and `G` different gates.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_case_sensitive_identifiers)
+    {
+        TEST_START
+            auto nl_res = parse("module top (a, A, out);\n"
+                                "  input a;\n"
+                                "  input A;\n"
+                                "  output out;\n"
+                                "  wire Out;\n"
+                                "  AND2 g (.I0(a), .I1(A), .O(out));\n"
+                                "  BUF G (.I(A), .O(Out));\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            Gate* g = gate_by_name(nl.get(), "g");
+            Gate* G = gate_by_name(nl.get(), "G");
+            ASSERT_NE(g, nullptr);
+            ASSERT_NE(G, nullptr);
+            EXPECT_EQ(g->get_type()->get_name(), "AND2");
+            EXPECT_EQ(G->get_type()->get_name(), "BUF");
+
+            Net* a = net_by_name(nl.get(), "a");
+            Net* A = net_by_name(nl.get(), "A");
+            ASSERT_NE(a, nullptr);
+            ASSERT_NE(A, nullptr);
+            EXPECT_NE(a, A);
+            EXPECT_EQ(g->get_fan_in_net("I0"), a);
+            EXPECT_EQ(g->get_fan_in_net("I1"), A);
+            EXPECT_EQ(G->get_fan_in_net("I"), A);
+            EXPECT_EQ(nl->get_global_input_nets().size(), 2);
+            ASSERT_NE(net_by_name(nl.get(), "Out"), nullptr);
+            EXPECT_NE(net_by_name(nl.get(), "Out"), net_by_name(nl.get(), "out"));
+        TEST_END
+    }
+
+    /**
+     * Literal forms in connections: underscores are ignored, `x` and `z` bits leave the pin open in any letter case,
+     * and a literal narrower than a pin group is zero-extended.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_literal_forms)
+    {
+        TEST_START
+            auto nl_res = parse("module top (out);\n"
+                                "  output [3:0] out;\n"
+                                "  RAM r (.ADDR(4'b01_10), .DATA_IN(4'b1x0z), .DATA_OUT(out));\n"
+                                "  RAM s (.ADDR(2'hZ), .DATA_IN(1'b1), .DATA_OUT());\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            Gate* r = gate_by_name(nl.get(), "r");
+            ASSERT_NE(r, nullptr);
+            ASSERT_NE(r->get_fan_in_net("ADDR(0)"), nullptr);
+            EXPECT_TRUE(r->get_fan_in_net("ADDR(0)")->is_gnd_net());
+            EXPECT_TRUE(r->get_fan_in_net("ADDR(1)")->is_vcc_net());
+            EXPECT_TRUE(r->get_fan_in_net("ADDR(2)")->is_vcc_net());
+            EXPECT_TRUE(r->get_fan_in_net("ADDR(3)")->is_gnd_net());
+
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(0)"), nullptr);    // z
+            ASSERT_NE(r->get_fan_in_net("DATA_IN(1)"), nullptr);
+            EXPECT_TRUE(r->get_fan_in_net("DATA_IN(1)")->is_gnd_net());
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(2)"), nullptr);    // x
+            ASSERT_NE(r->get_fan_in_net("DATA_IN(3)"), nullptr);
+            EXPECT_TRUE(r->get_fan_in_net("DATA_IN(3)")->is_vcc_net());
+
+            Gate* s = gate_by_name(nl.get(), "s");
+            ASSERT_NE(s, nullptr);
+            EXPECT_EQ(s->get_fan_in_net("ADDR(0)"), nullptr);
+            EXPECT_EQ(s->get_fan_in_net("ADDR(1)"), nullptr);
+            EXPECT_EQ(s->get_fan_in_net("ADDR(2)"), nullptr);
+            ASSERT_NE(s->get_fan_in_net("DATA_IN(0)"), nullptr);
+            EXPECT_TRUE(s->get_fan_in_net("DATA_IN(0)")->is_vcc_net());
+        TEST_END
+    }
+
+    /**
+     * A literal narrower than the pin group it is connected to is zero-extended, as a port connection of a narrower
+     * expression is in Verilog.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_literal_zero_extension)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("zero extension of a narrower literal on a pin group");
+            auto nl_res = parse("module top (out);\n"
+                                "  output [3:0] out;\n"
+                                "  RAM s (.ADDR(2'b10), .DATA_IN(1'b1), .DATA_OUT(out));\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            Gate* s = gate_by_name(nl.get(), "s");
+            ASSERT_NE(s, nullptr);
+            for (const auto& [pin, vcc] : std::vector<std::pair<std::string, bool>>{{"ADDR(0)", false}, {"ADDR(1)", true}, {"ADDR(2)", false}, {"ADDR(3)", false}, {"DATA_IN(0)", true}, {"DATA_IN(1)", false}, {"DATA_IN(2)", false}, {"DATA_IN(3)", false}})
+            {
+                ASSERT_NE(s->get_fan_in_net(pin), nullptr) << pin;
+                EXPECT_EQ(s->get_fan_in_net(pin)->is_vcc_net(), vcc) << pin;
+                EXPECT_EQ(s->get_fan_in_net(pin)->is_gnd_net(), !vcc) << pin;
+            }
+        TEST_END
+    }
+
+    /**
+     * Replication and nested concatenations inside a connection.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_replication_and_nested_concatenation)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("replication and nested concatenations");
+            auto nl_res = parse("module top (a, b, c, out);\n"
+                                "  input a, b, c;\n"
+                                "  output [3:0] out;\n"
+                                "  RAM r (.DATA_IN({{2{a}}, {b, c}}), .DATA_OUT(out));\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            Gate* r = gate_by_name(nl.get(), "r");
+            ASSERT_NE(r, nullptr);
+            ASSERT_NE(r->get_fan_in_net("DATA_IN(0)"), nullptr);
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(0)")->get_name(), "c");
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(1)")->get_name(), "b");
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(2)")->get_name(), "a");
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(3)")->get_name(), "a");
+        TEST_END
+    }
+
+    /**
+     * ANSI port kinds: `input wire`, `output reg`, `inout`, and one range shared by two port names.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_ansi_port_kinds)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("'input wire', 'output reg' and 'inout' in ANSI port lists");
+            auto nl_res = parse("module top (input wire a, output reg y, inout io, input [1:0] p, q);\n"
+                                "  AND2 g (.I0(p[1]), .I1(q[0]), .O(y));\n"
+                                "  BUF b (.I(a), .O(io));\n"
+                                "  BUF c (.I(io), .O(p[0]));\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            Gate* g = gate_by_name(nl.get(), "g");
+            ASSERT_NE(g, nullptr);
+            ASSERT_NE(g->get_fan_in_net("I0"), nullptr);
+            EXPECT_EQ(g->get_fan_in_net("I0")->get_name(), "p(1)");
+            EXPECT_EQ(g->get_fan_in_net("I1")->get_name(), "q(0)");
+            EXPECT_TRUE(nl->is_global_input_net(g->get_fan_in_net("I0")));
+            EXPECT_TRUE(nl->is_global_input_net(g->get_fan_in_net("I1")));
+            EXPECT_TRUE(nl->is_global_output_net(g->get_fan_out_net("O")));
+
+            // an inout port of the top module is both a global input and a global output
+            Net* io = net_by_name(nl.get(), "io");
+            ASSERT_NE(io, nullptr);
+            EXPECT_TRUE(nl->is_global_input_net(io));
+            EXPECT_TRUE(nl->is_global_output_net(io));
+            ModulePin* io_pin = nl->get_top_module()->get_pin_by_net(io);
+            ASSERT_NE(io_pin, nullptr);
+            EXPECT_EQ(io_pin->get_direction(), PinDirection::inout);
+        TEST_END
+    }
+
+    /**
+     * Body declarations: a range shared by several non-ANSI ports, a single-element range, `tri`, and a wire with an
+     * initializer, which is an alias like an assign.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_body_declaration_variants)
+    {
+        TEST_START
+            auto nl_res = parse("module top (a, b, y);\n"
+                                "  input [1:0] a, b;\n"
+                                "  output y;\n"
+                                "  wire [3:3] one;\n"
+                                "  tri t;\n"
+                                "  wire d = a[1];\n"
+                                "  AND2 g0 (.I0(a[0]), .I1(b[1]), .O(one[3]));\n"
+                                "  AND2 g1 (.I0(one[3]), .I1(d), .O(t));\n"
+                                "  BUF g2 (.I(t), .O(y));\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            Gate* g0 = gate_by_name(nl.get(), "g0");
+            Gate* g1 = gate_by_name(nl.get(), "g1");
+            Gate* g2 = gate_by_name(nl.get(), "g2");
+            ASSERT_NE(g0, nullptr);
+            ASSERT_NE(g1, nullptr);
+            ASSERT_NE(g2, nullptr);
+            EXPECT_EQ(nl->get_global_input_nets().size(), 3);    // a(0), a(1), b(1) are used, b(0) is not
+            ASSERT_NE(g0->get_fan_out_net("O"), nullptr);
+            EXPECT_EQ(g0->get_fan_out_net("O")->get_name(), "one(3)");
+            EXPECT_EQ(g1->get_fan_in_net("I0"), g0->get_fan_out_net("O"));
+            ASSERT_NE(g1->get_fan_in_net("I1"), nullptr);
+            EXPECT_TRUE(nl->is_global_input_net(g1->get_fan_in_net("I1")));    // d is an alias of the port bit a[1]
+            ASSERT_NE(g1->get_fan_out_net("O"), nullptr);
+            EXPECT_EQ(g1->get_fan_out_net("O")->get_name(), "t");
+            EXPECT_EQ(g2->get_fan_in_net("I"), g1->get_fan_out_net("O"));
+        TEST_END
+    }
+
+    /**
+     * Positional connections may leave a slot empty, and an instance may have no connections at all.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_positional_connection_gaps)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("empty slots in positional connection lists");
+            auto nl_res = parse("module top (a, y);\n"
+                                "  input a;\n"
+                                "  output y;\n"
+                                "  AND2 g (a, , y);\n"
+                                "  BUF u ();\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            Gate* g = gate_by_name(nl.get(), "g");
+            ASSERT_NE(g, nullptr);
+            ASSERT_NE(g->get_fan_in_net("I0"), nullptr);
+            EXPECT_EQ(g->get_fan_in_net("I0")->get_name(), "a");
+            EXPECT_EQ(g->get_fan_in_net("I1"), nullptr);
+            ASSERT_NE(g->get_fan_out_net("O"), nullptr);
+            EXPECT_EQ(g->get_fan_out_net("O")->get_name(), "y");
+
+            Gate* u = gate_by_name(nl.get(), "u");
+            ASSERT_NE(u, nullptr);
+            EXPECT_TRUE(u->get_fan_in_nets().empty());
+            EXPECT_TRUE(u->get_fan_out_nets().empty());
+        TEST_END
+    }
+
+    /**
+     * A module port tied to a constant in the parent connects the module-internal logic to the constant net.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_constant_on_module_port)
+    {
+        TEST_START
+            auto nl_res = parse("module sub (i, j, o);\n"
+                                "  input i, j;\n"
+                                "  output o;\n"
+                                "  AND2 g (.I0(i), .I1(j), .O(o));\n"
+                                "endmodule\n"
+                                "module top (y);\n"
+                                "  output y;\n"
+                                "  sub s (.i(1'b0), .j(1'b1), .o(y));\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            Gate* g = gate_by_name(nl.get(), "g");
+            ASSERT_NE(g, nullptr);
+            ASSERT_NE(g->get_fan_in_net("I0"), nullptr);
+            EXPECT_TRUE(g->get_fan_in_net("I0")->is_gnd_net());
+            ASSERT_NE(g->get_fan_in_net("I1"), nullptr);
+            EXPECT_TRUE(g->get_fan_in_net("I1")->is_vcc_net());
+            EXPECT_TRUE(nl->is_global_output_net(g->get_fan_out_net("O")));
+            EXPECT_EQ(nl->get_modules().size(), 2);
+        TEST_END
+    }
+
+    /**
+     * A module may be instantiated before its definition appears in the file.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_forward_module_reference)
+    {
+        TEST_START
+            auto nl_res = parse("module top (a, y);\n"
+                                "  input a;\n"
+                                "  output y;\n"
+                                "  later l (.i(a), .o(y));\n"
+                                "endmodule\n"
+                                "module later (i, o);\n"
+                                "  input i;\n"
+                                "  output o;\n"
+                                "  BUF g (.I(i), .O(o));\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            EXPECT_EQ(nl->get_design_name(), "top");
+            EXPECT_EQ(nl->get_top_module()->get_type(), "top");
+            ASSERT_EQ(nl->get_top_module()->get_submodules().size(), 1);
+            EXPECT_EQ(nl->get_top_module()->get_submodules().front()->get_type(), "later");
+            Gate* g = gate_by_name(nl.get(), "l/g");
+            if (g == nullptr)
+            {
+                g = gate_by_name(nl.get(), "g");
+            }
+            ASSERT_NE(g, nullptr);
+            EXPECT_TRUE(nl->is_global_input_net(g->get_fan_in_net("I")));
+            EXPECT_TRUE(nl->is_global_output_net(g->get_fan_out_net("O")));
+        TEST_END
+    }
+
+    /**
+     * Assign variants: a scalar tied to a constant, concatenations on both sides, a bit-select on the left,
+     * a narrower target that takes the low bits, and a high-impedance right side that leaves the target undriven.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_assign_variants)
+    {
+        TEST_START
+            auto nl_res = parse("module top (p, q, wide, out);\n"
+                                "  input p, q;\n"
+                                "  input [3:0] wide;\n"
+                                "  output [3:0] out;\n"
+                                "  wire zero, x, y, floating;\n"
+                                "  wire [1:0] narrow;\n"
+                                "  wire [3:0] sel;\n"
+                                "  assign zero = 1'b0;\n"
+                                "  assign {x, y} = {p, q};\n"
+                                "  assign narrow = wide;\n"
+                                "  assign sel[2] = q;\n"
+                                "  assign floating = 1'bz;\n"
+                                "  RAM r (.ADDR({zero, x, y, floating}), .DATA_IN({narrow, sel[2], sel[3]}), .DATA_OUT(out));\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            Gate* r = gate_by_name(nl.get(), "r");
+            ASSERT_NE(r, nullptr);
+
+            // a high-impedance assignment leaves the target undriven, so the pin sees a net without sources
+            Net* floating = r->get_fan_in_net("ADDR(0)");
+            ASSERT_NE(floating, nullptr);
+            EXPECT_EQ(floating->get_name(), "floating");
+            EXPECT_EQ(floating->get_num_of_sources(), 0);
+
+            // {x, y} = {p, q} makes x an alias of p and y an alias of q; both are top-level ports
+            Net* y = r->get_fan_in_net("ADDR(1)");
+            Net* x = r->get_fan_in_net("ADDR(2)");
+            ASSERT_NE(y, nullptr);
+            ASSERT_NE(x, nullptr);
+            EXPECT_NE(x, y);
+            EXPECT_TRUE(nl->is_global_input_net(x));
+            EXPECT_TRUE(nl->is_global_input_net(y));
+
+            ASSERT_NE(r->get_fan_in_net("ADDR(3)"), nullptr);
+            EXPECT_TRUE(r->get_fan_in_net("ADDR(3)")->is_gnd_net());    // zero
+
+            // sel[3] is declared but never driven, sel[2] is an alias of q
+            Net* sel_3 = r->get_fan_in_net("DATA_IN(0)");
+            ASSERT_NE(sel_3, nullptr);
+            EXPECT_EQ(sel_3->get_name(), "sel(3)");
+            EXPECT_EQ(sel_3->get_num_of_sources(), 0);
+            EXPECT_EQ(r->get_fan_in_net("DATA_IN(1)"), y);
+
+            // the narrower target takes the low bits of the wider source
+            Net* narrow_0 = r->get_fan_in_net("DATA_IN(2)");
+            Net* narrow_1 = r->get_fan_in_net("DATA_IN(3)");
+            ASSERT_NE(narrow_0, nullptr);
+            ASSERT_NE(narrow_1, nullptr);
+            EXPECT_NE(narrow_0, narrow_1);
+            EXPECT_TRUE(nl->is_global_input_net(narrow_0));
+            EXPECT_TRUE(nl->is_global_input_net(narrow_1));
+            EXPECT_EQ(nl->get_global_input_nets().size(), 4);    // p, q, wide[0], wide[1]; wide[3:2] is unused
+        TEST_END
+    }
+
+    /**
+     * Logic expressions in continuous assignments are outside the structural subset and must be rejected.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_logic_expression_rejected)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("rejecting logic expressions in assignments, it silently misreads them");
+            NO_COUT_TEST_BLOCK;
+            for (const std::string rhs : {"b & c", "~b", "b ? c : 1'b0", "b + c"})
+            {
+                auto nl_res = parse("module top (b, c, a);\n"
+                                    "  input b, c;\n"
+                                    "  output a;\n"
+                                    "  assign a = " + rhs + ";\n"
+                                    "endmodule");
+                EXPECT_TRUE(nl_res.is_error()) << "accepted 'assign a = " << rhs << ";'";
+            }
+        TEST_END
+    }
+
+    /**
+     * Compiler directives that carry no structural information are ignored.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_ignored_directives)
+    {
+        TEST_START
+            auto nl_res = parse("`timescale 1ns / 1ps\n"
+                                "`default_nettype none\n"
+                                "`celldefine\n"
+                                "module top (a, y);\n"
+                                "  input a;\n"
+                                "  output y;\n"
+                                "  INV g (.I(a), .O(y));\n"
+                                "endmodule\n"
+                                "`endcelldefine\n"
+                                "`resetall\n");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            EXPECT_EQ(nl->get_gates().size(), 1);
+            EXPECT_NE(gate_by_name(nl.get(), "g"), nullptr);
+        TEST_END
+    }
+
+    /**
+     * Conditional compilation and macros are evaluated: only the active branch of an `ifdef` is parsed and a
+     * `define is substituted.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_conditional_compilation)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("conditional compilation and macros");
+            auto nl_res = parse("`define GATE INV\n"
+                                "module top (a, y);\n"
+                                "  input a;\n"
+                                "  output y;\n"
+                                "`ifdef UNDEFINED_SYMBOL\n"
+                                "  BUF wrong (.I(a), .O(y));\n"
+                                "`else\n"
+                                "  `GATE g (.I(a), .O(y));\n"
+                                "`endif\n"
+                                "`ifndef UNDEFINED_SYMBOL\n"
+                                "  INV h (.I(y), .O());\n"
+                                "`endif\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            EXPECT_EQ(nl->get_gates().size(), 2);
+            EXPECT_EQ(gate_by_name(nl.get(), "wrong"), nullptr);
+            Gate* g = gate_by_name(nl.get(), "g");
+            ASSERT_NE(g, nullptr);
+            EXPECT_EQ(g->get_type()->get_name(), "INV");
+            EXPECT_NE(gate_by_name(nl.get(), "h"), nullptr);
+        TEST_END
+    }
+
+    /**
+     * Behavioral constructs are outside the structural subset and must be rejected with an error instead of being
+     * misread as instances.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_unsupported_constructs_rejected)
+    {
+        TEST_START
+            NO_COUT_TEST_BLOCK;
+            for (const std::string body : {"initial begin y = 1'b0; end",
+                                           "always @(posedge a) y <= a;",
+                                           "generate if (1) begin BUF g (.I(a), .O(y)); end endgenerate",
+                                           "function f; input x; f = x; endfunction",
+                                           "specify (a => y) = 1; endspecify"})
+            {
+                auto nl_res = parse("module top (a, y);\n"
+                                    "  input a;\n"
+                                    "  output y;\n"
+                                    "  " + body + "\n"
+                                    "endmodule");
+                EXPECT_TRUE(nl_res.is_error()) << "accepted '" << body << "'";
+            }
+        TEST_END
+    }
+
+    /**
+     * Line endings and comment placement: CRLF files, a last line without newline, comments inside a port list and
+     * inside a range, and comment markers inside a string.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_line_endings_and_comment_placement)
+    {
+        TEST_START
+            const std::string body = "module top (a, /* between ports */ y);\n"
+                                     "  input a; // trailing\n"
+                                     "  output y;\n"
+                                     "  wire [1 /* inside a range */ :0] v;\n"
+                                     "  (* note = \"a//b/*c*/\" *) BUF g (.I(a), .O(v[1]));\n"
+                                     "  BUF /* between type and name */ h (.I(v[1]), .O(y));\n"
+                                     "endmodule";
+
+            for (const bool crlf : {false, true})
+            {
+                std::string text = body;
+                if (crlf)
+                {
+                    std::string converted;
+                    for (const char c : text)
+                    {
+                        if (c == '\n')
+                        {
+                            converted += '\r';
+                        }
+                        converted += c;
+                    }
+                    text = converted;
+                }
+
+                auto nl_res = parse(text);
+                ASSERT_TRUE(nl_res.is_ok()) << (crlf ? "CRLF: " : "LF: ") << nl_res.get_error().get();
+                auto nl = nl_res.get();
+                EXPECT_EQ(nl->get_gates().size(), 2);
+                Gate* g = gate_by_name(nl.get(), "g");
+                Gate* h = gate_by_name(nl.get(), "h");
+                ASSERT_NE(g, nullptr);
+                ASSERT_NE(h, nullptr);
+                ASSERT_NE(g->get_fan_out_net("O"), nullptr);
+                EXPECT_EQ(g->get_fan_out_net("O")->get_name(), "v(1)");
+                EXPECT_EQ(h->get_fan_in_net("I"), g->get_fan_out_net("O"));
+                EXPECT_TRUE(nl->is_global_output_net(h->get_fan_out_net("O")));
+                EXPECT_EQ(std::get<1>(g->get_data("attribute", "note")), "a//b/*c*/");
+            }
+        TEST_END
+    }
+
+    /**
+     * A module whose output is assigned straight from its input is a pass-through, and an inout module port keeps its
+     * direction.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_pass_through_and_inout_modules)
+    {
+        TEST_START
+            auto nl_res = parse("module pass (i, o);\n"
+                                "  input i;\n"
+                                "  output o;\n"
+                                "  assign o = i;\n"
+                                "endmodule\n"
+                                "module bidi (io, o);\n"
+                                "  inout io;\n"
+                                "  output o;\n"
+                                "  BUF b (.I(io), .O(o));\n"
+                                "  BUF c (.I(o), .O(io));\n"
+                                "endmodule\n"
+                                "module top (a, y, z);\n"
+                                "  input a;\n"
+                                "  output y, z;\n"
+                                "  wire m;\n"
+                                "  pass p (.i(a), .o(m));\n"
+                                "  bidi q (.io(m), .o(y));\n"
+                                "  BUF g (.I(m), .O(z));\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+
+            Gate* g = gate_by_name(nl.get(), "g");
+            ASSERT_NE(g, nullptr);
+            ASSERT_NE(g->get_fan_in_net("I"), nullptr);
+            EXPECT_TRUE(nl->is_global_input_net(g->get_fan_in_net("I")));
+
+            Gate* b = gate_by_name(nl.get(), "b");
+            if (b == nullptr)
+            {
+                b = gate_by_name(nl.get(), "q/b");
+            }
+            ASSERT_NE(b, nullptr);
+            EXPECT_EQ(b->get_fan_in_net("I"), g->get_fan_in_net("I"));
+
+            // the net is driven inside bidi as well as outside and read on both sides, so the module pin is inout
+            Module* bidi = b->get_module();
+            ASSERT_NE(bidi, nullptr);
+            EXPECT_EQ(bidi->get_type(), "bidi");
+            EXPECT_EQ(b->get_fan_in_net("I")->get_num_of_sources(), 1);
+            ModulePin* io_pin = bidi->get_pin_by_net(b->get_fan_in_net("I"));
+            ASSERT_NE(io_pin, nullptr);
+            EXPECT_EQ(io_pin->get_name(), "io");
+            EXPECT_EQ(io_pin->get_direction(), PinDirection::inout);
+        TEST_END
+    }
+
+    /**
+     * Two outputs driving one wire give a net with two sources; the parser does not reject that.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_multiple_drivers)
+    {
+        TEST_START
+            auto nl_res = parse("module top (a, b, y);\n"
+                                "  input a, b;\n"
+                                "  output y;\n"
+                                "  BUF g (.I(a), .O(y));\n"
+                                "  BUF h (.I(b), .O(y));\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            Net* y = net_by_name(nl.get(), "y");
+            ASSERT_NE(y, nullptr);
+            EXPECT_EQ(y->get_num_of_sources(), 2);
+            EXPECT_TRUE(nl->is_global_output_net(y));
+        TEST_END
+    }
+
+    /**
+     * A port of the top module that nothing inside the module touches still is part of the interface: its net stays
+     * and is a global input or output.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_unconnected_top_port_kept)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("keeping a top-level port that nothing inside touches");
+            auto nl_res = parse("module top (a, unused_in, y, unused_out);\n"
+                                "  input a, unused_in;\n"
+                                "  output y, unused_out;\n"
+                                "  BUF g (.I(a), .O(y));\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            Net* unused_in  = net_by_name(nl.get(), "unused_in");
+            Net* unused_out = net_by_name(nl.get(), "unused_out");
+            ASSERT_NE(unused_in, nullptr);
+            ASSERT_NE(unused_out, nullptr);
+            EXPECT_TRUE(nl->is_global_input_net(unused_in));
+            EXPECT_TRUE(nl->is_global_output_net(unused_out));
+            EXPECT_EQ(nl->get_global_input_nets().size(), 2);
+            EXPECT_EQ(nl->get_global_output_nets().size(), 2);
+        TEST_END
+    }
+
+    /**
+     * Duplicate declarations of a wire, a module, or an instance name are errors.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_duplicate_declarations_rejected)
+    {
+        TEST_START
+            NO_COUT_TEST_BLOCK;
+            {
+                auto nl_res = parse("module top (a, y);\n"
+                                    "  input a;\n"
+                                    "  output y;\n"
+                                    "  BUF g (.I(a), .O(y));\n"
+                                    "endmodule\n"
+                                    "module top (a, y);\n"
+                                    "  input a;\n"
+                                    "  output y;\n"
+                                    "  INV g (.I(a), .O(y));\n"
+                                    "endmodule");
+                EXPECT_TRUE(nl_res.is_error()) << "accepted a module declared twice";
+            }
+            SKIP_ON_LEGACY_PARSER("rejecting a wire or an instance name that is declared twice");
+            {
+                auto nl_res = parse("module top (a, y);\n"
+                                    "  input a;\n"
+                                    "  output y;\n"
+                                    "  wire w;\n"
+                                    "  wire w;\n"
+                                    "  BUF g (.I(a), .O(w));\n"
+                                    "  BUF h (.I(w), .O(y));\n"
+                                    "endmodule");
+                EXPECT_TRUE(nl_res.is_error()) << "accepted a wire declared twice";
+            }
+            {
+                auto nl_res = parse("module top (a, y, z);\n"
+                                    "  input a;\n"
+                                    "  output y, z;\n"
+                                    "  BUF g (.I(a), .O(y));\n"
+                                    "  BUF g (.I(a), .O(z));\n"
+                                    "endmodule");
+                EXPECT_TRUE(nl_res.is_error()) << "accepted an instance name used twice";
+            }
+        TEST_END
+    }
+
+    /**
+     * Parameter declarations in a module header and body are accepted, positional parameter overrides and a defparam
+     * on a module instance end up on the module.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_parameter_declaration_forms)
+    {
+        TEST_START
+            SKIP_ON_LEGACY_PARSER("parameter lists in module headers and defparam on module instances");
+            auto nl_res = parse("module sub #(parameter WIDTH = 8, DEPTH = 2) (i, o);\n"
+                                "  input i;\n"
+                                "  output o;\n"
+                                "  localparam HALF = WIDTH / 2;\n"
+                                "  BUF g (.I(i), .O(o));\n"
+                                "endmodule\n"
+                                "module top (a, y, z);\n"
+                                "  input a;\n"
+                                "  output y, z;\n"
+                                "  sub #(.WIDTH(16)) s0 (.i(a), .o(y));\n"
+                                "  sub s1 (.i(a), .o(z));\n"
+                                "  defparam s1.DEPTH = 4;\n"
+                                "endmodule");
+            ASSERT_TRUE(nl_res.is_ok()) << nl_res.get_error().get();
+            auto nl = nl_res.get();
+            ASSERT_EQ(nl->get_top_module()->get_submodules().size(), 2);
+            Module* s0 = nullptr;
+            Module* s1 = nullptr;
+            for (Module* m : nl->get_top_module()->get_submodules())
+            {
+                if (m->get_name() == "s0")
+                {
+                    s0 = m;
+                }
+                else if (m->get_name() == "s1")
+                {
+                    s1 = m;
+                }
+            }
+            ASSERT_NE(s0, nullptr);
+            ASSERT_NE(s1, nullptr);
+            EXPECT_EQ(std::get<1>(s0->get_data("generic", "WIDTH")), "16");
+            EXPECT_EQ(std::get<1>(s1->get_data("generic", "DEPTH")), "4");
         TEST_END
     }
 } // namespace hal
