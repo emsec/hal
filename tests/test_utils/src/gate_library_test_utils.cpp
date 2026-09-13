@@ -1325,6 +1325,52 @@ namespace hal
                     return nullptr;
                 }
             }
+            {
+                // PARAM_TEST: a 2-input/1-output combinational cell with one bit-vector
+                // and one enum parameter. Exercises the typed-parameter system in HGL,
+                // .hal, Verilog, and VHDL round-trips. The output Boolean function
+                // references both parameters as variables so stage 3's parameter-aware
+                // get_boolean_function can be tested without further restructuring.
+                GateType* param_test = lib->create_gate_type("PARAM_TEST", {GateTypeProperty::combinational});
+                if (auto res = param_test->create_pin("I0", PinDirection::input); res.is_error())
+                {
+                    return nullptr;
+                }
+                if (auto res = param_test->create_pin("I1", PinDirection::input); res.is_error())
+                {
+                    return nullptr;
+                }
+                if (auto res = param_test->create_pin("O", PinDirection::output); res.is_error())
+                {
+                    return nullptr;
+                }
+                auto width_decl = Parameter::BitVector("width", 16, "0xCAFE");
+                if (width_decl.is_error())
+                {
+                    return nullptr;
+                }
+                if (auto res = param_test->add_parameter(width_decl.get()); res.is_error())
+                {
+                    return nullptr;
+                }
+                auto mode_decl = Parameter::Enum("mode", {"normal", "inverted"}, "normal");
+                if (mode_decl.is_error())
+                {
+                    return nullptr;
+                }
+                if (auto res = param_test->add_parameter(mode_decl.get()); res.is_error())
+                {
+                    return nullptr;
+                }
+                // parameter-conditional Boolean functions need the multi-bit function parser of the multi-output LUT branch,
+                // so the function stays plain until that lands
+                auto bf_o = BooleanFunction::from_string("I0 & I1");
+                if (bf_o.is_error())
+                {
+                    return nullptr;
+                }
+                param_test->add_boolean_function("O", bf_o.get());
+            }
 
             return std::move(lib);
         }
@@ -1477,6 +1523,13 @@ namespace hal
             else if (state_component1 != nullptr || state_component2 != nullptr)
             {
                 log_info("test_utils", "unequal Init components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                return false;
+            }
+
+            // Compare typed parameter declarations (order matters: parameters retain declaration order).
+            if (gt1->get_parameters() != gt2->get_parameters())
+            {
+                log_info("test_utils", "unequal parameters of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                 return false;
             }
 
