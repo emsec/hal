@@ -78,7 +78,7 @@ namespace hal
         }
     }    // namespace
 
-    std::vector<ContextMenuContribution> GuiExtensionXilinxToolbox::get_context_contribution(const Netlist*, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>&)
+    std::vector<ContextMenuContribution> GuiExtensionXilinxToolbox::get_context_contribution(const Netlist*, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets)
     {
         std::vector<ContextMenuContribution> retval;
 
@@ -96,16 +96,21 @@ namespace hal
             add("split_luts_selection", "Split LUTs of selection");
             add("split_shift_registers_selection", "Split shift registers of selection");
         }
+        else if (!nets.empty())
+        {
+            add("remove_no_load_wires_selection", "Remove no load wires of selection");
+        }
         else
         {
             add("split_luts_netlist", "Split LUTs of netlist");
             add("split_shift_registers_netlist", "Split shift registers of netlist");
+            add("remove_no_load_wires_netlist", "Remove no load wires of netlist");
         }
 
         return retval;
     }
 
-    void GuiExtensionXilinxToolbox::execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>&)
+    void GuiExtensionXilinxToolbox::execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets)
     {
         if (nl == nullptr)
         {
@@ -149,6 +154,34 @@ namespace hal
             else
             {
                 log_info("xilinx_toolbox", "split {} shift registers.", res.get());
+            }
+        }
+        else if (tag == "remove_no_load_wires_selection" || tag == "remove_no_load_wires_netlist")
+        {
+            std::vector<Net*> net_scope;
+            if (tag == "remove_no_load_wires_selection")
+            {
+                for (u32 id : nets)
+                {
+                    if (Net* n = nl->get_net_by_id(id); n != nullptr)
+                    {
+                        net_scope.push_back(n);
+                    }
+                }
+                if (net_scope.empty())
+                {
+                    log_warning("xilinx_toolbox", "cannot remove no load wires of the selection: no nets selected.");
+                    return;
+                }
+            }
+
+            if (const auto res = xilinx_toolbox::remove_no_load_wires(nl, net_scope); res.is_error())
+            {
+                log_error("xilinx_toolbox", "failed to remove no load wires: {}", res.get_error().get());
+            }
+            else
+            {
+                log_info("xilinx_toolbox", "removed {} no load wires.", res.get());
             }
         }
         else

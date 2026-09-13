@@ -286,7 +286,7 @@ namespace hal
 
             // without a selection the netlist-wide entries are offered
             auto without_selection = gui->get_context_contribution(nl.get(), {}, {}, {});
-            ASSERT_EQ(without_selection.size(), 2);
+            ASSERT_EQ(without_selection.size(), 3);
             for (const auto& cmc : without_selection)
             {
                 EXPECT_NE(cmc.mTagname.find("_netlist"), std::string::npos);
@@ -311,6 +311,117 @@ namespace hal
             gui->execute_function("split_luts_netlist", nl.get(), {}, {}, {});
             EXPECT_TRUE(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "LUT6_2"; }).empty());
             EXPECT_EQ(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "LUT6"; }).size(), 2);
+
+            // with only nets selected, the entry removing no load wires of the selection is offered and acts on those nets only
+            Gate* inv           = nl->create_gate(m_gl->get_gate_type_by_name("INV"), "inv");
+            Net* selected_nlw   = nl->create_net("NLW_inv_O_UNCONNECTED");
+            Net* unselected_nlw = nl->create_net("NLW_other_O_UNCONNECTED");
+            selected_nlw->add_source(inv, "O");
+            auto with_nets = gui->get_context_contribution(nl.get(), {}, {}, {selected_nlw->get_id()});
+            ASSERT_EQ(with_nets.size(), 1);
+            EXPECT_EQ(with_nets.front().mTagname, "remove_no_load_wires_selection");
+            gui->execute_function("remove_no_load_wires_selection", nl.get(), {}, {}, {selected_nlw->get_id()});
+            EXPECT_EQ(nl->get_net_by_id(selected_nlw->get_id()), nullptr);
+            EXPECT_TRUE(inv->get_fan_out_nets().empty());
+            EXPECT_EQ(nl->get_net_by_id(unselected_nlw->get_id()), unselected_nlw);
+
+            gui->execute_function("remove_no_load_wires_netlist", nl.get(), {}, {}, {});
+            EXPECT_EQ(nl->get_net_by_id(unselected_nlw->get_id()), nullptr);
+        }
+        TEST_END
+    }
+
+    /**
+     * Testing the removal of the no load wires that Vivado writes for unused output pins.
+     *
+     * Functions: remove_no_load_wires
+     */
+    TEST_F(XilinxToolboxTest, check_remove_no_load_wires)
+    {
+        TEST_START
+        {
+            Net* gnd_net = nullptr;
+            Net* vcc_net = nullptr;
+            auto nl      = create_netlist(&gnd_net, &vcc_net);
+            ASSERT_NE(nl, nullptr);
+
+            auto* fd_type = m_gl->get_gate_type_by_name("FDRE");
+            ASSERT_NE(fd_type, nullptr);
+
+            // no load wires as Vivado writes them: for a single-bit pin, for a flattened instance path, with the path in
+            // front of the prefix, and for one bit of a multi-bit pin in both index styles
+            Gate* ff_a     = nl->create_gate(fd_type, "ff_a");
+            Net* nlw_plain = nl->create_net("NLW_ff_a_Q_UNCONNECTED");
+            nlw_plain->add_source(ff_a, "Q");
+            Gate* ff_b    = nl->create_gate(fd_type, "sub/ff_b");
+            Net* nlw_flat = nl->create_net("NLW_sub/ff_b_Q_UNCONNECTED");
+            nlw_flat->add_source(ff_b, "Q");
+            Gate* ff_g         = nl->create_gate(fd_type, "sub/ff_g");
+            Net* nlw_flat_path = nl->create_net("sub/NLW_ff_g_Q_UNCONNECTED");
+            nlw_flat_path->add_source(ff_g, "Q");
+            Gate* carry     = nl->create_gate(m_gl->get_gate_type_by_name("CARRY4"), "carry");
+            Net* nlw_bit    = nl->create_net("NLW_carry_CO_UNCONNECTED(2)");
+            nlw_bit->add_source(carry, "CO(2)");
+            Net* nlw_bit_sq = nl->create_net("NLW_carry_CO_UNCONNECTED[3]");
+            nlw_bit_sq->add_source(carry, "CO(3)");
+
+            // an ordinary net without destinations is not a no load wire, whatever its name looks like
+            Gate* ff_c  = nl->create_gate(fd_type, "ff_c");
+            Net* unread = nl->create_net("unread");
+            unread->add_source(ff_c, "Q");
+            Gate* ff_d       = nl->create_gate(fd_type, "ff_d");
+            Net* nlw_in_path = nl->create_net("NLW_ff_d_Q_UNCONNECTED/inner");
+            nlw_in_path->add_source(ff_d, "Q");
+            Gate* ff_h        = nl->create_gate(fd_type, "ff_h");
+            Net* nlw_in_token = nl->create_net("xNLW_ff_h_Q_UNCONNECTED");
+            nlw_in_token->add_source(ff_h, "Q");
+
+            // a no load wire by name that is actually read stays, as does one that leaves the netlist
+            Gate* ff_e     = nl->create_gate(fd_type, "ff_e");
+            Net* nlw_read  = nl->create_net("NLW_ff_e_Q_UNCONNECTED");
+            nlw_read->add_source(ff_e, "Q");
+            nlw_read->add_destination(nl->create_gate(m_gl->get_gate_type_by_name("INV"), "inv"), "I");
+            Gate* ff_f      = nl->create_gate(fd_type, "ff_f");
+            Net* nlw_output = nl->create_net("NLW_ff_f_Q_UNCONNECTED");
+            nlw_output->add_source(ff_f, "Q");
+            nl->mark_global_output_net(nlw_output);
+
+            // a scope containing a net of another netlist is refused
+            auto other = netlist_factory::create_netlist(m_gl);
+            Net* foreign = other->create_net("NLW_x_O_UNCONNECTED");
+            EXPECT_TRUE(xilinx_toolbox::remove_no_load_wires(nl.get(), {foreign}).is_error());
+            EXPECT_TRUE(xilinx_toolbox::remove_no_load_wires(nullptr).is_error());
+
+            // a scope only removes the no load wires within it
+            auto scoped = xilinx_toolbox::remove_no_load_wires(nl.get(), {nlw_flat, unread});
+            ASSERT_TRUE(scoped.is_ok());
+            EXPECT_EQ(scoped.get(), 1);
+            EXPECT_EQ(nl->get_net_by_id(nlw_flat->get_id()), nullptr);
+            EXPECT_TRUE(ff_b->get_fan_out_nets().empty());
+            EXPECT_EQ(nl->get_net_by_id(nlw_plain->get_id()), nlw_plain);
+
+            const u32 nets_before = nl->get_nets().size();
+            auto all              = xilinx_toolbox::remove_no_load_wires(nl.get());
+            ASSERT_TRUE(all.is_ok());
+            EXPECT_EQ(all.get(), 4);
+            EXPECT_EQ(nl->get_nets().size(), nets_before - 4);
+            EXPECT_EQ(nl->get_net_by_id(nlw_plain->get_id()), nullptr);
+            EXPECT_EQ(nl->get_net_by_id(nlw_flat_path->get_id()), nullptr);
+            EXPECT_EQ(nl->get_net_by_id(nlw_bit->get_id()), nullptr);
+            EXPECT_EQ(nl->get_net_by_id(nlw_bit_sq->get_id()), nullptr);
+            EXPECT_TRUE(ff_a->get_fan_out_nets().empty());
+            EXPECT_TRUE(ff_g->get_fan_out_nets().empty());
+            EXPECT_TRUE(carry->get_fan_out_nets().empty());
+            EXPECT_EQ(ff_c->get_fan_out_net("Q"), unread);
+            EXPECT_EQ(ff_d->get_fan_out_net("Q"), nlw_in_path);
+            EXPECT_EQ(ff_h->get_fan_out_net("Q"), nlw_in_token);
+            EXPECT_EQ(ff_e->get_fan_out_net("Q"), nlw_read);
+            EXPECT_EQ(ff_f->get_fan_out_net("Q"), nlw_output);
+
+            // running again finds nothing left to do
+            auto again = xilinx_toolbox::remove_no_load_wires(nl.get());
+            ASSERT_TRUE(again.is_ok());
+            EXPECT_EQ(again.get(), 0);
         }
         TEST_END
     }

@@ -134,6 +134,34 @@ namespace hal
         )");
 
         m.def(
+            "remove_no_load_wires",
+            [](Netlist* nl, const std::vector<Net*>& nets) -> std::optional<u32> {
+                auto res = xilinx_toolbox::remove_no_load_wires(nl, nets);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            py::arg("nets") = std::vector<Net*>(),
+            R"(
+            Remove the "no load wire" nets that Vivado writes for unused output pins.
+            Vivado names such nets ``NLW_<instance>_<pin>_UNCONNECTED`` and only connects them to the output pin they stand in for.
+            A net is removed if its name starts with ``NLW_`` (or has ``NLW_`` right after a ``/`` in a flattened path) and ends with ``_UNCONNECTED``, optionally followed by a bit index such as ``(2)`` or ``[2]``, it has no destinations, and it is not a global output.
+            The output pins that drove the removed nets are left unconnected.
+
+            :param hal_py.Netlist nl: The netlist to operate on. 
+            :param list[hal_py.Net] nets: The nets to consider. Defaults to an empty list, in which case all nets of the netlist are considered.
+            :returns: The number of removed nets on success, ``None`` otherwise.
+            :rtype: int or None
+        )");
+
+        m.def(
             "parse_xdc_file",
             [](Netlist* nl, const std::filesystem::path& xdc_file) -> bool {
                 auto res = xilinx_toolbox::parse_xdc_file(nl, xdc_file);

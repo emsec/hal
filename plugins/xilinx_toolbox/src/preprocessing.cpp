@@ -327,5 +327,70 @@ namespace hal
 
             return OK(deleted_gates);
         }
+
+        Result<u32> remove_no_load_wires(Netlist* nl, const std::vector<Net*>& nets)
+        {
+            if (nl == nullptr)
+            {
+                return ERR("cannot remove no load wires: netlist is a nullptr");
+            }
+
+            // Vivado names a net that only exists to give an unused output pin something to drive 'NLW_<instance>_<pin>_UNCONNECTED'.
+            // When the hierarchy is flattened, the instance is a path, so the prefix either starts the name or follows a '/';
+            // a multi-bit no load wire is written as a vector and its bits carry a trailing index like '(2)' or '[2]'.
+            const auto is_no_load_wire = [](const Net* n) {
+                const std::string& name  = n->get_name();
+                const std::string prefix = "NLW_";
+                const std::string suffix = "_UNCONNECTED";
+
+                if (name.compare(0, prefix.size(), prefix) != 0 && name.find("/" + prefix) == std::string::npos)
+                {
+                    return false;
+                }
+
+                std::string::size_type end = name.size();
+                if (end > 0 && (name[end - 1] == ')' || name[end - 1] == ']'))
+                {
+                    const auto open = name.find_last_of("([");
+                    if (open == std::string::npos || open + 1 >= end - 1 || name.find_first_not_of("0123456789", open + 1) != end - 1)
+                    {
+                        return false;
+                    }
+                    end = open;
+                }
+
+                return end > prefix.size() + suffix.size() && name.compare(end - suffix.size(), suffix.size(), suffix) == 0;
+            };
+
+            std::vector<Net*> to_delete;
+            for (Net* n : nets.empty() ? nl->get_nets() : nets)
+            {
+                if (n == nullptr || n->get_netlist() != nl)
+                {
+                    return ERR("cannot remove no load wires: a net of the scope does not belong to netlist with ID " + std::to_string(nl->get_id()));
+                }
+
+                if (is_no_load_wire(n) && n->get_num_of_destinations() == 0 && !n->is_global_output_net())
+                {
+                    to_delete.push_back(n);
+                }
+            }
+
+            u32 deleted_nets = 0;
+            for (Net* n : to_delete)
+            {
+                const std::string name = n->get_name();
+                const u32 id           = n->get_id();
+                if (!nl->delete_net(n))
+                {
+                    return ERR("cannot remove no load wires: failed to delete net '" + name + "' with ID " + std::to_string(id));
+                }
+                deleted_nets++;
+            }
+
+            log_info("xilinx_toolbox", "removed {} no load wires", deleted_nets);
+
+            return OK(deleted_nets);
+        }
     }    // namespace xilinx_toolbox
 }    // namespace hal

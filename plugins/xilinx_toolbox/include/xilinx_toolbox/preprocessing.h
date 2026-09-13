@@ -38,6 +38,7 @@
 namespace hal
 {
     class Gate;
+    class Net;
     class Netlist;
 
     namespace xilinx_toolbox
@@ -64,6 +65,19 @@ namespace hal
          * @return The number of split shift registers on success, an error otherwise.
          */
         Result<u32> split_shift_registers(Netlist* nl, const std::vector<Gate*>& gates = {});
+
+        /**
+         * @brief Remove the "no load wire" nets that Vivado writes for unused output pins.
+         * 
+         * Vivado names such nets `NLW_<instance>_<pin>_UNCONNECTED` and only connects them to the output pin they stand in for.
+         * A net is removed if its name starts with `NLW_` (or has `NLW_` right after a `/` in a flattened path) and ends with `_UNCONNECTED`, optionally followed by a bit index such as `(2)` or `[2]`, it has no destinations, and it is not a global output.
+         * The output pins that drove the removed nets are left unconnected.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @param[in] nets - The nets to consider. Defaults to an empty vector, in which case all nets of the netlist are considered.
+         * @returns The number of removed nets on success, an error otherwise.
+         */
+        Result<u32> remove_no_load_wires(Netlist* nl, const std::vector<Net*>& nets = {});
 
         /**
          * @brief Parse an `.xdc` file and extract the position LOC and BEL data of each gate.
