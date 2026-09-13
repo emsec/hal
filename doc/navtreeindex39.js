@@ -1,5 +1,6 @@
 var NAVTREEINDEX39 =
 {
+"namespacehal_1_1sse.html":[8,0,0,36],
 "namespacehal_1_1sse.html#a2dc9cdbc5af2296090c5d6eb9fe1af5e":[8,0,0,36,0],
 "namespacehal_1_1sse.html#a6b080c07996b1408210263288898e0b7":[8,0,0,36,1],
 "namespacehal_1_1sse.html#ac46628851c0eddf196dab32f23127a2e":[8,0,0,36,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX39 =
 "netlist_2decorators_2boolean__function__net__decorator_8cpp.html":[10,0,2,0,1,1],
 "netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html":[10,0,2,0,1,1],
 "netlist_2decorators_2netlist__modification__decorator_8cpp.html":[10,0,2,0,1,2],
-"netlist_2decorators_2netlist__modification__decorator_8cpp_source.html":[10,0,2,0,1,2],
-"netlist_2decorators_2netlist__traversal__decorator_8cpp.html":[10,0,2,0,1,3]
+"netlist_2decorators_2netlist__modification__decorator_8cpp_source.html":[10,0,2,0,1,2]
 };

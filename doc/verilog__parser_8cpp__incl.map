@@ -1,6 +1,6 @@
 <map id="plugins/verilog_parser/src/verilog_parser.cpp" name="plugins/verilog_parser/src/verilog_parser.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="1835,5,2003,47"/>
-<area shape="rect" id="node2" href="$verilog__parser_8h.html" title=" " alt="" coords="1837,95,2001,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="2456,5,2624,47"/>
+<area shape="rect" id="node2" href="$verilog__parser_8h.html" title=" " alt="" coords="1902,95,2066,136"/>
 <area shape="rect" id="node6" href="$enums_8h.html" title=" " alt="" coords="2429,631,2560,672"/>
 <area shape="rect" id="node20" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="1273,281,1452,307"/>
 <area shape="rect" id="node26" href="$endpoint_8h.html" title=" " alt="" coords="296,459,491,486"/>
@@ -10,7 +10,8 @@
 <area shape="rect" id="node31" href="$include_2hal__core_2utilities_2utils_8h.html" title=" " alt="" coords="992,452,1123,493"/>
 <area shape="rect" id="node32" title=" " alt="" coords="3185,102,3258,129"/>
 <area shape="rect" id="node33" title=" " alt="" coords="3283,102,3357,129"/>
-<area shape="rect" id="node34" title=" " alt="" coords="3382,102,3445,129"/>
+<area shape="rect" id="node34" title=" " alt="" coords="3381,102,3456,129"/>
+<area shape="rect" id="node35" title=" " alt="" coords="3481,102,3543,129"/>
 <area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="434,720,574,747"/>
 <area shape="rect" id="node4" href="$gate__type_8h.html" title=" " alt="" coords="2295,452,2449,493"/>
 <area shape="rect" id="node9" title=" " alt="" coords="2833,638,2957,665"/>

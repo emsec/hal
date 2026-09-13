@@ -1,5 +1,6 @@
 var NAVTREEINDEX32 =
 {
+"functions_enum.html":[9,3,4],
 "functions_eval.html":[9,3,5],
 "functions_eval.html":[9,3,5,0],
 "functions_eval_b.html":[9,3,5,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX32 =
 "gatelibrary__frame__ram_8cpp.html":[10,0,1,8,2,18,0,5],
 "gatelibrary__frame__ram_8cpp_source.html":[10,0,1,8,2,18,0,5],
 "gatelibrary__frame__ram_8h.html":[10,0,1,8,0,0,18,0,5],
-"gatelibrary__frame__ram_8h_source.html":[10,0,1,8,0,0,18,0,5],
-"gatelibrary__frame__ram__port_8cpp.html":[10,0,1,8,2,18,0,6]
+"gatelibrary__frame__ram_8h_source.html":[10,0,1,8,0,0,18,0,5]
 };
