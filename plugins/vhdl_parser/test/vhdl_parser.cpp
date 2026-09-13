@@ -2398,6 +2398,77 @@ namespace hal {
      *
      * Functions: parse
      */
+    /**
+     * The '0' and '1' literals get a GND and VCC gate of their own even if the netlist already contains such a gate: an
+     * explicit GND instance drives what it drives in the netlist and is not tied to the literal behind its back.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_literals_next_to_explicit_gnd) {
+        TEST_START
+            {
+                std::string netlist_input("-- Device\t: device_name\n"
+                                          "entity TEST_Comp is "
+                                          "  port ( "
+                                          "    net_global_out_0 : out STD_LOGIC; "
+                                          "    net_global_out_1 : out STD_LOGIC "
+                                          "  ); "
+                                          "end TEST_Comp; "
+                                          "architecture STRUCTURE of TEST_Comp is "
+                                          "  signal net_gnd : STD_LOGIC; "
+                                          "begin "
+                                          "  gnd_inst : GND "
+                                          "    port map ( "
+                                          "      O => net_gnd "
+                                          "    ); "
+                                          "  gate_0 : BUF "
+                                          "    port map ( "
+                                          "      I => net_gnd, "
+                                          "      O => net_global_out_0 "
+                                          "    ); "
+                                          "  gate_1 : BUF "
+                                          "    port map ( "
+                                          "      I => '0', "
+                                          "      O => net_global_out_1 "
+                                          "    ); "
+                                          "end STRUCTURE;");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.vhdl", netlist_input);
+                VHDLParser vhdl_parser;
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                Gate* gnd_inst = *nl->get_gates(test_utils::gate_filter("GND", "gnd_inst")).begin();
+                Gate* gate_0   = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
+                Gate* gate_1   = *nl->get_gates(test_utils::gate_filter("BUF", "gate_1")).begin();
+                ASSERT_NE(gnd_inst, nullptr);
+                ASSERT_NE(gate_0, nullptr);
+                ASSERT_NE(gate_1, nullptr);
+
+                // the explicit GND instance drives net_gnd and nothing else
+                Net* net_gnd = gate_0->get_fan_in_net("I");
+                ASSERT_NE(net_gnd, nullptr);
+                EXPECT_EQ(net_gnd->get_name(), "net_gnd");
+                ASSERT_EQ(net_gnd->get_sources().size(), 1);
+                EXPECT_EQ(net_gnd->get_sources()[0]->get_gate(), gnd_inst);
+                EXPECT_EQ(gnd_inst->get_fan_out_net("O"), net_gnd);
+
+                // the literal has a driver, and it is a second GND gate
+                Net* net_zero = gate_1->get_fan_in_net("I");
+                ASSERT_NE(net_zero, nullptr);
+                EXPECT_EQ(net_zero->get_name(), "'0'");
+                ASSERT_EQ(net_zero->get_sources().size(), 1);
+                Gate* literal_gnd = net_zero->get_sources()[0]->get_gate();
+                ASSERT_NE(literal_gnd, nullptr);
+                EXPECT_TRUE(literal_gnd->is_gnd_gate());
+                EXPECT_NE(literal_gnd, gnd_inst);
+                EXPECT_EQ(nl->get_gnd_gates().size(), 2);
+            }
+        TEST_END
+    }
+
     TEST_F(VHDLParserTest, check_invalid_input) {
         TEST_START
             // ------ Tests that are present in booth parsers ------

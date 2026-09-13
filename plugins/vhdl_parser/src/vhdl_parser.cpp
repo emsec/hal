@@ -337,54 +337,56 @@ namespace hal
             return ERR_APPEND(res.get_error(), "could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "'");
         }
 
-        // add global GND gate if required by any instance
-        if (m_netlist->get_gnd_gates().empty())
+        // The '0' and '1' literals get a GND and VCC gate of their own whenever something reads them. A GND or VCC
+        // instance the netlist already contains drives whatever it drives in the netlist and nothing else.
+        if (m_zero_net->get_num_of_destinations() > 0)
         {
-            if (m_zero_net->get_num_of_destinations() > 0)
+            if (m_gnd_gate_types.empty())
             {
-                GateType* gnd_type  = m_gnd_gate_types.begin()->second;
-                GatePin* output_pin = gnd_type->get_output_pins().front();
-                Gate* gnd           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
-
-                if (!m_netlist->mark_gnd_gate(gnd))
-                {
-                    return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to mark GND gate");
-                }
-
-                if (!m_zero_net->add_source(gnd, output_pin))
-                {
-                    return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': could not add source to GND gate");
-                }
+                return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': the '0' literal is used but the gate library has no GND gate type");
             }
-            else
+            GateType* gnd_type  = m_gnd_gate_types.begin()->second;
+            GatePin* output_pin = gnd_type->get_output_pins().front();
+            Gate* gnd           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
+
+            if (!m_netlist->mark_gnd_gate(gnd))
             {
-                m_netlist->delete_net(m_zero_net);
+                return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to mark GND gate");
+            }
+
+            if (!m_zero_net->add_source(gnd, output_pin))
+            {
+                return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': could not add source to GND gate");
             }
         }
-
-        // add global VCC gate if required by any instance
-        if (m_netlist->get_vcc_gates().empty())
+        else
         {
-            if (m_one_net->get_num_of_destinations() > 0)
-            {
-                GateType* vcc_type  = m_vcc_gate_types.begin()->second;
-                GatePin* output_pin = vcc_type->get_output_pins().front();
-                Gate* vcc           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
+            m_netlist->delete_net(m_zero_net);
+        }
 
-                if (!m_netlist->mark_vcc_gate(vcc))
-                {
-                    return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to mark VCC gate");
-                }
-
-                if (!m_one_net->add_source(vcc, output_pin))
-                {
-                    return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': could not add source to VCC gate");
-                }
-            }
-            else
+        if (m_one_net->get_num_of_destinations() > 0)
+        {
+            if (m_vcc_gate_types.empty())
             {
-                m_netlist->delete_net(m_one_net);
+                return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': the '1' literal is used but the gate library has no VCC gate type");
             }
+            GateType* vcc_type  = m_vcc_gate_types.begin()->second;
+            GatePin* output_pin = vcc_type->get_output_pins().front();
+            Gate* vcc           = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
+
+            if (!m_netlist->mark_vcc_gate(vcc))
+            {
+                return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to mark VCC gate");
+            }
+
+            if (!m_one_net->add_source(vcc, output_pin))
+            {
+                return ERR("could not instantiate VHDL netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': could not add source to VCC gate");
+            }
+        }
+        else
+        {
+            m_netlist->delete_net(m_one_net);
         }
 
         // delete unused nets
@@ -398,7 +400,7 @@ namespace hal
             const bool no_destination     = num_of_destinations == 0 && !(net->is_global_output_net() && num_of_sources != 0);
             if (no_source && no_destination)
             {
-                m_netlist->delete_net(net);
+                nets_to_be_deleted.push(net);
             }
         }
 

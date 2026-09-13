@@ -156,6 +156,7 @@ All notable changes to this project will be documented in this file.
     * fixed `remove_redundant_gates` treating two flip-flops as duplicates although they have different initialization values
     * fixed `create_multi_bit_gate_modules` and `create_nets_at_unconnected_pins` handing out modules and nets to Python without keeping the netlist alive
   * Xilinx toolbox
+    * added `remove_no_load_wires` to delete the `NLW_<instance>_<pin>_UNCONNECTED` nets that Vivado writes for unused output pins, available from the GUI context menu as well
     * added an optional gate scope to the preprocessing functions, restricting which gates may be modified or deleted and defaulting to the entire netlist
     * changed the members of `xilinx_toolbox::LOC` to be default-initialised, `loc_type` to `PIN` and both coordinates to `0`
     * added tests
@@ -171,6 +172,11 @@ All notable changes to this project will be documented in this file.
   * module identification
     * changed the pin groups of an identified module to be descending. The pin indices are unchanged, and the `CTRL` group is now of type `control` instead of `enable`
     * fixed `CandidateType.addition_offset` being bound to `addition` in Python, which made the two indistinguishable
+  * Verilog parser
+    * added support for a port expression in a module header that is a concatenation, e.g. `.sum({\<const0> ,\^sum [1:0]})`, which Vivado writes for a port that is partly constant; every hierarchical Vivado netlist with such a port failed to parse before
+    * changed the choice of the top module to honour a module marked `(* top = 1 *)`, as Yosys writes it, before falling back to the one module nothing instantiates; a Yosys netlist that keeps unused modules failed as ambiguous before, and the error now names the candidates
+  * VHDL parser
+    * fixed the `'0'` and `'1'` literals being left without a driver whenever the netlist already contains a GND or VCC instance; each literal now gets a GND or VCC gate of its own, and an instance that is in the netlist drives only what it drives there
   * Liberty parser
     * fixed the Liberty parser rejecting a `type` group that declares `bit_to`
   * GUI extension demo

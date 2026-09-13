@@ -103,7 +103,11 @@ namespace hal
         struct VerilogPort
         {
             std::string m_identifier;
-            std::string m_expression;
+            /**
+             * What the port stands for inside the module: the identifier itself for a plain port, another signal for a
+             * port written as `.name(signal)`, and several signals or slices for one written as `.name({a, b[1:0]})`.
+             */
+            std::vector<assignment_t> m_expression_parts;
             PinDirection m_direction;
             std::vector<std::vector<u32>> m_ranges;
             std::vector<std::string> m_expanded_identifiers;
@@ -224,7 +228,7 @@ namespace hal
         void tokenize();
         Result<std::monostate> parse_tokens();
         Result<std::monostate> parse_module(std::vector<VerilogDataEntry>& attributes);
-        void parse_port_list(VerilogModule* module);
+        Result<std::monostate> parse_port_list(VerilogModule* module);
         Result<std::monostate> parse_port_declaration_list(VerilogModule* module);
         Result<std::monostate> parse_port_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
         Result<std::monostate> parse_signal_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);

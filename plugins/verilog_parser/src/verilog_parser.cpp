@@ -10,6 +10,7 @@
 
 #include <fstream>
 #include <iomanip>
+#include <numeric>
 #include <queue>
 
 namespace hal
@@ -70,35 +71,44 @@ namespace hal
             // expand port identifiers
             for (const auto& port : verilog_module->m_ports)
             {
-                if (port->m_expression == port->m_identifier)
+                const bool stands_for_one_signal = port->m_expression_parts.size() == 1 && std::holds_alternative<identifier_t>(port->m_expression_parts.front());
+                if (!stands_for_one_signal)
                 {
-                    if (!port->m_ranges.empty())
+                    // the width of the port is the width of its expression, whose signals are declared by now
+                    const std::vector<std::string> expanded_expression = expand_assignment_expression(verilog_module, port->m_expression_parts);
+                    if (expanded_expression.empty())
                     {
-                        port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
+                        return ERR("could not parse Verilog file '" + m_path.string() + "': unable to expand the expression of port '" + port->m_identifier + "' of module '" + verilog_module->m_name + "'");
+                    }
+                    if (expanded_expression.size() == 1)
+                    {
+                        port->m_expanded_identifiers = {port->m_identifier};
                     }
                     else
                     {
-                        port->m_expanded_identifiers = {port->m_identifier};
+                        std::vector<u32> range(expanded_expression.size());
+                        std::iota(range.begin(), range.end(), 0);
+                        port->m_ranges               = {range};
+                        port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
+                    }
+                    for (u32 i = 0; i < expanded_expression.size(); i++)
+                    {
+                        verilog_module->m_expanded_port_identifiers_to_expressions[port->m_expanded_identifiers.at(i)] = expanded_expression.at(i);
+                    }
+                }
+                else if (const identifier_t& signal = std::get<identifier_t>(port->m_expression_parts.front()); signal != port->m_identifier)
+                {
+                    // the port stands for one whole signal of another name, bit for bit
+                    port->m_expanded_identifiers = port->m_ranges.empty() ? std::vector<std::string>{port->m_identifier} : expand_ranges(port->m_identifier, port->m_ranges);
+                    const std::vector<std::string> expanded_expression = port->m_ranges.empty() ? std::vector<std::string>{signal} : expand_ranges(signal, port->m_ranges);
+                    for (u32 i = 0; i < expanded_expression.size(); i++)
+                    {
+                        verilog_module->m_expanded_port_identifiers_to_expressions[port->m_expanded_identifiers.at(i)] = expanded_expression.at(i);
                     }
                 }
                 else
                 {
-                    if (!port->m_ranges.empty())
-                    {
-                        port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
-                        auto expanded_expression     = expand_ranges(port->m_expression, port->m_ranges);
-
-                        std::transform(port->m_expanded_identifiers.begin(),
-                                       port->m_expanded_identifiers.end(),
-                                       expanded_expression.begin(),
-                                       std::inserter(verilog_module->m_expanded_port_identifiers_to_expressions, verilog_module->m_expanded_port_identifiers_to_expressions.end()),
-                                       std::make_pair<const std::string&, const std::string&>);
-                    }
-                    else
-                    {
-                        port->m_expanded_identifiers                                                   = {port->m_identifier};
-                        verilog_module->m_expanded_port_identifiers_to_expressions[port->m_identifier] = port->m_expression;
-                    }
+                    port->m_expanded_identifiers = port->m_ranges.empty() ? std::vector<std::string>{port->m_identifier} : expand_ranges(port->m_identifier, port->m_ranges);
                 }
             }
 
@@ -286,7 +296,25 @@ namespace hal
         }
         m_net_by_name[m_one_net->get_name()] = m_one_net;
 
-        // TODO: This tries to find the topmodule by searching for a module that is not referenced by any other module. This fails when there are multiple of those modules (for example with unused modules). There is also a top=1 flag that is set bz yosys for example that we could check first, before using this approach.
+        // a module marked (* top = 1 *), as Yosys does, is the top module; otherwise it is the one module nobody instantiates
+        std::vector<std::string> marked_top_modules;
+        for (const auto& [name, module] : m_modules_by_name)
+        {
+            for (const VerilogDataEntry& attribute : module->m_attributes)
+            {
+                if (attribute.m_name == "top" && utils::trim(attribute.m_value) == "1")
+                {
+                    marked_top_modules.push_back(name);
+                    break;
+                }
+            }
+        }
+        if (marked_top_modules.size() > 1)
+        {
+            return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': several modules carry the top attribute: "
+                       + utils::join(", ", marked_top_modules));
+        }
+
         std::map<std::string, u32> module_name_to_refereneces;
         for (const auto& [_name, module] : m_modules_by_name)
         {
@@ -299,12 +327,15 @@ namespace hal
             }
         }
 
-        std::vector<std::string> top_module_candidates;
-        for (const auto& [name, module] : m_modules_by_name)
+        std::vector<std::string> top_module_candidates = marked_top_modules;
+        if (top_module_candidates.empty())
         {
-            if (module_name_to_refereneces.find(name) == module_name_to_refereneces.end())
+            for (const auto& [name, module] : m_modules_by_name)
             {
-                top_module_candidates.push_back(name);
+                if (module_name_to_refereneces.find(name) == module_name_to_refereneces.end())
+                {
+                    top_module_candidates.push_back(name);
+                }
             }
         }
 
@@ -315,7 +346,8 @@ namespace hal
 
         if (top_module_candidates.size() > 1)
         {
-            return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': found multiple modules as candidates for the top module");
+            return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name()
+                       + "': found multiple modules as candidates for the top module, none of them marked (* top = 1 *): " + utils::join(", ", top_module_candidates));
         }
 
         // construct the netlist with the the top module
@@ -546,7 +578,10 @@ namespace hal
         }
         else
         {
-            parse_port_list(verilog_module_raw);
+            if (auto res = parse_port_list(verilog_module_raw); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "could not parse module '" + module_name + "' (line " + std::to_string(line_number) + "): unable to parse port list");
+            }
         }
 
         m_token_stream.consume(";", true);
@@ -621,7 +656,7 @@ namespace hal
         return OK({});
     }
 
-    void VerilogParser::parse_port_list(VerilogModule* verilog_module)
+    Result<std::monostate> VerilogParser::parse_port_list(VerilogModule* verilog_module)
     {
         TokenStream<std::string> ports_stream = m_token_stream.extract_until(")");
         m_token_stream.consume(")", true);
@@ -635,21 +670,44 @@ namespace hal
             {
                 port->m_identifier = ports_stream.consume().string;
                 ports_stream.consume("(", true);
-                port->m_expression = ports_stream.consume().string;
+                TokenStream<std::string> expression_stream = ports_stream.extract_until(")");
                 ports_stream.consume(")", true);
+
+                // a port expression is anything a right-hand side may be: a signal, a slice of one, or a concatenation
+                // of those, which Vivado writes for a port that is partly constant, e.g. .sum({\<const0> ,\^sum [1:0]})
+                auto parts_res = parse_assignment_expression(std::move(expression_stream));
+                if (parts_res.is_error())
+                {
+                    return ERR_APPEND(parts_res.get_error(), "could not parse port list: invalid expression of port '" + port->m_identifier + "' (line " + std::to_string(next_token.number) + ")");
+                }
+                port->m_expression_parts = parts_res.get();
             }
             else
             {
-                port->m_identifier = next_token.string;
-                port->m_expression = next_token.string;
+                port->m_identifier       = next_token.string;
+                port->m_expression_parts = {identifier_t(next_token.string)};
+            }
+
+            // the body declares direction and width on the signals the port stands for, so each of them has to find the port
+            for (const auto& part : port->m_expression_parts)
+            {
+                if (const identifier_t* identifier = std::get_if<identifier_t>(&part); identifier != nullptr)
+                {
+                    verilog_module->m_ports_by_expression[*identifier] = port.get();
+                }
+                else if (const ranged_identifier_t* ranged = std::get_if<ranged_identifier_t>(&part); ranged != nullptr)
+                {
+                    verilog_module->m_ports_by_expression[ranged->first] = port.get();
+                }
             }
 
             verilog_module->m_ports_by_identifier[port->m_identifier] = port.get();
-            verilog_module->m_ports_by_expression[port->m_expression] = port.get();
             verilog_module->m_ports.push_back(std::move(port));
 
             ports_stream.consume(",", ports_stream.remaining() > 0);
         }
+
+        return OK({});
     }
 
     Result<std::monostate> VerilogParser::parse_port_declaration_list(VerilogModule* verilog_module)
@@ -690,7 +748,7 @@ namespace hal
                 auto port                          = std::make_unique<VerilogPort>();
                 const std::string& port_expression = next_token.string;
                 port->m_identifier                 = port_expression;
-                port->m_expression                 = port_expression;
+                port->m_expression_parts           = {identifier_t(port_expression)};
                 port->m_direction                  = direction;
                 if (!ranges.empty())
                 {
@@ -756,7 +814,9 @@ namespace hal
             }
 
             port->m_direction = direction;
-            if (!ranges.empty())
+            // the ranges of a concatenation's signals belong to those signals, the port's width follows from the expression
+            const bool stands_for_one_signal = port->m_expression_parts.size() == 1 && std::holds_alternative<identifier_t>(port->m_expression_parts.front());
+            if (!ranges.empty() && stands_for_one_signal)
             {
                 port->m_ranges = ranges;
             }

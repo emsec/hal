@@ -3083,6 +3083,175 @@ namespace hal {
      *
      * Functions: parse
      */
+    /**
+     * A module header may give a port as an expression over internal signals, as Vivado does for a port that is partly
+     * constant: `.sum({\<const0> ,\^sum [1:0]})`. The body then declares the direction on the signals of the expression.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_port_expressions)
+    {
+        TEST_START
+        {
+            std::string netlist_input("module ADDER ("
+                                      "  a,"
+                                      "  .sum({\\<const0> ,\\^sum [1:0]})"
+                                      " ) ;"
+                                      "  input [1:0]a ;"
+                                      "  output \\<const0> ;"
+                                      "  output [1:0]\\^sum ;"
+                                      "  wire \\<const0> ;"
+                                      "GND gnd_inst ("
+                                      "  .O (\\<const0> )"
+                                      " ) ;"
+                                      "BUF buf_0 ("
+                                      "  .I (a[0]),"
+                                      "  .O (\\^sum [0])"
+                                      " ) ;"
+                                      "BUF buf_1 ("
+                                      "  .I (a[1]),"
+                                      "  .O (\\^sum [1])"
+                                      " ) ;"
+                                      "endmodule"
+                                      "\n"
+                                      "module top ("
+                                      "  in,"
+                                      "  out"
+                                      " ) ;"
+                                      "  input [1:0]in ;"
+                                      "  output [2:0]out ;"
+                                      "ADDER adder_inst ("
+                                      "  .a (in),"
+                                      "  .sum (out)"
+                                      " ) ;"
+                                      "endmodule");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            auto verilog_file           = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
+            ASSERT_NE(nl, nullptr);
+
+            ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("GND")).size(), 1);
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "buf_0")).size(), 1);
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "buf_1")).size(), 1);
+            Gate* gnd   = *nl->get_gates(test_utils::gate_type_filter("GND")).begin();
+            Gate* buf_0 = *nl->get_gates(test_utils::gate_filter("BUF", "buf_0")).begin();
+            Gate* buf_1 = *nl->get_gates(test_utils::gate_filter("BUF", "buf_1")).begin();
+
+            // the last element of the concatenation is bit 0 of the port
+            ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("out(0)")).size(), 1);
+            ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("out(1)")).size(), 1);
+            ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("out(2)")).size(), 1);
+            Net* out_0 = *nl->get_nets(test_utils::net_name_filter("out(0)")).begin();
+            Net* out_1 = *nl->get_nets(test_utils::net_name_filter("out(1)")).begin();
+            Net* out_2 = *nl->get_nets(test_utils::net_name_filter("out(2)")).begin();
+            EXPECT_TRUE(out_0->is_global_output_net());
+            EXPECT_TRUE(out_1->is_global_output_net());
+            EXPECT_TRUE(out_2->is_global_output_net());
+            EXPECT_EQ(buf_0->get_fan_out_net("O"), out_0);
+            EXPECT_EQ(buf_1->get_fan_out_net("O"), out_1);
+            EXPECT_EQ(gnd->get_fan_out_net("O"), out_2);
+
+            // the port of the submodule has one pin per bit of its expression, all outputs
+            ASSERT_EQ(nl->get_modules(test_utils::module_name_filter("adder_inst")).size(), 1);
+            Module* adder = *nl->get_modules(test_utils::module_name_filter("adder_inst")).begin();
+            for (const std::string& pin_name : {"sum(0)", "sum(1)", "sum(2)"})
+            {
+                ModulePin* pin = adder->get_pin_by_name(pin_name);
+                ASSERT_NE(pin, nullptr) << pin_name;
+                EXPECT_EQ(pin->get_direction(), PinDirection::output) << pin_name;
+            }
+            EXPECT_EQ(adder->get_pin_by_name("sum(0)")->get_net(), out_0);
+            EXPECT_EQ(adder->get_pin_by_name("sum(2)")->get_net(), out_2);
+        }
+        TEST_END
+    }
+
+    /**
+     * A module marked (* top = 1 *), as Yosys does, is the top module even if other modules are not instantiated either;
+     * without the mark, several uninstantiated modules are an error that names them.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_top_attribute)
+    {
+        TEST_START
+        {
+            std::string netlist_input("module UNUSED ("
+                                      "  a,"
+                                      "  b"
+                                      " ) ;"
+                                      "  input a ;"
+                                      "  output b ;"
+                                      "BUF gate_unused ("
+                                      "  .I (a),"
+                                      "  .O (b)"
+                                      " ) ;"
+                                      "endmodule"
+                                      "\n"
+                                      "(* top =  1  *)"
+                                      "module DESIGN ("
+                                      "  in,"
+                                      "  out"
+                                      " ) ;"
+                                      "  input in ;"
+                                      "  output out ;"
+                                      "BUF gate_top ("
+                                      "  .I (in),"
+                                      "  .O (out)"
+                                      " ) ;"
+                                      "endmodule");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            auto verilog_file           = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
+            ASSERT_NE(nl, nullptr);
+            EXPECT_EQ(nl->get_design_name(), "DESIGN");
+            EXPECT_EQ(nl->get_gates().size(), 1);
+            EXPECT_EQ((*nl->get_gates().begin())->get_name(), "gate_top");
+        }
+        {
+            // the same two modules without the mark: ambiguous, and the error names both candidates
+            NO_COUT_TEST_BLOCK;
+            std::string netlist_input("module UNUSED ("
+                                      "  a,"
+                                      "  b"
+                                      " ) ;"
+                                      "  input a ;"
+                                      "  output b ;"
+                                      "BUF gate_unused ("
+                                      "  .I (a),"
+                                      "  .O (b)"
+                                      " ) ;"
+                                      "endmodule"
+                                      "\n"
+                                      "module DESIGN ("
+                                      "  in,"
+                                      "  out"
+                                      " ) ;"
+                                      "  input in ;"
+                                      "  output out ;"
+                                      "BUF gate_top ("
+                                      "  .I (in),"
+                                      "  .O (out)"
+                                      " ) ;"
+                                      "endmodule");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            auto verilog_file           = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_error());
+            const std::string message = nl_res.get_error().get();
+            EXPECT_NE(message.find("DESIGN"), std::string::npos);
+            EXPECT_NE(message.find("UNUSED"), std::string::npos);
+        }
+        TEST_END
+    }
+
     TEST_F(VerilogParserTest, check_invalid_input) {
         TEST_START
             {
