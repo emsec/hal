@@ -71,15 +71,16 @@ namespace hal
          * The design is validated first. Its hierarchy is walked from the top module; every alias, every connection
          * to a module port and every constant is resolved with a union-find before anything is created, so that each
          * net is created exactly once and nothing is merged afterwards. A net is created for every class of bits that
-         * connects to a gate pin, is a port of the top module, or carries an attribute; other signals produce no net
-         * unless the options say so. Gate types and pins are resolved against the library by exact name first and then
-         * by a unique case-insensitive match. Parameters and attributes land in the typed stores of the created
-         * objects; a parameter that the gate type declares takes the gate type's declaration.
+         * connects to a gate pin or is a port of the top module; other signals produce no net unless the options say
+         * so, and their attributes go with them (Yosys annotates every wire, used or not). Gate types and pins are
+         * resolved against the library by exact name first and then by a unique case-insensitive match. Parameters
+         * and attributes land in the typed stores of the created objects; a parameter that the gate type declares
+         * takes the gate type's declaration.
          *
          * A net is named after the port or signal bits it consists of: a port of the top module comes first, then the
-         * shortest instance path, then a port over a signal, then the earliest declaration. Gates, modules and nets
-         * carry their plain name if it is unique across the netlist and are prefixed with their instance path
-         * otherwise, as the netlist parsers have always done.
+         * shortest instance path, then the receiving side of an assignment, then the earliest declaration. Gates,
+         * modules and nets carry their plain name if it is unique across the netlist and are prefixed with the name
+         * of the module they belong to otherwise, as the netlist parsers have always done.
          *
          * @param[in] design - The design.
          * @param[in] gate_library - The gate library to resolve gate types against.

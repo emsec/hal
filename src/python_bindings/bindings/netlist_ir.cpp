@@ -23,6 +23,7 @@ namespace hal
         py_ir.attr("ZERO")           = netlist_ir::ZERO;
         py_ir.attr("ONE")            = netlist_ir::ONE;
         py_ir.attr("FIRST_USER_BIT") = netlist_ir::FIRST_USER_BIT;
+        py_ir.attr("OPEN")           = netlist_ir::OPEN;
 
         py::class_<netlist_ir::Range> py_range(py_ir, "Range", R"(
             One index range of a port or signal, as declared: Verilog ``[7:0]`` is ``Range(7, 0)``, VHDL ``(0 to 3)`` is ``Range(0, 3)``.
@@ -265,6 +266,11 @@ namespace hal
             The connected bits in expression order.
 
             :type: list[int]
+        )");
+        py_connection.def_readwrite("replicate", &netlist_ir::Connection::replicate, R"(
+            Whether the single bit in ``bits`` connects to every bit of the port, for VHDL ``(others => '0')`` on a port of unknown width.
+
+            :type: bool
         )");
 
         py::enum_<netlist_ir::InstanceKind>(py_ir, "InstanceKind", R"(

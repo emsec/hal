@@ -26,7 +26,7 @@ namespace hal
     {
         std::set<std::string> retval;
         retval.insert("genlib_writer");
-        retval.insert("verilog_parser");
+        retval.insert("verilog_parser_old");    // owns the .v extension until the new parser takes over
         return retval;
     }
 }    // namespace hal

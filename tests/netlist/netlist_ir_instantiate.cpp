@@ -111,10 +111,10 @@ namespace hal
         ASSERT_NE(s1, nullptr);
         EXPECT_EQ(s0->get_type(), "sub");
 
-        // three AND2 gates plus the VCC gate for the constant; the two gates named 'g' inside the submodules get a prefix,
-        // the one on top keeps its name
+        // three AND2 gates plus the VCC gate for the constant; the three gates named 'g' are prefixed with the name of
+        // the module they belong to, the top module included
         EXPECT_EQ(nl->get_gates().size(), 4);
-        Gate* g    = gate_by_name(nl.get(), "g");
+        Gate* g    = gate_by_name(nl.get(), "top_module/g");
         Gate* g_s0 = gate_by_name(nl.get(), "s0/g");
         Gate* g_s1 = gate_by_name(nl.get(), "s1/g");
         ASSERT_NE(g, nullptr);
@@ -145,12 +145,12 @@ namespace hal
         EXPECT_EQ(nl->get_vcc_gates().size(), 1);
         EXPECT_TRUE(nl->get_gnd_gates().empty());
 
-        // the alias merges n with m[1]: one net, named after the earliest declaration on the shortest path
+        // the alias `assign n = m[1]` merges n with m[1]: one net, named after the receiving side of the assignment
         EXPECT_EQ(g->get_fan_in_net("I0"), g_s0->get_fan_out_net("O"));
         EXPECT_EQ(g->get_fan_in_net("I1"), g_s1->get_fan_out_net("O"));
         EXPECT_EQ(g->get_fan_in_net("I0")->get_name(), "m(0)");
-        EXPECT_EQ(g->get_fan_in_net("I1")->get_name(), "m(1)");
-        EXPECT_EQ(nl->get_nets().size(), 6);    // a, b, y, m(0), m(1), '1'
+        EXPECT_EQ(g->get_fan_in_net("I1")->get_name(), "n");
+        EXPECT_EQ(nl->get_nets().size(), 6);    // a, b, y, m(0), n, '1'
 
         // module pins carry the port names of the design
         ASSERT_EQ(s0->get_pins().size(), 3);
@@ -212,6 +212,11 @@ namespace hal
         Instance& r4 = top.add_instance("r4", "RAM", InstanceKind::Gate);
         r4.add_connection("ADDR(2)", {a.bits.at(0)});
 
+        // open positions: 4'b1x0z leaves ADDR(0) and ADDR(2) unconnected, {a[0], OPEN} on a pin group too
+        Instance& r5 = top.add_instance("r5", "RAM", InstanceKind::Gate);
+        r5.add_connection("ADDR", {ONE, OPEN, ZERO, OPEN});
+        r5.add_connection("DATA_IN", {a.bits.at(3), OPEN});
+
         auto res = instantiate(d, test_utils::get_gate_library());
         ASSERT_TRUE(res.is_ok()) << res.get_error().get();
         auto nl = res.get();
@@ -261,6 +266,16 @@ namespace hal
         ASSERT_NE(g4, nullptr);
         EXPECT_EQ(g4->get_fan_in_net("ADDR(2)")->get_name(), "a(3)");
         EXPECT_EQ(g4->get_fan_in_nets().size(), 1);
+
+        Gate* g5 = gate_by_name(nl.get(), "r5");
+        ASSERT_NE(g5, nullptr);
+        EXPECT_EQ(g5->get_fan_in_net("ADDR(0)"), nullptr);
+        EXPECT_TRUE(g5->get_fan_in_net("ADDR(1)")->is_gnd_net());
+        EXPECT_EQ(g5->get_fan_in_net("ADDR(2)"), nullptr);
+        EXPECT_TRUE(g5->get_fan_in_net("ADDR(3)")->is_vcc_net());
+        EXPECT_EQ(g5->get_fan_in_net("DATA_IN(0)"), nullptr);
+        EXPECT_EQ(g5->get_fan_in_net("DATA_IN(1)")->get_name(), "a(0)");
+        EXPECT_EQ(g5->get_fan_in_net("DATA_IN(2)"), nullptr);    // a signal with an open bit is not zero-extended
         TEST_END
     }
 
@@ -302,8 +317,7 @@ namespace hal
             auto nl = res.get();
 
             EXPECT_EQ(net_by_name(nl.get(), "dangling"), nullptr);
-            ASSERT_NE(net_by_name(nl.get(), "tagged"), nullptr);
-            EXPECT_EQ(net_by_name(nl.get(), "tagged")->get_attribute_value("keep").get(), "true");
+            EXPECT_EQ(net_by_name(nl.get(), "tagged"), nullptr);    // an attribute alone does not keep a signal
             ASSERT_NE(net_by_name(nl.get(), "unused_in"), nullptr);
             EXPECT_TRUE(nl->is_global_input_net(net_by_name(nl.get(), "unused_in")));
             ASSERT_NE(net_by_name(nl.get(), "unused_out"), nullptr);
@@ -319,14 +333,17 @@ namespace hal
             Net* y_net = net_by_name(nl.get(), "y");
             ASSERT_NE(y_net, nullptr);
             EXPECT_EQ(y_net->get_num_of_sources(), 2);
-            EXPECT_EQ(nl->get_nets().size(), 5);
+            EXPECT_EQ(nl->get_nets().size(), 4);
         }
         {
             InstantiationOptions options;
             options.keep_unconnected_signals = true;
             auto res                         = instantiate(d, test_utils::get_gate_library(), options);
             ASSERT_TRUE(res.is_ok()) << res.get_error().get();
-            EXPECT_NE(net_by_name(res.get().get(), "dangling"), nullptr);
+            auto nl = res.get();
+            EXPECT_NE(net_by_name(nl.get(), "dangling"), nullptr);
+            ASSERT_NE(net_by_name(nl.get(), "tagged"), nullptr);
+            EXPECT_EQ(net_by_name(nl.get(), "tagged")->get_attribute_value("keep").get(), "true");
         }
         TEST_END
     }
@@ -504,6 +521,24 @@ namespace hal
             EXPECT_EQ(nl->get_gnd_gates().size(), 1);
             EXPECT_TRUE(nl->get_vcc_gates().empty());
             EXPECT_EQ(net_by_name(nl.get(), "'0'"), nullptr);
+        }
+        {
+            // an explicit GND instance is marked as a GND gate and drives its own net, apart from any constant
+            Design d;
+            netlist_ir::Module& top = d.add_module("top");
+            Port& y                 = top.add_port("y", PinDirection::output);
+            Port& z                 = top.add_port("z", PinDirection::output);
+            Instance& gnd           = top.add_instance("gnd_inst", "GND", InstanceKind::Gate);
+            gnd.add_connection("O", y.bits);
+            top.add_alias(z.bits.front(), ZERO);
+            auto res = instantiate(d, test_utils::get_gate_library());
+            ASSERT_TRUE(res.is_ok()) << res.get_error().get();
+            auto nl = res.get();
+            EXPECT_EQ(nl->get_gnd_gates().size(), 2);
+            EXPECT_TRUE(net_by_name(nl.get(), "y")->is_gnd_net());
+            EXPECT_TRUE(net_by_name(nl.get(), "z")->is_gnd_net());
+            EXPECT_NE(net_by_name(nl.get(), "y"), net_by_name(nl.get(), "z"));
+            EXPECT_TRUE(gate_by_name(nl.get(), "gnd_inst")->is_gnd_gate());
         }
         {
             // no constants used: no GND or VCC gate

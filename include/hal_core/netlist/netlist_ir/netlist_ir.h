@@ -68,6 +68,9 @@ namespace hal
         /** The first handle a module hands out for its own bits. */
         constexpr BitId FIRST_USER_BIT = 2;
 
+        /** Not a bit: a position in a connection or an assignment that is left open, e.g. a `z` or `x` in a literal. */
+        constexpr BitId OPEN = 0xFFFFFFFFu;
+
         /**
          * One index range of a port or signal, as declared: Verilog `[7:0]` is `{7, 0}`, VHDL `(0 to 3)` is `{0, 3}`.
          */
@@ -208,7 +211,8 @@ namespace hal
          * The bits connected to one port of an instance.
          *
          * `bits` are in expression order, left to right as written, so the last bit is bit 0 of the port. A connection
-         * to a constant refers to `ZERO` or `ONE`; a pin that is left open or connected to `x`/`z` has no connection.
+         * to a constant refers to `ZERO` or `ONE`; a pin that is left open has no connection, and a single position
+         * that is open, e.g. an `x` or `z` bit of a literal, is `OPEN`.
          */
         struct NETLIST_API Connection
         {
@@ -218,8 +222,14 @@ namespace hal
             /** The part of the port that is connected, for VHDL `DATA_OUT(3 downto 1) => ...`; the whole port if empty. */
             std::optional<Range> port_slice;
 
-            /** The connected bits in expression order. */
+            /** The connected bits in expression order; `OPEN` leaves that position unconnected. */
             std::vector<BitId> bits;
+
+            /**
+             * The single bit in `bits` connects to every bit of the port, for VHDL `(others => '0')` on a port whose
+             * width the front end does not know. Requires exactly one bit.
+             */
+            bool replicate = false;
         };
 
         /**
@@ -280,7 +290,10 @@ namespace hal
             std::deque<Signal> signals;
             std::deque<Instance> instances;
 
-            /** Pairs of bits that are the same net, from assignments, initializers, and port expressions. */
+            /**
+             * Pairs of bits that are the same net, from assignments, initializers, and port expressions. The first bit
+             * of a pair is the receiving side (`assign first = second;`), which decides the name of the merged net.
+             */
             std::vector<std::pair<BitId, BitId>> aliases;
 
             /** The declared parameters or generics with their default values. */
@@ -343,7 +356,7 @@ namespace hal
             /**
              * Record that two bits are the same net.
              *
-             * @param[in] a - One bit.
+             * @param[in] a - The receiving bit, the left side of an assignment.
              * @param[in] b - The other bit.
              */
             void add_alias(BitId a, BitId b);

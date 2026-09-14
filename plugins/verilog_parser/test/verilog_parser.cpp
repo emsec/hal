@@ -3,6 +3,8 @@
 #include "netlist_test_utils.h"
 #include "gate_library_test_utils.h"
 
+#include "hal_core/utilities/enums.h"
+
 #include <bitset>
 #include <cstdlib>
 #include <filesystem>
@@ -30,6 +32,31 @@ namespace hal {
         {
             VerilogParser parser;
             return parser.parse_and_instantiate(test_utils::create_sandbox_file(file_name, netlist), test_utils::get_gate_library());
+        }
+
+        /**
+         * The type name and value of a typed parameter, or two empty strings if there is none. Replaces the legacy
+         * `get_data("generic", ...)` assertions: the parsers write typed parameters now.
+         */
+        static std::tuple<std::string, std::string> parameter_of(const DataContainer* c, const std::string& name)
+        {
+            if (!c->has_parameter(name))
+            {
+                return std::make_tuple("", "");
+            }
+            return std::make_tuple(enum_to_string(c->get_parameter_declaration(name).get().get_type()), c->get_parameter_value(name).get());
+        }
+
+        /**
+         * The type name and value of a typed attribute, or two empty strings if there is none.
+         */
+        static std::tuple<std::string, std::string> attribute_of(const DataContainer* c, const std::string& name)
+        {
+            if (!c->has_attribute(name))
+            {
+                return std::make_tuple("", "");
+            }
+            return std::make_tuple(enum_to_string(c->get_attribute_declaration(name).get().get_type()), c->get_attribute_value(name).get());
         }
 
         Gate* gate_by_name(const Netlist* nl, const std::string& name)
@@ -1167,18 +1194,18 @@ namespace hal {
             Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
 
             // Integers are stored in their hex representation
-            EXPECT_EQ(gate_0->get_data("generic", "key_integer"), std::make_tuple("integer", "1234"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_floating_point"), std::make_tuple("floating_point", "1.234"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_string"), std::make_tuple("string", "test_string"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_hex"), std::make_tuple("bit_vector", "ABC"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_dec"), std::make_tuple("bit_vector", "ABC"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_oct"), std::make_tuple("bit_vector", "ABC"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_bin"), std::make_tuple("bit_vector", "ABC"));
-            EXPECT_EQ(gate_0->get_data("generic", "external_int"), std::make_tuple("integer", "3"));
+            EXPECT_EQ(parameter_of(gate_0, "key_integer"), std::make_tuple("integer", "1234"));
+            EXPECT_EQ(parameter_of(gate_0, "key_floating_point"), std::make_tuple("float", "1.234"));
+            EXPECT_EQ(parameter_of(gate_0, "key_string"), std::make_tuple("string", "test_string"));
+            EXPECT_EQ(parameter_of(gate_0, "key_bit_vector_hex"), std::make_tuple("bit_vector", "0xABC"));
+            EXPECT_EQ(parameter_of(gate_0, "key_bit_vector_dec"), std::make_tuple("bit_vector", "0xABC"));
+            EXPECT_EQ(parameter_of(gate_0, "key_bit_vector_oct"), std::make_tuple("bit_vector", "0xABC"));
+            EXPECT_EQ(parameter_of(gate_0, "key_bit_vector_bin"), std::make_tuple("bit_vector", "0xABC"));
+            EXPECT_EQ(parameter_of(gate_0, "external_int"), std::make_tuple("integer", "3"));
 
             // Special Characters
-            EXPECT_EQ(gate_0->get_data("generic", "key_negative_comma_string"), std::make_tuple("string", "test,1,2,3"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_negative_float_string"), std::make_tuple("string", "1.234"));
+            EXPECT_EQ(parameter_of(gate_0, "key_negative_comma_string"), std::make_tuple("string", "test,1,2,3"));
+            EXPECT_EQ(parameter_of(gate_0, "key_negative_float_string"), std::make_tuple("string", "1.234"));
         }
         {
             // Port map gets multiple nets (should only assign right-most one)
@@ -1636,8 +1663,8 @@ namespace hal {
             EXPECT_EQ(child_mod->get_gates(), std::vector<Gate*>({gate_0_child, gate_1_child}));
 
             // check attributes
-            EXPECT_EQ(net_0->get_data("attribute", "child_net_attribute"), std::make_tuple("unknown", "child_net_attribute_value"));
-            EXPECT_EQ(child_mod->get_data("attribute", "child_attribute"), std::make_tuple("unknown", "child_attribute_value"));
+            EXPECT_EQ(attribute_of(net_0, "child_net_attribute"), std::make_tuple("string", "child_net_attribute_value"));
+            EXPECT_EQ(attribute_of(child_mod, "child_attribute"), std::make_tuple("string", "child_attribute_value"));
         }
         {
             // Create a netlist with the following MODULE hierarchy (assigned gates in '()'):
@@ -1775,7 +1802,7 @@ namespace hal {
                                                 gate_child_two_2->get_name()}).size(), 3);
 
             // Test the creation on generic data of the Module child_one_mod
-            EXPECT_EQ(top_child_one->get_data("generic", "child_one_mod_key"),
+            EXPECT_EQ(parameter_of(top_child_one, "child_one_mod_key"),
                         std::make_tuple("integer", "1234"));
         }
         {
@@ -2149,7 +2176,7 @@ namespace hal {
                 std::unique_ptr<Netlist> nl = nl_res.get();
 
                 ASSERT_NE(nl, nullptr);
-                EXPECT_EQ(nl->get_nets().size(), 2);
+                EXPECT_EQ(nl->get_nets().size(), 3);    // the unused top port net_global_out is kept
                 EXPECT_EQ(nl->get_nets(test_utils::net_name_filter("net_global_in")).size(), 1);
                 EXPECT_EQ(nl->get_nets(test_utils::net_name_filter("net_out")).size(), 1);
             }
@@ -2183,7 +2210,7 @@ namespace hal {
                 std::unique_ptr<Netlist> nl = nl_res.get();
                 
                 ASSERT_NE(nl, nullptr);
-                EXPECT_EQ(nl->get_nets().size(), 2);
+                EXPECT_EQ(nl->get_nets().size(), 3);    // the unused top port net_global_in is kept
                 EXPECT_EQ(nl->get_nets(test_utils::net_name_filter("net_in")).size(), 1);
                 EXPECT_EQ(nl->get_nets(test_utils::net_name_filter("net_global_out")).size(), 1);
             }
@@ -2666,8 +2693,8 @@ namespace hal {
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).empty());
                 gate = *(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin());
 
-                EXPECT_EQ(nl->get_nets().size(), 2);
-                EXPECT_EQ(nl->get_top_module()->get_pins().size(), 2);
+                EXPECT_EQ(nl->get_nets().size(), 4);    // the unused bits of the top ports are kept
+                EXPECT_EQ(nl->get_top_module()->get_pins().size(), 2);    // only the used bits reach a gate, so only they get pins
 
                 EXPECT_EQ(gate->get_fan_in_nets().size(), 1);
                 net = gate->get_fan_in_net("I");
@@ -2803,8 +2830,8 @@ namespace hal {
                 for (std::string key : std::set<std::string>({"no_comment_0", "no_comment_1", "no_comment_2",
                                                               "no_comment_3", "no_comment_4", "no_comment_5",
                                                               "no_comment_6"})) {
-                    EXPECT_NE(test_gate->get_data("generic", key), std::make_tuple("", ""));
-                    if (test_gate->get_data("generic", key) == std::make_tuple("", "")) {
+                    EXPECT_NE(parameter_of(test_gate, key), std::make_tuple("", ""));
+                    if (parameter_of(test_gate, key) == std::make_tuple("", "")) {
                         std::cout << "comment test failed for: " << key << std::endl;
                     }
                 }
@@ -2813,8 +2840,8 @@ namespace hal {
                 for (std::string key : std::set<std::string>({"comment_0", "comment_1", "comment_2", "comment_3",
                                                               "comment_4", "comment_5", "comment_6", "comment_7",
                                                               "comment_8", "comment_9"})) {
-                    EXPECT_EQ(test_gate->get_data("generic", key), std::make_tuple("", ""));
-                    if (test_gate->get_data("generic", key) != std::make_tuple("", "")) {
+                    EXPECT_EQ(parameter_of(test_gate, key), std::make_tuple("", ""));
+                    if (parameter_of(test_gate, key) != std::make_tuple("", "")) {
                         std::cout << "comment failed for: " << key << std::endl;
                     }
                 }
@@ -2868,17 +2895,17 @@ namespace hal {
 
                 // Check their attributes
                 // -- Module
-                EXPECT_EQ(attri_module->get_data("attribute", "ATTRIBUTE_MODULE"),
-                          std::make_tuple("unknown", "attri_module"));
-                EXPECT_EQ(attri_module->get_data("attribute", "FLAG_MODULE"), std::make_tuple("unknown", ""));
+                EXPECT_EQ(attribute_of(attri_module, "ATTRIBUTE_MODULE"),
+                          std::make_tuple("string", "attri_module"));
+                EXPECT_EQ(attribute_of(attri_module, "FLAG_MODULE"), std::make_tuple("boolean", "true"));
                 // -- Gate
-                EXPECT_EQ(attri_gate->get_data("attribute", "ATTRIBUTE_GATE"),
-                          std::make_tuple("unknown", "attri_gate"));
-                EXPECT_EQ(attri_gate->get_data("attribute", "FLAG_GATE"), std::make_tuple("unknown", ""));
+                EXPECT_EQ(attribute_of(attri_gate, "ATTRIBUTE_GATE"),
+                          std::make_tuple("string", "attri_gate"));
+                EXPECT_EQ(attribute_of(attri_gate, "FLAG_GATE"), std::make_tuple("boolean", "true"));
                 // -- Net
-                EXPECT_EQ(attri_net->get_data("attribute", "ATTRIBUTE_NET"),
-                          std::make_tuple("unknown", "attri_net"));
-                EXPECT_EQ(attri_net->get_data("attribute", "FLAG_NET"), std::make_tuple("unknown", ""));
+                EXPECT_EQ(attribute_of(attri_net, "ATTRIBUTE_NET"),
+                          std::make_tuple("string", "attri_net"));
+                EXPECT_EQ(attribute_of(attri_net, "FLAG_NET"), std::make_tuple("boolean", "true"));
             }
             {
                 // Use atrribute strings with special characters (',','.')
@@ -2904,10 +2931,10 @@ namespace hal {
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
                 Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("BUF")).begin();
-                EXPECT_EQ(attri_gate->get_data("attribute", "ATTRI_COMMA_STRING"),
-                          std::make_tuple("unknown", "test, 1, 2, 3"));
-                EXPECT_EQ(attri_gate->get_data("attribute", "ATTRI_FLOAT_STRING"),
-                          std::make_tuple("unknown", "1.234"));
+                EXPECT_EQ(attribute_of(attri_gate, "ATTRI_COMMA_STRING"),
+                          std::make_tuple("string", "test, 1, 2, 3"));
+                EXPECT_EQ(attribute_of(attri_gate, "ATTRI_FLOAT_STRING"),
+                          std::make_tuple("string", "1.234"));
             }
         TEST_END
     }
@@ -3509,7 +3536,7 @@ namespace hal {
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
                 auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
-                EXPECT_TRUE(nl_res.is_ok());
+                EXPECT_TRUE(nl_res.is_error());    // a value that is no literal is an error; the legacy parser stored it as text
             }
             {
                 // Use an undeclared signal
@@ -3555,21 +3582,15 @@ namespace hal {
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
                 auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
-                EXPECT_TRUE(nl_res.is_ok());
+                EXPECT_TRUE(nl_res.is_error());    // assigning to an undeclared signal is an error; the legacy parser ignored it
             }
         TEST_END
     }
 
     /* ------------------------------------------------------------------------------------------------------------------
-     * Edge cases added for the netlist parser rework. Every case is small on purpose so that the ones the legacy parser
-     * cannot pass can be skipped individually; each of them describes behavior the new parsers must provide. Set
-     * HAL_LEGACY_PARSER_STRICT to run the skipped ones anyway.
+     * Edge cases added for the netlist parser rework; the legacy parser skips the ones it cannot pass, this parser
+     * passes all of them.
      * ------------------------------------------------------------------------------------------------------------------ */
-#define SKIP_ON_LEGACY_PARSER(reason)                                                       \
-    if (std::getenv("HAL_LEGACY_PARSER_STRICT") == nullptr)                                 \
-    {                                                                                       \
-        GTEST_SKIP() << "the legacy Verilog parser does not support " << reason;            \
-    }
 
     /**
      * Escaped identifiers may contain brackets, parentheses, commas and keywords; an escaped `\bus[3]` is a scalar and
@@ -3719,7 +3740,6 @@ namespace hal {
     TEST_F(VerilogParserTest, check_literal_zero_extension)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("zero extension of a narrower literal on a pin group");
             auto nl_res = parse("module top (out);\n"
                                 "  output [3:0] out;\n"
                                 "  RAM s (.ADDR(2'b10), .DATA_IN(1'b1), .DATA_OUT(out));\n"
@@ -3746,7 +3766,6 @@ namespace hal {
     TEST_F(VerilogParserTest, check_replication_and_nested_concatenation)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("replication and nested concatenations");
             auto nl_res = parse("module top (a, b, c, out);\n"
                                 "  input a, b, c;\n"
                                 "  output [3:0] out;\n"
@@ -3773,7 +3792,6 @@ namespace hal {
     TEST_F(VerilogParserTest, check_ansi_port_kinds)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("'input wire', 'output reg' and 'inout' in ANSI port lists");
             auto nl_res = parse("module top (input wire a, output reg y, inout io, input [1:0] p, q);\n"
                                 "  AND2 g (.I0(p[1]), .I1(q[0]), .O(y));\n"
                                 "  BUF b (.I(a), .O(io));\n"
@@ -3830,7 +3848,7 @@ namespace hal {
             ASSERT_NE(g0, nullptr);
             ASSERT_NE(g1, nullptr);
             ASSERT_NE(g2, nullptr);
-            EXPECT_EQ(nl->get_global_input_nets().size(), 3);    // a(0), a(1), b(1) are used, b(0) is not
+            EXPECT_EQ(nl->get_global_input_nets().size(), 4);    // b(0) is unused but stays a global input
             ASSERT_NE(g0->get_fan_out_net("O"), nullptr);
             EXPECT_EQ(g0->get_fan_out_net("O")->get_name(), "one(3)");
             EXPECT_EQ(g1->get_fan_in_net("I0"), g0->get_fan_out_net("O"));
@@ -3850,7 +3868,6 @@ namespace hal {
     TEST_F(VerilogParserTest, check_positional_connection_gaps)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("empty slots in positional connection lists");
             auto nl_res = parse("module top (a, y);\n"
                                 "  input a;\n"
                                 "  output y;\n"
@@ -4003,7 +4020,7 @@ namespace hal {
             EXPECT_NE(narrow_0, narrow_1);
             EXPECT_TRUE(nl->is_global_input_net(narrow_0));
             EXPECT_TRUE(nl->is_global_input_net(narrow_1));
-            EXPECT_EQ(nl->get_global_input_nets().size(), 4);    // p, q, wide[0], wide[1]; wide[3:2] is unused
+            EXPECT_EQ(nl->get_global_input_nets().size(), 6);    // p, q, wide[3:0]; the unused wide[3:2] stay global inputs
         TEST_END
     }
 
@@ -4015,7 +4032,6 @@ namespace hal {
     TEST_F(VerilogParserTest, check_logic_expression_rejected)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("rejecting logic expressions in assignments, it silently misreads them");
             NO_COUT_TEST_BLOCK;
             for (const std::string rhs : {"b & c", "~b", "b ? c : 1'b0", "b + c"})
             {
@@ -4063,7 +4079,6 @@ namespace hal {
     TEST_F(VerilogParserTest, check_conditional_compilation)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("conditional compilation and macros");
             auto nl_res = parse("`define GATE INV\n"
                                 "module top (a, y);\n"
                                 "  input a;\n"
@@ -4160,7 +4175,7 @@ namespace hal {
                 EXPECT_EQ(g->get_fan_out_net("O")->get_name(), "v(1)");
                 EXPECT_EQ(h->get_fan_in_net("I"), g->get_fan_out_net("O"));
                 EXPECT_TRUE(nl->is_global_output_net(h->get_fan_out_net("O")));
-                EXPECT_EQ(std::get<1>(g->get_data("attribute", "note")), "a//b/*c*/");
+                EXPECT_EQ(std::get<1>(attribute_of(g, "note")), "a//b/*c*/");
             }
         TEST_END
     }
@@ -4253,7 +4268,6 @@ namespace hal {
     TEST_F(VerilogParserTest, check_unconnected_top_port_kept)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("keeping a top-level port that nothing inside touches");
             auto nl_res = parse("module top (a, unused_in, y, unused_out);\n"
                                 "  input a, unused_in;\n"
                                 "  output y, unused_out;\n"
@@ -4294,7 +4308,6 @@ namespace hal {
                                     "endmodule");
                 EXPECT_TRUE(nl_res.is_error()) << "accepted a module declared twice";
             }
-            SKIP_ON_LEGACY_PARSER("rejecting a wire or an instance name that is declared twice");
             {
                 auto nl_res = parse("module top (a, y);\n"
                                     "  input a;\n"
@@ -4327,7 +4340,6 @@ namespace hal {
     TEST_F(VerilogParserTest, check_parameter_declaration_forms)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("parameter lists in module headers and defparam on module instances");
             auto nl_res = parse("module sub #(parameter WIDTH = 8, DEPTH = 2) (i, o);\n"
                                 "  input i;\n"
                                 "  output o;\n"
@@ -4359,8 +4371,8 @@ namespace hal {
             }
             ASSERT_NE(s0, nullptr);
             ASSERT_NE(s1, nullptr);
-            EXPECT_EQ(std::get<1>(s0->get_data("generic", "WIDTH")), "16");
-            EXPECT_EQ(std::get<1>(s1->get_data("generic", "DEPTH")), "4");
+            EXPECT_EQ(std::get<1>(parameter_of(s0, "WIDTH")), "16");
+            EXPECT_EQ(std::get<1>(parameter_of(s1, "DEPTH")), "4");
         TEST_END
     }
 } // namespace hal

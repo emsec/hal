@@ -344,6 +344,17 @@ TEST_F(NetlistIRTest, check_validate)
     }
     {
         Design d = create_design();
+        d.find_module("top")->add_alias(FIRST_USER_BIT, OPEN);
+        expect_invalid(d, "an alias to an open position");
+    }
+    {
+        // an open position in a connection is fine
+        Design d                                                            = create_design();
+        d.find_module("top")->find_instance("g2")->connections.front().bits = {OPEN};
+        EXPECT_TRUE(d.validate().is_ok());
+    }
+    {
+        Design d = create_design();
         d.find_module("top")->add_instance("s0", "sub", InstanceKind::Module);
         expect_invalid(d, "two instances of the same name");
     }
@@ -364,14 +375,29 @@ TEST_F(NetlistIRTest, check_validate)
     }
     {
         Design d = create_design();
+        d.find_module("top")->find_instance("s0")->add_connection("i", {ZERO}, Range{0, 0});
+        expect_invalid(d, "a port connected as a whole and as a slice");
+    }
+    {
+        Design d           = create_design();
+        Connection& c      = d.find_module("top")->find_instance("s0")->add_connection("nope", {ZERO, ONE});
+        c.port             = "i";
+        c.replicate        = true;
+        d.find_module("top")->find_instance("s0")->connections.erase(d.find_module("top")->find_instance("s0")->connections.begin());    // drop the original 'i'
+        expect_invalid(d, "a replicated connection with two bits");
+    }
+    {
+        Design d = create_design();
         d.find_module("top")->find_instance("s0")->add_connection("nope", {ZERO});
         expect_invalid(d, "a connection to a port the module does not have");
     }
     {
+        // a connection wider or narrower than the module port is not invalid: the low bits pair up at instantiation
         Design d = create_design();
-        d.find_module("top")->find_instance("s0")->find_connection("i");
         d.find_module("top")->find_instance("s0")->connections.front().bits.push_back(ONE);
-        expect_invalid(d, "a connection wider than the module port");
+        EXPECT_TRUE(d.validate().is_ok());
+        d.find_module("top")->find_instance("s0")->connections.front().bits = {ZERO};
+        EXPECT_TRUE(d.validate().is_ok());
     }
     {
         Design d = create_design();
@@ -398,8 +424,6 @@ TEST_F(NetlistIRTest, check_validate)
         EXPECT_TRUE(d.validate().is_ok());
         d.find_module("top")->find_instance("s0")->connections.front() = Connection{"i", Range{2, 1}, {ZERO, ONE}};
         expect_invalid(d, "a port slice outside the port");
-        d.find_module("top")->find_instance("s0")->connections.front() = Connection{"i", Range{1, 0}, {ZERO}};
-        expect_invalid(d, "a connection narrower than the port slice");
     }
     {
         Design d = create_design();

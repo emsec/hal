@@ -23,27 +23,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file verilog_parser.h
+ * @brief The Verilog netlist parser: a file goes through the preprocessor, the lexer, the syntax parser and the
+ * elaboration into a netlist IR design, which is then instantiated against a gate library.
+ */
+
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/gate_library/gate_type.h"
-#include "hal_core/netlist/module.h"
-#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist_ir/instantiate.h"
+#include "hal_core/netlist/netlist_ir/netlist_ir.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser.h"
-#include "hal_core/utilities/special_strings.h"
-#include "hal_core/utilities/token_stream.h"
+#include "hal_core/utilities/result.h"
 
+#include <filesystem>
 #include <optional>
-#include <sstream>
-#include <unordered_map>
-#include <unordered_set>
-#include <utility>
 
 namespace hal
 {
+    namespace verilog
+    {
+        /**
+         * Read a structural Verilog file into a netlist IR design.
+         *
+         * @param[in] file - The path of the file.
+         * @returns The design on success, an error with the location of the problem otherwise.
+         */
+        Result<netlist_ir::Design> parse_to_ir(const std::filesystem::path& file);
+
+        /**
+         * Read structural Verilog text into a netlist IR design.
+         *
+         * @param[in] text - The text.
+         * @param[in] file - The path to report in messages and to resolve `include against.
+         * @returns The design on success, an error with the location of the problem otherwise.
+         */
+        Result<netlist_ir::Design> parse_text_to_ir(const std::string& text, const std::filesystem::path& file = "<string>");
+    }    // namespace verilog
 
     /**
-     * A netlist parser for gate-level Verilog.
+     * The Verilog netlist parser.
      *
      * @ingroup netlist_parser
      */
@@ -54,205 +74,37 @@ namespace hal
         ~VerilogParser() = default;
 
         /**
-         * Parse a Verilog netlist into an internal intermediate format.
+         * Parse a Verilog file into the netlist IR.
          *
-         * @param[in] file_path - Path to the Verilog netlist file.
-         * @returns `true` on success, `false` otherwise.
+         * @param[in] file_path - Path to the Verilog file.
+         * @returns Ok on success, an error otherwise.
          */
         Result<std::monostate> parse(const std::filesystem::path& file_path) override;
 
         /**
-         * Instantiate the parsed Verilog netlist using the specified gate library.
+         * Instantiate the parsed design against the given gate library.
          *
          * @param[in] gate_library - The gate library.
-         * @returns A pointer to the resulting netlist.
+         * @returns The netlist on success, an error otherwise.
          */
         Result<std::unique_ptr<Netlist>> instantiate(const GateLibrary* gate_library) override;
 
+        /**
+         * Get the design the last successful `parse` produced.
+         *
+         * @returns The design, or `std::nullopt` if nothing was parsed.
+         */
+        const std::optional<netlist_ir::Design>& get_design() const;
+
+        /**
+         * Set the options for the instantiation; the defaults are what a netlist parser should do.
+         *
+         * @param[in] options - The options.
+         */
+        void set_instantiation_options(const netlist_ir::InstantiationOptions& options);
+
     private:
-        using identifier_t        = std::string;
-        using ranged_identifier_t = std::pair<std::string, std::vector<std::vector<u32>>>;
-        using numeral_t           = std::vector<BooleanFunction::Value>;
-        using empty_t             = std::monostate;
-        using assignment_t        = std::variant<identifier_t, ranged_identifier_t, numeral_t, empty_t>;
-
-        /**
-         * A named value with an associated type, used for the attributes, parameters, and generics of a Verilog design.
-         */
-        struct VerilogDataEntry
-        {
-            std::string m_name;
-            std::string m_type  = "unknown";
-            std::string m_value = "";
-        };
-
-        /**
-         * The intermediate representation of a Verilog signal, i.e., a wire or a port, including its bit ranges.
-         */
-        struct VerilogSignal
-        {
-            std::string m_name;
-            std::vector<std::vector<u32>> m_ranges;
-            std::vector<VerilogDataEntry> m_attributes;
-            std::vector<std::string> m_expanded_names;
-        };
-
-        /**
-         * The intermediate representation of a port of a Verilog module.
-         */
-        struct VerilogPort
-        {
-            std::string m_identifier;
-            /**
-             * What the port stands for inside the module: the identifier itself for a plain port, another signal for a
-             * port written as `.name(signal)`, and several signals or slices for one written as `.name({a, b[1:0]})`.
-             */
-            std::vector<assignment_t> m_expression_parts;
-            PinDirection m_direction;
-            std::vector<std::vector<u32>> m_ranges;
-            std::vector<std::string> m_expanded_identifiers;
-        };
-
-        /**
-         * The signals that are assigned to a single port of a Verilog instance.
-         */
-        struct VerilogPortAssignment
-        {
-            std::optional<std::string> m_port_name;
-            std::vector<assignment_t> m_assignment;
-        };
-
-        /**
-         * A continuous assignment between two sets of Verilog signals.
-         */
-        struct VerilogAssignment
-        {
-            std::vector<assignment_t> m_variable;
-            std::vector<assignment_t> m_assignment;
-        };
-
-        /**
-         * The intermediate representation of an instantiation of a Verilog module or a gate type.
-         */
-        struct VerilogInstance
-        {
-            std::string m_name;
-            std::string m_type;
-            bool m_is_module = false;
-            std::vector<VerilogPortAssignment> m_port_assignments;
-            std::vector<VerilogDataEntry> m_parameters;
-            std::vector<VerilogDataEntry> m_attributes;
-            std::vector<std::pair<std::string, std::string>> m_expanded_port_assignments;
-        };
-
-        /**
-         * The intermediate representation of a Verilog module, i.e., its ports, signals, assignments, and instances.
-         */
-        struct VerilogModule
-        {
-        public:
-            VerilogModule()  = default;
-            ~VerilogModule() = default;
-
-            /**
-             * Check whether an module is considered smaller than another module.
-             *
-             * @param[in] other - The module to compare against.
-             * @returns `true` if the module is smaller than 'other', `false` otherwise.
-             */
-            bool operator<(const VerilogModule& other) const
-            {
-                return m_name < other.m_name;
-            }
-
-            // module information
-            std::string m_name;
-            u32 m_line_number;
-            std::vector<VerilogDataEntry> m_attributes;    // module attributes
-
-            // ports
-            std::vector<std::unique_ptr<VerilogPort>> m_ports;
-            std::map<std::string, VerilogPort*> m_ports_by_identifier;
-            std::map<std::string, VerilogPort*> m_ports_by_expression;
-            std::map<std::string, std::string> m_expanded_port_identifiers_to_expressions;
-
-            // signals
-            std::vector<std::unique_ptr<VerilogSignal>> m_signals;
-            std::map<std::string, VerilogSignal*> m_signals_by_name;
-
-            // assignments
-            std::vector<VerilogAssignment> m_assignments;
-            std::vector<std::pair<std::string, std::string>> m_expanded_assignments;
-
-            // instances
-            std::vector<std::unique_ptr<VerilogInstance>> m_instances;
-            std::map<std::string, VerilogInstance*> m_instances_by_name;
-        };
-
-        std::stringstream m_fs;
-        std::filesystem::path m_path;
-
-        // temporary netlist
-        Netlist* m_netlist = nullptr;
-
-        // all modules of the netlist
-        std::vector<std::unique_ptr<VerilogModule>> m_modules;
-        std::unordered_map<std::string, VerilogModule*> m_modules_by_name;
-        std::string m_last_module;
-
-        // token stream of entire input file
-        TokenStream<std::string> m_token_stream;
-
-        // some caching
-        std::unordered_map<std::string, GateType*> m_gate_types;
-        std::unordered_map<std::string, GateType*> m_vcc_gate_types;
-        std::unordered_map<std::string, GateType*> m_gnd_gate_types;
-        std::unordered_map<Net*, std::vector<std::pair<Module*, u32>>> m_module_port_by_net;
-        std::unordered_map<Module*, std::vector<std::tuple<std::string, Net*>>> m_module_ports;
-
-        // unique aliases
-        std::unordered_map<std::string, u32> m_module_instantiation_count;
-        std::unordered_map<std::string, u32> m_instance_name_occurences;
-        std::unordered_map<std::string, u32> m_net_name_occurences;
-
-        // nets
-        Net* m_zero_net;
-        Net* m_one_net;
-        std::unordered_map<std::string, Net*> m_net_by_name;
-        std::vector<std::pair<std::string, std::string>> m_nets_to_merge;
-
-        // parser settings
-        const std::string instance_name_seperator = "/";
-
-        // parse HDL into intermediate format
-        void tokenize();
-        Result<std::monostate> parse_tokens();
-        Result<std::monostate> parse_module(std::vector<VerilogDataEntry>& attributes);
-        Result<std::monostate> parse_port_list(VerilogModule* module);
-        Result<std::monostate> parse_port_declaration_list(VerilogModule* module);
-        Result<std::monostate> parse_port_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
-        Result<std::monostate> parse_signal_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
-        Result<std::monostate> parse_assignment(VerilogModule* module);
-        Result<std::monostate> parse_defparam(VerilogModule* module);
-        void parse_attribute(std::vector<VerilogDataEntry>& attributes);
-        Result<std::monostate> parse_instance(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
-        Result<std::monostate> parse_port_assign(VerilogInstance* instance);
-        Result<std::vector<VerilogDataEntry>> parse_parameter_assign();
-
-        // construct netlist from intermediate format
-        Result<std::monostate> construct_netlist(VerilogModule* top_module);
-        Result<Module*>
-            instantiate_module(const std::string& instance_name, VerilogModule* verilog_module, Module* parent, const std::unordered_map<std::string, std::string>& parent_module_assignments);
-
-        // helper functions
-        std::string get_unique_alias(const std::string& parent_name, const std::string& name, const std::unordered_map<std::string, u32>& name_occurences) const;
-        std::vector<u32> parse_range(TokenStream<std::string>& stream) const;
-        void expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const;
-        std::vector<std::string> expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const;
-        Result<std::vector<BooleanFunction::Value>> get_binary_vector(std::string value) const;
-        Result<std::string> get_hex_from_literal(const Token<std::string>& value_token) const;
-        Result<std::pair<std::string, std::string>> parse_parameter_value(const Token<std::string>& value_token) const;
-        Result<std::vector<VerilogParser::assignment_t>> parse_assignment_expression(TokenStream<std::string>&& stream) const;
-        std::vector<std::string> expand_assignment_expression(VerilogModule* verilog_module, const std::vector<assignment_t>& vars) const;
+        std::optional<netlist_ir::Design> m_design;
+        netlist_ir::InstantiationOptions m_options;
     };
 }    // namespace hal

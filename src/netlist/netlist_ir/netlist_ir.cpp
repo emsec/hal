@@ -405,7 +405,7 @@ namespace hal
             {
                 for (const BitId bit : bits)
                 {
-                    if (bit >= m.next_bit())
+                    if (bit != OPEN && bit >= m.next_bit())
                     {
                         return ERR(what + " of module '" + m.name + "' refers to bit " + std::to_string(bit) + ", which the module never allocated");
                     }
@@ -495,6 +495,10 @@ namespace hal
                     {
                         return ERR("module '" + m.name + "' aliases bit " + std::to_string(a) + " with itself");
                     }
+                    if (a == OPEN || b == OPEN)
+                    {
+                        return ERR("module '" + m.name + "' aliases an open position; an open position simply has no alias");
+                    }
                 }
 
                 if (auto res = validate_unique_names(m.parameters, "module '" + m.name + "'", "parameter"); res.is_error())
@@ -550,7 +554,8 @@ namespace hal
                         }
                     }
 
-                    std::unordered_set<std::string> connected_ports;
+                    std::unordered_set<std::string> whole_ports;
+                    std::unordered_set<std::string> sliced_ports;
                     u32 named      = 0;
                     u32 positional = 0;
                     for (const Connection& c : i.connections)
@@ -559,16 +564,23 @@ namespace hal
                         {
                             return res;
                         }
+                        if (c.replicate && c.bits.size() != 1)
+                        {
+                            return ERR("instance '" + i.name + "' of module '" + m.name + "' replicates " + std::to_string(c.bits.size()) + " bits on port '" + c.port + "', which needs exactly one");
+                        }
                         if (c.port.empty())
                         {
                             positional++;
                             continue;
                         }
                         named++;
-                        if (!connected_ports.insert(c.port).second)
+                        // a port may be connected in several slices, but never twice as a whole or as a whole and in slices
+                        const bool seen = whole_ports.count(c.port) > 0 || (sliced_ports.count(c.port) > 0 && !c.port_slice.has_value());
+                        if (seen)
                         {
                             return ERR("instance '" + i.name + "' of module '" + m.name + "' connects port '" + c.port + "' twice");
                         }
+                        (c.port_slice.has_value() ? sliced_ports : whole_ports).insert(c.port);
                         if (target != nullptr)
                         {
                             const Port* port = target->find_port(c.port);
@@ -576,7 +588,6 @@ namespace hal
                             {
                                 return ERR("instance '" + i.name + "' of module '" + m.name + "' connects port '" + c.port + "', which module '" + target->name + "' does not have");
                             }
-                            u32 expected = port->width();
                             if (c.port_slice.has_value())
                             {
                                 if (port->dims.size() != 1)
@@ -587,13 +598,8 @@ namespace hal
                                 {
                                     return ERR("instance '" + i.name + "' of module '" + m.name + "' connects a slice of port '" + c.port + "' that lies outside the port");
                                 }
-                                expected = c.port_slice->size();
                             }
-                            if (c.bits.size() != expected)
-                            {
-                                return ERR("instance '" + i.name + "' of module '" + m.name + "' connects " + std::to_string(c.bits.size()) + " bit(s) to port '" + c.port + "' of module '"
-                                           + target->name + "', which has " + std::to_string(expected));
-                            }
+                            // a width that differs from the port's is not an error: the low bits pair up at instantiation, as in Verilog
                         }
                     }
                     if (named > 0 && positional > 0)

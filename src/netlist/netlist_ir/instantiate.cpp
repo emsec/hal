@@ -84,9 +84,11 @@ namespace hal
             struct NameCandidate
             {
                 std::string name;
-                std::string path;
+                std::string path;        // the instance path, decides which candidate wins
+                u32 visit        = 0;    // the visit the candidate belongs to, decides the prefix
                 bool is_top_port = false;
-                bool is_port     = false;
+                bool is_port     = false;    // kept for messages; a port of an inner module has no precedence over a signal
+                bool is_target   = false;    // the receiving side of an assignment
                 u32 order        = 0;
 
                 bool better_than(const NameCandidate& other) const
@@ -99,9 +101,9 @@ namespace hal
                     {
                         return path.size() < other.path.size();
                     }
-                    if (is_port != other.is_port)
+                    if (is_target != other.is_target)
                     {
-                        return is_port;
+                        return is_target;
                     }
                     return order < other.order;
                 }
@@ -193,6 +195,11 @@ namespace hal
                 return bit < FIRST_USER_BIT;
             }
 
+            bool is_constant_or_open(BitId bit)
+            {
+                return bit < FIRST_USER_BIT || bit == OPEN;
+            }
+
             /**
              * Pair the bits of an expression with the pins of a pin group, low bits first. Returns pairs of (pin, bit);
              * a narrower constant expression is zero-extended, a narrower signal leaves the high pins open, a wider
@@ -206,7 +213,7 @@ namespace hal
                 {
                     log_warning("netlist_ir", "{}: {} bits are connected to pin group '{}' of width {}, the high bits are dropped", what, bits.size(), group->get_name(), width);
                 }
-                const bool all_constant = std::all_of(bits.begin(), bits.end(), is_constant);
+                const bool all_constant = std::all_of(bits.begin(), bits.end(), is_constant_or_open) && std::any_of(bits.begin(), bits.end(), is_constant);
                 for (u32 k = 0; k < width; k++)
                 {
                     const i32 index = group->get_lowest_index() + static_cast<i32>(k);
@@ -217,7 +224,10 @@ namespace hal
                     }
                     if (k < bits.size())
                     {
-                        res.emplace_back(pin_res.get(), bits.at(bits.size() - 1 - k));
+                        if (bits.at(bits.size() - 1 - k) != OPEN)
+                        {
+                            res.emplace_back(pin_res.get(), bits.at(bits.size() - 1 - k));
+                        }
                     }
                     else if (all_constant && !bits.empty())
                     {
@@ -378,20 +388,25 @@ namespace hal
                         }
                     }
 
+                    const std::vector<BitId> bits = c.replicate ? std::vector<BitId>(port_bits.size(), c.bits.front()) : c.bits;
+
                     // low bits pair up; a mismatch on a positional connection is tolerated like on a gate pin group
-                    if (c.bits.size() != port_bits.size())
+                    if (bits.size() != port_bits.size())
                     {
-                        log_warning("netlist_ir", "{}: {} bits are connected to port '{}' of width {}, only the low bits are connected", what, c.bits.size(), port->name, port_bits.size());
+                        log_warning("netlist_ir", "{}: {} bits are connected to port '{}' of width {}, only the low bits are connected", what, bits.size(), port->name, port_bits.size());
                     }
-                    const bool all_constant = std::all_of(c.bits.begin(), c.bits.end(), is_constant);
+                    const bool all_constant = std::all_of(bits.begin(), bits.end(), is_constant_or_open) && std::any_of(bits.begin(), bits.end(), is_constant);
                     for (u32 k = 0; k < port_bits.size(); k++)
                     {
                         const BitId port_bit = port_bits.at(port_bits.size() - 1 - k);
-                        if (k < c.bits.size())
+                        if (k < bits.size())
                         {
-                            uf.unite(key(v, port_bit), key(visit.parent, c.bits.at(c.bits.size() - 1 - k)));
+                            if (bits.at(bits.size() - 1 - k) != OPEN)
+                            {
+                                uf.unite(key(v, port_bit), key(visit.parent, bits.at(bits.size() - 1 - k)));
+                            }
                         }
-                        else if (all_constant && !c.bits.empty())
+                        else if (all_constant && !bits.empty())
                         {
                             uf.unite(key(v, port_bit), ZERO);
                         }
@@ -424,23 +439,26 @@ namespace hal
                     for (const Connection& c : inst.connections)
                     {
                         std::vector<std::pair<GatePin*, BitId>> pairs;
+                        const auto replicated = [&c](u32 width) { return c.replicate ? std::vector<BitId>(width, c.bits.front()) : c.bits; };
                         if (c.port.empty())
                         {
                             if (positional >= groups.size())
                             {
                                 return ERR(what + ": more positional connections than gate type '" + type->get_name() + "' has pin groups");
                             }
-                            pairs = pair_bits_with_pins(c.bits, groups.at(positional++), what);
+                            PinGroup<GatePin>* group = groups.at(positional++);
+                            pairs                    = pair_bits_with_pins(replicated(static_cast<u32>(group->get_pins().size())), group, what);
                         }
                         else if (PinGroup<GatePin>* group = resolve_name<PinGroup<GatePin>>(c.port, groups, [](const PinGroup<GatePin>* g) { return g->get_name(); }); group != nullptr)
                         {
                             if (c.port_slice.has_value())
                             {
                                 // a slice of a pin group: the bits go to the pins at the indices of the slice
-                                const Range& r = c.port_slice.value();
-                                if (c.bits.size() != r.size())
+                                const Range& r                = c.port_slice.value();
+                                const std::vector<BitId> bits = replicated(r.size());
+                                if (bits.size() != r.size())
                                 {
-                                    return ERR(what + ": " + std::to_string(c.bits.size()) + " bits are connected to a slice of width " + std::to_string(r.size()) + " of pin group '"
+                                    return ERR(what + ": " + std::to_string(bits.size()) + " bits are connected to a slice of width " + std::to_string(r.size()) + " of pin group '"
                                                + group->get_name() + "'");
                                 }
                                 for (u32 k = 0; k < r.size(); k++)
@@ -450,12 +468,15 @@ namespace hal
                                     {
                                         return ERR(what + ": index " + std::to_string(r.index_at(k)) + " is outside pin group '" + group->get_name() + "'");
                                     }
-                                    pairs.emplace_back(pin_res.get(), c.bits.at(k));
+                                    if (bits.at(k) != OPEN)
+                                    {
+                                        pairs.emplace_back(pin_res.get(), bits.at(k));
+                                    }
                                 }
                             }
                             else
                             {
-                                pairs = pair_bits_with_pins(c.bits, group, what);
+                                pairs = pair_bits_with_pins(replicated(static_cast<u32>(group->get_pins().size())), group, what);
                             }
                         }
                         else if (GatePin* pin = resolve_name<GatePin>(c.port, pins, [](const GatePin* p) { return p->get_name(); }); pin != nullptr)
@@ -464,7 +485,7 @@ namespace hal
                             {
                                 log_warning("netlist_ir", "{}: {} bits are connected to the single pin '{}', only the low bit is connected", what, c.bits.size(), pin->get_name());
                             }
-                            if (!c.bits.empty())
+                            if (!c.bits.empty() && c.bits.back() != OPEN)
                             {
                                 pairs.emplace_back(pin, c.bits.back());
                             }
@@ -498,6 +519,17 @@ namespace hal
                 classes[uf.find(r.key)].needs_net = true;
             }
 
+            // the first bit of an alias pair is the receiving side of the assignment that produced it, which is the
+            // name a designer expects the merged net to carry
+            std::unordered_set<u64> alias_targets;
+            for (u32 v = 0; v < visits.size(); v++)
+            {
+                for (const auto& [a, b] : visits.at(v).module->aliases)
+                {
+                    alias_targets.insert(key(v, a));
+                }
+            }
+
             u32 order = 0;
             for (u32 v = 0; v < visits.size(); v++)
             {
@@ -508,7 +540,7 @@ namespace hal
                         const u64 root      = uf.find(key(v, s.bits.at(i)));
                         ClassInfo& info     = classes[root];
                         const bool top_port = is_port && v == 0;
-                        if (top_port || options.keep_unconnected_signals || !s.attributes.empty())
+                        if (top_port || options.keep_unconnected_signals)
                         {
                             info.needs_net = true;
                         }
@@ -520,7 +552,7 @@ namespace hal
                         {
                             info.global_output = true;
                         }
-                        NameCandidate cand{s.bit_name(i), visit.path, top_port, is_port, order++};
+                        NameCandidate cand{s.bit_name(i), visit.path, v, top_port, is_port, alias_targets.count(key(v, s.bits.at(i))) > 0, order++};
                         if (!info.best.has_value() || cand.better_than(info.best.value()))
                         {
                             info.best = cand;
@@ -554,15 +586,20 @@ namespace hal
             {
                 module_namer.count(visits.at(v).name);
             }
+            // objects are prefixed with the name of the module they belong to when their plain name is not unique,
+            // which is how the parsers have always named things
             std::vector<hal::Module*> module_of_visit(visits.size(), nullptr);
+            std::vector<std::string> module_name_of_visit(visits.size());
             module_of_visit.at(0) = nl->get_top_module();
             module_of_visit.at(0)->set_name(options.top_module_name);
             module_of_visit.at(0)->set_type(top->name);
+            module_name_of_visit.at(0) = options.top_module_name;
             for (u32 v = 1; v < visits.size(); v++)
             {
-                const Visit& visit     = visits.at(v);
-                const std::string name = module_namer.assign(visit.name, visits.at(visit.parent).path);
-                hal::Module* m         = nl->create_module(name, module_of_visit.at(visit.parent));
+                const Visit& visit         = visits.at(v);
+                const std::string name     = module_namer.assign(visit.name, module_name_of_visit.at(visit.parent));
+                module_name_of_visit.at(v) = name;
+                hal::Module* m             = nl->create_module(name, module_of_visit.at(visit.parent));
                 if (m == nullptr)
                 {
                     return ERR("cannot instantiate design '" + design.source + "': failed to create module '" + name + "'");
@@ -634,7 +671,7 @@ namespace hal
                 }
                 else
                 {
-                    name = net_namer.assign(info.best->name, info.best->path);
+                    name = net_namer.assign(info.best->name, module_name_of_visit.at(info.best->visit));
                 }
                 Net* net = nl->create_net(name);
                 if (net == nullptr)
@@ -701,6 +738,8 @@ namespace hal
             }
 
             // gates
+            const auto gnd_types = gate_library->get_gnd_gate_types();
+            const auto vcc_types = gate_library->get_vcc_gate_types();
             UniqueNamer gate_namer(options.instance_name_separator);
             for (const Visit& visit : visits)
             {
@@ -724,7 +763,7 @@ namespace hal
                     }
                     const std::string what = describe(visit, &inst);
                     GateType* type         = gate_type_of.at({v, &inst});
-                    Gate* g                = nl->create_gate(type, gate_namer.assign(inst.name, visit.path));
+                    Gate* g                = nl->create_gate(type, gate_namer.assign(inst.name, module_name_of_visit.at(v)));
                     if (g == nullptr)
                     {
                         return ERR(what + ": failed to create the gate");
@@ -732,6 +771,15 @@ namespace hal
                     if (v != 0 && !module_of_visit.at(v)->assign_gate(g))
                     {
                         return ERR(what + ": failed to assign the gate to its module");
+                    }
+                    // an explicit instance of a GND or VCC type is marked like the ones created for the constants
+                    if (gnd_types.find(type->get_name()) != gnd_types.end())
+                    {
+                        nl->mark_gnd_gate(g);
+                    }
+                    else if (vcc_types.find(type->get_name()) != vcc_types.end())
+                    {
+                        nl->mark_vcc_gate(g);
                     }
                     if (auto res = apply_typed_values(g, inst.parameters, true, type, what); res.is_error())
                     {
@@ -771,8 +819,8 @@ namespace hal
                 }
             }
 
-            // module pins carry the port names of the design
-            for (u32 v = 1; v < visits.size(); v++)
+            // module pins carry the port names of the design, on the top module as on every other one
+            for (u32 v = 0; v < visits.size(); v++)
             {
                 const Visit& visit = visits.at(v);
                 hal::Module* m     = module_of_visit.at(v);

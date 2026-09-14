@@ -26,32 +26,20 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/plugin_system/fac_extension_interface.h"
 
 namespace hal
 {
     /**
-     * Registers the Verilog netlist parser with HAL's netlist parser manager.
-     */
-    class VerilogParserExtension : public FacExtensionInterface
-    {
-    public:
-        VerilogParserExtension();
-    };
-
-    /**
-     * The plugin that provides the Verilog netlist parser.
+     * The plugin that provides the Verilog netlist parser built on the netlist IR.
+     *
+     * Until the switch-over the parser is not registered for the `.v` extension; the legacy plugin
+     * `verilog_parser_old` keeps it. The parser is available through its class and through Python.
      */
     class PLUGIN_API VerilogParserPlugin : public BasePluginInterface
     {
-        VerilogParserExtension* m_extension;
     public:
-        VerilogParserPlugin();
-
         std::string get_name() const override;
         std::string get_version() const override;
-
-        void on_load() override;
-        void on_unload() override;
+        std::string get_description() const override;
     };
 }    // namespace hal
