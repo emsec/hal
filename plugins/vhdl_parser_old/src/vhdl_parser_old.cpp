@@ -1,4 +1,4 @@
-#include "vhdl_parser/vhdl_parser.h"
+#include "vhdl_parser_old/vhdl_parser_old.h"
 
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
@@ -19,7 +19,7 @@ namespace hal
 
     }    // namespace
 
-    Result<std::monostate> VHDLParser::parse(const std::filesystem::path& file_path)
+    Result<std::monostate> VHDLParserOld::parse(const std::filesystem::path& file_path)
     {
         m_path = file_path;
         m_entities.clear();
@@ -238,7 +238,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::unique_ptr<Netlist>> VHDLParser::instantiate(const GateLibrary* gate_library)
+    Result<std::unique_ptr<Netlist>> VHDLParserOld::instantiate(const GateLibrary* gate_library)
     {
         // create empty netlist
         std::unique_ptr<Netlist> result = netlist_factory::create_netlist(gate_library);
@@ -420,7 +420,7 @@ namespace hal
     // ###########          Parse HDL into Intermediate Format          ##########
     // ###########################################################################
 
-    void VHDLParser::tokenize()
+    void VHDLParserOld::tokenize()
     {
         std::vector<Token<core_strings::CaseInsensitiveString>> parsed_tokens;
         const std::string delimiters = ",(): ;=><&";
@@ -510,7 +510,7 @@ namespace hal
         m_token_stream = TokenStream(parsed_tokens, {"("}, {")"});
     }
 
-    Result<std::monostate> VHDLParser::parse_tokens()
+    Result<std::monostate> VHDLParserOld::parse_tokens()
     {
         while (m_token_stream.remaining() > 0)
         {
@@ -542,7 +542,7 @@ namespace hal
         return OK({});
     }
 
-    void VHDLParser::parse_library()
+    void VHDLParserOld::parse_library()
     {
         if (m_token_stream.peek() == "use")
         {
@@ -561,7 +561,7 @@ namespace hal
         }
     }
 
-    Result<std::monostate> VHDLParser::parse_entity()
+    Result<std::monostate> VHDLParserOld::parse_entity()
     {
         m_token_stream.consume("entity", true);
         const u32 line_number       = m_token_stream.peek().number;
@@ -627,7 +627,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::parse_port_definitons(VhdlEntity* vhdl_entity)
+    Result<std::monostate> VHDLParserOld::parse_port_definitons(VhdlEntity* vhdl_entity)
     {
         // default port assignments are not supported
         m_token_stream.consume("port", true);
@@ -713,7 +713,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::parse_attribute()
+    Result<std::monostate> VHDLParserOld::parse_attribute()
     {
         const u32 line_number = m_token_stream.peek().number;
 
@@ -785,7 +785,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::parse_architecture()
+    Result<std::monostate> VHDLParserOld::parse_architecture()
     {
         m_token_stream.consume("architecture", true);
         m_token_stream.consume();
@@ -822,7 +822,7 @@ namespace hal
         }
     }
 
-    Result<std::monostate> VHDLParser::parse_architecture_header(VhdlEntity* vhdl_entity)
+    Result<std::monostate> VHDLParserOld::parse_architecture_header(VhdlEntity* vhdl_entity)
     {
         auto next_token = m_token_stream.peek();
         while (next_token != "begin")
@@ -866,7 +866,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::parse_signal_definition(VhdlEntity* vhdl_entity)
+    Result<std::monostate> VHDLParserOld::parse_signal_definition(VhdlEntity* vhdl_entity)
     {
         m_token_stream.consume("signal", true);
         u32 line_number = m_token_stream.peek().number;
@@ -909,7 +909,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::parse_architecture_body(VhdlEntity* vhdl_entity)
+    Result<std::monostate> VHDLParserOld::parse_architecture_body(VhdlEntity* vhdl_entity)
     {
         m_token_stream.consume("begin", true);
         auto next_token = m_token_stream.peek();
@@ -952,7 +952,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::parse_assignment(VhdlEntity* vhdl_entity)
+    Result<std::monostate> VHDLParserOld::parse_assignment(VhdlEntity* vhdl_entity)
     {
         u32 line_number = m_token_stream.peek().number;
         VhdlAssignment assignment;
@@ -980,7 +980,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::parse_instance(VhdlEntity* vhdl_entity)
+    Result<std::monostate> VHDLParserOld::parse_instance(VhdlEntity* vhdl_entity)
     {
         auto instance    = std::make_unique<VhdlInstance>();
         u32 line_number  = m_token_stream.peek().number;
@@ -1057,7 +1057,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::parse_port_assign(VhdlInstance* instance)
+    Result<std::monostate> VHDLParserOld::parse_port_assign(VhdlInstance* instance)
     {
         u32 line_number = m_token_stream.peek().number;
         m_token_stream.consume("port", true);
@@ -1136,7 +1136,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::parse_generic_assign(VhdlInstance* instance)
+    Result<std::monostate> VHDLParserOld::parse_generic_assign(VhdlInstance* instance)
     {
         m_token_stream.consume("map", true);
         m_token_stream.consume("(", true);
@@ -1209,7 +1209,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> VHDLParser::assign_attributes(VhdlEntity* vhdl_entity)
+    Result<std::monostate> VHDLParserOld::assign_attributes(VhdlEntity* vhdl_entity)
     {
         for (const auto& [target_class, attributes] : m_attribute_buffer)
         {
@@ -1270,7 +1270,7 @@ namespace hal
     // ###########      Assemble Netlist from Intermediate Format       ##########
     // ###########################################################################
 
-    Result<std::monostate> VHDLParser::construct_netlist(VhdlEntity* top_entity)
+    Result<std::monostate> VHDLParserOld::construct_netlist(VhdlEntity* top_entity)
     {
         m_netlist->set_design_name(core_strings::to<std::string>(top_entity->m_name));
         m_netlist->enable_automatic_net_checks(false);
@@ -1715,7 +1715,7 @@ namespace hal
     }
 
     Result<Module*>
-        VHDLParser::instantiate_entity(const ci_string& instance_identifier, VhdlEntity* vhdl_entity, Module* parent, const std::unordered_map<ci_string, ci_string>& parent_module_assignments)
+        VHDLParserOld::instantiate_entity(const ci_string& instance_identifier, VhdlEntity* vhdl_entity, Module* parent, const std::unordered_map<ci_string, ci_string>& parent_module_assignments)
     {
         std::unordered_map<ci_string, ci_string> signal_alias;
         std::unordered_map<ci_string, ci_string> instance_alias;
@@ -2107,7 +2107,7 @@ namespace hal
     }    // namespace
 
     // generate a unique name for a gate/module instance
-    VHDLParser::ci_string VHDLParser::get_unique_alias(const ci_string& parent_name, const ci_string& name, const std::unordered_map<ci_string, u32>& name_occurences) const
+    VHDLParserOld::ci_string VHDLParserOld::get_unique_alias(const ci_string& parent_name, const ci_string& name, const std::unordered_map<ci_string, u32>& name_occurences) const
     {
         ci_string unique_alias = name;
 
@@ -2123,7 +2123,7 @@ namespace hal
         return unique_alias;
     }
 
-    std::vector<u32> VHDLParser::parse_range(TokenStream<ci_string>& range_stream) const
+    std::vector<u32> VHDLParserOld::parse_range(TokenStream<ci_string>& range_stream) const
     {
         if (range_stream.remaining() == 1)
         {
@@ -2153,7 +2153,7 @@ namespace hal
         return res;
     }
 
-    Result<std::vector<std::vector<u32>>> VHDLParser::parse_signal_ranges(TokenStream<ci_string>& signal_stream) const
+    Result<std::vector<std::vector<u32>>> VHDLParserOld::parse_signal_ranges(TokenStream<ci_string>& signal_stream) const
     {
         std::vector<std::vector<u32>> ranges;
         const u32 line_number = signal_stream.peek().number;
@@ -2193,7 +2193,7 @@ namespace hal
         return OK(ranges);
     }
 
-    void VHDLParser::expand_ranges_recursively(std::vector<ci_string>& expanded_names, const ci_string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const
+    void VHDLParserOld::expand_ranges_recursively(std::vector<ci_string>& expanded_names, const ci_string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const
     {
         // expand signal recursively
         if (ranges.size() > dimension)
@@ -2210,7 +2210,7 @@ namespace hal
         }
     }
 
-    std::vector<VHDLParser::ci_string> VHDLParser::expand_ranges(const ci_string& name, const std::vector<std::vector<u32>>& ranges) const
+    std::vector<VHDLParserOld::ci_string> VHDLParserOld::expand_ranges(const ci_string& name, const std::vector<std::vector<u32>>& ranges) const
     {
         std::vector<ci_string> res;
 
@@ -2219,7 +2219,7 @@ namespace hal
         return res;
     }
 
-    Result<std::vector<BooleanFunction::Value>> VHDLParser::get_binary_vector(std::string value) const
+    Result<std::vector<BooleanFunction::Value>> VHDLParserOld::get_binary_vector(std::string value) const
     {
         value = utils::to_upper(utils::replace(value, std::string("_"), std::string("")));
 
@@ -2322,7 +2322,7 @@ namespace hal
         return OK(result);
     }
 
-    Result<std::string> VHDLParser::get_hex_from_literal(const Token<ci_string>& value_token) const
+    Result<std::string> VHDLParserOld::get_hex_from_literal(const Token<ci_string>& value_token) const
     {
         const u32 line_number = value_token.number;
         const ci_string value = utils::to_upper(utils::replace(value_token.string, ci_string("_"), ci_string("")));
@@ -2409,7 +2409,7 @@ namespace hal
         return OK(ss.str());
     }
 
-    Result<std::vector<VHDLParser::assignment_t>> VHDLParser::parse_assignment_expression(TokenStream<ci_string>&& stream) const
+    Result<std::vector<VHDLParserOld::assignment_t>> VHDLParserOld::parse_assignment_expression(TokenStream<ci_string>&& stream) const
     {
         // PARSE ASSIGNMENT
         //   assignment can currently be one of the following:
@@ -2508,7 +2508,7 @@ namespace hal
         return OK(result);
     }
 
-    Result<std::vector<VHDLParser::ci_string>> VHDLParser::expand_assignment_expression(VhdlEntity* vhdl_entity, const std::vector<assignment_t>& vars) const
+    Result<std::vector<VHDLParserOld::ci_string>> VHDLParserOld::expand_assignment_expression(VhdlEntity* vhdl_entity, const std::vector<assignment_t>& vars) const
     {
         std::vector<ci_string> result;
         for (const auto& var : vars)

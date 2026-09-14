@@ -1,4 +1,4 @@
-#include "vhdl_parser_old/vhdl_parser_old.h"
+#include "vhdl_parser/vhdl_parser.h"
 
 #include "netlist_test_utils.h"
 #include "gate_library_test_utils.h"
@@ -8,7 +8,7 @@
 
 namespace hal {
 
-    class VHDLParserOldTest : public ::testing::Test {
+    class VHDLParserTest : public ::testing::Test {
     protected:
         virtual void SetUp() 
         {
@@ -27,8 +27,33 @@ namespace hal {
          */
         Result<std::unique_ptr<Netlist>> parse(const std::string& netlist, const std::string& file_name = "netlist.vhd")
         {
-            VHDLParserOld parser;
+            VHDLParser parser;
             return parser.parse_and_instantiate(test_utils::create_sandbox_file(file_name, netlist), test_utils::get_gate_library());
+        }
+
+        /**
+         * The type name and value of a typed parameter, or two empty strings if there is none. Replaces the legacy
+         * generic data assertions: the parsers write typed parameters now.
+         */
+        static std::tuple<std::string, std::string> parameter_of(const DataContainer* c, const std::string& name)
+        {
+            if (!c->has_parameter(name))
+            {
+                return std::make_tuple("", "");
+            }
+            return std::make_tuple(enum_to_string(c->get_parameter_declaration(name).get().get_type()), c->get_parameter_value(name).get());
+        }
+
+        /**
+         * The type name and value of a typed attribute, or two empty strings if there is none.
+         */
+        static std::tuple<std::string, std::string> attribute_of(const DataContainer* c, const std::string& name)
+        {
+            if (!c->has_attribute(name))
+            {
+                return std::make_tuple("", "");
+            }
+            return std::make_tuple(enum_to_string(c->get_attribute_declaration(name).get().get_type()), c->get_attribute_value(name).get());
         }
 
         Gate* gate_by_name(const Netlist* nl, const std::string& name)
@@ -59,7 +84,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_main_example) {
+    TEST_F(VHDLParserTest, check_main_example) {
         TEST_START
             std::string netlist_input("-- Device\t: device_name\n"
                                     "library IEEE;\n"
@@ -100,7 +125,7 @@ namespace hal {
                                     "");
             const GateLibrary* gate_lib = test_utils::get_gate_library();
             std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-            VHDLParserOld vhdl_parser;
+            VHDLParser vhdl_parser;
             auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
             ASSERT_TRUE(nl_res.is_ok());
             std::unique_ptr<Netlist> nl = nl_res.get();
@@ -180,7 +205,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_whitespace_chaos_) {
+    TEST_F(VHDLParserTest, check_whitespace_chaos_) {
 
         TEST_START
             {
@@ -205,7 +230,7 @@ namespace hal {
                                         "gate_2:AND3 port map(I0 => net_0,I1 => net_1,O => net_global_out);end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -283,7 +308,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_pin_assignments) {
+    TEST_F(VHDLParserTest, check_pin_assignments) {
 
         TEST_START
             {   // test gate pin assignment by name
@@ -318,7 +343,7 @@ namespace hal {
 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -377,7 +402,7 @@ namespace hal {
                 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -421,7 +446,7 @@ namespace hal {
                 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -465,7 +490,7 @@ namespace hal {
                 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -538,7 +563,7 @@ namespace hal {
                 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -623,7 +648,7 @@ namespace hal {
                 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -688,7 +713,7 @@ namespace hal {
                 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -752,7 +777,7 @@ namespace hal {
 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto vhdl_file              = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -854,7 +879,7 @@ namespace hal {
                 
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -895,7 +920,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_generic_map) {
+    TEST_F(VHDLParserTest, check_generic_map) {
 
         TEST_START
             {
@@ -932,7 +957,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -942,27 +967,27 @@ namespace hal {
                 Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
 
                 // Integers are stored in their hex representation
-                EXPECT_EQ(gate_0->get_data("generic", "key_integer"), std::make_tuple("integer", "1234"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_floating_point"),
-                          std::make_tuple("floating_point", "1.234"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_string"), std::make_tuple("string", "test_string"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_hex"),
-                          std::make_tuple("bit_vector", "ABC"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_dec"),
-                          std::make_tuple("bit_vector", "ABC"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_oct"),
-                          std::make_tuple("bit_vector", "ABC"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_bin"),
-                          std::make_tuple("bit_vector", "ABC"));
+                EXPECT_EQ(parameter_of(gate_0, "key_integer"), std::make_tuple("integer", "1234"));
+                EXPECT_EQ(parameter_of(gate_0, "key_floating_point"),
+                          std::make_tuple("float", "1.234"));
+                EXPECT_EQ(parameter_of(gate_0, "key_string"), std::make_tuple("string", "test_string"));
+                EXPECT_EQ(parameter_of(gate_0, "key_bit_vector_hex"),
+                          std::make_tuple("bit_vector", "0xABC"));
+                EXPECT_EQ(parameter_of(gate_0, "key_bit_vector_dec"),
+                          std::make_tuple("bit_vector", "0xABC"));
+                EXPECT_EQ(parameter_of(gate_0, "key_bit_vector_oct"),
+                          std::make_tuple("bit_vector", "0xABC"));
+                EXPECT_EQ(parameter_of(gate_0, "key_bit_vector_bin"),
+                          std::make_tuple("bit_vector", "0xABC"));
                 // Special Characters
-                EXPECT_EQ(gate_0->get_data("generic", "key_negative_comma_string"),
+                EXPECT_EQ(parameter_of(gate_0, "key_negative_comma_string"),
                           std::make_tuple("string", "test,1,2,3"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_negative_float_string"),
+                EXPECT_EQ(parameter_of(gate_0, "key_negative_float_string"),
                           std::make_tuple("string", "1.234"));
                 // -- VHDL specific Data Types:
-                EXPECT_EQ(gate_0->get_data("generic", "key_boolean"), std::make_tuple("boolean", "true"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_time"), std::make_tuple("time", "1.234sec"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_value"), std::make_tuple("bit_value", "1"));
+                EXPECT_EQ(parameter_of(gate_0, "key_boolean"), std::make_tuple("boolean", "true"));
+                EXPECT_EQ(parameter_of(gate_0, "key_time"), std::make_tuple("time", "1.234s"));
+                EXPECT_EQ(parameter_of(gate_0, "key_bit_value"), std::make_tuple("bit_vector", "0x1"));
             }
         TEST_END
     }
@@ -972,7 +997,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_net_vectors) {
+    TEST_F(VHDLParserTest, check_net_vectors) {
         TEST_START
             {
                 // Use two logic vectors with dimension 1. One uses the 'downto' the other the 'to' statement
@@ -1025,7 +1050,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -1083,7 +1108,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -1140,7 +1165,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -1168,7 +1193,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_special_nets) {
+    TEST_F(VHDLParserTest, check_special_nets) {
 
         TEST_START
             {
@@ -1206,7 +1231,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -1254,7 +1279,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_multiple_entities) {
+    TEST_F(VHDLParserTest, check_multiple_entities) {
 
         TEST_START
             {
@@ -1322,7 +1347,7 @@ namespace hal {
                                         "end ENT_TOP;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -1375,8 +1400,8 @@ namespace hal {
                 EXPECT_EQ(child_mod->get_gates(), std::vector<Gate*>({gate_0_child, gate_1_child}));
 
                 // check attributes
-                EXPECT_EQ(net_0->get_data("attribute", "child_net_attribute"), std::make_tuple("string", "child_net_attribute_value"));
-                EXPECT_EQ(child_mod->get_data("attribute", "child_attribute"), std::make_tuple("string", "child_attribute_value"));
+                EXPECT_EQ(attribute_of(net_0, "child_net_attribute"), std::make_tuple("string", "child_net_attribute_value"));
+                EXPECT_EQ(attribute_of(child_mod, "child_attribute"), std::make_tuple("string", "child_attribute_value"));
             }
             {
                 // Create a netlist with the following MODULE hierarchy (assigned gates in '()'):
@@ -1468,7 +1493,7 @@ namespace hal {
                                         "end ENT_TOP;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -1581,7 +1606,7 @@ namespace hal {
                                         "end STRUCTURE_TOP;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -1723,7 +1748,7 @@ namespace hal {
                                         "end STRUCTURE_TOP;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -1788,7 +1813,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_direct_assignment) {
+    TEST_F(VHDLParserTest, check_direct_assignment) {
         TEST_START
             {
                 // Build up a master-slave hierarchy as follows:
@@ -1837,7 +1862,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -1863,13 +1888,13 @@ namespace hal {
                 EXPECT_TRUE(net_master->is_global_input_net());
 
                 // VHDL specific: Check the Net attribute propagation
-                EXPECT_EQ(net_master->get_data("attribute", "master_attr"),
+                EXPECT_EQ(attribute_of(net_master, "master_attr"),
                           std::make_tuple("string", "master_attr"));
-                EXPECT_EQ(net_master->get_data("attribute", "slave_0_attr"),
+                EXPECT_EQ(attribute_of(net_master, "slave_0_attr"),
                           std::make_tuple("string", "slave_0_attr"));
-                EXPECT_EQ(net_master->get_data("attribute", "slave_1_attr"),
+                EXPECT_EQ(attribute_of(net_master, "slave_1_attr"),
                           std::make_tuple("string", "slave_1_attr"));
-                EXPECT_EQ(net_master->get_data("attribute", "slave_2_attr"),
+                EXPECT_EQ(attribute_of(net_master, "slave_2_attr"),
                           std::make_tuple("string", "slave_2_attr"));
             }
             {
@@ -1901,7 +1926,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -1939,7 +1964,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -1970,7 +1995,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_pin_group_port_assignment) {
+    TEST_F(VHDLParserTest, check_pin_group_port_assignment) {
 
         TEST_START
             {
@@ -1989,7 +2014,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -2031,7 +2056,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -2076,7 +2101,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -2112,7 +2137,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -2143,7 +2168,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_comments) {
+    TEST_F(VHDLParserTest, check_comments) {
 
         TEST_START
             {
@@ -2169,7 +2194,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -2180,16 +2205,16 @@ namespace hal {
 
                 // Test that the comments did not removed other parts (all no_comment_n generics should be created)
                 for (std::string key : std::set<std::string>({"no_comment_0", "no_comment_1", "no_comment_2"})) {
-                    EXPECT_NE(test_gate->get_data("generic", key), std::make_tuple("", ""));
-                    if (test_gate->get_data("generic", key) == std::make_tuple("", "")) {
+                    EXPECT_NE(parameter_of(test_gate, key), std::make_tuple("", ""));
+                    if (parameter_of(test_gate, key) == std::make_tuple("", "")) {
                         std::cout << "comment test failed for: " << key << std::endl;
                     }
                 }
 
                 // Test that the comments are not interpreted (all comment_n generics shouldn't be created)
                 for (std::string key : std::set<std::string>({"comment_0", "comment_1", "comment_2"})) {
-                    EXPECT_EQ(test_gate->get_data("generic", key), std::make_tuple("", ""));
-                    if (test_gate->get_data("generic", key) != std::make_tuple("", "")) {
+                    EXPECT_EQ(parameter_of(test_gate, key), std::make_tuple("", ""));
+                    if (parameter_of(test_gate, key) != std::make_tuple("", "")) {
                         std::cout << "comment failed for: " << key << std::endl;
                     }
                 }
@@ -2202,7 +2227,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_attributes) {
+    TEST_F(VHDLParserTest, check_attributes) {
 
         TEST_START
             {
@@ -2226,7 +2251,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -2234,8 +2259,8 @@ namespace hal {
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
                 Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("BUF")).begin();
-                EXPECT_EQ(attri_gate->get_data("attribute", "attri_name"),
-                          std::make_tuple("attri_type", "attri_value"));
+                EXPECT_EQ(attribute_of(attri_gate, "attri_name"),
+                          std::make_tuple("string", "attri_value"));
             }
             {
                 // Add a custom attribute for a Net
@@ -2264,7 +2289,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -2273,8 +2298,8 @@ namespace hal {
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
                 Net* attri_net = *nl->get_nets(test_utils::net_name_filter("net_0")).begin();
                 EXPECT_NE(attri_net, nullptr);
-                EXPECT_EQ(attri_net->get_data("attribute", "attri_name"),
-                          std::make_tuple("attri_type", "attri_value"));
+                EXPECT_EQ(attribute_of(attri_net, "attri_name"),
+                          std::make_tuple("string", "attri_value"));
             }
             {
                 // Use atrribute strings with special characters (',','.')
@@ -2305,7 +2330,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -2319,10 +2344,10 @@ namespace hal {
                 Gate* attri_gate = *nl->get_gates(test_utils::gate_name_filter("gate_0")).begin();
 
                 // Check the attributes
-                EXPECT_EQ(attri_net->get_data("attribute", "attri_comma_string"),
-                          std::make_tuple("attri_type_0", "test, 1, 2, 3"));
-                EXPECT_EQ(attri_gate->get_data("attribute", "attri_float_string"),
-                          std::make_tuple("attri_type_1", "1.234"));
+                EXPECT_EQ(attribute_of(attri_net, "attri_comma_string"),
+                          std::make_tuple("string", "test, 1, 2, 3"));
+                EXPECT_EQ(attribute_of(attri_gate, "attri_float_string"),
+                          std::make_tuple("string", "1.234"));
             }
         TEST_END
     }
@@ -2332,7 +2357,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_lib_prefix) {
+    TEST_F(VHDLParserTest, check_lib_prefix) {
         TEST_START
             // The prefix of the library SIMPRIM.VCOMPONENTS should be removed from the INV Gate type
             std::string netlist_input("-- Device\t: device_name\n"
@@ -2352,7 +2377,7 @@ namespace hal {
                                     "end STRUCTURE;");
             const GateLibrary* gate_lib = test_utils::get_gate_library();
             std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-            VHDLParserOld vhdl_parser;
+            VHDLParser vhdl_parser;
             auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
             ASSERT_TRUE(nl_res.is_ok());
             std::unique_ptr<Netlist> nl = nl_res.get();
@@ -2369,7 +2394,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_component) {
+    TEST_F(VHDLParserTest, check_component) {
 
         TEST_START
             /*{ // NOTE: Currently Unsupported
@@ -2397,7 +2422,7 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(g_lib_name);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
@@ -2426,7 +2451,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_literals_next_to_explicit_gnd) {
+    TEST_F(VHDLParserTest, check_literals_next_to_explicit_gnd) {
         TEST_START
             {
                 std::string netlist_input("-- Device\t: device_name\n"
@@ -2456,7 +2481,7 @@ namespace hal {
                                           "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.vhdl", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -2491,7 +2516,7 @@ namespace hal {
         TEST_END
     }
 
-    TEST_F(VHDLParserOldTest, check_invalid_input) {
+    TEST_F(VHDLParserTest, check_invalid_input) {
         TEST_START
             // ------ Tests that are present in booth parsers ------
             {
@@ -2512,7 +2537,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_error());
             }
@@ -2536,7 +2561,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_error());
             }
@@ -2546,7 +2571,7 @@ namespace hal {
                 std::string netlist_input("");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_error());
             }
@@ -2585,7 +2610,7 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 auto vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, m_gl);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -2611,7 +2636,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_error());
             }
@@ -2634,7 +2659,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_error());
             }
@@ -2657,7 +2682,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_error());
             }
@@ -2682,7 +2707,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_error());
             }
@@ -2702,7 +2727,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -2733,7 +2758,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 ASSERT_TRUE(nl_res.is_ok());
                 std::unique_ptr<Netlist> nl = nl_res.get();
@@ -2741,8 +2766,8 @@ namespace hal {
                 EXPECT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("BUF")).size(), 1);
                 Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("BUF")).begin();
-                EXPECT_EQ(attri_gate->get_data("attribute", "attri_name"),
-                          std::make_tuple("unknown", "attri_value"));
+                EXPECT_EQ(attribute_of(attri_gate, "attri_name"),
+                          std::make_tuple("string", "attri_value"));
             }
             {
                 // Use the 'attribute'-keyword in an unexpected way
@@ -2765,7 +2790,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_error());
             }
@@ -2788,7 +2813,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_error());
             }
@@ -2809,7 +2834,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_error());
             }
@@ -2830,7 +2855,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 const GateLibrary* gate_lib = test_utils::get_gate_library();
                 std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
-                VHDLParserOld vhdl_parser;
+                VHDLParser vhdl_parser;
                 auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_error());
             }
@@ -2842,12 +2867,6 @@ namespace hal {
      * cannot pass can be skipped individually; each of them describes behavior the new parsers must provide. Set
      * HAL_LEGACY_PARSER_STRICT to run the skipped ones anyway.
      * ------------------------------------------------------------------------------------------------------------------ */
-#define SKIP_ON_LEGACY_PARSER(reason)                                                       \
-    if (std::getenv("HAL_LEGACY_PARSER_STRICT") == nullptr)                                 \
-    {                                                                                       \
-        GTEST_SKIP() << "the legacy VHDL parser does not support " << reason;               \
-    }
-
     /**
      * Basic identifiers and keywords are case-insensitive: a reference in any letter case resolves to the declaration,
      * pin and type names resolve against the gate library regardless of case, and a name keeps the spelling of its
@@ -2855,10 +2874,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_case_insensitive_identifiers)
+    TEST_F(VHDLParserTest, check_case_insensitive_identifiers)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("case-insensitive entity names, it resolves 'top' against 'Top' case-sensitively");
             auto nl_res = parse("ENTITY Top IS\n"
                                 "  Port ( Sig_A : IN std_logic;\n"
                                 "         sig_b : in STD_LOGIC;\n"
@@ -2902,10 +2920,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_extended_identifiers)
+    TEST_F(VHDLParserTest, check_extended_identifiers)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("case-sensitive extended identifiers, it folds them like basic identifiers");
             auto nl_res = parse("entity top is\n"
                                 "  port ( \\A\\ : in std_logic;\n"
                                 "         \\a\\ : in std_logic;\n"
@@ -2952,10 +2969,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_end_forms)
+    TEST_F(VHDLParserTest, check_end_forms)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("'end entity', 'end architecture' and 'end component' with a name");
             auto nl_res = parse("entity sub is\n"
                                 "  port ( i : in std_logic; o : out std_logic );\n"
                                 "end entity sub;\n"
@@ -2987,10 +3003,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_instantiation_forms)
+    TEST_F(VHDLParserTest, check_instantiation_forms)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("direct instantiation with an architecture name");
             auto nl_res = parse("entity sub is\n"
                                 "  port ( i : in std_logic; o : out std_logic );\n"
                                 "end sub;\n"
@@ -3029,10 +3044,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_forward_entity_reference)
+    TEST_F(VHDLParserTest, check_forward_entity_reference)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("instantiating an entity declared later in the file");
             auto nl_res = parse("entity top is\n"
                                 "  port ( a : in std_logic; y : out std_logic );\n"
                                 "end top;\n"
@@ -3061,10 +3075,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_port_map_concatenation)
+    TEST_F(VHDLParserTest, check_port_map_concatenation)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("concatenation in a port map");
             auto nl_res = parse("entity top is\n"
                                 "  port ( a, b : in std_logic; v : in std_logic_vector(1 downto 0); y : out std_logic_vector(3 downto 0) );\n"
                                 "end top;\n"
@@ -3090,10 +3103,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_port_map_aggregates)
+    TEST_F(VHDLParserTest, check_port_map_aggregates)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("aggregates in a port map");
             auto nl_res = parse("entity top is\n"
                                 "  port ( a, b, c, d : in std_logic; y : out std_logic_vector(3 downto 0) );\n"
                                 "end top;\n"
@@ -3121,7 +3133,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_open_on_outputs_and_vectors)
+    TEST_F(VHDLParserTest, check_open_on_outputs_and_vectors)
     {
         TEST_START
             auto nl_res = parse("entity top is\n"
@@ -3144,7 +3156,7 @@ namespace hal {
             EXPECT_EQ(r->get_fan_out_net("DATA_OUT(0)"), nullptr);
             ASSERT_NE(r->get_fan_out_net("DATA_OUT(1)"), nullptr);
             EXPECT_EQ(r->get_fan_out_net("DATA_OUT(1)")->get_name(), "y(1)");
-            EXPECT_EQ(nl->get_global_output_nets().size(), 3);
+            EXPECT_EQ(nl->get_global_output_nets().size(), 4);    // y(0) has no driver but stays, top ports are always kept
         TEST_END
     }
 
@@ -3154,10 +3166,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_port_map_string_literals)
+    TEST_F(VHDLParserTest, check_port_map_string_literals)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("based string literals in a port map");
             auto nl_res = parse("entity top is\n"
                                 "  port ( y0, y1 : out std_logic_vector(3 downto 0) );\n"
                                 "end top;\n"
@@ -3196,10 +3207,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_weak_std_logic_values)
+    TEST_F(VHDLParserTest, check_weak_std_logic_values)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("the weak std_logic values");
             auto nl_res = parse("entity top is\n"
                                 "  port ( y : out std_logic_vector(3 downto 0) );\n"
                                 "end top;\n"
@@ -3228,10 +3238,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_generic_forms)
+    TEST_F(VHDLParserTest, check_generic_forms)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("generics on entity instances and integers with underscores or a base");
             auto nl_res = parse("entity sub is\n"
                                 "  generic ( WIDTH : integer := 4; MODE : string := \"fast\" );\n"
                                 "  port ( i : in std_logic; o : out std_logic );\n"
@@ -3252,15 +3261,15 @@ namespace hal {
 
             ASSERT_EQ(nl->get_top_module()->get_submodules().size(), 1);
             const Module* s = nl->get_top_module()->get_submodules().front();
-            EXPECT_EQ(s->get_data("generic", "WIDTH"), std::make_tuple(std::string("integer"), std::string("8")));
+            EXPECT_EQ(parameter_of(s, "WIDTH"), std::make_tuple(std::string("integer"), std::string("8")));
 
             Gate* g = gate_by_name(nl.get(), "g");
             ASSERT_NE(g, nullptr);
-            EXPECT_EQ(g->get_data("generic", "neg"), std::make_tuple(std::string("integer"), std::string("-1")));
-            EXPECT_EQ(g->get_data("generic", "big"), std::make_tuple(std::string("integer"), std::string("1000")));
-            EXPECT_EQ(g->get_data("generic", "based"), std::make_tuple(std::string("integer"), std::string("255")));
-            EXPECT_EQ(g->get_data("generic", "delay"), std::make_tuple(std::string("time"), std::string("10ns")));
-            EXPECT_EQ(g->get_data("generic", "hex"), std::make_tuple(std::string("bit_vector"), std::string("AB")));
+            EXPECT_EQ(parameter_of(g, "neg"), std::make_tuple(std::string("integer"), std::string("-1")));
+            EXPECT_EQ(parameter_of(g, "big"), std::make_tuple(std::string("integer"), std::string("1000")));
+            EXPECT_EQ(parameter_of(g, "based"), std::make_tuple(std::string("integer"), std::string("255")));
+            EXPECT_EQ(parameter_of(g, "delay"), std::make_tuple(std::string("time"), std::string("10ns")));
+            EXPECT_EQ(parameter_of(g, "hex"), std::make_tuple(std::string("bit_vector"), std::string("0xAB")));
         TEST_END
     }
 
@@ -3270,10 +3279,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_declaration_variants)
+    TEST_F(VHDLParserTest, check_declaration_variants)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("'std_ulogic', 'buffer' ports and initial values");
             auto nl_res = parse("entity top is\n"
                                 "  port ( a : in std_ulogic; y : buffer std_logic; z : out std_logic );\n"
                                 "end top;\n"
@@ -3314,10 +3322,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_assignment_variants)
+    TEST_F(VHDLParserTest, check_assignment_variants)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("'(others => '0')' and concatenation in assignments");
             auto nl_res = parse("entity top is\n"
                                 "  port ( p, q : in std_logic; y : out std_logic_vector(3 downto 0) );\n"
                                 "end top;\n"
@@ -3362,10 +3369,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_attributes_on_instances_and_vectors)
+    TEST_F(VHDLParserTest, check_attributes_on_instances_and_vectors)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("attributes on entity instance labels and vector signals");
             auto nl_res = parse("entity sub is\n"
                                 "  port ( i : in std_logic; o : out std_logic );\n"
                                 "end sub;\n"
@@ -3392,13 +3398,13 @@ namespace hal {
             auto nl = nl_res.get();
             ASSERT_EQ(nl->get_top_module()->get_submodules().size(), 1);
             const Module* s = nl->get_top_module()->get_submodules().front();
-            EXPECT_EQ(std::get<1>(s->get_data("attribute", "keep")), "yes");
+            EXPECT_EQ(std::get<1>(attribute_of(s, "keep")), "yes");
             Gate* c0 = gate_by_name(nl.get(), "c0");
             Gate* c1 = gate_by_name(nl.get(), "c1");
             ASSERT_NE(c0, nullptr);
             ASSERT_NE(c1, nullptr);
-            EXPECT_EQ(std::get<1>(c0->get_fan_in_net("I")->get_data("attribute", "keep")), "true");
-            EXPECT_EQ(std::get<1>(c1->get_fan_in_net("I")->get_data("attribute", "keep")), "true");
+            EXPECT_EQ(std::get<1>(attribute_of(c0->get_fan_in_net("I"), "keep")), "true");
+            EXPECT_EQ(std::get<1>(attribute_of(c1->get_fan_in_net("I"), "keep")), "true");
         TEST_END
     }
 
@@ -3408,10 +3414,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_line_endings_and_strings)
+    TEST_F(VHDLParserTest, check_line_endings_and_strings)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("comment markers and doubled quotes inside strings");
             const std::string body = "entity top is\n"
                                      "  port ( a : in std_logic; -- trailing\n"
                                      "         y : out std_logic );\n"
@@ -3454,8 +3459,8 @@ namespace hal {
                 ASSERT_NE(g, nullptr);
                 ASSERT_NE(h, nullptr);
                 EXPECT_EQ(h->get_fan_in_net("I"), g->get_fan_out_net("O"));
-                EXPECT_EQ(std::get<1>(g->get_data("generic", "note")), "a--b");
-                EXPECT_EQ(std::get<1>(g->get_data("generic", "quoted")), "say \"hi\"");
+                EXPECT_EQ(std::get<1>(parameter_of(g, "note")), "a--b");
+                EXPECT_EQ(std::get<1>(parameter_of(g, "quoted")), "say \"hi\"");
             }
         TEST_END
     }
@@ -3466,10 +3471,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_packages_and_use_clauses)
+    TEST_F(VHDLParserTest, check_packages_and_use_clauses)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("package declarations");
             auto nl_res = parse("library ieee;\n"
                                 "use ieee.std_logic_1164.std_logic;\n"
                                 "library work;\n"
@@ -3508,10 +3512,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_unconnected_top_port_kept)
+    TEST_F(VHDLParserTest, check_unconnected_top_port_kept)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("keeping a top-level port that nothing inside touches");
             auto nl_res = parse("entity top is\n"
                                 "  port ( a, unused_in : in std_logic; y, unused_out : out std_logic );\n"
                                 "end top;\n"
@@ -3537,7 +3540,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_duplicate_declarations_rejected)
+    TEST_F(VHDLParserTest, check_duplicate_declarations_rejected)
     {
         TEST_START
             NO_COUT_TEST_BLOCK;
@@ -3558,7 +3561,6 @@ namespace hal {
                                     "end rtl;\n");
                 EXPECT_TRUE(nl_res.is_error()) << "accepted an entity declared twice";
             }
-            SKIP_ON_LEGACY_PARSER("rejecting a signal or a label that is declared twice");
             {
                 auto nl_res = parse("entity top is\n"
                                     "  port ( a : in std_logic; y : out std_logic );\n"
@@ -3592,10 +3594,9 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(VHDLParserOldTest, check_architecture_selection)
+    TEST_F(VHDLParserTest, check_architecture_selection)
     {
         TEST_START
-            SKIP_ON_LEGACY_PARSER("several architectures for one entity");
             auto nl_res = parse("entity sub is\n"
                                 "  port ( i : in std_logic; o : out std_logic );\n"
                                 "end sub;\n"

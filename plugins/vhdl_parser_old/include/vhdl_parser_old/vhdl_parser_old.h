@@ -47,11 +47,11 @@ namespace hal
      *
      * @ingroup netlist_parser
      */
-    class NETLIST_API VHDLParser : public NetlistParser
+    class NETLIST_API VHDLParserOld : public NetlistParser
     {
     public:
-        VHDLParser()  = default;
-        ~VHDLParser() = default;
+        VHDLParserOld()  = default;
+        ~VHDLParserOld() = default;
 
         /**
          * Parse a VHDL netlist into an internal intermediate format.
