@@ -1,5 +1,6 @@
 #include "hal_core/netlist/netlist_ir/netlist_ir.h"
 
+#include "hal_core/netlist/netlist_ir/instantiate.h"
 #include "hal_core/python_bindings/python_bindings.h"
 
 namespace hal
@@ -543,6 +544,67 @@ namespace hal
 
             :returns: ``True`` if the design is valid, ``False`` otherwise (the problem is logged).
             :rtype: bool
+        )");
+
+        py::class_<netlist_ir::InstantiationOptions> py_options(py_ir, "InstantiationOptions", R"(
+            Settings for the instantiation of a design.
+        )");
+        py_options.def(py::init<>());
+        py_options.def_readwrite("keep_unconnected_signals", &netlist_ir::InstantiationOptions::keep_unconnected_signals, R"(
+            Create a net for every signal, even for one that nothing drives or reads.
+
+            :type: bool
+        )");
+        py_options.def_readwrite("instance_name_separator", &netlist_ir::InstantiationOptions::instance_name_separator, R"(
+            What separates the instance path from the name when a name has to be prefixed to stay unique.
+
+            :type: str
+        )");
+        py_options.def_readwrite("gnd_gate_type", &netlist_ir::InstantiationOptions::gnd_gate_type, R"(
+            The gate type to drive the constant ``0`` with; empty selects the first GND type of the gate library.
+
+            :type: str
+        )");
+        py_options.def_readwrite("vcc_gate_type", &netlist_ir::InstantiationOptions::vcc_gate_type, R"(
+            The gate type to drive the constant ``1`` with; empty selects the first VCC type of the gate library.
+
+            :type: str
+        )");
+        py_options.def_readwrite("top_module_name", &netlist_ir::InstantiationOptions::top_module_name, R"(
+            The name of the top module of the netlist; the design name is the top module's type regardless.
+
+            :type: str
+        )");
+
+        py_ir.def(
+            "instantiate",
+            [](const netlist_ir::Design& design, const GateLibrary* gate_library, const netlist_ir::InstantiationOptions& options) -> std::shared_ptr<Netlist> {
+                auto res = netlist_ir::instantiate(design, gate_library, options);
+                if (res.is_ok())
+                {
+                    return std::shared_ptr<Netlist>(res.get().release());
+                }
+                log_error("python_context", "{}", res.get_error().get());
+                return nullptr;
+            },
+            py::arg("design"),
+            py::arg("gate_library"),
+            py::arg("options") = netlist_ir::InstantiationOptions(),
+            R"(
+            Instantiate a design against a gate library.
+
+            The design is validated first. Every alias, every connection to a module port and every constant is resolved
+            before anything is created, so each net is created exactly once. A net is created for every class of bits
+            that connects to a gate pin, is a port of the top module, or carries an attribute. Gate types and pins are
+            resolved by exact name first and then by a unique case-insensitive match. Parameters and attributes land in
+            the typed stores of the created objects; a parameter that the gate type declares takes the gate type's
+            declaration.
+
+            :param hal_py.netlist_ir.Design design: The design.
+            :param hal_py.GateLibrary gate_library: The gate library to resolve gate types against.
+            :param hal_py.netlist_ir.InstantiationOptions options: The settings.
+            :returns: The netlist on success, ``None`` otherwise (the error is logged).
+            :rtype: hal_py.Netlist or None
         )");
     }
 }    // namespace hal
