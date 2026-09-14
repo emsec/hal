@@ -14,6 +14,8 @@ namespace hal
 
         parameter_init(m);
 
+        netlist_ir_init(m);
+
         data_container_init(m);
 
         core_utils_init(m);

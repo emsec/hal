@@ -201,6 +201,25 @@ namespace hal
                 return OK({});
             }
 
+            // Attributes are serialized like parameters, as a JSON object of typed entries, under "attributes".
+            Result<std::monostate> deserialize_attributes(DataContainer* c, const rapidjson::Value& val)
+            {
+                for (auto a_it = val.MemberBegin(); a_it != val.MemberEnd(); ++a_it)
+                {
+                    const std::string aname = a_it->name.GetString();
+                    auto decl_res           = deserialize_parameter_decl(aname, a_it->value);
+                    if (decl_res.is_error())
+                    {
+                        return ERR(decl_res.get_error().get());
+                    }
+                    if (auto res = c->set_attribute(decl_res.get(), a_it->value["value"].GetString()); res.is_error())
+                    {
+                        return ERR("failed to set attribute '" + aname + "': " + res.get_error().get());
+                    }
+                }
+                return OK({});
+            }
+
             // serialize endpoint
             rapidjson::Value serialize(const Endpoint* ep, rapidjson::Document::AllocatorType& allocator)
             {
@@ -362,6 +381,10 @@ namespace hal
                 {
                     val.AddMember("parameters", serialize_parameters(params, allocator), allocator);
                 }
+                if (const auto& attributes = gate->get_attributes(); !attributes.empty())
+                {
+                    val.AddMember("attributes", serialize_parameters(attributes, allocator), allocator);
+                }
                 {
                     rapidjson::Value functions(rapidjson::kObjectType);
                     for (const auto& [name, function] : gate->get_boolean_functions(true))
@@ -406,6 +429,15 @@ namespace hal
                     if (val.HasMember("parameters"))
                     {
                         if (auto res = deserialize_parameters(gate, val["parameters"]); res.is_error())
+                        {
+                            log_error("netlist_persistent", "could not deserialize gate '" + gate_name + "' with ID " + std::to_string(gate_id) + ": {}", res.get_error().get());
+                            return false;
+                        }
+                    }
+
+                    if (val.HasMember("attributes"))
+                    {
+                        if (auto res = deserialize_attributes(gate, val["attributes"]); res.is_error())
                         {
                             log_error("netlist_persistent", "could not deserialize gate '" + gate_name + "' with ID " + std::to_string(gate_id) + ": {}", res.get_error().get());
                             return false;
@@ -482,6 +514,10 @@ namespace hal
                 {
                     val.AddMember("parameters", serialize_parameters(params, allocator), allocator);
                 }
+                if (const auto& attributes = net->get_attributes(); !attributes.empty())
+                {
+                    val.AddMember("attributes", serialize_parameters(attributes, allocator), allocator);
+                }
                 return val;
             }
 
@@ -528,6 +564,15 @@ namespace hal
                 if (val.HasMember("parameters"))
                 {
                     if (auto res = deserialize_parameters(net, val["parameters"]); res.is_error())
+                    {
+                        log_error("netlist_persistent", "could not deserialize net '" + net_name + "' with ID " + std::to_string(net_id) + ": {}", res.get_error().get());
+                        return false;
+                    }
+                }
+
+                if (val.HasMember("attributes"))
+                {
+                    if (auto res = deserialize_attributes(net, val["attributes"]); res.is_error())
                     {
                         log_error("netlist_persistent", "could not deserialize net '" + net_name + "' with ID " + std::to_string(net_id) + ": {}", res.get_error().get());
                         return false;
@@ -606,6 +651,10 @@ namespace hal
                 {
                     val.AddMember("parameters", serialize_parameters(params, allocator), allocator);
                 }
+                if (const auto& attributes = module->get_attributes(); !attributes.empty())
+                {
+                    val.AddMember("attributes", serialize_parameters(attributes, allocator), allocator);
+                }
                 return val;
             }
 
@@ -661,6 +710,15 @@ namespace hal
                 if (val.HasMember("parameters"))
                 {
                     if (auto res = deserialize_parameters(sm, val["parameters"]); res.is_error())
+                    {
+                        log_error("netlist_persistent", "could not deserialize module '" + module_name + "' with ID " + std::to_string(module_id) + ": {}", res.get_error().get());
+                        return false;
+                    }
+                }
+
+                if (val.HasMember("attributes"))
+                {
+                    if (auto res = deserialize_attributes(sm, val["attributes"]); res.is_error())
                     {
                         log_error("netlist_persistent", "could not deserialize module '" + module_name + "' with ID " + std::to_string(module_id) + ": {}", res.get_error().get());
                         return false;

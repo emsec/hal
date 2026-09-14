@@ -321,6 +321,68 @@ TEST_F(DataContainerTest, check_parameters)
 }
 
 /**
+     * Testing the typed-attribute API, which mirrors the parameter API but keeps its own store, so that an attribute
+     * and a parameter may share a name.
+     *
+     * Functions: set_attribute, get_attribute_value, get_attribute_declaration, has_attribute, delete_attribute,
+     *            get_attributes
+     */
+TEST_F(DataContainerTest, check_attributes)
+{
+    TEST_START
+    const auto keep_decl = Parameter::Boolean("keep", "false").get();
+    const auto loc_decl  = Parameter::String("LOC", "").get();
+    const auto init_decl = Parameter::BitVector("INIT", 8, "0x0").get();
+
+    {
+        TestDataContainer d_cont;
+        EXPECT_TRUE(d_cont.set_attribute(keep_decl, "true").is_ok());
+        EXPECT_TRUE(d_cont.set_attribute(loc_decl, "SLICE_X0Y0").is_ok());
+        EXPECT_TRUE(d_cont.set_attribute(init_decl, "0xab").is_ok());
+
+        EXPECT_EQ(d_cont.get_attribute_value("keep").get(), "true");
+        EXPECT_EQ(d_cont.get_attribute_value("LOC").get(), "SLICE_X0Y0");
+        EXPECT_EQ(d_cont.get_attribute_value("INIT").get(), "0xAB");    // bit vectors are normalized like parameters
+        EXPECT_EQ(d_cont.get_attribute_declaration("keep").get(), keep_decl);
+        EXPECT_TRUE(d_cont.has_attribute("LOC"));
+        EXPECT_FALSE(d_cont.has_attribute("unknown"));
+        ASSERT_EQ(d_cont.get_attributes().size(), 3u);
+        EXPECT_EQ(d_cont.get_attributes().at("INIT").first, init_decl);
+
+        // attributes and parameters are separate stores
+        EXPECT_TRUE(d_cont.get_parameters().empty());
+        EXPECT_TRUE(d_cont.set_parameter(Parameter::String("keep", "").get(), "no").is_ok());
+        EXPECT_EQ(d_cont.get_attribute_value("keep").get(), "true");
+        EXPECT_EQ(d_cont.get_parameter_value("keep").get(), "no");
+
+        EXPECT_TRUE(d_cont.delete_attribute("keep"));
+        EXPECT_FALSE(d_cont.has_attribute("keep"));
+        EXPECT_TRUE(d_cont.has_parameter("keep"));
+        EXPECT_FALSE(d_cont.delete_attribute("keep"));
+    }
+
+    // Negative
+    {
+        NO_COUT_TEST_BLOCK;
+        TestDataContainer d_cont;
+        EXPECT_TRUE(d_cont.set_attribute(init_decl, "0x100").is_error());    // overflow
+        EXPECT_FALSE(d_cont.has_attribute("INIT"));
+        EXPECT_TRUE(d_cont.get_attribute_value("missing").is_error());
+        EXPECT_TRUE(d_cont.get_attribute_declaration("missing").is_error());
+    }
+    {
+        // equality takes the attributes into account
+        TestDataContainer a;
+        TestDataContainer b;
+        EXPECT_TRUE(a.set_attribute(keep_decl, "true").is_ok());
+        EXPECT_NE(a, b);
+        EXPECT_TRUE(b.set_attribute(keep_decl, "true").is_ok());
+        EXPECT_EQ(a, b);
+    }
+    TEST_END
+}
+
+/**
      * Equality of DataContainers takes both the data map and the parameter map
      * into account.
      *

@@ -179,5 +179,92 @@ namespace hal
             :returns: The parameter dict.
             :rtype: dict[str,tuple(hal_py.Parameter,str)]
         )");
+
+        py_data_container.def("set_attribute", [](DataContainer& self, const Parameter& attribute, const std::string& value) -> bool {
+                auto res = self.set_attribute(attribute, value);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            }, py::arg("attribute"), py::arg("value"), R"(
+            Set (or overwrite) the value of a typed attribute as a string. Attributes are what a netlist file annotates an object with, for example a Verilog ``(* keep = "true" *)``; they are stored apart from the parameters, so an attribute and a parameter may share a name. The value is validated and normalized before being stored.
+
+            :param hal_py.Parameter attribute: The attribute declaration.
+            :param str value: The value to store as a string.
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_data_container.def("get_attribute_value", [](DataContainer& self, const std::string& name) -> std::optional<std::string> {
+                auto res = self.get_attribute_value(name);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            }, py::arg("name"), R"(
+            Get the value of a typed attribute.
+
+            :param str name: The attribute name.
+            :returns: The value string on success, ``None`` if the attribute does not exist.
+            :rtype: str or None
+        )");
+
+        py_data_container.def("get_attribute_declaration", [](DataContainer& self, const std::string& name) -> std::optional<Parameter> {
+                auto res = self.get_attribute_declaration(name);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            }, py::arg("name"), R"(
+            Get the full declaration of a typed attribute.
+
+            :param str name: The attribute name.
+            :returns: The declaration on success, ``None`` if the attribute does not exist.
+            :rtype: hal_py.Parameter or None
+        )");
+
+        py_data_container.def("has_attribute", &DataContainer::has_attribute, py::arg("name"), R"(
+            Check whether an attribute with the given name exists.
+
+            :param str name: The attribute name.
+            :returns: ``True`` if the attribute exists, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_data_container.def("delete_attribute", &DataContainer::delete_attribute, py::arg("name"), R"(
+            Delete a stored attribute, if any.
+
+            :param str name: The attribute name.
+            :returns: ``True`` if an attribute was deleted, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_data_container.def_property_readonly("attributes", &DataContainer::get_attributes, R"(
+            All stored attributes as a dict from ``name`` to `(declaration, value)`.
+
+            :type: dict[str,tuple(hal_py.Parameter,str)]
+        )");
+
+        py_data_container.def("get_attributes", &DataContainer::get_attributes, R"(
+            Get all stored attributes as a dict from ``name`` to `(declaration, value)`.
+
+            :returns: The attribute dict.
+            :rtype: dict[str,tuple(hal_py.Parameter,str)]
+        )");
     }
 }    // namespace hal

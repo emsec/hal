@@ -276,6 +276,14 @@ namespace hal {
                  const Parameter net_delay = Parameter::BitVector("delay_ps", 32, "").get();
                  ASSERT_TRUE(net->set_parameter(net_delay, "0xFA").is_ok());
 
+                 // Attributes are serialized next to the parameters on gates, nets, and modules.
+                 const Parameter keep_attr = Parameter::Boolean("keep", "false").get();
+                 const Parameter loc_attr  = Parameter::String("LOC", "").get();
+                 ASSERT_TRUE(g->set_attribute(keep_attr, "true").is_ok());
+                 ASSERT_TRUE(g->set_attribute(loc_attr, "SLICE_X1Y2").is_ok());
+                 ASSERT_TRUE(net->set_attribute(keep_attr, "false").is_ok());
+                 ASSERT_TRUE(mod->set_attribute(loc_attr, "region").is_ok());
+
                  std::filesystem::path path = test_utils::create_sandbox_path("test_param_roundtrip.hal");
                  ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), path));
                  auto des_nl = netlist_serializer::deserialize_from_file(path);
@@ -298,6 +306,11 @@ namespace hal {
                  EXPECT_EQ(des_g->get_parameter_declaration("mode").get(), gate_mode);
                  EXPECT_EQ(des_g->get_parameter_declaration("width").get().encode_as_int("0xBEEF").get(), 0xBEEFu);
                  EXPECT_EQ(des_g->get_parameter_declaration("mode").get().encode_as_int("inverted").get(), 1u);
+
+                 EXPECT_EQ(des_g->get_attribute_value("keep").get(), "true");
+                 EXPECT_EQ(des_g->get_attribute_value("LOC").get(), "SLICE_X1Y2");
+                 EXPECT_EQ(des_g->get_attribute_declaration("keep").get(), keep_attr);
+                 EXPECT_FALSE(des_g->has_parameter("keep"));
 
                  // Module declarations and values are preserved end-to-end.
                  Module* des_mod = nullptr;

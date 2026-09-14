@@ -300,6 +300,13 @@ namespace hal
     void parameter_init(py::module& m);
 
     /**
+     * Initializes Python bindings for the netlist intermediate representation in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void netlist_ir_init(py::module& m);
+
+    /**
      * Initializes Python bindings for the HAL data container in a python module.
      *
      * @param[in] m - the python module

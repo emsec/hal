@@ -11,24 +11,32 @@ namespace hal
         std::string normalize_bv_value(Parameter::Type type, const std::string& value)
         {
             if (type != Parameter::Type::BitVector && type != Parameter::Type::LogicVector)
+            {
                 return value;
+            }
             if (value.size() < 2 || value[0] != '0')
+            {
                 return value;
+            }
             const char pfx = static_cast<char>(std::tolower(static_cast<unsigned char>(value[1])));
             if (pfx != 'b' && pfx != 'o' && pfx != 'x')
+            {
                 return value;
+            }
             std::string result;
             result.reserve(value.size());
             result += '0';
             result += pfx;
             for (std::size_t i = 2; i < value.size(); ++i)
+            {
                 result += static_cast<char>(std::toupper(static_cast<unsigned char>(value[i])));
+            }
             return result;
         }
     }    // namespace
     bool DataContainer::operator==(const DataContainer& other) const
     {
-        return m_data == other.get_data_map() && m_parameters == other.get_parameters();
+        return m_data == other.get_data_map() && m_parameters == other.get_parameters() && m_attributes == other.get_attributes();
     }
 
     bool DataContainer::operator!=(const DataContainer& other) const
@@ -201,6 +209,54 @@ namespace hal
     const std::unordered_map<std::string, std::pair<Parameter, std::string>>& DataContainer::get_parameters() const
     {
         return m_parameters;
+    }
+
+    Result<std::monostate> DataContainer::set_attribute(const Parameter& attribute, const std::string& value)
+    {
+        if (!attribute.validate(value))
+        {
+            return ERR("invalid value '" + value + "' for attribute '" + attribute.get_name() + "'");
+        }
+
+        const std::string normalized = normalize_bv_value(attribute.get_type(), value);
+        m_attributes.insert_or_assign(attribute.get_name(), std::make_pair(attribute, normalized));
+
+        return OK({});
+    }
+
+    Result<std::string> DataContainer::get_attribute_value(const std::string& name) const
+    {
+        if (auto it = m_attributes.find(name); it != m_attributes.end())
+        {
+            return OK(it->second.second);
+        }
+
+        return ERR("no attribute named '" + name + "'");
+    }
+
+    Result<Parameter> DataContainer::get_attribute_declaration(const std::string& name) const
+    {
+        if (auto it = m_attributes.find(name); it != m_attributes.end())
+        {
+            return OK(it->second.first);
+        }
+
+        return ERR("no attribute named '" + name + "'");
+    }
+
+    bool DataContainer::has_attribute(const std::string& name) const
+    {
+        return m_attributes.find(name) != m_attributes.end();
+    }
+
+    bool DataContainer::delete_attribute(const std::string& name)
+    {
+        return m_attributes.erase(name) > 0;
+    }
+
+    const std::unordered_map<std::string, std::pair<Parameter, std::string>>& DataContainer::get_attributes() const
+    {
+        return m_attributes;
     }
 
 }    // namespace hal

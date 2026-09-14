@@ -188,8 +188,59 @@ namespace hal
          */
         const std::unordered_map<std::string, std::pair<Parameter, std::string>>& get_parameters() const;
 
+        /**
+         * Set (or overwrite) the value of a typed attribute as a string. Attributes are what a netlist file annotates an
+         * object with, for example a Verilog `(* keep = "true" *)`; they are stored apart from the parameters, so an
+         * attribute and a parameter may share a name. The value is validated and normalized before being stored.
+         *
+         * @param[in] attribute - The attribute declaration.
+         * @param[in] value - The value to store as a string.
+         * @returns OK() on success, an error otherwise.
+         */
+        Result<std::monostate> set_attribute(const Parameter& attribute, const std::string& value);
+
+        /**
+         * Get the value of a typed attribute.
+         *
+         * @param[in] name - The attribute name.
+         * @returns OK() with the value string on success, an error if the attribute does not exist.
+         */
+        Result<std::string> get_attribute_value(const std::string& name) const;
+
+        /**
+         * Get the full declaration of a typed attribute.
+         *
+         * @param[in] name - The attribute name.
+         * @returns OK() with the declaration on success, an error if the attribute does not exist.
+         */
+        Result<Parameter> get_attribute_declaration(const std::string& name) const;
+
+        /**
+         * Check whether an attribute with the given name exists.
+         *
+         * @param[in] name - The attribute name.
+         * @returns `true` if the attribute exists, `false` otherwise.
+         */
+        bool has_attribute(const std::string& name) const;
+
+        /**
+         * Delete a stored attribute, if any.
+         *
+         * @param[in] name - The attribute name.
+         * @returns `true` if an attribute was deleted, `false` otherwise.
+         */
+        bool delete_attribute(const std::string& name);
+
+        /**
+         * Get all stored attributes as a map from `name` to `(declaration, value)`.
+         *
+         * @returns The attribute map.
+         */
+        const std::unordered_map<std::string, std::pair<Parameter, std::string>>& get_attributes() const;
+
     protected:
         std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> m_data;
         std::unordered_map<std::string, std::pair<Parameter, std::string>> m_parameters;
+        std::unordered_map<std::string, std::pair<Parameter, std::string>> m_attributes;
     };
 }    // namespace hal

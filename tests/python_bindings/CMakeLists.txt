@@ -21,3 +21,11 @@ add_test(NAME runTest-python_teardown
          WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 set_tests_properties(runTest-python_teardown PROPERTIES
                      ENVIRONMENT "PYTHONPATH=${CMAKE_BINARY_DIR}/lib;HAL_BASE_PATH=${CMAKE_BINARY_DIR}")
+
+# The IR test builds a small hierarchical design through the netlist_ir bindings and checks the helpers and the
+# validation from Python, which is what a netlist parser written in Python would do.
+add_test(NAME runTest-python_netlist_ir
+         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/netlist_ir_test.py
+         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+set_tests_properties(runTest-python_netlist_ir PROPERTIES
+                     ENVIRONMENT "PYTHONPATH=${CMAKE_BINARY_DIR}/lib;HAL_BASE_PATH=${CMAKE_BINARY_DIR}")
