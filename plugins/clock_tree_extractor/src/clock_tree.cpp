@@ -652,14 +652,14 @@ namespace hal
             for( igraph_integer_t idx = 0; idx < igraph_vector_int_size( &map ); idx++ )
             {
                 const igraph_integer_t vertex = VECTOR( map )[idx];
-                if( vertex == 0 )
+                if( vertex == -1 )
                 {
                     continue;
                 }
 
                 const void *ptr = m_vertices_to_ptrs.at( idx );
 
-                vertices_to_ptrs[vertex - 1] = ptr;
+                vertices_to_ptrs[vertex] = ptr;
                 ptrs_to_types[ptr] = m_ptrs_to_types.at( ptr );
             }
 
