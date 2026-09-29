@@ -217,8 +217,8 @@ namespace hal
 
         py_gate.def(
             "get_resolved_boolean_function",
-            [](const Gate& self, const GatePin* pin, const bool use_net_variables = false) -> std::optional<BooleanFunction> {
-                auto res = self.get_resolved_boolean_function(pin, use_net_variables);
+            [](const Gate& self, const GatePin* pin, const bool use_pin_names = false) -> std::optional<BooleanFunction> {
+                auto res = self.get_resolved_boolean_function(pin, use_pin_names);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -230,13 +230,13 @@ namespace hal
                 }
             },
             py::arg("pin"),
-            py::arg("use_net_variables") = false,
+            py::arg("use_pin_names") = false,
             R"(
             Get the resolved Boolean function corresponding to the given output pin, i.e., a Boolean function that only depends on input pins (or nets) and no internal or output pins.
             If fan-in nets are used to derive variable names, the variable names are generated using the ``BooleanFunctionNetDecorator``.
 
             :param hal_py.GatePin pin: The output pin.
-            :param bool use_net_variables: Set ``False`` to use variable names derived from fan-in nets of the gate, ``True`` to use input pin names instead. Defaults to ``False``.
+            :param bool use_pin_names: Set ``False`` to use variable names derived from fan-in nets of the gate, ``True`` to use input pin names instead. Defaults to ``False``.
             :returns: The Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
