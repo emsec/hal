@@ -230,7 +230,7 @@ namespace hal
           * If fan-in nets are used to derive variable names, the variable names are generated using the `BooleanFunctionNetDecorator`.
           *
           * @param[in] pin - The output pin.
-          * @param[in] use_net_variables - Set `true` to use variable names derived from fan-in nets of the gate, `false` to use input pin names instead. Defaults to `false`.
+          * @param[in] use_net_variables - Set `false` to use variable names derived from fan-in nets of the gate, `true` to use input pin names instead. Defaults to `false`.
           * @returns The Boolean function on success, an error otherwise.
           */
         Result<BooleanFunction> get_resolved_boolean_function(const GatePin* pin, const bool use_net_variables = false) const;

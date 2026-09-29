@@ -236,7 +236,7 @@ namespace hal
             If fan-in nets are used to derive variable names, the variable names are generated using the ``BooleanFunctionNetDecorator``.
 
             :param hal_py.GatePin pin: The output pin.
-            :param bool use_net_variables: Set ``True`` to use variable names derived from fan-in nets of the gate, ``False`` to use input pin names instead. Defaults to ``False``.
+            :param bool use_net_variables: Set ``False`` to use variable names derived from fan-in nets of the gate, ``True`` to use input pin names instead. Defaults to ``False``.
             :returns: The Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
