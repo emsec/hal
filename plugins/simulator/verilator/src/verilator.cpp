@@ -44,17 +44,26 @@ namespace hal
                 lut_init_data.push_back(std::make_pair(init_component->get_init_category(), init_component->get_init_identifiers()));
             }
 
+            // drop from the typed store and from the legacy data map alike
+            const auto forget = [](Gate* gate, const std::string& category, const std::string& key) {
+                gate->delete_data(category, key);
+                if (const auto source = DataContainer::source_from_category(category); source.has_value())
+                {
+                    gate->delete_parameter(key, source.value());
+                }
+            };
+
             for (const auto& gate : nl->get_gates())
             {
                 const auto& data_category   = gl->get_gate_location_data_category();
                 const auto& data_identifier = gl->get_gate_location_data_identifiers();
 
-                gate->delete_data(data_category, data_identifier.first);
-                gate->delete_data(data_category, data_identifier.second);
+                forget(gate, data_category, data_identifier.first);
+                forget(gate, data_category, data_identifier.second);
 
                 // TODO: remove this from netlist
-                gate->delete_data("generic", "READ_MODE");
-                gate->delete_data("generic", "WRITE_MODE");
+                forget(gate, "generic", "READ_MODE");
+                forget(gate, "generic", "WRITE_MODE");
 
                 if (!gate->get_type()->has_property(hal::GateTypeProperty::c_lut) && gate->get_type()->has_property(hal::GateTypeProperty::combinational))
                 {
@@ -62,7 +71,7 @@ namespace hal
                     {
                         for (const auto& init_identifier : init_identifiers)
                         {
-                            gate->delete_data(init_category, init_identifier);
+                            forget(gate, init_category, init_identifier);
                         }
                     }
                 }

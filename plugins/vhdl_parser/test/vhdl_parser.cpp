@@ -49,11 +49,11 @@ namespace hal {
          */
         static std::tuple<std::string, std::string> attribute_of(const DataContainer* c, const std::string& name)
         {
-            if (!c->has_attribute(name))
+            if (!c->has_parameter(name, Parameter::Source::Attribute))
             {
                 return std::make_tuple("", "");
             }
-            return std::make_tuple(enum_to_string(c->get_attribute_declaration(name).get().get_type()), c->get_attribute_value(name).get());
+            return std::make_tuple(enum_to_string(c->get_parameter_declaration(name, Parameter::Source::Attribute).get().get_type()), c->get_parameter_value(name, Parameter::Source::Attribute).get());
         }
 
         Gate* gate_by_name(const Netlist* nl, const std::string& name)

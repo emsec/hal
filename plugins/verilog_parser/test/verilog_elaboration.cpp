@@ -338,10 +338,11 @@ TEST_F(VerilogElaborationTest, check_instances_parameters_attributes)
     const netlist_ir::Module& sub = *d.find_module("sub");
 
     // module attributes and defaults
-    ASSERT_NE(find_value(top.attributes, "top"), nullptr);
-    EXPECT_EQ(find_value(top.attributes, "top")->declaration.get_type(), Parameter::Type::Integer);
-    EXPECT_EQ(find_value(top.attributes, "vendor")->value, "acme");
-    EXPECT_EQ(find_value(top.attributes, "vendor")->declaration.get_type(), Parameter::Type::String);
+    ASSERT_NE(find_value(top.parameters, "top"), nullptr);
+    EXPECT_EQ(find_value(top.parameters, "top")->declaration.get_type(), Parameter::Type::Integer);
+    EXPECT_EQ(find_value(top.parameters, "top")->declaration.get_source(), Parameter::Source::Attribute);
+    EXPECT_EQ(find_value(top.parameters, "vendor")->value, "acme");
+    EXPECT_EQ(find_value(top.parameters, "vendor")->declaration.get_type(), Parameter::Type::String);
     ASSERT_EQ(sub.parameters.size(), 3);
     EXPECT_EQ(sub.parameters.at(0).declaration.get_name(), "W");
     EXPECT_EQ(sub.parameters.at(1).declaration.get_name(), "R");
@@ -351,13 +352,13 @@ TEST_F(VerilogElaborationTest, check_instances_parameters_attributes)
 
     // port and signal attributes
     const netlist_ir::Port* y = top.find_port("y");
-    ASSERT_NE(find_value(y->attributes, "keep"), nullptr);
-    EXPECT_EQ(find_value(y->attributes, "keep")->declaration.get_type(), Parameter::Type::Boolean);
-    EXPECT_EQ(find_value(y->attributes, "keep")->value, "true");
-    EXPECT_EQ(find_value(y->attributes, "LOC")->value, "SLICE_X0Y0");
-    EXPECT_EQ(find_value(y->attributes, "LOC")->declaration.get_type(), Parameter::Type::String);
-    EXPECT_EQ(find_value(top.find_signal("w")->attributes, "mark")->value, "0xA");
-    EXPECT_EQ(find_value(top.find_signal("w")->attributes, "mark")->declaration.get_size(), 4);
+    ASSERT_NE(find_value(y->parameters, "keep"), nullptr);
+    EXPECT_EQ(find_value(y->parameters, "keep")->declaration.get_type(), Parameter::Type::Boolean);
+    EXPECT_EQ(find_value(y->parameters, "keep")->value, "true");
+    EXPECT_EQ(find_value(y->parameters, "LOC")->value, "SLICE_X0Y0");
+    EXPECT_EQ(find_value(y->parameters, "LOC")->declaration.get_type(), Parameter::Type::String);
+    EXPECT_EQ(find_value(top.find_signal("w")->parameters, "mark")->value, "0xA");
+    EXPECT_EQ(find_value(top.find_signal("w")->parameters, "mark")->declaration.get_size(), 4);
 
     // module instances: named and positional parameters, defparam override
     const netlist_ir::Instance* s0 = top.find_instance("s0");
@@ -391,7 +392,9 @@ TEST_F(VerilogElaborationTest, check_instances_parameters_attributes)
     EXPECT_EQ(find_value(g->parameters, "N")->value, "7");
     EXPECT_EQ(find_value(g->parameters, "F")->declaration.get_type(), Parameter::Type::Float);
     EXPECT_EQ(find_value(g->parameters, "Q")->value, "W_UNKNOWN");
-    EXPECT_EQ(find_value(g->attributes, "placed")->value, "true");
+    EXPECT_EQ(find_value(g->parameters, "placed")->value, "true");
+    EXPECT_EQ(find_value(g->parameters, "placed")->declaration.get_source(), Parameter::Source::Attribute);
+    EXPECT_EQ(find_value(g->parameters, "INIT")->declaration.get_source(), Parameter::Source::Generic);
     ASSERT_EQ(g->connections.size(), 1);    // .O() connects nothing
     EXPECT_EQ(g->connections.front().port, "I");
 

@@ -10,8 +10,6 @@
 
 namespace hal
 {
-    const std::set<std::string> VerilogWriter::valid_types = {"string", "integer", "floating_point", "bit_value", "bit_vector", "bit_string"};
-
     Result<std::monostate> VerilogWriter::write(Netlist* netlist, const std::filesystem::path& file_path)
     {
         std::stringstream res_stream;
@@ -100,6 +98,10 @@ namespace hal
         }
         module_type_aliases[module] = get_unique_alias(module_type_occurrences, module_type);
 
+        if (auto res = write_attributes(res_stream, module, ""); res.is_error())
+        {
+            return ERR_APPEND(res.get_error(), "could not write declaration of module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to write attributes");
+        }
         if (const std::string& design_name = module->get_netlist()->get_design_name(); module_type_aliases.at(module) == "top_module" && !design_name.empty())
         {
             res_stream << "module " << escape(design_name);
@@ -131,34 +133,27 @@ namespace hal
             aliases[net] = escape(get_unique_alias(identifier_occurrences, pin->get_name()));
 
             res_stream << aliases.at(net);
+            if (auto res = write_attributes(tmp_stream, net, "    "); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "could not write declaration of module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to write attributes of port net '" + net->get_name() + "'");
+            }
             tmp_stream << "    " << enum_to_string(pin->get_direction()) << " " << aliases.at(net) << ";" << std::endl;
         }
 
         res_stream << ");" << std::endl;
         res_stream << tmp_stream.str();
 
+        // module parameters: the generics of the typed store
+        for (const auto& [key, entry] : module->get_parameters(Parameter::Source::Generic))
         {
-            // module parameters
-            const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data = module->get_data_map();
-
-            for (const auto& [first, second] : data)
+            const auto& [declaration, value] = entry;
+            res_stream << "    parameter " << escape(key) << " = ";
+            if (auto res = write_parameter_value(res_stream, declaration, value); res.is_error())
             {
-                const auto& [category, key] = first;
-                const auto& [type, value]   = second;
-
-                if (category != "generic" || valid_types.find(type) == valid_types.end())
-                {
-                    continue;
-                }
-
-                res_stream << "    parameter " << escape(key) << " = ";
-                if (auto res = write_parameter_value(res_stream, type, value); res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(),
-                                      "could not write declaration of module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to write parameter value");
-                }
-                res_stream << ";" << std::endl;
+                return ERR_APPEND(res.get_error(),
+                                  "could not write declaration of module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to write parameter value");
             }
+            res_stream << ";" << std::endl;
         }
 
         std::unordered_set<Net*> port_nets       = module->get_input_nets();
@@ -178,6 +173,10 @@ namespace hal
                 auto net_alias = escape(get_unique_alias(identifier_occurrences, net->get_name()));
                 aliases[net]   = net_alias;
 
+                if (auto res = write_attributes(res_stream, net, "    "); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not write declaration of module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to write attributes of net '" + net->get_name() + "'");
+                }
                 res_stream << "    wire " << net_alias;
 
                 if (net->is_vcc_net() && net->get_num_of_sources() == 0)
@@ -229,6 +228,10 @@ namespace hal
     {
         const GateType* gate_type = gate->get_type();
 
+        if (auto res = write_attributes(res_stream, gate, "    "); res.is_error())
+        {
+            return ERR_APPEND(res.get_error(), "could not write gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to write attributes");
+        }
         res_stream << "    " << escape(gate_type->get_name());
         if (auto res = write_parameter_assignments(res_stream, gate); res.is_error())
         {
@@ -289,6 +292,10 @@ namespace hal
                                                                 std::unordered_map<std::string, u32>& identifier_occurrences,
                                                                 std::unordered_map<const Module*, std::string>& module_type_aliases) const
     {
+        if (auto res = write_attributes(res_stream, module, "    "); res.is_error())
+        {
+            return ERR_APPEND(res.get_error(), "could not write sub-module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to write attributes");
+        }
         res_stream << "    " << escape(module_type_aliases.at(module));
         if (auto res = write_parameter_assignments(res_stream, module); res.is_error())
         {
@@ -317,19 +324,10 @@ namespace hal
 
     Result<std::monostate> VerilogWriter::write_parameter_assignments(std::stringstream& res_stream, const DataContainer* container) const
     {
-        const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data = container->get_data_map();
-
         bool first_parameter = true;
-        for (const auto& [first, second] : data)
+        for (const auto& [key, entry] : container->get_parameters(Parameter::Source::Generic))
         {
-            const auto& [category, key] = first;
-            const auto& [type, value]   = second;
-
-            if (category != "generic" || valid_types.find(type) == valid_types.end())
-            {
-                continue;
-            }
-
+            const auto& [declaration, value] = entry;
             if (first_parameter)
             {
                 res_stream << " #(" << std::endl;
@@ -342,9 +340,9 @@ namespace hal
 
             res_stream << "        ." << escape(key) << "(";
 
-            if (auto res = write_parameter_value(res_stream, type, value); res.is_error())
+            if (auto res = write_parameter_value(res_stream, declaration, value); res.is_error())
             {
-                return ERR_APPEND(res.get_error(), "could not write parameter assignments: failed to write parameter value '" + value + "' of type '" + type + "'");
+                return ERR_APPEND(res.get_error(), "could not write parameter assignments: failed to write parameter value '" + value + "' of '" + key + "'");
             }
 
             res_stream << ")";
@@ -355,6 +353,33 @@ namespace hal
             res_stream << std::endl << "    )";
         }
 
+        return OK({});
+    }
+
+    Result<std::monostate> VerilogWriter::write_attributes(std::stringstream& res_stream, const DataContainer* container, const std::string& indent) const
+    {
+        const auto attributes = container->get_parameters(Parameter::Source::Attribute);
+        if (attributes.empty())
+        {
+            return OK({});
+        }
+        res_stream << indent << "(* ";
+        bool first = true;
+        for (const auto& [key, entry] : attributes)
+        {
+            const auto& [declaration, value] = entry;
+            if (!first)
+            {
+                res_stream << ", ";
+            }
+            first = false;
+            res_stream << escape(key) << " = ";
+            if (auto res = write_parameter_value(res_stream, declaration, value); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "could not write attributes: failed to write attribute value '" + value + "' of '" + key + "'");
+            }
+        }
+        res_stream << " *)" << std::endl;
         return OK({});
     }
 
@@ -425,60 +450,35 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> VerilogWriter::write_parameter_value(std::stringstream& res_stream, const std::string& type, const std::string& value) const
+    Result<std::monostate> VerilogWriter::write_parameter_value(std::stringstream& res_stream, const Parameter& declaration, const std::string& value) const
     {
-        if (type == "string")
+        switch (declaration.get_type())
         {
-            res_stream << "\"" << value << "\"";
+            case Parameter::Type::String:
+            case Parameter::Type::Time:
+            case Parameter::Type::Enum:
+                // Verilog has no time or enumeration literal in a parameter; the text survives as a string
+                res_stream << "\"" << value << "\"";
+                return OK({});
+            case Parameter::Type::Integer:
+            case Parameter::Type::Float:
+                res_stream << value;
+                return OK({});
+            case Parameter::Type::Boolean:
+                res_stream << "1'b" << (value == "true" ? "1" : "0");
+                return OK({});
+            case Parameter::Type::BitVector: {
+                const std::string digits = (value.size() > 2 && value[0] == '0' && (value[1] == 'x' || value[1] == 'X')) ? value.substr(2) : value;
+                res_stream << declaration.get_size() << "'h" << digits;
+                return OK({});
+            }
+            case Parameter::Type::LogicVector: {
+                const std::string bits = (value.size() > 2 && value[0] == '0' && (value[1] == 'b' || value[1] == 'B')) ? value.substr(2) : value;
+                res_stream << declaration.get_size() << "'b" << bits;
+                return OK({});
+            }
         }
-        else if (type == "integer" || type == "floating_point")
-        {
-            res_stream << value;
-        }
-        else if (type == "bit_value")
-        {
-            res_stream << "1'b" << value;
-        }
-        else if (type == "bit_vector")
-        {
-            u32 len = value.size() * 4;
-            // if (value.at(0) == '0' || value.at(0) == '1')
-            // {
-            //     len -= 3;
-            // }
-            // else if (value.at(0) == '2' || value.at(0) == '3')
-            // {
-            //     len -= 2;
-            // }
-            // else if (value.at(0) >= '4' && value.at(0) <= '7')
-            // {
-            //     len -= 1;
-            // }
-            res_stream << len << "'h" << value;
-        }
-        else if (type == "bit_string")
-        {
-            u32 len = value.size();
-            // if (value.at(0) == '0' || value.at(0) == '1')
-            // {
-            //     len -= 3;
-            // }
-            // else if (value.at(0) == '2' || value.at(0) == '3')
-            // {
-            //     len -= 2;
-            // }
-            // else if (value.at(0) >= '4' && value.at(0) <= '7')
-            // {
-            //     len -= 1;
-            // }
-            res_stream << len << "'b" << value;
-        }
-        else
-        {
-            return ERR("could not write parameter value '" + value + "' of type '" + type + "': invalid type");
-        }
-
-        return OK({});
+        return ERR("could not write parameter value '" + value + "': unknown type");
     }
 
     std::string VerilogWriter::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const

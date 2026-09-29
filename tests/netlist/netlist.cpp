@@ -44,6 +44,27 @@ namespace hal {
             EXPECT_FALSE(*nl_1 != *nl_1);
             EXPECT_FALSE(*nl_2 != *nl_2);
             EXPECT_TRUE(*nl_1 == *nl_2);        // identical netlists
+            {
+                // a copy carries the typed store of gates, nets and modules
+                std::unique_ptr<Netlist> nl = test_utils::create_example_netlist();
+                ASSERT_NE(nl, nullptr);
+                ASSERT_FALSE(nl->get_gates().empty());
+                ASSERT_FALSE(nl->get_nets().empty());
+                Gate* g = nl->get_gates().front();
+                Net* n  = nl->get_nets().front();
+                ASSERT_TRUE(g->set_parameter(Parameter::Integer("WIDTH", "0").get(), "8").is_ok());
+                ASSERT_TRUE(n->set_parameter(Parameter::Boolean("keep", "false", Parameter::Source::Attribute).get(), "true").is_ok());
+                ASSERT_TRUE(nl->get_top_module()->set_parameter(Parameter::String("origin", "").get(), "file").is_ok());
+                auto copy_res = nl->copy();
+                ASSERT_TRUE(copy_res.is_ok());
+                auto nl_copy = copy_res.get();
+                EXPECT_TRUE(*nl == *nl_copy);
+                EXPECT_EQ(nl_copy->get_gate_by_id(g->get_id())->get_parameter_value("WIDTH").get(), "8");
+                EXPECT_EQ(nl_copy->get_net_by_id(n->get_id())->get_parameter_value("keep", Parameter::Source::Attribute).get(), "true");
+                EXPECT_EQ(nl_copy->get_top_module()->get_parameter_value("origin").get(), "file");
+                ASSERT_TRUE(nl_copy->get_top_module()->delete_parameter("origin"));
+                EXPECT_FALSE(*nl == *nl_copy);
+            }
             EXPECT_TRUE(*nl_2 == *nl_1);
             EXPECT_FALSE(*nl_1 != *nl_2);
             EXPECT_FALSE(*nl_2 != *nl_1);

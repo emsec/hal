@@ -66,9 +66,37 @@ namespace hal
         };
 
         /**
+         * Where a value of this declaration comes from: a generic (Verilog `#(...)`, VHDL `generic map`, or a
+         * parameter declared by a gate type), or an attribute (Verilog `(* ... *)`, VHDL `attribute ... of`). Both are
+         * typed values in the same store; the source tells writers how to emit them and keeps the two name spaces apart.
+         */
+        enum class Source
+        {
+            /** A parameter or generic, possibly declared by the gate type. */
+            Generic,
+            /** An annotation from the netlist file; never declared by a gate type. */
+            Attribute,
+        };
+
+        /**
          * Constructs an empty / invalid Parameter.
          */
         explicit Parameter();
+
+        /**
+         * Get the source of the parameter: generic or attribute.
+         *
+         * @returns The source.
+         */
+        Source get_source() const;
+
+        /**
+         * Get a copy of the declaration with another source.
+         *
+         * @param[in] source - The source.
+         * @returns The copy.
+         */
+        Parameter with_source(Source source) const;
 
         /**
          * Get the name of the parameter.
@@ -114,8 +142,9 @@ namespace hal
          *
          * @param[in] name - Parameter name (must be non-empty).
          * @param[in] default_value - Default value, either `"true"` or `"false"`.
+         * @param[in] source - The source, `Generic` unless the value is an attribute; the same for every constructor below.
          */
-        static Result<Parameter> Boolean(const std::string& name, const std::string& default_value);
+        static Result<Parameter> Boolean(const std::string& name, const std::string& default_value, Source source = Source::Generic);
 
         /**
          * Construct a bit-vector parameter. Values use the prefixes
@@ -125,7 +154,7 @@ namespace hal
          * @param[in] size - Bit-width (must be at least 1; up to 65535).
          * @param[in] default_value - Default value as a string.
          */
-        static Result<Parameter> BitVector(const std::string& name, u16 size, const std::string& default_value);
+        static Result<Parameter> BitVector(const std::string& name, u16 size, const std::string& default_value, Source source = Source::Generic);
 
         /**
          * Construct a 9-state logic-vector parameter. Values use the prefixes
@@ -138,7 +167,7 @@ namespace hal
          * @param[in] size - Bit-width (must be at least 1; up to 65535).
          * @param[in] default_value - Default value as a 9-state literal string (empty for "no default").
          */
-        static Result<Parameter> LogicVector(const std::string& name, u16 size, const std::string& default_value);
+        static Result<Parameter> LogicVector(const std::string& name, u16 size, const std::string& default_value, Source source = Source::Generic);
 
         /**
          * Construct a signed-integer parameter. Values are parsed in base 10 and must fit in `i64`.
@@ -146,7 +175,7 @@ namespace hal
          * @param[in] name - Parameter name (must be non-empty).
          * @param[in] default_value - Default value as a decimal string (optional leading `+`/`-`).
          */
-        static Result<Parameter> Integer(const std::string& name, const std::string& default_value);
+        static Result<Parameter> Integer(const std::string& name, const std::string& default_value, Source source = Source::Generic);
 
         /**
          * Construct a string parameter. Any value (including the empty string) is accepted.
@@ -154,7 +183,7 @@ namespace hal
          * @param[in] name - Parameter name (must be non-empty).
          * @param[in] default_value - Default value.
          */
-        static Result<Parameter> String(const std::string& name, const std::string& default_value);
+        static Result<Parameter> String(const std::string& name, const std::string& default_value, Source source = Source::Generic);
 
         /**
          * Construct a floating-point parameter. Values are parsed via `std::stod`.
@@ -162,7 +191,7 @@ namespace hal
          * @param[in] name - Parameter name (must be non-empty).
          * @param[in] default_value - Default value as a decimal float (e.g. `3.14`, `1e-5`).
          */
-        static Result<Parameter> Float(const std::string& name, const std::string& default_value);
+        static Result<Parameter> Float(const std::string& name, const std::string& default_value, Source source = Source::Generic);
 
         /**
          * Construct a time parameter. Values are of the form `<number><unit>` with the unit
@@ -172,7 +201,7 @@ namespace hal
          * @param[in] name - Parameter name (must be non-empty).
          * @param[in] default_value - Default value, e.g. `10ns`.
          */
-        static Result<Parameter> Time(const std::string& name, const std::string& default_value);
+        static Result<Parameter> Time(const std::string& name, const std::string& default_value, Source source = Source::Generic);
 
         /**
          * Construct an enum parameter. `size` is auto-computed as `ceil(log2(values.size()))`.
@@ -181,7 +210,7 @@ namespace hal
          * @param[in] values - Ordered list of enum values (at least two, unique, non-empty).
          * @param[in] default_value - Default value, must equal one of ``values``.
          */
-        static Result<Parameter> Enum(const std::string& name, const std::vector<std::string>& values, const std::string& default_value);
+        static Result<Parameter> Enum(const std::string& name, const std::vector<std::string>& values, const std::string& default_value, Source source = Source::Generic);
 
         /**
          * Check whether a candidate value is valid for this parameter declaration.
@@ -222,6 +251,7 @@ namespace hal
     private:
         std::string name;
         Type type;
+        Source source = Source::Generic;
         u16 size = 0;
         std::string default_value = "";
         std::vector<std::string> enum_values = {};
@@ -229,4 +259,7 @@ namespace hal
 
     template<>
     std::map<Parameter::Type, std::string> EnumStrings<Parameter::Type>::data;
+
+    template<>
+    std::map<Parameter::Source, std::string> EnumStrings<Parameter::Source>::data;
 }    // namespace hal

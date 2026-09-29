@@ -36,7 +36,7 @@ namespace hal
     }    // namespace
     bool DataContainer::operator==(const DataContainer& other) const
     {
-        return m_data == other.get_data_map() && m_parameters == other.get_parameters() && m_attributes == other.get_attributes();
+        return m_data == other.get_data_map() && m_parameters == other.get_parameters();
     }
 
     bool DataContainer::operator!=(const DataContainer& other) const
@@ -141,122 +141,100 @@ namespace hal
         return it->second;
     }
 
+    std::optional<Parameter::Source> DataContainer::source_from_category(const std::string& category)
+    {
+        if (category == "generic")
+        {
+            return Parameter::Source::Generic;
+        }
+        if (category == "attribute")
+        {
+            return Parameter::Source::Attribute;
+        }
+        return std::nullopt;
+    }
+
     Result<std::monostate> DataContainer::set_parameter(const Parameter& param, const std::string& value)
     {
         if (!param.validate(value))
         {
-            return ERR("invalid parameter value");
+            return ERR("invalid value '" + value + "' for " + enum_to_string(param.get_source()) + " '" + param.get_name() + "'");
         }
 
         const std::string normalized = normalize_bv_value(param.get_type(), value);
-        m_parameters.insert_or_assign(param.get_name(), std::make_pair(param, normalized));
+        m_parameters.insert_or_assign(ParameterKey{param.get_source(), param.get_name()}, std::make_pair(param, normalized));
 
         return OK({});
     }
 
-    Result<std::string> DataContainer::get_parameter_value(const std::string& name) const
+    Result<std::string> DataContainer::get_parameter_value(const std::string& name, Parameter::Source source) const
     {
-        if (auto it = m_parameters.find(name); it != m_parameters.end())
+        if (auto it = m_parameters.find(ParameterKey{source, name}); it != m_parameters.end())
         {
             return OK(it->second.second);
         }
 
-        return ERR("no parameter named '" + name + "'");
+        return ERR("no " + enum_to_string(source) + " named '" + name + "'");
     }
 
     Result<std::string> DataContainer::get_parameter_value(const Parameter& param) const
     {
-        auto it = m_parameters.find(param.get_name());
+        auto it = m_parameters.find(ParameterKey{param.get_source(), param.get_name()});
         if (it == m_parameters.end())
         {
-            return ERR("no parameter named '" + param.get_name() + "'");
+            return ERR("no " + enum_to_string(param.get_source()) + " named '" + param.get_name() + "'");
         }
 
         if (it->second.first != param)
         {
-            return ERR("parameter with name '" + param.get_name() + "' exists, but does not match provided parameter declaration");
+            return ERR(enum_to_string(param.get_source()) + " with name '" + param.get_name() + "' exists, but does not match provided parameter declaration");
         }
 
         return OK(it->second.second);
     }
 
-    Result<Parameter> DataContainer::get_parameter_declaration(const std::string& name) const
+    Result<Parameter> DataContainer::get_parameter_declaration(const std::string& name, Parameter::Source source) const
     {
-        if (auto it = m_parameters.find(name); it != m_parameters.end())
+        if (auto it = m_parameters.find(ParameterKey{source, name}); it != m_parameters.end())
         {
             return OK(it->second.first);
         }
 
-        return ERR("no parameter named '" + name + "'");
+        return ERR("no " + enum_to_string(source) + " named '" + name + "'");
     }
 
-    bool DataContainer::has_parameter(const std::string& name) const
+    bool DataContainer::has_parameter(const std::string& name, Parameter::Source source) const
     {
-        return m_parameters.find(name) != m_parameters.end();
+        return m_parameters.find(ParameterKey{source, name}) != m_parameters.end();
     }
 
     bool DataContainer::has_parameter(const Parameter& param) const
     {
-        const auto it = m_parameters.find(param.get_name());
+        const auto it = m_parameters.find(ParameterKey{param.get_source(), param.get_name()});
         return it != m_parameters.end() && it->second.first == param;
     }
 
-    bool DataContainer::delete_parameter(const std::string& name)
+    bool DataContainer::delete_parameter(const std::string& name, Parameter::Source source)
     {
-        return m_parameters.erase(name) > 0;
+        return m_parameters.erase(ParameterKey{source, name}) > 0;
     }
 
-    const std::unordered_map<std::string, std::pair<Parameter, std::string>>& DataContainer::get_parameters() const
+    const std::map<DataContainer::ParameterKey, std::pair<Parameter, std::string>>& DataContainer::get_parameters() const
     {
         return m_parameters;
     }
 
-    Result<std::monostate> DataContainer::set_attribute(const Parameter& attribute, const std::string& value)
+    std::map<std::string, std::pair<Parameter, std::string>> DataContainer::get_parameters(Parameter::Source source) const
     {
-        if (!attribute.validate(value))
+        std::map<std::string, std::pair<Parameter, std::string>> out;
+        for (const auto& [key, entry] : m_parameters)
         {
-            return ERR("invalid value '" + value + "' for attribute '" + attribute.get_name() + "'");
+            if (key.first == source)
+            {
+                out.emplace(key.second, entry);
+            }
         }
-
-        const std::string normalized = normalize_bv_value(attribute.get_type(), value);
-        m_attributes.insert_or_assign(attribute.get_name(), std::make_pair(attribute, normalized));
-
-        return OK({});
-    }
-
-    Result<std::string> DataContainer::get_attribute_value(const std::string& name) const
-    {
-        if (auto it = m_attributes.find(name); it != m_attributes.end())
-        {
-            return OK(it->second.second);
-        }
-
-        return ERR("no attribute named '" + name + "'");
-    }
-
-    Result<Parameter> DataContainer::get_attribute_declaration(const std::string& name) const
-    {
-        if (auto it = m_attributes.find(name); it != m_attributes.end())
-        {
-            return OK(it->second.first);
-        }
-
-        return ERR("no attribute named '" + name + "'");
-    }
-
-    bool DataContainer::has_attribute(const std::string& name) const
-    {
-        return m_attributes.find(name) != m_attributes.end();
-    }
-
-    bool DataContainer::delete_attribute(const std::string& name)
-    {
-        return m_attributes.erase(name) > 0;
-    }
-
-    const std::unordered_map<std::string, std::pair<Parameter, std::string>>& DataContainer::get_attributes() const
-    {
-        return m_attributes;
+        return out;
     }
 
 }    // namespace hal

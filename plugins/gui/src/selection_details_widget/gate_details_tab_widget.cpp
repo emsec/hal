@@ -7,7 +7,7 @@
 #include "gui/selection_details_widget/details_frame_widget.h"
 #include "gui/selection_details_widget/gate_details_widget/gate_info_table.h"
 #include "gui/selection_details_widget/gate_details_widget/gate_pin_tree.h"
-#include "gui/user_action/action_set_object_data.h"
+#include "gui/user_action/action_set_object_parameter.h"
 #include "gui/validator/hexadecimal_validator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
@@ -87,6 +87,12 @@ namespace hal
         mDataFrame = new DetailsFrameWidget(mDataTable, "Data", this);
 
         addTab("Data", mDataFrame, false);
+        connect(mDataTable, &DataTableWidget::parameterChanged, this, [this]() {
+            if (mCurrentGate != nullptr)
+            {
+                setGate(mCurrentGate);    // an INIT edited in the data table changes the LUT tab as well
+            }
+        });
 
         //comments tab, no frame is used here
         mCommentWidget = new CommentWidget(this);
@@ -245,9 +251,11 @@ namespace hal
                 if (InitComponent* init_component = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
                     init_component != nullptr)
                 {
-                    std::string cat = init_component->get_init_category(), key = init_component->get_init_identifiers()[0];
-                    QString data_type        = "bit_vector";
-                    ActionSetObjectData* act = new ActionSetObjectData(QString::fromStdString(cat), QString::fromStdString(key), data_type, ipd.textValue().toUpper());
+                    const std::string key = init_component->get_init_identifiers()[0];
+                    const auto source     = DataContainer::source_from_category(init_component->get_init_category());
+                    const QString hex     = ipd.textValue().toUpper();
+                    // an existing INIT keeps its declared width; a new one takes four bits per digit
+                    ActionSetObjectParameter* act = new ActionSetObjectParameter(QString::fromStdString(enum_to_string(source.value_or(Parameter::Source::Generic))), QString::fromStdString(key), "0x" + hex, "bit_vector", 4 * hex.size());
                     act->setObject(UserActionObject(mCurrentGate->get_id(), UserActionObjectType::Gate));
                     act->exec();
                     setGate(mCurrentGate);    //must update config string and data table, no signal for that
@@ -260,8 +268,9 @@ namespace hal
             if (InitComponent* init_component = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
                 init_component != nullptr)
             {
-                std::string cat = init_component->get_init_category(), key = init_component->get_init_identifiers()[0];
-                QApplication::clipboard()->setText(PyCodeProvider::pyCodeGateData(mCurrentGate->get_id(), QString::fromStdString(cat), QString::fromStdString(key)));
+                const std::string key = init_component->get_init_identifiers()[0];
+                const auto source     = DataContainer::source_from_category(init_component->get_init_category());
+                QApplication::clipboard()->setText(PyCodeProvider::pyCodeGateParameter(mCurrentGate->get_id(), QString::fromStdString(key), QString::fromStdString(enum_to_string(source.value_or(Parameter::Source::Generic)))));
             }
             else
                 log_error("gui", "Could not load InitComponent from gate with id {}.", mCurrentGate->get_id());
@@ -404,8 +413,8 @@ namespace hal
                 //Setup lut config (init) string
                 if (InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); init_component != nullptr)
                 {
-                    auto typeAndValue = gate->get_data(init_component->get_init_category(), init_component->get_init_identifiers()[0]);
-                    mLutConfigLabel->setText(" 0x" + QString::fromStdString(std::get<1>(typeAndValue)));
+                    const auto init = gate->get_init_data();    // the typed store, or the legacy data map of an old project
+                    mLutConfigLabel->setText(init.is_ok() && !init.get().empty() ? " 0x" + QString::fromStdString(init.get().front()) : QString(" Could not load init string."));
                 }
                 else
                 {

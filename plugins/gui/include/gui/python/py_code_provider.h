@@ -54,6 +54,7 @@ namespace hal
         static QString pyCodeGateBooleanFunction(u32 gateId, QString booleanFunctionName);
         static QString pyCodeGateAsyncSetResetBehavior(u32 gateId);
         static QString pyCodeGateData(u32 gateId, QString category, QString key);
+        static QString pyCodeGateParameter(u32 gateId, QString key, QString source);
         static QString pyCodeGateDataMap(u32 gateId);
 
         static QString pyCodeStateComp(u32 gateId);
@@ -82,6 +83,7 @@ namespace hal
         static QString pyCodeNetSources(u32 netId);
         static QString pyCodeNetDestinations(u32 netId);
         static QString pyCodeNetData(u32 netId, QString category, QString key);
+        static QString pyCodeNetParameter(u32 netId, QString key, QString source);
         static QString pyCodeNetDataMap(u32 netId);
 
         static QString pyCodeModule(u32 moduleId);
@@ -99,6 +101,7 @@ namespace hal
         static QString pyCodeModuleInternalNets(u32 moduleId);
         static QString pyCodeModuleIsTopModule(u32 moduleId);
         static QString pyCodeModuleData(u32 moduleId, QString category, QString key);
+        static QString pyCodeModuleParameter(u32 moduleId, QString key, QString source);
         static QString pyCodeModuleDataMap(u32 moduleId);
         static QString pyCodeModulePinGroup(u32 moduleId, u32 groupId);
         static QString pyCodeModulePinGroups(u32 moduleId);

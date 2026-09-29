@@ -1674,7 +1674,7 @@ namespace hal
                             {
                                 return ERR(tv.get_error());
                             }
-                            if (std::any_of(out.parameters.begin(), out.parameters.end(), [&name](const TypedValue& v) { return v.declaration.get_name() == name; }))
+                            if (std::any_of(out.parameters.begin(), out.parameters.end(), [&name](const TypedValue& v) { return v.declaration.get_source() == Parameter::Source::Generic && v.declaration.get_name() == name; }))
                             {
                                 return ERR(what + ": generic '" + name + "' is set twice" + at(a.location));
                             }
@@ -1702,11 +1702,13 @@ namespace hal
                             // any other type, such as a user enumeration: the literal form of the value decides
                         }
                         const std::string what = where("attribute '" + spec.attribute.text + "'", spec.location);
-                        auto tv                = typed_value(spec.attribute.text, spec.value, declared_type, what);
-                        if (tv.is_error())
+                        auto typed             = typed_value(spec.attribute.text, spec.value, declared_type, what);
+                        if (typed.is_error())
                         {
-                            return ERR(tv.get_error());
+                            return ERR(typed.get_error());
                         }
+                        TypedValue tv  = typed.get();
+                        tv.declaration = tv.declaration.with_source(Parameter::Source::Attribute);
                         for (const Name& target : spec.targets)
                         {
                             std::vector<TypedValue>* dst = nullptr;
@@ -1717,7 +1719,7 @@ namespace hal
                                 {
                                     return ERR(what + ": there is no signal or port '" + target.text + "'");
                                 }
-                                dst = &s->attributes;
+                                dst = &s->parameters;
                             }
                             else if (spec.entity_class == "label")
                             {
@@ -1726,7 +1728,7 @@ namespace hal
                                 {
                                     return ERR(what + ": there is no instance labeled '" + target.text + "'");
                                 }
-                                dst = &it->second->attributes;
+                                dst = &it->second->parameters;
                             }
                             else if (spec.entity_class == "entity" || spec.entity_class == "architecture")
                             {
@@ -1734,18 +1736,18 @@ namespace hal
                                 {
                                     return ERR(what + ": '" + target.text + "' is not this entity or its architecture");
                                 }
-                                dst = &m_dst.attributes;
+                                dst = &m_dst.parameters;
                             }
                             else
                             {
                                 log_warning("vhdl_parser", "{}", what + ": attributes of class '" + spec.entity_class + "' have no place in the netlist and are dropped");
                                 continue;
                             }
-                            if (std::any_of(dst->begin(), dst->end(), [&tv](const TypedValue& v) { return v.declaration.get_name() == tv.get().declaration.get_name(); }))
+                            if (std::any_of(dst->begin(), dst->end(), [&tv](const TypedValue& v) { return v.declaration == tv.declaration || (v.declaration.get_source() == Parameter::Source::Attribute && v.declaration.get_name() == tv.declaration.get_name()); }))
                             {
                                 return ERR(what + ": the attribute is given twice for '" + target.text + "'");
                             }
-                            dst->push_back(tv.get());
+                            dst->push_back(tv);
                         }
                     }
                     return OK({});

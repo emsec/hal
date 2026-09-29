@@ -12,6 +12,22 @@ namespace hal {
         : QPoint(x_,y_)
     {;}
 
+    namespace
+    {
+        /**
+         * The data map of a container plus its typed values, so that a coordinate lives in either place.
+         */
+        std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> dataWithParameters(const DataContainer* c)
+        {
+            auto data = c->get_data_map();
+            for (const auto& [key, entry] : c->get_parameters())
+            {
+                data[{enum_to_string(key.first), key.second}] = {enum_to_string(entry.first.get_type()), entry.second};
+            }
+            return data;
+        }
+    }    // namespace
+
     CoordinateFromData CoordinateFromData::fromNode(const Node& nd)
     {
         Module* m;
@@ -20,7 +36,7 @@ namespace hal {
         case Node::Module:
             m = gNetlist->get_module_by_id(nd.id());
             Q_ASSERT(m);
-            return fromData(m->get_data_map());
+            return fromData(dataWithParameters(m));
         case Node::Gate:
             g = gNetlist->get_gate_by_id(nd.id());
             Q_ASSERT(g);
@@ -30,7 +46,7 @@ namespace hal {
                 int ly = (int) floor(g->get_location_y()+0.5);
                 return CoordinateFromData(lx,ly);
             }
-            return fromData(g->get_data_map());
+            return fromData(dataWithParameters(g));
         default:
             break;
         }

@@ -133,12 +133,14 @@ namespace hal
         };
 
         /**
-         * A named, typed value: a parameter or generic, or an attribute such as a Verilog `(* keep = "true" *)`.
+         * A named, typed value: a parameter or generic, or an attribute such as a Verilog `(* keep = "true" *)`; the
+         * declaration's source tells which.
          *
-         * The declaration carries the name and the type. A front end infers the type from the literal form in the
-         * file: an integer, a string, a bit vector of the literal's width, a boolean for a flag without a value. When
-         * the gate type of an instance declares a parameter of the same name, the gate type's declaration wins at
-         * instantiation; attributes are never declared by gate types.
+         * The declaration carries the name, the type and the source. A front end infers the type from the literal
+         * form in the file: an integer, a string, a bit vector of the literal's width, a boolean for a flag without a
+         * value. When the gate type of an instance declares a parameter of the same name, the gate type's declaration
+         * wins at instantiation; attributes are never declared by gate types. A generic and an attribute may share a
+         * name.
          */
         struct NETLIST_API TypedValue
         {
@@ -162,7 +164,8 @@ namespace hal
             /** One handle per bit, in declaration order. */
             std::vector<BitId> bits;
 
-            std::vector<TypedValue> attributes;
+            /** The typed values, in practice attributes. */
+            std::vector<TypedValue> parameters;
             Location location;
 
             /**
@@ -256,8 +259,8 @@ namespace hal
             /** Either every connection is named or every connection is positional. */
             std::deque<Connection> connections;
 
+            /** The generics set on the instance and its attributes. */
             std::vector<TypedValue> parameters;
-            std::vector<TypedValue> attributes;
             Location location;
 
             /**
@@ -296,10 +299,8 @@ namespace hal
              */
             std::vector<std::pair<BitId, BitId>> aliases;
 
-            /** The declared parameters or generics with their default values. */
+            /** The declared parameters or generics with their default values, and the module's attributes. */
             std::vector<TypedValue> parameters;
-
-            std::vector<TypedValue> attributes;
             Location location;
 
             /**

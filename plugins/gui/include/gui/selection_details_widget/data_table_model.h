@@ -58,10 +58,11 @@ namespace hal {
          */
         struct DataEntry
         {
-            QString category; /// The data's category
+            QString category; /// The data's category; for a typed value its source, "generic" or "attribute"
             QString key; /// The data's key
             QString dataType; // The data type
             QString value; // The value of the data 
+            bool typed = false; /// Whether the entry comes from the typed store rather than the free-form data map
             QString getPropertyValueByPropType(propertyType prop)//helper function to generically access a property value
             {
                 QString val =  (prop == 0) ? category : ( (prop == 1) ? key : ( (prop == 2) ? dataType : value ) );
@@ -136,6 +137,14 @@ namespace hal {
          *
          * @param dc - The data in the form of key - vlaue pairs.
          */
+        /**
+         * Show the typed values and the free-form data entries of a container: the generics first, then the
+         * attributes, then the data map by category and key.
+         *
+         * @param dc - The container
+         */
+        void updateData(const DataContainer* dc);
+
         void updateData(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& dc);
 
     private:

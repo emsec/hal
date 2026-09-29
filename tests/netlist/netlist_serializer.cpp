@@ -1,3 +1,4 @@
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 
 #include "hal_core/netlist/gate.h"
@@ -124,6 +125,10 @@ namespace hal {
             gate_1->set_data("category_1", "key_0", "data_type", "test_value_2");
             net_1_3->set_data("category", "key_2", "data_type", "test_value");
             test_m_0->set_data("category", "key_3", "data_type", "test_value");
+            // and some typed values, which the copy and the serializer carry along too
+            gate_1->set_parameter(Parameter::Integer("WIDTH", "0").get(), "8").get();
+            net_1_3->set_parameter(Parameter::Boolean("keep", "false", Parameter::Source::Attribute).get(), "true").get();
+            test_m_0->set_parameter(Parameter::String("origin", "").get(), "file").get();
 
             // Set some input/output port names of module 0
             
@@ -276,13 +281,13 @@ namespace hal {
                  const Parameter net_delay = Parameter::BitVector("delay_ps", 32, "").get();
                  ASSERT_TRUE(net->set_parameter(net_delay, "0xFA").is_ok());
 
-                 // Attributes are serialized next to the parameters on gates, nets, and modules.
-                 const Parameter keep_attr = Parameter::Boolean("keep", "false").get();
-                 const Parameter loc_attr  = Parameter::String("LOC", "").get();
-                 ASSERT_TRUE(g->set_attribute(keep_attr, "true").is_ok());
-                 ASSERT_TRUE(g->set_attribute(loc_attr, "SLICE_X1Y2").is_ok());
-                 ASSERT_TRUE(net->set_attribute(keep_attr, "false").is_ok());
-                 ASSERT_TRUE(mod->set_attribute(loc_attr, "region").is_ok());
+                 // Attributes are serialized in the same array as the generics on gates, nets, and modules.
+                 const Parameter keep_attr = Parameter::Boolean("keep", "false", Parameter::Source::Attribute).get();
+                 const Parameter loc_attr  = Parameter::String("LOC", "", Parameter::Source::Attribute).get();
+                 ASSERT_TRUE(g->set_parameter(keep_attr, "true").is_ok());
+                 ASSERT_TRUE(g->set_parameter(loc_attr, "SLICE_X1Y2").is_ok());
+                 ASSERT_TRUE(net->set_parameter(keep_attr, "false").is_ok());
+                 ASSERT_TRUE(mod->set_parameter(loc_attr, "region").is_ok());
 
                  std::filesystem::path path = test_utils::create_sandbox_path("test_param_roundtrip.hal");
                  ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), path));
@@ -307,10 +312,10 @@ namespace hal {
                  EXPECT_EQ(des_g->get_parameter_declaration("width").get().encode_as_int("0xBEEF").get(), 0xBEEFu);
                  EXPECT_EQ(des_g->get_parameter_declaration("mode").get().encode_as_int("inverted").get(), 1u);
 
-                 EXPECT_EQ(des_g->get_attribute_value("keep").get(), "true");
-                 EXPECT_EQ(des_g->get_attribute_value("LOC").get(), "SLICE_X1Y2");
-                 EXPECT_EQ(des_g->get_attribute_declaration("keep").get(), keep_attr);
-                 EXPECT_FALSE(des_g->has_parameter("keep"));
+                 EXPECT_EQ(des_g->get_parameter_value("keep", Parameter::Source::Attribute).get(), "true");
+                 EXPECT_EQ(des_g->get_parameter_value("LOC", Parameter::Source::Attribute).get(), "SLICE_X1Y2");
+                 EXPECT_EQ(des_g->get_parameter_declaration("keep", Parameter::Source::Attribute).get(), keep_attr);
+                 EXPECT_FALSE(des_g->has_parameter("keep"));    // no generic of that name
 
                  // Module declarations and values are preserved end-to-end.
                  Module* des_mod = nullptr;
@@ -356,6 +361,88 @@ namespace hal {
              }
 
 
+         TEST_END
+     }
+
+     /**
+      * Testing the migration of the legacy data map on load: the `generic` and `attribute` entries the previous
+      * parsers wrote become typed values of the matching source, with the legacy type strings mapped onto the typed
+      * declarations; every other category stays in the data map.
+      *
+      * Functions: deserialize_netlist
+      */
+     TEST_F(NetlistSerializerTest, check_legacy_data_migration) {
+         TEST_START
+             {
+                 auto nl   = create_example_serializer_netlist();
+                 Gate* g   = nl->get_gates().front();
+                 Net* net  = nl->get_nets().front();
+                 Module* m = nl->get_top_module();
+                 g->set_data("generic", "INIT", "bit_vector", "00AB");
+                 g->set_data("generic", "WIDTH", "integer", "8");
+                 g->set_data("generic", "RATE", "floating_point", "1.5");
+                 g->set_data("generic", "NAME", "string", "abc");
+                 g->set_data("generic", "FLAG", "boolean", "TRUE");
+                 g->set_data("generic", "BIT", "bit_value", "1");
+                 g->set_data("generic", "MASK", "bit_string", "1x0z");
+                 g->set_data("generic", "DELAY", "time", "1.234 sec");
+                 g->set_data("generic", "ODD", "invalid", "whatever");
+                 g->set_data("attribute", "keep", "string", "true");
+                 g->set_data("random", "note", "string", "stays");
+                 net->set_data("attribute", "mark", "string", "x");
+                 m->set_data("generic", "DEPTH", "integer", "2");
+                 // an entry the typed store already has is left alone
+                 ASSERT_TRUE(g->set_parameter(Parameter::Integer("TAKEN", "0").get(), "1").is_ok());
+                 g->set_data("generic", "TAKEN", "integer", "2");
+
+                 std::filesystem::path path = test_utils::create_sandbox_path("test_legacy_data.hal");
+                 ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), path));
+                 auto des_nl = netlist_serializer::deserialize_from_file(path);
+                 ASSERT_NE(des_nl, nullptr);
+
+                 const Gate* dg   = des_nl->get_gate_by_id(g->get_id());
+                 const Net* dn    = des_nl->get_net_by_id(net->get_id());
+                 const Module* dm = des_nl->get_top_module();
+                 ASSERT_NE(dg, nullptr);
+                 ASSERT_NE(dn, nullptr);
+
+                 const auto attr = Parameter::Source::Attribute;
+                 EXPECT_EQ(dg->get_parameter_value("INIT").get(), "0x00AB");    // the digits stay as written
+                 EXPECT_EQ(dg->get_parameter_declaration("INIT").get().get_size(), 16);    // four hex digits
+                 EXPECT_EQ(dg->get_parameter_value("WIDTH").get(), "8");
+                 EXPECT_EQ(dg->get_parameter_declaration("WIDTH").get().get_type(), Parameter::Type::Integer);
+                 EXPECT_EQ(dg->get_parameter_declaration("RATE").get().get_type(), Parameter::Type::Float);
+                 EXPECT_EQ(dg->get_parameter_declaration("NAME").get().get_type(), Parameter::Type::String);
+                 EXPECT_EQ(dg->get_parameter_value("FLAG").get(), "true");
+                 EXPECT_EQ(dg->get_parameter_declaration("FLAG").get().get_type(), Parameter::Type::Boolean);
+                 EXPECT_EQ(dg->get_parameter_value("BIT").get(), "0x1");
+                 EXPECT_EQ(dg->get_parameter_declaration("BIT").get().get_size(), 1);
+                 EXPECT_EQ(dg->get_parameter_value("MASK").get(), "0b1X0Z");
+                 EXPECT_EQ(dg->get_parameter_declaration("MASK").get().get_type(), Parameter::Type::LogicVector);
+                 EXPECT_EQ(dg->get_parameter_value("DELAY").get(), "1.234s");
+                 EXPECT_EQ(dg->get_parameter_declaration("DELAY").get().get_type(), Parameter::Type::Time);
+                 EXPECT_EQ(dg->get_parameter_value("ODD").get(), "whatever");
+                 EXPECT_EQ(dg->get_parameter_declaration("ODD").get().get_type(), Parameter::Type::String);
+                 EXPECT_EQ(dg->get_parameter_value("keep", attr).get(), "true");
+                 EXPECT_EQ(dg->get_parameter_value("TAKEN").get(), "1");
+                 EXPECT_EQ(dn->get_parameter_value("mark", attr).get(), "x");
+                 EXPECT_EQ(dm->get_parameter_value("DEPTH").get(), "2");
+
+                 // only the free-form entries and the entry that was already typed stay in the data map
+                 EXPECT_EQ(dg->get_data_map().size(), g->get_data_map().size() - 10);    // ten entries migrated
+                 EXPECT_EQ(dg->get_data("random", "note"), std::make_tuple(std::string("string"), std::string("stays")));
+                 EXPECT_EQ(dg->get_data("generic", "TAKEN"), std::make_tuple(std::string("integer"), std::string("2")));
+                 EXPECT_FALSE(dg->has_data("generic", "INIT"));
+                 EXPECT_FALSE(dg->has_data("attribute", "keep"));
+                 EXPECT_FALSE(dn->has_data("attribute", "mark"));
+                 EXPECT_FALSE(dm->has_data("generic", "DEPTH"));
+
+                 // the INIT reader sees the migrated value in the legacy form
+                 if (dg->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::init; }) != nullptr)
+                 {
+                     EXPECT_EQ(dg->get_init_data().get().front(), "00AB");
+                 }
+             }
          TEST_END
      }
 

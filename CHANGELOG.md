@@ -11,6 +11,12 @@ All notable changes to this project will be documented in this file.
 -->
 * Core
   * netlist
+    * added the netlist intermediate representation `hal_core/netlist/netlist_ir`: a bit-indexed, language-neutral description of a structural netlist (modules, ports, signals, instances, connections, aliases, typed values) with `Design::validate` and `netlist_ir::instantiate`, which turns a design into a netlist against a gate library. Bound to Python as `hal_py.netlist_ir`, so a parser can be written in Python
+    * added typed parameters and attributes on gates, nets and modules: `Parameter` declares a name, a type (`Boolean`, `BitVector`, `LogicVector`, `Integer`, `String`, `Float`, `Time`, `Enum`), a size, a default and a source (`Generic` or `Attribute`); `DataContainer::set_parameter`, `get_parameter_value`, `get_parameter_declaration`, `has_parameter`, `delete_parameter` and `get_parameters` keep them in one store keyed by source and name. The `.hal` file stores them as a `parameters` array
+    * changed `Gate::get_init_data`, `set_init_data`, the LUT Boolean function and `Netlist::load_gate_locations_from_data` to read and write the typed store, with the legacy `data` map as the fallback for old projects
+    * changed loading a `.hal` project to move the `generic` and `attribute` entries of the legacy `data` map into the typed store
+    * changed `Netlist::copy`, `SubgraphNetlistDecorator::copy_subgraph_netlist`, `NetlistModificationDecorator::replace_gate` and `connect_nets` to carry the typed store along with the data map
+    * changed the netlist IR instantiation to annotate a net with the names of the signals merged into it (`parser_annotation`/`merged_nets`), as the previous parsers did, so that `reconstruct_indexed_ff_identifiers` of netlist preprocessing keeps working
     * changed `Net` and `Gate` to identify a pin by pointer identity instead of by value when looking up an endpoint
     * sped up deleting gates, nets and modules, which searched the object vectors of the netlist and of the owning module linearly; every such vector now tracks the positions of its elements and removal is a constant-time swap
     * sped up `Module::is_parent_module_of`, which walked the whole subtree of the module once per endpoint whenever module nets are recomputed; it now walks up the parent chain of the queried module. Together with the constant-time removal, parsing the OpenTitan Earl Grey netlist of 25,906 modules went from 709 s to 31 s
@@ -86,6 +92,7 @@ All notable changes to this project will be documented in this file.
     * added `ClockTree::from_netlist` that extracts the clock tree of a netlist
     * added `ClockTree::export_dot` that writes the tree as a DOT graph
     * added `ClockTree::get_subtree` that returns the clock tree below a gate or net as a `ClockTree` of its own
+    * changed `export_dot` to read the `X` and `Y` coordinates of a gate from the typed store, with the legacy `data` map as the fallback
     * added `ClockTree::get_neighbors`, bound to Python as `get_parents` and `get_childs`, that returns the gates and nets directly upstream or downstream of an object in the clock tree
     * added `ClockTree::get_gates`, `get_nets`, `get_all` and `get_netlist` that list the gates and nets of a clock tree and hand back the netlist it was built from
     * added `ClockTree::get_vertex_from_ptr`, `get_ptr_from_vertex`, `get_vertices_from_ptrs` and `get_ptrs_from_vertices` that translate between gates or nets and their igraph vertex IDs, and `ClockTree::get_igraph` that exposes the underlying `igraph_t` to C++ callers
@@ -172,17 +179,41 @@ All notable changes to this project will be documented in this file.
   * module identification
     * changed the pin groups of an identified module to be descending. The pin indices are unchanged, and the `CTRL` group is now of type `control` instead of `enable`
     * fixed `CandidateType.addition_offset` being bound to `addition` in Python, which made the two indistinguishable
+    * changed `create_modules` to copy the typed parameters of a gate it replaces
   * Verilog parser
+    * replaced the parser with one built on the netlist IR (`hal_core/netlist/netlist_ir`): a preprocessor and lexer, a recursive-descent parser into a syntax tree, and an elaboration into the IR that the shared instantiation back end turns into the netlist. Parameters and attributes become typed values in the typed store of gates, nets and modules; the legacy `data` map is no longer written. The plugin keeps the name `verilog_parser` and the `.v` extension; the previous parser stays loadable as `verilog_parser_old` without registering an extension and is removed in a later release
+    * added the Python functions `verilog_parser.parse_to_ir`, `parse_text_to_ir` and `parse_and_instantiate`
+    * changed every port of the top module to become a net and a global input or output, used or not
+    * changed a parameter value that is no literal and an assignment to an undeclared signal to be errors
+    * changed a top-level output assigned a constant to be driven by the GND or VCC gate
+    * changed escaped identifiers to keep their spelling exactly, so `\a[3]` is a scalar named `a[3]`
     * added support for a port expression in a module header that is a concatenation, e.g. `.sum({\<const0> ,\^sum [1:0]})`, which Vivado writes for a port that is partly constant; every hierarchical Vivado netlist with such a port failed to parse before
     * changed the choice of the top module to honour a module marked `(* top = 1 *)`, as Yosys writes it, before falling back to the one module nothing instantiates; a Yosys netlist that keeps unused modules failed as ambiguous before, and the error now names the candidates
   * VHDL parser
+    * replaced the parser with one built on the netlist IR, like the Verilog parser: a lexer with case-folded identifier keys, a recursive-descent parser for the structural subset, and an elaboration that keeps the declared spelling of every name and resolves references without regard to case. Generics and attributes become typed values; generics typed by an entity or component declaration take that type. The plugin keeps the name `vhdl_parser` and the `.vhd` and `.vhdl` extensions; the previous parser stays loadable as `vhdl_parser_old` without registering an extension
+    * added the Python functions `vhdl_parser.parse_to_ir`, `parse_text_to_ir` and `parse_and_instantiate`
+    * added support for extended identifiers, `end entity name` and the other `end` forms, direct instantiation `entity work.e(arch)`, several architectures per entity (one module per architecture in use), configurations, packages with components and constants, `subtype`, array types, `others` in aggregates, sized bit strings, the weak `std_logic` values, and generics on entity instances
+    * changed attributes on instance labels to be kept; they were dropped before
     * fixed the `'0'` and `'1'` literals being left without a driver whenever the netlist already contains a GND or VCC instance; each literal now gets a GND or VCC gate of its own, and an instance that is in the netlist drives only what it drives there
+  * netlist simulator
+    * changed the flip-flop and RAM initialization to read the INIT values through `Gate::get_init_data`, which serves the typed store and falls back to the legacy `data` map
+  * Verilator
+    * changed the removal of location, INIT and RAM mode data before writing the netlist to cover the typed store as well
+  * GEXF writer
+    * changed the `INIT` column to read the typed store, with the legacy `data` map as the fallback
+  * Verilog writer
+    * changed the writer to emit the generics of the typed store as `#(...)` parameters and module `parameter` declarations, and the attributes as `(* ... *)` on modules, nets, gates and module instances; the legacy `data` map is no longer written
   * Liberty parser
     * fixed the Liberty parser rejecting a `type` group that declares `bit_to`
   * GUI extension demo
     * fixed `ParameterType.Module` being bound to `Gate` in Python, which made the two indistinguishable
     
 * GUI
+  * selection details
+    * changed the graph layouter to read `X_COORDINATE` and `Y_COORDINATE` from the typed store as well as from the data map
+    * changed the data table of gates, nets and modules to list the typed generics and attributes first, with their type and width, and the free-form data map below; the Python snippet of a typed row reads the value from the typed store
+    * added changing the value of a typed parameter or attribute and deleting it from the data table, with undo, through the new user action `SetObjectParameter`; the value is validated against the declared type
+    * changed the configuration string of a LUT to be read from and written to the typed store, so editing it in the LUT tab or in the data table updates the Boolean function
   * module and gate pins
     * changed the pin tree of a module to show the number of pins of each group and its order, ↑ for ascending and ↓ for descending, in a `Size/Index` column right after the name, which also holds the index of each pin; the pin tree of a gate shows the number of pins and the order of each group in its `Index` column
     * added `Automatically rename pins` to the context menu of a pin group, which renames every pin of the group to `<group name>(<index>)`

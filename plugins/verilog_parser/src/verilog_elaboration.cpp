@@ -327,7 +327,7 @@ namespace hal
                     {
                         return res;
                     }
-                    if (auto res = convert_attributes(m_src.attributes, m_dst.attributes, "module '" + m_src.name + "'"); res.is_error())
+                    if (auto res = convert_attributes(m_src.attributes, m_dst.parameters, "module '" + m_src.name + "'"); res.is_error())
                     {
                         return res;
                     }
@@ -606,18 +606,22 @@ namespace hal
                     return make(Parameter::Integer(name, "0"), std::to_string(v.get()));
                 }
 
+                /**
+                 * Append the attributes as typed values with the attribute source; a generic of the same name may sit
+                 * in the same list.
+                 */
                 Result<std::monostate> convert_attributes(const std::vector<ast::Attribute>& src, std::vector<TypedValue>& dst, const std::string& what) const
                 {
                     for (const ast::Attribute& a : src)
                     {
-                        if (std::any_of(dst.begin(), dst.end(), [&a](const TypedValue& tv) { return tv.declaration.get_name() == a.name; }))
+                        if (std::any_of(dst.begin(), dst.end(), [&a](const TypedValue& tv) { return tv.declaration.get_source() == Parameter::Source::Attribute && tv.declaration.get_name() == a.name; }))
                         {
                             return ERR(what + ": attribute '" + a.name + "' is given twice" + at(a.location));
                         }
                         if (!a.value.has_value())
                         {
                             TypedValue tv;
-                            tv.declaration = Parameter::Boolean(a.name, "false").get();
+                            tv.declaration = Parameter::Boolean(a.name, "false", Parameter::Source::Attribute).get();
                             tv.value       = "true";
                             dst.push_back(tv);
                             continue;
@@ -627,7 +631,9 @@ namespace hal
                         {
                             return ERR(tv.get_error());
                         }
-                        dst.push_back(tv.get());
+                        TypedValue value  = tv.get();
+                        value.declaration = value.declaration.with_source(Parameter::Source::Attribute);
+                        dst.push_back(value);
                     }
                     return OK({});
                 }
@@ -639,7 +645,7 @@ namespace hal
                     for (const ast::ParameterDecl& p : m_src.parameters)
                     {
                         if (m_parameter_values.find(p.name) != m_parameter_values.end()
-                            || std::any_of(m_dst.parameters.begin(), m_dst.parameters.end(), [&p](const TypedValue& tv) { return tv.declaration.get_name() == p.name; }))
+                            || std::any_of(m_dst.parameters.begin(), m_dst.parameters.end(), [&p](const TypedValue& tv) { return tv.declaration.get_source() == Parameter::Source::Generic && tv.declaration.get_name() == p.name; }))
                         {
                             return ERR(where("parameter '" + p.name + "' is declared twice", p.location));
                         }
@@ -712,7 +718,7 @@ namespace hal
                         }
                         Signal& s  = m_dst.add_signal(p.name, dims.get());
                         s.location = p.location;
-                        if (auto res = convert_attributes(p.attributes, s.attributes, where("signal '" + p.name + "'", p.location)); res.is_error())
+                        if (auto res = convert_attributes(p.attributes, s.parameters, where("signal '" + p.name + "'", p.location)); res.is_error())
                         {
                             return res;
                         }
@@ -747,7 +753,7 @@ namespace hal
                         }
                         Signal& s  = m_dst.add_signal(n.name, dims.get());
                         s.location = n.location;
-                        if (auto res = convert_attributes(n.attributes, s.attributes, where("net '" + n.name + "'", n.location)); res.is_error())
+                        if (auto res = convert_attributes(n.attributes, s.parameters, where("net '" + n.name + "'", n.location)); res.is_error())
                         {
                             return res;
                         }
@@ -783,7 +789,7 @@ namespace hal
                             }
                             Port& port    = m_dst.add_port(h.name, p->direction, dims.get());
                             port.location = p->location;
-                            if (auto res = convert_attributes(p->attributes, port.attributes, where("port '" + h.name + "'", p->location)); res.is_error())
+                            if (auto res = convert_attributes(p->attributes, port.parameters, where("port '" + h.name + "'", p->location)); res.is_error())
                             {
                                 return res;
                             }
@@ -1235,14 +1241,14 @@ namespace hal
                             {
                                 return ERR(tv.get_error());
                             }
-                            if (std::any_of(out.parameters.begin(), out.parameters.end(), [&name](const TypedValue& t) { return t.declaration.get_name() == name; }))
+                            if (std::any_of(out.parameters.begin(), out.parameters.end(), [&name](const TypedValue& t) { return t.declaration.get_source() == Parameter::Source::Generic && t.declaration.get_name() == name; }))
                             {
                                 return ERR(what + ": parameter '" + name + "' is set twice" + at(p.location));
                             }
                             out.parameters.push_back(tv.get());
                         }
 
-                        if (auto res = convert_attributes(inst.attributes, out.attributes, what); res.is_error())
+                        if (auto res = convert_attributes(inst.attributes, out.parameters, what); res.is_error())
                         {
                             return res;
                         }
@@ -1269,7 +1275,7 @@ namespace hal
                             return ERR(tv.get_error());
                         }
                         // a defparam overrides an earlier value
-                        inst->parameters.erase(std::remove_if(inst->parameters.begin(), inst->parameters.end(), [&d](const TypedValue& t) { return t.declaration.get_name() == d.path.back(); }),
+                        inst->parameters.erase(std::remove_if(inst->parameters.begin(), inst->parameters.end(), [&d](const TypedValue& t) { return t.declaration.get_source() == Parameter::Source::Generic && t.declaration.get_name() == d.path.back(); }),
                                                inst->parameters.end());
                         inst->parameters.push_back(tv.get());
                     }

@@ -30,6 +30,7 @@
 #include "hal_core/utilities/result.h"
 
 #include <map>
+#include <optional>
 #include <string>
 #include <tuple>
 #include <unordered_map>
@@ -123,9 +124,22 @@ namespace hal
          */
         void set_data_map(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& map);
 
+        /** The key of a typed value: its source and its name. */
+        using ParameterKey = std::pair<Parameter::Source, std::string>;
+
         /**
-         * Set (or overwrite) the value of a typed parameter as a string. The value is validated and
-         * normalized before being stored. Any existing entry with the same name is replaced.
+         * Map a category of the legacy data map to the source of the typed store: `generic` to `Generic`,
+         * `attribute` to `Attribute`. Gate libraries name INIT and location data by such a category.
+         *
+         * @param[in] category - The category.
+         * @returns The source, or nothing for any other category.
+         */
+        static std::optional<Parameter::Source> source_from_category(const std::string& category);
+
+        /**
+         * Set (or overwrite) the value of a typed parameter as a string. The declaration's source says whether the
+         * value is a generic or an attribute; a generic and an attribute may share a name. The value is validated and
+         * normalized before being stored. Any existing entry with the same source and name is replaced.
          *
          * @param[in] param - The parameter declaration.
          * @param[in] value - The value to store as a string.
@@ -134,113 +148,74 @@ namespace hal
         Result<std::monostate> set_parameter(const Parameter& param, const std::string& value);
 
         /**
-         * Get the value of a typed parameter. Returns the explicitly-stored value or an error if the parameter does not exist.
+         * Get the value of a typed parameter.
          *
          * @param[in] name - The parameter name.
-         * @returns OK() with the value string on success, an error otherwise.
+         * @param[in] source - The source, generic or attribute.
+         * @returns OK() with the value string on success, an error if the parameter does not exist.
          */
-        Result<std::string> get_parameter_value(const std::string& name) const;
+        Result<std::string> get_parameter_value(const std::string& name, Parameter::Source source = Parameter::Source::Generic) const;
 
         /**
-         * Get the value of a typed parameter. Returns the explicitly-stored value or an error if the parameter does not exist.
+         * Get the value of a typed parameter whose declaration matches the given one.
          *
-         * @param[in] param - The parameter.
-         * @returns OK() with the value string on success, an error otherwise.
+         * @param[in] param - The parameter declaration.
+         * @returns OK() with the value string on success, an error if there is no parameter with that source and name or its declaration differs.
          */
-        Result<std::string> get_parameter_value(const Parameter& name) const;
+        Result<std::string> get_parameter_value(const Parameter& param) const;
 
         /**
          * Get the full declaration of a typed parameter.
          *
          * @param[in] name - The parameter name.
-         * @returns OK() with the declaration on success, an error otherwise.
+         * @param[in] source - The source, generic or attribute.
+         * @returns OK() with the declaration on success, an error if the parameter does not exist.
          */
-        Result<Parameter> get_parameter_declaration(const std::string& name) const;
+        Result<Parameter> get_parameter_declaration(const std::string& name, Parameter::Source source = Parameter::Source::Generic) const;
 
         /**
-         * Check whether a parameter exists and has an explicitly stored value.
+         * Check whether a parameter with the given declaration exists.
          *
-         * @param[in] param - The parameter.
-         * @returns `true` if the parameter is explicitly set, `false` otherwise.
+         * @param[in] param - The parameter declaration.
+         * @returns `true` if a parameter with that source and name exists and its declaration matches, `false` otherwise.
          */
         bool has_parameter(const Parameter& param) const;
 
         /**
-         * Check whether a parameter with the given name exists and has an explicitly stored value.
+         * Check whether a parameter with the given name exists.
          *
          * @param[in] name - The parameter name.
-         * @returns `true` if the parameter is explicitly set, `false` otherwise.
+         * @param[in] source - The source, generic or attribute.
+         * @returns `true` if the parameter exists, `false` otherwise.
          */
-        bool has_parameter(const std::string& name) const;
+        bool has_parameter(const std::string& name, Parameter::Source source = Parameter::Source::Generic) const;
 
         /**
-         * Delete an explicitly stored parameter value, if any.
+         * Delete a stored parameter, if any.
          *
          * @param[in] name - The parameter name.
-         * @returns `true` if a value was deleted, `false` otherwise.
+         * @param[in] source - The source, generic or attribute.
+         * @returns `true` if a parameter was deleted, `false` otherwise.
          */
-        bool delete_parameter(const std::string& name);
+        bool delete_parameter(const std::string& name, Parameter::Source source = Parameter::Source::Generic);
 
         /**
-         * Get all explicitly stored parameters as a map from `name` to `(declaration, value)`.
+         * Get all stored typed values as a map from `(source, name)` to `(declaration, value)`.
          *
          * @returns The parameter map.
          */
-        const std::unordered_map<std::string, std::pair<Parameter, std::string>>& get_parameters() const;
+        const std::map<ParameterKey, std::pair<Parameter, std::string>>& get_parameters() const;
 
         /**
-         * Set (or overwrite) the value of a typed attribute as a string. Attributes are what a netlist file annotates an
-         * object with, for example a Verilog `(* keep = "true" *)`; they are stored apart from the parameters, so an
-         * attribute and a parameter may share a name. The value is validated and normalized before being stored.
+         * Get the stored typed values of one source as a map from `name` to `(declaration, value)`.
          *
-         * @param[in] attribute - The attribute declaration.
-         * @param[in] value - The value to store as a string.
-         * @returns OK() on success, an error otherwise.
+         * @param[in] source - The source, generic or attribute.
+         * @returns The parameter map.
          */
-        Result<std::monostate> set_attribute(const Parameter& attribute, const std::string& value);
-
-        /**
-         * Get the value of a typed attribute.
-         *
-         * @param[in] name - The attribute name.
-         * @returns OK() with the value string on success, an error if the attribute does not exist.
-         */
-        Result<std::string> get_attribute_value(const std::string& name) const;
-
-        /**
-         * Get the full declaration of a typed attribute.
-         *
-         * @param[in] name - The attribute name.
-         * @returns OK() with the declaration on success, an error if the attribute does not exist.
-         */
-        Result<Parameter> get_attribute_declaration(const std::string& name) const;
-
-        /**
-         * Check whether an attribute with the given name exists.
-         *
-         * @param[in] name - The attribute name.
-         * @returns `true` if the attribute exists, `false` otherwise.
-         */
-        bool has_attribute(const std::string& name) const;
-
-        /**
-         * Delete a stored attribute, if any.
-         *
-         * @param[in] name - The attribute name.
-         * @returns `true` if an attribute was deleted, `false` otherwise.
-         */
-        bool delete_attribute(const std::string& name);
-
-        /**
-         * Get all stored attributes as a map from `name` to `(declaration, value)`.
-         *
-         * @returns The attribute map.
-         */
-        const std::unordered_map<std::string, std::pair<Parameter, std::string>>& get_attributes() const;
+        std::map<std::string, std::pair<Parameter, std::string>> get_parameters(Parameter::Source source) const;
 
     protected:
         std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> m_data;
-        std::unordered_map<std::string, std::pair<Parameter, std::string>> m_parameters;
-        std::unordered_map<std::string, std::pair<Parameter, std::string>> m_attributes;
+        std::map<ParameterKey, std::pair<Parameter, std::string>> m_parameters;
     };
 }    // namespace hal

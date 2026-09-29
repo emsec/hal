@@ -123,10 +123,11 @@ namespace hal
         py_location.def("__str__", &netlist_ir::Location::to_string);
 
         py::class_<netlist_ir::TypedValue> py_typed_value(py_ir, "TypedValue", R"(
-            A named, typed value: a parameter or generic, or an attribute such as a Verilog ``(* keep = "true" *)``. The
-            declaration carries the name and the type, inferred from the literal form in the file. When the gate type
-            of an instance declares a parameter of the same name, the gate type's declaration wins at instantiation;
-            attributes are never declared by gate types.
+            A named, typed value: a parameter or generic, or an attribute such as a Verilog ``(* keep = "true" *)``; the
+            declaration's source tells which. The declaration carries the name, the type and the source, the type inferred
+            from the literal form in the file. When the gate type of an instance declares a parameter of the same name, the
+            gate type's declaration wins at instantiation; attributes are never declared by gate types. A generic and an
+            attribute may share a name.
         )");
         py_typed_value.def(py::init<>());
         py_typed_value.def(py::init([](const Parameter& declaration, const std::string& value) {
@@ -175,8 +176,8 @@ namespace hal
 
             :type: list[int]
         )");
-        py_signal.def_readwrite("attributes", &netlist_ir::Signal::attributes, R"(
-            The attributes.
+        py_signal.def_readwrite("parameters", &netlist_ir::Signal::parameters, R"(
+            The typed values, in practice attributes.
 
             :type: list[hal_py.netlist_ir.TypedValue]
         )");
@@ -304,12 +305,7 @@ namespace hal
             :type: list[hal_py.netlist_ir.Connection]
         )");
         py_instance.def_readwrite("parameters", &netlist_ir::Instance::parameters, R"(
-            The parameter values set on the instance.
-
-            :type: list[hal_py.netlist_ir.TypedValue]
-        )");
-        py_instance.def_readwrite("attributes", &netlist_ir::Instance::attributes, R"(
-            The attributes.
+            The generics set on the instance and its attributes.
 
             :type: list[hal_py.netlist_ir.TypedValue]
         )");
@@ -371,12 +367,7 @@ namespace hal
             :type: list[tuple(int,int)]
         )");
         py_module.def_readwrite("parameters", &netlist_ir::Module::parameters, R"(
-            The declared parameters or generics with their default values.
-
-            :type: list[hal_py.netlist_ir.TypedValue]
-        )");
-        py_module.def_readwrite("attributes", &netlist_ir::Module::attributes, R"(
-            The attributes.
+            The declared parameters or generics with their default values, and the module's attributes.
 
             :type: list[hal_py.netlist_ir.TypedValue]
         )");
@@ -603,7 +594,7 @@ namespace hal
             before anything is created, so each net is created exactly once. A net is created for every class of bits
             that connects to a gate pin, is a port of the top module, or carries an attribute. Gate types and pins are
             resolved by exact name first and then by a unique case-insensitive match. Parameters and attributes land in
-            the typed stores of the created objects; a parameter that the gate type declares takes the gate type's
+            the typed store of the created objects; a generic that the gate type declares takes the gate type's
             declaration.
 
             :param hal_py.netlist_ir.Design design: The design.

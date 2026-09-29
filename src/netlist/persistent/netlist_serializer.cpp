@@ -1,5 +1,8 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 
+#include <algorithm>
+#include <cctype>
+
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
@@ -87,6 +90,97 @@ namespace hal
                 return val;
             }
 
+            /**
+             * The typed declaration for a legacy data entry of category `generic` or `attribute`, from the type
+             * string the legacy parsers wrote; the value is adjusted to the typed grammar where needed.
+             */
+            std::optional<std::pair<Parameter, std::string>> legacy_typed_value(Parameter::Source source, const std::string& key, const std::string& type, const std::string& value)
+            {
+                Result<Parameter> decl = ERR("");
+                std::string typed      = value;
+                if (type == "integer")
+                {
+                    decl = Parameter::Integer(key, "0", source);
+                }
+                else if (type == "floating_point" || type == "float")
+                {
+                    decl = Parameter::Float(key, "0", source);
+                }
+                else if (type == "boolean")
+                {
+                    decl = Parameter::Boolean(key, "false", source);
+                    std::transform(typed.begin(), typed.end(), typed.begin(), [](unsigned char ch) { return std::tolower(ch); });
+                }
+                else if (type == "bit_value")
+                {
+                    decl  = Parameter::BitVector(key, 1, "", source);
+                    typed = "0x" + value;
+                }
+                else if (type == "bit_vector")
+                {
+                    decl  = Parameter::BitVector(key, static_cast<u16>(std::max<std::size_t>(1, value.size() * 4)), "", source);
+                    typed = "0x" + value;
+                }
+                else if (type == "bit_string")
+                {
+                    const bool defined = value.find_first_not_of("01") == std::string::npos;
+                    decl               = defined ? Parameter::BitVector(key, static_cast<u16>(std::max<std::size_t>(1, value.size())), "", source)
+                                                 : Parameter::LogicVector(key, static_cast<u16>(std::max<std::size_t>(1, value.size())), "", source);
+                    typed              = "0b" + value;
+                }
+                else if (type == "time")
+                {
+                    decl = Parameter::Time(key, "0s", source);
+                    typed.erase(std::remove(typed.begin(), typed.end(), ' '), typed.end());
+                    if (typed.size() > 3 && typed.compare(typed.size() - 3, 3, "sec") == 0)
+                    {
+                        typed = typed.substr(0, typed.size() - 3) + "s";
+                    }
+                    else if (typed.size() > 2 && typed.compare(typed.size() - 2, 2, "hr") == 0)
+                    {
+                        typed = typed.substr(0, typed.size() - 2) + "h";
+                    }
+                }
+                if (decl.is_error() || !decl.get().validate(typed))
+                {
+                    // string, unknown, invalid: keep the text
+                    decl  = Parameter::String(key, "", source);
+                    typed = value;
+                }
+                if (decl.is_error())
+                {
+                    return std::nullopt;
+                }
+                return std::make_pair(decl.get(), typed);
+            }
+
+            /**
+             * Move the `generic` and `attribute` entries of the legacy data map, which the parsers wrote before the
+             * typed store existed, into the typed store. An entry the store already has is left alone.
+             */
+            void migrate_legacy_data(DataContainer* c)
+            {
+                std::vector<std::tuple<std::string, std::string>> migrated;
+                for (const auto& [key, entry] : c->get_data_map())
+                {
+                    const auto& [category, name] = key;
+                    const auto source            = DataContainer::source_from_category(category);
+                    if (!source.has_value() || c->has_parameter(name, source.value()))
+                    {
+                        continue;
+                    }
+                    const auto typed = legacy_typed_value(source.value(), name, std::get<0>(entry), std::get<1>(entry));
+                    if (typed.has_value() && c->set_parameter(typed->first, typed->second).is_ok())
+                    {
+                        migrated.push_back(key);
+                    }
+                }
+                for (const auto& [category, name] : migrated)
+                {
+                    c->delete_data(category, name);
+                }
+            }
+
             void deserialize_data(DataContainer* c, const rapidjson::Value& val)
             {
                 for (const auto& entry : val.GetArray())
@@ -95,15 +189,18 @@ namespace hal
                 }
             }
 
-            // serialize parameters
-            rapidjson::Value serialize_parameters(const std::unordered_map<std::string, std::pair<Parameter, std::string>>& params, rapidjson::Document::AllocatorType& allocator)
+            // serialize the typed values of a container as an array; generic and attribute may share a name
+            rapidjson::Value serialize_parameters(const std::map<DataContainer::ParameterKey, std::pair<Parameter, std::string>>& params, rapidjson::Document::AllocatorType& allocator)
             {
-                rapidjson::Value out(rapidjson::kObjectType);
-                for (const auto& [pname, decl_and_value] : params)
+                rapidjson::Value out(rapidjson::kArrayType);
+                for (const auto& [key, decl_and_value] : params)
                 {
                     const auto& [decl, pvalue] = decl_and_value;
                     rapidjson::Value entry(rapidjson::kObjectType);
-                    const std::string type_str = enum_to_string<Parameter::Type>(decl.get_type());
+                    const std::string source_str = enum_to_string<Parameter::Source>(decl.get_source());
+                    const std::string type_str   = enum_to_string<Parameter::Type>(decl.get_type());
+                    entry.AddMember("name", JSON_STR_HELPER(decl.get_name()), allocator);
+                    entry.AddMember("source", JSON_STR_HELPER(source_str), allocator);
                     entry.AddMember("type", JSON_STR_HELPER(type_str), allocator);
                     entry.AddMember("size", static_cast<u32>(decl.get_size()), allocator);
                     entry.AddMember("default", JSON_STR_HELPER(decl.get_default_value()), allocator);
@@ -117,7 +214,7 @@ namespace hal
                         entry.AddMember("enum_values", enum_values, allocator);
                     }
                     entry.AddMember("value", JSON_STR_HELPER(pvalue), allocator);
-                    out.AddMember(JSON_STR_HELPER(pname), entry, allocator);
+                    out.PushBack(entry, allocator);
                 }
                 return out;
             }
@@ -135,32 +232,42 @@ namespace hal
                 {
                     return ERR("parameter '" + name + "' has unknown type '" + type_str + "'");
                 }
+                Parameter::Source source = Parameter::Source::Generic;
+                if (entry.HasMember("source") && entry["source"].IsString())
+                {
+                    const std::string source_str = entry["source"].GetString();
+                    if (!is_valid_enum<Parameter::Source>(source_str))
+                    {
+                        return ERR("parameter '" + name + "' has unknown source '" + source_str + "'");
+                    }
+                    source = enum_from_string<Parameter::Source>(source_str);
+                }
                 const Parameter::Type ptype     = enum_from_string<Parameter::Type>(type_str);
                 const std::string default_value = (entry.HasMember("default") && entry["default"].IsString()) ? entry["default"].GetString() : std::string{};
                 switch (ptype)
                 {
                     case Parameter::Type::Boolean: {
-                        return Parameter::Boolean(name, default_value);
+                        return Parameter::Boolean(name, default_value, source);
                     }
                     case Parameter::Type::BitVector: {
                         const u16 size = (entry.HasMember("size") && entry["size"].IsUint()) ? static_cast<u16>(entry["size"].GetUint()) : 0;
-                        return Parameter::BitVector(name, size, default_value);
+                        return Parameter::BitVector(name, size, default_value, source);
                     }
                     case Parameter::Type::LogicVector: {
                         const u16 size = (entry.HasMember("size") && entry["size"].IsUint()) ? static_cast<u16>(entry["size"].GetUint()) : 0;
-                        return Parameter::LogicVector(name, size, default_value);
+                        return Parameter::LogicVector(name, size, default_value, source);
                     }
                     case Parameter::Type::Integer: {
-                        return Parameter::Integer(name, default_value);
+                        return Parameter::Integer(name, default_value, source);
                     }
                     case Parameter::Type::String: {
-                        return Parameter::String(name, default_value);
+                        return Parameter::String(name, default_value, source);
                     }
                     case Parameter::Type::Float: {
-                        return Parameter::Float(name, default_value);
+                        return Parameter::Float(name, default_value, source);
                     }
                     case Parameter::Type::Time: {
-                        return Parameter::Time(name, default_value);
+                        return Parameter::Time(name, default_value, source);
                     }
                     case Parameter::Type::Enum: {
                         std::vector<std::string> values;
@@ -175,46 +282,50 @@ namespace hal
                                 values.emplace_back(v.GetString());
                             }
                         }
-                        return Parameter::Enum(name, values, default_value);
+                        return Parameter::Enum(name, values, default_value, source);
                     }
                 }
                 return ERR("parameter '" + name + "' has unhandled type");
             }
 
-            // Deserialize the contents of a "parameters" JSON object into a DataContainer.
-            // For each entry, reconstructs the declaration and stores the value via set_parameter.
-            Result<std::monostate> deserialize_parameters(DataContainer* c, const rapidjson::Value& val)
+            Result<std::monostate> deserialize_parameter_entry(DataContainer* c, const std::string& name, const rapidjson::Value& entry)
             {
-                for (auto p_it = val.MemberBegin(); p_it != val.MemberEnd(); ++p_it)
+                auto decl_res = deserialize_parameter_decl(name, entry);
+                if (decl_res.is_error())
                 {
-                    const std::string pname = p_it->name.GetString();
-                    auto decl_res           = deserialize_parameter_decl(pname, p_it->value);
-                    if (decl_res.is_error())
-                    {
-                        return ERR(decl_res.get_error().get());
-                    }
-                    if (auto res = c->set_parameter(decl_res.get(), p_it->value["value"].GetString()); res.is_error())
-                    {
-                        return ERR("failed to set parameter '" + pname + "': " + res.get_error().get());
-                    }
+                    return ERR(decl_res.get_error().get());
+                }
+                if (auto res = c->set_parameter(decl_res.get(), entry["value"].GetString()); res.is_error())
+                {
+                    return ERR("failed to set parameter '" + name + "': " + res.get_error().get());
                 }
                 return OK({});
             }
 
-            // Attributes are serialized like parameters, as a JSON object of typed entries, under "attributes".
-            Result<std::monostate> deserialize_attributes(DataContainer* c, const rapidjson::Value& val)
+            // Deserialize the typed values of a container: an array of entries with a 'name' (the current form), or an
+            // object keyed by name (the form before the source was recorded, all generics).
+            Result<std::monostate> deserialize_parameters(DataContainer* c, const rapidjson::Value& val)
             {
-                for (auto a_it = val.MemberBegin(); a_it != val.MemberEnd(); ++a_it)
+                if (val.IsArray())
                 {
-                    const std::string aname = a_it->name.GetString();
-                    auto decl_res           = deserialize_parameter_decl(aname, a_it->value);
-                    if (decl_res.is_error())
+                    for (const auto& entry : val.GetArray())
                     {
-                        return ERR(decl_res.get_error().get());
+                        if (!entry.IsObject() || !entry.HasMember("name") || !entry["name"].IsString())
+                        {
+                            return ERR("a parameter entry has no name");
+                        }
+                        if (auto res = deserialize_parameter_entry(c, entry["name"].GetString(), entry); res.is_error())
+                        {
+                            return res;
+                        }
                     }
-                    if (auto res = c->set_attribute(decl_res.get(), a_it->value["value"].GetString()); res.is_error())
+                    return OK({});
+                }
+                for (auto p_it = val.MemberBegin(); p_it != val.MemberEnd(); ++p_it)
+                {
+                    if (auto res = deserialize_parameter_entry(c, p_it->name.GetString(), p_it->value); res.is_error())
                     {
-                        return ERR("failed to set attribute '" + aname + "': " + res.get_error().get());
+                        return res;
                     }
                 }
                 return OK({});
@@ -381,10 +492,6 @@ namespace hal
                 {
                     val.AddMember("parameters", serialize_parameters(params, allocator), allocator);
                 }
-                if (const auto& attributes = gate->get_attributes(); !attributes.empty())
-                {
-                    val.AddMember("attributes", serialize_parameters(attributes, allocator), allocator);
-                }
                 {
                     rapidjson::Value functions(rapidjson::kObjectType);
                     for (const auto& [name, function] : gate->get_boolean_functions(true))
@@ -434,15 +541,7 @@ namespace hal
                             return false;
                         }
                     }
-
-                    if (val.HasMember("attributes"))
-                    {
-                        if (auto res = deserialize_attributes(gate, val["attributes"]); res.is_error())
-                        {
-                            log_error("netlist_persistent", "could not deserialize gate '" + gate_name + "' with ID " + std::to_string(gate_id) + ": {}", res.get_error().get());
-                            return false;
-                        }
-                    }
+                    migrate_legacy_data(gate);
 
                     if (val.HasMember("custom_functions"))
                     {
@@ -514,10 +613,6 @@ namespace hal
                 {
                     val.AddMember("parameters", serialize_parameters(params, allocator), allocator);
                 }
-                if (const auto& attributes = net->get_attributes(); !attributes.empty())
-                {
-                    val.AddMember("attributes", serialize_parameters(attributes, allocator), allocator);
-                }
                 return val;
             }
 
@@ -569,15 +664,7 @@ namespace hal
                         return false;
                     }
                 }
-
-                if (val.HasMember("attributes"))
-                {
-                    if (auto res = deserialize_attributes(net, val["attributes"]); res.is_error())
-                    {
-                        log_error("netlist_persistent", "could not deserialize net '" + net_name + "' with ID " + std::to_string(net_id) + ": {}", res.get_error().get());
-                        return false;
-                    }
-                }
+                migrate_legacy_data(net);
 
                 return true;
             }
@@ -651,10 +738,6 @@ namespace hal
                 {
                     val.AddMember("parameters", serialize_parameters(params, allocator), allocator);
                 }
-                if (const auto& attributes = module->get_attributes(); !attributes.empty())
-                {
-                    val.AddMember("attributes", serialize_parameters(attributes, allocator), allocator);
-                }
                 return val;
             }
 
@@ -715,15 +798,7 @@ namespace hal
                         return false;
                     }
                 }
-
-                if (val.HasMember("attributes"))
-                {
-                    if (auto res = deserialize_attributes(sm, val["attributes"]); res.is_error())
-                    {
-                        log_error("netlist_persistent", "could not deserialize module '" + module_name + "' with ID " + std::to_string(module_id) + ": {}", res.get_error().get());
-                        return false;
-                    }
-                }
+                migrate_legacy_data(sm);
 
                 if (val.HasMember("pin_groups"))
                 {

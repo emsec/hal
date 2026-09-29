@@ -209,6 +209,13 @@ namespace hal
         return buildPyCode(gateCodePrefix, suffix, gateId);
     }
 
+    QString PyCodeProvider::pyCodeGateParameter(u32 gateId, QString key, QString source)
+    {
+        const QString suffix = QString("get_parameter_value(\"%1\", hal_py.Parameter.Source.%2)").arg(key, source == "attribute" ? "Attribute" : "Generic");
+
+        return buildPyCode(gateCodePrefix, suffix, gateId);
+    }
+
     QString PyCodeProvider::pyCodeNet(u32 netId)
     {
         return netCodePrefix.arg(netId);
@@ -263,6 +270,13 @@ namespace hal
     QString PyCodeProvider::pyCodeNetData(u32 netId, QString category, QString key)
     {
         const QString suffix = QString("data[(\"%1\", \"%2\")]").arg(category, key);
+
+        return buildPyCode(netCodePrefix, suffix, netId);
+    }
+
+    QString PyCodeProvider::pyCodeNetParameter(u32 netId, QString key, QString source)
+    {
+        const QString suffix = QString("get_parameter_value(\"%1\", hal_py.Parameter.Source.%2)").arg(key, source == "attribute" ? "Attribute" : "Generic");
 
         return buildPyCode(netCodePrefix, suffix, netId);
     }
@@ -373,6 +387,13 @@ namespace hal
     QString PyCodeProvider::pyCodeModuleData(u32 moduleId, QString category, QString key)
     {
         const QString suffix = QString("data[(\"%1\", \"%2\")]").arg(category, key);
+
+        return buildPyCode(moduleCodePrefix, suffix, moduleId);
+    }
+
+    QString PyCodeProvider::pyCodeModuleParameter(u32 moduleId, QString key, QString source)
+    {
+        const QString suffix = QString("get_parameter_value(\"%1\", hal_py.Parameter.Source.%2)").arg(key, source == "attribute" ? "Attribute" : "Generic");
 
         return buildPyCode(moduleCodePrefix, suffix, moduleId);
     }

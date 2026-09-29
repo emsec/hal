@@ -106,6 +106,42 @@ namespace hal
         return mDataEntries.at(row);
     }
 
+    void DataTableModel::updateData(const DataContainer* dc)
+    {
+        if (dc == nullptr)
+        {
+            updateData({});
+            return;
+        }
+        QList<DataEntry> typedEntries;
+        for (const auto& [key, entry] : dc->get_parameters())
+        {
+            const auto& [declaration, value] = entry;
+            DataEntry e;
+            e.category = QString::fromStdString(enum_to_string(key.first));
+            e.key      = QString::fromStdString(key.second);
+            e.dataType = QString::fromStdString(enum_to_string(declaration.get_type()));
+            if (declaration.get_type() == Parameter::Type::BitVector || declaration.get_type() == Parameter::Type::LogicVector)
+            {
+                e.dataType += QString("[%1]").arg(declaration.get_size());
+            }
+            e.value = QString::fromStdString(value);
+            e.typed = true;
+            typedEntries.append(e);
+        }
+        updateData(dc->get_data_map());
+        Q_EMIT layoutAboutToBeChanged();
+        mDataEntries = typedEntries + mDataEntries;    // the store is ordered: generics, then attributes
+        mEntryToRowStyle.clear();
+        int rowIdx = 0;
+        for(const DataEntry& entry : mDataEntries)
+        {
+            mEntryToRowStyle[QPair<QString,QString>(entry.category, entry.key)] = getRowStyleByEntry(entry, rowIdx);
+            rowIdx++;
+        }
+        Q_EMIT layoutChanged();
+    }
+
     void DataTableModel::updateData(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& dataMap)
     {
         Q_EMIT layoutAboutToBeChanged();
@@ -165,6 +201,11 @@ namespace hal
         {
             style.valueString = QString("\"%1\"").arg(entry.value);
             style.valueColor = PythonQssAdapter::instance()->doubleQuotedStringColor();
+        }
+        else if(entry.typed && (entry.dataType.startsWith("bit_vector") || entry.dataType.startsWith("logic_vector") || entry.dataType == "integer" || entry.dataType == "float"))
+        {
+            style.valueString = entry.value;    // typed values carry their prefix already
+            style.valueColor = PythonQssAdapter::instance()->numberColor();
         }
         else if(entry.dataType == "bit_value" || entry.dataType == "bit_vector")
         {

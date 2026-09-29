@@ -267,8 +267,8 @@ TEST_F(DataContainerTest, check_parameters)
         EXPECT_EQ(d_cont.get_parameter_declaration("flavor").get(), flavor_decl);
 
         ASSERT_EQ(d_cont.get_parameters().size(), 3u);
-        EXPECT_EQ(d_cont.get_parameters().at("WIDTH").first, width_decl);
-        EXPECT_EQ(d_cont.get_parameters().at("WIDTH").second, "0x20");
+        EXPECT_EQ(d_cont.get_parameters().at({Parameter::Source::Generic, "WIDTH"}).first, width_decl);
+        EXPECT_EQ(d_cont.get_parameters(Parameter::Source::Generic).at("WIDTH").second, "0x20");
     }
     {
         // The (Parameter) lookup returns the stored value when the declaration matches.
@@ -321,62 +321,76 @@ TEST_F(DataContainerTest, check_parameters)
 }
 
 /**
-     * Testing the typed-attribute API, which mirrors the parameter API but keeps its own store, so that an attribute
-     * and a parameter may share a name.
+     * Testing attributes in the typed store: a declaration with the attribute source lives next to the generics, so
+     * that an attribute and a generic may share a name, and every accessor selects by source.
      *
-     * Functions: set_attribute, get_attribute_value, get_attribute_declaration, has_attribute, delete_attribute,
-     *            get_attributes
+     * Functions: set_parameter, get_parameter_value, get_parameter_declaration, has_parameter, delete_parameter,
+     *            get_parameters
      */
 TEST_F(DataContainerTest, check_attributes)
 {
     TEST_START
-    const auto keep_decl = Parameter::Boolean("keep", "false").get();
-    const auto loc_decl  = Parameter::String("LOC", "").get();
-    const auto init_decl = Parameter::BitVector("INIT", 8, "0x0").get();
+    const auto attr      = Parameter::Source::Attribute;
+    const auto keep_decl = Parameter::Boolean("keep", "false", attr).get();
+    const auto loc_decl  = Parameter::String("LOC", "", attr).get();
+    const auto init_decl = Parameter::BitVector("INIT", 8, "0x0", attr).get();
+    EXPECT_EQ(keep_decl.get_source(), attr);
+    EXPECT_EQ(Parameter::Boolean("keep", "false").get().get_source(), Parameter::Source::Generic);
+    EXPECT_EQ(Parameter::Boolean("keep", "false").get().with_source(attr), keep_decl);
+    EXPECT_NE(Parameter::Boolean("keep", "false").get(), keep_decl);    // the source is part of the declaration
 
     {
         TestDataContainer d_cont;
-        EXPECT_TRUE(d_cont.set_attribute(keep_decl, "true").is_ok());
-        EXPECT_TRUE(d_cont.set_attribute(loc_decl, "SLICE_X0Y0").is_ok());
-        EXPECT_TRUE(d_cont.set_attribute(init_decl, "0xab").is_ok());
+        EXPECT_TRUE(d_cont.set_parameter(keep_decl, "true").is_ok());
+        EXPECT_TRUE(d_cont.set_parameter(loc_decl, "SLICE_X0Y0").is_ok());
+        EXPECT_TRUE(d_cont.set_parameter(init_decl, "0xab").is_ok());
 
-        EXPECT_EQ(d_cont.get_attribute_value("keep").get(), "true");
-        EXPECT_EQ(d_cont.get_attribute_value("LOC").get(), "SLICE_X0Y0");
-        EXPECT_EQ(d_cont.get_attribute_value("INIT").get(), "0xAB");    // bit vectors are normalized like parameters
-        EXPECT_EQ(d_cont.get_attribute_declaration("keep").get(), keep_decl);
-        EXPECT_TRUE(d_cont.has_attribute("LOC"));
-        EXPECT_FALSE(d_cont.has_attribute("unknown"));
-        ASSERT_EQ(d_cont.get_attributes().size(), 3u);
-        EXPECT_EQ(d_cont.get_attributes().at("INIT").first, init_decl);
+        EXPECT_EQ(d_cont.get_parameter_value("keep", attr).get(), "true");
+        EXPECT_EQ(d_cont.get_parameter_value("LOC", attr).get(), "SLICE_X0Y0");
+        EXPECT_EQ(d_cont.get_parameter_value("INIT", attr).get(), "0xAB");    // bit vectors are normalized like generics
+        EXPECT_EQ(d_cont.get_parameter_value(keep_decl).get(), "true");
+        EXPECT_EQ(d_cont.get_parameter_declaration("keep", attr).get(), keep_decl);
+        EXPECT_TRUE(d_cont.has_parameter("LOC", attr));
+        EXPECT_TRUE(d_cont.has_parameter(loc_decl));
+        EXPECT_FALSE(d_cont.has_parameter("LOC"));    // no generic of that name
+        EXPECT_FALSE(d_cont.has_parameter("unknown", attr));
+        ASSERT_EQ(d_cont.get_parameters().size(), 3u);
+        ASSERT_EQ(d_cont.get_parameters(attr).size(), 3u);
+        EXPECT_TRUE(d_cont.get_parameters(Parameter::Source::Generic).empty());
+        EXPECT_EQ(d_cont.get_parameters(attr).at("INIT").first, init_decl);
+        EXPECT_EQ(d_cont.get_parameters().at({attr, "INIT"}).first, init_decl);
 
-        // attributes and parameters are separate stores
-        EXPECT_TRUE(d_cont.get_parameters().empty());
+        // an attribute and a generic may share a name
         EXPECT_TRUE(d_cont.set_parameter(Parameter::String("keep", "").get(), "no").is_ok());
-        EXPECT_EQ(d_cont.get_attribute_value("keep").get(), "true");
+        EXPECT_EQ(d_cont.get_parameter_value("keep", attr).get(), "true");
         EXPECT_EQ(d_cont.get_parameter_value("keep").get(), "no");
+        EXPECT_EQ(d_cont.get_parameters().size(), 4u);
+        EXPECT_EQ(d_cont.get_parameters(Parameter::Source::Generic).size(), 1u);
 
-        EXPECT_TRUE(d_cont.delete_attribute("keep"));
-        EXPECT_FALSE(d_cont.has_attribute("keep"));
+        EXPECT_TRUE(d_cont.delete_parameter("keep", attr));
+        EXPECT_FALSE(d_cont.has_parameter("keep", attr));
         EXPECT_TRUE(d_cont.has_parameter("keep"));
-        EXPECT_FALSE(d_cont.delete_attribute("keep"));
+        EXPECT_FALSE(d_cont.delete_parameter("keep", attr));
     }
 
     // Negative
     {
         NO_COUT_TEST_BLOCK;
         TestDataContainer d_cont;
-        EXPECT_TRUE(d_cont.set_attribute(init_decl, "0x100").is_error());    // overflow
-        EXPECT_FALSE(d_cont.has_attribute("INIT"));
-        EXPECT_TRUE(d_cont.get_attribute_value("missing").is_error());
-        EXPECT_TRUE(d_cont.get_attribute_declaration("missing").is_error());
+        EXPECT_TRUE(d_cont.set_parameter(init_decl, "0x100").is_error());    // overflow
+        EXPECT_FALSE(d_cont.has_parameter("INIT", attr));
+        EXPECT_TRUE(d_cont.get_parameter_value("missing", attr).is_error());
+        EXPECT_TRUE(d_cont.get_parameter_declaration("missing", attr).is_error());
+        EXPECT_TRUE(d_cont.set_parameter(keep_decl, "true").is_ok());
+        EXPECT_TRUE(d_cont.get_parameter_value(keep_decl.with_source(Parameter::Source::Generic)).is_error());
     }
     {
         // equality takes the attributes into account
         TestDataContainer a;
         TestDataContainer b;
-        EXPECT_TRUE(a.set_attribute(keep_decl, "true").is_ok());
+        EXPECT_TRUE(a.set_parameter(keep_decl, "true").is_ok());
         EXPECT_NE(a, b);
-        EXPECT_TRUE(b.set_attribute(keep_decl, "true").is_ok());
+        EXPECT_TRUE(b.set_parameter(keep_decl, "true").is_ok());
         EXPECT_EQ(a, b);
     }
     TEST_END

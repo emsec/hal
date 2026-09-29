@@ -877,15 +877,29 @@ namespace hal
             identifiers = data_identifiers;
         }
 
+        // the typed store first, the legacy data map for projects that still carry it
+        const std::optional<Parameter::Source> source = DataContainer::source_from_category(category);
+        const auto read                               = [&](const Gate* gate, const std::string& id) -> std::optional<std::string> {
+            if (source.has_value() && gate->has_parameter(id, source.value()))
+            {
+                return gate->get_parameter_value(id, source.value()).get();
+            }
+            if (gate->has_data(category, id))
+            {
+                return std::get<1>(gate->get_data(category, id));
+            }
+            return std::nullopt;
+        };
+
         u32 failed = 0;
         for (Gate* gate : m_gates)
         {
-            if (gate->has_data(category, identifiers.first))
+            if (const auto x_str = read(gate, identifiers.first); x_str.has_value())
             {
                 try
                 {
-                    i32 x_loc = std::stoi(std::get<1>(gate->get_data(category, identifiers.first)));
-                    i32 y_loc = std::stoi(std::get<1>(gate->get_data(category, identifiers.second)));
+                    i32 x_loc = std::stoi(x_str.value());
+                    i32 y_loc = std::stoi(read(gate, identifiers.second).value_or(""));
 
                     gate->set_location(std::make_pair(x_loc, y_loc));
 

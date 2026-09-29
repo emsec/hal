@@ -133,7 +133,8 @@ namespace hal
                 {
                     continue;
                 }
-                const std::string& init_str = std::get<1>(gate->get_data(init_component->get_init_category(), init_component->get_init_identifiers().front()));
+                const auto init_res        = gate->get_init_data();    // the typed store, or the legacy data map of an old project
+                const std::string init_str = (init_res.is_ok() && !init_res.get().empty()) ? init_res.get().front() : std::string();
 
                 if (!init_str.empty())
                 {

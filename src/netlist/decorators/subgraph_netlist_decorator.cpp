@@ -39,6 +39,10 @@ namespace hal
         {
             Net* new_net = c_netlist->create_net(net->get_id(), net->get_name());
             new_net->set_data_map(net->get_data_map());
+            for (const auto& [key, entry] : net->get_parameters())
+            {
+                new_net->set_parameter(entry.first, entry.second);
+            }
         }
 
         // copy gates

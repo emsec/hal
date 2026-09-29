@@ -75,8 +75,9 @@ check([mod.name for mod in design.modules] == ["sub", "top"], "modules")
 # parameters and attributes
 s0.parameters = [ir.TypedValue(hal_py.Parameter.Integer("W", "8"), "8")]
 check(top.find_instance("s0").parameters[0].declaration.get_name() == "W", "parameter value round trip")
-g2.attributes = [ir.TypedValue(hal_py.Parameter.Boolean("keep", "false"), "true")]
-check(top.find_instance("g2").attributes[0].declaration.get_type() == hal_py.Parameter.Type.Boolean, "attribute type")
+g2.parameters = [ir.TypedValue(hal_py.Parameter.Boolean("keep", "false", hal_py.Parameter.Source.Attribute), "true")]
+check(top.find_instance("g2").parameters[0].declaration.get_type() == hal_py.Parameter.Type.Boolean, "attribute type")
+check(top.find_instance("g2").parameters[0].declaration.source == hal_py.Parameter.Source.Attribute, "attribute source")
 
 # top detection and validation
 check(design.find_top() == "top", "find_top")
@@ -102,7 +103,10 @@ check(len(g_top) == 1, "top-level gate exists")
 check(g_top[0].get_parameter_value("W") is None and len(nl.get_top_module().get_submodules()) == 2, "hierarchy")
 s0_mod = [m for m in nl.get_modules() if m.get_name() == "s0"][0]
 check(s0_mod.get_parameter_value("W") == "8", "instance parameter on the module")
-check(g_top[0].get_attribute_value("keep") == "true", "attribute on the gate")
+check(g_top[0].get_parameter_value("keep", hal_py.Parameter.Source.Attribute) == "true", "attribute on the gate")
+check(not g_top[0].has_parameter("keep"), "no generic of that name")
+check(list(g_top[0].get_parameters(hal_py.Parameter.Source.Attribute).keys()) == ["keep"], "attributes by source")
+check((hal_py.Parameter.Source.Attribute, "keep") in g_top[0].get_parameters(), "the store is keyed by source and name")
 check(any(n.is_gnd_net() for n in nl.get_nets()), "the constant got a net")
 
 top.add_instance("s0", "sub", ir.InstanceKind.Module)

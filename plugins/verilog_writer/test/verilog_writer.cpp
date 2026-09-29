@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "gate_library_test_utils.h"
 #include "netlist_test_utils.h"
-#include "verilog_parser_old/verilog_parser_old.h"
+#include "verilog_parser/verilog_parser.h"
 #include "verilog_writer/verilog_writer.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
@@ -34,7 +34,7 @@ namespace hal
     };
 
     /**
-     * Test writing a given netlist to file and subsequently parse it using the VerilogParserOld.
+     * Test writing a given netlist to file and subsequently parse it using the VerilogParser.
      *
      * Functions: write
      */
@@ -69,21 +69,18 @@ namespace hal
                     Net* net_6_7 = test_utils::connect(nl.get(), gate_6, "O", gate_7, "I0");
 
                     Net* net_4_out = test_utils::connect_global_out(nl.get(), gate_4, "O", "net_4_out");
-                    ASSERT_TRUE(net_4_out->set_data("parser_annotation", "merged_nets", "string", "[[\"net_4_out__GLOBAL_IO__\"]]"));
                     ModulePin* pin_1 = top_module->get_pin_by_net(net_4_out);
                     ASSERT_NE(pin_1, nullptr);
                     ASSERT_TRUE(top_module->set_pin_name(pin_1, net_4_out->get_name()));
                     ASSERT_TRUE(top_module->set_pin_group_name(pin_1->get_group().first, net_4_out->get_name()));
 
                     Net* net_5_out = test_utils::connect_global_out(nl.get(), gate_5, "O", "net_5_out");
-                    ASSERT_TRUE(net_5_out->set_data("parser_annotation", "merged_nets", "string", "[[\"net_5_out__GLOBAL_IO__\"]]"));
                     ModulePin* pin_2 = top_module->get_pin_by_net(net_5_out);
                     ASSERT_NE(pin_2, nullptr);
                     ASSERT_TRUE(top_module->set_pin_name(pin_2, net_5_out->get_name()));
                     ASSERT_TRUE(top_module->set_pin_group_name(pin_2->get_group().first, net_5_out->get_name()));
 
                     Net* net_7_out = test_utils::connect_global_out(nl.get(), gate_7, "O", "net_7_out");
-                    ASSERT_TRUE(net_7_out->set_data("parser_annotation", "merged_nets", "string", "[[\"net_7_out__GLOBAL_IO__\"]]"));
                     ModulePin* pin_3 = top_module->get_pin_by_net(net_7_out);
                     ASSERT_NE(pin_3, nullptr);
                     ASSERT_TRUE(top_module->set_pin_name(pin_3, net_7_out->get_name()));
@@ -93,7 +90,7 @@ namespace hal
                 VerilogWriter verilog_writer;
                 ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist).is_ok());
 
-                VerilogParserOld verilog_parser;
+                VerilogParser verilog_parser;
                 auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
                 ASSERT_TRUE(parsed_nl_res.is_ok());
                 std::unique_ptr<Netlist> parsed_nl = parsed_nl_res.get();
@@ -151,7 +148,7 @@ namespace hal
                 VerilogWriter verilog_writer;
                 ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist).is_ok());
 
-                VerilogParserOld verilog_parser;
+                VerilogParser verilog_parser;
                 auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
                 ASSERT_TRUE(parsed_nl_res.is_ok());
                 std::unique_ptr<Netlist> parsed_nl = parsed_nl_res.get();
@@ -228,7 +225,7 @@ namespace hal
                 VerilogWriter verilog_writer;
                 ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist).is_ok());
 
-                VerilogParserOld verilog_parser;
+                VerilogParser verilog_parser;
                 auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
                 ASSERT_TRUE(parsed_nl_res.is_ok());
                 std::unique_ptr<Netlist> parsed_nl = parsed_nl_res.get();                
@@ -294,67 +291,68 @@ namespace hal
                 std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(m_gl);
 
                 Gate* gate = nl->create_gate(m_gl->get_gate_type_by_name("BUF"), "gate_0");
-                test_utils::connect_global_in(nl.get(), gate, "I");
+                Net* in_net = test_utils::connect_global_in(nl.get(), gate, "I");
                 test_utils::connect_global_out(nl.get(), gate, "O");
 
                 Module* mod = nl->create_module("mod", nl->get_top_module(), {gate});
 
-                gate->set_data("generic", "test_bit_vector", "bit_vector", "123ABC");
-                gate->set_data("generic", "test_string", "string", "one_two_three");
-                gate->set_data("generic", "test_integer", "integer", "123");
-                gate->set_data("generic", "test_float", "floating_point", "1.001");
-                gate->set_data("generic", "test_bit_value", "bit_value", "1");
+                const auto attr = Parameter::Source::Attribute;
+                for (DataContainer* c : std::vector<DataContainer*>{gate, mod})
+                {
+                    ASSERT_TRUE(c->set_parameter(Parameter::BitVector("test_bit_vector", 24, "").get(), "0x123ABC").is_ok());
+                    ASSERT_TRUE(c->set_parameter(Parameter::LogicVector("test_logic_vector", 4, "").get(), "0b1x0z").is_ok());
+                    ASSERT_TRUE(c->set_parameter(Parameter::String("test_string", "").get(), "one_two_three").is_ok());
+                    ASSERT_TRUE(c->set_parameter(Parameter::Integer("test_integer", "0").get(), "123").is_ok());
+                    ASSERT_TRUE(c->set_parameter(Parameter::Float("test_float", "0").get(), "1.001").is_ok());
+                    ASSERT_TRUE(c->set_parameter(Parameter::Boolean("test_boolean", "false").get(), "true").is_ok());
+                    ASSERT_TRUE(c->set_parameter(Parameter::Time("test_time", "0s").get(), "10ns").is_ok());
+                    ASSERT_TRUE(c->set_parameter(Parameter::String("test_attr_string", "", attr).get(), "one_two_three").is_ok());
+                    ASSERT_TRUE(c->set_parameter(Parameter::Boolean("keep", "false", attr).get(), "true").is_ok());
 
-                // below data should be ignored when writing
-                gate->set_data("generic", "test_invalid", "invalid", "ignore_me");
-                gate->set_data("attribute", "test_attr_string", "string", "one_two_three");
-                gate->set_data("random", "test_rand_string", "string", "one_two_three");
+                    // the free-form data map is not written
+                    c->set_data("random", "test_rand_string", "string", "one_two_three");
+                }
+                ASSERT_TRUE(in_net->set_parameter(Parameter::String("mark", "", attr).get(), "x").is_ok());
 
-                mod->set_data("generic", "test_bit_vector", "bit_vector", "123ABC");
-                mod->set_data("generic", "test_string", "string", "one_two_three");
-                mod->set_data("generic", "test_integer", "integer", "123");
-                mod->set_data("generic", "test_float", "floating_point", "1.001");
-                mod->set_data("generic", "test_bit_value", "bit_value", "1");
-
-                // below data should be ignored when writing
-                mod->set_data("generic", "test_invalid", "invalid", "ignore_me");
-                mod->set_data("attribute", "test_attr_string", "string", "one_two_three");
-                mod->set_data("random", "test_rand_string", "string", "one_two_three");
-                
                 VerilogWriter verilog_writer;
                 ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist).is_ok());
 
-                VerilogParserOld verilog_parser;
+                VerilogParser verilog_parser;
                 auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
-                ASSERT_TRUE(parsed_nl_res.is_ok());
+                ASSERT_TRUE(parsed_nl_res.is_ok()) << parsed_nl_res.get_error().get();
                 std::unique_ptr<Netlist> parsed_nl = parsed_nl_res.get();
                 ASSERT_NE(parsed_nl, nullptr);
 
                 std::vector<Gate*> gates = parsed_nl->get_gates();
                 ASSERT_EQ(gates.size(), 1);
-                const Gate* parsed_gate = gates.front();
-                ASSERT_NE(parsed_gate, nullptr);
-
-                EXPECT_EQ(parsed_gate->get_data_map().size(), 5);
-                EXPECT_EQ(parsed_gate->get_data("generic", "test_bit_vector"), std::make_tuple(std::string("bit_vector"), std::string("123ABC")));
-                EXPECT_EQ(parsed_gate->get_data("generic", "test_string"), std::make_tuple(std::string("string"), std::string("one_two_three")));
-                EXPECT_EQ(parsed_gate->get_data("generic", "test_integer"), std::make_tuple(std::string("integer"), std::string("123")));
-                EXPECT_EQ(parsed_gate->get_data("generic", "test_float"), std::make_tuple(std::string("floating_point"), std::string("1.001")));
-                EXPECT_EQ(parsed_gate->get_data("generic", "test_bit_value"), std::make_tuple(std::string("bit_value"), std::string("1")));
-
                 std::vector<Module*> modules = parsed_nl->get_modules();
                 ASSERT_EQ(modules.size(), 2);
                 auto mod_it = std::find_if(modules.begin(), modules.end(), [](const Module* m){ return !m->is_top_module(); });
                 ASSERT_NE(mod_it, modules.end());
-                const Module* parsed_module = *mod_it;
-                ASSERT_NE(parsed_module, nullptr);
 
-                EXPECT_EQ(parsed_module->get_data_map().size(), 5);
-                EXPECT_EQ(parsed_module->get_data("generic", "test_bit_vector"), std::make_tuple(std::string("bit_vector"), std::string("123ABC")));
-                EXPECT_EQ(parsed_module->get_data("generic", "test_string"), std::make_tuple(std::string("string"), std::string("one_two_three")));
-                EXPECT_EQ(parsed_module->get_data("generic", "test_integer"), std::make_tuple(std::string("integer"), std::string("123")));
-                EXPECT_EQ(parsed_module->get_data("generic", "test_float"), std::make_tuple(std::string("floating_point"), std::string("1.001")));
-                EXPECT_EQ(parsed_module->get_data("generic", "test_bit_value"), std::make_tuple(std::string("bit_value"), std::string("1")));
+                for (const DataContainer* c : std::vector<const DataContainer*>{gates.front(), *mod_it})
+                {
+                    EXPECT_TRUE(c->get_data_map().empty());
+                    EXPECT_EQ(c->get_parameters(Parameter::Source::Generic).size(), 7);
+                    EXPECT_EQ(c->get_parameters(attr).size(), 2);
+                    EXPECT_EQ(c->get_parameter_value("test_bit_vector").get(), "0x123ABC");
+                    EXPECT_EQ(c->get_parameter_declaration("test_bit_vector").get().get_size(), 24);
+                    EXPECT_EQ(c->get_parameter_value("test_logic_vector").get(), "0b1X0Z");    // normalized to upper case
+                    EXPECT_EQ(c->get_parameter_declaration("test_logic_vector").get().get_type(), Parameter::Type::LogicVector);
+                    EXPECT_EQ(c->get_parameter_value("test_string").get(), "one_two_three");
+                    EXPECT_EQ(c->get_parameter_value("test_integer").get(), "123");
+                    EXPECT_EQ(c->get_parameter_declaration("test_integer").get().get_type(), Parameter::Type::Integer);
+                    EXPECT_EQ(c->get_parameter_value("test_float").get(), "1.001");
+                    EXPECT_EQ(c->get_parameter_declaration("test_float").get().get_type(), Parameter::Type::Float);
+                    EXPECT_EQ(c->get_parameter_value("test_boolean").get(), "0x1");    // Verilog has no boolean, it comes back as a 1-bit vector
+                    EXPECT_EQ(c->get_parameter_value("test_time").get(), "10ns");       // and no time literal, it comes back as a string
+                    EXPECT_EQ(c->get_parameter_declaration("test_time").get().get_type(), Parameter::Type::String);
+                    EXPECT_EQ(c->get_parameter_value("test_attr_string", attr).get(), "one_two_three");
+                    EXPECT_EQ(c->get_parameter_value("keep", attr).get(), "0x1");
+                }
+                Net* parsed_in = parsed_nl->get_global_input_nets().size() == 1 ? *parsed_nl->get_global_input_nets().begin() : nullptr;
+                ASSERT_NE(parsed_in, nullptr);
+                EXPECT_EQ(parsed_in->get_parameter_value("mark", attr).get(), "x");
             }
         TEST_END
     }
@@ -398,7 +396,7 @@ namespace hal
                 VerilogWriter verilog_writer;
                 ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist).is_ok());
 
-                VerilogParserOld verilog_parser;
+                VerilogParser verilog_parser;
                 auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
                 ASSERT_TRUE(parsed_nl_res.is_ok());
                 std::unique_ptr<Netlist> parsed_nl = parsed_nl_res.get();

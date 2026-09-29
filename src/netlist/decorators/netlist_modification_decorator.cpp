@@ -46,6 +46,7 @@ namespace hal
         Module* gate_module               = gate->get_module();
         Grouping* gate_grouping           = gate->get_grouping();
         auto gate_data                    = gate->get_data_map();
+        const auto gate_parameters        = gate->get_parameters();
 
         std::map<GatePin*, Net*> in_nets;
         std::map<GatePin*, Net*> out_nets;
@@ -105,6 +106,10 @@ namespace hal
         if (!gate_data.empty())
         {
             new_gate->set_data_map(gate_data);
+        }
+        for (const auto& [key, entry] : gate_parameters)
+        {
+            new_gate->set_parameter(entry.first, entry.second);
         }
 
         // remove old gate
@@ -266,6 +271,10 @@ namespace hal
         if (const auto& data_map = slave_net->get_data_map(); !data_map.empty())
         {
             master_net->set_data_map(data_map);
+        }
+        for (const auto& [key, entry] : slave_net->get_parameters())
+        {
+            master_net->set_parameter(entry.first, entry.second);
         }
 
         if (!m_netlist.delete_net(slave_net))

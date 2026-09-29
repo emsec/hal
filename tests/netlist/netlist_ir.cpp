@@ -439,21 +439,21 @@ TEST_F(NetlistIRTest, check_validate)
     }
     {
         Design d        = create_design();
-        const auto keep = Parameter::Boolean("keep", "false").get();
-        d.find_module("top")->find_instance("g2")->attributes.push_back({keep, "true"});
-        d.find_module("top")->find_instance("g2")->attributes.push_back({keep, "false"});
+        const auto keep = Parameter::Boolean("keep", "false", Parameter::Source::Attribute).get();
+        d.find_module("top")->find_instance("g2")->parameters.push_back({keep, "true"});
+        d.find_module("top")->find_instance("g2")->parameters.push_back({keep, "false"});
         expect_invalid(d, "an attribute given twice");
     }
     {
         Design d = create_design();
-        d.find_module("top")->signals.front().attributes.push_back({Parameter::Integer("n", "0").get(), "abc"});
+        d.find_module("top")->signals.front().parameters.push_back({Parameter::Integer("n", "0", Parameter::Source::Attribute).get(), "abc"});
         expect_invalid(d, "an attribute value that does not fit its type");
     }
     {
-        // an attribute and a parameter may share a name
+        // an attribute and a generic may share a name
         Design d        = create_design();
         const auto keep = Parameter::Boolean("keep", "false").get();
-        d.find_module("top")->find_instance("g2")->attributes.push_back({keep, "true"});
+        d.find_module("top")->find_instance("g2")->parameters.push_back({keep.with_source(Parameter::Source::Attribute), "true"});
         d.find_module("top")->find_instance("g2")->parameters.push_back({keep, "false"});
         EXPECT_TRUE(d.validate().is_ok());
     }

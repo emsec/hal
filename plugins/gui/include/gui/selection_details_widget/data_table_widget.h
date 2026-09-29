@@ -90,6 +90,12 @@ namespace hal
          */
         void setModule(Module* module);
 
+    Q_SIGNALS:
+        /**
+         * Emitted after a typed parameter of the shown container was changed through the table.
+         */
+        void parameterChanged();
+
     private Q_SLOTS:
         /**
          * Handles the resize event. The table is sized, so that the output column is bigger than the input columns.
@@ -103,6 +109,8 @@ namespace hal
     private:
         void adjustTableSizes();
         void changePropertyRequested(DataTableModel::propertyType prop);
+        void changeParameterValueRequested();
+        void deleteParameterRequested();
 
         DataTableModel* mDataTableModel;
         DataContainer* mCurrentContainer;

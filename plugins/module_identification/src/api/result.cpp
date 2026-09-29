@@ -258,6 +258,10 @@ namespace hal
 
                     // copy data container
                     new_gate->set_data_map(gate->get_data_map());
+                    for (const auto& [key, entry] : gate->get_parameters())
+                    {
+                        new_gate->set_parameter(entry.first, entry.second);
+                    }
 
                     // remove old gate from module and replace with new one
                     std::vector<Gate*>* relevant_vector;

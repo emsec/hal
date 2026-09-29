@@ -1378,13 +1378,13 @@ namespace hal
             EXPECT_EQ(gate->get_parameter_declaration("width").get(), width_decl);
             EXPECT_EQ(gate->get_parameter_declaration("mode").get(), mode_decl);
 
-            // get_parameters() exposes the full (declaration, value) map keyed by name.
+            // get_parameters() exposes the full (declaration, value) map keyed by source and name.
             const auto& params = gate->get_parameters();
             ASSERT_EQ(params.size(), 2u);
-            EXPECT_EQ(params.at("width").first, width_decl);
-            EXPECT_EQ(params.at("width").second, "0x1234");
-            EXPECT_EQ(params.at("mode").first, mode_decl);
-            EXPECT_EQ(params.at("mode").second, "inverted");
+            EXPECT_EQ(params.at({Parameter::Source::Generic, "width"}).first, width_decl);
+            EXPECT_EQ(params.at({Parameter::Source::Generic, "width"}).second, "0x1234");
+            EXPECT_EQ(gate->get_parameters(Parameter::Source::Generic).at("mode").first, mode_decl);
+            EXPECT_EQ(gate->get_parameters(Parameter::Source::Generic).at("mode").second, "inverted");
 
             // Values that fail the declaration's `validate` are rejected.
             EXPECT_TRUE(gate->set_parameter(width_decl, "0x10000").is_error());          // 16-bit overflow

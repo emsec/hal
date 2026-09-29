@@ -72,13 +72,10 @@ namespace hal
                 {
                     return true;
                 }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return false;
-                }
+                log_error("python_context", "{}", res.get_error().get());
+                return false;
             }, py::arg("param"), py::arg("value"), R"(
-            Set (or overwrite) the value of a typed parameter as a string. The value is validated, normalized, and stored; any existing entry with the same name is replaced.
+            Set (or overwrite) the value of a typed parameter as a string. The declaration's source says whether the value is a generic or an attribute; a generic and an attribute may share a name. The value is validated and normalized before being stored.
 
             :param hal_py.Parameter param: The parameter declaration.
             :param str value: The value to store as a string.
@@ -86,21 +83,19 @@ namespace hal
             :rtype: bool
         )");
 
-        py_data_container.def("get_parameter_value", [](DataContainer& self, const std::string& name) -> std::optional<std::string> {
-                auto res = self.get_parameter_value(name);
+        py_data_container.def("get_parameter_value", [](DataContainer& self, const std::string& name, Parameter::Source source) -> std::optional<std::string> {
+                auto res = self.get_parameter_value(name, source);
                 if (res.is_ok())
                 {
                     return res.get();
                 }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            }, py::arg("name"), R"(
-            Get the value of a typed parameter. Returns the explicitly-stored value or ``None`` if the parameter does not exist.
+                log_error("python_context", "{}", res.get_error().get());
+                return std::nullopt;
+            }, py::arg("name"), py::arg("source") = Parameter::Source::Generic, R"(
+            Get the value of a typed parameter. Returns the stored value or ``None`` if the parameter does not exist.
 
             :param str name: The parameter name.
+            :param hal_py.Parameter.Source source: The source, generic or attribute.
             :returns: The value string on success, ``None`` otherwise.
             :rtype: str or None
         )");
@@ -111,159 +106,77 @@ namespace hal
                 {
                     return res.get();
                 }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            }, py::arg("name"), R"(
-            Get the value of a typed parameter. Returns the explicitly-stored value or ``None`` if the parameter does not exist.
+                log_error("python_context", "{}", res.get_error().get());
+                return std::nullopt;
+            }, py::arg("param"), R"(
+            Get the value of a typed parameter whose declaration matches the given one. Returns the stored value or ``None`` if there is no such parameter or its declaration differs.
 
-            :param hal_py.Parameter param: The parameter.
+            :param hal_py.Parameter param: The parameter declaration.
             :returns: The value string on success, ``None`` otherwise.
             :rtype: str or None
         )");
 
-        py_data_container.def("get_parameter_declaration", [](DataContainer& self, const std::string& name) -> std::optional<Parameter> {
-                auto res = self.get_parameter_declaration(name);
+        py_data_container.def("get_parameter_declaration", [](DataContainer& self, const std::string& name, Parameter::Source source) -> std::optional<Parameter> {
+                auto res = self.get_parameter_declaration(name, source);
                 if (res.is_ok())
                 {
                     return res.get();
                 }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            }, py::arg("name"), R"(
+                log_error("python_context", "{}", res.get_error().get());
+                return std::nullopt;
+            }, py::arg("name"), py::arg("source") = Parameter::Source::Generic, R"(
             Get the full declaration of a typed parameter.
 
             :param str name: The parameter name.
+            :param hal_py.Parameter.Source source: The source, generic or attribute.
             :returns: The parameter declaration on success, ``None`` otherwise.
             :rtype: hal_py.Parameter or None
         )");
 
-        py_data_container.def("has_parameter", py::overload_cast<const std::string&>(&DataContainer::has_parameter, py::const_), py::arg("name"), R"(
-            Check whether a parameter with the given name exists and has an explicitly stored value.
+        py_data_container.def("has_parameter", py::overload_cast<const std::string&, Parameter::Source>(&DataContainer::has_parameter, py::const_), py::arg("name"), py::arg("source") = Parameter::Source::Generic, R"(
+            Check whether a parameter with the given name and source exists.
 
             :param str name: The parameter name.
-            :returns: ``True`` if the parameter is explicitly set, ``False`` otherwise.
+            :param hal_py.Parameter.Source source: The source, generic or attribute.
+            :returns: ``True`` if the parameter exists, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_data_container.def("has_parameter", py::overload_cast<const Parameter&>(&DataContainer::has_parameter, py::const_), py::arg("param"), R"(
-            Check whether a parameter exists and has an explicitly stored value.
+            Check whether a parameter with the given declaration exists.
 
-            :param hal_py.Parameter param: The parameter.
-            :returns: ``True`` if the parameter is explicitly set, ``False`` otherwise.
+            :param hal_py.Parameter param: The parameter declaration.
+            :returns: ``True`` if a parameter with that source and name exists and its declaration matches, ``False`` otherwise.
             :rtype: bool
         )");
 
-        py_data_container.def("delete_parameter", &DataContainer::delete_parameter, py::arg("name"), R"(
-            Delete an explicitly stored parameter value, if any.
+        py_data_container.def("delete_parameter", &DataContainer::delete_parameter, py::arg("name"), py::arg("source") = Parameter::Source::Generic, R"(
+            Delete a stored parameter, if any.
 
             :param str name: The parameter name.
-            :returns: ``True`` if a value was deleted, ``False`` otherwise.
+            :param hal_py.Parameter.Source source: The source, generic or attribute.
+            :returns: ``True`` if a parameter was deleted, ``False`` otherwise.
             :rtype: bool
         )");
 
-        py_data_container.def_property_readonly("parameters", &DataContainer::get_parameters, R"(
-            All explicitly stored parameter values as a dict from ``name`` to `(declaration, value)`.
+        py_data_container.def_property_readonly("parameters", py::overload_cast<>(&DataContainer::get_parameters, py::const_), R"(
+            All stored typed values as a dict from ``(source, name)`` to ``(declaration, value)``.
 
-            :type: dict[str,tuple(hal_py.Parameter,str)]
+            :type: dict[tuple(hal_py.Parameter.Source,str),tuple(hal_py.Parameter,str)]
         )");
 
-        py_data_container.def("get_parameters", &DataContainer::get_parameters, R"(
-            Get all explicitly stored parameter values as a dict from ``name`` to `(declaration, value)`.
+        py_data_container.def("get_parameters", py::overload_cast<>(&DataContainer::get_parameters, py::const_), R"(
+            Get all stored typed values as a dict from ``(source, name)`` to ``(declaration, value)``.
 
             :returns: The parameter dict.
-            :rtype: dict[str,tuple(hal_py.Parameter,str)]
+            :rtype: dict[tuple(hal_py.Parameter.Source,str),tuple(hal_py.Parameter,str)]
         )");
 
-        py_data_container.def("set_attribute", [](DataContainer& self, const Parameter& attribute, const std::string& value) -> bool {
-                auto res = self.set_attribute(attribute, value);
-                if (res.is_ok())
-                {
-                    return true;
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return false;
-                }
-            }, py::arg("attribute"), py::arg("value"), R"(
-            Set (or overwrite) the value of a typed attribute as a string. Attributes are what a netlist file annotates an object with, for example a Verilog ``(* keep = "true" *)``; they are stored apart from the parameters, so an attribute and a parameter may share a name. The value is validated and normalized before being stored.
+        py_data_container.def("get_parameters", py::overload_cast<Parameter::Source>(&DataContainer::get_parameters, py::const_), py::arg("source"), R"(
+            Get the stored typed values of one source as a dict from ``name`` to ``(declaration, value)``.
 
-            :param hal_py.Parameter attribute: The attribute declaration.
-            :param str value: The value to store as a string.
-            :returns: ``True`` on success, ``False`` otherwise.
-            :rtype: bool
-        )");
-
-        py_data_container.def("get_attribute_value", [](DataContainer& self, const std::string& name) -> std::optional<std::string> {
-                auto res = self.get_attribute_value(name);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            }, py::arg("name"), R"(
-            Get the value of a typed attribute.
-
-            :param str name: The attribute name.
-            :returns: The value string on success, ``None`` if the attribute does not exist.
-            :rtype: str or None
-        )");
-
-        py_data_container.def("get_attribute_declaration", [](DataContainer& self, const std::string& name) -> std::optional<Parameter> {
-                auto res = self.get_attribute_declaration(name);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            }, py::arg("name"), R"(
-            Get the full declaration of a typed attribute.
-
-            :param str name: The attribute name.
-            :returns: The declaration on success, ``None`` if the attribute does not exist.
-            :rtype: hal_py.Parameter or None
-        )");
-
-        py_data_container.def("has_attribute", &DataContainer::has_attribute, py::arg("name"), R"(
-            Check whether an attribute with the given name exists.
-
-            :param str name: The attribute name.
-            :returns: ``True`` if the attribute exists, ``False`` otherwise.
-            :rtype: bool
-        )");
-
-        py_data_container.def("delete_attribute", &DataContainer::delete_attribute, py::arg("name"), R"(
-            Delete a stored attribute, if any.
-
-            :param str name: The attribute name.
-            :returns: ``True`` if an attribute was deleted, ``False`` otherwise.
-            :rtype: bool
-        )");
-
-        py_data_container.def_property_readonly("attributes", &DataContainer::get_attributes, R"(
-            All stored attributes as a dict from ``name`` to `(declaration, value)`.
-
-            :type: dict[str,tuple(hal_py.Parameter,str)]
-        )");
-
-        py_data_container.def("get_attributes", &DataContainer::get_attributes, R"(
-            Get all stored attributes as a dict from ``name`` to `(declaration, value)`.
-
-            :returns: The attribute dict.
+            :param hal_py.Parameter.Source source: The source, generic or attribute.
+            :returns: The parameter dict.
             :rtype: dict[str,tuple(hal_py.Parameter,str)]
         )");
     }

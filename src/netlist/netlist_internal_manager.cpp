@@ -50,7 +50,8 @@ namespace hal
             {
                 return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied net '" + net->m_name + "' with ID " + std::to_string(net->m_id));
             }
-            c_net->m_data = net->m_data;
+            c_net->m_data       = net->m_data;
+            c_net->m_parameters = net->m_parameters;
         }
 
         // copy gates
@@ -99,7 +100,8 @@ namespace hal
                 }
             }
 
-            c_gate->m_data = gate->m_data;
+            c_gate->m_data       = gate->m_data;
+            c_gate->m_parameters = gate->m_parameters;
         }
 
         // copy modules
@@ -108,7 +110,8 @@ namespace hal
             // ignore top module, since this is already created by the constructor
             if (module->m_id == 1)
             {
-                c_netlist->m_top_module->m_data = module->get_data_map();
+                c_netlist->m_top_module->m_data       = module->get_data_map();
+                c_netlist->m_top_module->m_parameters = module->get_parameters();
                 c_netlist->m_top_module->m_type = module->m_type;
                 continue;
             }
@@ -132,7 +135,8 @@ namespace hal
                 return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create copied module '" + module->m_name + "' with ID " + std::to_string(module->m_id));
             }
 
-            c_module->m_data = module->m_data;
+            c_module->m_data       = module->m_data;
+            c_module->m_parameters = module->m_parameters;
             c_module->m_type = module->m_type;
         }
 

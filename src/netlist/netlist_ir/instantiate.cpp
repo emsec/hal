@@ -237,22 +237,24 @@ namespace hal
                 return res;
             }
 
-            Result<std::monostate> apply_typed_values(DataContainer* target, const std::vector<TypedValue>& values, bool as_parameters, const GateType* declaring_type, const std::string& what)
+            /**
+             * Write typed values to a container; a generic that the gate type declares takes the gate type's declaration.
+             */
+            Result<std::monostate> apply_typed_values(DataContainer* target, const std::vector<TypedValue>& values, const GateType* declaring_type, const std::string& what)
             {
                 for (const TypedValue& v : values)
                 {
                     Parameter declaration = v.declaration;
-                    if (as_parameters && declaring_type != nullptr)
+                    if (declaration.get_source() == Parameter::Source::Generic && declaring_type != nullptr)
                     {
                         if (auto declared = declaring_type->get_parameter(v.declaration.get_name()); declared.is_ok())
                         {
                             declaration = declared.get();
                         }
                     }
-                    const auto res = as_parameters ? target->set_parameter(declaration, v.value) : target->set_attribute(declaration, v.value);
-                    if (res.is_error())
+                    if (const auto res = target->set_parameter(declaration, v.value); res.is_error())
                     {
-                        return ERR_APPEND(res.get_error(), what + ": cannot set " + (as_parameters ? "parameter '" : "attribute '") + v.declaration.get_name() + "' to '" + v.value + "'");
+                        return ERR_APPEND(res.get_error(), what + ": cannot set " + enum_to_string(declaration.get_source()) + " '" + v.declaration.get_name() + "' to '" + v.value + "'");
                     }
                 }
                 return OK({});
@@ -510,7 +512,8 @@ namespace hal
                 bool global_input  = false;
                 bool global_output = false;
                 std::optional<NameCandidate> best;
-                std::vector<TypedValue> attributes;
+                std::vector<TypedValue> parameters;
+                std::vector<std::string> names;    /**< Every signal name the class carries, in the order seen, without repeats. */
             };
             std::map<u64, ClassInfo> classes;
 
@@ -557,7 +560,11 @@ namespace hal
                         {
                             info.best = cand;
                         }
-                        info.attributes.insert(info.attributes.end(), s.attributes.begin(), s.attributes.end());
+                        if (std::find(info.names.begin(), info.names.end(), cand.name) == info.names.end())
+                        {
+                            info.names.push_back(cand.name);
+                        }
+                        info.parameters.insert(info.parameters.end(), s.parameters.begin(), s.parameters.end());
                     }
                 };
                 for (const Port& p : visit.module->ports)
@@ -613,12 +620,8 @@ namespace hal
                 hal::Module* m         = module_of_visit.at(v);
                 const std::string what = v == 0 ? "top module '" + top->name + "'" : describe(visits.at(visit.parent), visit.instance);
 
-                // the module's declared defaults first, then the instance's overrides on top
-                if (auto res = apply_typed_values(m, visit.module->parameters, true, nullptr, what); res.is_error())
-                {
-                    return ERR(res.get_error());
-                }
-                if (auto res = apply_typed_values(m, visit.module->attributes, false, nullptr, what); res.is_error())
+                // the module's declared defaults and attributes first, then the instance's overrides on top
+                if (auto res = apply_typed_values(m, visit.module->parameters, nullptr, what); res.is_error())
                 {
                     return ERR(res.get_error());
                 }
@@ -630,18 +633,14 @@ namespace hal
                         TypedValue effective = tv;
                         for (const TypedValue& declared : visit.module->parameters)
                         {
-                            if (declared.declaration.get_name() == tv.declaration.get_name() && declared.declaration.validate(tv.value))
+                            if (declared.declaration.get_source() == tv.declaration.get_source() && declared.declaration.get_name() == tv.declaration.get_name() && declared.declaration.validate(tv.value))
                             {
-                                effective.declaration = declared.declaration;
+                                effective.declaration = declared.declaration;    // a generic override takes the module's declared type
                             }
                         }
                         overrides.push_back(effective);
                     }
-                    if (auto res = apply_typed_values(m, overrides, true, nullptr, what); res.is_error())
-                    {
-                        return ERR(res.get_error());
-                    }
-                    if (auto res = apply_typed_values(m, visit.instance->attributes, false, nullptr, what); res.is_error())
+                    if (auto res = apply_typed_values(m, overrides, nullptr, what); res.is_error())
                     {
                         return ERR(res.get_error());
                     }
@@ -686,9 +685,36 @@ namespace hal
                 {
                     net->mark_global_output_net();
                 }
-                if (auto res = apply_typed_values(net, info.attributes, false, nullptr, "net '" + name + "'"); res.is_error())
+                if (auto res = apply_typed_values(net, info.parameters, nullptr, "net '" + name + "'"); res.is_error())
                 {
                     return ERR(res.get_error());
+                }
+                // the names of the signals merged into this net, as the legacy parsers annotated them: a JSON list of
+                // lists (one depth level here), which netlist preprocessing reads to recover multi-bit identifiers
+                if (info.names.size() > 1 && info.best.has_value())
+                {
+                    std::string json = "[[";
+                    bool first       = true;
+                    for (const std::string& n : info.names)
+                    {
+                        if (n == info.best->name)
+                        {
+                            continue;
+                        }
+                        std::string escaped;
+                        for (char ch : n)
+                        {
+                            if (ch == '"' || ch == '\\')
+                            {
+                                escaped += '\\';
+                            }
+                            escaped += ch;
+                        }
+                        json += (first ? "\"" : ", \"") + escaped + "\"";
+                        first = false;
+                    }
+                    json += "]]";
+                    net->set_data("parser_annotation", "merged_nets", "string", json);
                 }
                 net_of_class[root] = net;
             }
@@ -781,11 +807,7 @@ namespace hal
                     {
                         nl->mark_vcc_gate(g);
                     }
-                    if (auto res = apply_typed_values(g, inst.parameters, true, type, what); res.is_error())
-                    {
-                        return ERR(res.get_error());
-                    }
-                    if (auto res = apply_typed_values(g, inst.attributes, false, nullptr, what); res.is_error())
+                    if (auto res = apply_typed_values(g, inst.parameters, type, what); res.is_error())
                     {
                         return ERR(res.get_error());
                     }

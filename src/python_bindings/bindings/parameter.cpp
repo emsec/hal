@@ -20,10 +20,16 @@ namespace hal
             .value("Time", Parameter::Type::Time, R"(A time value with a unit suffix (``fs``, ``ps``, ``ns``, ``us``, ``ms``, ``s``, ``min``, ``h``).)")
             .value("Enum", Parameter::Type::Enum, R"(A finite, ordered set of named values; encoded as an integer index.)");
 
+        py::enum_<Parameter::Source>(py_parameter, "Source", R"(
+            Where a value of a declaration comes from: a generic (Verilog ``#(...)``, VHDL ``generic map``, or a parameter declared by a gate type) or an attribute (Verilog ``(* ... *)``, VHDL ``attribute ... of``). Both are typed values in the same store; the source keeps the two name spaces apart.
+        )")
+            .value("Generic", Parameter::Source::Generic, R"(A parameter or generic, possibly declared by the gate type.)")
+            .value("Attribute", Parameter::Source::Attribute, R"(An annotation from the netlist file; never declared by a gate type.)");
+
         py_parameter.def_static(
             "Boolean",
-            [](const std::string& name, const std::string& default_value) -> std::optional<Parameter> {
-                auto res = Parameter::Boolean(name, default_value);
+            [](const std::string& name, const std::string& default_value, Parameter::Source source) -> std::optional<Parameter> {
+                auto res = Parameter::Boolean(name, default_value, source);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -36,17 +42,19 @@ namespace hal
             },
             py::arg("name"),
             py::arg("default_value"),
+            py::arg("source") = Parameter::Source::Generic,
             R"(
             Construct a boolean parameter. Accepts only the value strings ``"true"`` and ``"false"``.
 
             :param str name: Parameter name (must be non-empty).
             :param str default_value: Default value, either ``"true"`` or ``"false"``.
+            :param hal_py.Parameter.Source source: The source, ``Generic`` unless the value is an attribute; the same for every constructor.
         )");
 
         py_parameter.def_static(
             "BitVector",
-            [](const std::string& name, u16 size, const std::string& default_value) -> std::optional<Parameter> {
-                auto res = Parameter::BitVector(name, size, default_value);
+            [](const std::string& name, u16 size, const std::string& default_value, Parameter::Source source) -> std::optional<Parameter> {
+                auto res = Parameter::BitVector(name, size, default_value, source);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -60,6 +68,7 @@ namespace hal
             py::arg("name"),
             py::arg("size"),
             py::arg("default_value"),
+            py::arg("source") = Parameter::Source::Generic,
             R"(
             Construct a bit-vector parameter. Values use the prefixes ``0b`` / ``0o`` / ``0x``.
 
@@ -70,8 +79,8 @@ namespace hal
 
         py_parameter.def_static(
             "LogicVector",
-            [](const std::string& name, u16 size, const std::string& default_value) -> std::optional<Parameter> {
-                auto res = Parameter::LogicVector(name, size, default_value);
+            [](const std::string& name, u16 size, const std::string& default_value, Parameter::Source source) -> std::optional<Parameter> {
+                auto res = Parameter::LogicVector(name, size, default_value, source);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -85,6 +94,7 @@ namespace hal
             py::arg("name"),
             py::arg("size"),
             py::arg("default_value"),
+            py::arg("source") = Parameter::Source::Generic,
             R"(
             Construct a 9-state logic-vector parameter. Values use the prefixes ``0b`` / ``0o`` / ``0x``,
             with any of the VHDL ``std_logic`` state characters (``X``, ``Z``, ``U``, ``L``, ``H``, ``W``, ``-``)
@@ -98,8 +108,8 @@ namespace hal
 
         py_parameter.def_static(
             "Integer",
-            [](const std::string& name, const std::string& default_value) -> std::optional<Parameter> {
-                auto res = Parameter::Integer(name, default_value);
+            [](const std::string& name, const std::string& default_value, Parameter::Source source) -> std::optional<Parameter> {
+                auto res = Parameter::Integer(name, default_value, source);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -112,6 +122,7 @@ namespace hal
             },
             py::arg("name"),
             py::arg("default_value"),
+            py::arg("source") = Parameter::Source::Generic,
             R"(
             Construct a signed-integer parameter. Values are parsed in base 10 and must fit in ``i64``.
 
@@ -121,8 +132,8 @@ namespace hal
 
         py_parameter.def_static(
             "String",
-            [](const std::string& name, const std::string& default_value) -> std::optional<Parameter> {
-                auto res = Parameter::String(name, default_value);
+            [](const std::string& name, const std::string& default_value, Parameter::Source source) -> std::optional<Parameter> {
+                auto res = Parameter::String(name, default_value, source);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -135,6 +146,7 @@ namespace hal
             },
             py::arg("name"),
             py::arg("default_value"),
+            py::arg("source") = Parameter::Source::Generic,
             R"(
             Construct a string parameter. Any value (including the empty string) is accepted.
 
@@ -144,8 +156,8 @@ namespace hal
 
         py_parameter.def_static(
             "Float",
-            [](const std::string& name, const std::string& default_value) -> std::optional<Parameter> {
-                auto res = Parameter::Float(name, default_value);
+            [](const std::string& name, const std::string& default_value, Parameter::Source source) -> std::optional<Parameter> {
+                auto res = Parameter::Float(name, default_value, source);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -158,6 +170,7 @@ namespace hal
             },
             py::arg("name"),
             py::arg("default_value"),
+            py::arg("source") = Parameter::Source::Generic,
             R"(
             Construct a floating-point parameter. Values are parsed via ``std::stod``.
 
@@ -167,8 +180,8 @@ namespace hal
 
         py_parameter.def_static(
             "Time",
-            [](const std::string& name, const std::string& default_value) -> std::optional<Parameter> {
-                auto res = Parameter::Time(name, default_value);
+            [](const std::string& name, const std::string& default_value, Parameter::Source source) -> std::optional<Parameter> {
+                auto res = Parameter::Time(name, default_value, source);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -181,6 +194,7 @@ namespace hal
             },
             py::arg("name"),
             py::arg("default_value"),
+            py::arg("source") = Parameter::Source::Generic,
             R"(
             Construct a time parameter. Values are of the form ``<number><unit>`` with the unit
             in {``fs``, ``ps``, ``ns``, ``us``, ``ms``, ``s``, ``min``, ``h``}; the number is a
@@ -192,8 +206,8 @@ namespace hal
 
         py_parameter.def_static(
             "Enum",
-            [](const std::string& name, const std::vector<std::string>& values, const std::string& default_value) -> std::optional<Parameter> {
-                auto res = Parameter::Enum(name, values, default_value);
+            [](const std::string& name, const std::vector<std::string>& values, const std::string& default_value, Parameter::Source source) -> std::optional<Parameter> {
+                auto res = Parameter::Enum(name, values, default_value, source);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -207,6 +221,7 @@ namespace hal
             py::arg("name"),
             py::arg("values"),
             py::arg("default_value"),
+            py::arg("source") = Parameter::Source::Generic,
             R"(
             Construct an enum parameter. ``size`` is auto-computed as ``ceil(log2(len(values)))``.
 
@@ -226,6 +241,27 @@ namespace hal
 
             :returns: The parameter name.
             :rtype: str
+        )");
+
+        py_parameter.def_property_readonly("source", &Parameter::get_source, R"(
+            The source of the parameter, generic or attribute (read-only).
+
+            :type: hal_py.Parameter.Source
+        )");
+
+        py_parameter.def("get_source", &Parameter::get_source, R"(
+            Get the source of the parameter, generic or attribute.
+
+            :returns: The source.
+            :rtype: hal_py.Parameter.Source
+        )");
+
+        py_parameter.def("with_source", &Parameter::with_source, py::arg("source"), R"(
+            Get a copy of the declaration with another source.
+
+            :param hal_py.Parameter.Source source: The source.
+            :returns: The copy.
+            :rtype: hal_py.Parameter
         )");
 
         py_parameter.def_property_readonly("type", &Parameter::get_type, R"(

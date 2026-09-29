@@ -19,6 +19,12 @@ namespace hal
         {Parameter::Type::Enum, "enum"},
     };
 
+    template<>
+    std::map<Parameter::Source, std::string> EnumStrings<Parameter::Source>::data = {
+        {Parameter::Source::Generic, "generic"},
+        {Parameter::Source::Attribute, "attribute"},
+    };
+
     namespace
     {
         std::string normalize_value(Parameter::Type type, const std::string& value)
@@ -301,6 +307,18 @@ namespace hal
         return type;
     }
 
+    Parameter::Source Parameter::get_source() const
+    {
+        return source;
+    }
+
+    Parameter Parameter::with_source(Source new_source) const
+    {
+        Parameter copy = *this;
+        copy.source    = new_source;
+        return copy;
+    }
+
     u16 Parameter::get_size() const
     {
         return size;
@@ -316,7 +334,7 @@ namespace hal
         return enum_values;
     }
 
-    Result<Parameter> Parameter::Boolean(const std::string& name, const std::string& default_value)
+    Result<Parameter> Parameter::Boolean(const std::string& name, const std::string& default_value, Source source)
     {
         if (name.empty())
         {
@@ -326,6 +344,7 @@ namespace hal
         auto param          = Parameter();
         param.type          = Parameter::Type::Boolean;
         param.name          = name;
+        param.source        = source;
         param.size          = 1;
         param.default_value = default_value;
 
@@ -337,7 +356,7 @@ namespace hal
         return OK(param);
     }
 
-    Result<Parameter> Parameter::BitVector(const std::string& name, u16 size, const std::string& default_value)
+    Result<Parameter> Parameter::BitVector(const std::string& name, u16 size, const std::string& default_value, Source source)
     {
         if (name.empty())
         {
@@ -351,6 +370,7 @@ namespace hal
         auto param          = Parameter();
         param.type          = Parameter::Type::BitVector;
         param.name          = name;
+        param.source        = source;
         param.size          = size;
         param.default_value = normalize_value(Type::BitVector, default_value);
 
@@ -362,7 +382,7 @@ namespace hal
         return OK(param);
     }
 
-    Result<Parameter> Parameter::LogicVector(const std::string& name, u16 size, const std::string& default_value)
+    Result<Parameter> Parameter::LogicVector(const std::string& name, u16 size, const std::string& default_value, Source source)
     {
         if (name.empty())
         {
@@ -376,6 +396,7 @@ namespace hal
         auto param          = Parameter();
         param.type          = Parameter::Type::LogicVector;
         param.name          = name;
+        param.source        = source;
         param.size          = size;
         param.default_value = normalize_value(Type::LogicVector, default_value);
 
@@ -387,7 +408,7 @@ namespace hal
         return OK(param);
     }
 
-    Result<Parameter> Parameter::Integer(const std::string& name, const std::string& default_value)
+    Result<Parameter> Parameter::Integer(const std::string& name, const std::string& default_value, Source source)
     {
         if (name.empty())
         {
@@ -397,6 +418,7 @@ namespace hal
         auto param          = Parameter();
         param.type          = Parameter::Type::Integer;
         param.name          = name;
+        param.source        = source;
         param.size          = 64;
         param.default_value = default_value;
 
@@ -408,7 +430,7 @@ namespace hal
         return OK(param);
     }
 
-    Result<Parameter> Parameter::String(const std::string& name, const std::string& default_value)
+    Result<Parameter> Parameter::String(const std::string& name, const std::string& default_value, Source source)
     {
         if (name.empty())
         {
@@ -418,13 +440,14 @@ namespace hal
         auto param          = Parameter();
         param.type          = Parameter::Type::String;
         param.name          = name;
+        param.source        = source;
         param.size          = 0;
         param.default_value = default_value;
 
         return OK(param);
     }
 
-    Result<Parameter> Parameter::Float(const std::string& name, const std::string& default_value)
+    Result<Parameter> Parameter::Float(const std::string& name, const std::string& default_value, Source source)
     {
         if (name.empty())
         {
@@ -434,6 +457,7 @@ namespace hal
         auto param          = Parameter();
         param.type          = Parameter::Type::Float;
         param.name          = name;
+        param.source        = source;
         param.size          = 64;
         param.default_value = default_value;
 
@@ -445,7 +469,7 @@ namespace hal
         return OK(param);
     }
 
-    Result<Parameter> Parameter::Time(const std::string& name, const std::string& default_value)
+    Result<Parameter> Parameter::Time(const std::string& name, const std::string& default_value, Source source)
     {
         if (name.empty())
         {
@@ -455,6 +479,7 @@ namespace hal
         auto param          = Parameter();
         param.type          = Parameter::Type::Time;
         param.name          = name;
+        param.source        = source;
         param.size          = 0;
         param.default_value = default_value;
 
@@ -466,7 +491,7 @@ namespace hal
         return OK(param);
     }
 
-    Result<Parameter> Parameter::Enum(const std::string& name, const std::vector<std::string>& values, const std::string& default_value)
+    Result<Parameter> Parameter::Enum(const std::string& name, const std::vector<std::string>& values, const std::string& default_value, Source source)
     {
         if (name.empty())
         {
@@ -490,6 +515,7 @@ namespace hal
         auto param          = Parameter();
         param.type          = Parameter::Type::Enum;
         param.name          = name;
+        param.source        = source;
         param.size          = enum_bit_width(values.size());
         param.enum_values   = values;
         param.default_value = default_value;
@@ -659,7 +685,7 @@ namespace hal
 
     bool Parameter::operator==(const Parameter& other) const
     {
-        return name == other.name && type == other.type && size == other.size && default_value == other.default_value && enum_values == other.enum_values;
+        return name == other.name && type == other.type && source == other.source && size == other.size && default_value == other.default_value && enum_values == other.enum_values;
     }
 
     bool Parameter::operator!=(const Parameter& other) const

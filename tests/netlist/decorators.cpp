@@ -272,10 +272,15 @@ namespace hal {
             pin_map[and_type->get_pin_by_name("I1")] = xor_type->get_pin_by_name("I1");
             pin_map[and_type->get_pin_by_name("O")] = xor_type->get_pin_by_name("O");
 
+            ASSERT_TRUE(a4->set_parameter(Parameter::BitVector("INIT", 4, "").get(), "0x8").is_ok());
+            ASSERT_TRUE(a4->set_parameter(Parameter::Boolean("keep", "false", Parameter::Source::Attribute).get(), "true").is_ok());
             const auto replace_res = NetlistModificationDecorator(*(nl.get())).replace_gate(a4, xor_type, pin_map);
             ASSERT_TRUE(replace_res.is_ok());
             Gate* new_gate = replace_res.get();
             ASSERT_NE(new_gate, nullptr);
+            // the typed values move to the new gate
+            EXPECT_EQ(new_gate->get_parameter_value("INIT").get(), "0x8");
+            EXPECT_EQ(new_gate->get_parameter_value("keep", Parameter::Source::Attribute).get(), "true");
 
             EXPECT_EQ(nl->get_gates().size(), 8);
             EXPECT_EQ(nl->get_nets().size(), 14);
@@ -477,12 +482,14 @@ namespace hal {
             EXPECT_TRUE(m_net01->is_a_destination(a0, "I0"));
             EXPECT_TRUE(m_net01->is_a_destination(a2, "I0"));
 
-            // merge internal nets
+            // merge internal nets; the slave's typed values land on the master
+            ASSERT_TRUE(net3->set_parameter(Parameter::String("mark", "", Parameter::Source::Attribute).get(), "x").is_ok());
             const auto merged_net23_res = nl_dec.connect_nets(net2, net3);
             ASSERT_TRUE(merged_net23_res.is_ok());
             Net* m_net23 = merged_net23_res.get();
             ASSERT_NE(m_net23, nullptr);
             EXPECT_EQ(m_net23, net2);
+            EXPECT_EQ(m_net23->get_parameter_value("mark", Parameter::Source::Attribute).get(), "x");
             EXPECT_FALSE(m_net23->is_global_input_net());
             EXPECT_FALSE(m_net23->is_global_output_net());
             EXPECT_EQ(m_net23->get_num_of_sources(), 2);

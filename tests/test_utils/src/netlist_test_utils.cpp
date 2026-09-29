@@ -516,6 +516,11 @@ namespace hal
             log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: The stored data is different.");
             return false;
         }
+        if (n0->get_parameters() != n1->get_parameters())
+        {
+            log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: The typed parameters are different.");
+            return false;
+        }
         if (n0->is_global_input_net() != n1->is_global_input_net())
         {
             log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: One net is a global input net, the other one isn't.");
@@ -562,6 +567,11 @@ namespace hal
         if (g0->get_data_map() != g1->get_data_map())
         {
             log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: The stored data is different.");
+            return false;
+        }
+        if (g0->get_parameters() != g1->get_parameters())
+        {
+            log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: The typed parameters are different.");
             return false;
         }
         if (g0->is_gnd_gate() != g1->is_gnd_gate())
@@ -621,6 +631,11 @@ namespace hal
         if (m_0->get_data_map() != m_1->get_data_map())
         {
             log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: The stored data is different.");
+            return false;
+        }
+        if (m_0->get_parameters() != m_1->get_parameters())
+        {
+            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: The typed parameters are different.");
             return false;
         }
 

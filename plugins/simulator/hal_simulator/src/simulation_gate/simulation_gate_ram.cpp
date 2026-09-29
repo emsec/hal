@@ -104,11 +104,15 @@ namespace hal
                 return;
             }
 
-            const std::string& category = init_component->get_init_category();
-
-            for (const std::string& identifier : init_component->get_init_identifiers())
+            const auto init_res = m_gate->get_init_data();    // the typed store, or the legacy data map of an old project
+            if (init_res.is_error())
             {
-                const std::string data = std::get<1>(m_gate->get_data(category, identifier));
+                log_error("hal_simulator", "cannot read initialization data for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+                return;
+            }
+
+            for (const std::string& data : init_res.get())
+            {
 
                 u32 data_len = data.size();
                 assert(data_len % 16 == 0);

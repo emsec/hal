@@ -26,32 +26,18 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/plugin_system/fac_extension_interface.h"
 
 namespace hal
 {
     /**
-     * Registers the VHDL netlist parser with HAL's netlist parser manager.
-     */
-    class VHDLParserOldExtension : public FacExtensionInterface
-    {
-    public:
-        VHDLParserOldExtension();
-    };
-
-    /**
-     * The plugin that provides the VHDL netlist parser.
+     * The plugin that keeps the legacy VHDL netlist parser loadable. It registers no file extension any more; the
+     * `vhdl_parser` plugin owns `.vhd` and `.vhdl`. The class `VHDLParserOld` stays available for direct use.
      */
     class PLUGIN_API VHDLParserOldPlugin : public BasePluginInterface
     {
-        VHDLParserOldExtension* m_extension;
     public:
-        VHDLParserOldPlugin();
-
         std::string get_name() const override;
         std::string get_version() const override;
-
-        void on_load() override;
-        void on_unload() override;
+        std::string get_description() const override;
     };
 }    // namespace hal

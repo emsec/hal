@@ -166,6 +166,17 @@ namespace hal
                 value = QString::fromStdString(g->get_module()->get_name());
                 break;
             case 2:
+                // the INIT of the typed store, or of the legacy data map of an old project
+                if (const auto init = g->get_init_data(); init.is_ok() && !init.get().empty())
+                {
+                    value = QString::fromStdString(init.get().front());
+                    break;
+                }
+                if (g->has_parameter("INIT"))
+                {
+                    value = QString::fromStdString(g->get_parameter_value("INIT").get());
+                    break;
+                }
                 for (const auto& [key, val] : g->get_data_map())
                 {
                     QString keyTxt = QString::fromStdString(std::get<1>(key));

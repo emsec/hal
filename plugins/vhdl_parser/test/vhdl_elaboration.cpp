@@ -323,7 +323,7 @@ namespace hal
             EXPECT_EQ(typed(sub->parameters, "MODE"), std::make_tuple("string", "a"));
             EXPECT_EQ(typed(sub->parameters, "FLAG"), std::make_tuple("boolean", "false"));
             EXPECT_EQ(typed(sub->parameters, "DELAY"), std::make_tuple("time", "1ns"));
-            EXPECT_EQ(typed(top->attributes, "KEEP"), std::make_tuple("string", "yes"));
+            EXPECT_EQ(typed(top->parameters, "KEEP"), std::make_tuple("string", "yes"));
 
             ASSERT_EQ(top->instances.size(), 8);
             const Instance& g1 = top->instances.at(0);
@@ -333,9 +333,10 @@ namespace hal
             ASSERT_EQ(g1.connections.size(), 3);
             EXPECT_EQ(g1.connections.at(0).port, "I0");    // the declared spelling of the formal
             EXPECT_EQ(g1.connections.at(2).port, "O");
-            EXPECT_EQ(typed(g1.attributes, "LOC"), std::make_tuple("string", "X0Y0"));
-            EXPECT_EQ(typed(g1.attributes, "DONT"), std::make_tuple("string", "1"));
-            EXPECT_EQ(typed(g1.attributes, "FLAGGY"), std::make_tuple("boolean", "true"));
+            EXPECT_EQ(typed(g1.parameters, "LOC"), std::make_tuple("string", "X0Y0"));
+            EXPECT_EQ(typed(g1.parameters, "DONT"), std::make_tuple("string", "1"));
+            EXPECT_EQ(typed(g1.parameters, "FLAGGY"), std::make_tuple("boolean", "true"));
+            EXPECT_TRUE(std::all_of(g1.parameters.begin(), g1.parameters.end(), [](const TypedValue& v) { return v.declaration.get_source() == Parameter::Source::Attribute; }));
             const Instance& g2 = top->instances.at(1);
             ASSERT_EQ(g2.connections.size(), 3);
             EXPECT_FALSE(g2.connections.at(0).replicate);
@@ -378,8 +379,8 @@ namespace hal
             const Instance& odd = top->instances.at(7);
             EXPECT_EQ(odd.name, "Odd/Name");
             EXPECT_EQ(odd.type, "BUF");    // the library prefix is stripped
-            EXPECT_EQ(typed(top->find_signal("n")->attributes, "KEEP"), std::make_tuple("string", "true"));
-            EXPECT_EQ(typed(top->find_signal("n")->attributes, "NUM"), std::make_tuple("integer", "42"));
+            EXPECT_EQ(typed(top->find_signal("n")->parameters, "KEEP"), std::make_tuple("string", "true"));
+            EXPECT_EQ(typed(top->find_signal("n")->parameters, "NUM"), std::make_tuple("integer", "42"));
         }
         {
             // a configuration binds a component to an entity of the file

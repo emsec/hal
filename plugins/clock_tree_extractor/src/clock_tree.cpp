@@ -450,10 +450,18 @@ namespace hal
                 // const i32 x = gate->get_location_x();
                 // const i32 y = gate->get_location_y();
 
+                // the typed store, or the legacy data map of an old project
+                const auto coordinate = [gate]( const std::string& key ) -> std::string {
+                    if ( gate->has_parameter( key ) )
+                    {
+                        return gate->get_parameter_value( key ).get();
+                    }
+                    return std::get<1>( gate->get_data( "generic", key ) );
+                };
                 try
                 {
-                    const i32 x = std::stoi( std::get<1>( gate->get_data( "generic", "X" ) ) );
-                    const i32 y = std::stoi( std::get<1>( gate->get_data( "generic", "Y" ) ) );
+                    const i32 x = std::stoi( coordinate( "X" ) );
+                    const i32 y = std::stoi( coordinate( "Y" ) );
                     coords = " x=" + std::to_string( x ) + " y=" + std::to_string( y );
                 } catch( const std::invalid_argument &err )
                 {

@@ -16,6 +16,18 @@ namespace hal
     class NetlistIRInstantiateTest : public ::testing::Test
     {
     protected:
+        static bool y_net_has_annotation(const Netlist* nl)
+        {
+            for (const Net* n : nl->get_nets())
+            {
+                if (n->get_name() == "y")
+                {
+                    return n->has_data("parser_annotation", "merged_nets");
+                }
+            }
+            return false;
+        }
+
         virtual void SetUp()
         {
             NO_COUT_BLOCK;
@@ -297,8 +309,8 @@ namespace hal
         Signal& dangling        = top.add_signal("dangling");
         Signal& tagged          = top.add_signal("tagged");
         Signal& alias           = top.add_signal("alias_of_a");
-        tagged.attributes.push_back({Parameter::Boolean("keep", "false").get(), "true"});
-        alias.attributes.push_back({Parameter::String("mark", "").get(), "x"});
+        tagged.parameters.push_back({Parameter::Boolean("keep", "false", Parameter::Source::Attribute).get(), "true"});
+        alias.parameters.push_back({Parameter::String("mark", "", Parameter::Source::Attribute).get(), "x"});
         top.add_alias(alias.bits.front(), a.bits.front());
 
         Instance& g = top.add_instance("g", "BUF", InstanceKind::Gate);
@@ -328,7 +340,10 @@ namespace hal
             ASSERT_NE(a_net, nullptr);
             EXPECT_EQ(net_by_name(nl.get(), "alias_of_a"), nullptr);
             EXPECT_EQ(gate_by_name(nl.get(), "g")->get_fan_in_net("I"), a_net);
-            EXPECT_EQ(a_net->get_attribute_value("mark").get(), "x");
+            EXPECT_EQ(a_net->get_parameter_value("mark", Parameter::Source::Attribute).get(), "x");
+            // the merged signal names are annotated the way the legacy parsers did it, for netlist preprocessing
+            EXPECT_EQ(a_net->get_data("parser_annotation", "merged_nets"), std::make_tuple(std::string("string"), std::string("[[\"alias_of_a\"]]")));
+            EXPECT_FALSE(y_net_has_annotation(nl.get()));
 
             Net* y_net = net_by_name(nl.get(), "y");
             ASSERT_NE(y_net, nullptr);
@@ -343,7 +358,7 @@ namespace hal
             auto nl = res.get();
             EXPECT_NE(net_by_name(nl.get(), "dangling"), nullptr);
             ASSERT_NE(net_by_name(nl.get(), "tagged"), nullptr);
-            EXPECT_EQ(net_by_name(nl.get(), "tagged")->get_attribute_value("keep").get(), "true");
+            EXPECT_EQ(net_by_name(nl.get(), "tagged")->get_parameter_value("keep", Parameter::Source::Attribute).get(), "true");
         }
         TEST_END
     }
@@ -351,7 +366,7 @@ namespace hal
     /**
      * Testing parameters and attributes: a parameter declared by the gate type takes the gate type's declaration
      * (the only way an enum is set), others keep the inferred one; module defaults and instance overrides land on the
-     * module; attributes go to the attribute store on gates, modules and nets; a bad value is an error.
+     * module; attributes go to the same store with the attribute source on gates, modules and nets; a bad value is an error.
      *
      * Functions: instantiate
      */
@@ -362,7 +377,7 @@ namespace hal
         netlist_ir::Module& sub = d.add_module("sub");
         sub.parameters.push_back({Parameter::Integer("WIDTH", "8").get(), "8"});
         sub.parameters.push_back({Parameter::Integer("DEPTH", "2").get(), "2"});
-        sub.attributes.push_back({Parameter::String("origin", "").get(), "file"});
+        sub.parameters.push_back({Parameter::String("origin", "", Parameter::Source::Attribute).get(), "file"});
         Port& i     = sub.add_port("i", PinDirection::input);
         Port& o     = sub.add_port("o", PinDirection::output);
         Instance& p = sub.add_instance("p", "PARAM_TEST", InstanceKind::Gate);
@@ -372,8 +387,8 @@ namespace hal
         p.parameters.push_back({Parameter::String("mode", "").get(), "inverted"});          // declared as an enum by the gate type
         p.parameters.push_back({Parameter::BitVector("width", 32, "").get(), "0xBEEF"});    // declared as 16 bits by the gate type
         p.parameters.push_back({Parameter::String("note", "").get(), "free"});              // not declared: inferred declaration stays
-        p.attributes.push_back({Parameter::Boolean("keep", "false").get(), "true"});
-        p.attributes.push_back({Parameter::String("mode", "").get(), "attr"});    // same name as a parameter
+        p.parameters.push_back({Parameter::Boolean("keep", "false", Parameter::Source::Attribute).get(), "true"});
+        p.parameters.push_back({Parameter::String("mode", "", Parameter::Source::Attribute).get(), "attr"});    // same name as a generic
 
         netlist_ir::Module& top = d.add_module("top");
         Port& a                 = top.add_port("a", PinDirection::input);
@@ -382,7 +397,7 @@ namespace hal
         s.add_connection("i", a.bits);
         s.add_connection("o", y.bits);
         s.parameters.push_back({Parameter::Integer("WIDTH", "0").get(), "16"});
-        s.attributes.push_back({Parameter::String("loc", "").get(), "here"});
+        s.parameters.push_back({Parameter::String("loc", "", Parameter::Source::Attribute).get(), "here"});
 
         auto res = instantiate(d, test_utils::get_gate_library());
         ASSERT_TRUE(res.is_ok()) << res.get_error().get();
@@ -396,16 +411,17 @@ namespace hal
         EXPECT_EQ(g->get_parameter_declaration("width").get().get_size(), 16);
         EXPECT_EQ(g->get_parameter_value("note").get(), "free");
         EXPECT_EQ(g->get_parameter_declaration("note").get().get_type(), Parameter::Type::String);
-        EXPECT_EQ(g->get_attribute_value("keep").get(), "true");
-        EXPECT_EQ(g->get_attribute_value("mode").get(), "attr");
+        EXPECT_EQ(g->get_parameter_value("keep", Parameter::Source::Attribute).get(), "true");
+        EXPECT_EQ(g->get_parameter_value("mode", Parameter::Source::Attribute).get(), "attr");
+        EXPECT_EQ(g->get_parameter_declaration("mode", Parameter::Source::Attribute).get().get_type(), Parameter::Type::String);    // the gate type's enum applies to the generic only
         EXPECT_TRUE(g->get_data_map().empty());    // nothing lands in the legacy data map
 
         hal::Module* sm = module_by_name(nl.get(), "s");
         ASSERT_NE(sm, nullptr);
         EXPECT_EQ(sm->get_parameter_value("WIDTH").get(), "16");    // overridden
         EXPECT_EQ(sm->get_parameter_value("DEPTH").get(), "2");     // declared default
-        EXPECT_EQ(sm->get_attribute_value("origin").get(), "file");
-        EXPECT_EQ(sm->get_attribute_value("loc").get(), "here");
+        EXPECT_EQ(sm->get_parameter_value("origin", Parameter::Source::Attribute).get(), "file");
+        EXPECT_EQ(sm->get_parameter_value("loc", Parameter::Source::Attribute).get(), "here");
         EXPECT_TRUE(sm->get_data_map().empty());
 
         // a value the gate type's declaration rejects is an error

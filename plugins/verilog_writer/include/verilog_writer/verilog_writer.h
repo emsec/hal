@@ -27,6 +27,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer.h"
+#include "hal_core/netlist/parameter.h"
 
 #include <set>
 #include <sstream>
@@ -62,8 +63,6 @@ namespace hal
         Result<std::monostate> write(Netlist* netlist, const std::filesystem::path& file_path) override;
 
     private:
-        static const std::set<std::string> valid_types;
-
         Result<std::monostate> write_module_declaration(std::stringstream& res_stream,
                                                         const Module* module,
                                                         std::unordered_map<const Module*, std::string>& module_type_aliases,
@@ -78,10 +77,11 @@ namespace hal
                                                      std::unordered_map<std::string, u32>& identifier_occurrences,
                                                      std::unordered_map<const Module*, std::string>& module_type_aliases) const;
         Result<std::monostate> write_parameter_assignments(std::stringstream& res_stream, const DataContainer* container) const;
+        Result<std::monostate> write_attributes(std::stringstream& res_stream, const DataContainer* container, const std::string& indent) const;
         Result<std::monostate> write_pin_assignments(std::stringstream& res_stream,
                                                      const std::vector<std::pair<std::string, std::vector<const Net*>>>& pin_assignments,
                                                      std::unordered_map<const DataContainer*, std::string>& aliases) const;
-        Result<std::monostate> write_parameter_value(std::stringstream& res_stream, const std::string& type, const std::string& value) const;
+        Result<std::monostate> write_parameter_value(std::stringstream& res_stream, const Parameter& declaration, const std::string& value) const;
         std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
         std::string escape(const std::string& s) const;
     };

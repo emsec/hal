@@ -1,5 +1,7 @@
 #include "hal_core/netlist/gate.h"
 
+#include <algorithm>
+
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/event_system/event_handler.h"
@@ -41,6 +43,56 @@ static u64 bitreverse(u64 n)
 
 namespace hal
 {
+    namespace
+    {
+        /**
+         * Read an INIT-style value: the typed store first (a bit vector padded to its declared width, without the
+         * `0x` prefix, as the legacy data map stored it), then the legacy data map.
+         */
+        std::string get_init_value(const DataContainer* c, const std::string& category, const std::string& key)
+        {
+            if (const auto source = DataContainer::source_from_category(category); source.has_value() && c->has_parameter(key, source.value()))
+            {
+                const Parameter decl = c->get_parameter_declaration(key, source.value()).get();
+                std::string value    = c->get_parameter_value(key, source.value()).get();
+                if (decl.get_type() == Parameter::Type::BitVector && value.size() > 2 && value[0] == '0' && (value[1] == 'x' || value[1] == 'X'))
+                {
+                    value                  = value.substr(2);
+                    const u32 digits       = (decl.get_size() + 3) / 4;
+                    if (value.size() < digits)
+                    {
+                        value.insert(0, digits - value.size(), '0');
+                    }
+                    return value;
+                }
+                if (decl.get_type() == Parameter::Type::LogicVector && value.size() > 2 && value[0] == '0' && (value[1] == 'b' || value[1] == 'B'))
+                {
+                    return value.substr(2);
+                }
+                return value;
+            }
+            return std::get<1>(c->get_data(category, key));
+        }
+
+        /**
+         * Write an INIT-style bit vector: to the typed store when the category names a source, else to the data map.
+         */
+        void set_init_value(DataContainer* c, const std::string& category, const std::string& key, const std::string& hex_value)
+        {
+            if (const auto source = DataContainer::source_from_category(category); source.has_value())
+            {
+                // the width follows the written digits, so that get_init_data hands the same string back
+                const u16 size       = static_cast<u16>(std::max<std::size_t>(1, hex_value.size() * 4));
+                const Parameter decl = Parameter::BitVector(key, size, "", source.value()).get();
+                if (c->set_parameter(decl, "0x" + hex_value).is_ok())
+                {
+                    return;
+                }
+            }
+            c->set_data(category, key, "bit_vector", hex_value);
+        }
+    }    // namespace
+
     Gate::Gate(NetlistInternalManager* mgr, EventHandler* event_handler, const u32 id, GateType* gt, const std::string& name, i32 x, i32 y)
         : m_internal_manager(mgr), m_id(id), m_name(name), m_type(gt), m_x(x), m_y(y), m_event_handler(event_handler)
     {
@@ -384,7 +436,7 @@ namespace hal
 
         const std::string& category  = init_component->get_init_category();
         const std::string& key       = init_component->get_init_identifiers().front();
-        std::string config_str       = std::get<1>(get_data(category, key));
+        std::string config_str       = get_init_value(this, category, key);
         auto is_ascending            = lut_component->is_init_ascending();
         std::vector<GatePin*> inputs = m_type->get_input_pins();
 
@@ -548,7 +600,7 @@ namespace hal
                     std::stringstream stream;
                     u32 init_len = 1 << (input_pin_names.size() - 2);
                     stream << std::hex << std::setfill('0') << std::setw(init_len) << config_value;
-                    set_data(category, key, "bit_vector", stream.str());
+                    set_init_value(this, category, key, stream.str());
                 }
             }
         }
@@ -1046,7 +1098,7 @@ namespace hal
         std::vector<std::string> init_data;
         for (const std::string& id : identifiers)
         {
-            init_data.push_back(std::get<1>(get_data(category, id)));
+            init_data.push_back(get_init_value(this, category, id));
         }
 
         return OK(init_data);
@@ -1073,7 +1125,7 @@ namespace hal
         u32 i = 0;
         for (const std::string& id : identifiers)
         {
-            set_data(category, id, "bit_vector", init_data.at(i));
+            set_init_value(this, category, id, init_data.at(i));
             i++;
         }
 

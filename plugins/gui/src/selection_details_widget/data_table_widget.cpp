@@ -3,6 +3,7 @@
 #include "gui/python/py_code_provider.h"
 #include "gui/input_dialog/input_dialog.h"
 #include "gui/user_action/action_set_object_data.h"
+#include "gui/user_action/action_set_object_parameter.h"
 #include <QHeaderView>
 #include <QtWidgets/QMenu>
 #include <QApplication>
@@ -40,7 +41,7 @@ namespace hal
             return;
         }
         mCurrentContainer = dynamic_cast<DataContainer*>(gate);
-        mDataTableModel->updateData(gate->get_data_map());
+        mDataTableModel->updateData(gate);
         mCurrentObject = UserActionObject(gate->get_id(), UserActionObjectType::Gate);
         clearSelection();
         adjustTableSizes();
@@ -52,7 +53,7 @@ namespace hal
             return;
         }
         mCurrentContainer = dynamic_cast<DataContainer*>(net);
-        mDataTableModel->updateData(net->get_data_map());
+        mDataTableModel->updateData(net);
         mCurrentObject = UserActionObject(net->get_id(), UserActionObjectType::Net);
         clearSelection();
         adjustTableSizes();
@@ -63,7 +64,7 @@ namespace hal
         if(module == nullptr){
             return;
         }
-        mDataTableModel->updateData(module->get_data_map());
+        mDataTableModel->updateData(module);
         mCurrentContainer = dynamic_cast<DataContainer*>(module);
         mCurrentObject = UserActionObject(module->get_id(), UserActionObjectType::Module);
         clearSelection();
@@ -93,21 +94,30 @@ namespace hal
         menu.addAction("Value to clipboard", [entry](){QApplication::clipboard()->setText(entry.value);});
 
         menu.addSection("ChangeSection");
-        menu.addAction("Change category", [this](){changePropertyRequested(DataTableModel::propertyType::category);});
-        menu.addAction("Change key", [this](){changePropertyRequested(DataTableModel::propertyType::key);});
-        menu.addAction("Change type", [this](){changePropertyRequested(DataTableModel::propertyType::type);});
-        menu.addAction("Change value", [this](){changePropertyRequested(DataTableModel::propertyType::value);});
+        if (entry.typed)
+        {
+            // a typed value keeps its declaration; the value is validated against the type
+            menu.addAction("Change value", [this](){changeParameterValueRequested();});
+            menu.addAction("Delete parameter", [this](){deleteParameterRequested();});
+        }
+        else
+        {
+            menu.addAction("Change category", [this](){changePropertyRequested(DataTableModel::propertyType::category);});
+            menu.addAction("Change key", [this](){changePropertyRequested(DataTableModel::propertyType::key);});
+            menu.addAction("Change type", [this](){changePropertyRequested(DataTableModel::propertyType::type);});
+            menu.addAction("Change value", [this](){changePropertyRequested(DataTableModel::propertyType::value);});
+        }
 
         QString pyCode = "";
         switch(mCurrentObject.type())
         {
-            case UserActionObjectType::Gate: pyCode = PyCodeProvider::pyCodeGateData(mCurrentObject.id(), entry.category, entry.key); break;
-            case UserActionObjectType::Net: pyCode = PyCodeProvider::pyCodeNetData(mCurrentObject.id(), entry.category, entry.key); break;
-            case UserActionObjectType::Module: pyCode = PyCodeProvider::pyCodeModuleData(mCurrentObject.id(), entry.category, entry.key); break;
+            case UserActionObjectType::Gate: pyCode = entry.typed ? PyCodeProvider::pyCodeGateParameter(mCurrentObject.id(), entry.key, entry.category) : PyCodeProvider::pyCodeGateData(mCurrentObject.id(), entry.category, entry.key); break;
+            case UserActionObjectType::Net: pyCode = entry.typed ? PyCodeProvider::pyCodeNetParameter(mCurrentObject.id(), entry.key, entry.category) : PyCodeProvider::pyCodeNetData(mCurrentObject.id(), entry.category, entry.key); break;
+            case UserActionObjectType::Module: pyCode = entry.typed ? PyCodeProvider::pyCodeModuleParameter(mCurrentObject.id(), entry.key, entry.category) : PyCodeProvider::pyCodeModuleData(mCurrentObject.id(), entry.category, entry.key); break;
             default: break;
         }
         menu.addSection("Python");
-        menu.addAction(QIcon(":/icons/python"), "Get data entry", [pyCode](){QApplication::clipboard()->setText(pyCode);});
+        menu.addAction(QIcon(":/icons/python"), entry.typed ? "Get parameter value" : "Get data entry", [pyCode](){QApplication::clipboard()->setText(pyCode);});
 
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
         menu.exec();
@@ -151,11 +161,50 @@ namespace hal
                 act->setChangeKeyAndOrCategory(oldValues[0], oldValues[1]);
             act->exec();
 
-            mDataTableModel->updateData(mCurrentContainer->get_data_map());
+            mDataTableModel->updateData(mCurrentContainer);
             clearSelection();
             adjustTableSizes();
         }
     }
 
+
+    void DataTableWidget::changeParameterValueRequested()
+    {
+        if(!mCurrentContainer)
+            return;
+        QModelIndex idx = currentIndex();
+        DataTableModel::DataEntry entry = mDataTableModel->getEntryAtRow(idx.row());
+        InputDialog ipd("Change value", "New value of " + entry.category + " '" + entry.key + "' of type " + entry.dataType + ".", entry.value);
+        if(ipd.exec() == QDialog::Accepted)
+        {
+            ActionSetObjectParameter* act = new ActionSetObjectParameter(entry.category, entry.key, ipd.textValue());
+            act->setObject(mCurrentObject);
+            if (act->exec())
+            {
+                Q_EMIT parameterChanged();
+            }
+            mDataTableModel->updateData(mCurrentContainer);
+            clearSelection();
+            adjustTableSizes();
+        }
+    }
+
+    void DataTableWidget::deleteParameterRequested()
+    {
+        if(!mCurrentContainer)
+            return;
+        QModelIndex idx = currentIndex();
+        DataTableModel::DataEntry entry = mDataTableModel->getEntryAtRow(idx.row());
+        ActionSetObjectParameter* act = new ActionSetObjectParameter(entry.category, entry.key);
+        act->setRemove();
+        act->setObject(mCurrentObject);
+        if (act->exec())
+        {
+            Q_EMIT parameterChanged();
+        }
+        mDataTableModel->updateData(mCurrentContainer);
+        clearSelection();
+        adjustTableSizes();
+    }
 
 } // namespace hal

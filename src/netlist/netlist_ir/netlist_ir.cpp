@@ -413,16 +413,17 @@ namespace hal
                 return OK({});
             }
 
-            Result<std::monostate> validate_unique_names(const std::vector<TypedValue>& values, const std::string& owner, const char* what)
+            Result<std::monostate> validate_unique_names(const std::vector<TypedValue>& values, const std::string& owner)
             {
-                std::unordered_set<std::string> names;
+                std::set<std::pair<Parameter::Source, std::string>> names;
                 for (const TypedValue& v : values)
                 {
+                    const std::string what = v.declaration.get_source() == Parameter::Source::Attribute ? "attribute" : "parameter";
                     if (v.declaration.get_name().empty())
                     {
                         return ERR(owner + " has a " + what + " without a name");
                     }
-                    if (!names.insert(v.declaration.get_name()).second)
+                    if (!names.insert({v.declaration.get_source(), v.declaration.get_name()}).second)
                     {
                         return ERR(owner + " has " + what + " '" + v.declaration.get_name() + "' twice");
                     }
@@ -501,24 +502,20 @@ namespace hal
                     }
                 }
 
-                if (auto res = validate_unique_names(m.parameters, "module '" + m.name + "'", "parameter"); res.is_error())
-                {
-                    return res;
-                }
-                if (auto res = validate_unique_names(m.attributes, "module '" + m.name + "'", "attribute"); res.is_error())
+                if (auto res = validate_unique_names(m.parameters, "module '" + m.name + "'"); res.is_error())
                 {
                     return res;
                 }
                 for (const Port& p : m.ports)
                 {
-                    if (auto res = validate_unique_names(p.attributes, "port '" + p.name + "' of module '" + m.name + "'", "attribute"); res.is_error())
+                    if (auto res = validate_unique_names(p.parameters, "port '" + p.name + "' of module '" + m.name + "'"); res.is_error())
                     {
                         return res;
                     }
                 }
                 for (const Signal& sig : m.signals)
                 {
-                    if (auto res = validate_unique_names(sig.attributes, "signal '" + sig.name + "' of module '" + m.name + "'", "attribute"); res.is_error())
+                    if (auto res = validate_unique_names(sig.parameters, "signal '" + sig.name + "' of module '" + m.name + "'"); res.is_error())
                     {
                         return res;
                     }
@@ -612,11 +609,7 @@ namespace hal
                                    + std::to_string(target->ports.size()) + " ports");
                     }
 
-                    if (auto res = validate_unique_names(i.parameters, "instance '" + i.name + "' of module '" + m.name + "'", "parameter"); res.is_error())
-                    {
-                        return res;
-                    }
-                    if (auto res = validate_unique_names(i.attributes, "instance '" + i.name + "' of module '" + m.name + "'", "attribute"); res.is_error())
+                    if (auto res = validate_unique_names(i.parameters, "instance '" + i.name + "' of module '" + m.name + "'"); res.is_error())
                     {
                         return res;
                     }
