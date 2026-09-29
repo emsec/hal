@@ -24,7 +24,7 @@ namespace hal
 
     std::string LogicEvaluatorPlugin::get_name() const
     {
-        return std::string("waveform_viewer");
+        return std::string("logic_evaluator");
     }
 
     std::string LogicEvaluatorPlugin::get_version() const
@@ -34,7 +34,7 @@ namespace hal
 
     std::string LogicEvaluatorPlugin::get_description() const
     {
-        return std::string("GUI to control simulation and view resulting waveforms");
+        return std::string("GUI to evaluate the combinational logic of selected gates for chosen input values");
     }
 
     std::set<std::string> LogicEvaluatorPlugin::get_dependencies() const
