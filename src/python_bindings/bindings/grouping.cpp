@@ -314,7 +314,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_grouping.def("remove_module_by_id", &Grouping::remove_gate_by_id, py::arg("module_id"), R"(
+        py_grouping.def("remove_module_by_id", &Grouping::remove_module_by_id, py::arg("module_id"), R"(
             Remove a module from the grouping by ID.
             Fails if the module is not contained within the grouping.
 

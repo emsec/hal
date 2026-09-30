@@ -1438,7 +1438,7 @@ namespace hal
             py::arg("ordered_variables")        = std::vector<std::string>(),
             py::arg("remove_unknown_variables") = false,
             R"(
-            Computes the truth table outputs for a Boolean function that comprises <= 10 single-bit variables.
+            Computes the truth table outputs for a Boolean function that comprises <= 20 single-bit variables.
 
             **Warning:** The generation of the truth table is exponential in the number of parameters.
 
@@ -1466,7 +1466,7 @@ namespace hal
             py::arg("function_name")            = std::string(""),
             py::arg("remove_unknown_variables") = false,
             R"(
-            Prints the truth table for a Boolean function that comprises <= 10 single-bit variables.
+            Prints the truth table for a Boolean function that comprises <= 20 single-bit variables.
 
             **Warning:** The generation of the truth table is exponential in the number of parameters.
 
