@@ -1,6 +1,7 @@
 #include "module_identification/candidates/candidate_context.h"
 
 #include "boolean_influence/boolean_influence.h"
+#include "hal_core/netlist/decorators/subgraph_function_cache.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
 
@@ -14,7 +15,7 @@ namespace hal
         Result<std::monostate> CandidateContext::populate_boolean_function_cache(const std::vector<Net*> nets)
         {
             const auto subgraph_dec = SubgraphNetlistDecorator(*m_netlist);
-            std::map<std::pair<u32, const GatePin*>, BooleanFunction> gate_cache;
+            SubgraphFunctionCache gate_cache;
 
             for (const auto& n : nets)
             {

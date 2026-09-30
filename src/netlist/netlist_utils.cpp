@@ -1,3 +1,4 @@
+#include "hal_core/netlist/decorators/subgraph_function_cache.h"
 #include "hal_core/netlist/netlist_utils.h"
 
 #include "hal_core/netlist/decorators/netlist_modification_decorator.h"
@@ -141,7 +142,7 @@ namespace hal
 
         }    // namespace
 
-        Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache)
+        Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, SubgraphFunctionCache& cache)
         {
             if (net == nullptr)
             {
@@ -160,7 +161,7 @@ namespace hal
 
         Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates)
         {
-            std::map<std::pair<u32, const GatePin*>, BooleanFunction> cache;
+            SubgraphFunctionCache cache;
             if (auto res = get_subgraph_function(net, subgraph_gates, cache); res.is_error())
             {
                 return ERR(res.get_error());
