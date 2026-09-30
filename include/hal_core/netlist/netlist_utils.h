@@ -25,7 +25,6 @@
 
 #pragma once
 
-#include "hal_core/netlist/decorators/subgraph_function_cache.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/netlist.h"
@@ -54,7 +53,7 @@ namespace hal
          * @returns The combined Boolean function of the subgraph on success, an error otherwise.
          */
         [[deprecated("Will be removed in a future version, use SubgraphNetlistDecorator::get_subgraph_function instead.")]] CORE_API Result<BooleanFunction>
-            get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, SubgraphFunctionCache& cache);
+            get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache);
 
         /**
          * \deprecated
