@@ -83,6 +83,9 @@ All notable changes to this project will be documented in this file.
     * fixed the decorators storing a reference to the netlist or net they were constructed from without keeping it alive
     * fixed `DataContainer` and `ProjectDirectory` leaking every instance created from Python, as each was bound with a holder that never frees; `ProjectManager.get_project_directory` leaked a copy on every call
 
+  * subgraph netlist decorator
+    * added `SubgraphFunctionCache` as the type of the cache taken by `SubgraphNetlistDecorator::get_subgraph_function`, used throughout the C++ API instead of the spelled-out map type
+    * fixed the cache of `SubgraphNetlistDecorator.get_subgraph_function` having no effect in Python: the Python dict was copied for every call and never filled. The cache is now the class `hal_py.SubgraphFunctionCache`, which is passed by reference and kept across calls just as in C++
 * Plugins
   * clock tree extractor
     * added the `clock_tree_extractor` plugin, which recovers the clock distribution network of a gate-level netlist. Starting at the clock pin of every flip-flop it walks against the signal direction through buffers, inverters, delay gates, clock gates and toggle-flip-flop clock dividers up to the global input nets that drive them, and returns the result as a `ClockTree`. Reconvergent clock networks, i.e. meshes, are extracted as well.
@@ -214,6 +217,7 @@ All notable changes to this project will be documented in this file.
     * fixed tooltip `dragTest` being shown whenever dragging gates in the graph view
     * fixed sorting the groupings table, which compared all columns as text, sorting colors by their hex code; IDs are now compared as numbers and colors by hue, saturation, and value
     * removed a leftover debug output that printed every search string of the log widget to stdout
+    * fixed the option to copy the gate library into the project directory in the netlist import dialog staying enabled when the gate library is detected automatically, in which case there is no file to copy and the option had no effect
 * Build and dependencies
   * changed the GUI from Qt 5 to Qt 6
   * updated the vendored QuaZip from 1.3 to 1.5 as part of the move to Qt 6
@@ -222,6 +226,8 @@ All notable changes to this project will be documented in this file.
   * fixed `install_dependencies.sh` on macOS writing the Homebrew prefix into the shell configuration as the unexpanded text
   * fixed the documentation build: Sphinx is now run through the Python interpreter that `hal_py` is linked against
   * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
+  * fixed the Qt6 fallback on macOS, which pointed to a Qt5 installation (`qt@5`); if `Qt6_DIR` is not given, the Qt6 installed by Homebrew is used
+  * changed `install_dependencies.sh` to add Homebrew's `llvm` to `PATH` instead of `llvm@14`, matching the `Brewfile`
 
 ## [4.5.0](v4.5.0) - 2025-09-23 12:00:00+02:00 (urgency: medium)
 * plugins
