@@ -6,6 +6,27 @@ namespace hal
 {
     void subgraph_netlist_decorator_init(py::module& m)
     {
+        py::class_<SubgraphFunctionCache> py_subgraph_function_cache(m, "SubgraphFunctionCache", R"(
+            Cache for the Boolean functions that ``SubgraphNetlistDecorator.get_subgraph_function`` computes for the output pins of gates.
+            Passing the same cache to consecutive calls avoids recomputing logic that several subgraphs share.
+            The cache is filled by these calls and must not be reused after the netlist has been modified.
+        )");
+
+        py_subgraph_function_cache.def(py::init<>(), R"(
+            Construct a new, empty cache.
+        )");
+
+        py_subgraph_function_cache.def("__len__", [](const SubgraphFunctionCache& self) { return self.size(); }, R"(
+            Get the number of cached Boolean functions.
+
+            :returns: The number of cached Boolean functions.
+            :rtype: int
+        )");
+
+        py_subgraph_function_cache.def("clear", [](SubgraphFunctionCache& self) { self.clear(); }, R"(
+            Remove all cached Boolean functions, e.g., after the netlist has been modified.
+        )");
+
         py::class_<SubgraphNetlistDecorator> py_subgraph_netlist_decorator(m, "SubgraphNetlistDecorator", R"(
             A netlist decorator that operates on an existing subgraph of the associated netlist to, e.g., copy the subgraph as a new netlist object or compute a Boolean function describing the subgraph.
         )");
@@ -68,7 +89,7 @@ namespace hal
 
         py_subgraph_netlist_decorator.def(
             "get_subgraph_function",
-            [](SubgraphNetlistDecorator& self, const std::vector<const Gate*>& subgraph_gates, const Net* subgraph_output, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache)
+            [](SubgraphNetlistDecorator& self, const std::vector<const Gate*>& subgraph_gates, const Net* subgraph_output, SubgraphFunctionCache& cache)
                 -> std::optional<BooleanFunction> {
                 auto res = self.get_subgraph_function(subgraph_gates, subgraph_output, cache);
                 if (res.is_ok())
@@ -91,7 +112,7 @@ namespace hal
 
             :param list[hal_py.Gate] subgraph_gates: The gates making up the subgraph to consider.
             :param hal_py.Net subgraph_output: The subgraph output net for which to generate the Boolean function.
-            :param dict[tuple(int,hal_py.GatePin),hal_py.BooleanFunction] cache: Cache to speed up computations. The cache is filled by this function.
+            :param hal_py.SubgraphFunctionCache cache: Cache to speed up consecutive computations. The cache is filled by this function.
             :returns: The combined Boolean function of the subgraph on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
@@ -124,7 +145,7 @@ namespace hal
 
         py_subgraph_netlist_decorator.def(
             "get_subgraph_function",
-            [](SubgraphNetlistDecorator& self, const Module* subgraph_module, const Net* subgraph_output, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache)
+            [](SubgraphNetlistDecorator& self, const Module* subgraph_module, const Net* subgraph_output, SubgraphFunctionCache& cache)
                 -> std::optional<BooleanFunction> {
                 auto res = self.get_subgraph_function(subgraph_module, subgraph_output, cache);
                 if (res.is_ok())
@@ -147,7 +168,7 @@ namespace hal
 
             :param hal_py.Module subgraph_module: The module making up the subgraph to consider.
             :param hal_py.Net subgraph_output: The subgraph output net for which to generate the Boolean function.
-            :param dict[tuple(int,hal_py.GatePin),hal_py.BooleanFunction] cache: Cache to speed up computations. The cache is filled by this function.
+            :param hal_py.SubgraphFunctionCache cache: Cache to speed up consecutive computations. The cache is filled by this function.
             :returns: The combined Boolean function of the subgraph on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");

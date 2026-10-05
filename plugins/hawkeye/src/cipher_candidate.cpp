@@ -3,6 +3,7 @@
 #include "graph_algorithm/algorithms/components.h"
 #include "graph_algorithm/algorithms/subgraph.h"
 #include "graph_algorithm/netlist_graph.h"
+#include "hal_core/netlist/decorators/subgraph_function_cache.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/endpoint.h"
@@ -1038,7 +1039,7 @@ namespace hal
             const std::vector<Gate*> subgraph_gates = sbox->get_combinational_gates();
 
             const auto snd = SubgraphNetlistDecorator(*m_netlist);
-            std::map<std::pair<u32, const GatePin*>, BooleanFunction> cache;
+            SubgraphFunctionCache cache;
 
             std::vector<BooleanFunction> bfs;
             std::set<Net*> all_inputs;

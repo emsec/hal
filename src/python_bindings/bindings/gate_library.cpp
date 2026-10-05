@@ -145,7 +145,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate_library.def_property_readonly("gnd_gate_types", py::cpp_function(&GateLibrary::get_vcc_gate_types, py::is_method(py_gate_library), borrowed()), R"(
+        py_gate_library.def_property_readonly("gnd_gate_types", py::cpp_function(&GateLibrary::get_gnd_gate_types, py::is_method(py_gate_library), borrowed()), R"(
             All GND gate types of the gate library as as dict from gate type names to gate types.
 
             :type: dict[str,hal_py.GateType]

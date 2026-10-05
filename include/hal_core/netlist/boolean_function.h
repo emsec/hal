@@ -858,7 +858,7 @@ namespace hal
         Result<std::vector<Value>> evaluate(const std::unordered_map<std::string, std::vector<Value>>& inputs) const;
 
         /**
-         * Computes the truth table outputs for a Boolean function that comprises <= 10 single-bit variables.
+         * Computes the truth table outputs for a Boolean function that comprises <= 20 single-bit variables.
          * \warning The generation of the truth table is exponential in the number of parameters.
          * 
          * @param[in] ordered_variables - A vector describing the order of input variables used to generate the truth table. Defaults to an empty vector.
@@ -874,7 +874,7 @@ namespace hal
         Result<std::vector<std::vector<Value>>> compute_truth_table(const std::vector<std::string>& ordered_variables = {}, bool remove_unknown_variables = false) const;
 
         /**
-         * Prints the truth table for a Boolean function that comprises <= 10 single-bit variables.
+         * Prints the truth table for a Boolean function that comprises <= 20 single-bit variables.
          * \warning The generation of the truth table is exponential in the number of parameters.
          * 
          * @param[in] ordered_variables - A vector describing the order of input variables used to generate the truth table. Defaults to an empty vector.

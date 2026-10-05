@@ -3,9 +3,17 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
     cmake_minimum_required(VERSION 3.5.0)
 
 
+    # On macOS, fall back to the Qt6 installed by Homebrew (see Brewfile) if Qt6_DIR is not given
     if(APPLE AND CMAKE_HOST_APPLE AND NOT Qt6_DIR)
-        set (Qt6_DIR "/usr/local/opt/qt@5/lib/cmake" )
-    endif(APPLE AND CMAKE_HOST_APPLE AND NOT Qt6_DIR)    
+        execute_process(COMMAND brew --prefix qt
+                        OUTPUT_VARIABLE HAL_BREW_QT_PREFIX
+                        OUTPUT_STRIP_TRAILING_WHITESPACE
+                        RESULT_VARIABLE HAL_BREW_QT_RESULT
+                        ERROR_QUIET)
+        if(HAL_BREW_QT_RESULT EQUAL 0 AND EXISTS "${HAL_BREW_QT_PREFIX}/lib/cmake/Qt6")
+            set(Qt6_DIR "${HAL_BREW_QT_PREFIX}/lib/cmake/Qt6")
+        endif()
+    endif()
 
     find_package(Qt6 COMPONENTS Core REQUIRED )
 

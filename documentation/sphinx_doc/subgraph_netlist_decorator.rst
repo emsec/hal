@@ -5,3 +5,9 @@ Subgraph Netlist Decorator
    :members:
 
    .. automethod:: __init__
+
+.. autoclass:: hal_py.SubgraphFunctionCache
+   :members:
+
+   .. automethod:: __init__
+   .. automethod:: __len__
