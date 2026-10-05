@@ -104,7 +104,6 @@ var hierarchy =
       [ "hal::LatchComponentEntry", "classhal_1_1_latch_component_entry.html", null ],
       [ "hal::StateComponentEntry", "classhal_1_1_state_component_entry.html", null ]
     ] ],
-    [ "hal::borrowed", "structhal_1_1borrowed.html", null ],
     [ "hal::CallbackHook< class >", "classhal_1_1_callback_hook.html", null ],
     [ "hal::CallbackHook< R(ArgTypes...)>", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html", null ],
     [ "hal::CallbackHook< void(const spdlog::level::level_enum &, const std::string &, const std::string &)>", "classhal_1_1_callback_hook.html", null ],

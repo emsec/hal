@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-137-gacc899e29</span>
+   &#160;<span id="projectnumber">v4.5.0-145-g7151a1b7d</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -94,7 +94,7 @@ $(document).ready(function(){initNavTree('base__pin_8cpp_source.html',''); initR
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;{</div>
 <div class="line"><a name="l00005"></a><span class="lineno"><a class="line" href="group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c">    5</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c">base_pin_init</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">py::module</a>&amp; m)</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    {</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;        py::class_&lt;BasePin&lt;GatePin&gt;, <a class="code" href="group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">RawPtrWrapper&lt;BasePin&lt;GatePin&gt;</a>&gt;&gt; py_gate_base_pin(m, <span class="stringliteral">&quot;GateBasePin&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;        py::class_&lt;BasePin&lt;GatePin&gt;, RawPtrWrapper&lt;BasePin&lt;GatePin&gt;&gt;&gt; py_gate_base_pin(m, <span class="stringliteral">&quot;GateBasePin&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="stringliteral">            Base class for gate pins.</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="stringliteral"></span> </div>
@@ -171,20 +171,20 @@ $(document).ready(function(){initNavTree('base__pin_8cpp_source.html',''); initR
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">            :rtype: hal_py.PinType</span></div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral">        py_gate_base_pin.def_property_readonly(</span><span class="stringliteral">&quot;group&quot;</span>, py::cpp_function(&amp;<a class="code" href="classhal_1_1_base_pin.html">BasePin&lt;GatePin&gt;::get_group</a>, py::is_method(py_gate_base_pin), <a class="code" href="structhal_1_1borrowed.html">borrowed</a>()), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral">        py_gate_base_pin.def_property_readonly(</span><span class="stringliteral">&quot;group&quot;</span>, py::cpp_function(&amp;<a class="code" href="classhal_1_1_base_pin.html">BasePin&lt;GatePin&gt;::get_group</a>, py::is_method(py_gate_base_pin), borrowed()), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="stringliteral">            A tuple comprising the group of the pin as well as the index of the pin within the group.</span></div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="stringliteral">            :type: tuple(hal_py.GatePinGroup,int)</span></div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">        py_gate_base_pin.def(</span><span class="stringliteral">&quot;get_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_pin.html">BasePin&lt;GatePin&gt;::get_group</a>, <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">        py_gate_base_pin.def(</span><span class="stringliteral">&quot;get_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_pin.html">BasePin&lt;GatePin&gt;::get_group</a>, borrowed(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="stringliteral">            Get the group of the pin as well as the index of the pin within the group.</span></div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="stringliteral">            :returns: The group and the index of the pin.</span></div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="stringliteral">            :rtype: tuple(hal_py.GatePinGroup,int)</span></div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="stringliteral">        py::class_&lt;BasePin&lt;ModulePin&gt;, <a class="code" href="group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">RawPtrWrapper&lt;BasePin&lt;ModulePin&gt;</a>&gt;&gt; py_module_base_pin(m, </span><span class="stringliteral">&quot;ModuleBasePin&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="stringliteral">        py::class_&lt;BasePin&lt;ModulePin&gt;, RawPtrWrapper&lt;BasePin&lt;ModulePin&gt;&gt;&gt; py_module_base_pin(m, </span><span class="stringliteral">&quot;ModuleBasePin&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="stringliteral">            Base class for module pins.</span></div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="stringliteral"></span> </div>
@@ -261,13 +261,13 @@ $(document).ready(function(){initNavTree('base__pin_8cpp_source.html',''); initR
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="stringliteral">            :rtype: hal_py.PinType</span></div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="stringliteral">        py_module_base_pin.def_property_readonly(</span><span class="stringliteral">&quot;group&quot;</span>, py::cpp_function(&amp;<a class="code" href="classhal_1_1_base_pin.html">BasePin&lt;ModulePin&gt;::get_group</a>, py::is_method(py_module_base_pin), <a class="code" href="structhal_1_1borrowed.html">borrowed</a>()), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="stringliteral">        py_module_base_pin.def_property_readonly(</span><span class="stringliteral">&quot;group&quot;</span>, py::cpp_function(&amp;<a class="code" href="classhal_1_1_base_pin.html">BasePin&lt;ModulePin&gt;::get_group</a>, py::is_method(py_module_base_pin), borrowed()), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="stringliteral">            A tuple comprising the group of the pin as well as the index of the pin within the group.</span></div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="stringliteral">            :type: tuple(hal_py.ModulePinGroup,int)</span></div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="stringliteral">        py_module_base_pin.def(</span><span class="stringliteral">&quot;get_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_pin.html">BasePin&lt;ModulePin&gt;::get_group</a>, <a class="code" href="structhal_1_1borrowed.html">borrowed</a>(), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="stringliteral">        py_module_base_pin.def(</span><span class="stringliteral">&quot;get_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_pin.html">BasePin&lt;ModulePin&gt;::get_group</a>, borrowed(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="stringliteral">            Get the group of the pin as well as the index of the pin within the group.</span></div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="stringliteral">            :returns: The group and the index of the pin.</span></div>
@@ -277,11 +277,9 @@ $(document).ready(function(){initNavTree('base__pin_8cpp_source.html',''); initR
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_base_pin_html"><div class="ttname"><a href="classhal_1_1_base_pin.html">hal::BasePin</a></div><div class="ttdef"><b>Definition:</b> <a href="base__pin_8h_source.html#l00047">base_pin.h:48</a></div></div>
 <div class="ttc" id="agroup__pybind_html_ga7b89c9d47d0533ec4c234d5ecaebcc2c"><div class="ttname"><a href="group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c">hal::base_pin_init</a></div><div class="ttdeci">void base_pin_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="base__pin_8cpp_source.html#l00005">base_pin.cpp:5</a></div></div>
-<div class="ttc" id="agroup__pybind_html_ga81181bacca930bfda574ce3a51a01e9c"><div class="ttname"><a href="group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">hal::RawPtrWrapper</a></div><div class="ttdeci">std::unique_ptr&lt; T, py::nodelete &gt; RawPtrWrapper</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_8h_source.html#l00093">python_bindings.h:93</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00748">graph_graphics_view.cpp:748</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
-<div class="ttc" id="astructhal_1_1borrowed_html"><div class="ttname"><a href="structhal_1_1borrowed.html">hal::borrowed</a></div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_8h_source.html#l00129">python_bindings.h:130</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

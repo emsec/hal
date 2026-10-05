@@ -1,7 +1,5 @@
 var group__pybind =
 [
-    [ "borrowed", "structhal_1_1borrowed.html", null ],
-    [ "RawPtrWrapper", "group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c", null ],
     [ "base_pin_init", "group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c", null ],
     [ "boolean_function_decorator_init", "group__pybind.html#gadcbe9ddba67d0061af0b3f101c727c6e", null ],
     [ "boolean_function_init", "group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb", null ],
@@ -35,6 +33,7 @@ var group__pybind =
     [ "plugin_manager_init", "group__pybind.html#ga9e03e20ad125cd9eb1f4e601ac556777", null ],
     [ "program_options_init", "group__pybind.html#ga24730220376b911e08e8ba91bbba0352", null ],
     [ "project_manager_init", "group__pybind.html#gac072de2b8e9f09d8320090e5873be90d", null ],
+    [ "PYBIND11_MAKE_OPAQUE", "group__pybind.html#ga8d34548d570d39ce2c5148f34ff8f80e", null ],
     [ "smt_init", "group__pybind.html#ga6f399ac0514c1e1adff48f88ee349380", null ],
     [ "subgraph_netlist_decorator_init", "group__pybind.html#gac5492afb41ef2e8dd6c49f56ddb7e73c", null ]
 ];

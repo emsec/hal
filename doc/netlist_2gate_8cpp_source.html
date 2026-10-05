@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-137-gacc899e29</span>
+   &#160;<span id="projectnumber">v4.5.0-145-g7151a1b7d</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -374,10 +374,10 @@ $(document).ready(function(){initNavTree('netlist_2gate_8cpp_source.html',''); i
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <span class="keywordflow">return</span> res;</div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    }</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
-<div class="line"><a name="l00287"></a><span class="lineno"><a class="line" href="classhal_1_1_gate.html#a4d6bacb0e0a429895c0f38cfbde43b24">  287</a></span>&#160;    <a class="code" href="classhal_1_1_result.html">Result&lt;BooleanFunction&gt;</a> Gate::get_resolved_boolean_function(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin, <span class="keyword">const</span> <span class="keywordtype">bool</span> use_net_variables)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno"><a class="line" href="classhal_1_1_gate.html#af32e941d0ce9d7aa2b8ffa5b1f5fe113">  287</a></span>&#160;    <a class="code" href="classhal_1_1_result.html">Result&lt;BooleanFunction&gt;</a> Gate::get_resolved_boolean_function(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin, <span class="keyword">const</span> <span class="keywordtype">bool</span> use_pin_names)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="keyword">const</span> std::function&lt;Result&lt;BooleanFunction&gt;(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>*, std::unordered_set&lt;std::string&gt;&amp;)&gt; get_resolved_boolean_function_internal =</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;            [<span class="keyword">this</span>, &amp;get_resolved_boolean_function_internal, use_net_variables](<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* output_pin, std::unordered_set&lt;std::string&gt;&amp; on_stack) -&gt; <a class="code" href="classhal_1_1_result.html">Result&lt;BooleanFunction&gt;</a> {</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;            [<span class="keyword">this</span>, &amp;get_resolved_boolean_function_internal, use_pin_names](<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* output_pin, std::unordered_set&lt;std::string&gt;&amp; on_stack) -&gt; <a class="code" href="classhal_1_1_result.html">Result&lt;BooleanFunction&gt;</a> {</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;            <span class="keywordflow">if</span> (output_pin == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;            {</div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not get resolved Boolean function of gate &#39;&quot;</span> + this-&gt;get_name() + <span class="stringliteral">&quot;&#39; with ID &quot;</span> + std::to_string(this-&gt;get_id()) + <span class="stringliteral">&quot;: given output pin is null.&quot;</span>);</div>
@@ -406,7 +406,7 @@ $(document).ready(function(){initNavTree('netlist_2gate_8cpp_source.html',''); i
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;                <span class="keyword">const</span> <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> pin_dir = pin-&gt;<a class="code" href="classhal_1_1_base_pin.html#a8027dbd47c6dcb221f5333f3ee269dc3">get_direction</a>();</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                <span class="keywordflow">if</span> (pin_dir == PinDirection::input)</div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;                {</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;                    <span class="keywordflow">if</span> (!use_net_variables)</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;                    <span class="keywordflow">if</span> (!use_pin_names)</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                    {</div>
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;                        <span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* <span class="keyword">const</span> input_net = this-&gt;get_fan_in_net(var);</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                        <span class="keywordflow">if</span> (input_net == <span class="keyword">nullptr</span>)</div>

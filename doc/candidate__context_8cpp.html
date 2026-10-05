@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-137-gacc899e29</span>
+   &#160;<span id="projectnumber">v4.5.0-145-g7151a1b7d</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -92,6 +92,7 @@ $(document).ready(function(){initNavTree('candidate__context_8cpp.html',''); ini
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="candidate__context_8h_source.html">module_identification/candidates/candidate_context.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="boolean__influence_8h_source.html">boolean_influence/boolean_influence.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="subgraph__function__cache_8h_source.html">hal_core/netlist/decorators/subgraph_function_cache.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate_8h_source.html">hal_core/netlist/gate.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="include_2hal__core_2netlist_2netlist_8h_source.html">hal_core/netlist/netlist.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -99,29 +100,30 @@ Include dependency graph for candidate_context.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="candidate__context_8cpp__incl.png" border="0" usemap="#aplugins_2module__identification_2src_2candidates_2candidate__context_8cpp" alt=""/></div>
 <map name="aplugins_2module__identification_2src_2candidates_2candidate__context_8cpp" id="aplugins_2module__identification_2src_2candidates_2candidate__context_8cpp">
-<area shape="rect" title=" " alt="" coords="879,5,1093,61"/>
-<area shape="rect" href="candidate__context_8h.html" title="This file contains the CandidateContext struct and that is used for optimization purposes during the ..." alt="" coords="645,109,810,165"/>
-<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="294,310,473,337"/>
-<area shape="rect" href="boolean__influence_8h.html" title=" " alt="" coords="1792,117,1988,158"/>
-<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1161,124,1328,151"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="779,481,919,508"/>
-<area shape="rect" href="boolean__function__decorator_8h.html" title=" " alt="" coords="618,213,837,255"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="39,392,170,433"/>
-<area shape="rect" title=" " alt="" coords="1617,399,1667,426"/>
-<area shape="rect" title=" " alt="" coords="1808,399,1871,426"/>
-<area shape="rect" href="boolean__function__net__decorator_8h.html" title=" " alt="" coords="911,213,1157,255"/>
-<area shape="rect" href="subgraph__netlist__decorator_8h.html" title=" " alt="" coords="227,213,441,255"/>
-<area shape="rect" href="log_8h.html" title=" " alt="" coords="655,303,786,344"/>
-<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="1117,303,1295,344"/>
-<area shape="rect" title=" " alt="" coords="1185,399,1227,426"/>
-<area shape="rect" title=" " alt="" coords="1423,399,1547,426"/>
-<area shape="rect" title=" " alt="" coords="164,481,251,508"/>
-<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="397,392,583,433"/>
-<area shape="rect" title=" " alt="" coords="607,399,685,426"/>
-<area shape="rect" href="z3__utils_8h.html" title=" " alt="" coords="1282,221,1421,247"/>
-<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="1927,303,2082,344"/>
-<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="2157,310,2351,337"/>
-<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1445,213,1599,255"/>
+<area shape="rect" title=" " alt="" coords="1254,5,1469,61"/>
+<area shape="rect" href="candidate__context_8h.html" title="This file contains the CandidateContext struct and that is used for optimization purposes during the ..." alt="" coords="537,109,703,165"/>
+<area shape="rect" href="subgraph__function__cache_8h.html" title=" " alt="" coords="860,303,1063,344"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="1631,399,1809,426"/>
+<area shape="rect" href="boolean__influence_8h.html" title=" " alt="" coords="1263,213,1459,255"/>
+<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1986,221,2153,247"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="762,571,902,597"/>
+<area shape="rect" href="boolean__function__decorator_8h.html" title=" " alt="" coords="364,303,583,344"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="767,481,897,523"/>
+<area shape="rect" title=" " alt="" coords="1365,489,1416,515"/>
+<area shape="rect" title=" " alt="" coords="1917,489,1979,515"/>
+<area shape="rect" href="boolean__function__net__decorator_8h.html" title=" " alt="" coords="93,303,339,344"/>
+<area shape="rect" href="subgraph__netlist__decorator_8h.html" title=" " alt="" coords="759,213,974,255"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="817,392,948,433"/>
+<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="1023,392,1201,433"/>
+<area shape="rect" title=" " alt="" coords="1217,489,1260,515"/>
+<area shape="rect" title=" " alt="" coords="2115,489,2239,515"/>
+<area shape="rect" title=" " alt="" coords="1271,571,1358,597"/>
+<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="2275,481,2461,523"/>
+<area shape="rect" title=" " alt="" coords="1681,489,1759,515"/>
+<area shape="rect" href="z3__utils_8h.html" title=" " alt="" coords="1239,310,1377,337"/>
+<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="1985,392,2140,433"/>
+<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="2417,399,2612,426"/>
+<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1503,303,1657,344"/>
 </map>
 </div>
 </div>

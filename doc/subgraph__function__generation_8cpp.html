@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-137-gacc899e29</span>
+   &#160;<span id="projectnumber">v4.5.0-145-g7151a1b7d</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -92,6 +92,7 @@ $(document).ready(function(){initNavTree('subgraph__function__generation_8cpp.ht
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="subgraph__function__generation_8h_source.html">z3_utils/subgraph_function_generation.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="subgraph__function__cache_8h_source.html">hal_core/netlist/decorators/subgraph_function_cache.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="boolean__function__net__decorator_8h_source.html">hal_core/netlist/decorators/boolean_function_net_decorator.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="subgraph__netlist__decorator_8h_source.html">hal_core/netlist/decorators/subgraph_netlist_decorator.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="endpoint_8h_source.html">hal_core/netlist/endpoint.h</a>&quot;</code><br />
@@ -104,30 +105,32 @@ Include dependency graph for subgraph_function_generation.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="subgraph__function__generation_8cpp__incl.png" border="0" usemap="#aplugins_2z3__utils_2src_2subgraph__function__generation_8cpp" alt=""/></div>
 <map name="aplugins_2z3__utils_2src_2subgraph__function__generation_8cpp" id="aplugins_2z3__utils_2src_2subgraph__function__generation_8cpp">
-<area shape="rect" title=" " alt="" coords="1204,5,1455,47"/>
-<area shape="rect" href="subgraph__function__generation_8h.html" title=" " alt="" coords="961,273,1157,315"/>
-<area shape="rect" href="boolean__function__net__decorator_8h.html" title=" " alt="" coords="733,95,979,136"/>
-<area shape="rect" href="subgraph__netlist__decorator_8h.html" title=" " alt="" coords="1087,184,1302,225"/>
-<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="5,191,200,218"/>
-<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1307,102,1474,129"/>
-<area shape="rect" href="log_8h.html" title=" " alt="" coords="2043,273,2173,315"/>
-<area shape="rect" href="z3__utils_8h.html" title=" " alt="" coords="1651,191,1789,218"/>
-<area shape="rect" title=" " alt="" coords="2094,102,2157,129"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="1023,363,1153,404"/>
-<area shape="rect" title=" " alt="" coords="1514,370,1585,397"/>
-<area shape="rect" title=" " alt="" coords="721,370,783,397"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="561,452,701,479"/>
-<area shape="rect" title=" " alt="" coords="1329,452,1415,479"/>
-<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="1587,273,1765,315"/>
-<area shape="rect" href="net_8h.html" title=" " alt="" coords="759,191,918,218"/>
-<area shape="rect" title=" " alt="" coords="1828,370,1879,397"/>
-<area shape="rect" title=" " alt="" coords="2215,370,2257,397"/>
-<area shape="rect" title=" " alt="" coords="1675,370,1799,397"/>
-<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="579,273,733,315"/>
-<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="382,363,567,404"/>
-<area shape="rect" title=" " alt="" coords="1207,370,1284,397"/>
-<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="1283,281,1461,307"/>
-<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1813,184,1968,225"/>
+<area shape="rect" title=" " alt="" coords="959,5,1210,47"/>
+<area shape="rect" href="subgraph__function__generation_8h.html" title=" " alt="" coords="977,273,1173,315"/>
+<area shape="rect" href="subgraph__function__cache_8h.html" title=" " alt="" coords="110,184,313,225"/>
+<area shape="rect" href="boolean__function__net__decorator_8h.html" title=" " alt="" coords="801,95,1048,136"/>
+<area shape="rect" href="subgraph__netlist__decorator_8h.html" title=" " alt="" coords="563,95,777,136"/>
+<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="337,191,531,218"/>
+<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1280,102,1447,129"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="2161,273,2291,315"/>
+<area shape="rect" href="z3__utils_8h.html" title=" " alt="" coords="1695,191,1834,218"/>
+<area shape="rect" title=" " alt="" coords="2391,102,2453,129"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="791,363,922,404"/>
+<area shape="rect" title=" " alt="" coords="1708,370,1779,397"/>
+<area shape="rect" title=" " alt="" coords="1044,370,1107,397"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="423,452,563,479"/>
+<area shape="rect" title=" " alt="" coords="1447,452,1533,479"/>
+<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="1654,273,1833,315"/>
+<area shape="rect" title=" " alt="" coords="1850,370,1901,397"/>
+<area shape="rect" title=" " alt="" coords="249,281,309,307"/>
+<area shape="rect" title=" " alt="" coords="2333,370,2375,397"/>
+<area shape="rect" title=" " alt="" coords="1991,370,2115,397"/>
+<area shape="rect" href="net_8h.html" title=" " alt="" coords="719,191,877,218"/>
+<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="798,273,953,315"/>
+<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="531,363,716,404"/>
+<area shape="rect" title=" " alt="" coords="1274,370,1351,397"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="1350,281,1529,307"/>
+<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1931,184,2086,225"/>
 </map>
 </div>
 </div>

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-137-gacc899e29</span>
+   &#160;<span id="projectnumber">v4.5.0-145-g7151a1b7d</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -86,6 +86,7 @@ $(document).ready(function(){initNavTree('group__decorators.html',''); initResiz
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">Decorators<div class="ingroups"><a class="el" href="group__core.html">HAL Core</a> &raquo; <a class="el" href="group__netlist.html">Netlist</a></div></div>  </div>
@@ -116,6 +117,11 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_subgraph_netlist_decorator.html">hal::SubgraphNetlistDecorator</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:ga06f1939cb6102436443a866a6a64056d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__decorators.html#ga06f1939cb6102436443a866a6a64056d">hal::SubgraphFunctionCache</a> = std::map&lt; std::pair&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, const <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> * &gt;, <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;</td></tr>
+<tr class="separator:ga06f1939cb6102436443a866a6a64056d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:gabf9ea95cf437527b2fd8929ae3d7489d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__decorators.html#gabf9ea95cf437527b2fd8929ae3d7489d">hal::TraversalDirection</a> { <a class="el" href="group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da965dbaac085fc891bfbbd4f9d145bbc8">hal::forward</a>
@@ -130,6 +136,26 @@ Enumerations</h2></td></tr>
 <tr class="separator:ga10a0dbae61e1d4d1c8d2310ce40947c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="ga06f1939cb6102436443a866a6a64056d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga06f1939cb6102436443a866a6a64056d">&#9670;&nbsp;</a></span>SubgraphFunctionCache</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="group__decorators.html#ga06f1939cb6102436443a866a6a64056d">hal::SubgraphFunctionCache</a> = typedef std::map&lt;std::pair&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, const <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a>*&gt;, <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Cache for the Boolean functions that <code><a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#ad55d58724133704b9ce81e1c00bf572f">SubgraphNetlistDecorator::get_subgraph_function</a></code> computes for the output pins of gates. It maps a pair of gate ID and output pin to the Boolean function of that pin, with the variables already replaced by the corresponding nets.</p>
+<p>Passing the same cache to consecutive calls of <code>get_subgraph_function</code> avoids recomputing logic that several subgraphs share. The cache is filled by these calls and should initially be empty. It must not be reused after the netlist has been modified.</p>
+<p>In Python, the cache is available as <code>hal_py.SubgraphFunctionCache</code> and is passed by reference, so it is filled across calls just as in C++. </p>
+
+<p class="definition">Definition at line <a class="el" href="subgraph__function__cache_8h_source.html#l00050">50</a> of file <a class="el" href="subgraph__function__cache_8h_source.html">subgraph_function_cache.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="gabf9ea95cf437527b2fd8929ae3d7489d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gabf9ea95cf437527b2fd8929ae3d7489d">&#9670;&nbsp;</a></span>TraversalDirection</h2>

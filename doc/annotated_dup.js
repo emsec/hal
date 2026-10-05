@@ -167,7 +167,6 @@ var annotated_dup =
       [ "UIPluginInterface", "classhal_1_1_u_i_plugin_interface.html", "classhal_1_1_u_i_plugin_interface" ],
       [ "PluginParameter", "classhal_1_1_plugin_parameter.html", "classhal_1_1_plugin_parameter" ],
       [ "RuntimeLibrary", "classhal_1_1_runtime_library.html", "classhal_1_1_runtime_library" ],
-      [ "borrowed", "structhal_1_1borrowed.html", null ],
       [ "CallbackHook", "classhal_1_1_callback_hook.html", null ],
       [ "CallbackHook< R(ArgTypes...)>", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4" ],
       [ "EnumStrings", "structhal_1_1_enum_strings.html", "structhal_1_1_enum_strings" ],

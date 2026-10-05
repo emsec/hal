@@ -1,6 +1,5 @@
 var NAVTREEINDEX32 =
 {
-"functions_enum.html":[9,3,4],
 "functions_eval.html":[9,3,5],
 "functions_eval.html":[9,3,5,0],
 "functions_eval_b.html":[9,3,5,1],
@@ -73,8 +72,8 @@ var NAVTREEINDEX32 =
 "functions_type.html":[9,3,3],
 "functions_u.html":[9,3,0,20],
 "functions_v.html":[9,3,0,21],
-"functions_vars.html":[9,3,2],
 "functions_vars.html":[9,3,2,0],
+"functions_vars.html":[9,3,2],
 "functions_vars_b.html":[9,3,2,1],
 "functions_vars_c.html":[9,3,2,2],
 "functions_vars_d.html":[9,3,2,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX32 =
 "gatelibrary__frame__ram_8cpp.html":[10,0,1,8,2,18,0,5],
 "gatelibrary__frame__ram_8cpp_source.html":[10,0,1,8,2,18,0,5],
 "gatelibrary__frame__ram_8h.html":[10,0,1,8,0,0,18,0,5],
-"gatelibrary__frame__ram_8h_source.html":[10,0,1,8,0,0,18,0,5]
+"gatelibrary__frame__ram_8h_source.html":[10,0,1,8,0,0,18,0,5],
+"gatelibrary__frame__ram__port_8cpp.html":[10,0,1,8,2,18,0,6]
 };
