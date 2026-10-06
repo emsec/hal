@@ -128,6 +128,24 @@ namespace hal
                 return ERR( "no netlist provided" );
             }
 
+            std::vector<Diagnostic> diagnostics;
+            const auto report = [&diagnostics]( Severity severity,
+                                                DiagnosticCode code,
+                                                PtrType type,
+                                                const void *ptr,
+                                                u32 id,
+                                                std::string message ) {
+                if( severity == Severity::error )
+                {
+                    log_error( "clock_tree_extractor", "{}", message );
+                }
+                else
+                {
+                    log_warning( "clock_tree_extractor", "{}", message );
+                }
+                diagnostics.push_back( { severity, code, type, ptr, id, std::move( message ) } );
+            };
+
             std::unordered_set<void *> vertices;
             std::unordered_set<std::pair<void *, void *>, VoidPtrHash> edges;
             std::unordered_map<const void *, PtrType> ptrs_to_type;
@@ -147,18 +165,26 @@ namespace hal
 
                 if( clock_pins.size() != 1 )
                 {
-                    log_error( "clock_tree_extractor",
-                               "invalid number of input clock pins at gate '" + ff->get_name() + "' with ID "
-                                   + std::to_string( ff->get_id() ) );
+                    report( Severity::error,
+                            DiagnosticCode::invalid_clock_pin_count,
+                            PtrType::GATE,
+                            ff,
+                            ff->get_id(),
+                            "invalid number of input clock pins at gate '" + ff->get_name() + "' with ID "
+                                + std::to_string( ff->get_id() ) );
                     continue;
                 }
 
                 const Net *clk = ff->get_fan_in_net( clock_pins.front() );
                 if( clk == nullptr )
                 {
-                    log_error( "clock_tree_extractor",
-                               "no net connected to clock pin at gate '" + ff->get_name() + "' with ID "
-                                   + std::to_string( ff->get_id() ) );
+                    report( Severity::error,
+                            DiagnosticCode::unconnected_clock_pin,
+                            PtrType::GATE,
+                            ff,
+                            ff->get_id(),
+                            "no net connected to clock pin at gate '" + ff->get_name() + "' with ID "
+                                + std::to_string( ff->get_id() ) );
                     continue;
                 }
 
@@ -180,9 +206,12 @@ namespace hal
                     }
                     if( !valid )
                     {
-                        log_error( "clock_tree_extractor",
-                                   "invalid number of sources for clock net with ID "
-                                       + std::to_string( clk->get_id() ) );
+                        report( Severity::error,
+                                DiagnosticCode::invalid_clock_net_sources,
+                                PtrType::NET,
+                                clk,
+                                clk->get_id(),
+                                "invalid number of sources for clock net with ID " + std::to_string( clk->get_id() ) );
                         continue;
                     }
                 }
@@ -196,9 +225,12 @@ namespace hal
                 }
                 else if( clk->get_num_of_sources() == 0 )
                 {
-                    log_warning( "clock_tree_extractor",
-                                 "unrouted clock net with ID {} ignored",
-                                 std::to_string( clk->get_id() ) );
+                    report( Severity::warning,
+                            DiagnosticCode::unrouted_clock_net,
+                            PtrType::NET,
+                            clk,
+                            clk->get_id(),
+                            "unrouted clock net with ID " + std::to_string( clk->get_id() ) + " ignored" );
                     continue;
                 }
 
@@ -301,16 +333,22 @@ namespace hal
 
                     if( net->get_num_of_sources() == 0 )
                     {
-                        log_warning( "clock_tree_extractor",
-                                     "unrouted clock net with ID {} ignored",
-                                     std::to_string( net->get_id() ) );
+                        report( Severity::warning,
+                                DiagnosticCode::unrouted_clock_net,
+                                PtrType::NET,
+                                net,
+                                net->get_id(),
+                                "unrouted clock net with ID " + std::to_string( net->get_id() ) + " ignored" );
                         continue;
                     }
                     else if( net->get_num_of_sources() > 1 )
                     {
-                        log_warning( "clock_tree_extractor",
-                                     "multi-driven clock net with ID {} ignored",
-                                     std::to_string( net->get_id() ) );
+                        report( Severity::warning,
+                                DiagnosticCode::multi_driven_clock_net,
+                                PtrType::NET,
+                                net,
+                                net->get_id(),
+                                "multi-driven clock net with ID " + std::to_string( net->get_id() ) + " ignored" );
                         continue;
                     }
 
@@ -323,6 +361,7 @@ namespace hal
             }
 
             std::unique_ptr<ClockTree> clock_tree = std::unique_ptr<ClockTree>( new ClockTree( netlist ) );
+            clock_tree->m_diagnostics = std::move( diagnostics );
 
             igraph_integer_t idx = 0;
             for( const void *vertex : vertices )
@@ -758,6 +797,11 @@ namespace hal
         const Netlist *ClockTree::get_netlist() const
         {
             return m_netlist;
+        }
+
+        const std::vector<Diagnostic> &ClockTree::get_diagnostics() const
+        {
+            return m_diagnostics;
         }
 
         const igraph_t *ClockTree::get_igraph() const
