@@ -84,8 +84,7 @@ namespace hal
                 return result;
             }
 
-            igraph_error_t
-            in_callback( const igraph_t *graph, igraph_integer_t vid, igraph_integer_t dist, void *extra )
+            igraph_error_t in_callback( const igraph_t *graph, igraph_int_t vid, igraph_int_t dist, void *extra )
             {
                 return igraph_vector_int_push_back( (igraph_vector_int_t *) extra, vid );
             }
@@ -99,8 +98,8 @@ namespace hal
 
         ClockTree::ClockTree( const Netlist *netlist,
                               igraph_t &&igraph,
-                              std::unordered_set<igraph_integer_t> &&roots,
-                              std::unordered_map<igraph_integer_t, const void *> &&vertices_to_ptrs,
+                              std::unordered_set<igraph_int_t> &&roots,
+                              std::unordered_map<igraph_int_t, const void *> &&vertices_to_ptrs,
                               std::unordered_map<const void *, PtrType> &&ptrs_to_types )
             : m_netlist( netlist )
             , m_igraph( std::move( igraph ) )
@@ -363,10 +362,10 @@ namespace hal
             std::unique_ptr<ClockTree> clock_tree = std::unique_ptr<ClockTree>( new ClockTree( netlist ) );
             clock_tree->m_diagnostics = std::move( diagnostics );
 
-            igraph_integer_t idx = 0;
+            igraph_int_t idx = 0;
             for( const void *vertex : vertices )
             {
-                const igraph_integer_t vertex_id = idx++;
+                const igraph_int_t vertex_id = idx++;
 
                 clock_tree->m_vertices_to_ptrs[vertex_id] = vertex;
                 clock_tree->m_ptrs_to_vertices[vertex] = vertex_id;
@@ -493,20 +492,20 @@ namespace hal
                 dot_fd << "];\n";
             }
 
-            std::queue<std::pair<igraph_integer_t, std::string>> queue;
-            for( const igraph_integer_t &root : m_roots )
+            std::queue<std::pair<igraph_int_t, std::string>> queue;
+            for( const igraph_int_t &root : m_roots )
             {
                 queue.push( { root, "blue" } );
             }
 
             igraph_error_t ierror;
-            std::unordered_set<igraph_integer_t> visited;
+            std::unordered_set<igraph_int_t> visited;
             while( !queue.empty() )
             {
-                const std::pair<igraph_integer_t, std::string> pair = queue.front();
+                const std::pair<igraph_int_t, std::string> pair = queue.front();
                 queue.pop();
 
-                const igraph_integer_t vertex = pair.first;
+                const igraph_int_t vertex = pair.first;
                 std::string edge_color = pair.second;
 
                 if( visited.find( vertex ) != visited.end() )
@@ -540,7 +539,7 @@ namespace hal
                     return ERR( igraph_strerror( ierror ) );
                 }
 
-                for( igraph_integer_t idx = 0; idx < igraph_vector_int_size( &neighbors ); idx++ )
+                for( igraph_int_t idx = 0; idx < igraph_vector_int_size( &neighbors ); idx++ )
                 {
                     const std::string src_id = stype == PtrType::GATE ? std::to_string( ( (Gate *) sptr )->get_id() )
                                                                       : ( (Net *) sptr )->get_name();
@@ -572,7 +571,7 @@ namespace hal
             }
 
             igraph_error_t ierror;
-            igraph_integer_t root = it->second;
+            igraph_int_t root = it->second;
             if( parent )
             {
                 igraph_vector_int_t parents;
@@ -648,13 +647,13 @@ namespace hal
             igraph_vs_destroy( &vs );
             igraph_vector_int_destroy( &vertices );
 
-            std::unordered_set<igraph_integer_t> roots;
+            std::unordered_set<igraph_int_t> roots;
             std::unordered_map<const void *, PtrType> ptrs_to_types;
-            std::unordered_map<igraph_integer_t, const void *> vertices_to_ptrs;
+            std::unordered_map<igraph_int_t, const void *> vertices_to_ptrs;
 
-            for( igraph_integer_t idx = 0; idx < igraph_vector_int_size( &map ); idx++ )
+            for( igraph_int_t idx = 0; idx < igraph_vector_int_size( &map ); idx++ )
             {
-                const igraph_integer_t vertex = VECTOR( map )[idx];
+                const igraph_int_t vertex = VECTOR( map )[idx];
                 if( vertex == -1 )
                 {
                     continue;
@@ -681,7 +680,7 @@ namespace hal
                 return ERR( igraph_strerror( ierror ) );
             }
 
-            for( igraph_integer_t idx = 0; idx < igraph_vector_int_size( &indegrees ); idx++ )
+            for( igraph_int_t idx = 0; idx < igraph_vector_int_size( &indegrees ); idx++ )
             {
                 if( VECTOR( indegrees )[idx] != 0 )
                 {
@@ -699,7 +698,7 @@ namespace hal
                                                     std::move( ptrs_to_types ) ) );
         }
 
-        Result<igraph_integer_t> ClockTree::get_vertex_from_ptr( const void *ptr ) const
+        Result<igraph_int_t> ClockTree::get_vertex_from_ptr( const void *ptr ) const
         {
             auto it = m_ptrs_to_vertices.find( ptr );
             if( it == m_ptrs_to_vertices.end() )
@@ -710,7 +709,7 @@ namespace hal
             return OK( it->second );
         }
 
-        Result<std::pair<const void *, PtrType>> ClockTree::get_ptr_from_vertex( const igraph_integer_t vertex ) const
+        Result<std::pair<const void *, PtrType>> ClockTree::get_ptr_from_vertex( const igraph_int_t vertex ) const
         {
             auto it = m_vertices_to_ptrs.find( vertex );
             if( it == m_vertices_to_ptrs.end() )
@@ -721,10 +720,10 @@ namespace hal
             return OK( std::make_pair( it->second, m_ptrs_to_types.at( it->second ) ) );
         }
 
-        Result<std::vector<igraph_integer_t>>
+        Result<std::vector<igraph_int_t>>
         ClockTree::get_vertices_from_ptrs( const std::vector<const void *> &ptrs ) const
         {
-            std::vector<igraph_integer_t> result;
+            std::vector<igraph_int_t> result;
 
             for( const void *ptr : ptrs )
             {
@@ -741,11 +740,11 @@ namespace hal
         }
 
         Result<std::vector<std::pair<const void *, PtrType>>>
-        ClockTree::get_ptrs_from_vertices( const std::vector<igraph_integer_t> &vertices ) const
+        ClockTree::get_ptrs_from_vertices( const std::vector<igraph_int_t> &vertices ) const
         {
             std::vector<std::pair<const void *, PtrType>> result;
 
-            for( const igraph_integer_t vertex : vertices )
+            for( const igraph_int_t vertex : vertices )
             {
                 auto res = get_ptr_from_vertex( vertex );
                 if( res.is_error() )
@@ -835,7 +834,7 @@ namespace hal
             }
 
             std::vector<std::pair<const void *, PtrType>> result;
-            for( igraph_integer_t idx = 0; idx < igraph_vector_int_size( &neighbors ); idx++ )
+            for( igraph_int_t idx = 0; idx < igraph_vector_int_size( &neighbors ); idx++ )
             {
                 const void *n_ptr = m_vertices_to_ptrs.at( VECTOR( neighbors )[idx] );
                 result.push_back( std::make_pair( n_ptr, m_ptrs_to_types.at( n_ptr ) ) );
