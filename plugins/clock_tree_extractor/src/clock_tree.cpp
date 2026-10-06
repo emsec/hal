@@ -25,11 +25,11 @@
 // SOFTWARE.
 
 #include "clock_tree_extractor/clock_tree.h"
+#include "clock_tree_extractor/utils.h"
 
 #include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/gate_library/enums/gate_type_property.h"
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
@@ -52,42 +52,6 @@ namespace hal
     {
         namespace
         {
-            inline bool is_ff( const Gate *gate )
-            {
-                return gate->get_type()->has_property( GateTypeProperty::ff );
-            }
-
-            inline bool is_latch( const Gate *gate )
-            {
-                return gate->get_type()->has_property( GateTypeProperty::latch );
-            }
-
-            inline bool is_buffer( const Gate *gate )
-            {
-                return gate->get_type()->has_property( GateTypeProperty::c_buffer );
-            }
-
-            inline bool is_inverter( const Gate *gate )
-            {
-                return gate->get_type()->has_property( GateTypeProperty::c_inverter );
-            }
-
-            inline bool is_delay( const Gate *gate )
-            {
-                return gate->get_type()->has_property( GateTypeProperty::delay );
-            }
-
-            inline bool is_control_pin( const PinType &pin_type )
-            {
-                return pin_type == PinType::clock || pin_type == PinType::enable || pin_type == PinType::select
-                    || pin_type == PinType::set || pin_type == PinType::reset;
-            }
-
-            inline bool is_connected_to_control_pin( const Endpoint *endpoint )
-            {
-                return is_control_pin( endpoint->get_pin()->get_type() );
-            }
-
             const std::unordered_set<const Gate *> get_toggle_ffs( const Netlist *netlist )
             {
                 const std::vector<Gate *> ffs = netlist->get_gates( is_ff );
