@@ -497,6 +497,47 @@ namespace hal
 
                 :returns: The diagnostics.
                 :rtype: list[clock_tree_extractor.Diagnostic]
+            )" )
+            .def(
+                "get_branches",
+                []( const cte::ClockTree &self ) -> py::object {
+                    auto res = self.get_branches();
+                    if( res.is_error() )
+                    {
+                        log_error( "clock_tree_extractor", "{}", res.get_error().get() );
+                        return py::none();
+                    }
+
+                    py::list branches;
+                    for( const auto &branch : res.get() )
+                    {
+                        py::list py_branch;
+                        for( const auto &[ptr, type] : branch )
+                        {
+                            if( type == cte::PtrType::GATE )
+                            {
+                                py_branch.append( py::cast( (const Gate *) ptr ) );
+                            }
+                            else if( type == cte::PtrType::NET )
+                            {
+                                py_branch.append( py::cast( (const Net *) ptr ) );
+                            }
+                            else
+                            {
+                                log_error( "clock_tree_extractor", "unknown ptr type" );
+                                return py::none();
+                            }
+                        }
+                        branches.append( std::move( py_branch ) );
+                    }
+                    return std::move( branches );
+                },
+                borrowed(),
+                R"(
+                Get all branches of the clock tree, i.e., all paths from a root to a sink. The branches are computed on the first call and cached.
+
+                :returns: The branches on success, ``None`` otherwise. Each branch is ordered from root to sink.
+                :rtype: list[list[hal_py.Gate or hal_py.Net]] or None
             )" );
 
 #ifndef PYBIND11_MODULE
