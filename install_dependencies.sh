@@ -28,9 +28,9 @@ if [[ "$platform" == 'macOS' ]]; then
             echo "export PATH=\"$BREW_PREFIX/opt/qt/bin:\$PATH\"" >> ~/.zshrc
         fi
 
-        grep -Fxq "export PATH=\"$BREW_PREFIX/opt/llvm@14/bin:\$PATH\"" ~/.zshrc
+        grep -Fxq "export PATH=\"$BREW_PREFIX/opt/llvm/bin:\$PATH\"" ~/.zshrc
         if ! [[ $? -eq 0 ]]; then
-            echo "export PATH=\"$BREW_PREFIX/opt/llvm@14/bin:\$PATH\"" >> ~/.zshrc
+            echo "export PATH=\"$BREW_PREFIX/opt/llvm/bin:\$PATH\"" >> ~/.zshrc
         fi
 
         grep -Fxq "export PATH=\"$BREW_PREFIX/opt/flex/bin:\$PATH\"" ~/.zshrc
@@ -49,9 +49,9 @@ if [[ "$platform" == 'macOS' ]]; then
             echo "export PATH=\"$BREW_PREFIX/opt/qt/bin:\$PATH\"" >> ~/.bash_profile
         fi
 
-        grep -Fxq "export PATH=\"$BREW_PREFIX/opt/llvm@14/bin:\$PATH\"" ~/.bash_profile
+        grep -Fxq "export PATH=\"$BREW_PREFIX/opt/llvm/bin:\$PATH\"" ~/.bash_profile
         if ! [[ $? -eq 0 ]]; then
-            echo "export PATH=\"$BREW_PREFIX/opt/llvm@14/bin:\$PATH\"" >> ~/.bash_profile
+            echo "export PATH=\"$BREW_PREFIX/opt/llvm/bin:\$PATH\"" >> ~/.bash_profile
         fi
 
         grep -Fxq "export PATH=\"$BREW_PREFIX/opt/flex/bin:\$PATH\"" ~/.bash_profile

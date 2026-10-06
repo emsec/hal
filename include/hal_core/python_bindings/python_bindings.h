@@ -80,6 +80,10 @@
 
 #pragma GCC diagnostic pop
 
+// Passed to Python by reference instead of being converted to a dict, so that a cache filled by
+// SubgraphNetlistDecorator.get_subgraph_function is kept across calls (see subgraph_netlist_decorator.cpp).
+PYBIND11_MAKE_OPAQUE(hal::SubgraphFunctionCache)
+
 namespace hal
 {
     namespace py = pybind11;
