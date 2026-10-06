@@ -32,6 +32,7 @@
 
 #include <igraph/igraph.h>
 #include <memory>
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -67,6 +68,9 @@ namespace hal
             u32 subject_id;
             std::string message;
         };
+
+        // a root-to-sink path through the clock tree
+        using Branch = std::vector<std::pair<const void *, PtrType>>;
 
         struct VoidPtrHash
         {
@@ -126,6 +130,10 @@ namespace hal
 
             const std::vector<Diagnostic> &get_diagnostics() const;
 
+            const std::unordered_set<igraph_int_t> &get_roots() const;
+
+            Result<std::vector<Branch>> get_branches() const;
+
           private:
             ClockTree() = delete;
 
@@ -146,6 +154,8 @@ namespace hal
             std::unordered_map<const void *, PtrType> m_ptrs_to_types;
 
             std::vector<Diagnostic> m_diagnostics;
+
+            mutable std::optional<std::vector<Branch>> m_branches;
         };
     }  // namespace cte
 }  // namespace hal

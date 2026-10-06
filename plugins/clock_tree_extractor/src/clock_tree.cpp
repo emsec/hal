@@ -25,6 +25,7 @@
 // SOFTWARE.
 
 #include "clock_tree_extractor/clock_tree.h"
+#include "clock_tree_extractor/branches.h"
 #include "clock_tree_extractor/utils.h"
 
 #include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
@@ -801,6 +802,26 @@ namespace hal
         const std::vector<Diagnostic> &ClockTree::get_diagnostics() const
         {
             return m_diagnostics;
+        }
+
+        const std::unordered_set<igraph_int_t> &ClockTree::get_roots() const
+        {
+            return m_roots;
+        }
+
+        Result<std::vector<Branch>> ClockTree::get_branches() const
+        {
+            if( !m_branches.has_value() )
+            {
+                auto result = recover_branches( *this );
+                if( result.is_error() )
+                {
+                    return ERR( result.get_error().get() );
+                }
+                m_branches = result.get();
+            }
+
+            return OK( *m_branches );
         }
 
         const igraph_t *ClockTree::get_igraph() const
