@@ -41,23 +41,32 @@
 namespace hal
 {
     class Netlist;
-}
-
-namespace hal
-{
     class Gate;
-}
-
-namespace hal
-{
     class Net;
-}
 
-namespace hal
-{
     namespace cte
     {
         enum PtrType { UNKNOWN, GATE, NET };
+
+        enum class Severity { warning, error };
+
+        enum class DiagnosticCode {
+            invalid_clock_pin_count,
+            unconnected_clock_pin,
+            invalid_clock_net_sources,
+            unrouted_clock_net,
+            multi_driven_clock_net,
+        };
+
+        struct Diagnostic
+        {
+            Severity severity;
+            DiagnosticCode code;
+            PtrType subject_type;
+            const void *subject_ptr;
+            u32 subject_id;
+            std::string message;
+        };
 
         struct VoidPtrHash
         {
@@ -115,6 +124,8 @@ namespace hal
 
             const igraph_t *get_igraph() const;
 
+            const std::vector<Diagnostic> &get_diagnostics() const;
+
           private:
             ClockTree() = delete;
 
@@ -133,6 +144,8 @@ namespace hal
             std::unordered_map<const void *, igraph_integer_t> m_ptrs_to_vertices;
 
             std::unordered_map<const void *, PtrType> m_ptrs_to_types;
+
+            std::vector<Diagnostic> m_diagnostics;
         };
     }  // namespace cte
 }  // namespace hal

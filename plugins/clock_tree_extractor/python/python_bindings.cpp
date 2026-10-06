@@ -29,6 +29,7 @@
 #include "clock_tree_extractor/clock_tree.h"
 #include "clock_tree_extractor/plugin_clock_tree_extractor.h"
 #include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
 
 #include <igraph/igraph.h>
 #include <pybind11/detail/descr.h>
@@ -121,6 +122,77 @@ namespace hal
     :returns: A set of plugin names that this plugin depends on.
     :rtype: set[str]
     )" );
+
+        py::enum_<cte::PtrType>( m, "PtrType", R"(
+            The kind of object a clock tree vertex or diagnostic refers to.
+        )" )
+            .value( "UNKNOWN", cte::PtrType::UNKNOWN )
+            .value( "GATE", cte::PtrType::GATE )
+            .value( "NET", cte::PtrType::NET )
+            .export_values();
+
+        py::enum_<cte::Severity>( m, "Severity", R"(
+            The severity of a diagnostic emitted during clock tree extraction.
+        )" )
+            .value( "warning", cte::Severity::warning )
+            .value( "error", cte::Severity::error );
+
+        py::enum_<cte::DiagnosticCode>( m, "DiagnosticCode", R"(
+            The machine-readable kind of a diagnostic emitted during clock tree extraction.
+        )" )
+            .value( "invalid_clock_pin_count", cte::DiagnosticCode::invalid_clock_pin_count )
+            .value( "unconnected_clock_pin", cte::DiagnosticCode::unconnected_clock_pin )
+            .value( "invalid_clock_net_sources", cte::DiagnosticCode::invalid_clock_net_sources )
+            .value( "unrouted_clock_net", cte::DiagnosticCode::unrouted_clock_net )
+            .value( "multi_driven_clock_net", cte::DiagnosticCode::multi_driven_clock_net );
+
+        py::class_<cte::Diagnostic>( m, "Diagnostic", R"(
+            A problem encountered during clock tree extraction, e.g., a gate or net that had to be skipped.
+        )" )
+            .def_readonly( "severity", &cte::Diagnostic::severity, R"(
+                The severity.
+
+                :type: clock_tree_extractor.Severity
+            )" )
+            .def_readonly( "code", &cte::Diagnostic::code, R"(
+                The machine-readable kind of the diagnostic.
+
+                :type: clock_tree_extractor.DiagnosticCode
+            )" )
+            .def_readonly( "subject_type", &cte::Diagnostic::subject_type, R"(
+                Whether the subject is a gate or a net.
+
+                :type: clock_tree_extractor.PtrType
+            )" )
+            .def_property_readonly(
+                "ptr",
+                []( const cte::Diagnostic &self ) -> py::object {
+                    if( self.subject_type == cte::PtrType::GATE )
+                    {
+                        return py::cast( (const Gate *) self.subject_ptr );
+                    }
+                    else if( self.subject_type == cte::PtrType::NET )
+                    {
+                        return py::cast( (const Net *) self.subject_ptr );
+                    }
+                    return py::none();
+                },
+                borrowed(),
+                R"(
+                The gate or net the diagnostic is about.
+
+                :type: hal_py.Gate or hal_py.Net or None
+            )" )
+            .def_readonly( "subject_id", &cte::Diagnostic::subject_id, R"(
+                The ID of the gate or net the diagnostic is about.
+
+                :type: int
+            )" )
+            .def_readonly( "message", &cte::Diagnostic::message, R"(
+                The human-readable message.
+
+                :type: str
+            )" );
 
         py::class_<cte::ClockTree>( m, "ClockTree", R"(
             The clock distribution network of a netlist as a directed graph whose vertices are gates and nets.
@@ -419,6 +491,12 @@ namespace hal
 
                 :returns: The netlist.
                 :rtype: hal_py.Netlist
+            )" )
+            .def( "get_diagnostics", &cte::ClockTree::get_diagnostics, R"(
+                Get the diagnostics collected while the clock tree was recovered. Empty for subtrees.
+
+                :returns: The diagnostics.
+                :rtype: list[clock_tree_extractor.Diagnostic]
             )" );
 
 #ifndef PYBIND11_MODULE
