@@ -90,8 +90,8 @@ namespace hal
           public:
             ClockTree( const Netlist *netlist,
                        igraph_t &&graph,
-                       std::unordered_set<igraph_integer_t> &&roots,
-                       std::unordered_map<igraph_integer_t, const void *> &&m_vertices_to_ptrs,
+                       std::unordered_set<igraph_int_t> &&roots,
+                       std::unordered_map<igraph_int_t, const void *> &&m_vertices_to_ptrs,
                        std::unordered_map<const void *, PtrType> &&m_ptrs_to_types );
 
             ~ClockTree();
@@ -105,14 +105,14 @@ namespace hal
 
             Result<std::unique_ptr<ClockTree>> get_subtree( const void *ptr, const bool parent ) const;
 
-            Result<igraph_integer_t> get_vertex_from_ptr( const void *ptr ) const;
+            Result<igraph_int_t> get_vertex_from_ptr( const void *ptr ) const;
 
-            Result<std::pair<const void *, PtrType>> get_ptr_from_vertex( const igraph_integer_t vertex ) const;
+            Result<std::pair<const void *, PtrType>> get_ptr_from_vertex( const igraph_int_t vertex ) const;
 
-            Result<std::vector<igraph_integer_t>> get_vertices_from_ptrs( const std::vector<const void *> &ptrs ) const;
+            Result<std::vector<igraph_int_t>> get_vertices_from_ptrs( const std::vector<const void *> &ptrs ) const;
 
             Result<std::vector<std::pair<const void *, PtrType>>>
-            get_ptrs_from_vertices( const std::vector<igraph_integer_t> &vertices ) const;
+            get_ptrs_from_vertices( const std::vector<igraph_int_t> &vertices ) const;
 
             const std::vector<const Gate *> get_gates() const;
 
@@ -137,11 +137,11 @@ namespace hal
 
             igraph_t *m_igraph_ptr;
 
-            std::unordered_set<igraph_integer_t> m_roots;
+            std::unordered_set<igraph_int_t> m_roots;
 
-            std::unordered_map<igraph_integer_t, const void *> m_vertices_to_ptrs;
+            std::unordered_map<igraph_int_t, const void *> m_vertices_to_ptrs;
 
-            std::unordered_map<const void *, igraph_integer_t> m_ptrs_to_vertices;
+            std::unordered_map<const void *, igraph_int_t> m_ptrs_to_vertices;
 
             std::unordered_map<const void *, PtrType> m_ptrs_to_types;
 

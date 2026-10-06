@@ -315,7 +315,7 @@ namespace hal
             )" )
             .def(
                 "get_ptr_from_vertex",
-                []( const cte::ClockTree &self, const igraph_integer_t vertex ) -> py::object {
+                []( const cte::ClockTree &self, const igraph_int_t vertex ) -> py::object {
                     auto result = self.get_ptr_from_vertex( vertex );
                     if( result.is_ok() )
                     {
@@ -363,7 +363,7 @@ namespace hal
             )" )
             .def(
                 "get_ptrs_from_vertices",
-                []( const cte::ClockTree &self, const std::vector<igraph_integer_t> &vertices ) -> py::list {
+                []( const cte::ClockTree &self, const std::vector<igraph_int_t> &vertices ) -> py::list {
                     auto res = self.get_ptrs_from_vertices( vertices );
                     if( res.is_ok() )
                     {
