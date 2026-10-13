@@ -356,6 +356,8 @@ var group__gui =
       [ "removeModule", "classhal_1_1_module_model.html#a66df758d860323f458c3cb2c9e052516", null ],
       [ "removeNet", "classhal_1_1_module_model.html#aa1b9eaad2187572b1631bd88d90d874f", null ],
       [ "setIsModifying", "classhal_1_1_module_model.html#aa0170922e216b32944fbbe3488482a0f", null ],
+      [ "setShowNetsOutsideModules", "classhal_1_1_module_model.html#a1673dde600cfe42e085c48ab0d0e4824", null ],
+      [ "showNetsOutsideModules", "classhal_1_1_module_model.html#a54c91c251bb18f5c2d23fedbe49d303b", null ],
       [ "updateGateName", "classhal_1_1_module_model.html#a8a1cfb7a8ed65b65cda4d971316e0536", null ],
       [ "updateModuleName", "classhal_1_1_module_model.html#aba67be1ad929342450a11ff64f73c7a9", null ],
       [ "updateModuleParent", "classhal_1_1_module_model.html#a1244c475cef303c88d73eaaafad72484", null ],

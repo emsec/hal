@@ -1,5 +1,8 @@
 var NAVTREEINDEX20 =
 {
+"classhal_1_1_python_editor.html#ad75d92772579c2ca31fd92b16b5cbbdd":[7,1,1,0,6,49],
+"classhal_1_1_python_editor.html#ad913089f49e1edfaea338cdeafb217ed":[7,1,1,0,6,29],
+"classhal_1_1_python_editor.html#ae67327ef76e06f517658ccff564c761d":[7,1,1,0,6,16],
 "classhal_1_1_python_editor.html#aeff7843fce79c03128983e7c2b8f0d39":[7,1,1,0,6,3],
 "classhal_1_1_python_editor.html#af1b281f6fe716081de82205d393c5f0b":[7,1,1,0,6,81],
 "classhal_1_1_python_editor.html#af745ba23189583e9207d3afe79f8c33f":[7,1,1,0,6,25],
@@ -246,8 +249,5 @@ var NAVTREEINDEX20 =
 "classhal_1_1_saleae_directory_composed_entry.html#a8b0bc1a3e8fa7826b5c3f3b6c1d63326":[9,0,0,550,2],
 "classhal_1_1_saleae_directory_composed_entry.html#a911c7ac3598548dba1b6530265375b31":[9,0,0,550,10],
 "classhal_1_1_saleae_directory_composed_entry.html#a9651a53b68767817f1f748d32f06a5b8":[9,0,0,550,6],
-"classhal_1_1_saleae_directory_composed_entry.html#ac2bcd0144348d718299bb8294cf59061":[9,0,0,550,7],
-"classhal_1_1_saleae_directory_composed_entry.html#ac44a045dcf95afc3814cd38344cf4e45":[9,0,0,550,11],
-"classhal_1_1_saleae_directory_composed_entry.html#ac9f5d27cbaf35c679343a249213af969":[9,0,0,550,1],
-"classhal_1_1_saleae_directory_composed_entry.html#acefbbad61b3576a63ca3ecde43fe2b15":[9,0,0,550,8]
+"classhal_1_1_saleae_directory_composed_entry.html#ac2bcd0144348d718299bb8294cf59061":[9,0,0,550,7]
 };
