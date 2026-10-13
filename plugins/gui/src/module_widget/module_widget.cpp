@@ -111,6 +111,7 @@ namespace hal
         connect(mToggleExpandTreeAction, &QAction::triggered, this, &ModuleWidget::handleToggleExpandTreeClicked);
         connect(mRenameAction, &QAction::triggered, this, &ModuleWidget::handleRenameClicked);
 
+        mModuleModel->setShowNetsOutsideModules(true);    // so that the global inputs and outputs show up as well
         mModuleModel->populateTree({gNetlist->get_top_module()->get_id()});
         mTreeView->expandAllModules();
     }
