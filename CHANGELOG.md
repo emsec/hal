@@ -199,6 +199,7 @@ All notable changes to this project will be documented in this file.
     * added context menu entries to the GUI for `remove_buffers`, `unify_ff_outputs`, `split_luts`, and `split_shift_registers`, each applicable to the current selection or to the entire netlist
     * changed duplicating a view to place the modules and gates of the copy where they are in the original instead of laying the copy out anew
   * bugfixes
+    * fixed `Number of nets` in the details of a module showing the number of internal nets; it now counts every net with a source or a destination inside the module, as `Module::get_nets` returns them
     * fixed the GUI crashing when a pin group that still holds pins is deleted
     * fixed the GUI crashing when `Delete pin group` is chosen for a group that holds a single pin named like the group
     * fixed toggling a pin group between ascending and descending losing the direction and the type of the group, and deleting a pin group creating the single-pin groups for its pins without direction and type
