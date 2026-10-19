@@ -1,4 +1,4 @@
-# Changelog
+a# Changelog
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
@@ -221,6 +221,7 @@ All notable changes to this project will be documented in this file.
     * fixed sorting the groupings table, which compared all columns as text, sorting colors by their hex code; IDs are now compared as numbers and colors by hue, saturation, and value
     * removed a leftover debug output that printed every search string of the log widget to stdout
     * fixed the option to copy the gate library into the project directory in the netlist import dialog staying enabled when the gate library is detected automatically, in which case there is no file to copy and the option had no effect
+    * fixed action enable behavior in View Manager when deleting an entry
 * Build and dependencies
   * changed the GUI from Qt 5 to Qt 6
   * updated the vendored QuaZip from 1.3 to 1.5 as part of the move to Qt 6
