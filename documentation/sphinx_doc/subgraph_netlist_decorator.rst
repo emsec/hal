@@ -9,5 +9,4 @@ Subgraph Netlist Decorator
 .. autoclass:: hal_py.SubgraphFunctionCache
    :members:
 
-   .. automethod:: __init__
    .. automethod:: __len__
