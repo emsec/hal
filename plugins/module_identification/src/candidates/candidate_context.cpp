@@ -15,11 +15,16 @@ namespace hal
         Result<std::monostate> CandidateContext::populate_boolean_function_cache(const std::vector<Net*> nets)
         {
             const auto subgraph_dec = SubgraphNetlistDecorator(*m_netlist);
-            SubgraphFunctionCache gate_cache;
+            auto gate_cache_res     = subgraph_dec.make_subgraph_function_cache(m_gates);
+            if (gate_cache_res.is_error())
+            {
+                return ERR_APPEND(gate_cache_res.get_error(), "cannot populate context with Boolean functions: failed to create subgraph function cache");
+            }
+            auto gate_cache = gate_cache_res.get();
 
             for (const auto& n : nets)
             {
-                auto bf_res = subgraph_dec.get_subgraph_function(m_gates, n, gate_cache);
+                auto bf_res = subgraph_dec.get_subgraph_function(n, gate_cache);
                 if (bf_res.is_error())
                 {
                     return ERR_APPEND(bf_res.get_error(),

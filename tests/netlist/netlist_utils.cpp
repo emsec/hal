@@ -62,6 +62,19 @@ namespace hal
             BooleanFunction expected_bf = BooleanFunction::from_string((net_20_name + " & " + "(!" + net_13_name + ")")).get();
             EXPECT_EQ(sub_graph_bf, expected_bf);
         }
+        {
+            // The cache is neither read nor filled, so an entry left by another subgraph does not change the result
+            const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
+            const Net* output_net = test_nl->get_net_by_id(MIN_NET_ID + 045);
+
+            std::map<std::pair<u32, const GatePin*>, BooleanFunction> cache;
+            cache.insert({{gate_0->get_id(), gate_0->get_type()->get_pin_by_name("O")}, BooleanFunction::Const(1, 1)});
+
+            auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates, cache);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get(), BooleanFunction::from_string((net_20_name + " & " + "(!" + net_13_name + ")")).get());
+            EXPECT_EQ(cache.size(), 1);
+        }
         // NEGATIVE
         {
             // No subgraph gates are passed
