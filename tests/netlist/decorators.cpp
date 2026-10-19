@@ -8,6 +8,9 @@
 #include "hal_core/netlist/decorators/boolean_function_decorator.h"
 #include "hal_core/netlist/decorators/netlist_modification_decorator.h"
 #include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
+#include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/module.h"
 #include "netlist_test_utils.h"
 
 
@@ -1511,6 +1514,316 @@ namespace hal {
                 auto cache = NetlistTraversalDecorator(*other).make_traversal_cache(TraversalDirection::forward, is_seq, TraversalStop::at_match);
                 EXPECT_TRUE(dec.get_gates(ff0, cache).is_error());
             }
+        }
+        TEST_END
+    }
+
+    namespace
+    {
+        // Adds a gate type with the given pins to the library. An output pin with an empty function string gets no Boolean function.
+        GateType* add_gate_type(GateLibrary* gl,
+                                const std::string& name,
+                                const std::set<GateTypeProperty>& properties,
+                                const std::vector<std::string>& inputs,
+                                const std::vector<std::pair<std::string, std::string>>& outputs,
+                                std::unique_ptr<GateTypeComponent> component = nullptr)
+        {
+            GateType* gt = gl->create_gate_type(name, properties, std::move(component));
+            for (const auto& pin : inputs)
+            {
+                if (gt->create_pin(pin, PinDirection::input).is_error())
+                {
+                    return nullptr;
+                }
+            }
+            for (const auto& [pin, function] : outputs)
+            {
+                if (gt->create_pin(pin, PinDirection::output).is_error())
+                {
+                    return nullptr;
+                }
+                if (!function.empty())
+                {
+                    gt->add_boolean_function(pin, BooleanFunction::from_string(function).get());
+                }
+            }
+            return gt;
+        }
+
+        // A gate library with the gate types a subgraph walk has to tell apart: combinational gates with Boolean functions, a combinational
+        // buffer without one (like the clock and I/O buffers of many vendor libraries), and a flip-flop whose output function is its internal state.
+        std::unique_ptr<GateLibrary> create_subgraph_gate_library()
+        {
+            auto gl = std::make_unique<GateLibrary>("imaginary_path", "subgraph_gl");
+            if (add_gate_type(gl.get(), "AND2", {GateTypeProperty::combinational, GateTypeProperty::c_and}, {"I0", "I1"}, {{"O", "I0 & I1"}}) == nullptr
+                || add_gate_type(gl.get(), "XOR2", {GateTypeProperty::combinational, GateTypeProperty::c_xor}, {"I0", "I1"}, {{"O", "I0 ^ I1"}}) == nullptr
+                || add_gate_type(gl.get(), "OPAQUE_BUF", {GateTypeProperty::combinational, GateTypeProperty::c_buffer}, {"I"}, {{"O", ""}}) == nullptr
+                || add_gate_type(gl.get(),
+                                 "DFF",
+                                 {GateTypeProperty::sequential, GateTypeProperty::ff},
+                                 {"CLK", "D"},
+                                 {{"Q", "IQ"}},
+                                 GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                                                        BooleanFunction::from_string("D").get(),
+                                                                        BooleanFunction::from_string("CLK").get()))
+                       == nullptr)
+            {
+                return nullptr;
+            }
+            return gl;
+        }
+
+        std::string var(const Net* net)
+        {
+            return BooleanFunctionNetDecorator(*net).get_boolean_variable_name();
+        }
+
+        // Whether both functions read the same variables and agree on every assignment of them.
+        bool is_equivalent(const BooleanFunction& a, const BooleanFunction& b)
+        {
+            const auto variables = a.get_variable_names();
+            if (variables != b.get_variable_names())
+            {
+                return false;
+            }
+            const std::vector<std::string> ordered(variables.begin(), variables.end());
+            const auto table_a = a.compute_truth_table(ordered);
+            const auto table_b = b.compute_truth_table(ordered);
+            return table_a.is_ok() && table_b.is_ok() && table_a.get() == table_b.get();
+        }
+
+        bool is_equivalent(const Result<BooleanFunction>& res, const std::string& expected)
+        {
+            return res.is_ok() && is_equivalent(res.get(), BooleanFunction::from_string(expected).get());
+        }
+    }    // namespace
+
+    /**
+     * Test the gates at which the walk of the subgraph functions stops: gates outside of the subgraph, sequential gates, and combinational
+     * gates without a Boolean function for the reached output pin, the latter two even if they are part of the subgraph.
+     *
+     * Functions: get_subgraph_function, get_subgraph_function_inputs, copy_subgraph_netlist
+     */
+    TEST_F(DecoratorTest, check_subgraph_netlist_decorator_boundary)
+    {
+        TEST_START
+        {
+            auto gl = create_subgraph_gate_library();
+            ASSERT_NE(gl, nullptr);
+            auto nl = std::make_unique<Netlist>(gl.get());
+
+            //  a ------------------ g_and --- n_and --- g_xor --- d ---.
+            //  q ---------------'                  .---'               |
+            //  b --- g_opaque --- n_opaque --------'                   |
+            //  '--- ff (Q) <-------------------------------------------'   (q is driven by ff, which reads d)
+            Gate* g_and    = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g_and");
+            Gate* g_xor    = nl->create_gate(gl->get_gate_type_by_name("XOR2"), "g_xor");
+            Gate* g_opaque = nl->create_gate(gl->get_gate_type_by_name("OPAQUE_BUF"), "g_opaque");
+            Gate* ff       = nl->create_gate(gl->get_gate_type_by_name("DFF"), "ff");
+
+            Net* a = nl->create_net("a");
+            a->add_destination(g_and, "I0");
+            nl->mark_global_input_net(a);
+            Net* b = nl->create_net("b");
+            b->add_destination(g_opaque, "I");
+            nl->mark_global_input_net(b);
+            Net* clk = nl->create_net("clk");
+            clk->add_destination(ff, "CLK");
+            nl->mark_global_input_net(clk);
+            Net* q        = test_utils::connect(nl.get(), ff, "Q", g_and, "I1", "q");
+            Net* n_and    = test_utils::connect(nl.get(), g_and, "O", g_xor, "I0", "n_and");
+            Net* n_opaque = test_utils::connect(nl.get(), g_opaque, "O", g_xor, "I1", "n_opaque");
+            Net* d        = test_utils::connect(nl.get(), g_xor, "O", ff, "D", "d");
+
+            const SubgraphNetlistDecorator dec(*nl);
+            const std::vector<const Gate*> all_gates   = {g_and, g_xor, g_opaque, ff};
+            const std::vector<const Gate*> composable  = {g_and, g_xor};
+            const std::string expected                 = "(" + var(a) + " & " + var(q) + ") ^ " + var(n_opaque);
+            const std::set<const Net*> expected_inputs = {a, q, n_opaque};
+
+            {
+                // the flip-flop and the buffer without a function bound the function although they are part of the subgraph
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(all_gates, d), expected));
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(composable, d), expected));
+
+                const auto inputs_all = dec.get_subgraph_function_inputs(all_gates, d);
+                ASSERT_TRUE(inputs_all.is_ok());
+                EXPECT_EQ(inputs_all.get(), expected_inputs);
+                const auto inputs_composable = dec.get_subgraph_function_inputs(composable, d);
+                ASSERT_TRUE(inputs_composable.is_ok());
+                EXPECT_EQ(inputs_composable.get(), expected_inputs);
+            }
+            {
+                // a module holding the flip-flop as well, with the AND gate in a submodule that belongs to the subgraph too
+                Module* mod = nl->create_module("mod", nl->get_top_module(), {g_xor, g_opaque, ff});
+                ASSERT_NE(mod, nullptr);
+                Module* sub_mod = nl->create_module("sub_mod", mod, {g_and});
+                ASSERT_NE(sub_mod, nullptr);
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(mod, d), expected));
+                const auto inputs = dec.get_subgraph_function_inputs(mod, d);
+                ASSERT_TRUE(inputs.is_ok());
+                EXPECT_EQ(inputs.get(), expected_inputs);
+
+                const auto copy_res = dec.copy_subgraph_netlist(mod);
+                ASSERT_TRUE(copy_res.is_ok());
+                EXPECT_EQ(copy_res.get()->get_gates().size(), 4);
+                EXPECT_NE(copy_res.get()->get_gate_by_id(g_and->get_id()), nullptr);
+            }
+            {
+                // a net driven by a gate that is not composed is the only input of its own function
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(all_gates, q), var(q)));
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(all_gates, n_opaque), var(n_opaque)));
+                const auto inputs = dec.get_subgraph_function_inputs(all_gates, q);
+                ASSERT_TRUE(inputs.is_ok());
+                EXPECT_EQ(inputs.get(), std::set<const Net*>({q}));
+            }
+            {
+                // gates outside of the subgraph still bound it
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(std::vector<const Gate*>({g_xor}), d), var(n_and) + " ^ " + var(n_opaque)));
+            }
+        }
+        TEST_END
+    }
+
+    /**
+     * Test the subgraph function cache: it is bound to the subgraph and the netlist it was created for, and results shared through it
+     * agree with uncached calls.
+     *
+     * Functions: make_subgraph_function_cache, get_subgraph_function
+     */
+    TEST_F(DecoratorTest, check_subgraph_netlist_decorator_cache)
+    {
+        TEST_START
+        {
+            auto gl = create_subgraph_gate_library();
+            ASSERT_NE(gl, nullptr);
+            auto nl = std::make_unique<Netlist>(gl.get());
+
+            //  a, b --- inner --- m --- outer --- o
+            //                     c ---'
+            Gate* inner = nl->create_gate(gl->get_gate_type_by_name("AND2"), "inner");
+            Gate* outer = nl->create_gate(gl->get_gate_type_by_name("XOR2"), "outer");
+            Net* a      = nl->create_net("a");
+            a->add_destination(inner, "I0");
+            nl->mark_global_input_net(a);
+            Net* b = nl->create_net("b");
+            b->add_destination(inner, "I1");
+            nl->mark_global_input_net(b);
+            Net* c = nl->create_net("c");
+            c->add_destination(outer, "I1");
+            nl->mark_global_input_net(c);
+            Net* m = test_utils::connect(nl.get(), inner, "O", outer, "I0", "m");
+            Net* o = nl->create_net("o");
+            o->add_source(outer, "O");
+            nl->mark_global_output_net(o);
+
+            const SubgraphNetlistDecorator dec(*nl);
+
+            {
+                // a cache for both gates composes both
+                auto cache_res = dec.make_subgraph_function_cache(std::vector<const Gate*>({inner, outer}));
+                ASSERT_TRUE(cache_res.is_ok());
+                auto cache = cache_res.get();
+                EXPECT_EQ(cache.size(), 0);
+
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(o, cache), "(" + var(a) + " & " + var(b) + ") ^ " + var(c)));
+                EXPECT_EQ(cache.size(), 2);
+
+                // the function of m was composed on the way and is answered from the cache
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(m, cache), var(a) + " & " + var(b)));
+                EXPECT_EQ(cache.size(), 2);
+
+                // a cache for a smaller subgraph does not see what the first cache composed
+                auto outer_cache_res = dec.make_subgraph_function_cache(std::vector<const Gate*>({outer}));
+                ASSERT_TRUE(outer_cache_res.is_ok());
+                auto outer_cache = outer_cache_res.get();
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(o, outer_cache), var(m) + " ^ " + var(c)));
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(std::vector<const Gate*>({outer}), o), var(m) + " ^ " + var(c)));
+            }
+            {
+                // a cache created for a module, with the inner gate in a submodule
+                Module* mod = nl->create_module("mod", nl->get_top_module(), {outer});
+                ASSERT_NE(mod, nullptr);
+                Module* sub_mod = nl->create_module("sub_mod", mod, {inner});
+                ASSERT_NE(sub_mod, nullptr);
+                auto cache_res = dec.make_subgraph_function_cache(mod);
+                ASSERT_TRUE(cache_res.is_ok());
+                auto cache = cache_res.get();
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(o, cache), "(" + var(a) + " & " + var(b) + ") ^ " + var(c)));
+            }
+            // NEGATIVE
+            {
+                // a cache for no gates, a 'nullptr' gate, or a 'nullptr' module
+                EXPECT_TRUE(dec.make_subgraph_function_cache(std::vector<const Gate*>()).is_error());
+                EXPECT_TRUE(dec.make_subgraph_function_cache(std::vector<const Gate*>({inner, nullptr})).is_error());
+                EXPECT_TRUE(dec.make_subgraph_function_cache(static_cast<const Module*>(nullptr)).is_error());
+            }
+            {
+                // a 'nullptr' net
+                auto cache_res = dec.make_subgraph_function_cache(std::vector<const Gate*>({inner, outer}));
+                ASSERT_TRUE(cache_res.is_ok());
+                auto cache = cache_res.get();
+                EXPECT_TRUE(dec.get_subgraph_function(nullptr, cache).is_error());
+            }
+            {
+                // a cache created for another netlist, and a cache for gates of another netlist
+                auto other_nl = std::make_unique<Netlist>(gl.get());
+                Gate* other_gate = other_nl->create_gate(gl->get_gate_type_by_name("AND2"), "other_gate");
+                const SubgraphNetlistDecorator other_dec(*other_nl);
+
+                auto other_cache_res = other_dec.make_subgraph_function_cache(std::vector<const Gate*>({other_gate}));
+                ASSERT_TRUE(other_cache_res.is_ok());
+                auto other_cache = other_cache_res.get();
+                EXPECT_TRUE(dec.get_subgraph_function(o, other_cache).is_error());
+
+                EXPECT_TRUE(dec.make_subgraph_function_cache(std::vector<const Gate*>({inner, other_gate})).is_error());
+                EXPECT_TRUE(dec.get_subgraph_function(std::vector<const Gate*>({inner, other_gate}), o).is_error());
+            }
+        }
+        TEST_END
+    }
+
+    /**
+     * Test that invalid arguments to the subgraph functions are reported as errors, in particular without dereferencing a 'nullptr'.
+     *
+     * Functions: get_subgraph_function, get_subgraph_function_inputs
+     */
+    TEST_F(DecoratorTest, check_subgraph_netlist_decorator_invalid_arguments)
+    {
+        TEST_START
+        {
+            auto gl = create_subgraph_gate_library();
+            ASSERT_NE(gl, nullptr);
+            auto nl = std::make_unique<Netlist>(gl.get());
+
+            Gate* g_and = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g_and");
+            Net* o      = nl->create_net("o");
+            o->add_source(g_and, "O");
+
+            const SubgraphNetlistDecorator dec(*nl);
+
+            // no gates or a 'nullptr' gate, together with a 'nullptr' net
+            EXPECT_TRUE(dec.get_subgraph_function(std::vector<const Gate*>(), nullptr).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function(std::vector<const Gate*>({nullptr}), nullptr).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function_inputs(std::vector<const Gate*>(), nullptr).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function_inputs(std::vector<const Gate*>({nullptr}), nullptr).is_error());
+
+            // no gates or a 'nullptr' gate
+            EXPECT_TRUE(dec.get_subgraph_function(std::vector<const Gate*>(), o).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function(std::vector<const Gate*>({g_and, nullptr}), o).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function_inputs(std::vector<const Gate*>(), o).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function_inputs(std::vector<const Gate*>({g_and, nullptr}), o).is_error());
+
+            // a 'nullptr' module
+            EXPECT_TRUE(dec.get_subgraph_function(static_cast<const Module*>(nullptr), o).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function_inputs(static_cast<const Module*>(nullptr), o).is_error());
+            EXPECT_TRUE(dec.copy_subgraph_netlist(static_cast<const Module*>(nullptr)).is_error());
+
+            // a net of another netlist
+            auto other_nl  = std::make_unique<Netlist>(gl.get());
+            Net* other_net = other_nl->create_net("other_net");
+            EXPECT_TRUE(dec.get_subgraph_function(std::vector<const Gate*>({g_and}), other_net).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function_inputs(std::vector<const Gate*>({g_and}), other_net).is_error());
         }
         TEST_END
     }
