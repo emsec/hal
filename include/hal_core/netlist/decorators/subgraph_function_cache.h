@@ -42,11 +42,9 @@ namespace hal
      * A reusable store for the Boolean functions that `SubgraphNetlistDecorator::get_subgraph_function` computes for the output pins of the gates of one specific subgraph.
      *
      * The subgraph a cache belongs to is sealed in when it is created with `SubgraphNetlistDecorator::make_subgraph_function_cache`,
-     * and the cache can only ever be used for exactly that subgraph. This is what makes reuse sound -- the function cached for a
-     * gate output depends on which gates were composed into it, so it must never be consulted for a different subgraph.
+     * and the cache can only ever be used for exactly that subgraph.
      *
-     * The cache belongs to the netlist it was created for and must be dropped when the netlist is modified, as its entries are not
-     * invalidated by netlist events.
+     * The cache belongs to the netlist it was created for and must be dropped when the netlist is modified, as its entries are not invalidated by netlist events.
      *
      * @ingroup decorators
      */
