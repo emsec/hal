@@ -1,4 +1,4 @@
-# Changelog
+a# Changelog
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
@@ -198,7 +198,10 @@ All notable changes to this project will be documented in this file.
     * changed the plugin manager of the GUI to unload a plugin, and the dependencies it pulled in, right after loading it to read its description, so that only plugins requested by the user or required by such a plugin stay loaded
     * added context menu entries to the GUI for `remove_buffers`, `unify_ff_outputs`, `split_luts`, and `split_shift_registers`, each applicable to the current selection or to the entire netlist
     * changed duplicating a view to place the modules and gates of the copy where they are in the original instead of laying the copy out anew
+    * changed the modules widget to list the nets that belong to no module, i.e., the global inputs and outputs of the netlist and nets without any source or destination, below the top module when nets are shown, so that every net of the netlist appears in the tree
   * bugfixes
+    * fixed the module trees keeping a net under its module after the net was marked as a global input or output, and leaving a net out after it was unmarked
+    * fixed `Number of nets` in the details of a module showing the number of internal nets; it now counts every net with a source or a destination inside the module, as `Module::get_nets` returns them
     * fixed the GUI crashing when a pin group that still holds pins is deleted
     * fixed the GUI crashing when `Delete pin group` is chosen for a group that holds a single pin named like the group
     * fixed toggling a pin group between ascending and descending losing the direction and the type of the group, and deleting a pin group creating the single-pin groups for its pins without direction and type
@@ -218,6 +221,7 @@ All notable changes to this project will be documented in this file.
     * fixed sorting the groupings table, which compared all columns as text, sorting colors by their hex code; IDs are now compared as numbers and colors by hue, saturation, and value
     * removed a leftover debug output that printed every search string of the log widget to stdout
     * fixed the option to copy the gate library into the project directory in the netlist import dialog staying enabled when the gate library is detected automatically, in which case there is no file to copy and the option had no effect
+    * fixed action enable behavior in View Manager when deleting an entry
 * Build and dependencies
   * changed the GUI from Qt 5 to Qt 6
   * updated the vendored QuaZip from 1.3 to 1.5 as part of the move to Qt 6

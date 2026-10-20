@@ -88,7 +88,7 @@ list(REMOVE_ITEM ABC_SRC ${ABC_MAIN_SRC})
 # target_link_libraries(abc PRIVATE libabc)
 # abc_properties(abc PRIVATE)
 
-add_library(libabc-pic EXCLUDE_FROM_ALL ${ABC_SRC})
+add_library(libabc-pic SHARED EXCLUDE_FROM_ALL ${ABC_SRC})
 abc_properties(libabc-pic PUBLIC)
 set_property(TARGET libabc-pic PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET libabc-pic PROPERTY OUTPUT_NAME abc-pic)
