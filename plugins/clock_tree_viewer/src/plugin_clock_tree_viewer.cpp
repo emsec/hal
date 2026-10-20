@@ -26,11 +26,12 @@
 
 #include "clock_tree_viewer/plugin_clock_tree_viewer.h"
 
+#include "clock_tree_viewer/clock_tree_viewer_factory.h"
 #include "gui/content_manager/content_manager.h"
+#include "gui/gui_globals.h"
 #include "hal_core/utilities/log.h"
 
 #include <memory>
-#include <qstring.h>
 #include <set>
 
 namespace hal
@@ -67,10 +68,22 @@ namespace hal
             get_name(),
             { LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink() },
             "info" );
+
+        m_factory = new ClockTreeViewerFactory( QString::fromStdString( get_name() ) );
+        ExternalContent::instance()->append( m_factory );
+
+        // Without a netlist there is no content area yet, the factory is used as soon as one is opened.
+        if( gNetlist != nullptr )
+        {
+            gContentManager->addExternalWidget( m_factory );
+        }
     }
 
     void ClockTreeViewerPlugin::on_unload()
     {
         ExternalContent::instance()->removePlugin( QString::fromStdString( get_name() ) );
+
+        delete m_factory;
+        m_factory = nullptr;
     }
 }  // namespace hal
