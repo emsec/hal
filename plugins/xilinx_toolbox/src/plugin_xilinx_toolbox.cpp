@@ -1,11 +1,20 @@
 #include "xilinx_toolbox/plugin_xilinx_toolbox.h"
-#include "xilinx_toolbox/preprocessing.h"
 
 #include "hal_core/netlist/gate.h"
-#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/netlist.h"
+#include "xilinx_toolbox/preprocessing.h"
+#include "xilinx_toolbox/utils/gui_layout_locker.h"
+
+#include <unordered_set>
 
 namespace hal
 {
+    XilinxToolboxPlugin::XilinxToolboxPlugin()
+    {
+        m_extensions.push_back(new GuiExtensionXilinxToolbox());
+    }
+
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<XilinxToolboxPlugin>();
@@ -31,130 +40,195 @@ namespace hal
         return {};
     }
 
-    std::vector<AbstractExtensionInterface*> XilinxToolboxPlugin::get_extensions() const
-    {
-        return {&mGuiExtension};
-    }
-
-    // -------------------------------------------------------------------------
-
-    std::vector<PluginParameter> XilinxGuiExtension::get_parameter() const
+    std::vector<PluginParameter> GuiExtensionXilinxToolbox::get_parameter() const
     {
         return {
-            {PluginParameter::Boolean,    "split_luts",             "Split all LUT6_2 gates",          mSplitLuts           ? "true" : "false"},
-            {PluginParameter::Boolean,    "split_shift_registers",  "Split all shift register gates",  mSplitShiftRegisters ? "true" : "false"},
-            {PluginParameter::PushButton, "execute",                "Execute"},
+            {PluginParameter::Boolean, "split_luts", "Split all LUT6_2 gates", mSplitLuts ? "true" : "false"},
+            {PluginParameter::Boolean, "split_shift_registers", "Split all shift register gates", mSplitShiftRegisters ? "true" : "false"},
+            {PluginParameter::PushButton, "execute", "Execute"},
         };
     }
 
-    void XilinxGuiExtension::set_parameter(const std::vector<PluginParameter>& params)
+    void GuiExtensionXilinxToolbox::set_parameter(const std::vector<PluginParameter>& params)
     {
         for (const auto& p : params)
         {
             if (p.get_tagname() == "split_luts")
+            {
                 mSplitLuts = (p.get_value() == "true");
+            }
             else if (p.get_tagname() == "split_shift_registers")
+            {
                 mSplitShiftRegisters = (p.get_value() == "true");
+            }
         }
     }
-
-    // -------------------------------------------------------------------------
 
     namespace
     {
-        bool is_srl_gate(const Gate* g)
+        /**
+         * The gates of the selected modules, including those of their submodules, together with the selected gates.
+         * Duplicates are dropped, which matters when a gate is selected both directly and through a parent module.
+         */
+        std::vector<Gate*> gates_from_selection(Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats)
         {
-            const std::string& t = g->get_type()->get_name();
-            return t == "SRL16E" || t == "SRL16" || t == "SRLC16E" || t == "SRLC32E";
+            std::vector<Gate*> res;
+            std::unordered_set<Gate*> seen;
+
+            const auto collect = [&res, &seen](Gate* g) {
+                if (g != nullptr && seen.insert(g).second)
+                {
+                    res.push_back(g);
+                }
+            };
+
+            for (u32 id : gats)
+            {
+                collect(nl->get_gate_by_id(id));
+            }
+
+            for (u32 id : mods)
+            {
+                if (const Module* m = nl->get_module_by_id(id); m != nullptr)
+                {
+                    for (Gate* g : m->get_gates(nullptr, true))
+                    {
+                        collect(g);
+                    }
+                }
+            }
+
+            return res;
         }
+    }    // namespace
+
+    std::vector<ContextMenuContribution> GuiExtensionXilinxToolbox::get_context_contribution(const Netlist*, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets)
+    {
+        std::vector<ContextMenuContribution> retval;
+
+        const auto add = [this, &retval](const std::string& tag, const std::string& entry) {
+            ContextMenuContribution cmc;
+            cmc.mContributer = this;
+            cmc.mTagname     = tag;
+            cmc.mEntry       = entry;
+            retval.push_back(cmc);
+        };
+
+        // a selection is what the user is pointing at, so do not offer to run on the entire netlist next to it
+        if (!mods.empty() || !gats.empty())
+        {
+            add("split_luts_selection", "Split LUTs of selection");
+            add("split_shift_registers_selection", "Split shift registers of selection");
+        }
+        else if (!nets.empty())
+        {
+            add("remove_no_load_wires_selection", "Remove no load wires of selection");
+        }
+        else
+        {
+            add("split_luts_netlist", "Split LUTs of netlist");
+            add("split_shift_registers_netlist", "Split shift registers of netlist");
+            add("remove_no_load_wires_netlist", "Remove no load wires of netlist");
+        }
+
+        return retval;
     }
 
-    std::vector<ContextMenuContribution> XilinxGuiExtension::get_context_contribution(
-        const Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets)
+    void GuiExtensionXilinxToolbox::execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets)
     {
-        if (gats.size() == 1)
+        if (nl == nullptr)
         {
-            Gate* g = nl->get_gate_by_id(gats.front());
-            if (!g)
-                return {};
-            if (g->get_type()->get_name() == "LUT6_2")
-                return {{this, "split_lut", "Split LUT6_2"}};
-            if (is_srl_gate(g))
-                return {{this, "split_shift_register", "Split shift register"}};
+            log_warning("xilinx_toolbox", "cannot run preprocessing: no netlist loaded.");
+            return;
         }
-        else if (gats.size() > 1)
-        {
-            bool has_lut  = false;
-            bool has_srl  = false;
-            for (u32 id : gats)
-            {
-                Gate* g = nl->get_gate_by_id(id);
-                if (!g) continue;
-                if (g->get_type()->get_name() == "LUT6_2") has_lut = true;
-                if (is_srl_gate(g))                        has_srl = true;
-                if (has_lut && has_srl) break;
-            }
-            std::vector<ContextMenuContribution> contributions;
-            if (has_lut)
-                contributions.push_back({this, "split_luts_in_selection",            "Split LUT6_2 gates in selection"});
-            if (has_srl)
-                contributions.push_back({this, "split_shift_registers_in_selection", "Split shift registers in selection"});
-            return contributions;
-        }
-        return {};
-    }
 
-    void XilinxGuiExtension::execute_function(
-        std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets)
-    {
-        if (tag == "split_lut" && gats.size() == 1)
+        // deleting or replacing a gate makes the GUI re-layout its graph views, which would otherwise happen once
+        // per gate and dominate the runtime of the preprocessing itself
+        const xilinx_toolbox::GuiLayoutLocker layout_locker;
+
+        // an empty scope makes the preprocessing functions consider the entire netlist
+        std::vector<Gate*> scope;
+        if (tag == "split_luts_selection" || tag == "split_shift_registers_selection")
         {
-            Gate* g = nl->get_gate_by_id(gats.front());
-            if (!g)
+            scope = gates_from_selection(nl, mods, gats);
+            if (scope.empty())
             {
-                log_error("xilinx_toolbox", "split_lut: gate with ID {} not found.", gats.front());
+                log_warning("xilinx_toolbox", "cannot run preprocessing on the selection: no gates selected.");
                 return;
             }
-            if (auto res = xilinx_toolbox::split_lut(g); res.is_error())
-                log_error("xilinx_toolbox", "split_lut failed: {}", res.get_error().get());
         }
-        else if (tag == "split_shift_register" && gats.size() == 1)
+
+        if (tag == "execute")
         {
-            Gate* g = nl->get_gate_by_id(gats.front());
-            if (!g)
-            {
-                log_error("xilinx_toolbox", "split_shift_register: gate with ID {} not found.", gats.front());
-                return;
-            }
-            if (auto res = xilinx_toolbox::split_shift_register(g); res.is_error())
-                log_error("xilinx_toolbox", "split_shift_register failed: {}", res.get_error().get());
-        }
-        else if (tag == "split_luts_in_selection")
-        {
-            std::vector<Gate*> gates;
-            for (u32 id : gats)
-                if (Gate* g = nl->get_gate_by_id(id); g && g->get_type()->get_name() == "LUT6_2")
-                    gates.push_back(g);
-            if (auto res = xilinx_toolbox::split_luts(gates); res.is_error())
-                log_error("xilinx_toolbox", "split_luts_in_selection failed: {}", res.get_error().get());
-        }
-        else if (tag == "split_shift_registers_in_selection")
-        {
-            std::vector<Gate*> gates;
-            for (u32 id : gats)
-                if (Gate* g = nl->get_gate_by_id(id); g && is_srl_gate(g))
-                    gates.push_back(g);
-            if (auto res = xilinx_toolbox::split_shift_registers(gates); res.is_error())
-                log_error("xilinx_toolbox", "split_shift_registers_in_selection failed: {}", res.get_error().get());
-        }
-        else if (tag == "execute")
-        {
+            // the plugin parameter dialog runs the chosen steps on the entire netlist
             if (mSplitLuts)
-                if (auto res = xilinx_toolbox::split_luts(nl); res.is_error())
-                    log_error("xilinx_toolbox", "split_luts failed: {}", res.get_error().get());
+            {
+                if (const auto res = xilinx_toolbox::split_luts(nl); res.is_error())
+                {
+                    log_error("xilinx_toolbox", "failed to split LUTs: {}", res.get_error().get());
+                }
+            }
             if (mSplitShiftRegisters)
-                if (auto res = xilinx_toolbox::split_shift_registers(nl); res.is_error())
-                    log_error("xilinx_toolbox", "split_shift_registers failed: {}", res.get_error().get());
+            {
+                if (const auto res = xilinx_toolbox::split_shift_registers(nl); res.is_error())
+                {
+                    log_error("xilinx_toolbox", "failed to split shift registers: {}", res.get_error().get());
+                }
+            }
+        }
+        else if (tag == "split_luts_selection" || tag == "split_luts_netlist")
+        {
+            if (const auto res = xilinx_toolbox::split_luts(nl, scope); res.is_error())
+            {
+                log_error("xilinx_toolbox", "failed to split LUTs: {}", res.get_error().get());
+            }
+            else
+            {
+                log_info("xilinx_toolbox", "split {} LUTs.", res.get());
+            }
+        }
+        else if (tag == "split_shift_registers_selection" || tag == "split_shift_registers_netlist")
+        {
+            if (const auto res = xilinx_toolbox::split_shift_registers(nl, scope); res.is_error())
+            {
+                log_error("xilinx_toolbox", "failed to split shift registers: {}", res.get_error().get());
+            }
+            else
+            {
+                log_info("xilinx_toolbox", "split {} shift registers.", res.get());
+            }
+        }
+        else if (tag == "remove_no_load_wires_selection" || tag == "remove_no_load_wires_netlist")
+        {
+            std::vector<Net*> net_scope;
+            if (tag == "remove_no_load_wires_selection")
+            {
+                for (u32 id : nets)
+                {
+                    if (Net* n = nl->get_net_by_id(id); n != nullptr)
+                    {
+                        net_scope.push_back(n);
+                    }
+                }
+                if (net_scope.empty())
+                {
+                    log_warning("xilinx_toolbox", "cannot remove no load wires of the selection: no nets selected.");
+                    return;
+                }
+            }
+
+            if (const auto res = xilinx_toolbox::remove_no_load_wires(nl, net_scope); res.is_error())
+            {
+                log_error("xilinx_toolbox", "failed to remove no load wires: {}", res.get_error().get());
+            }
+            else
+            {
+                log_info("xilinx_toolbox", "removed {} no load wires.", res.get());
+            }
+        }
+        else
+        {
+            log_warning("xilinx_toolbox", "unknown context menu tag '{}'.", tag);
         }
     }
 }    // namespace hal

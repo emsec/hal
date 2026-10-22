@@ -5,6 +5,8 @@
 #include "hal_core/netlist/netlist.h"
 #include "xilinx_toolbox/plugin_xilinx_toolbox.h"
 
+#include <functional>
+
 namespace
 {
     // Extract the numeric index from an address pin name.
@@ -47,6 +49,32 @@ namespace hal
 {
     namespace xilinx_toolbox
     {
+        namespace
+        {
+            /**
+             * All gates within the caller's scope that also pass the given type filter. An empty scope means the
+             * entire netlist, which is what the preprocessing functions default to. The scope only ever restricts
+             * which gates are considered, it never widens what a function operates on.
+             */
+            std::vector<Gate*> gates_in_scope(const Netlist* nl, const std::vector<Gate*>& gates, const std::function<bool(const Gate*)>& type_filter)
+            {
+                if (gates.empty())
+                {
+                    return nl->get_gates(type_filter);
+                }
+
+                std::vector<Gate*> res;
+                for (auto* g : gates)
+                {
+                    if (type_filter(g))
+                    {
+                        res.push_back(g);
+                    }
+                }
+                return res;
+            }
+        }    // namespace
+
         Result<std::monostate> split_lut(Gate* g, bool create_module)
         {
             if (g->get_type()->get_name() != "LUT6_2")
@@ -186,9 +214,9 @@ namespace hal
             return OK(count);
         }
 
-        Result<u32> split_luts(Netlist* nl, bool create_module)
+        Result<u32> split_luts(Netlist* nl, const std::vector<Gate*>& gates, bool create_module)
         {
-            return split_luts(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "LUT6_2"; }), create_module);
+            return split_luts(gates_in_scope(nl, gates, [](const Gate* g) { return g->get_type()->get_name() == "LUT6_2"; }), create_module);
         }
 
         Result<std::monostate> split_shift_register(Gate* g, bool create_module)
@@ -430,9 +458,74 @@ namespace hal
             return OK(count);
         }
 
-        Result<u32> split_shift_registers(Netlist* nl, bool create_module)
+        Result<u32> split_shift_registers(Netlist* nl, const std::vector<Gate*>& gates, bool create_module)
         {
-            return split_shift_registers(nl->get_gates([](const Gate* g) { return is_srl_type(g->get_type()->get_name()); }), create_module);
+            return split_shift_registers(gates_in_scope(nl, gates, [](const Gate* g) { return is_srl_type(g->get_type()->get_name()); }), create_module);
+        }
+
+        Result<u32> remove_no_load_wires(Netlist* nl, const std::vector<Net*>& nets)
+        {
+            if (nl == nullptr)
+            {
+                return ERR("cannot remove no load wires: netlist is a nullptr");
+            }
+
+            // Vivado names a net that only exists to give an unused output pin something to drive 'NLW_<instance>_<pin>_UNCONNECTED'.
+            // When the hierarchy is flattened, the instance is a path, so the prefix either starts the name or follows a '/';
+            // a multi-bit no load wire is written as a vector and its bits carry a trailing index like '(2)' or '[2]'.
+            const auto is_no_load_wire = [](const Net* n) {
+                const std::string& name  = n->get_name();
+                const std::string prefix = "NLW_";
+                const std::string suffix = "_UNCONNECTED";
+
+                if (name.compare(0, prefix.size(), prefix) != 0 && name.find("/" + prefix) == std::string::npos)
+                {
+                    return false;
+                }
+
+                std::string::size_type end = name.size();
+                if (end > 0 && (name[end - 1] == ')' || name[end - 1] == ']'))
+                {
+                    const auto open = name.find_last_of("([");
+                    if (open == std::string::npos || open + 1 >= end - 1 || name.find_first_not_of("0123456789", open + 1) != end - 1)
+                    {
+                        return false;
+                    }
+                    end = open;
+                }
+
+                return end > prefix.size() + suffix.size() && name.compare(end - suffix.size(), suffix.size(), suffix) == 0;
+            };
+
+            std::vector<Net*> to_delete;
+            for (Net* n : nets.empty() ? nl->get_nets() : nets)
+            {
+                if (n == nullptr || n->get_netlist() != nl)
+                {
+                    return ERR("cannot remove no load wires: a net of the scope does not belong to netlist with ID " + std::to_string(nl->get_id()));
+                }
+
+                if (is_no_load_wire(n) && n->get_num_of_destinations() == 0 && !n->is_global_output_net())
+                {
+                    to_delete.push_back(n);
+                }
+            }
+
+            u32 deleted_nets = 0;
+            for (Net* n : to_delete)
+            {
+                const std::string name = n->get_name();
+                const u32 id           = n->get_id();
+                if (!nl->delete_net(n))
+                {
+                    return ERR("cannot remove no load wires: failed to delete net '" + name + "' with ID " + std::to_string(id));
+                }
+                deleted_nets++;
+            }
+
+            log_info("xilinx_toolbox", "removed {} no load wires", deleted_nets);
+
+            return OK(deleted_nets);
         }
     }    // namespace xilinx_toolbox
 }    // namespace hal

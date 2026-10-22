@@ -24,3 +24,6 @@ Gate Type Component
 
 .. autoclass:: hal_py.RAMPortComponent
    :members:
+
+.. autoclass:: hal_py.MACComponent
+   :members:

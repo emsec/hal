@@ -29,6 +29,10 @@
 
 namespace hal
 {
+    /**
+     * Describes a single error, comprising a message and the source location at which the error occurred.
+     * Errors are propagated through the API using `Result`, and can be chained to preserve the context of a failure.
+     */
     class Error final
     {
     public:

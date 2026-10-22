@@ -18,6 +18,7 @@ namespace hal
                                                                                    {GateTypeProperty::pll, "pll"},
                                                                                    {GateTypeProperty::oscillator, "oscillator"},
                                                                                    {GateTypeProperty::scan, "scan"},
+                                                                                   {GateTypeProperty::delay, "delay"},
                                                                                    {GateTypeProperty::c_buffer, "c_buffer"},
                                                                                    {GateTypeProperty::c_inverter, "c_inverter"},
                                                                                    {GateTypeProperty::c_and, "c_and"},

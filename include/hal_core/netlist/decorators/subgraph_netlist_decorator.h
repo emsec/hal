@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "hal_core/netlist/decorators/subgraph_function_cache.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/netlist.h"
@@ -85,7 +86,7 @@ namespace hal
          * @return The combined Boolean function of the subgraph on success, an error otherwise.
          */
         Result<BooleanFunction>
-            get_subgraph_function(const std::vector<const Gate*>& subgraph_gates, const Net* subgraph_output, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache) const;
+            get_subgraph_function(const std::vector<const Gate*>& subgraph_gates, const Net* subgraph_output, SubgraphFunctionCache& cache) const;
 
         /**
          * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
@@ -97,7 +98,7 @@ namespace hal
          * @param[inout] cache - Cache to speed up computations. The cache is filled by this function.
          * @return The combined Boolean function of the subgraph on success, an error otherwise.
          */
-        Result<BooleanFunction> get_subgraph_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache) const;
+        Result<BooleanFunction> get_subgraph_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, SubgraphFunctionCache& cache) const;
 
         /**
          * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
@@ -109,7 +110,7 @@ namespace hal
          * @param[inout] cache - Cache to speed up computations. The cache is filled by this function.
          * @return The combined Boolean function of the subgraph on success, an error otherwise.
          */
-        Result<BooleanFunction> get_subgraph_function(const Module* subgraph_module, const Net* subgraph_output, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache) const;
+        Result<BooleanFunction> get_subgraph_function(const Module* subgraph_module, const Net* subgraph_output, SubgraphFunctionCache& cache) const;
 
         /**
          * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
@@ -147,7 +148,7 @@ namespace hal
          * 
          * @param[in] subgraph_gates - The subgraph gates making up the subgraph to consider.
          * @param[in] subgraph_output - The subgraph oputput net from which to start the back propagation from.
-         * @return The input nets that would be the input for the subgraph function on success, an error otherwise;
+         * @return The input nets that would be the input for the subgraph function on success, an error otherwise.
          */
         Result<std::set<const Net*>> get_subgraph_function_inputs(const std::vector<const Gate*>& subgraph_gates, const Net* subgraph_output) const;
 
@@ -157,7 +158,7 @@ namespace hal
          * 
          * @param[in] subgraph_gates - The subgraph gates making up the subgraph to consider.
          * @param[in] subgraph_output - The subgraph oputput net from which to start the back propagation from.
-         * @return The input nets that would be the input for the subgraph function on success, an error otherwise;
+         * @return The input nets that would be the input for the subgraph function on success, an error otherwise.
          */
         Result<std::set<const Net*>> get_subgraph_function_inputs(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output) const;
 
@@ -167,7 +168,7 @@ namespace hal
          * 
          * @param[in] subgraph_module - The module making up the subgraph to consider.
          * @param[in] subgraph_output - The subgraph oputput net from which to start the back propagation from.
-         * @return The input nets that would be the input for the subgraph function on success, an error otherwise;
+         * @return The input nets that would be the input for the subgraph function on success, an error otherwise.
          */
         Result<std::set<const Net*>> get_subgraph_function_inputs(const Module* subgraph_module, const Net* subgraph_output) const;
 

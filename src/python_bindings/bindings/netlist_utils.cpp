@@ -2,6 +2,20 @@
 
 namespace hal
 {
+    namespace
+    {
+        /// Tells a Python caller once per function and process that what they called is going away.
+        /// C++ callers get this from [[deprecated]] at compile time; a script has no compiler to warn it.
+        void warn_deprecated(const std::string& name, const std::string& use_instead)
+        {
+            static std::set<std::string> warned;
+            if (warned.insert(name).second)
+            {
+                log_warning("python_context", "hal_py.NetlistUtils.{} is deprecated and will be removed in a future version, use {} instead.", name, use_instead);
+            }
+        }
+    }    // namespace
+
     void netlist_utils_init(py::module& m)
     {
         auto py_netlist_utils = m.def_submodule("NetlistUtils", R"(
@@ -11,6 +25,7 @@ namespace hal
         py_netlist_utils.def(
             "get_subgraph_function",
             [](const Net* net, const std::vector<const Gate*>& subgraph_gates) -> BooleanFunction {
+                warn_deprecated("get_subgraph_function", "hal_py.SubgraphNetlistDecorator.get_subgraph_function");
                 auto res = netlist_utils::get_subgraph_function(net, subgraph_gates);
                 if (res.is_ok())
                 {
@@ -35,7 +50,8 @@ namespace hal
         )");
 
         py_netlist_utils.def(
-            "copy_netlist", [](const Netlist* nl) { return std::shared_ptr<Netlist>(netlist_utils::copy_netlist(nl)); }, py::arg("nl"), R"(
+            "copy_netlist", [](const Netlist* nl) {
+                warn_deprecated("copy_netlist", "hal_py.Netlist.copy"); return std::shared_ptr<Netlist>(netlist_utils::copy_netlist(nl)); }, py::arg("nl"), R"(
             Get a deep copy of an entire netlist including all of its gates, nets, modules, and groupings.
 
             :param hal_py.Netlist nl: The netlist to copy.
@@ -43,62 +59,71 @@ namespace hal
             :rtype: hal_py.Netlist
         )");
 
-        py_netlist_utils.def("get_ff_dependency_matrix", &netlist_utils::get_ff_dependency_matrix, py::arg("nl"), R"(
+        py_netlist_utils.def("get_ff_dependency_matrix", [](const Netlist* nl) {
+                warn_deprecated("get_ff_dependency_matrix", "boolean_influence.get_ff_dependency_matrix");
+                return netlist_utils::get_ff_dependency_matrix(nl);
+            }, py::arg("nl"), borrowed(), R"(
             Get the FF dependency matrix of a netlist.
 
             :param hal_py.Netlist nl: The netlist to extract the dependency matrix from.
-            :returns: A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
-            :rtype: pair(dict(int, hal_py.Gate), list[list[int]])
+            :returns: A pair consisting of a dict from the original gate IDs to the ones in the matrix, and the FF dependency matrix itself.
+            :rtype: tuple(dict[int,hal_py.Gate], list[list[int]])
         )");
 
-        py_netlist_utils.def("get_next_gates",
-                             py::overload_cast<const Gate*, bool, int, const std::function<bool(const Gate*)>&>(&netlist_utils::get_next_gates),
+        py_netlist_utils.def("get_next_gates", [](const Gate* a0, bool a1, int a2, const std::function<bool(const Gate*)>& a3) {
+                warn_deprecated("get_next_gates", "hal_py.NetlistTraversalDecorator.get_next_matching_gates_until_depth");
+                return netlist_utils::get_next_gates(a0, a1, a2, a3);
+            },
                              py::arg("gate"),
                              py::arg("get_successors"),
                              py::arg("depth")  = 0,
-                             py::arg("filter") = nullptr,
+                             py::arg("filter") = nullptr, borrowed(),
                              R"(
             Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. 
             Higher number of depth causes as many steps of recursive calls. 
             If depth is set to 0 there is no limitation and the loop  continues until no more predecessors/succesors are found.
-            If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
+            If a filter function is given, the recursion stops whenever the filter function evaluates to ``False``. 
             Only gates matching the filter will be added to the result vector.
             The result will not include the provided gate itself.
 
             :param hal_py.Gate gate: The initial gate.
-            :param bool get_successors: True to return successors, False for Predecessors.
+            :param bool get_successors: ``True`` to return successors, ``False`` for Predecessors.
             :param int depth: Depth of recursion.
             :param lambda filter: User-defined filter function.
             :returns: List of predecessor/successor gates.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist_utils.def("get_next_gates",
-                             py::overload_cast<const Net*, bool, int, const std::function<bool(const Gate*)>&>(&netlist_utils::get_next_gates),
+        py_netlist_utils.def("get_next_gates", [](const Net* a0, bool a1, int a2, const std::function<bool(const Gate*)>& a3) {
+                warn_deprecated("get_next_gates", "hal_py.NetlistTraversalDecorator.get_next_matching_gates_until_depth");
+                return netlist_utils::get_next_gates(a0, a1, a2, a3);
+            },
                              py::arg("net"),
                              py::arg("get_successors"),
                              py::arg("depth")  = 0,
-                             py::arg("filter") = nullptr,
+                             py::arg("filter") = nullptr, borrowed(),
                              R"(
             Find predecessors or successors of a net. If depth is set to 1 only direct predecessors/successors will be returned. 
             Higher number of depth causes as many steps of recursive calls. 
             If depth is set to 0 there is no limitation and the loop  continues until no more predecessors/succesors are found.
-            If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
+            If a filter function is given, the recursion stops whenever the filter function evaluates to ``False``. 
             Only gates matching the filter will be added to the result vector.
 
             :param hal_py.Net net: The initial net.
-            :param bool get_successors: True to return successors, False for Predecessors.
+            :param bool get_successors: ``True`` to return successors, ``False`` for Predecessors.
             :param int depth: Depth of recursion.
             :param lambda filter: User-defined filter function.
             :returns: List of predecessor/successor gates.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist_utils.def("get_next_sequential_gates",
-                             py::overload_cast<const Gate*, bool, std::unordered_map<u32, std::vector<Gate*>>&>(&netlist_utils::get_next_sequential_gates),
+        py_netlist_utils.def("get_next_sequential_gates", [](const Gate* a0, bool a1, std::unordered_map<u32, std::vector<Gate*>>& a2) {
+                warn_deprecated("get_next_sequential_gates", "hal_py.NetlistTraversalDecorator.get_next_sequential_gates");
+                return netlist_utils::get_next_sequential_gates(a0, a1, a2);
+            },
                              py::arg("gate"),
                              py::arg("get_successors"),
-                             py::arg("cache"),
+                             py::arg("cache"), borrowed(),
                              R"(
             Find all sequential predecessors or successors of a gate.
             Traverses combinational logic of all input or output nets until sequential gates are found.
@@ -108,28 +133,33 @@ namespace hal
             Different caches for different values of get_successors shall be used.
         
             :param hal_py.Gate gate: The initial gate.
-            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param bool get_successors: If ``True``, sequential successors are returned, otherwise sequential predecessors are returned.
             :param dict[int, list[hal_py.Gate]] cache: The cache. 
             :returns: All sequential successors or predecessors of the gate.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist_utils.def("get_next_sequential_gates", py::overload_cast<const Gate*, bool>(&netlist_utils::get_next_sequential_gates), py::arg("gate"), py::arg("get_successors"), R"(
+        py_netlist_utils.def("get_next_sequential_gates", [](const Gate* a0, bool a1) {
+                warn_deprecated("get_next_sequential_gates", "hal_py.NetlistTraversalDecorator.get_next_sequential_gates");
+                return netlist_utils::get_next_sequential_gates(a0, a1);
+            }, py::arg("gate"), py::arg("get_successors"), borrowed(), R"(
             Find all sequential predecessors or successors of a gate.
             Traverses combinational logic of all input or output nets until sequential gates are found.
             The result may include the provided gate itself.
 
             :param hal_py.Gate gate: The initial gate.
-            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param bool get_successors: If ``True``, sequential successors are returned, otherwise sequential predecessors are returned.
             :returns: All sequential successors or predecessors of the gate.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist_utils.def("get_next_sequential_gates",
-                             py::overload_cast<const Net*, bool, std::unordered_map<u32, std::vector<Gate*>>&>(&netlist_utils::get_next_sequential_gates),
+        py_netlist_utils.def("get_next_sequential_gates", [](const Net* a0, bool a1, std::unordered_map<u32, std::vector<Gate*>>& a2) {
+                warn_deprecated("get_next_sequential_gates", "hal_py.NetlistTraversalDecorator.get_next_sequential_gates");
+                return netlist_utils::get_next_sequential_gates(a0, a1, a2);
+            },
                              py::arg("net"),
                              py::arg("get_successors"),
-                             py::arg("cache"),
+                             py::arg("cache"), borrowed(),
                              R"(
             Find all sequential predecessors or successors of a net.
             Traverses combinational logic of all input or output nets until sequential gates are found.
@@ -138,28 +168,33 @@ namespace hal
             Different caches for different values of get_successors shall be used.
 
             :param hal_py.Net net: The initial net.
-            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param bool get_successors: If ``True``, sequential successors are returned, otherwise sequential predecessors are returned.
             :param dict[int, list[hal_py.Gate]] cache: The cache. 
             :returns: All sequential successors or predecessors of the net.
             :rtype: list[hal_py.Net]
         )");
 
-        py_netlist_utils.def("get_next_sequential_gates", py::overload_cast<const Net*, bool>(&netlist_utils::get_next_sequential_gates), py::arg("net"), py::arg("get_successors"), R"(
+        py_netlist_utils.def("get_next_sequential_gates", [](const Net* a0, bool a1) {
+                warn_deprecated("get_next_sequential_gates", "hal_py.NetlistTraversalDecorator.get_next_sequential_gates");
+                return netlist_utils::get_next_sequential_gates(a0, a1);
+            }, py::arg("net"), py::arg("get_successors"), borrowed(), R"(
             Find all sequential predecessors or successors of a net.
             Traverses combinational logic of all input or output nets until sequential gates are found.
 
             :param hal_py.Net net: The initial net.
-            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param bool get_successors: If ``True``, sequential successors are returned, otherwise sequential predecessors are returned.
             :returns: All sequential successors or predecessors of the net.
             :rtype: list[hal_py.Net]
         )");
 
-        py_netlist_utils.def("get_path",
-                             py::overload_cast<const Gate*, bool, std::set<GateTypeProperty>, std::unordered_map<u32, std::vector<Gate*>>&>(&netlist_utils::get_path),
+        py_netlist_utils.def("get_path", [](const Gate* a0, bool a1, std::set<GateTypeProperty> a2, std::unordered_map<u32, std::vector<Gate*>>& a3) {
+                warn_deprecated("get_path", "hal_py.NetlistTraversalDecorator.get_gates with the negated condition and TraversalStop.at_mismatch");
+                return netlist_utils::get_path(a0, a1, a2, a3);
+            },
                              py::arg("gate"),
                              py::arg("get_successors"),
                              py::arg("stop_properties"),
-                             py::arg("cache"),
+                             py::arg("cache"), borrowed(),
                              R"(
             Find all gates on the predecessor or successor path of a gate.
             Traverses all input or output nets until gates of the specified base types are found.
@@ -169,7 +204,7 @@ namespace hal
             Different caches for different values of get_successors shall be used.
         
             :param hal_py.Gate gate: The initial gate.
-            :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
+            :param bool get_successors: If ``True``, the successor path is returned, otherwise the predecessor path is returned.
             :param set[hal_py.GateTypeProperty] stop_properties: Stop recursion when reaching a gate of a type with one of the specified properties.
             :param dict[int, list[hal_py.Gate]] cache: The cache. 
             :returns: All gates on the predecessor or successor path of the gate.
@@ -177,24 +212,29 @@ namespace hal
         )");
 
         py_netlist_utils.def(
-            "get_path", py::overload_cast<const Gate*, bool, std::set<GateTypeProperty>>(&netlist_utils::get_path), py::arg("gate"), py::arg("get_successors"), py::arg("stop_properties"), R"(
+            "get_path", [](const Gate* a0, bool a1, std::set<GateTypeProperty> a2) {
+                warn_deprecated("get_path", "hal_py.NetlistTraversalDecorator.get_gates with the negated condition and TraversalStop.at_mismatch");
+                return netlist_utils::get_path(a0, a1, a2);
+            }, py::arg("gate"), py::arg("get_successors"), py::arg("stop_properties"), borrowed(), R"(
             Find all gates on the predeccessor or successor path of a gate.
             Traverses all input or output nets until gates of the specified base types are found.
             The result may include the provided gate itself.
 
             :param hal_py.Gate gate: The initial gate.
-            :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
+            :param bool get_successors: If ``True``, the successor path is returned, otherwise the predecessor path is returned.
             :param set[hal_py.GateTypeProperty] stop_properties: Stop recursion when reaching a gate of a type with one of the specified properties.
             :returns: All gates on the predecessor or successor path of the gate.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist_utils.def("get_path",
-                             py::overload_cast<const Net*, bool, std::set<GateTypeProperty>, std::unordered_map<u32, std::vector<Gate*>>&>(&netlist_utils::get_path),
+        py_netlist_utils.def("get_path", [](const Net* a0, bool a1, std::set<GateTypeProperty> a2, std::unordered_map<u32, std::vector<Gate*>>& a3) {
+                warn_deprecated("get_path", "hal_py.NetlistTraversalDecorator.get_gates with the negated condition and TraversalStop.at_mismatch");
+                return netlist_utils::get_path(a0, a1, a2, a3);
+            },
                              py::arg("net"),
                              py::arg("get_successors"),
                              py::arg("stop_properties"),
-                             py::arg("cache"),
+                             py::arg("cache"), borrowed(),
                              R"(
             Find all gates on the predecessor or successor path of a net.
             Traverses all input or output nets until gates of the specified base types are found.
@@ -203,36 +243,43 @@ namespace hal
             Different caches for different values of get_successors shall be used.
 
             :param hal_py.Net net: The initial net.
-            :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
+            :param bool get_successors: If ``True``, the successor path is returned, otherwise the predecessor path is returned.
             :param set[hal_py.GateTypeProperty] stop_properties: Stop recursion when reaching a gate of a type with one of the specified properties.
             :param dict[int, list[hal_py.Gate]] cache: The cache. 
             :returns: All gates on the predecessor or successor path of the net.
             :rtype: list[hal_py.Net]
         )");
         py_netlist_utils.def(
-            "get_path", py::overload_cast<const Net*, bool, std::set<GateTypeProperty>>(&netlist_utils::get_path), py::arg("net"), py::arg("get_successors"), py::arg("stop_properties"), R"(
+            "get_path", [](const Net* a0, bool a1, std::set<GateTypeProperty> a2) {
+                warn_deprecated("get_path", "hal_py.NetlistTraversalDecorator.get_gates with the negated condition and TraversalStop.at_mismatch");
+                return netlist_utils::get_path(a0, a1, a2);
+            }, py::arg("net"), py::arg("get_successors"), py::arg("stop_properties"), borrowed(), R"(
             Find all gates on the predecessor or successor path of a net.
             Traverses all input or output nets until gates of the specified base types are found.
 
             :param hal_py.Net net: The initial net.
-            :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
+            :param bool get_successors: If ``True``, the successor path is returned, otherwise the predecessor path is returned.
             :param set[hal_py.GateTypeProperty] stop_properties: Stop recursion when reaching a gate of a type with one of the specified properties.
             :returns: All gates on the predecessor or successor path of the net.
             :rtype: list[hal_py.Net]
         )");
 
-        py_netlist_utils.def("get_nets_at_pins", netlist_utils::get_nets_at_pins, py::arg("gate"), py::arg("pins"), R"(
+        py_netlist_utils.def("get_nets_at_pins", [](Gate* gate, std::vector<GatePin*> pins) {
+                warn_deprecated("get_nets_at_pins", "hal_py.Gate.get_fan_in_net or get_fan_out_net per pin");
+                return netlist_utils::get_nets_at_pins(gate, pins);
+            }, py::arg("gate"), py::arg("pins"), borrowed(), R"(
             Get the nets that are connected to a subset of pins of the specified gate.
         
             :param hal_py.Gate gate: The gate.
             :param list[hal_py.GatePin] pins: The targeted pins.
-            :returns: The list of nets connected to the pins.
+            :returns: A list of nets connected to the pins.
             :rtype: list[hal_py.Net]
         )");
 
         py_netlist_utils.def(
             "remove_buffers",
             [](Netlist* netlist, bool analyze_inputs = false) -> i32 {
+                warn_deprecated("remove_buffers", "netlist_preprocessing.remove_buffers");
                 auto res = netlist_utils::remove_buffers(netlist, analyze_inputs);
                 if (res.is_ok())
                 {
@@ -251,7 +298,7 @@ namespace hal
             If enabled, analyzes every gate's inputs and removes fixed '0' or '1' inputs from the Boolean function.
 
             :param hal_py.Netlist netlist: The target netlist.
-            :param bool analyze_inputs: Set True to dynamically analyze the inputs, False otherwise.
+            :param bool analyze_inputs: Set ``True`` to dynamically analyze the inputs, ``False`` otherwise.
             :returns: The number of removed buffers on success, -1 otherwise.
             :rtype: int
         )");
@@ -259,6 +306,7 @@ namespace hal
         py_netlist_utils.def(
             "remove_unused_lut_endpoints",
             [](Netlist* netlist) -> i32 {
+                warn_deprecated("remove_unused_lut_endpoints", "netlist_preprocessing.remove_unused_lut_inputs");
                 auto res = netlist_utils::remove_unused_lut_endpoints(netlist);
                 if (res.is_ok())
                 {
@@ -279,7 +327,10 @@ namespace hal
             :rtype: int
         )");
 
-        py_netlist_utils.def("get_common_inputs", &netlist_utils::get_common_inputs, py::arg("gates"), py::arg("threshold") = 0, R"(
+        py_netlist_utils.def("get_common_inputs", [](const std::vector<Gate*>& gates, u32 threshold) {
+                warn_deprecated("get_common_inputs", "hal_py.NetlistTraversalDecorator.get_common_inputs");
+                return netlist_utils::get_common_inputs(gates, threshold);
+            }, py::arg("gates"), py::arg("threshold") = 0, borrowed(), R"(
             Returns all nets that are considered to be common inputs to the provided gates.
             A threshold value can be provided to specify the number of gates a net must be connected to in order to be classified as a common input.
             If the theshold value is set to 0, a net must be input to all gates to be considered a common input.
@@ -293,6 +344,7 @@ namespace hal
         py_netlist_utils.def(
             "replace_gate",
             [](Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map) -> i32 {
+                warn_deprecated("replace_gate", "hal_py.NetlistModificationDecorator.replace_gate");
                 auto res = netlist_utils::replace_gate(gate, target_type, pin_map);
                 if (res.is_ok())
                 {
@@ -315,111 +367,54 @@ namespace hal
             :param hal_py.Gate gate: The gate to be replaced.
             :param hal_py.GateType target_type: The gate type of the replacement gate.
             :param dict[hal_py.GatePin,hal_py.GatePin] pin_map: A dict from old to new pins.
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
-        py_netlist_utils.def(
-            "get_gate_chain",
-            [](Gate* start_gate, const std::vector<const GatePin*>& input_pins = {}, const std::vector<const GatePin*>& output_pins = {}, const std::function<bool(const Gate*)>& filter = nullptr)
-                -> std::vector<Gate*> {
-                auto res = netlist_utils::get_gate_chain(start_gate, input_pins, output_pins, filter);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while detecting gate chain:\n{}", res.get_error().get());
-                    return {};
-                }
-            },
-            py::arg("start_gate"),
-            py::arg("input_pins")  = std::vector<GatePin*>(),
-            py::arg("output_pins") = std::vector<GatePin*>(),
-            py::arg("filter")      = nullptr,
-            R"(
-            Find a sequence of identical gates that are connected via the specified input and output pins.
-            The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
-            If input and/or output pins are specified, the gates must be connected through one of the input pins and/or one of the output pins.
-            The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
 
-            :param hal_py.Gate start_gate: The gate at which to start the chain detection.
-            :param list[hal_py.GatePin] input_pins: The input pins through which the gates must be connected. Defaults to an empty list.
-            :param set[hal_py.GatePin] output_pins: The output pins through which the gates must be connected. Defaults to an empty list.
-            :param lambda filter: An optional filter function to be evaluated on each gate.
-            :returns: A list of gates that form a chain on success, an empty list on error.
-            :rtype: list[hal_py.Gate]
-        )");
 
-        py_netlist_utils.def(
-            "get_complex_gate_chain",
-            [](Gate* start_gate,
-               const std::vector<GateType*>& chain_types,
-               const std::map<GateType*, std::vector<const GatePin*>>& input_pins,
-               const std::map<GateType*, std::vector<const GatePin*>>& output_pins,
-               const std::function<bool(const Gate*)>& filter = nullptr) -> std::vector<Gate*> {
-                auto res = netlist_utils::get_complex_gate_chain(start_gate, chain_types, input_pins, output_pins, filter);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while detecting complex gate chain:\n{}", res.get_error().get());
-                    return {};
-                }
-            },
-            py::arg("start_gate"),
-            py::arg("chain_types"),
-            py::arg("input_pins"),
-            py::arg("output_pins"),
-            py::arg("filter") = nullptr,
-            R"(
-            Find a sequence of gates (of the specified sequence of gate types) that are connected via the specified input and output pins.
-            The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
-            However, the start gate must be of the first gate type within the repeating sequence.
-            If input and/or output pins are specified for a gate type, the gates must be connected through one of the input pins and/or one of the output pins.
-            The optional filter is evaluated on every gate such that the result only contains gates matching the specified condition.
 
-            :param hal_py.Gate start_gate: The gate at which to start the chain detection.
-            :param list[hal_py.GateType] chain_types: The sequence of gate types that is expected to make up the gate chain.
-            :param dict[hal_py.GateType,set[str]] input_pins: The input pins through which the gates are allowed to be connected.
-            :param dict[hal_py.GateType,set[str]] output_pins: The output pins through which the gates are allowed to be connected.
-            :param lambda filter: A filter that is evaluated on all candidates.
-            :returns: A list of gates that form a chain.
-            :rtype: list[hal_py.Gate]
-        )");
 
-        py_netlist_utils.def("get_shortest_path", py::overload_cast<Gate*,Gate*,bool>(&netlist_utils::get_shortest_path), py::arg("start_gate"), py::arg("end_gate"), py::arg("search_both_directions") = false, R"(
-            Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with the end gate. 
+        py_netlist_utils.def("get_shortest_path", [](Gate* a0, Gate* a1, bool a2) {
+                warn_deprecated("get_shortest_path", "hal_py.NetlistTraversalDecorator.get_shortest_path");
+                return netlist_utils::get_shortest_path(a0, a1, a2);
+            }, py::arg("start_gate"), py::arg("end_gate"), py::arg("search_both_directions") = false, borrowed(), R"(
+            Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with the end gate. 
             The gate where the search started from will be the first in the result vector, the end gate will be the last. 
             If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
 
-            :param hal_py.Gate start_gate: The start gate for the path (might be the end if searching both directions)
-            :param hal_py.Gate end_gate: The end gate for the path (might be the start if searching both directions)
-            :param bool search_both_directions: If true checking start <-> end, which ever direction is shorter
-            :returns: A list of gates that form a chain on success, an empty list on error.
+            :param hal_py.Gate start_gate: The gate to start from.
+            :param hal_py.Gate end_gate: The gate to connect to.
+            :param bool search_both_directions: ``True`` to additionally check whether a shorter path from end to start exists, ``False`` otherwise.
+            :returns: A list of gates that connect the start with end gate (possibly in reverse order).
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist_utils.def("get_shortest_path", py::overload_cast<Gate*,Module*,bool>(&netlist_utils::get_shortest_path), py::arg("start_gate"), py::arg("end_module"), py::arg("forward_direction"), R"(
-            Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with any gate for the given module.
+        py_netlist_utils.def("get_shortest_path", [](Gate* a0, Module* a1, bool a2) {
+                warn_deprecated("get_shortest_path", "hal_py.NetlistTraversalDecorator.get_shortest_path");
+                return netlist_utils::get_shortest_path(a0, a1, a2);
+            }, py::arg("start_gate"), py::arg("end_module"), py::arg("forward_direction"), borrowed(), R"(
+            Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with any gate from the given module.
             The gate where the search started from will be the first in the result vector, the end gate will be the last.
             If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
 
-            :param hal_py.Gate start_gate: The start gate for the path
-            :param hal_py.Module end_module: The module which contains the end gate for the path
-            :param bool forward_direction: Search successor module to gate if true, else search predecessor module.
-            :returns: A list of gates that form a chain on success, an empty list on error.
+            :param hal_py.Gate start_gate: The gate to start from.
+            :param hal_py.Module end_module: The module to connect to.
+            :param bool forward_direction: ``True`` to search along the fan-out nets of the start gate, ``False`` to search along its fan-in nets.
+            :returns: A list of gates that connect the start with end gate (possibly in reverse order).
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist_utils.def("get_shortest_path", py::overload_cast<Module*,Module*>(&netlist_utils::get_shortest_path), py::arg("start_module"), py::arg("end_module"), R"(
-            Find (multiple) shortest path (i.e., theresult set with the lowest number of gates) that connects the module with another module.
+        py_netlist_utils.def("get_shortest_path", [](Module* a0, Module* a1) {
+                warn_deprecated("get_shortest_path", "hal_py.NetlistTraversalDecorator.get_shortest_path");
+                return netlist_utils::get_shortest_path(a0, a1);
+            }, py::arg("start_module"), py::arg("end_module"), borrowed(), R"(
+            Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start module with the target module.
+            There might be more than one connection thus a list of connecting gate lists is returned.
 
-            :param hal_py.Module start_module: The module which contains a gate as start for the path
-            :param hal_py.Module end_module: The module which contains a gate as end of the path
+            :param hal_py.Module start_module: The module to start from.
+            :param hal_py.Module end_module: The module to connect to.
+            :returns: A list of connecting lists with gates that connect the start with end gate.
             :rtype: list[list[hal_py.Gate]]
         )");
     }

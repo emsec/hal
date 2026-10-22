@@ -132,7 +132,7 @@ namespace hal
              * 
              * The gates contained in the modules do not have to be of the target gate types.
              * The input and output pin groups of these modules will be used to guide datapath analysis.
-             * Only pin groups larger than `min_group_size´ will be considered.
+             * Only pin groups larger than `min_group_size` will be considered.
              * 
              * @param[in] structures - A vector of modules.
              * @param[in] overwrite - Set `true` to overwrite the existing known word-level structures, `false` otherwise. Defaults to `false`.
@@ -147,7 +147,7 @@ namespace hal
              * The input and output pin groups of these modules will be used to guide datapath analysis.
              * For each module, the input and output pin groups to be considered for analysis must be specified. 
              * An empty pin group vector results in all pin groups of the module being considered.
-             * Only pin groups larger than `min_group_size´ will be considered.
+             * Only pin groups larger than `min_group_size` will be considered.
              * 
              * @param[in] structures - A vector of modules, each of them with a vector of module pin groups.
              * @param[in] overwrite - Set `true` to overwrite the existing known word-level structures, `false` otherwise. Defaults to `false`.
@@ -160,7 +160,7 @@ namespace hal
              * 
              * The gates do not have to be of the target gate types.
              * The input and output pin groups of these gates will be used to guide datapath analysis.
-             * Only pin groups larger than `min_group_size´ will be considered.
+             * Only pin groups larger than `min_group_size` will be considered.
              * 
              * @param[in] structures - A vector of gates.
              * @param[in] overwrite - Set `true` to overwrite the existing known word-level structures, `false` otherwise. Defaults to `false`.
@@ -175,7 +175,7 @@ namespace hal
              * The input and output pin groups of these gates will be used to guide datapath analysis.
              * For each gate, the input and output pin groups to be considered for analysis must be specified. 
              * An empty pin group vector results in all pin groups of the gate being considered.
-             * Only pin groups larger than `min_group_size´ will be considered.
+             * Only pin groups larger than `min_group_size` will be considered.
              *
              * @param[in] structures - A vector of gates, each of them with a vector of gate pin groups.
              * @param[in] overwrite - Set `true` to overwrite the existing known word-level structures, `false` otherwise. Defaults to `false`.
@@ -188,7 +188,7 @@ namespace hal
              * 
              * The gate types do not have to be part of the target gate types.
              * The input and output pin groups of the gates of these types will be used to guide datapath analysis.
-             * Only pin groups larger than `min_group_size´ will be considered.
+             * Only pin groups larger than `min_group_size` will be considered.
              * 
              * @param[in] structures - A set of gate types.
              * @param[in] overwrite - Set `true` to overwrite the existing known word-level structures, `false` otherwise. Defaults to `false`.
@@ -203,7 +203,7 @@ namespace hal
              * The input and output pin groups of the gates of these types will be used to guide datapath analysis.
              * For each gate type, the input and output pin groups to be considered for analysis must be specified. 
              * An empty pin group vector results in all pin groups of the gate type being considered.
-             * Only pin groups larger than `min_group_size´ will be considered.
+             * Only pin groups larger than `min_group_size` will be considered.
              *
              * @param[in] structures - A map from gates to a vector of a subset of their pin groups.
              * @param[in] overwrite - Set `true` to overwrite the existing known word-level structures, `false` otherwise. Defaults to `false`.

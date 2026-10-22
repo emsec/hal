@@ -3,9 +3,9 @@
 #include "gui/content_widget/content_widget.h"
 #include "gui/content_frame/content_frame.h"
 #include "gui/content_manager/content_manager.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include <QDir>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QRect>
 
 namespace hal
@@ -80,7 +80,7 @@ namespace hal
 
     QSize SettingsManager::mainWindowSize() const
     {
-        QRect rect = QApplication::desktop()->screenGeometry();
+        QRect rect = QtCompat::desktopScreenGeometry();
         return mUserSettingsFile->value("MainWindow/size", rect.size()).toSize();
     }
 

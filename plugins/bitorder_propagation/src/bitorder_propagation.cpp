@@ -1,4 +1,6 @@
 #include "bitorder_propagation/bitorder_propagation.h"
+
+#include "bitorder_propagation/bit_order.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
@@ -852,9 +854,41 @@ namespace hal
 
         }    // namespace
 
-        Result<std::map<MPG, std::map<Net*, u32>>>
-            propagate_module_pingroup_bitorder(const std::map<MPG, std::map<Net*, u32>>& known_bitorders, const std::set<MPG>& unknown_bitorders, const bool enforce_continuous_bitorders)
+        namespace
         {
+            /// The algorithm below works on a map of pin groups to net indices. Translate at the boundary rather
+            /// than rewrite 1600 lines of it, so that the interface can change without the behaviour doing so.
+            std::map<MPG, std::map<Net*, u32>> to_internal(const BitOrderResult& bit_orders)
+            {
+                std::map<MPG, std::map<Net*, u32>> res;
+                for (const auto& bit_order : bit_orders)
+                {
+                    std::map<Net*, u32> indices;
+                    for (const auto& [net, index] : bit_order.get_order())
+                    {
+                        indices.insert({net, index});
+                    }
+                    res.insert({{bit_order.get_module(), bit_order.get_pin_group()}, std::move(indices)});
+                }
+                return res;
+            }
+
+            BitOrderResult from_internal(const std::map<MPG, std::map<Net*, u32>>& bit_orders)
+            {
+                BitOrderResult res;
+                for (const auto& [mpg, indices] : bit_orders)
+                {
+                    res.add(BitOrder(mpg.first, mpg.second, {indices.begin(), indices.end()}));
+                }
+                return res;
+            }
+        }    // namespace
+
+        Result<BitOrderResult>
+            propagate_module_pingroup_bitorder(const BitOrderResult& src, const std::set<MPG>& unknown_bitorders, const bool enforce_continuous_bitorders)
+        {
+            const std::map<MPG, std::map<Net*, u32>> known_bitorders = to_internal(src);
+
             // std::unordered_map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, std::set<Net*>>>, boost::hash<std::pair<MPG, std::set<Net*>>>> connectivity_inwards;
             // std::unordered_map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, std::set<Net*>>>, boost::hash<std::pair<MPG, std::set<Net*>>>> connectivity_outwards;
 
@@ -1230,11 +1264,13 @@ namespace hal
 
             log_info("bitorder_propagation", "Found a valid bitorder for {} pingroups.", wellformed_module_pin_groups.size());
 
-            return OK(wellformed_module_pin_groups);
+            return OK(from_internal(wellformed_module_pin_groups));
         }
 
-        Result<std::monostate> reorder_module_pin_groups(const std::map<MPG, std::map<Net*, u32>>& ordered_module_pin_groups)
+        Result<std::monostate> reorder_module_pin_groups(const BitOrderResult& bit_orders)
         {
+            const std::map<MPG, std::map<Net*, u32>> ordered_module_pin_groups = to_internal(bit_orders);
+
             // reorder pin groups to match found bit orders
             for (const auto& [mpg, bitorder] : ordered_module_pin_groups)
             {
@@ -1284,14 +1320,14 @@ namespace hal
             return OK({});
         }
 
-        Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> propagate_bitorder(Netlist* nl, const std::pair<u32, std::string>& src, const std::pair<u32, std::string>& dst)
+        Result<BitOrderResult> propagate_bitorder(Netlist* nl, const std::pair<u32, std::string>& src, const std::pair<u32, std::string>& dst)
         {
             const std::vector<std::pair<u32, std::string>> src_vec = {src};
             const std::vector<std::pair<u32, std::string>> dst_vec = {dst};
             return propagate_bitorder(nl, src_vec, dst_vec);
         }
 
-        Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> propagate_bitorder(const std::pair<Module*, PinGroup<ModulePin>*>& src,
+        Result<BitOrderResult> propagate_bitorder(const std::pair<Module*, PinGroup<ModulePin>*>& src,
                                                                                                            const std::pair<Module*, PinGroup<ModulePin>*>& dst)
         {
             if (!src.second)
@@ -1307,7 +1343,7 @@ namespace hal
             return propagate_bitorder(src_vec, dst_vec);
         }
 
-        Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>>
+        Result<BitOrderResult>
             propagate_bitorder(Netlist* nl, const std::vector<std::pair<u32, std::string>>& src, const std::vector<std::pair<u32, std::string>>& dst)
         {
             std::vector<std::pair<Module*, PinGroup<ModulePin>*>> internal_src;
@@ -1381,7 +1417,7 @@ namespace hal
             return propagate_bitorder(internal_src, internal_dst);
         }
 
-        Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> propagate_bitorder(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
+        Result<BitOrderResult> propagate_bitorder(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
                                                                                                            const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& dst)
         {
             std::map<MPG, std::map<Net*, u32>> known_bitorders;
@@ -1409,7 +1445,7 @@ namespace hal
             }
 
             // actually propagate the bit order
-            const auto res = propagate_module_pingroup_bitorder(known_bitorders, unknown_bitorders);
+            const auto res = propagate_module_pingroup_bitorder(from_internal(known_bitorders), unknown_bitorders);
             if (res.is_error())
             {
                 return ERR_APPEND(res.get_error(), "cannot propagate bit order: failed propagation");
@@ -1437,7 +1473,7 @@ namespace hal
 #endif
 
             // print stats
-            const u32 all_wellformed_bitorders_count = all_wellformed_module_pin_groups.size();
+            const u32 all_wellformed_bitorders_count = all_wellformed_module_pin_groups.get_size();
             const u32 new_bit_order_count            = all_wellformed_bitorders_count - src.size();
 
             log_info("bitorder_propagation", "reconstructed {} unknown bit orders from {} known bit orders", new_bit_order_count, src.size());
@@ -1451,7 +1487,7 @@ namespace hal
             return OK(all_wellformed_module_pin_groups);
         }
 
-        Result<std::map<MPG, u32>> export_bitorder_propagation_information(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
+        Result<std::map<MPG, WordIndex>> export_bitorder_propagation_information(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
                                                                            const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& dst,
                                                                            const std::string& export_filepath)
         {
@@ -1479,13 +1515,15 @@ namespace hal
                 known_bitorders.insert({{m, pg}, src_bitorder});
             }
 
-            return export_bitorder_propagation_information(known_bitorders, unknown_bitorders, export_filepath);
+            return export_bitorder_propagation_information(from_internal(known_bitorders), unknown_bitorders, export_filepath);
         }
 
-        Result<std::map<MPG, u32>> export_bitorder_propagation_information(const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& known_bitorders,
-                                                                           const std::set<std::pair<Module*, PinGroup<ModulePin>*>>& unknown_bitorders,
-                                                                           const std::string& export_filepath)
+        Result<std::map<MPG, WordIndex>> export_bitorder_propagation_information(const BitOrderResult& src,
+                                                                                 const std::set<std::pair<Module*, PinGroup<ModulePin>*>>& unknown_bitorders,
+                                                                                 const std::string& export_filepath)
         {
+            const std::map<MPG, std::map<Net*, u32>> known_bitorders = to_internal(src);
+
             std::map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, std::set<Net*>>>> connectivity_inwards;
             std::map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, std::set<Net*>>>> connectivity_outwards;
 

@@ -278,9 +278,7 @@ namespace hal
     void CommentDialog::codeTriggered()
     {
         QTextCharFormat fmt;
-        //mTextEdit->palette().color(QPalette::Background)
-        //fmt.setBackground(mCodeAction->isChecked() ? QColor("#334652") : mTextEdit->palette().color(QPalette::Background)); //dependent on background
-        fmt.setBackground(mCodeAction->isChecked() ? mTextEdit->palette().color(QPalette::AlternateBase) : mTextEdit->palette().color(QPalette::Background));
+        fmt.setBackground(mCodeAction->isChecked() ? mTextEdit->palette().color(QPalette::AlternateBase) : mTextEdit->palette().color(QPalette::Window));
         fmt.setFont(mCodeAction->isChecked() ? QFontDatabase::systemFont(QFontDatabase::FixedFont) : mDefaultFont);
         mergeFormatOnWordOrSelection(fmt);
     }

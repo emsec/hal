@@ -70,7 +70,7 @@ void QGVInteraction::disableHandler()
 QGVScene::QGVScene(QObject *parent)
     : QGraphicsScene(parent), _drawGrid(true)
 {
-#ifdef HAS_AGDISK_MEM
+#ifdef HAS_AGDISC_MEM
     aaglex_destroy();
 #endif
     _context = new QGVGvcPrivate(gvContext());

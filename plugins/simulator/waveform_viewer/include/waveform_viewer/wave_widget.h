@@ -38,6 +38,7 @@
 #include "waveform_viewer/wave_item.h"
 #include "waveform_viewer/wave_selection_dialog.h"
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
+#include "gui/module_model/module_item.h"
 
 namespace hal {
 
@@ -48,6 +49,9 @@ namespace hal {
 
 //    enum SimulationState { SimulationSelectGates, SimulationClockSet, SimulationInputGenerate, SimulationShowResults };
 
+    /**
+     * The widget that combines the waveform tree and the waveform canvas of one simulation.
+     */
     class WaveWidget : public QSplitter
     {
         Q_OBJECT

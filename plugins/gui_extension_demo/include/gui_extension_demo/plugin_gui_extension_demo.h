@@ -38,6 +38,9 @@ namespace hal
 {
     class GuiExtensionPythonBase;
 
+    /**
+     * Demonstrates how a plugin can add entries to the context menus of the GUI.
+     */
     class GuiExtensionContext : public GuiExtensionInterface
     {
         std::unordered_map<std::string,GuiExtensionPythonBase*> m_python_plugins;
@@ -78,6 +81,11 @@ namespace hal
         static GuiExtensionContext* sInstance;
     };
 
+    /**
+     * An example plugin that shows how to contribute parameters and context menu entries to the GUI.
+     *
+     * An example plugin that shows how to contribute parameters and context menu entries to the GUI.
+     */
     class PLUGIN_API GuiExtensionDemoPlugin : public BasePluginInterface
     {
         friend class GuiExtensionPythonBase;

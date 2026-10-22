@@ -45,6 +45,7 @@ namespace hal
         /**
          * Action constructor.
          *
+         * @param method - How the netlist gets opened, e.g. by creating a new project or by importing a file.
          * @param filename_ - The path of the netlist file to open.
          */
         ActionOpenNetlistFile(OpenMethod method = Undefined, const QString& filename_ = QString());

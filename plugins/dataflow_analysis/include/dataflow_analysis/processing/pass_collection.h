@@ -39,18 +39,27 @@ namespace hal
             using pass_function = std::function<std::shared_ptr<Grouping>(const std::shared_ptr<Grouping>&)>;
             using pass_id       = u16;
 
+            /**
+             * A single dataflow analysis pass together with the arguments that it is invoked with.
+             */
             struct PassConfiguration
             {
                 PassConfiguration(const pass_function& func);
                 PassConfiguration() = default;
 
+                /** The function that performs the pass. */
                 pass_function function;
+
+                /** The identifier of the pass, which also encodes the arguments it is invoked with. */
                 pass_id id;
             };
 
             /* Forward declaration */
             struct Configuration;
 
+            /**
+             * The registry of all grouping passes together with the order in which they are applied.
+             */
             namespace pass_collection
             {
                 std::vector<PassConfiguration> get_passes(const Configuration& config, const std::vector<std::vector<pass_id>>& previous_passes);

@@ -1,5 +1,6 @@
 #include "z3_utils/netlist_comparison.h"
 
+#include "hal_core/netlist/decorators/subgraph_function_cache.h"
 #include "hal_core/netlist/boolean_function/solver.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
@@ -24,7 +25,7 @@ namespace hal
                                                           const std::string& variable_prefix,
                                                           z3::context& ctx,
                                                           std::map<u32, z3::expr>& net_cache,
-                                                          std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache)
+                                                          SubgraphFunctionCache& gate_cache)
             {
                 if (const auto it = net_cache.find(net->get_id()); it != net_cache.end())
                 {
@@ -119,7 +120,7 @@ namespace hal
                                                                         const std::string& variable_prefix,
                                                                         z3::context& ctx,
                                                                         std::map<u32, z3::expr>& net_cache,
-                                                                        std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache)
+                                                                        SubgraphFunctionCache& gate_cache)
             {
                 // check validity of subgraph_gates
                 if (subgraph_gates.empty())
@@ -145,7 +146,7 @@ namespace hal
             Result<z3::expr> get_prefixed_subgraph_z3_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, const std::string& variable_prefix, z3::context& ctx)
             {
                 std::map<u32, z3::expr> net_cache;
-                std::map<std::pair<u32, const GatePin*>, BooleanFunction> gate_cache;
+                SubgraphFunctionCache gate_cache;
 
                 return get_prefixed_subgraph_z3_function_internal(subgraph_gates, subgraph_output, variable_prefix, ctx, net_cache, gate_cache);
             }

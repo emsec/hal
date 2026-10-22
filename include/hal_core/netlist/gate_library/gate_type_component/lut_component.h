@@ -38,6 +38,9 @@ namespace hal
 {
     class Gate;
 
+    /**
+     * A gate type component that describes a look-up table, in particular the bit-order of its initialization string.
+     */
     class LUTComponent : public GateTypeComponent
     {
     public:
@@ -93,7 +96,7 @@ namespace hal
          * Check whether a component is a LUTComponent.
          *
          * @param[in] component - The component to check.
-         * @returns True if component is a LUTComponent, false otherwise.
+         * @returns `true` if component is a LUTComponent, `false` otherwise.
          */
         static bool is_class_of(const GateTypeComponent* component);
 

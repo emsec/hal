@@ -64,25 +64,25 @@ namespace hal
         BooleanFunctionTableModel* getModel();
 
         /**
-         * If set to true, the context menu entry shows "Boolean function to clipboard".
+         * If set to `true`, the context menu entry shows "Boolean function to clipboard".
          * Otherwise it displays the actual name of the boolean function.
          *
-         * @param enabled - False to show the actual function name, true otherwise.
+         * @param enable - `false` to show the actual function name, `true` otherwise.
          */
         void setContextMenuPlainDescr(bool enable){mShowPlainDescr = enable;}
 
         /**
-         * If set to true, the context menu entry for the python code for shows "Get boolean function".
+         * If set to `true`, the context menu entry for the python code for shows "Get boolean function".
          * Otherwise it displays the actual name of the boolean function.
          *
-         * @param enabled - False to show the actual function name, true otherse.
+         * @param enable - `false` to show the actual function name, `true` otherse.
          */
         void setContextMenuPythonPlainDescr(bool enable){mShowPlainPyDescr = enable;}
 
         /**
-         * If set to true, the context menu additionaly shows the "Change Boolean function" option.
+         * If set to `true`, the context menu additionaly shows the "Change Boolean function" option.
          *
-         * @param enable - True to show the entry, false otherwise.
+         * @param enable - `true` to show the entry, `false` otherwise.
          */
         void enableChangeBooleanFunctionOption(bool enable) {mChangeBooleanFunc = enable;}
 
@@ -97,7 +97,7 @@ namespace hal
 
         /**
          * Sets the id (and the gate) as internal information so the context menu has access to its full functionality.
-         * To "reset" this information in case no gate is explicity displayed, a nullptr can be given as a parameter.
+         * To "reset" this information in case no gate is explicity displayed, a `nullptr` can be given as a parameter.
          * This function is "optional" as long as the context menu entry "Change Boolean function" is not needed since
          * the table is filled through the setEntries method.
          *

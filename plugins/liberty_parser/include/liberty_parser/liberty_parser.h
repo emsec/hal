@@ -41,6 +41,8 @@
 namespace hal
 {
     /**
+     * A gate library parser for the Liberty format.
+     *
      * @ingroup netlist
      */
     class NETLIST_API LibertyParser : public GateLibraryParser
@@ -53,14 +55,16 @@ namespace hal
          * Deserializes a gate library in Liberty format from the string stream into a gate library object.
          * In order to also support lookup tables (LUTs) the following extension is allowed:
          *
+         * ```
          * lut(<function name>) {
          *     data_category = <category>;
          *     data_identifier = <identifier>;
          *     direction = <"ascending" or "descending">;
          * }
+         * ```
          *
-         * <category> and <identifier> refer to the location where the LUT configuration string is stored, for example "generic" and "init".
-         * direction describes whether the least significant bit of the configuration is the output for inputs 000... (ascending) or 111... (descending).
+         * `<category>` and `<identifier>` refer to the location where the LUT configuration string is stored, for example "generic" and "init".
+         * `direction` describes whether the least significant bit of the configuration is the output for inputs 000... (ascending) or 111... (descending).
          *
          * @param[in] file_path - Path to the file containing the gate library definition.
          * @returns The gate library on success, an error otherwise.
@@ -68,6 +72,9 @@ namespace hal
         Result<std::unique_ptr<GateLibrary>> parse(const std::filesystem::path& file_path) override;
 
     private:
+        /**
+         * The intermediate representation of a `type` group of a Liberty file, which declares the width and bit order of a bus.
+         */
         struct type_group
         {
             u32 line_number;
@@ -77,6 +84,9 @@ namespace hal
             u32 width;
         };
 
+        /**
+         * The intermediate representation of a `pin` group of a Liberty file, i.e., a single pin of a cell.
+         */
         struct pin_group
         {
             u32 line_number;
@@ -91,6 +101,9 @@ namespace hal
             bool ground = false;
         };
 
+        /**
+         * The intermediate representation of a `bus` group of a Liberty file, i.e., a group of pins that share a bus type.
+         */
         struct bus_group
         {
             u32 line_number;
@@ -103,6 +116,9 @@ namespace hal
             std::unordered_map<u32, std::string> index_to_pin;
         };
 
+        /**
+         * The intermediate representation of an `ff` group of a Liberty file, which describes the behavior of a flip-flop.
+         */
         struct ff_group
         {
             u32 line_number;
@@ -115,6 +131,9 @@ namespace hal
             AsyncSetResetBehavior special_behavior_var2 = AsyncSetResetBehavior::undef;
         };
 
+        /**
+         * The intermediate representation of a `latch` group of a Liberty file, which describes the behavior of a latch.
+         */
         struct latch_group
         {
             u32 line_number;
@@ -127,6 +146,9 @@ namespace hal
             AsyncSetResetBehavior special_behavior_var2 = AsyncSetResetBehavior::undef;
         };
 
+        /**
+         * The intermediate representation of the HAL-specific `lut` group of a Liberty file, which describes where the LUT configuration is stored.
+         */
         struct lut_group
         {
             u32 line_number;
@@ -136,6 +158,9 @@ namespace hal
             std::string data_direction;
         };
 
+        /**
+         * The intermediate representation of a `cell` group of a Liberty file, i.e., a single gate type.
+         */
         struct cell_group
         {
             u32 line_number;

@@ -40,15 +40,19 @@ namespace hal
     class Module;
     class Net;
 
+    /**
+     * Simplifies a netlist before analysis, e.g., by removing unused gates and nets and by resolving redundant logic.
+     */
     namespace netlist_preprocessing
     {
         /**
          * Removes all LUT fan-in endpoints that do not correspond to a variable within the Boolean function that determines the output of a gate.
          * 
          * @param[in] nl - The netlist to operate on. 
+         * @param[in] gates - The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered.
          * @returns OK() and the number of removed LUT endpoints on success, an error otherwise.
          */
-        Result<u32> remove_unused_lut_inputs(Netlist* nl);
+        Result<u32> remove_unused_lut_inputs(Netlist* nl, const std::vector<Gate*>& gates = {});
 
         /**
          * Removes buffer gates from the netlist and connect their fan-in to their fan-out nets.
@@ -56,18 +60,21 @@ namespace hal
          * For example, a 2-input AND gate with one input being connected to constant `1` will also be removed.
          * 
          * @param[in] nl - The netlist to operate on. 
+         * @param[in] gates - The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered.
          * @returns OK() and the number of removed buffers on success, an error otherwise.
          */
-        Result<u32> remove_buffers(Netlist* nl);
+        Result<u32> remove_buffers(Netlist* nl, const std::vector<Gate*>& gates = {});
 
         /**
          * Removes redundant gates from the netlist, i.e., gates that are functionally equivalent and are connected to the same input nets.
+         * Only gates contained in `gates` are removed, the equivalent gate that is kept in their stead may lie outside of `gates`.
          * 
          * @param[in] nl - The netlist to operate on. 
          * @param[in] filter - Optional filter to fine-tune which gates are being replaced. Default to a `nullptr`.
+         * @param[in] gates - The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered.
          * @return OK() and the number of removed gates on success, an error otherwise.
          */
-        Result<u32> remove_redundant_gates(Netlist* nl, const std::function<bool(const Gate*)>& filter = nullptr);
+        Result<u32> remove_redundant_gates(Netlist* nl, const std::function<bool(const Gate*)>& filter = nullptr, const std::vector<Gate*>& gates = {});
 
         /**
          * Removes redundant sequential feedback loops.
@@ -92,11 +99,13 @@ namespace hal
 
         /**
          * Removes gates for which all fan-out nets do not have a destination and are not global output nets.
+         * The removal is repeated until no further gates can be removed, but gates outside of `gates` are never removed, even if they become unconnected in the process.
          * 
          * @param[in] nl - The netlist to operate on. 
+         * @param[in] gates - The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered.
          * @return OK() and the number of removed gates on success, an error otherwise.
          */
-        Result<u32> remove_unconnected_gates(Netlist* nl);
+        Result<u32> remove_unconnected_gates(Netlist* nl, const std::vector<Gate*>& gates = {});
 
         /**
          * Removes nets who have neither a source, nor a destination.
@@ -129,28 +138,33 @@ namespace hal
         /**
          * Builds for all gate output nets the Boolean function and substitutes all variables connected to vcc/gnd nets with the respective boolean value.
          * If the function simplifies to a  boolean constant cut the connection to the nets destinations and directly connect it to vcc/gnd. 
+         * The propagation is repeated until no further gates can be substituted, but gates outside of `gates` are never substituted, even if they become constant in the process.
          * 
          * @param[in] nl - The netlist to operate on.
+         * @param[in] gates - The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered.
          * @return OK() and the number rerouted destinations on success, an error otherwise.
          */
-        Result<u32> propagate_constants(Netlist* nl);
+        Result<u32> propagate_constants(Netlist* nl, const std::vector<Gate*>& gates = {});
 
         /**
          * Removes two consecutive inverters and reconnects the input of the first inverter to the output of the second one.
          * If the first inverter has additional successors, only the second inverter is deleted.
+         * Both inverters must be contained in `gates` for the pair to be considered, even if only the second one ends up being deleted.
          * 
          * @param[in] nl - The netlist to operate on.
+         * @param[in] gates - The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered.
          * @returns OK() and the number of removed inverter gates on success, an error otherwise.
          */
-        Result<u32> remove_consecutive_inverters(Netlist* nl);
+        Result<u32> remove_consecutive_inverters(Netlist* nl, const std::vector<Gate*>& gates = {});
 
         /**
          * Replaces pins connected to GND/VCC with constants and simplifies the Boolean function of a LUT by recomputing the INIT string.
          * 
          * @param[in] nl - The netlist to operate on. 
+         * @param[in] gates - The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered.
          * @return OK() and the number of simplified INIT strings on success, an error otherwise.
          */
-        Result<u32> simplify_lut_inits(Netlist* nl);
+        Result<u32> simplify_lut_inits(Netlist* nl, const std::vector<Gate*>& gates = {});
 
         /**
          * Tries to reconstruct a name and index for each flip flop that was part of a multi-bit wire in the verilog code.
@@ -186,21 +200,29 @@ namespace hal
         Result<std::monostate> parse_def_file(Netlist* nl, const std::filesystem::path& def_file);
 
         /**
-         * Create modules from large gates like RAMs and DSPs with the option to concat mutliple gate pingroups to larger consecutive pin groups
-         * 
-         * TODO: document paramaters
+         * Create modules from large gates like RAMs and DSPs with the option to concatenate multiple gate pin groups into larger consecutive pin groups.
+         *
+         * @param[in] nl - The netlist to operate on.
+         * @param[in] concatenated_pin_groups - A map from gate type name to a map from the name of the resulting pin group to the names of the pin groups it is concatenated from.
+         * @returns OK() and the created modules on success, an error otherwise.
          */
         Result<std::vector<Module*>> create_multi_bit_gate_modules(Netlist* nl, const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatenated_pin_groups);
 
         /**
-         * TODO: document
-        */
-        Result<std::vector<Net*>> create_nets_at_unconnected_pins(Netlist* nl);
+         * Create a new net for every unconnected output pin of every gate of the netlist.
+         * The new nets are named `HAL_UNCONNECTED_<net_id>`.
+         *
+         * @param[in] nl - The netlist to operate on.
+         * @param[in] gates - The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered.
+         * @returns OK() and the created nets on success, an error otherwise.
+         */
+        Result<std::vector<Net*>> create_nets_at_unconnected_pins(Netlist* nl, const std::vector<Gate*>& gates = {});
 
         /**
          * Iterates all flip-flops of the netlist or specified by the user.
          * If a flip-flop has a `state` and a `neg_state` output, a new inverter gate is created and connected to the `state` output net as an additional destination.
          * Finally, the `neg_state` output net is disconnected from the `neg_state` pin and re-connected to the new inverter gate's output. 
+         * The new inverter gate is assigned to the module of the respective flip-flop.
          * 
          * @param[in] nl - The netlist to operate on.
          * @param[in] ffs - The flip-flops to operate on. Defaults to an empty vector, in which case all flip-flops of the netlist are considered.

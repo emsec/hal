@@ -32,6 +32,9 @@
 
 namespace hal
 {
+    /**
+     * A gate type component that describes a single read or write port of a random access memory.
+     */
     class RAMPortComponent : public GateTypeComponent
     {
     public:
@@ -43,7 +46,7 @@ namespace hal
          * @param[in] addr_group - The name of the read or write address pin group.
          * @param[in] clock_bf - The read or write clock's Boolean function.
          * @param[in] enable_bf - The read or write enable's Boolean function.
-         * @param[in] is_write - Set true for write port, false for read port.
+         * @param[in] is_write - Set `true` for write port, `false` for read port.
          * @returns The RAMPortComponent.
          */
         static std::unique_ptr<RAMPortComponent> create(std::unique_ptr<GateTypeComponent> component,
@@ -64,7 +67,7 @@ namespace hal
          * Check whether a component is a RAMPortComponent.
          * 
          * @param[in] component - The component to check.
-         * @returns True if component is a RAMPortComponent, false otherwise.
+         * @returns `true` if component is a RAMPortComponent, `false` otherwise.
          */
         static bool is_class_of(const GateTypeComponent* component);
 
@@ -138,14 +141,14 @@ namespace hal
         /**
          * Check whether the port is a write or a read port.
          * 
-         * @returns True if the port is a write port, false if it is a read port.
+         * @returns `true` if the port is a write port, `false` otherwise.
          */
         bool is_write_port() const;
 
         /**
          * Set the port to be a write or a read port.
          * 
-         * @param[in] is_write - True to set the port to be a write port, false to set it to be a read port.
+         * @param[in] is_write - `true` to set the port to be a write port, `false` to set it to be a read port.
          */
         void set_write_port(bool is_write);
 

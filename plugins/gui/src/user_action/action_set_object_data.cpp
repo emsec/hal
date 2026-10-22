@@ -132,19 +132,19 @@ namespace hal
         const QStringList actionTypeToString = {"unknown", "delete", "create", "modify", "move"};
         while(xmlIn.readNextStartElement())
         {
-            if(xmlIn.name() == "category")
+            if(xmlIn.name() == QString("category"))
                 mDataEntry.category = xmlIn.readElementText();
-            else if(xmlIn.name() == "key")
+            else if(xmlIn.name() == QString("key"))
                 mDataEntry.key      = xmlIn.readElementText();
-            else if(xmlIn.name() == "type")
+            else if(xmlIn.name() == QString("type"))
                 mDataEntry.dataType = xmlIn.readElementText();
-            else if(xmlIn.name() == "value")
+            else if(xmlIn.name() == QString("value"))
                 mDataEntry.value    = xmlIn.readElementText();
-            else if(xmlIn.name() == "oldCategory")
+            else if(xmlIn.name() == QString("oldCategory"))
                 mOldCat = xmlIn.readElementText();
-            else if(xmlIn.name() == "oldKey")
+            else if(xmlIn.name() == QString("oldKey"))
                 mOldKey = xmlIn.readElementText();
-            else if (xmlIn.name() == "action")
+            else if (xmlIn.name() == QString("action"))
             {
                 QString tmpAct = xmlIn.readElementText();
                 int i = actionTypeToString.indexOf(tmpAct);

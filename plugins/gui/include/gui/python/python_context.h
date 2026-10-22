@@ -50,6 +50,9 @@ namespace hal
     class PythonThread;
     class LayoutLocker;
 
+    /**
+     * Hands the gate that the user picked from the graph back to the waiting python script.
+     */
     class PythonGateSelectionReceiver : public GateSelectReceiver
     {
         Q_OBJECT
@@ -61,6 +64,9 @@ namespace hal
             : GateSelectReceiver(parent), mThread(thread) {;}
     };
 
+    /**
+     * Hands the module that the user picked from the graph back to the waiting python script.
+     */
     class PythonModuleSelectionReceiver : public ModuleSelectReceiver
     {
         Q_OBJECT
@@ -106,7 +112,7 @@ namespace hal
          *
          * @param caller - The caller of interpreter, will be notified when finished
          * @param input - The input string in python format.
-         * @param multiple_expressions - Must be set to <b>true</b> if the input contains multiple expressions
+         * @param multiple_expressions - Must be set to `true` if the input contains multiple expressions
          *                               (i.e. is a compound statement).
          */
         void interpretBackground(QObject* caller, const QString& input, bool multiple_expressions = false);
@@ -157,7 +163,7 @@ namespace hal
          * E.g. for <i>text</i>="pri" one entry would be ("print", "nt")
          *
          * @param text - The text to complete
-         * @param use_console_context - Set <b>true</b> if identifiers in the context of the python console should be
+         * @param use_console_context - Set `true` if identifiers in the context of the python console should be
          *                              considered in the auto completion.
          * @returns a vector of all possible auto completion candidates.
          */

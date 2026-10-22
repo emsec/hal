@@ -31,6 +31,9 @@
 
 namespace hal {
 
+    /**
+     * A project serializer that stores the groupings of a netlist in a separate file within the project directory.
+     */
     class GroupingSerializer : public ProjectSerializer
     {
         static GroupingSerializer* instance;
@@ -41,7 +44,7 @@ namespace hal {
          * Serialize elements of class Grouping to separate file
          * @param[in] netlist Netlist that might contain groupings
          * @param[in] savedir Project directory to save to
-         * @param[in] isAutosave True if serialize call was issued from autosave, false otherwise
+         * @param[in] isAutosave `true` if serialize call was issued from autosave, `false` otherwise
          * @return
          */
         std::string serialize(Netlist* netlist, const std::filesystem::path& savedir, bool isAutosave) override;

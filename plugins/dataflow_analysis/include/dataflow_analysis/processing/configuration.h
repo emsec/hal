@@ -33,12 +33,21 @@ namespace hal
     {
         namespace processing
         {
+            /**
+             * The configuration of the processing phase of dataflow analysis, e.g., the number of pass layers and worker threads.
+             */
             struct Configuration
             {
+                /** The number of pass layers, i.e., how often the set of passes is applied one after another. */
                 u32 pass_layers;
+
+                /** The number of worker threads that passes are executed on in parallel. */
                 u32 num_threads;
 
+                /** Set `true` to keep gates of different types from ending up in the same group, `false` otherwise. */
                 bool enforce_type_consistency;
+
+                /** Set `true` if the analysis was seeded with previously known groups, `false` otherwise. */
                 bool has_known_groups = false;
             };
 

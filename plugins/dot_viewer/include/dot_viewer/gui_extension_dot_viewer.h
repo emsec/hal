@@ -31,6 +31,9 @@
 namespace hal {
     class DotViewer;
 
+    /**
+     * The GUI contribution of the DOT viewer plugin.
+     */
     class GuiExtensionDotViewer : public GuiExtensionInterface
     {
     public:
@@ -53,7 +56,12 @@ namespace hal {
          */
         void set_parameter(const std::vector<PluginParameter>& params) override;
 
-        void netlist_about_to_close(Netlist*) override;
+        /**
+         * Detach the DOT viewer from the netlist before that netlist is closed.
+         *
+         * @param[in] netlist - The netlist that is about to be closed.
+         */
+        void netlist_about_to_close(Netlist* netlist) override;
     };
 }
 

@@ -335,7 +335,8 @@ namespace hal
          * Relays the following hal-core event: <i>ModuleEvent::event::pin_changed</i>
          *
          * @param m - The module with the changed port
-         * @param respective_net - The id of the net of the renamed input port
+         * @param pev - The pin event that describes the change
+         * @param pgid - The id of the affected pin group
          */
         void modulePortsChanged(Module* m, PinEvent pev, u32 pgid) const;
 

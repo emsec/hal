@@ -388,6 +388,18 @@ namespace hal
         Q_EMIT numberOfPortsChanged(m->get_pins().size());
     }
 
+    void ModulePinsTreeModel::reload()
+    {
+        Module* m = mModule;
+        if (!m)
+            return;
+
+        Q_EMIT pinsAboutToReload();
+        clear();          // sets mModule to nullptr
+        setModule(m);
+        Q_EMIT pinsReloaded();
+    }
+
     Net* ModulePinsTreeModel::getNetFromItem(ModulePinsTreeItem* item)
     {
         if (!mModule)    //no current module = no represented net
@@ -426,6 +438,13 @@ namespace hal
         Q_UNUSED(pev);
         Q_UNUSED(pgid);
         if (m != mModule) return;
+
+        if (pev == PinEvent::PinsReload)
+        {
+            // a bulk operation replaced the pins of this module, the individual events have been coalesced
+            reload();
+            return;
+        }
 
         // debug pingroups  log_info("gui", "Handle pin_changed event {} ID={}", enum_to_string<PinEvent>(pev), pgid);
         ModulePinsTreeItem* ptiPin = nullptr;

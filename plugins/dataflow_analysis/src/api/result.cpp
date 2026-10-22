@@ -4,8 +4,6 @@
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
-#include "hal_core/plugin_system/gui_extension_interface.h"
-#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
@@ -245,28 +243,6 @@ namespace hal
             }
 
             return OK({});
-        }
-
-        void dataflow::Result::open_dot_in_viewer(const std::filesystem::path& out_path) const
-        {
-            BasePluginInterface* bpif = plugin_manager::get_plugin_instance("dot_viewer");
-            if (!bpif)
-            {
-                log_info("dataflow", "Cannot find 'dot_viewer' plugin, dot graph not displayed.");
-                return;
-            }
-            GuiExtensionInterface* geif = bpif->get_first_extension<GuiExtensionInterface>();
-            if (!geif)
-            {
-                log_info("dataflow", "Cannot find dot_viewer GUI interface, dot graph not displayed.");
-                return;
-            }
-            std::vector<PluginParameter> params;
-            params.push_back(PluginParameter(PluginParameter::ExistingFile, "filename", "", out_path.string()));
-            params.push_back(PluginParameter(PluginParameter::String, "plugin", "", "dataflow"));
-            params.push_back(PluginParameter(PluginParameter::PushButton, "exec", "", "clicked"));
-            geif->set_parameter(params);
-            log_info("dataflow", "Request to display graph '{}' send to dot viewer.", out_path.string());
         }
 
         hal::Result<std::filesystem::path> dataflow::Result::write_dot(const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids) const

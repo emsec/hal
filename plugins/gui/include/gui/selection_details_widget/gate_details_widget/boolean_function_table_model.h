@@ -265,7 +265,7 @@ namespace hal {
          * The constructor.
          *
          * @param gateId - The id of the gate the state belongs to.
-         * @param name - The name of the state (pos. / neg.).
+         * @param type - The name of the state (pos. / neg.).
          * @param stateVal - The value of the state.
          */
         StateComponentEntry(u32 gateId, StateCompType type, QString stateVal);
@@ -345,7 +345,7 @@ namespace hal {
          * @param index - The model index
          * @param value - The value to set
          * @param role - The access role
-         * @returns <b>true</b> on success
+         * @returns `true` on success, `false` otherwise.
          */
         bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 

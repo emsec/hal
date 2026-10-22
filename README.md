@@ -40,6 +40,7 @@ This repository contains a selection of curated plugins:
   - Detailed widgets with information on all aspects of the inspected netlist
 - **Netlist Simulator:** A simulator for arbitrary parts of a loaded netlist
 - **Dataflow Analysis:** Our dataflow analysis plugin [DANA](https://eprint.iacr.org/2020/751.pdf) that recovers high-level registers in an unstructured netlist
+- **Clock Tree Extractor:** A plugin to recover clock trees from an unstructured gate-level netlist
 - **Graph Algorithms:** [igraph](https://igraph.org) integration for direct access to common algorithms from graph-theory
 - **Python Shell:** A command-line plugin to spawn a Python shell preloaded with the HAL Python bindings
 - **VHDL & Verilog Parsers:** Adds support for parsing VHDL and Verilog files as netlist input formats

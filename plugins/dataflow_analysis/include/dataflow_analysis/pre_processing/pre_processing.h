@@ -34,6 +34,9 @@ namespace hal
 
     namespace dataflow
     {
+        /**
+         * The pre-processing phase of dataflow analysis, which builds the netlist abstraction that the later phases operate on.
+         */
         namespace pre_processing
         {
             NetlistAbstraction run(const dataflow::Configuration& config, std::shared_ptr<dataflow::Grouping>& initial_grouping);

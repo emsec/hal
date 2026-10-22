@@ -39,6 +39,9 @@ namespace hal
             struct Configuration;
         }
 
+        /**
+         * A dataflow analysis pass that repeatedly groups flip-flops by their successors or predecessors until the grouping no longer changes.
+         */
         namespace group_by_successors_predecessors_iteratively
         {
             std::shared_ptr<Grouping> process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state, bool successors);

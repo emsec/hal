@@ -7,6 +7,7 @@
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -17,6 +18,7 @@
 #include "resynthesis/resynthesis.h"
 #include "z3_utils/netlist_comparison.h"
 
+#include <algorithm>
 #include <fstream>
 #include <queue>
 #include <regex>
@@ -25,7 +27,61 @@ namespace hal
 {
     namespace netlist_preprocessing
     {
-        Result<u32> remove_unused_lut_inputs(Netlist* nl)
+        namespace
+        {
+            /**
+             * The set of gates a preprocessing function is allowed to modify or delete. An empty gate vector means the
+             * entire netlist, which is what all of these functions default to.
+             */
+            struct GateScope
+            {
+                GateScope(const std::vector<Gate*>& gates) : m_all(gates.empty())
+                {
+                    // duplicates are dropped, but the caller's order is preserved so that results stay reproducible
+                    for (auto* g : gates)
+                    {
+                        if (m_lookup.insert(g).second)
+                        {
+                            m_gates.push_back(g);
+                        }
+                    }
+                }
+
+                bool contains(const Gate* g) const
+                {
+                    return m_all || m_lookup.find(g) != m_lookup.end();
+                }
+
+                /**
+                 * All gates within the scope that also pass the caller's type filter. The scope only ever restricts
+                 * which gates are considered, it never widens what a function operates on.
+                 */
+                std::vector<Gate*> gates(const Netlist* nl, const std::function<bool(const Gate*)>& type_filter = nullptr) const
+                {
+                    if (m_all)
+                    {
+                        return type_filter ? nl->get_gates(type_filter) : nl->get_gates();
+                    }
+
+                    std::vector<Gate*> res;
+                    for (auto* g : m_gates)
+                    {
+                        if (!type_filter || type_filter(g))
+                        {
+                            res.push_back(g);
+                        }
+                    }
+                    return res;
+                }
+
+            private:
+                bool m_all;
+                std::vector<Gate*> m_gates;
+                std::unordered_set<const Gate*> m_lookup;
+            };
+        }    // namespace
+
+        Result<u32> remove_unused_lut_inputs(Netlist* nl, const std::vector<Gate*>& gates)
         {
             u32 num_eps = 0;
 
@@ -37,8 +93,10 @@ namespace hal
             }
             Net* gnd_net = gnd_gates.front()->get_fan_out_nets().front();
 
+            const GateScope scope(gates);
+
             // iterate all LUT gates
-            for (const auto& gate : nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_lut); }))
+            for (const auto& gate : scope.gates(nl, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_lut); }))
             {
                 std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
                 std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
@@ -92,13 +150,15 @@ namespace hal
 
         // TODO make this check every pin of a gate and check whether the generated boolean function (with replaced gnd and vcc nets) is just a variable.
         //      Afterwards just connect input net to buffer destination. Do this for all pins and delete gate if it has no more successors and not global outputs
-        Result<u32> remove_buffers(Netlist* nl)
+        Result<u32> remove_buffers(Netlist* nl, const std::vector<Gate*>& gates)
         {
             u32 num_gates = 0;
 
             std::queue<Gate*> gates_to_be_deleted;
 
-            for (const auto& gate : nl->get_gates())
+            const GateScope scope(gates);
+
+            for (const auto& gate : scope.gates(nl))
             {
                 std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
 
@@ -377,8 +437,12 @@ namespace hal
             }
         }    // namespace
 
-        Result<u32> remove_redundant_gates(Netlist* nl, const std::function<bool(const Gate*)>& filter)
+        Result<u32> remove_redundant_gates(Netlist* nl, const std::function<bool(const Gate*)>& filter, const std::vector<Gate*>& gates)
         {
+            // NOTE: the scope restricts which gates may be deleted, not which gates are compared. The gate that is
+            // kept in place of a duplicate is allowed to lie outside of it, so the candidate pool below stays global.
+            const GateScope scope(gates);
+
             auto config = hal::SMT::QueryConfig();
 
 #ifdef BITWUZLA_LIBRARY
@@ -392,12 +456,12 @@ namespace hal
                 std::map<GatePin*, Net*> ordered_fan_in = {};
                 std::set<Net*> unordered_fan_in         = {};
                 u8 truth_table_hw                       = 0;
+                std::vector<std::string> init_data      = {};
 
                 bool operator<(const GateFingerprint& other) const
                 {
-                    return (other.type < type) || (other.type == type && other.ordered_fan_in < ordered_fan_in)
-                           || (other.type == type && other.ordered_fan_in == ordered_fan_in && other.unordered_fan_in < unordered_fan_in)
-                           || (other.type == type && other.ordered_fan_in == ordered_fan_in && other.unordered_fan_in == unordered_fan_in && other.truth_table_hw < truth_table_hw);
+                    return std::tie(type, ordered_fan_in, unordered_fan_in, truth_table_hw, init_data)
+                           < std::tie(other.type, other.ordered_fan_in, other.unordered_fan_in, other.truth_table_hw, other.init_data);
                 }
             };
 
@@ -470,6 +534,19 @@ namespace hal
                         {
                             fingerprint.ordered_fan_in[ep->get_pin()] = ep->get_net();
                         }
+
+                        // Two flip-flops of the same type driven by the same nets can still differ in the value they
+                        // start out at, which the fan-in does not show. The fingerprint decides on its own here, as
+                        // there is no equivalence check behind it as there is for combinational gates, so the initial
+                        // value has to be part of it rather than folded into a hash of it.
+                        if (const auto* init_component = fingerprint.type->get_component_as<InitComponent>([](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::init; });
+                            init_component != nullptr)
+                        {
+                            for (const auto& identifier : init_component->get_init_identifiers())
+                            {
+                                fingerprint.init_data.push_back(std::get<1>(gate->get_data(init_component->get_init_category(), identifier)));
+                            }
+                        }
                     }
 
                     fingerprinted_gates[fingerprint].push_back(gate);
@@ -479,6 +556,12 @@ namespace hal
                 for (const auto& [fingerprint, gates] : fingerprinted_gates)
                 {
                     if (gates.size() == 1)
+                    {
+                        continue;
+                    }
+
+                    // no gate of this group may be deleted, so skip the equivalence checks altogether
+                    if (std::none_of(gates.begin(), gates.end(), [&scope](const Gate* g) { return scope.contains(g); }))
                     {
                         continue;
                     }
@@ -543,6 +626,10 @@ namespace hal
                 {
                     std::sort(current_duplicates.begin(), current_duplicates.end(), [](const auto& g1, const auto& g2) { return g1->get_name().length() < g2->get_name().length(); });
 
+                    // a gate outside of the scope must never be deleted, so move such gates to the front to make one
+                    // of them the survivor. Without a scope this is a no-op and the shortest name survives as before.
+                    std::stable_partition(current_duplicates.begin(), current_duplicates.end(), [&scope](const Gate* g) { return !scope.contains(g); });
+
                     auto* survivor_gate = current_duplicates.front();
                     std::map<GatePin*, Net*> out_pins_to_nets;
                     for (auto* ep : survivor_gate->get_fan_out_endpoints())
@@ -563,6 +650,13 @@ namespace hal
                     for (u32 k = 1; k < current_duplicates.size(); k++)
                     {
                         auto* current_gate = current_duplicates.at(k);
+
+                        // a group can hold more than one gate outside of the scope, none of which may be deleted
+                        if (!scope.contains(current_gate))
+                        {
+                            continue;
+                        }
+
                         for (auto* ep : current_gate->get_fan_out_endpoints())
                         {
                             auto* ep_net = ep->get_net();
@@ -1031,15 +1125,20 @@ namespace hal
             return OK(clean_up_res.get() + counter);
         }
 
-        Result<u32> remove_unconnected_gates(Netlist* nl)
+        Result<u32> remove_unconnected_gates(Netlist* nl, const std::vector<Gate*>& gates)
         {
             u32 num_gates = 0;
+            const GateScope scope(gates);
+
+            // gates outside of the scope are never deleted, so the candidates can only shrink from here on
+            std::vector<Gate*> candidates = scope.gates(nl);
+
             std::vector<Gate*> to_delete;
             do
             {
                 to_delete.clear();
 
-                for (const auto& g : nl->get_gates())
+                for (const auto& g : candidates)
                 {
                     bool is_unconnected = true;
                     for (const auto& on : g->get_fan_out_nets())
@@ -1066,6 +1165,14 @@ namespace hal
                     {
                         num_gates++;
                     }
+                }
+
+                // drop every gate that was handled so that the next round neither dereferences a deleted gate nor
+                // retries one that could not be deleted
+                if (!to_delete.empty())
+                {
+                    const std::unordered_set<Gate*> handled(to_delete.begin(), to_delete.end());
+                    candidates.erase(std::remove_if(candidates.begin(), candidates.end(), [&handled](Gate* g) { return handled.find(g) != handled.end(); }), candidates.end());
                 }
             } while (!to_delete.empty());
 
@@ -1644,12 +1751,14 @@ namespace hal
             return OK(res_count);
         }
 
-        Result<u32> propagate_constants(Netlist* nl)
+        Result<u32> propagate_constants(Netlist* nl, const std::vector<Gate*>& gates)
         {
             if (nl == nullptr)
             {
                 return ERR("netlist is a nullptr");
             }
+
+            const GateScope scope(gates);
 
             Net* gnd_net = nl->get_gnd_gates().empty() ? nullptr : nl->get_gnd_gates().front()->get_fan_out_nets().front();
             Net* vcc_net = nl->get_vcc_gates().empty() ? nullptr : nl->get_vcc_gates().front()->get_fan_out_nets().front();
@@ -1660,8 +1769,10 @@ namespace hal
             {
                 u32 replaced_dst_count = 0;
                 std::vector<Gate*> to_delete;
-                for (const auto g : nl->get_gates([](const auto g) {
-                         return g->get_type()->has_property(GateTypeProperty::combinational) && !g->get_type()->has_property(GateTypeProperty::ground)
+                // re-queried every round so that gates deleted in a previous round are never revisited, the scope
+                // keeps the propagation from cascading into gates the caller did not select
+                for (const auto g : nl->get_gates([&scope](const auto g) {
+                         return scope.contains(g) && g->get_type()->has_property(GateTypeProperty::combinational) && !g->get_type()->has_property(GateTypeProperty::ground)
                                 && !g->get_type()->has_property(GateTypeProperty::power);
                      }))
                 {
@@ -1756,15 +1867,17 @@ namespace hal
             return OK(total_replaced_dst_count);
         }
 
-        Result<u32> remove_consecutive_inverters(Netlist* nl)
+        Result<u32> remove_consecutive_inverters(Netlist* nl, const std::vector<Gate*>& gates)
         {
             if (nl == nullptr)
             {
                 return ERR("netlist is a nullptr");
             }
 
+            const GateScope scope(gates);
+
             std::set<Gate*> gates_to_delete;
-            for (auto* inv_gate : nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_inverter); }))
+            for (auto* inv_gate : scope.gates(nl, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_inverter); }))
             {
                 if (gates_to_delete.find(inv_gate) != gates_to_delete.end())
                 {
@@ -1786,6 +1899,12 @@ namespace hal
                     continue;
                 }
                 auto* pred_gate = middle_net->get_sources().front()->get_gate();
+
+                // both inverters of the pair have to be in scope, even if only the second one ends up being deleted
+                if (!scope.contains(pred_gate))
+                {
+                    continue;
+                }
 
                 if (pred_gate->get_type()->has_property(GateTypeProperty::c_inverter))
                 {
@@ -1871,11 +1990,13 @@ namespace hal
             }
         }    // namespace
 
-        Result<u32> simplify_lut_inits(Netlist* nl)
+        Result<u32> simplify_lut_inits(Netlist* nl, const std::vector<Gate*>& gates)
         {
             u32 num_inits = 0;
 
-            for (auto g : nl->get_gates([](const auto& g) { return g->get_type()->has_property(GateTypeProperty::c_lut); }))
+            const GateScope scope(gates);
+
+            for (auto g : scope.gates(nl, [](const auto& g) { return g->get_type()->has_property(GateTypeProperty::c_lut); }))
             {
                 // skip if the gate type has more than one output pin
                 if (g->get_type()->get_output_pins().size() != 1)
@@ -1885,6 +2006,12 @@ namespace hal
 
                 auto* lc_simp = g->get_type()->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::lut; });
                 if (lc_simp == nullptr)
+                {
+                    continue;
+                }
+
+                // skip if the output pin is not connected, there is nothing to simplify then
+                if (g->get_fan_out_endpoints().empty())
                 {
                     continue;
                 }
@@ -2467,11 +2594,13 @@ namespace hal
             return OK(all_modules);
         }
 
-        Result<std::vector<Net*>> create_nets_at_unconnected_pins(Netlist* nl)
+        Result<std::vector<Net*>> create_nets_at_unconnected_pins(Netlist* nl, const std::vector<Gate*>& gates)
         {
             std::vector<Net*> created_nets;
 
-            for (const auto& g : nl->get_gates())
+            const GateScope scope(gates);
+
+            for (const auto& g : scope.gates(nl))
             {
                 for (const auto& p : g->get_type()->get_output_pins())
                 {
@@ -2578,6 +2707,13 @@ namespace hal
                 }
 
                 auto* inv = nl->create_gate(inverter_type, ff->get_name() + "__NEG_STATE_INVERT__");
+
+                // keep the new inverter within the module of the flip-flop it belongs to instead of the top module
+                if (auto* mod = ff->get_module(); !mod->is_top_module())
+                {
+                    mod->assign_gate(inv);
+                }
+
                 state_net->add_destination(inv, inv_in_pin);
                 neg_state_net->remove_source(neg_state_ep);
                 neg_state_net->add_source(inv, inv_out_pin);

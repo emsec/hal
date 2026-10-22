@@ -1,7 +1,7 @@
 #include "gui/gui_utils/geometry.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QWidget>
 
 namespace hal
@@ -10,7 +10,7 @@ namespace hal
     {
         void ensureOnScreen(QWidget* w)
         {
-            auto boundingRect = QApplication::desktop()->availableGeometry(w);
+            auto boundingRect = QtCompat::widgetAvailableGeometry(w);
             auto requiredRect = w->geometry();
             // Try fitting vertically, prioritizing top on screen
             if (boundingRect.top() > requiredRect.top())

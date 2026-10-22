@@ -36,7 +36,7 @@ namespace hal
      * @brief Combines different validators into one.
      *
      * The StackedValidator is a Validator that combines multiple other Validators. Its validate function returns
-     * <b>true</b> if all added Validators accept the string. <br>
+     * `true` if all added Validators accept the string. <br>
      * The fail text will be chosen from the firstly added validator which validation fails.
      */
     class StackedValidator : public Validator
@@ -69,15 +69,15 @@ namespace hal
             void clearValidators();
 
             /**
-             * Given any string this function returns <b>true</b> iff the string is accepted by all registered Validators
+             * Given any string this function returns `true` iff the string is accepted by all registered Validators
              * (added by StackedValidator:addValidator).
              *
-             * If no Validator is registered this function always returns true.
+             * If no Validator is registered this function always returns `true`.
              * If one or more Validators reject the string, the fail text of the failing Validator that was added the
              * earliest will be chosen.
              *
              * @param input - The input string
-             * @returns <b>true</b> iff the string is considered valid (accepted by all validators)
+             * @returns `true` iff the string is considered valid (accepted by all validators), `false` otherwise.
              */
             bool validate(const QString &input);
 

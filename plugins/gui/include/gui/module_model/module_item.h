@@ -63,7 +63,7 @@ namespace hal
         /**
          * Sets the data for a specified column. Column 2 (type) can only be set, if this item is a module.
          *
-         * @param index - The column to set the new data. Either 0 (name) or 2(type). Other columns will be ignored.
+         * @param column - The column to set the new data. Either 0 (name) or 2(type). Other columns will be ignored.
          * @param data - The new column data.
          */
         void setDataAtColumn(int column, QVariant& data) override;
@@ -127,7 +127,7 @@ namespace hal
         /**
          * Checks if this ModuleItem is currently highlighted.
          *
-         * @returns <b>true</b> if this ModuleItem is currently highlighted.
+         * @returns `true` if this ModuleItem is currently highlighted, `false` otherwise.
          */
         bool highlighted() const;
 
@@ -161,8 +161,8 @@ namespace hal
         /**
          * Marks/Unmarks this ModuleItem as highlighted.
          *
-         * @param highlighted - <b>true</b> if the ModuleItem should be marked as highlighted.
-         *                      <b>false</b> if the ModuleItem should be marked as NOT highlighted.
+         * @param highlighted - `true` if the ModuleItem should be marked as highlighted.
+         *                      `false` if the ModuleItem should be marked as NOT highlighted.
          */
         void setHighlighted(const bool highlighted);
 

@@ -36,6 +36,9 @@ namespace hal
 {
     class GuiExtensionInterface;
 
+    /**
+     * A single entry that a plugin contributes to a context menu of the GUI.
+     */
     struct ContextMenuContribution
     {
         GuiExtensionInterface* mContributer;
@@ -43,6 +46,9 @@ namespace hal
         std::string mEntry;
     };
 
+    /**
+     * A plugin extension that adds contributions to the GUI, e.g., configurable parameters and context menu entries.
+     */
     class GuiExtensionInterface : public AbstractExtensionInterface
     {
         bool mContributionEnabled;
@@ -117,7 +123,7 @@ namespace hal
 
         /**
          * Check whether context menu contributions are enabled for this plugin
-         * @return True if enabled, false otherwise
+         * @return `true` if enabled, `false` otherwise
          */
         bool is_contribution_enabled() const { return mContributionEnabled; }
 

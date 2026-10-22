@@ -39,6 +39,9 @@ namespace hal
         struct NetlistAbstraction;
         struct Context;
 
+        /**
+         * Ranks the candidate groupings of one iteration against each other so that the best one can be picked.
+         */
         namespace scoring
         {
             std::shared_ptr<Grouping> scoring(Context& eval_context, const std::shared_ptr<const NetlistAbstraction>& m_context);

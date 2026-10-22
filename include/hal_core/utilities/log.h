@@ -99,11 +99,16 @@ namespace hal
     } while (0);
 
     /**
+     * The log manager takes care of the log channels of HAL and the sinks (e.g., stdout, log file, GUI) that they write to.
+     *
      * @ingroup utilities 
      */
     class CORE_API LogManager
     {
     public:
+        /**
+         * A single sink that a log channel writes to, e.g., stdout, a log file, or the GUI.
+         */
         struct log_sink
         {
             std::shared_ptr<spdlog::sinks::sink> spdlog_sink;
@@ -151,7 +156,7 @@ namespace hal
         /**
          * Returns all channels' names.
          *
-         * @returns A set of the names.
+         * @returns A set of channel names.
          */
         std::set<std::string> get_channels() const;
 
@@ -258,7 +263,7 @@ namespace hal
         /**
          * Create a new logging sink which prints to stdout.
          *
-         * @param[in] colored - If true, the output will be colored depending on the severity.
+         * @param[in] colored - If `true`, the output will be colored depending on the severity.
          * @returns The new sink.
          */
         static std::shared_ptr<log_sink> create_stdout_sink(const bool colored = true);
@@ -269,7 +274,7 @@ namespace hal
          * If \p file_name is empty, the default log file will be used.
          *
          * @param[in] file_name - The file name.
-         * @param[in] truncate - Flag whether the file should be overwritten(true) or appended to(false).
+         * @param[in] truncate - Flag whether the file should be overwritten(`true`) or appended to(`false`).
          * @returns The new sink or the already existing sink.
          */
         static std::shared_ptr<log_sink> create_file_sink(const std::filesystem::path& file_name = "", const bool truncate = false);
@@ -315,6 +320,9 @@ namespace hal
         static LogManager* m_instance;
     };
 
+    /**
+     * A log sink that forwards every log message to the GUI so that it can be displayed in the log widget.
+     */
     class log_gui_sink : public spdlog::sinks::base_sink<std::mutex>
     {
     public:

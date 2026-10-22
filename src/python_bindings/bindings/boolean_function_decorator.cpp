@@ -4,7 +4,9 @@ namespace hal
 {
     void boolean_function_decorator_init(py::module& m)
     {
-        py::class_<BooleanFunctionDecorator> py_boolean_function_decorator(m, "BooleanFunctionDecorator", R"()");
+        py::class_<BooleanFunctionDecorator> py_boolean_function_decorator(m, "BooleanFunctionDecorator", R"(
+            A Boolean function decorator that provides functionality to operate on the associated Boolean function.
+        )");
 
         py_boolean_function_decorator.def(py::init<const BooleanFunction&>(), py::arg("bf"), R"(
             Construct new BooleanFunctionDecorator object.
@@ -78,7 +80,7 @@ namespace hal
             py::arg("ascending")      = true,
             R"(
             Get the Boolean function that is the concatenation of Boolean functions.
-            The Boolean function can optionally be extended to any desired size greater the size of the given net vector.
+            The Boolean function can optionally be extended to any desired size greater the size of the given Boolean function list.
 
             :param list[hal_py.BooleanFunction] functions: The Boolean functions to concatenate. 
             :param int extend_to_size: The size to which to extend the Boolean function. Set to ``0`` to prevent extension. Defaults to ``0``.

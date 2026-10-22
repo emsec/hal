@@ -38,6 +38,7 @@
 namespace hal
 {
     class Gate;
+    class Net;
     class Netlist;
 
     namespace xilinx_toolbox
@@ -70,15 +71,16 @@ namespace hal
         Result<u32> split_luts(const std::vector<Gate*>& gates, bool create_module = false);
 
         /**
-         * @brief Split all `LUT6_2` gates in the netlist into separate LUT gates.
+         * @brief Split the `LUT6_2` gates of the netlist, or of the given gates, into separate LUT gates.
          *
-         * Finds all gates of type `LUT6_2` in the netlist and calls `split_luts(gates)`.
+         * Finds all gates of type `LUT6_2` within `gates` (or within the netlist if `gates` is empty) and calls `split_luts(gates)`.
          *
          * @param[in] nl - The netlist to operate on.
+         * @param[in] gates - The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered.
          * @param[in] create_module - If `true`, each split gate's replacements are placed into a new module named after the original gate. If `false` (default), replacements inherit the parent module of the original gate.
          * @returns The number of successfully split `LUT6_2` gates.
          */
-        Result<u32> split_luts(Netlist* nl, bool create_module = false);
+        Result<u32> split_luts(Netlist* nl, const std::vector<Gate*>& gates = {}, bool create_module = false);
 
         /**
          * @brief Split a single shift register primitive into an equivalent chain of `FDCE` flip-flops.
@@ -118,18 +120,32 @@ namespace hal
         Result<u32> split_shift_registers(const std::vector<Gate*>& gates, bool create_module = false);
 
         /**
-         * @brief Split all shift register primitives in the netlist into `FDCE` flip-flop chains.
+         * @brief Split the shift register primitives of the netlist, or of the given gates, into `FDCE` flip-flop chains.
          *
          * Supported gate types: `SRL16`, `SRL16E`, `SRLC16E`, `SRLC32E`.
          *
-         * Finds all gates of one of the supported types in the netlist and calls
-         * `split_shift_registers(gates)`.
+         * Finds all gates of one of the supported types within `gates` (or within the netlist if `gates` is empty)
+         * and calls `split_shift_registers(gates)`.
          *
          * @param[in] nl - The netlist to operate on.
+         * @param[in] gates - The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered.
          * @param[in] create_module - If `true`, each split gate's replacements are placed into a new module named after the original gate. If `false` (default), replacements inherit the parent module of the original gate.
          * @returns The number of successfully split shift register gates.
          */
-        Result<u32> split_shift_registers(Netlist* nl, bool create_module = false);
+        Result<u32> split_shift_registers(Netlist* nl, const std::vector<Gate*>& gates = {}, bool create_module = false);
+
+        /**
+         * @brief Remove the "no load wire" nets that Vivado writes for unused output pins.
+         * 
+         * Vivado names such nets `NLW_<instance>_<pin>_UNCONNECTED` and only connects them to the output pin they stand in for.
+         * A net is removed if its name starts with `NLW_` (or has `NLW_` right after a `/` in a flattened path) and ends with `_UNCONNECTED`, optionally followed by a bit index such as `(2)` or `[2]`, it has no destinations, and it is not a global output.
+         * The output pins that drove the removed nets are left unconnected.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @param[in] nets - The nets to consider. Defaults to an empty vector, in which case all nets of the netlist are considered.
+         * @returns The number of removed nets on success, an error otherwise.
+         */
+        Result<u32> remove_no_load_wires(Netlist* nl, const std::vector<Net*>& nets = {});
 
         /**
          * @brief Parse an `.xdc` file and extract the position LOC and BEL data of each gate.

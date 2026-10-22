@@ -43,6 +43,9 @@ namespace hal
     class Module;
     class GateType;
 
+    /**
+     * Groups the flip-flops of a netlist into registers by analyzing how data flows between them.
+     */
     namespace dataflow
     {
         /**
@@ -144,13 +147,6 @@ namespace hal
              * @returns Ok() and the predecessors of the gate as a set of gates on success, an error otherwise.
              */
             hal::Result<std::unordered_set<Gate*>> get_gate_predecessors(const Gate* gate) const;
-
-            /**
-             * @brief Open DOT graph in dot viewer if appropriate plugin was loaded.
-             *
-             * @param[in] out_path - The output path.
-             */
-            void open_dot_in_viewer(const std::filesystem::path& out_path) const;
 
             /**
              * @brief Write the dataflow graph as a DOT graph to the specified location.

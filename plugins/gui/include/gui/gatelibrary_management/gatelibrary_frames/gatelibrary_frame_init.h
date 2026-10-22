@@ -32,6 +32,9 @@
 
 namespace hal
 {
+    /**
+     * Displays the init component of the selected gate type.
+     */
     class GatelibraryFrameInit : public GatelibraryComponentFrame
     {
         Q_OBJECT

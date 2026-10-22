@@ -39,6 +39,9 @@ namespace hal {
     class WaveItemHash;
     class WaveDataTimeframe;
 
+    /**
+     * The scrollable canvas on which all waveforms are drawn.
+     */
     class WaveGraphicsCanvas : public QAbstractScrollArea
     {
         Q_OBJECT

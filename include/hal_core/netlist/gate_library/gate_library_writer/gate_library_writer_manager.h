@@ -39,7 +39,7 @@ namespace hal
     /**
      * The gate library writer manager keeps track of all gate library writers that are available within HAL. It is used to dispatch writing tasks to the respective writers.
      * 
-     * @ingroup gate_library_writer
+     * @ingroup gate_lib_writer
      */
     namespace gate_library_writer_manager
     {
@@ -67,7 +67,7 @@ namespace hal
          * 
          * @param[in] gate_lib - The gate library.
          * @param[in] file_path - The output path.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         NETLIST_API bool write(const GateLibrary* gate_lib, const std::filesystem::path& file_path);
     }    // namespace gate_library_writer_manager

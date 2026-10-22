@@ -6,6 +6,9 @@
 #include <QSet>
 
 namespace hal {
+    /**
+     * Assembles the context menu entries that are shared by all widgets showing modules, gates, and nets.
+     */
     class ModuleContextMenu
     {
         public:

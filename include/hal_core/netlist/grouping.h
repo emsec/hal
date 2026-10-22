@@ -112,7 +112,7 @@ namespace hal
          *
          * @param[in] gate - The gate to assign.
          * @param[in] force - Overwrite previous assignment.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool assign_gate(Gate* gate, bool force = false);
 
@@ -123,7 +123,7 @@ namespace hal
          *
          * @param[in] gate_id - The ID of the gate to assign.
          * @param[in] force - Overwrite previous assignment.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool assign_gate_by_id(const u32 gate_id, bool force = false);
 
@@ -157,7 +157,7 @@ namespace hal
          * Fails if the gate is not contained within the grouping.
          *
          * @param[in] gate - The gate to remove.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool remove_gate(Gate* gate);
 
@@ -166,7 +166,7 @@ namespace hal
          * Fails if the gate is not contained within the grouping.
          *
          * @param[in] gate_id - The ID of the gate to remove.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool remove_gate_by_id(const u32 gate_id);
 
@@ -174,7 +174,7 @@ namespace hal
          * Check whether a gate is in the grouping.
          *
          * @param[in] gate - The gate to check for.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool contains_gate(Gate* gate) const;
 
@@ -182,7 +182,7 @@ namespace hal
          * Check whether a gate is in the grouping by ID.
          *
          * @param[in] gate_id - The ID of the gate to check for.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool contains_gate_by_id(const u32 gate_id) const;
 
@@ -199,7 +199,7 @@ namespace hal
          *
          * @param[in] net - The net to assign.
          * @param[in] force - Overwrite previous assignment.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool assign_net(Net* net, bool force = false);
 
@@ -210,7 +210,7 @@ namespace hal
          *
          * @param[in] net_id - The ID of the net to assign.
          * @param[in] force - Overwrite previous assignment.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool assign_net_by_id(const u32 net_id, bool force = false);
 
@@ -244,7 +244,7 @@ namespace hal
          * Fails if the net is not contained within the grouping.
          *
          * @param[in] net - The net to remove.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool remove_net(Net* net);
 
@@ -253,7 +253,7 @@ namespace hal
          * Fails if the net is not contained within the grouping.
          *
          * @param[in] net_id - The ID of the net to remove.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool remove_net_by_id(const u32 net_id);
 
@@ -261,7 +261,7 @@ namespace hal
          * Check whether a net is in the grouping.<br>
          *
          * @param[in] net - The net to check for.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool contains_net(Net* net) const;
 
@@ -269,7 +269,7 @@ namespace hal
          * Check whether a net is in the grouping by ID.<br>
          *
          * @param[in] net_id - The ID of the net to check for.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool contains_net_by_id(const u32 net_id) const;
 
@@ -286,7 +286,7 @@ namespace hal
          *
          * @param[in] module - The module to assign.
          * @param[in] force - Overwrite previous assignment.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool assign_module(Module* module, bool force = false);
 
@@ -297,7 +297,7 @@ namespace hal
          *
          * @param[in] module_id - The ID of the module to assign.
          * @param[in] force - Overwrite previous assignment.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool assign_module_by_id(const u32 module_id, bool force = false);
 
@@ -331,7 +331,7 @@ namespace hal
          * Fails if the module is not contained within the grouping.
          *
          * @param[in] module - The module to remove.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool remove_module(Module* module);
 
@@ -340,7 +340,7 @@ namespace hal
          * Fails if the module is not contained within the grouping.
          *
          * @param[in] module_id - The ID of the module to remove.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool remove_module_by_id(const u32 module_id);
 
@@ -348,7 +348,7 @@ namespace hal
          * Check whether a module is in the grouping.<br>
          *
          * @param[in] module - The module to check for.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool contains_module(Module* module) const;
 
@@ -356,7 +356,7 @@ namespace hal
          * Check whether a module is in the grouping by ID.<br>
          *
          * @param[in] module_id - The ID of the module to check for.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool contains_module_by_id(const u32 module_id) const;
 

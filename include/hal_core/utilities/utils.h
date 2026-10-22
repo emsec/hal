@@ -37,12 +37,15 @@
 #include <set>
 #include <sstream>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
 namespace hal
 {
     /**
+     * Contains general-purpose utility functions for strings, containers, bit manipulation, and file system paths.
+     *
      * @ingroup utilities
      */
     namespace utils
@@ -64,6 +67,49 @@ namespace hal
             }
             *it = vec.back();
             vec.pop_back();
+            return true;
+        }
+
+        /**
+         * Append an element to an unordered vector whose element positions are tracked in a map.
+         *
+         * @param[in] vec - The unordered vector.
+         * @param[in] positions - The position of every element of the vector.
+         * @param[in] element - The element to append.
+         */
+        template<typename T>
+        CORE_API inline void indexed_vector_push_back(std::vector<T>& vec, std::unordered_map<T, u32>& positions, T element)
+        {
+            positions[element] = static_cast<u32>(vec.size());
+            vec.push_back(element);
+        }
+
+        /**
+         * Erase an element from an unordered vector whose element positions are tracked in a map, in constant time.
+         * The last element takes the erased element's place, as with `unordered_vector_erase`.
+         *
+         * @param[in] vec - The unordered vector.
+         * @param[in] positions - The position of every element of the vector.
+         * @param[in] element - The element to delete.
+         * @returns `true` on success, `false` if the element is not in the vector.
+         */
+        template<typename T>
+        CORE_API inline bool indexed_vector_erase(std::vector<T>& vec, std::unordered_map<T, u32>& positions, T element)
+        {
+            const auto it = positions.find(element);
+            if (it == positions.end())
+            {
+                return false;
+            }
+            const u32 index = it->second;
+            positions.erase(it);
+            T last = vec.back();
+            vec.pop_back();
+            if (last != element)
+            {
+                vec[index]      = last;
+                positions[last] = index;
+            }
             return true;
         }
 
@@ -141,7 +187,7 @@ namespace hal
          *
          * @param[in] s - The string to analyze.
          * @param[in] end - The ending to check for.
-         * @returns True if \p s ends with \p end, false otherwise.
+         * @returns `true` if \p s ends with \p end, `false` otherwise.
          */
         template<typename T>
         CORE_API bool ends_with(const T& s, const T& end)
@@ -161,7 +207,7 @@ namespace hal
          *
          * @param[in] s - The string to analyze.
          * @param[in] start - The beginning to check for.
-         * @returns True if \p s begins with \p start, false otherwise.
+         * @returns `true` if \p s begins with \p start, `false` otherwise.
          */
         template<typename T>
         CORE_API bool starts_with(const T& s, const T& start)
@@ -180,7 +226,7 @@ namespace hal
          * Checks whether a string contains only digits.
          *
          * @param[in] s - The string to analyze.
-         * @returns True if \p s contains only digits, false otherwise.
+         * @returns `true` if \p s contains only digits, `false` otherwise.
          */
         template<typename T>
         CORE_API bool is_digits(const T& s)
@@ -192,7 +238,7 @@ namespace hal
          * Checks whether a string represents an integer.
          *
          * @param[in] s - The string to analyze.
-         * @returns True if \p s contains an integer, false otherwise.
+         * @returns `true` if \p s contains an integer, `false` otherwise.
          */
         template<typename T>
         CORE_API bool is_integer(const T& s)
@@ -212,7 +258,7 @@ namespace hal
          * Checks whether a string represents a real number.
          *
          * @param[in] s - The string to analyze.
-         * @returns True if \p s contains a real number, false otherwise.
+         * @returns `true` if \p s contains a real number, `false` otherwise.
          */
         template<typename T>
         CORE_API bool is_floating_point(const T& s)
@@ -226,7 +272,7 @@ namespace hal
         /**
          * Split a string into a vector of strings. The split delimiter can be specified by the user.<br>
          * The delimiters are removed in the splitting process.<br>
-         * To avoid splitting within brackets, set \p obey_brackets to \p true.
+         * To avoid splitting within brackets, set \p obey_brackets to \p `true`.
          *
          * @param[in] s - The string to split.
          * @param[in] delim - The delimiter, indicating where to split.
@@ -296,7 +342,7 @@ namespace hal
                     result.push_back(item);
                 }
             }
-            if (s.back() == delim)
+            if (!s.empty() && s.back() == delim)
             {
                 result.push_back("");
             }
@@ -533,7 +579,7 @@ namespace hal
          *
          * @param[in] subset - The container containing the possible subset.
          * @param[in] superset - The container containing the possible superset.
-         * @returns True if the subset container actually is a subset of the superset.
+         * @returns `true` if the subset container actually is a subset of the superset, `false` otherwise.
          */
         template<typename T1, typename T2>
         CORE_API bool is_subset(const T1& subset, const T2& superset)
@@ -552,7 +598,7 @@ namespace hal
          * Check whether a file exists.
          *
          * @param[in] filename - The file to check.
-         * @returns True if file exists, false otherwise.
+         * @returns `true` if file exists, `false` otherwise.
          */
         CORE_API bool file_exists(const std::string& filename);
 
@@ -560,7 +606,7 @@ namespace hal
          * Check whether a directory exists and access rights are granted.
          *
          * @param[in] path - The directory to check.
-         * @returns True if \p path exists and is accessible, false otherwise.
+         * @returns `true` if \p path exists and is accessible, `false` otherwise.
          */
         CORE_API bool folder_exists_and_is_accessible(const std::filesystem::path& path);
 
@@ -608,6 +654,7 @@ namespace hal
 
         /**
          * Get the path to shared objects and files provided by the user.<br>
+         * This is `~/.local/share/hal` on Unix.
          *
          * @returns The path.
          */
@@ -623,6 +670,7 @@ namespace hal
 
         /**
          * Get the path to the configuration directory of the user.<br>
+         * This is `~/.config/hal` on Unix.
          *
          * @returns The path.
          */
@@ -630,7 +678,7 @@ namespace hal
 
         /**
          * Get the path to the default directory for log files.<br>
-         * If an netlist source file is provided, the function returns the parent directory.
+         * If a netlist source file is provided, the function returns the parent directory, otherwise `get_user_share_directory() / "log"`.
          *
          * @param[in] source_file - The netlist source file.
          * @returns The path.
@@ -639,6 +687,7 @@ namespace hal
 
         /**
          * Get the paths to the locations where gate libraries are searched.<br>
+         * Contains the share and user share directories.
          *
          * @returns A vector of paths.
          */
@@ -646,6 +695,7 @@ namespace hal
 
         /**
          * Get the paths to the locations where plugins are searched.<br>
+         * Contains the library and user share directories.
          *
          * @returns A vector of paths.
          */
@@ -672,7 +722,7 @@ namespace hal
          * Try to generate a unique temporary directory.
          * 
          * @param[in] prefix - A prefix that is added in front of the unique identifier. Defaults to an empty string.
-         * @param[in] max_attmeps - The maximum amount of attempts before the function fails. Defaults to `5`.
+         * @param[in] max_attempts - The maximum amount of attempts before the function fails. Defaults to `5`.
          * @returns OK and the created directory path on success, an error otherwise.
          */
         CORE_API Result<std::filesystem::path> get_unique_temp_directory(const std::string& prefix = "", const u32 max_attempts = 5);

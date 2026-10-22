@@ -28,6 +28,9 @@
 #include <QCheckBox>
 namespace hal
 {
+    /**
+     * A drop-down that lets the user pick the severity level of a log channel.
+     */
     class SeveritySelector : public QCheckBox
     {
     public:

@@ -28,11 +28,35 @@ namespace hal
         py::module m("z3_utils", "hal Z3UtilsPlugin python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
-        py::class_<Z3UtilsPlugin, RawPtrWrapper<Z3UtilsPlugin>, BasePluginInterface> py_z3_utils(m, "Z3UtilsPlugin");
-        py_z3_utils.def_property_readonly("name", &Z3UtilsPlugin::get_name);
-        py_z3_utils.def("get_name", &Z3UtilsPlugin::get_name);
-        py_z3_utils.def_property_readonly("version", &Z3UtilsPlugin::get_version);
-        py_z3_utils.def("get_version", &Z3UtilsPlugin::get_version);
+        py::class_<Z3UtilsPlugin, RawPtrWrapper<Z3UtilsPlugin>, BasePluginInterface> py_z3_utils(m, "Z3UtilsPlugin", R"(
+            The plugin that provides utilities to translate between HAL Boolean functions and z3 expressions.
+        )");
+
+        py_z3_utils.def_property_readonly("name", &Z3UtilsPlugin::get_name, R"(
+            The name of the plugin.
+
+            :type: str
+        )");
+
+        py_z3_utils.def("get_name", &Z3UtilsPlugin::get_name, R"(
+            Get the name of the plugin.
+
+            :returns: The name of the plugin.
+            :rtype: str
+        )");
+
+        py_z3_utils.def_property_readonly("version", &Z3UtilsPlugin::get_version, R"(
+            The version of the plugin.
+
+            :type: str
+        )");
+
+        py_z3_utils.def("get_version", &Z3UtilsPlugin::get_version, R"(
+            Get the version of the plugin.
+
+            :returns: The version of the plugin.
+            :rtype: str
+        )");
 
         m.def(
             "get_subgraph_function",
@@ -53,13 +77,11 @@ namespace hal
             py::arg("subgraph_gates"),
             py::arg("subgraph_output"),
             R"(
-            Compare two nets from two different netlist. 
-            This is done on a functional level by buidling the subgraph function of each net considering all combinational gates of the netlist.
-            In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+            Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
 
-            :param list[hal_py.Gate] subgraph_gates: List containing the gates of the subgraph. 
-            :param hal_py.Net subgraph_output: The output net of the subgraph that whose function should be generated 
-            :returns: The Boolean function implemented by the subgraph on success, None otherwise.
+            :param list[hal_py.Gate] subgraph_gates: The gates making up the subgraph to consider.
+            :param hal_py.Net subgraph_output: The output net of the subgraph whose function shall be generated.
+            :returns: The Boolean function implemented by the subgraph on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -84,17 +106,17 @@ namespace hal
             py::arg("fail_on_unknown") = true,
             py::arg("solver_timeout")  = 10,
             R"(
-            Compare two nets from two different netlist. 
-            This is done on a functional level by buidling the subgraph function of each net considering all combinational gates of the netlist.
-            In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+            Compare two nets from two different netlists. 
+            This is done on a functional level by building the subgraph function of each net considering all combinational gates of the netlist.
+            In order for this to work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
 
             :param hal_py.Netlist netlist_a: First netlist. 
             :param hal_py.Netlist netlist_b: Second netlist. 
             :param hal_py.Net net_a: First net. 
             :param hal_py.Net net_b: Second net. 
-            :param bool fail_on_unknown: Determines whether the function returns false or true incase the SAT solver returns unknown.
-            :param int solver_timeout; The timeout for each SAT solver query in seconds. 
-            :returns: A Boolean indicating whether the two nets are functionally equivalent on success, None otherwise.
+            :param bool fail_on_unknown: Determines whether the function returns ``False`` or ``True`` in case the SAT solver returns unknown.
+            :param int solver_timeout: The timeout for each SAT solver query in seconds. 
+            :returns: A Boolean indicating whether the two nets are functionally equivalent on success, ``None`` otherwise.
             :rtype: bool or None
         )");
 
@@ -119,16 +141,16 @@ namespace hal
             py::arg("fail_on_unknown") = true,
             py::arg("solver_timeout")  = 10,
             R"(
-            Compare two nets from two different netlist. 
-            This is done on a functional level by buidling the subgraph function of each net considering all combinational gates of the netlist.
-            In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+            Compare two nets from two different netlists. 
+            This is done on a functional level by building the subgraph function of each net considering all combinational gates of the netlist.
+            In order for this to work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
 
             :param hal_py.Netlist netlist_a: First netlist. 
             :param hal_py.Netlist netlist_b: Second netlist. 
-            :param list[tuple(hal_py.Net, hal_py.Net)] nets : The pairs of nets to compare against each other.
-            :param bool fail_on_unknown: Determines whether the function returns false or true incase the SAT solver returns unknown.
-            :param int solver_timeout; The timeout for each SAT solver query in seconds. 
-            :returns: A Boolean indicating whether the two nets are functionally equivalent on success, None otherwise.
+            :param list[tuple(hal_py.Net,hal_py.Net)] nets: The pairs of nets to compare against each other.
+            :param bool fail_on_unknown: Determines whether the function returns ``False`` or ``True`` in case the SAT solver returns unknown.
+            :param int solver_timeout: The timeout for each SAT solver query in seconds. 
+            :returns: A Boolean indicating whether the two nets are functionally equivalent on success, ``None`` otherwise.
             :rtype: bool or None
         )");
 
@@ -151,15 +173,15 @@ namespace hal
             py::arg("fail_on_unknown") = true,
             py::arg("solver_timeout")  = 10,
             R"(
-            Compares two netlist by finding a corresponding partner for each sequential gate in the netlist and checking whether they are identical.
-            This is done on a functional level by buidling the subgraph function of all their input nets considering all combinational gates of the netlist.
-            In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+            Compares two netlists by finding a corresponding partner for each sequential gate in the netlist and checking whether they are identical.
+            This is done on a functional level by building the subgraph function of all their input nets considering all combinational gates of the netlist.
+            In order for this to work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
 
             :param hal_py.Netlist netlist_a: First netlist to compare. 
             :param hal_py.Netlist netlist_b: Second netlist to compare. 
-            :param bool fail_on_unknown: Determines whether the function returns false or true incase the SAT solver returns unknown.
-            :param int solver_timeout; The timeout for each SAT solver query in seconds. 
-            :returns: A Boolean indicating whether the two netlists are functionally equivalent on success, None otherwise.
+            :param bool fail_on_unknown: Determines whether the function returns ``False`` or ``True`` in case the SAT solver returns unknown.
+            :param int solver_timeout: The timeout for each SAT solver query in seconds. 
+            :returns: A Boolean indicating whether the two netlists are functionally equivalent on success, ``None`` otherwise.
             :rtype: bool or None
         )");
 
@@ -192,7 +214,7 @@ namespace hal
             Simplifies a Boolean function using the Z3 solver.
             This is done by using the Z3 solver to simplify the function and then converting it back to a Boolean function.
             :param hal_py.BooleanFunction bf: The Boolean function to simplify.
-            :returns: The simplified Boolean function on success, None otherwise.
+            :returns: The simplified Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 

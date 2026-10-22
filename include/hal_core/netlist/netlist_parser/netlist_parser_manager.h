@@ -40,6 +40,8 @@ namespace hal
     class Netlist;
 
     /**
+     * The netlist parser manager keeps track of all netlist parsers that are available within HAL. It is used to dispatch parsing tasks to the respective parsers.
+     *
      * @ingroup netlist_parser
      */
     namespace netlist_parser_manager
@@ -100,7 +102,7 @@ namespace hal
         /**
          * Checks whether there is a parser registered for file extension
          * @param file_name - The input file
-         * @return true if parser could be found.
+         * @return `true` if parser could be found, `false` otherwise.
          */
         bool can_parse(const std::filesystem::path& file_name);
 

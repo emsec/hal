@@ -30,6 +30,9 @@
 #include <string>
 
 namespace hal {
+    /**
+     * A two-column table that shows a set of key-value pairs.
+     */
     class KeyValueTable : public QWidget
     {
         Q_OBJECT

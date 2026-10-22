@@ -18,7 +18,7 @@ namespace hal
     {
         mComboBox = new QComboBox(this);
         mComboBox->addItems(mOptions);
-        connect(mComboBox, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), this, &SettingsWidgetDropdown::on_index_changed);
+        connect(mComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWidgetDropdown::on_index_changed);
 
 
         mContainer->addWidget(mComboBox);
@@ -40,9 +40,9 @@ namespace hal
         return mComboBox->currentIndex();
     }
 
-    void SettingsWidgetDropdown::on_index_changed(QString text)
+    void SettingsWidgetDropdown::on_index_changed(int inx)
     {
-        Q_UNUSED(text);
+        Q_UNUSED(inx);
         this->trigger_setting_updated();
     }
 }

@@ -31,6 +31,9 @@ namespace hal
 {
     class DataContainer;
 
+    /**
+     * A user action that sets a data entry on a gate, net, module, or netlist.
+     */
     class ActionSetObjectData : public UserAction
     {
 

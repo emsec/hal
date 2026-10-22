@@ -27,15 +27,15 @@ namespace hal
 
         py_core_utils.def("get_library_directory", &utils::get_library_directory, R"(
             Get the path to the shared and static libraries of HAL.
-            Relative to the binary directory.
+            The resulting path is relative to the binary directory.
 
             :returns: The path.
             :rtype: pathlib.Path
     )");
 
         py_core_utils.def("get_share_directory", &utils::get_share_directory, R"(
-            Get the path to the sh
-            Relative to the binary
+            Get the path to the shared objects of HAL.
+            The resulting path is relative to the binary directory.
 
             :returns: The path.
             :rtype: pathlib.Path
@@ -43,7 +43,7 @@ namespace hal
 
         py_core_utils.def("get_user_share_directory", &utils::get_user_share_directory, R"(
             Get the path to shared objects and files provided by the user.
-            home/.local/share for Unix
+            This is ``~/.local/share/hal`` on Unix.
 
             :returns: The path.
             :rtype: pathlib.Path
@@ -51,7 +51,7 @@ namespace hal
 
         py_core_utils.def("get_user_config_directory", &utils::get_user_config_directory, R"(
             Get the path to the configuration directory of the user.
-            home/.config/hal for Unix
+            This is ``~/.config/hal`` on Unix.
 
             :returns: The path.
             :rtype: pathlib.Path
@@ -59,16 +59,15 @@ namespace hal
 
         py_core_utils.def("get_default_log_directory", &utils::get_default_log_directory, py::arg("source_file") = "", R"(
             Get the path to the default directory for log files.
-            If an hdl source file is provided, the function returns the parent directory, otherwise get_user_share_directory() / "log".
+            If a netlist source file is provided, the function returns the parent directory, otherwise ``get_user_share_directory() / "log"``.
 
-            :param source_file: The hdl source file.
-            :type source_file: pathlib.Path
+            :param pathlib.Path source_file: The netlist source file.
             :returns: The path.
             :rtype: pathlib.Path
     )");
 
         py_core_utils.def("get_gate_library_directories", &utils::get_gate_library_directories, R"(
-            Get the paths where gate libraries are searched.
+            Get the paths to the locations where gate libraries are searched.
             Contains the share and user share directories.
 
             :returns: A list of paths.
@@ -76,10 +75,11 @@ namespace hal
     )");
 
         py_core_utils.def("get_plugin_directories", &utils::get_plugin_directories, R"(
-            Get the paths where plugins are searched.
+            Get the paths to the locations where plugins are searched.
             Contains the library and user share directories.
 
-            :returns: A vector of paths.
+            :returns: A list of paths.
+            :rtype: list[pathlib.Path]
     )");
     }
 }    // namespace hal

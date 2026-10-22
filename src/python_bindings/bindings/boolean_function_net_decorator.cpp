@@ -4,9 +4,11 @@ namespace hal
 {
     void boolean_function_net_decorator_init(py::module& m)
     {
-        py::class_<BooleanFunctionNetDecorator> py_boolean_function_net_decorator(m, "BooleanFunctionNetDecorator", R"()");
+        py::class_<BooleanFunctionNetDecorator> py_boolean_function_net_decorator(m, "BooleanFunctionNetDecorator", R"(
+            A net decorator that provides functionality to translate between nets and Boolean function variables.
+        )");
 
-        py_boolean_function_net_decorator.def(py::init<const Net&>(), py::arg("net"), R"(
+        py_boolean_function_net_decorator.def(py::init<const Net&>(), py::arg("net"), py::keep_alive<1, 2>(), R"(
             Construct new BooleanFunctionNetDecorator object.
 
             :param hal_py.Net net: The net to operate on.
@@ -42,12 +44,13 @@ namespace hal
             },
             py::arg("netlist"),
             py::arg("var"),
+            py::keep_alive<0, 1>(),
             R"(
             Get the net represented by a unique Boolean variable.
 
             :param hal_py.Netlist netlist: The netlist on which to operate.
             :param hal_py.BooleanFunction var: The Boolean variable.
-            :returns: The specified net on success, None otherwise.
+            :returns: The specified net on success, ``None`` otherwise.
             :rtype: hal_py.Net or None
         )");
 
@@ -67,12 +70,13 @@ namespace hal
             },
             py::arg("netlist"),
             py::arg("var_name"),
+            py::keep_alive<0, 1>(),
             R"(
             Get the net represented by a unique Boolean variable name.
 
             :param hal_py.Netlist netlist: The netlist on which to operate.
             :param str var_name: The Boolean variable name.
-            :returns: The specified net on success, None otherwise.
+            :returns: The specified net on success, ``None`` otherwise.
             :rtype: hal_py.Net or None
         )");
     }

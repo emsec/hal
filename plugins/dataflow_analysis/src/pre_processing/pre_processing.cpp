@@ -5,7 +5,7 @@
 #include "dataflow_analysis/common/netlist_abstraction.h"
 #include "dataflow_analysis/pre_processing/register_stage_identification.h"
 #include "dataflow_analysis/utils/parallel_for_each.h"
-#include "dataflow_analysis/utils/progress_printer.h"
+#include "hal_core/plugin_system/user_feedback.h"
 #include "dataflow_analysis/utils/timing_utils.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
@@ -85,10 +85,8 @@ namespace hal
                 void identify_successors_predecessors(const dataflow::Configuration& config, NetlistAbstraction& netlist_abstr)
                 {
                     log_info("dataflow", "identifying successors and predecessors of sequential gates...");
-                    measure_block_time("identifying successors and predecessors of sequential gates") ProgressPrinter progress_bar;
+                    measure_block_time("identifying successors and predecessors of sequential gates") user_feedback::ProgressPrinter progress_bar("dataflow: preprocessing …");
                     float cnt = 0;
-
-                    progress_bar.print_message_to_gui("dataflow: preprocessing …");
 
                     // cache map of nets to group indices of known net groups
                     std::unordered_map<const Net*, u32> net_to_group_index;
@@ -112,8 +110,7 @@ namespace hal
                     for (const auto& gate : netlist_abstr.target_gates)
                     {
                         cnt++;
-                        progress_bar.print_progress_to_stderr(cnt / netlist_abstr.target_gates.size());
-                        progress_bar.print_progress_to_gui();
+                        progress_bar.report(cnt / netlist_abstr.target_gates.size());
 
                         // create sets even if there are no successors
                         if (netlist_abstr.gate_to_successors.find(gate->get_id()) == netlist_abstr.gate_to_successors.end())

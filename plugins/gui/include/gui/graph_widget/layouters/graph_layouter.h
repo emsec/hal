@@ -60,7 +60,13 @@ namespace hal
     class NetLayoutJunctionEntries;
     class CommentSpeechBubble;
     class CommentEntry;
+    /**
+     * Computes the wire arrangement of a single junction in the background.
+     */
     class JunctionThread;
+    /**
+     * Computes the shape of a single net in the background so that several nets can be routed in parallel.
+     */
     class DrawNetThread;
 
     /**
@@ -80,6 +86,9 @@ namespace hal
 
         friend class DrawNetThread;
 
+        /**
+         * One row or column of the layout grid, i.e., the lanes it occupies and the scene coordinate it maps to.
+         */
         class SceneCoordinate
         {
             int minLane;
@@ -120,6 +129,9 @@ namespace hal
             float xBoxOffset() const;
         };
 
+        /**
+         * The scene coordinates of all rows or columns of the layout grid, indexed by grid coordinate.
+         */
         class SceneCoordinateArray
         {
             float* mArray;
@@ -130,6 +142,9 @@ namespace hal
             float lanePosition(int igrid, int ilane) const;
         };
 
+        /**
+         * The scene coordinates at which the pins of a single node are drawn.
+         */
         class EndpointCoordinate
         {
             float mYoffset;
@@ -161,6 +176,9 @@ namespace hal
             QList<int> outputPinIndex(u32 id) const;
         };
 
+        /**
+         * The grid points at which a net enters or leaves nodes, together with whether they are inputs or outputs.
+         */
         class EndpointList : public QList<NetLayoutPoint>
         {
         public:
@@ -193,6 +211,9 @@ namespace hal
             bool mOutputArrow;
         };
 
+        /**
+         * The horizontal space that the separated nets of a node require on its input and output side.
+         */
         class SeparatedNetWidth
         {
         public:
@@ -206,6 +227,9 @@ namespace hal
             void requireOutputSpace(float spc);
         };
 
+        /**
+         * One horizontal or vertical routing channel of the layout grid.
+         */
         struct Road
         {
             Road(const int x_coordinate, const int y_coordinate) : x(x_coordinate), y(y_coordinate), mLanes(0)
@@ -218,6 +242,9 @@ namespace hal
             unsigned int mLanes = 0;
         };
 
+        /**
+         * The routing channels and junctions that are already occupied while a net is being routed.
+         */
         struct UsedPaths
         {
             QSet<Road*> mHRoads;
@@ -417,6 +444,9 @@ namespace hal
         SceneCoordinateArray* mCoordArrayY;
     };
 
+    /**
+     * Computes the shape of a single net in the background so that several nets can be routed in parallel.
+     */
     class DrawNetThread : public QThread
     {
         Q_OBJECT
@@ -432,6 +462,9 @@ namespace hal
         void run() override;
     };
 
+    /**
+     * Computes the wire arrangement of a single junction in the background.
+     */
     class JunctionThread : public QThread
     {
         Q_OBJECT

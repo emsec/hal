@@ -28,6 +28,9 @@
 
 namespace hal
 {
+    /**
+     * The options of a search, e.g., whether it is case sensitive and which columns it covers.
+     */
     class SearchOptions
     {
     public:

@@ -39,6 +39,9 @@
 #include "hal_core/defines.h"
 
 namespace hal {
+    /**
+     * The wizard page on which the LUT component of the gate type is configured.
+     */
     class LUTWizardPage : public QWizardPage {
         Q_OBJECT
         friend class GateLibraryWizard;

@@ -35,6 +35,9 @@
 
 namespace hal
 {
+    /**
+     * Contains the configuration, queries, and results of the SMT solvers that HAL can use to reason about Boolean functions.
+     */
     namespace SMT
     {
         /**
@@ -87,7 +90,7 @@ namespace hal
             QueryConfig& with_solver(SolverType solver);
 
             /**
-             * Sets the solver type to the desired SMT solver.
+             * Sets the call type to the desired target.
              *
              * @param[in] call - The solver call.
              * @returns The updated SMT query configuration.
@@ -138,6 +141,13 @@ namespace hal
              * @returns A reference to the output stream.
              */
             friend std::ostream& operator<<(std::ostream& out, const QueryConfig& config);
+
+            /**
+             * Translate the SMT query configuration into its string representation.
+             *
+             * @returns A string representing the SMT query configuration.
+             */
+            std::string to_string() const;
         };
 
         /**
@@ -255,7 +265,7 @@ namespace hal
              * Checks whether two SMT models are unequal.
              *
              * @param[in] other - The model to compare again.
-             * @returns True if both models are unequal, false otherwise.
+             * @returns `true` if both models are unequal, `false` otherwise.
              */
             bool operator!=(const Model& other) const;
 
@@ -267,6 +277,13 @@ namespace hal
              * @returns A reference to the output stream.
              */
             friend std::ostream& operator<<(std::ostream& out, const Model& model);
+
+            /**
+             * Translate the SMT model into its string representation.
+             *
+             * @returns A string representing the SMT model.
+             */
+            std::string to_string() const;
 
             ////////////////////////////////////////////////////////////////////////
             // Interface
@@ -372,6 +389,13 @@ namespace hal
              * @returns A reference to output stream.
              */
             friend std::ostream& operator<<(std::ostream& out, const SolverResult& result);
+
+            /**
+             * Translate the SMT result into its string representation.
+             *
+             * @returns A string representing the SMT result.
+             */
+            std::string to_string() const;
 
         private:
             /// Constructor to initialize a 'Result.

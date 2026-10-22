@@ -30,12 +30,18 @@
 
 namespace hal
 {
+    /**
+     * Registers the Verilog netlist writer with HAL's netlist writer manager.
+     */
     class VerilogWriterExtension : public FacExtensionInterface
     {
     public:
         VerilogWriterExtension();
     };
 
+    /**
+     * The plugin that provides the Verilog netlist writer.
+     */
     class PLUGIN_API VerilogWriterPlugin : public BasePluginInterface
     {
         VerilogWriterExtension* m_extension;

@@ -60,7 +60,7 @@ namespace hal
      * A module is a container for gates and their associated nets that enables hierarchization within the netlist.<br>
      * Each gate can only be in one module at a time. Nets are only loosely associated with modules.
      *
-     * @ingroup module
+     * @ingroup netlist
      */
     class NETLIST_API Module : public DataContainer
     {
@@ -70,7 +70,7 @@ namespace hal
          * Does not check for parent module.
          *
          * @param[in] other - The module to compare against.
-         * @returns True if both modules are equal, false otherwise.
+         * @returns `true` if both modules are equal, `false` otherwise.
          */
         bool operator==(const Module& other) const;
 
@@ -79,7 +79,7 @@ namespace hal
          * Does not check for parent module.
          *
          * @param[in] other - The module to compare against.
-         * @returns True if both modules are unequal, false otherwise.
+         * @returns `true` if both modules are unequal, `false` otherwise.
          */
         bool operator!=(const Module& other) const;
 
@@ -141,7 +141,7 @@ namespace hal
 
         /**
          * Get the parent module of this module.<br>
-         * For the top module, a \p nullptr is returned.
+         * For the top module, a `nullptr` is returned.
          *
          * @returns The parent module.
          */
@@ -149,7 +149,7 @@ namespace hal
 
         /**
          * Get all parents of this module.<br>
-         * If `recursive` is set to true, all indirect parents are also included.<br>
+         * If `recursive` is set to `true`, all indirect parents are also included.<br>
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
          * @param[in] filter - An optional filter.
@@ -178,7 +178,7 @@ namespace hal
 
         /**
          * Get all direct submodules of this module.<br>
-         * If `recursive` is set to true, all indirect submodules are also included.<br>
+         * If `recursive` is set to `true`, all indirect submodules are also included.<br>
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
          * @param[in] filter - An optional filter.
@@ -198,7 +198,7 @@ namespace hal
 
         /**
          * Checks whether another module is a submodule of this module.<br>
-         * If \p recursive is set to true, all indirect submodules are also included.
+         * If \p recursive is set to `true`, all indirect submodules are also included.
          *
          * @param[in] other - Other module to check for.
          * @param[in] recursive - Set `true` to include indirect submodules as well, `false` otherwise.
@@ -207,7 +207,7 @@ namespace hal
         bool contains_module(const Module* other, bool recursive = false) const;
 
         /**
-         * Returns true only if the module is the top module of the netlist.
+         * Returns `true` only if the module is the top module of the netlist.
          * 
          * @returns `true` if the module is the top module, `false` otherwise.
          */
@@ -238,7 +238,7 @@ namespace hal
          * If `recursive` is set to `true`, nets in submodules are considered as well.
          *
          * @param[in] net - The net to check for.
-         * @param[in] recursive - True to also consider nets in submodules, false otherwise.
+         * @param[in] recursive - `true` to also consider nets in submodules, `false` otherwise.
          * @returns `true` if the net is contained in the module, `false` otherwise.
          */
         bool contains_net(Net* net, bool recursive = false) const;
@@ -294,7 +294,7 @@ namespace hal
          * Check whether the given net is an output of the module, i.e., whether the net is a global output to the netlist or has at least one destination outside of the module.
          * 
          * @param[in] net - The net.
-         * @returns `true` if the net is an ouput net, `false` otherwise.
+         * @returns `true` if the net is an output net, `false` otherwise.
          */
         bool is_output_net(Net* net) const;
 
@@ -484,7 +484,7 @@ namespace hal
          * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
          * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
          * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
-         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
          * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
          * @param[in] force_name - Set `true` to enforce the name, `false` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to `false`.
@@ -495,7 +495,7 @@ namespace hal
                                                       const std::vector<ModulePin*> pins = {},
                                                       PinDirection direction             = PinDirection::none,
                                                       PinType type                       = PinType::none,
-                                                      bool ascending                     = true,
+                                                      bool ascending                     = false,
                                                       u32 start_index                    = 0,
                                                       bool delete_empty_groups           = true,
                                                       bool force_name                    = false);
@@ -508,7 +508,7 @@ namespace hal
          * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
          * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
          * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
-         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
          * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
          * @param[in] force_name - Set `true` to enforce the name, `false` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to `false`.
@@ -527,7 +527,7 @@ namespace hal
          * Delete the given pin group.
          * 
          * @param[in] pin_group - The pin group to be deleted.
-         * @returns true on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool delete_pin_group(PinGroup<ModulePin>* pin_group);
 
@@ -537,7 +537,7 @@ namespace hal
          * 
          * @param[in] pin_group - The pin group to be moved.
          * @param[in] new_index - The index to which the pin group is moved.
-         * @returns true on success, false message otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool move_pin_group(PinGroup<ModulePin>* pin_group, u32 new_index);
 
@@ -659,7 +659,7 @@ namespace hal
          *
          * @param[in] id - The unique ID of the gate.
          * @param[in] recursive - Set to `true` to also consider gates in submodules, `false` otherwise.
-         * @returns The gate on success, a nullptr otherwise.
+         * @returns The gate on success, a `nullptr` otherwise.
          */
         Gate* get_gate_by_id(const u32 id, bool recursive = false) const;
 
@@ -694,6 +694,9 @@ namespace hal
         Module(const Module&)            = delete;    //disable copy-constructor
         Module& operator=(const Module&) = delete;    //disable copy-assignment
 
+        /**
+         * Describes how a net is connected relative to this module, i.e., whether its sources and destinations are inside or outside of the module.
+         */
         struct NetConnectivity
         {
             bool has_internal_source;
@@ -714,6 +717,7 @@ namespace hal
         Module* m_parent;
         std::unordered_map<u32, Module*> m_submodules_map;
         std::vector<Module*> m_submodules;
+        std::unordered_map<Module*, u32> m_submodule_positions;    // position of every submodule in m_submodules, for constant-time removal
 
         // pins
         u32 m_next_pin_id;
@@ -730,6 +734,8 @@ namespace hal
         std::vector<std::unique_ptr<ModulePin>> m_pins;
         std::unordered_map<u32, ModulePin*> m_pins_map;
         std::unordered_map<std::string, ModulePin*> m_pin_names_map;
+        // the net of a pin never changes, so this index only needs to be maintained on pin creation and deletion
+        std::unordered_map<const Net*, ModulePin*> m_pin_nets_map;
         std::vector<std::unique_ptr<PinGroup<ModulePin>>> m_pin_groups;
         std::unordered_map<u32, PinGroup<ModulePin>*> m_pin_groups_map;
         std::unordered_map<std::string, PinGroup<ModulePin>*> m_pin_group_names_map;
@@ -738,6 +744,7 @@ namespace hal
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;
         std::vector<Gate*> m_gates;
+        std::unordered_map<Gate*, u32> m_gate_positions;    // position of every gate in m_gates, for constant-time removal
 
         std::unordered_set<Net*> m_nets;
         std::unordered_set<Net*> m_input_nets;

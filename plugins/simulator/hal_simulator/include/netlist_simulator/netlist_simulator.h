@@ -39,6 +39,9 @@ namespace hal
 {
     class SimulationInput;
 
+    /**
+     * HAL's built-in event-driven simulation engine.
+     */
     class NetlistSimulator : public SimulationEngineEventDriven
     {
         friend class NetlistSimulatorFactory;
@@ -159,14 +162,14 @@ namespace hal
          * @param[in] start_time - Start of the timeframe to write to the file (in picoseconds).
          * @param[in] end_time - End of the timeframe to write to the file (in picoseconds).
          * @param[in] nets - Nets to include in the VCD file.
-         * @returns True if the file gerneration was successful, false otherwise.
+         * @returns `true` if the file gerneration was successful, `false` otherwise.
          */
         bool generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<const Net*> nets = {}) const;
 
         /**
          * Get vector of simulated events for net
          *
-         * @param[in] n - The net for which events where simulated
+         * @param[in] netId - The net for which events where simulated
          * @return Vector of events
          */
         std::vector<WaveEvent> get_simulation_events(u32 netId) const override;
@@ -176,6 +179,9 @@ namespace hal
     private:
         friend class NetlistSimulatorPlugin;
 
+        /**
+         * The simulation state of a single gate, i.e., its input pins and the nets connected to them.
+         */
         struct SimulationGate
         {
             const Gate* m_gate;
@@ -189,6 +195,9 @@ namespace hal
             virtual bool simulate(const Simulation& simulation, const WaveEvent& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) = 0;
         };
 
+        /**
+         * The simulation state of a combinational gate, which recomputes its outputs whenever an input changes.
+         */
         struct SimulationGateCombinational : public SimulationGate
         {
             std::vector<GatePin*> m_output_pins;
@@ -200,6 +209,9 @@ namespace hal
             bool simulate(const Simulation& simulation, const WaveEvent& event, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
         };
 
+        /**
+         * The base class for the simulation state of a sequential gate, which additionally holds an internal state.
+         */
         struct SimulationGateSequential : public SimulationGate
         {
             SimulationGateSequential(const Gate* gate);
@@ -209,6 +221,9 @@ namespace hal
             virtual void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events)                                  = 0;
         };
 
+        /**
+         * The simulation state of a flip-flop, i.e., its clock, clear, preset, and next-state functions.
+         */
         struct SimulationGateFF : public SimulationGateSequential
         {
             BooleanFunction m_clock_func;
@@ -230,8 +245,14 @@ namespace hal
             void clock(const u64 current_time, std::map<std::pair<const Net*, u64>, BooleanFunction::Value>& new_events) override;
         };
 
+        /**
+         * The simulation state of a random access memory, i.e., its memory contents and its read and write ports.
+         */
         struct SimulationGateRAM : public SimulationGateSequential
         {
+            /**
+             * A single read or write port of a simulated random access memory.
+             */
             struct Port
             {
                 const Net* clock_net;
@@ -278,6 +299,9 @@ namespace hal
         BooleanFunction::Value process_clear_preset_behavior(AsyncSetResetBehavior behavior, BooleanFunction::Value previous_output);
     };
 
+    /**
+     * Creates instances of HAL's built-in simulation engine.
+     */
     class NetlistSimulatorFactory : public SimulationEngineFactory
     {
     public:

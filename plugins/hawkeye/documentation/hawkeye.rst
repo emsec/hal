@@ -2,27 +2,23 @@ HAWKEYE
 ==========================
 
 .. automodule:: hawkeye
-    :members: detect_candidates, locate_sboxes, identify_sbox
+    :members: identify_sbox
 
 .. autoclass:: hawkeye.DetectionConfiguration
     :members:
 
     .. automethod:: __init__
 
-.. autoclass:: hawkeye.RegisterCandidate
+.. autoclass:: hawkeye.CipherCandidate
     :members:
 
     .. automethod:: __init__
 
-.. autoclass:: hawkeye.RoundCandidate
+.. autoclass:: hawkeye.SBox
     :members:
 
-    .. automethod:: __init__
-
-.. autoclass:: hawkeye.SBoxCandidate
+.. autoclass:: hawkeye.SBoxStatus
     :members:
-
-    .. automethod:: __init__
 
 .. autoclass:: hawkeye.SBoxDatabase
     :members:

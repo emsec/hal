@@ -30,6 +30,9 @@
 namespace hal {
     class WaveTransform;
 
+    /**
+     * The horizontal scroll bar that moves the visible time window of the waveform canvas.
+     */
     class WaveScrollbar : public QScrollBar
     {
         const WaveTransform* mTransform;

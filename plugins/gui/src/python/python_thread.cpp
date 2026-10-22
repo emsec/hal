@@ -25,12 +25,12 @@ namespace hal {
         : QThread(parent), mScript(script), mSingleStatement(singleStatement),
           mAbortRequested(false), mSpamCount(0)
     {
-      //    qDebug() << "+++PythonThread" << hex << (quintptr) this;
+      //    qDebug() << "+++PythonThread" << QString::number((quintptr) this, 16);
     }
 
     PythonThread::~PythonThread()
     {
-      //    qDebug() << "---PythonThread" << hex << (quintptr) this;
+      //    qDebug() << "---PythonThread" << QString::number((quintptr) this, 16);
     }
 
     void PythonThread::run()

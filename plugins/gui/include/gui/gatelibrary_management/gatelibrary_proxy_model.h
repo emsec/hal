@@ -71,12 +71,12 @@ namespace hal
         /**
          * Overrides QSortFilterProxyModel::filterAcceptsRow to implement the filter logic based on the regular
          * expression stored by setFilterRegularExpression.<br>
-         * Returns <b>true</b> if the item in the row indicated by <i>sourceRow</i> and <i>sourceParent</i> should be included
+         * Returns `true` if the item in the row indicated by <i>sourceRow</i> and <i>sourceParent</i> should be included
          * in the model.
          *
          * @param sourceRow - The row in the source model
          * @param sourceParent - the source parent
-         * @returns <b>true</b> if the row should be included in the model.
+         * @returns `true` if the row should be included in the model, `false` otherwise.
          */
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
@@ -85,7 +85,7 @@ namespace hal
          *
          * @param source_left - The model index of the left element
          * @param source_right - The model index of the right element
-         * @returns <b>true</b> iff the element at source_left is considered less than the element at source_right
+         * @returns `true` iff the element at source_left is considered less than the element at source_right, `false` otherwise.
          */
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 

@@ -31,6 +31,9 @@ namespace hal {
     class WaveTransform;
     class WaveScrollbar;
 
+    /**
+     * Computes the minor and major tick spacing that best fits the currently visible time window.
+     */
     class WaveLogicTimescale
     {
         quint64 mTminor;
@@ -43,6 +46,9 @@ namespace hal {
         quint64 labelInterval() const { return mTlabel; }
     };
 
+    /**
+     * The ruler above the waveform canvas that shows the time axis.
+     */
     class WaveTimescale : public QWidget
     {
         Q_OBJECT

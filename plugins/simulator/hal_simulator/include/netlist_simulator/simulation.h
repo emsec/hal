@@ -34,6 +34,9 @@ namespace hal
 {
     class Net;
 
+    /**
+     * The result of a simulation run, i.e., the events that occurred on every net over time.
+     */
     class Simulation
     {
     public:
@@ -63,7 +66,7 @@ namespace hal
         /**
          * Get events of simulation for net identified by netId
          * @param[in] netId - ID of net for simulation
-         * @param{out] found - true simulation events for net found, false otherwise
+         * @param[out] found - `true` simulation events for net found, `false` otherwise
          * @return A vector of simulation events
          */
         std::vector<WaveEvent> get_events_by_net_id(u32 netId, bool* found=nullptr) const;

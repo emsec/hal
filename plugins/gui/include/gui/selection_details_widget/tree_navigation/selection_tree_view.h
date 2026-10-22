@@ -51,7 +51,7 @@ namespace hal
          * (e.g. through a click, this is not used to trigger a "global selection change" but rather
          *  to more specific details of an item within the complete selection).
          *
-         * @param sti - The new "selected" item, can be a nullptr if the index was not valid.
+         * @param sti - The new "selected" item, can be a `nullptr` if the index was not valid.
          */
         void triggerSelection(const ModuleItem* sti);
 
@@ -63,13 +63,11 @@ namespace hal
         void itemDoubleClicked(const ModuleItem* sti);
 
     public Q_SLOTS:
-        /**
-         * Tells its intern proxy model to filter its items based on the given string.
-         * The first index is automatically selected (if item(s) were found).
-         *
-         * @param filter_text -The text to filter the model.
-         */
-        ///void handleFilterTextChanged(const QString& filter_text);
+        // Tells its intern proxy model to filter its items based on the given string.
+        // The first index is automatically selected (if item(s) were found).
+        //
+        //     filter_text - The text to filter the model.
+        //void handleFilterTextChanged(const QString& filter_text);
 
         /**
          * Might have to change icon color if module selected, thus updating view upon this event
@@ -100,6 +98,7 @@ namespace hal
          * The constructor.
          *
          * @param parent - The widget's parent.
+         * @param isGrouping - `true` if the view shows the content of a grouping, `false` if it shows the current selection.
          */
         SelectionTreeView(QWidget* parent = nullptr, bool isGrouping = false);
 
@@ -110,7 +109,7 @@ namespace hal
 
         /**
          * Triggers the underlying model to update its data to the new selection and therefore
-         * filling the view if mVisible is set to True. If mVisible is set to False, the view's
+         * filling the view if mVisible is set to `true`. If mVisible is set to `false`, the view's
          * selection model is cleared and the view itself hides.
          *
          * @param mVisible - The bool to determine the described behaviour.
@@ -122,7 +121,7 @@ namespace hal
          * Converts a given modelIntex to the item it represents.
          *
          * @param index - The index to convert.
-         * @return The item that is represented. Returns a nullptr if the index is invalid or the conversion fails.
+         * @return The item that is represented. Returns a `nullptr` if the index is invalid or the conversion fails.
          */
         ModuleItem* itemFromIndex(const QModelIndex& index = QModelIndex()) const;
 

@@ -40,7 +40,7 @@ namespace hal
     NodeDragShadow::NodeDragShadow()
         : QGraphicsItem(), mRect(0,0,100,100)
     {
-        setAcceptedMouseButtons(0);
+        setAcceptedMouseButtons(Qt::NoButton);
     }
 
     void NodeDragShadow::start(const QPointF& posF, const QSizeF& sizeF)

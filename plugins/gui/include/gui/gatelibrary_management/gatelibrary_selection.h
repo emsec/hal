@@ -35,6 +35,9 @@ class QPushButton;
 class QCheckBox;
 
 namespace hal {
+    /**
+     * One selectable gate library, i.e., its name and the path it was loaded from.
+     */
     class GateLibrarySelectionEntry
     {
         QString mName;
@@ -48,6 +51,9 @@ namespace hal {
         QString path() const {return mPath; }
     };
 
+    /**
+     * The item model behind the gate library selection.
+     */
     class GateLibrarySelectionTable : public QAbstractTableModel
     {
         Q_OBJECT
@@ -66,6 +72,9 @@ namespace hal {
         bool isWarnSubstitute() const { return mWarnSubstitute; }
     };
 
+    /**
+     * The widget in which the user picks one of the known gate libraries or browses for a new one.
+     */
     class GateLibrarySelection : public QFrame
     {
         Q_OBJECT

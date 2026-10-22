@@ -32,6 +32,9 @@
 
 namespace hal
 {
+    /**
+     * Displays the RAM port components of the selected gate type.
+     */
     class GateLibraryFrameRAMPort : public GatelibraryComponentFrame
     {
         Q_OBJECT

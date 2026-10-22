@@ -35,6 +35,9 @@ namespace hal
     class Net;
     class BaseTreeItem;
 
+    /**
+     * Lists the modules that the selected net enters or leaves.
+     */
     class NetModuleTable : public QTableView
     {
         Q_OBJECT

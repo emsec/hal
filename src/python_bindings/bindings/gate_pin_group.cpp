@@ -11,14 +11,14 @@ namespace hal
         py_gate_pin_group.def(py::self == py::self, R"(
             Check whether two gate pin groups are equal.
 
-            :returns: True if both gate pin groups are equal, False otherwise.
+            :returns: ``True`` if both gate pin groups are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_gate_pin_group.def(py::self != py::self, R"(
             Check whether two gate pin groups are unequal.
 
-            :returns: True if both gate pin groups are unequal, False otherwise.
+            :returns: ``True`` if both gate pin groups are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -38,7 +38,7 @@ namespace hal
         py_gate_pin_group.def("get_id", &PinGroup<GatePin>::get_id, R"(
             Get the ID of the gate pin group. The ID is unique within a gate type.
 
-            :returns: The ID of the pin.
+            :returns: The ID of the pin group.
             :rtype: int
         )");
 
@@ -64,7 +64,7 @@ namespace hal
         py_gate_pin_group.def("get_direction", &PinGroup<GatePin>::get_direction, R"(
             Get the direction of the pin group.
 
-            :returns: The direction of the pin.
+            :returns: The direction of the pin group.
             :rtype: hal_py.PinDirection
         )");
 
@@ -77,21 +77,21 @@ namespace hal
         py_gate_pin_group.def("get_type", &PinGroup<GatePin>::get_type, R"(
             Get the type of the pin group.
 
-            :returns: The type of the pin.
+            :returns: The type of the pin group.
             :rtype: hal_py.PinType
         )");
 
-        py_gate_pin_group.def_property_readonly("pins", [](const PinGroup<GatePin>& self) -> std::vector<GatePin*> { return self.get_pins(nullptr); }, R"(
+        py_gate_pin_group.def_property_readonly("pins", py::cpp_function([](const PinGroup<GatePin>& self) -> std::vector<GatePin*> { return self.get_pins(nullptr); }, py::is_method(py_gate_pin_group), borrowed()), R"(
             The (ordered) pins of the pin groups.
 
             :type: list[hal_py.GatePin]
         )");
 
-        py_gate_pin_group.def("get_pins", &PinGroup<GatePin>::get_pins, py::arg("filter") = nullptr, R"(
+        py_gate_pin_group.def("get_pins", &PinGroup<GatePin>::get_pins, py::arg("filter") = nullptr, borrowed(), R"(
             Get the (ordered) pins of the pin groups.
-            The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter function to be evaluated on each pin.
+            :param lambda filter: An optional filter.
             :returns: The ordered pins.
             :rtype: list[hal_py.GatePin]
         )");
@@ -111,11 +111,11 @@ namespace hal
                 }
             },
             py::arg("index"),
-            R"(
+            borrowed(), R"(
             Get the pin specified by the given index.
 
             :param int index: The index of the pin within the pin group.
-            :returns: The pin on success, None otherwise.
+            :returns: The pin on success, ``None`` otherwise.
             :rtype: hal_py.GatePin or None
         )");
 
@@ -146,7 +146,7 @@ namespace hal
             Check whether the pin group contains the given pin.
 
             :param hal_py.GatePin pin: The pin to check.
-            :returns: True if the pin group contains the pin, True otherwise.
+            :returns: ``True`` if the pin group contains the pin, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -235,7 +235,7 @@ namespace hal
         py_gate_pin_group.def("empty", &PinGroup<GatePin>::empty, R"(
             Check whether the pin group is empty, i.e., contains no pins.
 
-            :returns: True if the pin group is empty, False otherwise.
+            :returns: ``True`` if the pin group is empty, ``False`` otherwise.
             :rtype: bool
         )");
 

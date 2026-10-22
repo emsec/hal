@@ -40,6 +40,9 @@ namespace hal {
     class WaveDataGroup;
     class WaveGraphicsCanvas;
 
+    /**
+     * The invisible root group that holds all waveforms shown in the tree.
+     */
     class WaveDataRoot : public WaveDataGroup
     {
     public:
@@ -51,6 +54,9 @@ namespace hal {
         void dump() const;
     };
 
+    /**
+     * Determines the value of a waveform at the cursor position in the background.
+     */
     class WaveValueThread : public QThread
     {
         Q_OBJECT
@@ -71,6 +77,9 @@ namespace hal {
         bool wasAborted() const { return mAbort; }
     };
 
+    /**
+     * The item model behind the waveform tree, which lists the waveforms and their groups.
+     */
     class WaveTreeModel : public QAbstractItemModel
     {
         Q_OBJECT
@@ -78,6 +87,9 @@ namespace hal {
     public:
         enum DragCommand { None, Move, Copy };
 
+        /**
+         * Defers the reordering of the waveform tree until all pending changes have been applied.
+         */
         class ReorderRequest
         {
             WaveTreeModel* mParent;

@@ -32,6 +32,9 @@ namespace hal
     class Netlist;
     class Net;
 
+    /**
+     * Shows the name, ID, and type of the selected net.
+     */
     class NetInfoTable : public GeneralTableWidget
     {
         Q_OBJECT

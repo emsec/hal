@@ -35,6 +35,9 @@
 
 namespace hal
 {
+    /**
+     * Holds the error codes that the SALEAE file readers and writers can report.
+     */
     class SaleaeStatus
     {
     public:
@@ -48,6 +51,9 @@ namespace hal
                          Ok = 0};
     };
 
+    /**
+     * The header of a SALEAE binary waveform file, which stores the value format and the number of transitions.
+     */
     class SaleaeHeader
     {
     public:
@@ -115,6 +121,9 @@ namespace hal
         void incrementTransitions() { ++mNumTransitions; }
     };
 
+    /**
+     * An in-memory buffer of waveform transitions, i.e., an array of time stamps and an array of values.
+     */
     class SaleaeDataBuffer
     {
     public:
@@ -127,13 +136,13 @@ namespace hal
         /// Number of elements in buffer
         uint64_t mCount;
 
-        /// Buffer for <nCount> transition time values
+        /// Buffer for `mCount` transition time values
         uint64_t* mTimeArray;
 
-        /// Buffer for <nCount> data values
+        /// Buffer for `mCount` data values
         int* mValueArray;
 
-        /// Returns whether buffer has data. Will be false when e.g. reading behind EOF
+        /// Returns whether buffer has data. Will be `false` when e.g. reading behind EOF
         bool isNull() const { return mCount == 0; }
 
         /// Convert data buffer from "hal " format to "halx"
@@ -143,6 +152,9 @@ namespace hal
         void dump() const;
     };
 
+    /**
+     * A single waveform transition, i.e., a time stamp together with the value assumed at that time.
+     */
     class SaleaeDataTuple
     {
     public:
@@ -162,6 +174,9 @@ namespace hal
         bool readError() const { return mValue == sReadError; }
     };
 
+    /**
+     * Reads waveform transitions from a SALEAE binary file.
+     */
     class SaleaeInputFile : public std::ifstream
     {
         SaleaeHeader mHeader;
@@ -180,7 +195,7 @@ namespace hal
         /// Get verbose error message based on internal status, empty string if no error
         std::string get_last_error() const;
 
-        /// Returns pointer to data buffer reading from current file position up to <nread> events. It is the callers responsibility to dispose the buffer eventually.
+        /// Returns pointer to data buffer reading from current file position up to `nread` events. It is the callers responsibility to dispose the buffer eventually.
         SaleaeDataBuffer* get_buffered_data(uint64_t nread);
 
 
@@ -200,6 +215,9 @@ namespace hal
     };
 
 
+    /**
+     * Writes waveform transitions into a SALEAE binary file.
+     */
     class SaleaeOutputFile : public std::ofstream
     {
         int mIndex;

@@ -35,6 +35,9 @@
 
 namespace hal {
 
+    /**
+     * The dialog in which the user picks the grouping that elements are added to.
+     */
     class GroupingDialog : public QDialog
     {
         Q_OBJECT
@@ -57,17 +60,17 @@ namespace hal {
         /**
          * Get the flag that states if a new grouping should be created.
          *
-         * @return True if a new grouping should be created, False otherwise.
+         * @return `true` if a new grouping should be created, `false` otherwise.
          */
         bool isNewGrouping() const { return mNewGrouping; }
 
     public Q_SLOTS:
         /**
          * Enables the dialog buttons if groupId is not zero and vice versa. If groupId is not zero and
-         * doubleClick is true, the dialog is accepted.
+         * doubleClick is `true`, the dialog is accepted.
          *
          * @param groupId - The selected id.
-         * @param doubleClick - True if grouping table view emitted doubleClicked signal.
+         * @param doubleClick - `true` if grouping table view emitted doubleClicked signal.
          */
         void handleGroupingSelected(u32 groupId, bool doubleClick);
 

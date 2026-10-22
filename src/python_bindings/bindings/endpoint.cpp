@@ -8,7 +8,7 @@ namespace hal
             An endpoint comprises the pin of a gate, the respective gate, and the connected net.
         )");
 
-        py_endpoint.def_property_readonly("gate", &Endpoint::get_gate, R"(
+        py_endpoint.def_property_readonly("gate", py::cpp_function(&Endpoint::get_gate, py::is_method(py_endpoint), borrowed()), R"(
             The gate associated with the endpoint.
 
             :type: hal_py.Gate
@@ -17,44 +17,44 @@ namespace hal
         py_endpoint.def(py::self == py::self, R"(
             Check whether two endpoints are equal.
 
-            :returns: True if both endpoints are equal, False otherwise.
+            :returns: ``True`` if both endpoints are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_endpoint.def(py::self != py::self, R"(
             Check whether two endpoints are unequal.
 
-            :returns: True if both endpoints are unequal, False otherwise.
+            :returns: ``True`` if both endpoints are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
-        py_endpoint.def("get_gate", &Endpoint::get_gate, R"(
+        py_endpoint.def("get_gate", &Endpoint::get_gate, borrowed(), R"(
             Get the gate associated with the endpoint.
 
             :returns: The gate.
             :rtype: hal_py.Gate
         )");
 
-        py_endpoint.def_property_readonly("pin", &Endpoint::get_pin, R"(
+        py_endpoint.def_property_readonly("pin", py::cpp_function(&Endpoint::get_pin, py::is_method(py_endpoint), borrowed()), R"(
             The pin associated with the endpoint.
 
             :type: hal_py.GatePin
         )");
 
-        py_endpoint.def("get_pin", &Endpoint::get_pin, R"(
-            Get pin associated with the endpoint.
+        py_endpoint.def("get_pin", &Endpoint::get_pin, borrowed(), R"(
+            Get the pin associated with the endpoint.
 
             :returns: The pin.
             :rtype: hal_py.GatePin
         )");
 
-        py_endpoint.def_property_readonly("net", &Endpoint::get_net, R"(
+        py_endpoint.def_property_readonly("net", py::cpp_function(&Endpoint::get_net, py::is_method(py_endpoint), borrowed()), R"(
             The net associated with the endpoint.
 
             :type: hal_py.Net
         )");
 
-        py_endpoint.def("get_net", &Endpoint::get_net, R"(
+        py_endpoint.def("get_net", &Endpoint::get_net, borrowed(), R"(
             Get the net associated with the endpoint.
 
             :returns: The net.
@@ -62,7 +62,7 @@ namespace hal
         )");
 
         py_endpoint.def_property_readonly("source_pin", &Endpoint::is_source_pin, R"(
-            True if the pin of the endpoint is a source (output) pin, False otherwise.
+            ``True`` if the pin of the endpoint is a source (output) pin, ``False`` otherwise.
 
             :type: bool
         )");
@@ -70,12 +70,12 @@ namespace hal
         py_endpoint.def("is_source_pin", &Endpoint::is_source_pin, R"(
             Checks whether the pin of the endpoint is a source (output) pin.
 
-            :returns: True if the endpoint is an source (output) pin, False otherwise.
+            :returns: ``True`` if the endpoint is an source (output) pin, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_endpoint.def_property_readonly("destination_pin", &Endpoint::is_destination_pin, R"(
-            True if the pin of the endpoint is a destination (input) pin, False otherwise.
+            ``True`` if the pin of the endpoint is a destination (input) pin, ``False`` otherwise.
 
             :type: bool
         )");
@@ -83,7 +83,7 @@ namespace hal
         py_endpoint.def("is_destination_pin", &Endpoint::is_destination_pin, R"(
             Checks whether the pin of the endpoint is a destination (input) pin.
 
-            :returns: True if the endpoint is an destination (input) pin, False otherwise.
+            :returns: ``True`` if the endpoint is an destination (input) pin, ``False`` otherwise.
             :rtype: bool
         )");
     }

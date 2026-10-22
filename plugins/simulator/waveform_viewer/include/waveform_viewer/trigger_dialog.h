@@ -36,6 +36,9 @@ class QRadioButton;
 namespace hal {
     class WaveData;
 
+    /**
+     * The dialog in which the user configures the transitions that a trigger waveform reacts to.
+     */
     class TriggerDialog : public QDialog
     {
         Q_OBJECT

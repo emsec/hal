@@ -35,6 +35,9 @@
 
 namespace hal
 {
+    /**
+     * The tree view that lists the pins and pin groups of the selected gate type.
+     */
     class PinTreeView : public QTreeView
     {
         Q_OBJECT

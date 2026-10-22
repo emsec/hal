@@ -41,7 +41,8 @@ namespace hal
         /**
          * Constructor.
          *
-         * @param svg_data - The svg data to create the QIcon from
+         * @param dataEnabled - The svg data to create the enabled QIcon from
+         * @param dataDisabled - The svg data to create the disabled QIcon from
          */
         explicit SvgIconEngine(const QByteArray& dataEnabled, const QByteArray& dataDisabled);
 

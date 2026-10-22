@@ -41,7 +41,7 @@ namespace hal
      * @brief One item in the welcome screen's RecentFiles section.
      *
      * One entry in the RecentFileWidget. It represents one recently used file and can be clicked to open the netlist
-     * (i.e. parse hdl file or open .hal file) of the file.
+     * (i.e. parse hdl file or open `.hal` file) of the file.
      */
     class RecentFileItem : public QFrame
     {
@@ -66,7 +66,7 @@ namespace hal
          *
          * @param event - The QEvent
          */
-        void enterEvent(QEvent* event) override;
+        void enterEvent(QEnterEvent *event) override;
 
         /**
          * Handles that the mouse leaves the widget.

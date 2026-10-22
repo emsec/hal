@@ -9,7 +9,7 @@ if "__decorated__" not in dir():
 		@wraps(f)
 		def decorated(*args, **kwargs):
 			result = f(*args, **kwargs)
-			hal_py.log_info("Function: {}, {}-ID: {}".format(message, object_type, args[0].id))
+			hal_py.log_info("python_context", "Function: {}, {}-ID: {}".format(message, object_type, args[0].id))
 			return result
 		return decorated
 
@@ -26,7 +26,7 @@ if "__decorated__" not in dir():
 			result_id = -1
 			if result is not None:
 				result_id = result.id
-			hal_py.log_info("Function: {}, {}-ID: {}".format(message, object_type, result_id))
+			hal_py.log_info("python_context", "Function: {}, {}-ID: {}".format(message, object_type, result_id))
 			return result
 		return decorated
 
@@ -42,7 +42,7 @@ if "__decorated__" not in dir():
 			else:
 				sorted_result = sorted(result, key=lambda gate: gate.id)
 				log_string += "".join([str(g.id) + ", " for g in sorted_result])[:-2] + "}"
-			hal_py.log_info(log_string)
+			hal_py.log_info("python_context", log_string)
 			return result
 		return decorated
 
@@ -58,7 +58,7 @@ if "__decorated__" not in dir():
 			else:
 				sorted_result = sorted(result, key=lambda net: net.id)
 				log_string += "".join([str(n.id) + ", " for n in sorted_result])[:-2] + "}"
-			hal_py.log_info(log_string)
+			hal_py.log_info("python_context", log_string)
 			return result
 		return decorated
 
@@ -66,7 +66,7 @@ if "__decorated__" not in dir():
 		@wraps(f)
 		def decorated(*args, **kwargs):
 			result = f(*args, **kwargs)
-			hal_py.log_info("Function: {}, Module-ID: {}".format(message, result.id))
+			hal_py.log_info("python_context", "Function: {}, Module-ID: {}".format(message, result.id))
 			return result
 		return decorated
 
@@ -85,7 +85,7 @@ if "__decorated__" not in dir():
 				log_string += "".join([str(g.id) + ", " for g in sorted_gate_ids])[:-2] + "}"
 			else:
 				log_string += "empty}"
-			hal_py.log_info(log_string)
+			hal_py.log_info("python_context", log_string)
 			return result
 		return decorated
 
@@ -101,7 +101,7 @@ if "__decorated__" not in dir():
 				log_string += "".join([str(g.id) + ", " for g in sorted_gate_ids])[:-2] + "}"
 			else:
 				log_string += "empty}"
-			hal_py.log_info(log_string)
+			hal_py.log_info("python_context", log_string)
 			return result
 		return decorated
 
@@ -115,7 +115,7 @@ if "__decorated__" not in dir():
 			else:
 				sorted_modules = sorted(result, key=lambda module: module.id)
 				log_string += "".join([str(mod.id) + ", " for mod in sorted_modules])[:-2] + "}"
-			hal_py.log_info(log_string)
+			hal_py.log_info("python_context", log_string)
 			return result
 		return decorated
 
@@ -124,7 +124,7 @@ if "__decorated__" not in dir():
 		def decorated(*args, **kwargs):
 			result = f(*args, **kwargs)
 			log_string = "Function: {}, Grouping-Id: ".format(message) + str(result.id)
-			hal_py.log_info(log_string)
+			hal_py.log_info("python_context", log_string)
 			return result
 		return decorated
 
@@ -139,7 +139,7 @@ if "__decorated__" not in dir():
 				log_string += "".join([str(endpoint.gate.id) + ", " for endpoint in sorted_endpoints])[:-2] + "}"
 			else:
 				log_string += "empty}"
-			hal_py.log_info(log_string)
+			hal_py.log_info("python_context", log_string)
 			return result
 		return decorated
 
@@ -149,9 +149,9 @@ if "__decorated__" not in dir():
 			result = f(*args, **kwargs)
 			result_gate = result.gate
 			if result_gate is not None:
-				hal_py.log_info("Function: {}, Gate-ID: {}, Predecessor-ID: {}".format(message, str(args[0].id), result_gate.id))
+				hal_py.log_info("python_context", "Function: {}, Gate-ID: {}, Predecessor-ID: {}".format(message, str(args[0].id), result_gate.id))
 			else:
-				hal_py.log_info("Function: {}, Gate-ID: {}, Predecessor-ID: -1".format(message, str(args[0].id)))
+				hal_py.log_info("python_context", "Function: {}, Gate-ID: {}, Predecessor-ID: -1".format(message, str(args[0].id)))
 			return result
 		return decorated
 
@@ -163,9 +163,9 @@ if "__decorated__" not in dir():
 		def decorated(*args, **kwargs):
 			result = f(*args, **kwargs)
 			if result.gate is None:
-				hal_py.log_info("Function: {}".format(message) + ", Gate-ID: {empty}")
+				hal_py.log_info("python_context", "Function: {}".format(message) + ", Gate-ID: {empty}")
 			else:
-				hal_py.log_info("Function: {}, Gate-ID: {}".format(message, result.gate.id))
+				hal_py.log_info("python_context", "Function: {}, Gate-ID: {}".format(message, result.gate.id))
 			return result
 		return decorated
 
@@ -179,7 +179,7 @@ if "__decorated__" not in dir():
 			else:
 				sorted_endpoints = sorted(result, key=lambda ep: ep.gate.id)
 				log_string += "".join([str(endpoint.gate.id) + ", " for endpoint in sorted_endpoints])[:-2] + "}"
-			hal_py.log_info(log_string)
+			hal_py.log_info("python_context", log_string)
 			return result
 		return decorated
 
@@ -192,7 +192,7 @@ if "__decorated__" not in dir():
 			assigned_gate = kwargs.get("gate")
 			if assigned_gate is None:
 				assigned_gate = args[1]
-			hal_py.log_info("Function: {}, {}-ID: {}, Gate-ID: {}".format(message, object_type, args[0].id, assigned_gate.id))
+			hal_py.log_info("python_context", "Function: {}, {}-ID: {}, Gate-ID: {}".format(message, object_type, args[0].id, assigned_gate.id))
 			return result
 		return decorated
 
@@ -210,7 +210,7 @@ if "__decorated__" not in dir():
 					log_string += "".join([str(g) + ", " for g in sorted_gates])[:-2] + "}"
 				else:
 					log_string += "".join([str(g.id) + ", " for g in sorted_gates])[:-2] + "}"
-			hal_py.log_info(log_string)
+			hal_py.log_info("python_context", log_string)
 			return  result
 		return decorated
 
@@ -222,7 +222,7 @@ if "__decorated__" not in dir():
 			if gate is None:
 				gate = args[1]
 			log_string = "Function: " + message + ", " + object_type + "-ID: " + str(args[0].id) + ", Gate-ID: " + str(gate.id)
-			hal_py.log_info(log_string)
+			hal_py.log_info("python_context", log_string)
 			return result
 		return decorated
 
@@ -234,7 +234,7 @@ if "__decorated__" not in dir():
 			assigned_gate_id = kwargs.get("gate_id")
 			if assigned_gate_id is None:
 				assigned_gate_id = args[1]
-			hal_py.log_info("Function: {}, Grouping-ID: {}, Gate-ID: {}".format(message, args[0].id, assigned_gate_id))
+			hal_py.log_info("python_context", "Function: {}, Grouping-ID: {}, Gate-ID: {}".format(message, args[0].id, assigned_gate_id))
 			return result
 		return decorated
 
@@ -247,7 +247,7 @@ if "__decorated__" not in dir():
 			# if gate_id is None:
 			# 	gate_id = args[1]
 			log_string = "Function: {}, Grouping-ID: {}, Gate-ID: {}".format(message, args[0].id, gate_id)
-			hal_py.log_info(log_string)
+			hal_py.log_info("python_context", log_string)
 			return result
 		return decorated
 
@@ -264,7 +264,7 @@ if "__decorated__" not in dir():
 			else:
 				net_id = kwargs.get("net").id
 			log_string = "Function: {}, Grouping-ID: {}, Net-ID: {}".format(message, args[0].id, net_id)
-			hal_py.log_info(log_string)
+			hal_py.log_info("python_context", log_string)
 			return result
 		return decorated
 
@@ -275,9 +275,9 @@ if "__decorated__" not in dir():
 		def decorated(*args, **kwargs):
 			result = f(*args, **kwargs)
 			if result is not None:
-				hal_py.log_info("Function: {}, Gate-ID: {}".format(message, result.id))
+				hal_py.log_info("python_context", "Function: {}, Gate-ID: {}".format(message, result.id))
 			else:
-				hal_py.log_info("Function: {}, Gate-ID: -1".format(message))
+				hal_py.log_info("python_context", "Function: {}, Gate-ID: -1".format(message))
 			return result
 		return decorated
 
@@ -340,4 +340,4 @@ if "__decorated__" not in dir():
 	hal_py.Grouping.assign_net_by_id = grouping_assign_net("Grouping.assign_net_by_id", hal_py.Grouping.assign_net_by_id)
 
 else:
-	hal_py.log_info("Already decorated. Not applying again.")
+	hal_py.log_info("python_context", "Already decorated. Not applying again.")

@@ -134,19 +134,20 @@ namespace hal
          * submodules.
          *
          * @param id - The id of the module to unfold
+         * @param plc - Hint on where to place the gates and submodules that replace the module
          */
         void unfoldModule(const u32 id, const PlacementHint& plc);
 
         /**
          * Check if the context is empty i.e. does not contain Module%s or Gate%s.
          *
-         * @returns <b>true</b> if the context is empty.
+         * @returns `true` if the context is empty, `false` otherwise.
          */
         bool empty() const;
 
         /**
          * Checks whether the context will be empty after pending changes are applied.
-         * @return <b>true</b> if the context is empty.
+         * @return `true` if the context is empty, `false` otherwise.
          */
         bool willBeEmptied() const;
 
@@ -154,7 +155,7 @@ namespace hal
          * Checks if the context represents the content of the given module i.e. after double-clicking the module item.
          *
          * @param id - The id of the module
-         * @returns <b>true</b> if the context shows the content of the module
+         * @returns `true` if the context shows the content of the module, `false` otherwise.
          */
         bool isShowingModule(const u32 id) const;
 
@@ -162,7 +163,7 @@ namespace hal
          * Checks if the context represents the content of the given module i.e. after double-clicking the module item. <br>
          * In some cases it is necessary that the check is performed on a previous state e.g. if a gate was newly assigned to the
          * netlist and the affected GraphContexts should be discovered now. Since the comparison is done on the current
-         * netlist but the context does not contain the gate yet, this function will falsely return <b>false</b> even
+         * netlist but the context does not contain the gate yet, this function will falsely return `false` even
          * on the right GraphContexts. Therefore the new gate must be manually removed from the comparison by passing
          * it in the minus_gates list. <br>
          * Accordingly, it is also possible to add Gate%s to the comparison (e.g. after removing them from the module)
@@ -173,7 +174,7 @@ namespace hal
          * @param minus_gates - The ids of the Gate%s that are removed for comparison
          * @param plus_modules - The ids of the Module%s that are added for comparison
          * @param plus_gates - The ids of the Gate%s that are added for comparison
-         * @returns <b>true</b> if the context Show%s the content of the module.
+         * @returns `true` if the context Show%s the content of the module, `false` otherwise.
          */
         bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
@@ -215,7 +216,7 @@ namespace hal
          * Given a net, this function checks if any of the Net's source Gate%s appear in the context.
          *
          * @param mNetId - The id of the net
-         * @returns <b>true</b> if a source gate of the net is shown
+         * @returns `true` if a source gate of the net is shown, `false` otherwise.
          */
         bool isShowingNetSource(const u32 mNetId) const;
 
@@ -223,14 +224,14 @@ namespace hal
          * Given a net, this functions checks if any of the Net's destination gates appear in the context.
          *
          * @param mNetId - The id of the net
-         * @returns <b>true</b> if a destination gate of the net is shown
+         * @returns `true` if a destination gate of the net is shown, `false` otherwise.
          */
         bool isShowingNetDestination(const u32 mNetId) const;
 
         /**
          * Checks whether there is only the folded top_module in the context
          * which makes other time consumptive tests unnecessary
-         * @return <b>true</b> If here is only the folded top_module in the context
+         * @return `true` If here is only the folded top_module in the context, `false` otherwise.
          */
         bool isShowingFoldedTopModule() const;
 
@@ -238,7 +239,7 @@ namespace hal
          * Given a net, this function returns the first visible source node.
          *
          * @param n - Pointer to net
-         * @returns <b>true</b> The first visibible source node, might be Node::None
+         * @returns `true` The first visibible source node, might be Node::None, `false` otherwise.
          */
         Node getNetSource(const Net* n) const;
 
@@ -246,7 +247,7 @@ namespace hal
          * Given a net, this function returns the first visible destination node.
          *
          * @param n - Pointer to net
-         * @returns <b>true</b> The first visibible destination node, might be Node::None
+         * @returns `true` The first visibible destination node, might be Node::None, `false` otherwise.
          */
         Node getNetDestination(const Net* n) const;
 
@@ -288,7 +289,7 @@ namespace hal
         /**
          * Get the name of the context with dirty state.
          *
-         * @returns the context's name with an asterisk if the dirty is set to true.
+         * @returns the context's name with an asterisk if the dirty is set to `true`.
          */
         QString getNameWithDirtyState() const;
 
@@ -315,7 +316,7 @@ namespace hal
 
         /**
          * Get the used GraphLayouter.
-         * Returns a <i>nullptr</i> if no layouter was configured yet.
+         * Returns a `nullptr` if no layouter was configured yet.
          *
          * @returns the used GraphLayouter
          */
@@ -333,7 +334,7 @@ namespace hal
         /**
          * Returns whether the scene is in an updating process (i.e. layouter process) or not.
          *
-         * @returns <b>true</b> while the scene updates.
+         * @returns `true` while the scene updates, `false` otherwise.
          */
         bool sceneUpdateInProgress() const;
 
@@ -366,7 +367,7 @@ namespace hal
          * Writes the context (its modules, gates, nets) to a given json object.
          *
          * @param json - The object to write to
-         * @param int - ParentId of the graphContext.
+         * @param parentId - ParentId of the graphContext.
          */
         void writeToFile(QJsonObject& json, int parentId);
 
@@ -374,7 +375,7 @@ namespace hal
          * Reads a context from a given json object.
          *
          * @param json - The object to read from.
-         * @return true if reading was successful, false otherwise
+         * @return `true` if reading was successful, `false` otherwise
          */
         bool readFromFile(const QJsonObject& json);
 

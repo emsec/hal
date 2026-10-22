@@ -3,6 +3,7 @@
 #include "gui/comment_system/widgets/comment_dialog.h"
 #include "gui/searchbar/searchable_label.h"
 #include "gui/gui_globals.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 
 #include <QToolBar>
 #include <QVBoxLayout>
@@ -84,10 +85,19 @@ namespace hal
             while (mTextEdit->find(regExp, options))
             {
                 found = true; // just return if something is found, position doesnt matter
+                QTextCursor cur = mTextEdit->textCursor();
+                if (cur.anchor() == cur.position()) // zero-length match
+                {
+                    if (!cur.movePosition(QTextCursor::NextCharacter))
+                        break; // end of document reached
+                    mTextEdit->setTextCursor(cur);
+                    continue;
+                }
+
                 QTextEdit::ExtraSelection extra;
                 extra.format.setForeground(QBrush(color));
                 extra.format.setBackground(mBackgroundColor);
-                extra.cursor = mTextEdit->textCursor();
+                extra.cursor = cur;
                 extraSelections.append(extra);
             }
         }
@@ -125,14 +135,14 @@ namespace hal
         // TODO: replace fixed sizes (put them in stylesheet / compute them?)
         mLayout = new QVBoxLayout(this);
         mLayout->setSpacing(0);
-        mLayout->setMargin(0);
+        QtCompat::setMarginWidth(mLayout,0);
 
         // top part
         mTopWidget = new QWidget(this);
         mTopWidget->setFixedHeight(iconSize.height()+5); // just some spacing
         mTopLayout = new QHBoxLayout(mTopWidget);
         mTopLayout->setSpacing(0);
-        mTopLayout->setMargin(0);
+        QtCompat::setMarginWidth(mTopLayout,0);
 
         mHeader = new SearchableLabel(this);
         mHeader->setStyleSheet("font-weight: bold;");

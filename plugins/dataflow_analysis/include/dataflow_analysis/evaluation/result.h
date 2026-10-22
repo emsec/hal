@@ -33,11 +33,20 @@ namespace hal
 {
     namespace dataflow
     {
+        /**
+         * The evaluation phase of dataflow analysis, which ranks the candidate groupings produced by the processing phase and merges them into one result.
+         */
         namespace evaluation
         {
+            /**
+             * The outcome of one iteration of the evaluation phase, i.e., the merged grouping and whether it is already final.
+             */
             struct Result
             {
+                /** The grouping that resulted from merging the candidate groupings of this iteration. */
                 std::shared_ptr<Grouping> merged_result;
+
+                /** Set `true` if no further iteration can improve the result, `false` otherwise. */
                 bool is_final_result;
             };
 

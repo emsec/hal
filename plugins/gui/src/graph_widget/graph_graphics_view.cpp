@@ -57,6 +57,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QMimeData>
+#include <QPixmap>
 #include <QScrollBar>
 #include <QStyleOptionGraphicsItem>
 #include <QWheelEvent>
@@ -262,7 +263,7 @@ namespace hal
             return;
 
         if ((event->modifiers() == mPanModifier && event->button() == Qt::LeftButton) ||
-                (event->button() == Qt::MidButton && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
+                (event->button() == Qt::MiddleButton && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
         {
             mMovePosition = event->pos();
         }
@@ -314,7 +315,7 @@ namespace hal
         }
 
         if ((event->buttons().testFlag(Qt::LeftButton) && event->modifiers() == mPanModifier) ||
-                (event->buttons().testFlag(Qt::MidButton) && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
+                (event->buttons().testFlag(Qt::MiddleButton) && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
         {
             QScrollBar* hBar  = horizontalScrollBar();
             QScrollBar* vBar  = verticalScrollBar();
@@ -330,10 +331,15 @@ namespace hal
                 QDrag* drag         = new QDrag(this);
                 QMimeData* mimeData = new QMimeData;
 
-                // TODO set MIME type and icon
-                mimeData->setText("dragTest");
+                // the drop side recognises the drag by its source and action, the mime data only has to exist; a text
+                // would be drawn next to the cursor by the system, so a private type without content is used instead
+                mimeData->setData("application/x-hal-graph-node", QByteArray());
                 drag->setMimeData(mimeData);
-                // drag->setPixmap(iconPixmap);
+
+                // the scene draws the node being moved itself, the system should draw nothing
+                QPixmap nothing(1, 1);
+                nothing.fill(Qt::transparent);
+                drag->setPixmap(nothing);
 
                 // enable DragMoveEvents until mouse released
                 drag->exec(Qt::MoveAction);
@@ -437,7 +443,7 @@ namespace hal
     {
         if (QApplication::keyboardModifiers() == mZoomModifier)
         {
-            if (event->orientation() == Qt::Vertical)
+            if (event->angleDelta().y() != 0)
             {
                 qreal angle  = event->angleDelta().y();
                 qreal factor = qPow(mZoomFactorBase, angle);
@@ -694,15 +700,6 @@ namespace hal
                                             gSelectionRelay->selectedNetsVector());
         if (gPythonContext->pythonThread())
             gPythonContext->pythonThread()->unlock();
-    }
-
-    void GraphGraphicsView::updateMatrix(const int delta)
-    {
-        qreal scale = qPow(2.0, delta / 100.0);
-
-        QMatrix matrix;
-        matrix.scale(scale, scale);
-        setMatrix(matrix);
     }
 
     void GraphGraphicsView::toggleAntialiasing()
@@ -1560,15 +1557,19 @@ namespace hal
         for (const Module* m : modSet)
             if (m) modDepth.insertMulti(m->get_submodule_depth(),m);
 
-        QMapIterator<int,const Module*> it(modDepth);
-        it.toBack();
-        while (it.hasPrevious())
+        if (!modDepth.empty())
         {
-            it.previous();
-            const Module* m = it.value();
-            ActionFoldModule* act = new ActionFoldModule(m->get_id());
-            act->setContextId(context->id());
-            act->exec();
+            auto it = modDepth.constEnd();
+            for (;;)
+            {
+                --it;
+                const Module* m = it.value();
+                ActionFoldModule* act = new ActionFoldModule(m->get_id());
+                act->setContextId(context->id());
+                act->exec();
+                if (it == modDepth.constBegin())
+                    break;
+            }
         }
     }
 

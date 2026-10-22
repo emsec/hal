@@ -39,6 +39,9 @@
 
 namespace hal
 {
+    /**
+     * The dialog in which the search options are configured.
+     */
     class SearchOptionsDialog : public QDialog
     {
         Q_OBJECT

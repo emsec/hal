@@ -4,6 +4,9 @@
 
 namespace hal
 {
+    /**
+     * The plugin that provides the GENLIB gate library writer.
+     */
     class PLUGIN_API GenlibWriterPlugin : public BasePluginInterface
     {
     public:

@@ -46,6 +46,9 @@ namespace hal {
         bool filterAcceptsRow(int irow, const QModelIndex &parentInx) const override;
     };
 */
+    /**
+     * The status line of the project directory dialog, which tells the user whether the selected directory is a valid project.
+     */
     class ProjectDirDialogStatus : public QFrame
     {
         Q_OBJECT;
@@ -60,6 +63,9 @@ namespace hal {
         void setMessage(const QString& path, FileManager::DirectoryStatus stat);
     };
 
+    /**
+     * The dialog in which the user picks the directory of the project to open.
+     */
     class ProjectDirDialog : public QFileDialog
     {
         Q_OBJECT

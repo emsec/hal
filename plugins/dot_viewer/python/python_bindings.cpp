@@ -26,7 +26,7 @@ namespace hal
 #endif    // ifdef PYBIND11_MODULE
 
         py::class_<DotViewerPlugin, RawPtrWrapper<DotViewerPlugin>, BasePluginInterface> py_dotviewer_plugin(
-            m, "DotViewerPlugin", R"(This class provides an interface to integrate a .dot viewer as a plugin within the HAL framework.)");
+            m, "DotViewerPlugin", R"(This class provides an interface to integrate a ``.dot`` viewer as a plugin within the HAL framework.)");
 
         py_dotviewer_plugin.def_property_readonly("name", &DotViewerPlugin::get_name, R"(
             The name of the plugin.
@@ -103,7 +103,7 @@ namespace hal
 
             :param pathlib.Path path: The path to the ``.dot`` file.
             :param str creator_plugin: The name of plugin that created the ``.dot`` file. Will try to detect from content or query by popup if empty.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 

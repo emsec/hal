@@ -48,6 +48,9 @@ namespace hal {
         Q_OBJECT
     private:
 
+        /**
+         * One row of the LUT truth table, i.e., an input combination together with the resulting output.
+         */
         struct LutEntry
         {
             QVector<u8> inputBits; // 0 or 1 per entry
@@ -105,7 +108,7 @@ namespace hal {
          * @param index - The model index
          * @param value - The value to set
          * @param role - The access role
-         * @returns <b>true</b> on success
+         * @returns `true` on success, `false` otherwise.
          */
         bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 

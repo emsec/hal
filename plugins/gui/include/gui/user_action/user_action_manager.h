@@ -99,7 +99,7 @@ namespace hal
         /**
          * Tests whether actions are currently recorded.
          *
-         * @return True if it is currently recording, false otherwise.
+         * @return `true` if it is currently recording, `false` otherwise.
          */
         bool isRecording() const;
 
@@ -107,7 +107,7 @@ namespace hal
          * Tests whether actions are currently recorded and
          * at least one command has been executed
          *
-         * @return True if there are recorded and executed actions, False otherwise.
+         * @return `true` if there are recorded and executed actions, `false` otherwise.
          */
         bool hasRecorded() const;
 
@@ -159,7 +159,7 @@ namespace hal
 
     public Q_SLOTS:
         /**
-         * Deletes current dumpAction if parameter is set to true.
+         * Deletes current dumpAction if parameter is set to `true`.
          *
          * @param wantDump - Decides if current dumpAction is to be deleted.
          */
@@ -170,10 +170,10 @@ namespace hal
 
     Q_SIGNALS:
         /**
-         * Q_SIGNAL that is emitted when undoLastAction() is called. The parameter is set to true
+         * Q_SIGNAL that is emitted when undoLastAction() is called. The parameter is set to `true`
          * if the last action could be undone.
          *
-         * @param yesWeCan - True if last action could be undone.
+         * @param yesWeCan - `true` if last action could be undone.
          */
         void canUndoLastAction(bool yesWeCan);
 

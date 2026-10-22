@@ -56,6 +56,9 @@ namespace hal {
         /**
          * The constructor.
          *
+         * @param selectable - The ids of the gates that can be selected, an empty set makes all gates selectable.
+         * @param title - The window title of the dialog.
+         * @param receiver - The receiver for graphical picker, picker will be hidden if `nullptr`
          * @param parent - The dialog's parent.
          */
 
@@ -80,11 +83,11 @@ namespace hal {
         /**
          *
          * Checks if the selected module id is valid (not excluded). If yes and the doubleClick
-         * parameter is set to True, the dialog is accepted. If doubleClick is False, the dialog
+         * parameter is set to `true`, the dialog is accepted. If doubleClick is `false`, the dialog
          * buttons will be enabled.
          *
          * @param id - The selected id.
-         * @param doubleClick - True to accept the dialog when id is valid. False to enable buttons.
+         * @param doubleClick - `true` to accept the dialog when id is valid. `false` to enable buttons.
          */
         void handleTableSelection(u32 id, bool doubleClick);
 
@@ -102,7 +105,7 @@ namespace hal {
 
         /**
          * Indicates that user has activated graphical gate picker mode.
-         * @return true if picker mode activated, false otherwise.
+         * @return `true` if picker mode activated, `false` otherwise.
          */
         bool pickerModeActivated() const { return mPickerModeActivated; }
     private:

@@ -37,7 +37,7 @@ namespace hal
      *
      * The following sections are distinguished and their color can be
      * configured in the qss file: <ul>
-     *   <li> Python Keywords (e.g. if, and, break, class, True, ...)
+     *   <li> Python Keywords (e.g. if, and, break, class, `true`, ...)
      *   <li> Operators (e.g. =, +, -, ==, &, <<, ...)
      *   <li> Brackets ( round brackets (), curly brackets {} and square brackets [])
      *   <li> Single Quoted String ('string')
@@ -70,6 +70,9 @@ namespace hal
     private:
         int closeMultilineComment(const QString& text, const QRegularExpression& delimiter, const int offset = 0);
 
+        /**
+         * A single syntax highlighting rule, i.e., the pattern to match and the format to apply to it.
+         */
         struct HighlightingRule
         {
             QRegularExpression mPattern;

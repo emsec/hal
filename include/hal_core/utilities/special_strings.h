@@ -30,6 +30,8 @@
 namespace hal
 {
     /**
+     * Contains the string types used throughout HAL, in particular a case-insensitive string.
+     *
      * @ingroup utilities
      */
     namespace core_strings
@@ -65,7 +67,7 @@ namespace hal
              * 
              * @param[in] c1 - The first character.
              * @param[in] c2 - The second character.
-             * @returns True if equal, false otherwise.
+             * @returns `true` if equal, `false` otherwise.
              */
             static bool eq(char c1, char c2)
             {
@@ -77,7 +79,7 @@ namespace hal
              * 
              * @param[in] c1 - The first character.
              * @param[in] c2 - The second character.
-             * @returns True if unequal, false otherwise.
+             * @returns `true` if unequal, `false` otherwise.
              */
             static bool ne(char c1, char c2)
             {
@@ -89,7 +91,7 @@ namespace hal
              * 
              * @param[in] c1 - The first character.
              * @param[in] c2 - The second character.
-             * @returns True if lower, false otherwise.
+             * @returns `true` if lower, `false` otherwise.
              */
             static bool lt(char c1, char c2)
             {
@@ -124,7 +126,7 @@ namespace hal
              * @param[in] s - The character array to search in.
              * @param[in] n - The size of the character array.
              * @param[in] a - The character to search for.
-             * @returns A pointer to the position of 'a' within 's' or a 'nullptr'.
+             * @returns A pointer to the position of 'a' within 's' or a `nullptr`.
              */
             static const char* find(const char* s, int n, char a)
             {
@@ -146,6 +148,9 @@ namespace hal
 
 namespace std
 {
+    /**
+     * Hash specialization that allows a case-insensitive string to be used as a key of an unordered container.
+     */
     template<>
     struct hash<hal::core_strings::CaseInsensitiveString>
     {

@@ -38,6 +38,9 @@ namespace hal {
     class Gate;
     class Net;
 
+    /**
+     * The values that a set of nets assume at one point in time, together with the duration until the next event.
+     */
     class SimulationInputNetEvent : public std::unordered_map<const Net*,BooleanFunction::Value>
     {
         u64 mSimulationDuration;
@@ -46,11 +49,17 @@ namespace hal {
         void set_simulation_duration(u64 t) { mSimulationDuration = t; }
     };
 
+    /**
+     * The complete input of a simulation run, i.e., the simulated gates, the clocks, and the stimuli applied to the input nets.
+     */
     class SimulationInput {
 
     public:
         enum DirectionType { Undefined, InputOnly, OutputOnly, Mixed};
 
+        /**
+         * A clock signal, described by its net, its period, and its start value.
+         */
         struct Clock
         {
             const Net* clock_net;
@@ -59,6 +68,9 @@ namespace hal {
             u64 period() const { return switch_time * 2; }
         };
 
+        /**
+         * A group of nets of the simulated netlist that belong together, e.g., the pins of a pin group.
+         */
         struct NetGroup
         {
             DirectionType direction;
@@ -93,20 +105,20 @@ namespace hal {
 
         /**
          * Checks whether essential data for simulation has been provided (gates, clock, input_nets)
-         * @return true if essential data is present, false otherwise
+         * @return `true` if essential data is present, `false` otherwise
          */
         bool is_ready() const;
 
         /**
          * Checks whether gates have been selected for simulation
-         * @return true if at least one gate is in simulation set, false otherwise
+         * @return `true` if at least one gate is in simulation set, `false` otherwise
          */
         bool has_gates() const;
 
         /**
          * Checks whether a gate is part of the simulation set
          * @param[in] g the gate
-         * @return true if part, false otherwise
+         * @return `true` if part, `false` otherwise
          */
         bool contains_gate(const Gate* g) const;
 
@@ -125,7 +137,7 @@ namespace hal {
         /**
          * Tests whether net has been selected as clock
          * @param[in] n pointer to net
-         * @return true if net has been selected as clock, false otherwise
+         * @return `true` if net has been selected as clock, `false` otherwise
          */
         bool is_clock(const Net* n) const;
 
@@ -143,7 +155,7 @@ namespace hal {
         /**
          * Tests whether net is an input net
          * @param[in] n pointer to net
-         * @return true if net is input net, false otherwise
+         * @return `true` if net is input net, `false` otherwise
          */
         bool is_input_net(const Net* n) const;
 

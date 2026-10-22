@@ -37,6 +37,9 @@ namespace hal
     class LogicEvaluator;
     class NetlistSimulator;
 
+    /**
+     * The plugin that provides the logic evaluator.
+     */
     class PLUGIN_API LogicEvaluatorPlugin : public BasePluginInterface
     {
     public:
@@ -51,6 +54,9 @@ namespace hal
         std::set<std::string> get_dependencies() const override;
     };
 
+    /**
+     * The GUI contribution of the logic evaluator plugin.
+     */
     class GuiExtensionLogicEvaluator : public GuiExtensionInterface
     {
         bool mSkipCompile;

@@ -46,6 +46,9 @@ namespace hal
     class GraphShader
     {
     public:
+        /**
+         * The visual style that a shader assigns to each node and net of a graph view.
+         */
         struct Shading
         {
             QMap<u32, GraphicsNode::Visuals> mOduleVisuals;

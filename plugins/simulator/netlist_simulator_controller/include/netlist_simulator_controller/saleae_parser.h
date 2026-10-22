@@ -41,6 +41,9 @@ namespace hal
     class SaleaeInputFile;
 
 #ifdef STANDALONE_PARSER
+    /**
+     * A net of the netlist as referenced by the SALEAE directory, identified by its ID and name.
+     */
     class Net
     {
       uint32_t mId;
@@ -64,13 +67,16 @@ namespace hal
      *        1) A parser-dont-care object that helps the callback function to identify the waveform.<br>
      *        2) Event time.<br>
      *        3) Waveform value. </li>
-     *   <li> Repeat: call next_event() until function returns false. </li>
+     *   <li> Repeat: call next_event() until function returns `false`. </li>
      *  </ul>
      */
     class SaleaeParser
     {
         SaleaeDirectory mSaleaeDirectory;
         static std::string strim(std::string s);
+        /**
+         * An open SALEAE data file together with the callback that is invoked for every transition read from it.
+         */
         struct DataFileHandle {
             std::function<void(void*obj, uint64_t, int)> callback;
             SaleaeInputFile* file;
@@ -95,7 +101,7 @@ namespace hal
          * @param id Net/Waveform ID for which callback gets registered
          * @param callback Callback function with three mandatory arguments
          * @param obj Pointer to any object (e.g. net) that might be useful for callback function to identify net or waveform
-         * @return True if callback was registered successfully, false otherwise (e.g. if net was not found in SALEAE directory)
+         * @return `true` if callback was registered successfully, `false` otherwise (e.g. if net was not found in SALEAE directory)
          */
         bool register_callback(const std::string& name, uint32_t id, std::function<void(void*,uint64_t, int)> callback, void* obj);
 
@@ -104,7 +110,7 @@ namespace hal
          * @param net Net pointer corresponding to waveform for which callback gets registered
          * @param callback Callback function with three mandatory arguments
          * @param obj Pointer to any object (e.g. net) that might be useful for callback function to identify net or waveform
-         * @return True if callback was registered successfully, false otherwise (e.g. if net was not found in SALEAE directory)
+         * @return `true` if callback was registered successfully, `false` otherwise (e.g. if net was not found in SALEAE directory)
          */
         bool register_callback(const Net* net, std::function<void(void*,uint64_t, int)> callback, void* obj);
 

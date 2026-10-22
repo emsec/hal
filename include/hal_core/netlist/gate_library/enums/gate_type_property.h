@@ -47,6 +47,7 @@ namespace hal
         pll,            /**< PLL gate type. **/
         oscillator,     /**< Oscillator gate type. **/
         scan,           /**< Scan gate type. **/
+        delay,          /**< Delay gate type. **/
         c_buffer,       /**< Buffer gate type. **/
         c_inverter,     /**< Inverter gate type. **/
         c_and,          /**< AND gate type. **/

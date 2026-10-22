@@ -128,10 +128,15 @@ namespace hal
 
     bool ProgramOptions::add(const std::string& flag, const std::string& description, const std::initializer_list<std::string>& parameters)
     {
-        return add({flag}, description, parameters);
+        return add_flags({flag}, description, parameters);
     }
 
     bool ProgramOptions::add(const std::initializer_list<std::string>& flags, const std::string& description, const std::initializer_list<std::string>& parameters)
+    {
+        return add_flags(flags, description, parameters);
+    }
+
+    bool ProgramOptions::add_flags(const std::vector<std::string>& flags, const std::string& description, const std::vector<std::string>& parameters)
     {
         if (flags.size() == 0)
         {
@@ -198,7 +203,7 @@ namespace hal
         Option opt;
         opt.description = description;
         opt.parameters  = parameters;
-        opt.flags       = flags;
+        opt.flags       = std::set<std::string>(flags.begin(), flags.end());
 
         m_options.push_back(opt);
 

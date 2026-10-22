@@ -55,6 +55,7 @@ namespace hal
          * Set the text label for module box.
          *
          * @param m - The underlying module of this GraphicsModule
+         * @param init - `true` when called from the constructor, `false` when updating an existing label
          */
         void setModuleLabel(const Module* m, bool init=false);
 

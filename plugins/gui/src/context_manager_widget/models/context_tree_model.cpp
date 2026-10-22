@@ -1,10 +1,8 @@
 #include "gui/context_manager_widget/models/context_tree_model.h"
 #include "gui/selection_details_widget/selection_details_icon_provider.h"
-#include "gui/gui_globals.h"
-#include "gui/gui_utils/graphics.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include "gui/user_action/action_delete_object.h"
 
-#include <limits>
 #include <QApplication>
 
 namespace hal
@@ -73,7 +71,7 @@ namespace hal
             case 1:
                 return mContext->id();
             case 2:
-                return mContext->getTimestamp().toString(Qt::SystemLocaleShortDate);
+                return QtCompat::dateToLocaleString(mContext->getTimestamp());
             }
         }
         return QVariant();

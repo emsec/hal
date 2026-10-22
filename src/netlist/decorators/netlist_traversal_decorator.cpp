@@ -1,7 +1,11 @@
 #include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 
+#include "hal_core/netlist/module.h"
+
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
+
+#include <deque>
 
 namespace hal
 {
@@ -9,12 +13,13 @@ namespace hal
     {
     }
 
-    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_matching_gates(const Net* net,
-                                                                               bool successors,
-                                                                               const std::function<bool(const Gate*)>& target_gate_filter,
-                                                                               bool continue_on_match,
-                                                                               const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
-                                                                               const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_gates(const Net* net,
+                                                                 TraversalDirection direction,
+                                                                 const std::function<bool(const Gate*)>& match,
+                                                                 TraversalStop stop,
+                                                                 u32 max_depth,
+                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
     {
         if (net == nullptr)
         {
@@ -26,15 +31,37 @@ namespace hal
             return ERR("net does not belong to netlist");
         }
 
-        if (!target_gate_filter)
+        if (!match)
         {
-            return ERR("no target gate filter specified");
+            return ERR("no match condition specified");
         }
 
-        std::unordered_set<const Net*> visited;
-        std::vector<const Net*> stack = {net};
-        std::vector<const Net*> previous;
+        if (direction == TraversalDirection::both)
+        {
+            auto res_forward = get_gates(net, TraversalDirection::forward, match, stop, max_depth, exit_endpoint_filter, entry_endpoint_filter);
+            if (res_forward.is_error())
+            {
+                return res_forward;
+            }
+
+            auto res_backward = get_gates(net, TraversalDirection::backward, match, stop, max_depth, exit_endpoint_filter, entry_endpoint_filter);
+            if (res_backward.is_error())
+            {
+                return res_backward;
+            }
+
+            auto gates = res_forward.get();
+            gates.merge(res_backward.get());
+            return OK(gates);
+        }
+
+        const bool successors = (direction == TraversalDirection::forward);
+
         std::set<Gate*> res;
+        std::vector<const Net*> stack     = {net};
+        std::vector<const Net*> previous  = {};
+        std::unordered_set<const Net*> visited;
+
         while (!stack.empty())
         {
             const Net* current = stack.back();
@@ -46,37 +73,51 @@ namespace hal
                 continue;
             }
 
+            const u32 current_depth = previous.size() + 1;
+            if (max_depth != 0 && current_depth > max_depth)
+            {
+                stack.pop_back();
+                continue;
+            }
+
             visited.insert(current);
 
             bool added = false;
             for (const auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
             {
-                if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, previous.size() + 1))
+                if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, current_depth))
                 {
                     continue;
                 }
 
                 auto* gate = entry_ep->get_gate();
 
-                if (target_gate_filter(gate))
+                const bool matches = match(gate);
+                if (matches)
                 {
                     res.insert(gate);
+                }
 
-                    if (!continue_on_match)
-                    {
-                        continue;
-                    }
+                // Where the walk halts. A gate that ends it is still reported if it matched, it is only
+                // not traversed through.
+                if ((matches && stop == TraversalStop::at_match) || (!matches && stop == TraversalStop::at_mismatch))
+                {
+                    continue;
+                }
+
+                if (max_depth != 0 && current_depth == max_depth)
+                {
+                    continue;
                 }
 
                 for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
                 {
-                    const Net* exit_net = exit_ep->get_net();
-
-                    if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, previous.size() + 1))
+                    if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, current_depth))
                     {
                         continue;
                     }
 
+                    const Net* exit_net = exit_ep->get_net();
                     if (visited.find(exit_net) == visited.end())
                     {
                         stack.push_back(exit_net);
@@ -96,6 +137,84 @@ namespace hal
         }
 
         return OK(res);
+    }
+
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_gates(const Gate* gate,
+                                                                 TraversalDirection direction,
+                                                                 const std::function<bool(const Gate*)>& match,
+                                                                 TraversalStop stop,
+                                                                 u32 max_depth,
+                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (gate == nullptr)
+        {
+            return ERR("nullptr given as gate");
+        }
+
+        if (!m_netlist.is_gate_in_netlist(gate))
+        {
+            return ERR("gate does not belong to netlist");
+        }
+
+        if (!match)
+        {
+            return ERR("no match condition specified");
+        }
+
+        // For both, the fan-out nets are walked forward and the fan-in nets backward, each purely. Passing
+        // `both` down to the per-net walks instead would also walk *forward* from a fan-in net, which runs
+        // into the cones of sibling gates sharing that input -- gates that are neither ancestors nor
+        // descendants of this one.
+        std::set<Gate*> res;
+        if (direction == TraversalDirection::forward || direction == TraversalDirection::both)
+        {
+            for (const auto* exit_ep : gate->get_fan_out_endpoints())
+            {
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 1))
+                {
+                    continue;
+                }
+
+                auto res_net = get_gates(exit_ep->get_net(), TraversalDirection::forward, match, stop, max_depth, exit_endpoint_filter, entry_endpoint_filter);
+                if (res_net.is_error())
+                {
+                    return ERR_APPEND(res_net.get_error(), "cannot traverse from gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
+                }
+                res.merge(res_net.get());
+            }
+        }
+
+        if (direction == TraversalDirection::backward || direction == TraversalDirection::both)
+        {
+            for (const auto* exit_ep : gate->get_fan_in_endpoints())
+            {
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 1))
+                {
+                    continue;
+                }
+
+                auto res_net = get_gates(exit_ep->get_net(), TraversalDirection::backward, match, stop, max_depth, exit_endpoint_filter, entry_endpoint_filter);
+                if (res_net.is_error())
+                {
+                    return ERR_APPEND(res_net.get_error(), "cannot traverse from gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
+                }
+                res.merge(res_net.get());
+            }
+        }
+
+        return OK(res);
+    }
+
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_matching_gates(const Net* net,
+                                                                               bool successors,
+                                                                               const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                               bool continue_on_match,
+                                                                               const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                               const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        return get_gates(net, successors ? TraversalDirection::forward : TraversalDirection::backward, target_gate_filter,
+                         continue_on_match ? TraversalStop::never : TraversalStop::at_match, 0, exit_endpoint_filter, entry_endpoint_filter);
     }
 
     Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_matching_gates(const Gate* gate,
@@ -142,87 +261,8 @@ namespace hal
                                                                                      const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
                                                                                      const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
     {
-        if (net == nullptr)
-        {
-            return ERR("nullptr given as net");
-        }
-
-        if (!m_netlist.is_net_in_netlist(net))
-        {
-            return ERR("net does not belong to netlist");
-        }
-
-        if (!target_gate_filter)
-        {
-            return ERR("no target gate filter specified");
-        }
-
-        std::unordered_set<const Net*> visited;
-        std::vector<const Net*> stack = {net};
-        std::vector<const Net*> previous;
-        std::set<Gate*> res;
-        while (!stack.empty())
-        {
-            const Net* current = stack.back();
-
-            if (!previous.empty() && current == previous.back())
-            {
-                stack.pop_back();
-                previous.pop_back();
-                continue;
-            }
-
-            visited.insert(current);
-
-            bool added = false;
-            for (const auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
-            {
-                if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, previous.size() + 1))
-                {
-                    continue;
-                }
-
-                auto* g = entry_ep->get_gate();
-
-                if (target_gate_filter(g))
-                {
-                    res.insert(g);
-                }
-                else
-                {
-                    if (!continue_on_mismatch)
-                    {
-                        continue;
-                    }
-                }
-
-                for (const auto* exit_ep : successors ? g->get_fan_out_endpoints() : g->get_fan_in_endpoints())
-                {
-                    if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, previous.size() + 1))
-                    {
-                        continue;
-                    }
-
-                    const Net* n = exit_ep->get_net();
-                    if (visited.find(n) == visited.end())
-                    {
-                        stack.push_back(n);
-                        added = true;
-                    }
-                }
-            }
-
-            if (added)
-            {
-                previous.push_back(current);
-            }
-            else
-            {
-                stack.pop_back();
-            }
-        }
-
-        return OK(res);
+        return get_gates(net, successors ? TraversalDirection::forward : TraversalDirection::backward, target_gate_filter,
+                         continue_on_mismatch ? TraversalStop::never : TraversalStop::at_mismatch, 0, exit_endpoint_filter, entry_endpoint_filter);
     }
 
     Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_matching_gates_until(const Gate* gate,
@@ -264,76 +304,8 @@ namespace hal
     Result<std::set<Gate*>>
         NetlistTraversalDecorator::get_next_matching_gates_until_depth(const Net* net, bool successors, u32 max_depth, const std::function<bool(const Gate*)>& target_gate_filter) const
     {
-        if (net == nullptr)
-        {
-            return ERR("nullptr given as net");
-        }
-
-        if (!m_netlist.is_net_in_netlist(net))
-        {
-            return ERR("net does not belong to netlist");
-        }
-
-        std::unordered_set<const Net*> visited;
-        std::vector<const Net*> stack = {net};
-        std::vector<const Net*> previous;
-        std::set<Gate*> res;
-        while (!stack.empty())
-        {
-            const Net* current = stack.back();
-
-            if (!previous.empty() && current == previous.back())
-            {
-                stack.pop_back();
-                previous.pop_back();
-                continue;
-            }
-
-            u32 current_depth = previous.size() + 1;
-            visited.insert(current);
-
-            bool added = false;
-            for (const auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
-            {
-                if (max_depth != 0 && current_depth > max_depth)
-                {
-                    continue;
-                }
-
-                auto* g = entry_ep->get_gate();
-
-                if ((target_gate_filter == nullptr) || target_gate_filter(g))
-                {
-                    res.insert(g);
-                }
-
-                for (const auto* exit_ep : successors ? g->get_fan_out_endpoints() : g->get_fan_in_endpoints())
-                {
-                    if (max_depth != 0 && current_depth == max_depth)
-                    {
-                        continue;
-                    }
-
-                    const Net* n = exit_ep->get_net();
-                    if (visited.find(n) == visited.end())
-                    {
-                        stack.push_back(n);
-                        added = true;
-                    }
-                }
-            }
-
-            if (added)
-            {
-                previous.push_back(current);
-            }
-            else
-            {
-                stack.pop_back();
-            }
-        }
-
-        return OK(res);
+        const auto match = (target_gate_filter == nullptr) ? std::function<bool(const Gate*)>([](const Gate*) { return true; }) : target_gate_filter;
+        return get_gates(net, successors ? TraversalDirection::forward : TraversalDirection::backward, match, TraversalStop::never, max_depth);
     }
 
     Result<std::set<Gate*>>
@@ -363,121 +335,75 @@ namespace hal
         return OK(res);
     }
 
-    Result<std::set<Gate*>>
-        NetlistTraversalDecorator::get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    Result<std::vector<Net*>> NetlistTraversalDecorator::get_common_inputs(const std::vector<Gate*>& gates, u32 threshold) const
     {
-        if (net == nullptr)
+        // a threshold of zero means a net only counts when it is an input to every single gate
+        if (threshold == 0)
         {
-            return ERR("nullptr given as net");
+            threshold = gates.size();
         }
 
-        if (!m_netlist.is_net_in_netlist(net))
+        std::map<Net*, u32> net_count;
+        for (Gate* gate : gates)
         {
-            return ERR("net does not belong to netlist");
-        }
-
-        std::unordered_set<const Net*> visited;
-        std::vector<const Net*> stack = {net};
-        std::vector<const Net*> previous;
-        std::set<Gate*> res;
-        while (!stack.empty())
-        {
-            const Net* current = stack.back();
-
-            if (!previous.empty() && current == previous.back())
+            if (gate == nullptr)
             {
-                stack.pop_back();
-                previous.pop_back();
-                continue;
+                return ERR("nullptr given within gates");
             }
 
-            visited.insert(current);
-
-            bool added = false;
-            for (const auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
+            if (!m_netlist.is_gate_in_netlist(gate))
             {
-                auto entry_pin = entry_ep->get_pin();
-                auto* gate     = entry_ep->get_gate();
+                return ERR("gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " does not belong to netlist");
+            }
 
-                // stop traversal if gate is sequential
-                if (gate->get_type()->has_property(GateTypeProperty::sequential))
+            for (Endpoint* pred : gate->get_predecessors())
+            {
+                if (pred->get_gate()->is_gnd_gate() || pred->get_gate()->is_vcc_gate())
                 {
-                    // stop traversal on forbidden pins
-                    if (forbidden_pins.find(entry_pin->get_type()) != forbidden_pins.end())
-                    {
-                        continue;
-                    }
-
-                    // only add gate to result if it has not been reached through a forbidden pin (e.g., control pin)
-                    res.insert(gate);
-
-                    // update cache
-                    if (cache)
-                    {
-                        (*cache)[current].insert(gate);
-                        for (const auto* n : previous)
-                        {
-                            (*cache)[n].insert(gate);
-                        }
-                    }
+                    continue;
                 }
-                else
-                {
-                    for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
-                    {
-                        const Net* exit_net     = exit_ep->get_net();
-                        const GatePin* exit_pin = exit_ep->get_pin();
 
-                        // stop traversal on forbidden pins
-                        if (forbidden_pins.find(exit_pin->get_type()) != forbidden_pins.end())
-                        {
-                            continue;
-                        }
-
-                        if (cache)
-                        {
-                            if (const auto it = cache->find(exit_net); it != cache->end())
-                            {
-                                const auto& cached_gates = std::get<1>(*it);
-
-                                // append cached gates to result
-                                res.insert(cached_gates.begin(), cached_gates.end());
-
-                                // update cache
-                                (*cache)[current].insert(cached_gates.begin(), cached_gates.end());
-                                for (const auto* n : previous)
-                                {
-                                    (*cache)[n].insert(cached_gates.begin(), cached_gates.end());
-                                }
-
-                                continue;
-                            }
-                        }
-
-                        if (visited.find(exit_net) == visited.end())
-                        {
-                            stack.push_back(exit_net);
-                            added = true;
-                        }
-                    }
-                }
-            }
-
-            if (added)
-            {
-                previous.push_back(current);
-            }
-            else
-            {
-                stack.pop_back();
+                net_count[pred->get_net()]++;
             }
         }
 
-        return OK(res);
+        std::vector<Net*> common_inputs;
+        for (const auto& [net, count] : net_count)
+        {
+            if (count >= threshold)
+            {
+                common_inputs.push_back(net);
+            }
+        }
+
+        return OK(common_inputs);
     }
 
-    Result<std::set<Gate*>>
-        NetlistTraversalDecorator::get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    TraversalCache NetlistTraversalDecorator::make_traversal_cache(TraversalDirection direction,
+                                                                    std::function<bool(const Gate*)> match,
+                                                                    TraversalStop stop,
+                                                                    std::function<bool(const Endpoint*)> exit_endpoint_filter,
+                                                                    std::function<bool(const Endpoint*)> entry_endpoint_filter) const
+    {
+        return TraversalCache(&m_netlist, direction, std::move(match), stop, std::move(exit_endpoint_filter), std::move(entry_endpoint_filter));
+    }
+
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_gates(const Net* net, TraversalCache& cache) const
+    {
+        if (cache.m_netlist != &m_netlist)
+        {
+            return ERR("cache was created for a different netlist");
+        }
+
+        if (cache.m_direction == TraversalDirection::both)
+        {
+            return ERR("a cache cannot hold both directions at once, create one per direction");
+        }
+
+        return get_gates_memoized(net, cache.m_direction == TraversalDirection::forward, cache.m_match, cache.m_stop, cache.m_exit_endpoint_filter, cache.m_entry_endpoint_filter, cache.m_store);
+    }
+
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_gates(const Gate* gate, TraversalCache& cache) const
     {
         if (gate == nullptr)
         {
@@ -486,41 +412,259 @@ namespace hal
 
         if (!m_netlist.is_gate_in_netlist(gate))
         {
-            return ERR("net does not belong to netlist");
+            return ERR("gate does not belong to netlist");
+        }
+
+        if (cache.m_netlist != &m_netlist)
+        {
+            return ERR("cache was created for a different netlist");
+        }
+
+        if (cache.m_direction == TraversalDirection::both)
+        {
+            return ERR("a cache cannot hold both directions at once, create one per direction");
         }
 
         std::set<Gate*> res;
-        for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+        for (const auto* exit_ep : (cache.m_direction == TraversalDirection::forward) ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
         {
-            const auto* exit_net = exit_ep->get_net();
-            const auto* exit_pin = exit_ep->get_pin();
-
-            // stop traversal on forbidden pins
-            if (forbidden_pins.find(exit_pin->get_type()) != forbidden_pins.end())
+            if (cache.m_exit_endpoint_filter != nullptr && !cache.m_exit_endpoint_filter(exit_ep))
             {
                 continue;
             }
 
-            if (cache)
+            auto res_net = get_gates(exit_ep->get_net(), cache);
+            if (res_net.is_error())
             {
-                if (const auto it = cache->find(exit_net); it != cache->end())
+                return ERR_APPEND(res_net.get_error(), "cannot traverse from gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
+            }
+            res.merge(res_net.get());
+        }
+        return OK(res);
+    }
+
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_gates_memoized(const Net* start,
+                                                                          bool successors,
+                                                                          const std::function<bool(const Gate*)>& match,
+                                                                          TraversalStop stop,
+                                                                          const std::function<bool(const Endpoint*)>& exit_endpoint_filter,
+                                                                          const std::function<bool(const Endpoint*)>& entry_endpoint_filter,
+                                                                          std::unordered_map<const Net*, std::set<Gate*>>& store) const
+    {
+        if (start == nullptr)
+        {
+            return ERR("nullptr given as net");
+        }
+
+        if (!m_netlist.is_net_in_netlist(start))
+        {
+            return ERR("net does not belong to netlist");
+        }
+
+        if (!match)
+        {
+            return ERR("no match condition specified");
+        }
+
+        if (const auto it = store.find(start); it != store.end())
+        {
+            return OK(it->second);
+        }
+
+        // Tarjan's algorithm over the nets, iteratively. `collected` holds, per unpublished net, the
+        // gates found next to it plus everything absorbed from already published successors; when a
+        // strongly connected component completes, its members share the union of what they collected
+        // and are published together.
+        struct Frame
+        {
+            const Net* net;
+            std::vector<const Net*> successors;
+            size_t next = 0;
+        };
+
+        std::unordered_map<const Net*, u32> index;
+        std::unordered_map<const Net*, u32> lowlink;
+        std::unordered_map<const Net*, std::set<Gate*>> collected;
+        std::vector<const Net*> scc_stack;
+        std::unordered_set<const Net*> on_stack;
+        std::vector<Frame> frames;
+        u32 next_index = 0;
+
+        const auto expand = [&](const Net* net) {
+            index[net] = lowlink[net] = next_index++;
+            scc_stack.push_back(net);
+            on_stack.insert(net);
+
+            Frame frame{net, {}, 0};
+            for (const auto* entry_ep : successors ? net->get_destinations() : net->get_sources())
+            {
+                if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep))
                 {
-                    const auto& cached_gates = std::get<1>(*it);
-
-                    // append cached gates to result
-                    res.insert(cached_gates.begin(), cached_gates.end());
-
                     continue;
                 }
+
+                auto* gate         = entry_ep->get_gate();
+                const bool matches = match(gate);
+                if (matches)
+                {
+                    collected[net].insert(gate);
+                }
+
+                const bool traverse = (stop == TraversalStop::at_match) ? !matches : (stop == TraversalStop::at_mismatch) ? matches : true;
+                if (!traverse)
+                {
+                    continue;
+                }
+
+                for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+                {
+                    if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep))
+                    {
+                        continue;
+                    }
+
+                    frame.successors.push_back(exit_ep->get_net());
+                }
+            }
+            frames.push_back(std::move(frame));
+        };
+
+        expand(start);
+        while (!frames.empty())
+        {
+            Frame& frame = frames.back();
+            if (frame.next < frame.successors.size())
+            {
+                const Net* child = frame.successors.at(frame.next++);
+                if (const auto it = store.find(child); it != store.end() && on_stack.find(child) == on_stack.end())
+                {
+                    // published, by an earlier call or by a component that completed within this one
+                    collected[frame.net].insert(it->second.begin(), it->second.end());
+                }
+                else if (index.find(child) == index.end())
+                {
+                    expand(child);
+                }
+                else if (on_stack.find(child) != on_stack.end())
+                {
+                    lowlink[frame.net] = std::min(lowlink[frame.net], index[child]);
+                }
+            }
+            else
+            {
+                const Net* net = frame.net;
+                frames.pop_back();
+
+                if (lowlink[net] == index[net])
+                {
+                    // the component is complete: its members share one answer and are published together
+                    std::vector<const Net*> members;
+                    std::set<Gate*> total;
+                    while (true)
+                    {
+                        const Net* member = scc_stack.back();
+                        scc_stack.pop_back();
+                        on_stack.erase(member);
+                        members.push_back(member);
+                        auto& part = collected[member];
+                        total.insert(part.begin(), part.end());
+                        if (member == net)
+                        {
+                            break;
+                        }
+                    }
+                    for (const Net* member : members)
+                    {
+                        store[member] = total;
+                    }
+                }
+
+                if (!frames.empty())
+                {
+                    Frame& parent = frames.back();
+                    lowlink[parent.net] = std::min(lowlink[parent.net], lowlink[net]);
+                    if (const auto it = store.find(net); it != store.end())
+                    {
+                        collected[parent.net].insert(it->second.begin(), it->second.end());
+                    }
+                }
+            }
+        }
+
+        return OK(store[start]);
+    }
+
+    namespace
+    {
+        /// A filter that refuses any endpoint whose pin type is forbidden, or no filter at all when
+        /// nothing is forbidden, so that the walk skips the filter calls entirely.
+        std::function<bool(const Endpoint*)> forbidden_pin_filter(const std::set<PinType>& forbidden_pins)
+        {
+            if (forbidden_pins.empty())
+            {
+                return nullptr;
+            }
+            return [forbidden_pins](const Endpoint* ep) { return forbidden_pins.find(ep->get_pin()->get_type()) == forbidden_pins.end(); };
+        }
+
+        /// The entry rule of the sequential traversal: a forbidden pin stops the walk at a sequential
+        /// gate entered through it, so that a flip-flop reached through its clock does not count,
+        /// while a combinational gate is traversed regardless of the pin it is entered through.
+        std::function<bool(const Endpoint*)> sequential_entry_filter(const std::set<PinType>& forbidden_pins)
+        {
+            if (forbidden_pins.empty())
+            {
+                return nullptr;
+            }
+            return [forbidden_pins](const Endpoint* ep) {
+                return !(ep->get_gate()->get_type()->has_property(GateTypeProperty::sequential) && forbidden_pins.find(ep->get_pin()->get_type()) != forbidden_pins.end());
+            };
+        }
+
+        bool is_sequential(const Gate* gate)
+        {
+            return gate->get_type()->has_property(GateTypeProperty::sequential);
+        }
+    }    // namespace
+
+    // The two traversals below are the memoized walk with their conditions pinned. They exist by name
+    // because the questions they answer are asked constantly; anyone asking them repeatedly holds a
+    // TraversalCache and calls get_gates with it instead.
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins) const
+    {
+        std::unordered_map<const Net*, std::set<Gate*>> local_store;
+        return get_gates_memoized(net, successors, is_sequential, TraversalStop::at_match, forbidden_pin_filter(forbidden_pins), sequential_entry_filter(forbidden_pins), local_store);
+    }
+
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins) const
+    {
+        if (gate == nullptr)
+        {
+            return ERR("nullptr given as gate");
+        }
+
+        if (!m_netlist.is_gate_in_netlist(gate))
+        {
+            return ERR("gate does not belong to netlist");
+        }
+
+        std::set<Gate*> res;
+        std::unordered_map<const Net*, std::set<Gate*>> local_store;
+        const auto exit_filter  = forbidden_pin_filter(forbidden_pins);
+        const auto entry_filter = sequential_entry_filter(forbidden_pins);
+        for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+        {
+            if (forbidden_pins.find(exit_ep->get_pin()->get_type()) != forbidden_pins.end())
+            {
+                continue;
             }
 
-            const auto next_res = this->get_next_sequential_gates(exit_ep->get_net(), successors, forbidden_pins, cache);
-            if (next_res.is_error())
+            auto res_net = get_gates_memoized(exit_ep->get_net(), successors, is_sequential, TraversalStop::at_match, exit_filter, entry_filter, local_store);
+            if (res_net.is_error())
             {
-                return ERR(next_res.get_error());
+                return ERR_APPEND(res_net.get_error(), "cannot get next sequential gates of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
             }
-            auto next = next_res.get();
-            res.insert(next.begin(), next.end());
+            res.merge(res_net.get());
         }
         return OK(res);
     }
@@ -528,11 +672,15 @@ namespace hal
     Result<std::map<Gate*, std::set<Gate*>>> NetlistTraversalDecorator::get_next_sequential_gates_map(bool successors, const std::set<PinType>& forbidden_pins) const
     {
         std::map<Gate*, std::set<Gate*>> seq_gate_map;
-        std::unordered_map<const Net*, std::set<Gate*>> cache = {};
+        auto cache = make_traversal_cache(successors ? TraversalDirection::forward : TraversalDirection::backward,
+                                          is_sequential,
+                                          TraversalStop::at_match,
+                                          forbidden_pin_filter(forbidden_pins),
+                                          sequential_entry_filter(forbidden_pins));
 
-        for (auto* sg : m_netlist.get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); }))
+        for (auto* sg : m_netlist.get_gates(&is_sequential))
         {
-            if (const auto res = this->get_next_sequential_gates(sg, successors, forbidden_pins, &cache); res.is_ok())
+            if (const auto res = this->get_gates(sg, cache); res.is_ok())
             {
                 seq_gate_map[sg] = res.get();
             }
@@ -545,115 +693,16 @@ namespace hal
         return OK(std::move(seq_gate_map));
     }
 
-    Result<std::set<Gate*>>
-        NetlistTraversalDecorator::get_next_combinational_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_combinational_cone(const Net* net, bool successors, const std::set<PinType>& forbidden_pins) const
     {
-        if (net == nullptr)
-        {
-            return ERR("nullptr given as net");
-        }
+        const auto match  = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); };
+        const auto filter = forbidden_pin_filter(forbidden_pins);
 
-        if (!m_netlist.is_net_in_netlist(net))
-        {
-            return ERR("net does not belong to netlist");
-        }
-
-        std::unordered_set<const Net*> visited;
-        std::vector<const Net*> stack = {net};
-        std::vector<const Net*> previous;
-        std::set<Gate*> res;
-        while (!stack.empty())
-        {
-            const Net* current = stack.back();
-
-            if (!previous.empty() && current == previous.back())
-            {
-                stack.pop_back();
-                previous.pop_back();
-                continue;
-            }
-
-            visited.insert(current);
-
-            bool added = false;
-            for (const auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
-            {
-                auto* gate            = entry_ep->get_gate();
-                const auto* entry_pin = entry_ep->get_pin();
-                if (!gate->get_type()->has_property(GateTypeProperty::combinational))
-                {
-                    // stop traversal if not combinational
-                    continue;
-                }
-
-                // stop traversal on forbidden pins
-                if (forbidden_pins.find(entry_pin->get_type()) != forbidden_pins.end())
-                {
-                    continue;
-                }
-
-                // add to result if gate is combinational
-                res.insert(gate);
-
-                // update cache
-                if (cache)
-                {
-                    (*cache)[current].insert(gate);
-                    for (const auto* n : previous)
-                    {
-                        (*cache)[n].insert(gate);
-                    }
-                }
-
-                for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
-                {
-                    const Net* exit_net     = exit_ep->get_net();
-                    const GatePin* exit_pin = exit_ep->get_pin();
-
-                    // stop traversal on forbidden pins
-                    if (forbidden_pins.find(exit_pin->get_type()) != forbidden_pins.end())
-                    {
-                        continue;
-                    }
-
-                    if (cache)
-                    {
-                        if (const auto it = cache->find(exit_net); it != cache->end())
-                        {
-                            const auto& cached_gates = std::get<1>(*it);
-
-                            // append cached gates to result
-                            res.insert(cached_gates.begin(), cached_gates.end());
-
-                            continue;
-                        }
-                    }
-
-                    if (visited.find(exit_net) == visited.end())
-                    {
-                        stack.push_back(exit_net);
-                        added = true;
-                    }
-                }
-            }
-
-            if (added)
-            {
-                previous.push_back(current);
-            }
-            else
-            {
-                stack.pop_back();
-            }
-        }
-
-        return OK(res);
+        std::unordered_map<const Net*, std::set<Gate*>> local_store;
+        return get_gates_memoized(net, successors, match, TraversalStop::at_mismatch, filter, filter, local_store);
     }
 
-    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_combinational_gates(const Gate* gate,
-                                                                                    bool successors,
-                                                                                    const std::set<PinType>& forbidden_pins,
-                                                                                    std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_combinational_cone(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins) const
     {
         if (gate == nullptr)
         {
@@ -662,41 +711,26 @@ namespace hal
 
         if (!m_netlist.is_gate_in_netlist(gate))
         {
-            return ERR("net does not belong to netlist");
+            return ERR("gate does not belong to netlist");
         }
 
         std::set<Gate*> res;
+        std::unordered_map<const Net*, std::set<Gate*>> local_store;
+        const auto match  = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); };
+        const auto filter = forbidden_pin_filter(forbidden_pins);
         for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
         {
-            const auto* exit_net = exit_ep->get_net();
-            const auto* exit_pin = exit_ep->get_pin();
-
-            // stop traversal on forbidden pins
-            if (forbidden_pins.find(exit_pin->get_type()) != forbidden_pins.end())
+            if (forbidden_pins.find(exit_ep->get_pin()->get_type()) != forbidden_pins.end())
             {
                 continue;
             }
 
-            if (cache)
+            auto res_net = get_gates_memoized(exit_ep->get_net(), successors, match, TraversalStop::at_mismatch, filter, filter, local_store);
+            if (res_net.is_error())
             {
-                if (const auto it = cache->find(exit_net); it != cache->end())
-                {
-                    const auto& cached_gates = std::get<1>(*it);
-
-                    // append cached gates to result
-                    res.insert(cached_gates.begin(), cached_gates.end());
-
-                    continue;
-                }
+                return ERR_APPEND(res_net.get_error(), "cannot get combinational cone of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
             }
-
-            const auto next_res = this->get_next_combinational_gates(exit_ep->get_net(), successors, forbidden_pins, cache);
-            if (next_res.is_error())
-            {
-                return ERR(next_res.get_error());
-            }
-            auto next = next_res.get();
-            res.insert(next.begin(), next.end());
+            res.merge(res_net.get());
         }
         return OK(res);
     }
@@ -810,11 +844,11 @@ namespace hal
                    + std::to_string(end_gate->get_id()) + ": pin direction " + enum_to_string(direction) + " is not supported");
     }
 
-    Result<std::optional<std::vector<Gate*>>> NetlistTraversalDecorator::get_shortest_path(const Gate* start_gate,
-                                                                                           const Gate* end_gate,
-                                                                                           const PinDirection& direction,
-                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
-                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    Result<std::optional<std::vector<Gate*>>> NetlistTraversalDecorator::get_shortest_path_to(const Gate* start_gate,
+                                                                                              const std::function<bool(const Gate*)>& is_target,
+                                                                                              const PinDirection& direction,
+                                                                                              const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                              const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
     {
         const auto reconstruct_shortest_path = [](const Gate* start_gate, const Gate* end_gate, const std::unordered_map<Gate*, Gate*>& origin_map) -> Result<std::optional<std::vector<Gate*>>> {
             Gate* _start_gate       = start_gate->get_netlist()->get_gate_by_id(start_gate->get_id());
@@ -879,9 +913,9 @@ namespace hal
                             }
                             origin_map.insert({next_g, curr_g});
 
-                            if (next_g == end_gate)
+                            if (is_target(next_g))
                             {
-                                return reconstruct_shortest_path(start_gate, end_gate, origin_map);
+                                return reconstruct_shortest_path(start_gate, next_g, origin_map);
                             }
 
                             next.push_back(next_g);
@@ -903,13 +937,13 @@ namespace hal
 
         if (direction == PinDirection::inout)
         {
-            const auto res_backward = get_shortest_path(start_gate, end_gate, PinDirection::input);
+            const auto res_backward = get_shortest_path_to(start_gate, is_target, PinDirection::input, exit_endpoint_filter, entry_endpoint_filter);
             if (res_backward.is_error())
             {
                 return res_backward;
             }
 
-            const auto res_forward = get_shortest_path(start_gate, end_gate, PinDirection::output);
+            const auto res_forward = get_shortest_path_to(start_gate, is_target, PinDirection::output, exit_endpoint_filter, entry_endpoint_filter);
             if (res_forward.is_error())
             {
                 return res_forward;
@@ -941,8 +975,386 @@ namespace hal
             return OK(path_forward);
         }
 
-        return ERR("cannot get shortest path between Gate " + start_gate->get_name() + " with ID " + std::to_string(start_gate->get_id()) + " and Gate " + end_gate->get_name() + " with ID "
-                   + std::to_string(end_gate->get_id()) + ": pin direction " + enum_to_string(direction) + " is not supported");
+        return ERR("cannot get shortest path from Gate " + start_gate->get_name() + " with ID " + std::to_string(start_gate->get_id()) + ": pin direction " + enum_to_string(direction)
+                   + " is not supported");
     }
+
+    Result<std::optional<std::vector<Gate*>>> NetlistTraversalDecorator::get_shortest_path(const Gate* start_gate,
+                                                                                           const Gate* end_gate,
+                                                                                           const PinDirection& direction,
+                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (end_gate == nullptr)
+        {
+            return ERR("nullptr given as end gate");
+        }
+
+        return get_shortest_path_to(
+            start_gate, [end_gate](const Gate* gate) { return gate == end_gate; }, direction, exit_endpoint_filter, entry_endpoint_filter);
+    }
+
+    Result<std::optional<std::vector<Gate*>>> NetlistTraversalDecorator::get_shortest_path(const Gate* start_gate,
+                                                                                           const Module* end_module,
+                                                                                           const PinDirection& direction,
+                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (end_module == nullptr)
+        {
+            return ERR("nullptr given as end module");
+        }
+
+        const auto gates = end_module->get_gates(nullptr, true);
+        const std::unordered_set<const Gate*> end_gates(gates.begin(), gates.end());
+
+        // A start gate that is already inside the module has arrived: the path is the gate itself. Searching from
+        // here instead would walk to a neighbour and report a path of two, and reporting nothing would not be
+        // distinguishable from the module being unreachable.
+        if (end_gates.find(start_gate) != end_gates.end())
+        {
+            Gate* gate = start_gate->get_netlist()->get_gate_by_id(start_gate->get_id());
+            return OK(std::optional<std::vector<Gate*>>({gate}));
+        }
+
+        return get_shortest_path_to(
+            start_gate, [&end_gates](const Gate* gate) { return end_gates.find(gate) != end_gates.end(); }, direction, exit_endpoint_filter, entry_endpoint_filter);
+    }
+
+    Result<std::vector<std::vector<Gate*>>> NetlistTraversalDecorator::get_shortest_path(const Module* start_module,
+                                                                                         const Module* end_module,
+                                                                                         const PinDirection& direction,
+                                                                                         const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                         const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (start_module == nullptr)
+        {
+            return ERR("nullptr given as start module");
+        }
+        if (end_module == nullptr)
+        {
+            return ERR("nullptr given as end module");
+        }
+
+        // One search per gate of the start module, keeping every path that ties for the shortest. Searching from each
+        // gate rather than towards each one keeps the paths running from start to end, so that a caller does not have
+        // to know which end a path was grown from.
+        std::vector<std::vector<Gate*>> shortest;
+        for (Gate* start_gate : start_module->get_gates(nullptr, true))
+        {
+            const auto res = get_shortest_path(start_gate, end_module, direction, exit_endpoint_filter, entry_endpoint_filter);
+            if (res.is_error())
+            {
+                return ERR_APPEND(res.get_error(),
+                                  "cannot get shortest path between Module " + start_module->get_name() + " with ID " + std::to_string(start_module->get_id()) + " and Module "
+                                      + end_module->get_name() + " with ID " + std::to_string(end_module->get_id()) + ": failed to search from Gate " + start_gate->get_name());
+            }
+
+            const auto& path = res.get();
+            if (!path.has_value() || path.value().empty())
+            {
+                continue;
+            }
+
+            if (shortest.empty() || path.value().size() < shortest.front().size())
+            {
+                shortest = {path.value()};
+            }
+            else if (path.value().size() == shortest.front().size())
+            {
+                shortest.push_back(path.value());
+            }
+        }
+
+        return OK(shortest);
+    }
+
+
+
+        Result<std::vector<Gate*>>
+        NetlistTraversalDecorator::get_gate_chain(Gate* start_gate, const std::vector<const GatePin*>& input_pins, const std::vector<const GatePin*>& output_pins, const std::function<bool(const Gate*)>& filter) const
+        {
+            if (start_gate == nullptr)
+            {
+                return ERR("could not detect gate chain at start gate: start gate is a 'nullptr'");
+            }
+
+            // check filter on start gate
+            if (filter && !filter(start_gate))
+            {
+                return ERR("could not detect gate chain at start gate '" + start_gate->get_name() + "' with ID " + std::to_string(start_gate->get_id())
+                           + ": filter evaluates to 'false' for start gate");
+            }
+
+            std::deque<Gate*> gate_chain            = {start_gate};
+            std::unordered_set<Gate*> visited_gates = {start_gate};
+            const GateType* target_type             = start_gate->get_type();
+            bool found_next_gate;
+
+            // move forward
+            const Gate* current_gate = start_gate;
+            do
+            {
+                found_next_gate = false;
+
+                // check all eligible successors of current gate
+                std::vector<Endpoint*> successors = current_gate->get_successors([input_pins, output_pins, target_type, filter](const GatePin* ep_pin, Endpoint* ep) {
+                    if (ep->get_gate()->get_type() == target_type)
+                    {
+                        if (output_pins.empty() || std::find(output_pins.begin(), output_pins.end(), ep_pin) != output_pins.end())
+                        {
+                            if (input_pins.empty() || std::find(input_pins.begin(), input_pins.end(), ep->get_pin()) != input_pins.end())
+                            {
+                                if (!filter || filter(ep->get_gate()))
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    return false;
+                });
+
+                if (successors.size() > 1)
+                {
+                    log_debug("netlist_utils",
+                              "detected more than one valid successor gate for gate '{}' with ID {} in netlist with ID {}.",
+                              current_gate->get_name(),
+                              current_gate->get_id(),
+                              current_gate->get_netlist()->get_id());
+                    break;
+                }
+                else if (!successors.empty())
+                {
+                    Gate* suc_gate = successors.at(0)->get_gate();
+
+                    if (visited_gates.find(suc_gate) != visited_gates.end())
+                    {
+                        log_debug("netlist_utils", "detected a loop at gate with ID {}.", suc_gate->get_id());
+                        break;
+                    }
+
+                    gate_chain.push_back(suc_gate);
+                    visited_gates.insert(suc_gate);
+                    current_gate    = suc_gate;
+                    found_next_gate = true;
+                }
+            } while (found_next_gate);
+
+            // move backwards
+            current_gate = start_gate;
+            do
+            {
+                found_next_gate = false;
+
+                // check all eligable predecessors of current gate
+                std::vector<Endpoint*> predecessors = current_gate->get_predecessors([input_pins, output_pins, target_type, filter](const GatePin* ep_pin, Endpoint* ep) {
+                    if (ep->get_gate()->get_type() == target_type)
+                    {
+                        if (input_pins.empty() || std::find(input_pins.begin(), input_pins.end(), ep_pin) != input_pins.end())
+                        {
+                            if (output_pins.empty() || std::find(output_pins.begin(), output_pins.end(), ep->get_pin()) != output_pins.end())
+                            {
+                                if (!filter || filter(ep->get_gate()))
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    return false;
+                });
+
+                if (predecessors.size() > 1)
+                {
+                    log_debug("netlist_utils",
+                              "detected more than one valid predecessor gate for gate '{}' with ID {} in netlist with ID {}.",
+                              current_gate->get_name(),
+                              current_gate->get_id(),
+                              current_gate->get_netlist()->get_id());
+                    break;
+                }
+                else if (!predecessors.empty())
+                {
+                    Gate* pred_gate = predecessors.at(0)->get_gate();
+
+                    if (visited_gates.find(pred_gate) != visited_gates.end())
+                    {
+                        log_debug("netlist_utils", "detected a loop at gate with ID {}.", pred_gate->get_id());
+                        break;
+                    }
+
+                    gate_chain.push_front(pred_gate);
+                    visited_gates.insert(pred_gate);
+                    current_gate    = pred_gate;
+                    found_next_gate = true;
+                    log_debug("netlist_utils", "found predecessor gate with ID {}.", pred_gate->get_id());
+                }
+            } while (found_next_gate);
+
+            return OK(std::vector<Gate*>(gate_chain.begin(), gate_chain.end()));
+        }
+
+        Result<std::vector<Gate*>> NetlistTraversalDecorator::get_complex_gate_chain(Gate* start_gate,
+                                                          const std::vector<GateType*>& chain_types,
+                                                          const std::map<GateType*, std::vector<const GatePin*>>& input_pins,
+                                                          const std::map<GateType*, std::vector<const GatePin*>>& output_pins,
+                                                                                            const std::function<bool(const Gate*)>& filter) const
+        {
+            if (start_gate == nullptr)
+            {
+                return ERR("could not detect gate chain at start gate: start gate is a 'nullptr'");
+            }
+            if (chain_types.size() < 2)
+            {
+                return ERR("could not detect gate chain at start gate: 'chain_types' comprises less than two target gate types");
+            }
+            if (start_gate->get_type() != chain_types.at(0))
+            {
+                return ERR("could not detect gate chain at start gate '" + start_gate->get_name() + "' with ID " + std::to_string(start_gate->get_id()) + ": start gate is not of type '"
+                           + chain_types.front()->get_name() + "'");
+            }
+            if (filter && !filter(start_gate))
+            {
+                return ERR("could not detect gate chain at start gate '" + start_gate->get_name() + "' with ID " + std::to_string(start_gate->get_id())
+                           + ": filter evaluates to 'false' for start gate");
+            }
+
+            std::deque<Gate*> gate_chain = {start_gate};
+            std::unordered_set<Gate*> visited_gates;
+
+            u32 last_index    = 0;
+            u32 current_index = (last_index + 1) % chain_types.size();
+
+            // move forward
+            bool found_next_gate;
+            const Gate* current_gate = start_gate;
+            do
+            {
+                found_next_gate = false;
+
+                // check all successors of current gate
+                GateType* target_type                      = chain_types.at(current_index);
+                const std::vector<const GatePin*>& inputs  = input_pins.at(target_type);
+                const std::vector<const GatePin*>& outputs = output_pins.at(chain_types.at(last_index));
+                std::vector<Endpoint*> successors          = current_gate->get_successors([target_type, inputs, outputs, filter](const GatePin* ep_pin, Endpoint* ep) {
+                    if (ep->get_gate()->get_type() == target_type)
+                    {
+                        if (outputs.empty() || std::find(outputs.begin(), outputs.end(), ep_pin) != outputs.end())
+                        {
+                            if (inputs.empty() || std::find(inputs.begin(), inputs.end(), ep->get_pin()) != inputs.end())
+                            {
+                                if (!filter || filter(ep->get_gate()))
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    return false;
+                });
+
+                if (successors.size() > 1)
+                {
+                    log_debug("netlist_utils",
+                              "detected more than one valid successor gate for gate '{}' with ID {} in netlist with ID {}.",
+                              current_gate->get_name(),
+                              current_gate->get_id(),
+                              current_gate->get_netlist()->get_id());
+                    break;
+                }
+                else if (!successors.empty())
+                {
+                    Gate* suc_gate = successors.at(0)->get_gate();
+
+                    if (visited_gates.find(suc_gate) != visited_gates.end())
+                    {
+                        log_debug("netlist_utils", "detected a loop at gate with ID {}.", suc_gate->get_id());
+                        break;
+                    }
+
+                    gate_chain.push_back(suc_gate);
+                    visited_gates.insert(suc_gate);
+                    current_gate    = suc_gate;
+                    last_index      = current_index;
+                    current_index   = (current_index + 1) % chain_types.size();
+                    found_next_gate = true;
+                }
+            } while (found_next_gate);
+
+            // remove partial sequences at the end of the chain
+            while (current_index != 0)
+            {
+                gate_chain.pop_back();
+                current_index--;
+            }
+
+            current_gate  = start_gate;
+            last_index    = 0;
+            current_index = chain_types.size() - 1;
+
+            // move backwards
+            do
+            {
+                found_next_gate = false;
+
+                // check all predecessors of current gate
+                GateType* target_type                      = chain_types.at(current_index);
+                const std::vector<const GatePin*>& inputs  = input_pins.at(chain_types.at(last_index));
+                const std::vector<const GatePin*>& outputs = output_pins.at(target_type);
+                std::vector<Endpoint*> predecessors        = current_gate->get_predecessors([target_type, inputs, outputs, filter](const GatePin* ep_pin, Endpoint* ep) {
+                    if (ep->get_gate()->get_type() == target_type)
+                    {
+                        if (inputs.empty() || std::find(inputs.begin(), inputs.end(), ep_pin) != inputs.end())
+                        {
+                            if (outputs.empty() || std::find(outputs.begin(), outputs.end(), ep->get_pin()) != outputs.end())
+                            {
+                                if (!filter || filter(ep->get_gate()))
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    return false;
+                });
+
+                if (predecessors.size() > 1)
+                {
+                    log_debug("netlist_utils",
+                              "detected more than one valid predecessor gate for gate '{}' with ID {} in netlist with ID {}.",
+                              current_gate->get_name(),
+                              current_gate->get_id(),
+                              current_gate->get_netlist()->get_id());
+                    break;
+                }
+                else if (!predecessors.empty())
+                {
+                    Gate* pred_gate = predecessors.at(0)->get_gate();
+
+                    if (visited_gates.find(pred_gate) != visited_gates.end())
+                    {
+                        log_debug("netlist_utils", "detected a loop at gate with ID {}.", pred_gate->get_id());
+                        break;
+                    }
+
+                    gate_chain.push_front(pred_gate);
+                    visited_gates.insert(pred_gate);
+                    current_gate    = pred_gate;
+                    last_index      = current_index;
+                    current_index   = (current_index == 0) ? chain_types.size() - 1 : current_index - 1;
+                    found_next_gate = true;
+                }
+            } while (found_next_gate);
+
+            // remove partial sequences at the beginning of the chain
+            while (last_index != 0)
+            {
+                gate_chain.pop_front();
+                last_index--;
+            }
+
+            return OK(std::vector<Gate*>(gate_chain.begin(), gate_chain.end()));
+        }
 
 }    // namespace hal

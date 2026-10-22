@@ -2,7 +2,7 @@
 
 #include "dataflow_analysis/common/netlist_abstraction.h"
 #include "dataflow_analysis/utils/parallel_for_each.h"
-#include "dataflow_analysis/utils/progress_printer.h"
+#include "hal_core/plugin_system/user_feedback.h"
 #include "dataflow_analysis/utils/timing_utils.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
@@ -46,14 +46,14 @@ namespace hal
 
                     {
                         measure_block_time(ctx.name + " analysis");
-                        ProgressPrinter progress_bar;
+                        user_feedback::ProgressPrinter progress_bar("dataflow: " + ctx.name + " analysis …");
                         float cnt = 0;
                         std::unordered_map<u32, u32> stage_index_of_gate;
 
                         for (const auto& sequential_gate : netlist_abstr.target_gates)
                         {
                             cnt++;
-                            progress_bar.print_progress_to_stderr(cnt / netlist_abstr.target_gates.size());
+                            progress_bar.report(cnt / netlist_abstr.target_gates.size());
 
                             auto current = sequential_gate->get_id();
 
@@ -133,14 +133,14 @@ namespace hal
                             ctx.stages[i].erase(std::unique(ctx.stages[i].begin(), ctx.stages[i].end()), ctx.stages[i].end());
                         }
 
-                        ProgressPrinter progress_bar;
+                        user_feedback::ProgressPrinter progress_bar("dataflow: splitting register stages …");
                         float cnt = 0;
 
                         u32 stages_to_split = ctx.stages.size();
                         for (u32 i = 0; i < stages_to_split; ++i)
                         {
                             ++cnt;
-                            progress_bar.print_progress_to_stderr(cnt / stages_to_split);
+                            progress_bar.report(cnt / stages_to_split);
 
                             std::unordered_map<u32, std::vector<u32>> move_out_reasons;
                             for (auto g : ctx.stages[i])
@@ -225,7 +225,7 @@ namespace hal
                     log_info("dataflow", "merging directional stages...");
                     measure_block_time("merging directional stages");
 
-                    ProgressPrinter progress_bar;
+                    user_feedback::ProgressPrinter progress_bar("dataflow: merging directional stages …");
 
                     for (u32 i = 0; i < 2; ++i)
                     {
@@ -238,7 +238,7 @@ namespace hal
                         for (const auto& stage : directional_stages[i].stages)
                         {
                             cnt++;
-                            progress_bar.print_progress_to_stderr(cnt / (directional_stages[0].stages.size() + directional_stages[1].stages.size()));
+                            progress_bar.report(cnt / (directional_stages[0].stages.size() + directional_stages[1].stages.size()));
                             for (auto it = directional_stages[1 - i].stages.begin(); it != directional_stages[1 - i].stages.end();)
                             {
                                 auto& other_stage = *it;
@@ -290,13 +290,13 @@ namespace hal
 
                     // step 1: precompute all stage indices that are in one multi-stage
 
-                    ProgressPrinter progress_bar;
+                    user_feedback::ProgressPrinter progress_bar("dataflow: merging multi-stages …");
                     float cnt = 0;
                     std::vector<std::unordered_set<u32>> spread_stages;
                     std::set<std::vector<u32>> seen;
                     for (auto& [g, stages] : netlist_abstr.gate_to_register_stages)
                     {
-                        progress_bar.print_progress_to_stderr(++cnt / netlist_abstr.gate_to_register_stages.size());
+                        progress_bar.report(++cnt / netlist_abstr.gate_to_register_stages.size());
 
                         if (stages.size() > 1)
                         {
@@ -336,7 +336,7 @@ namespace hal
                     cnt = 0;
                     for (const auto& combine : spread_stages)
                     {
-                        progress_bar.print_progress_to_stderr(++cnt / netlist_abstr.gate_to_register_stages.size());
+                        progress_bar.report(++cnt / netlist_abstr.gate_to_register_stages.size());
 
                         for (auto stage_id : combine)
                         {

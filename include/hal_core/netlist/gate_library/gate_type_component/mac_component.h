@@ -31,6 +31,9 @@
 
 namespace hal
 {
+    /**
+     * A gate type component that marks a gate type as a multiply-accumulate unit.
+     */
     class MACComponent : public GateTypeComponent
     {
     public:
@@ -52,7 +55,7 @@ namespace hal
          * Check whether a component is a MACComponent.
          * 
          * @param[in] component - The component to check.
-         * @returns True if component is a MACComponent, false otherwise.
+         * @returns `true` if component is a MACComponent, `false` otherwise.
          */
         static bool is_class_of(const GateTypeComponent* component);
 

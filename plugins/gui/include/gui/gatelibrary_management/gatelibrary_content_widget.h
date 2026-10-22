@@ -41,6 +41,9 @@ namespace hal
     class Toolbar;
     class Searchbar;
 
+    /**
+     * The left-hand side of the gate library manager, which lists the gate types and lets the user filter them.
+     */
     class GatelibraryContentWidget : public QFrame
     {
         Q_OBJECT

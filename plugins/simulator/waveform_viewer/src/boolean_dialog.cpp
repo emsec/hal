@@ -1,4 +1,5 @@
 #include "waveform_viewer/boolean_dialog.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QRadioButton>
@@ -178,6 +179,6 @@ namespace hal {
             if (!incomplete)
                 val.insert(v);
         }
-        return val.toList();
+        return QtCompat::setToList<int>(val);
     }
 }

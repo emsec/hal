@@ -35,6 +35,9 @@ class QLineEdit;
 
 namespace hal {
 
+    /**
+     * The dialog in which the user picks the name, location, and gate library of a new project.
+     */
     class NewProjectDialog : public QDialog
     {
         Q_OBJECT

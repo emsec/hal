@@ -32,6 +32,8 @@
 namespace hal
 {
     /**
+     * The stylesheet handling of the GUI.
+     *
      * @ingroup gui
      */
     namespace style

@@ -35,7 +35,7 @@ namespace hal
      * @ingroup gui
      * @brief Checks if a given string is unique compared to other given strings.
      *
-     * The UniqueStringValidator is a Validator which validate function returns <b>true</b> if the candidate string does not
+     * The UniqueStringValidator is a Validator which validate function returns `true` if the candidate string does not
      * appear in the list of unique strings passed in the constructor.
      * It should be used whenever an input must not contain an already used identifier.
      */
@@ -45,16 +45,16 @@ namespace hal
             /**
              * Constructor.
              *
-             * @param unique_strings - The black list of strings that will cause the validate function to return <b>false</b>
+             * @param unique_strings - The black list of strings that will cause the validate function to return `false`
              */
             UniqueStringValidator(const QStringList &unique_strings);
 
             /**
-             * Given any string this function returns <b>true</b> iff the string does not appear in the unique_string
+             * Given any string this function returns `true` iff the string does not appear in the unique_string
              * list passed to the constructor.
              *
              * @param input - The input string
-             * @returns <b>true</b> iff the string is considered valid (unique)
+             * @returns `true` iff the string is considered valid (unique), `false` otherwise.
              */
             bool validate(const QString &input);
 

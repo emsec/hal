@@ -41,6 +41,9 @@ namespace hal
 {
     namespace dataflow
     {
+        /**
+         * Measures the wall-clock time from its construction until it goes out of scope and writes the result to the log.
+         */
         class measure_block_time_t
         {
         public:
@@ -56,7 +59,10 @@ namespace hal
             }
 
         private:
+            /** The name of the measured section, used when the measurement is logged. */
             std::string m_name;
+
+            /** The point in time at which the measurement started. */
             std::chrono::time_point<std::chrono::high_resolution_clock> m_begin_time;
         };
     }    // namespace dataflow

@@ -160,13 +160,13 @@ namespace hal
             QString name;
             int val = 0;
 
-            if (xmlIn.name() == "type")
+            if (xmlIn.name() == QString("type"))
                 tp = PinActionType::fromString(xmlIn.readElementText());
-            if (xmlIn.name() == "id")
+            if (xmlIn.name() == QString("id"))
                 id = xmlIn.readElementText().toInt();
-            if (xmlIn.name() == "name")
+            if (xmlIn.name() == QString("name"))
                 name = xmlIn.readElementText();
-            if (xmlIn.name() == "value")
+            if (xmlIn.name() == QString("value"))
                 val = xmlIn.readElementText().toInt();
             mPinActions.append(AtomicAction(tp,id,name,val));
         }

@@ -244,7 +244,7 @@ namespace hal {
         if (newScale >= 100) return;
         if (newScale*mTransform.deltaT()*1.2<viewport()->width() && newScale < oldScale) return;
         double tEvent = (evt->modifiers() & Qt::ShiftModifier)
-                ? mScrollbar->tPosF(evt->pos().x())
+                ? mScrollbar->tPosF(evt->position().x())
                 : mCursorTime;
 
         mTransform.setScale(newScale);

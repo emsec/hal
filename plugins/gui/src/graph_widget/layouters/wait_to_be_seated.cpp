@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QMap>
 #include <QTextStream>
+#include <QIODevice>
 
 namespace hal
 {

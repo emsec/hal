@@ -38,6 +38,9 @@
 
 namespace hal
 {
+    /**
+     * Contains the callbacks that write every netlist event into the log.
+     */
     namespace event_log
     {
         /**

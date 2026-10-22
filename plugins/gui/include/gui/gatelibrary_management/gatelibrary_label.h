@@ -30,6 +30,9 @@
 
 namespace hal
 {
+    /**
+     * A label of the gate library manager that is styled differently depending on whether it shows a property name or its value.
+     */
     class GateLibraryLabel : public QLabel
     {
         Q_OBJECT

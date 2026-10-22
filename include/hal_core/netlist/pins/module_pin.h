@@ -59,7 +59,7 @@ namespace hal
          * Check whether two module pins are equal.
          *
          * @param[in] other - The module pin to compare against.
-         * @returns True if both module pins are equal, false otherwise.
+         * @returns `true` if both module pins are equal, `false` otherwise.
          */
         bool operator==(const ModulePin& other) const;
 
@@ -67,7 +67,7 @@ namespace hal
          * Check whether two module pins are unequal.
          *
          * @param[in] other - The module pin to compare against.
-         * @returns True if both module pins are unequal, false otherwise.
+         * @returns `true` if both module pins are unequal, `false` otherwise.
          */
         bool operator!=(const ModulePin& other) const;
 

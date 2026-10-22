@@ -62,7 +62,7 @@ namespace hal
         /**
          * Checks if the model is still busy with applying the changes (in applyFilterOnGraphics()).
          *
-         * @return True if the model is still busy. False otherwise.
+         * @return `true` if the model is still busy. `false` otherwise.
          */
         bool isGraphicsBusy() const { return mGraphicsBusy > 0; }
 

@@ -19,7 +19,6 @@
 
 #include <string>
 #include <QRegularExpression>
-#include <iostream>
 
 namespace hal
 {
@@ -299,7 +298,6 @@ namespace hal
     void LoggerWidget::handleSearchChanged(QString filter, int searchOptions)
     {
         mSearchFilter = filter;
-        std::cout << mSearchFilter.QString::toStdString() << std::endl;
         mSearchOptions = SearchOptions(searchOptions);
         handleCurrentFilterChanged(1);
     }

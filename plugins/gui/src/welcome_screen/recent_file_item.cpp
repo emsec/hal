@@ -13,6 +13,7 @@
 #include <QStyle>
 #include <QVBoxLayout>
 #include <QToolButton>
+#include <QEnterEvent>
 
 namespace hal
 {
@@ -63,7 +64,7 @@ namespace hal
         repolish();
     }
 
-    void RecentFileItem::enterEvent(QEvent* event)
+    void RecentFileItem::enterEvent(QEnterEvent* event)
     {
         Q_UNUSED(event)
         if(mMissing)
