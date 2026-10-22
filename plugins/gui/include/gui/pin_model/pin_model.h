@@ -105,6 +105,7 @@ namespace hal
 
         QList<PinItem*> getInputPins();
         QList<PinItem*> getOutputPins();
+        QList<PinItem*> getInternalPins();
 
     private:
         QList<PinItem*> mInvalidPins = QList<PinItem*>();

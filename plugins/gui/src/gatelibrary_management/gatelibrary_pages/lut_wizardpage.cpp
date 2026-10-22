@@ -1,13 +1,11 @@
 #include "gui/gatelibrary_management/gatelibrary_pages/lut_wizardpage.h"
 #include "gui/gatelibrary_management/gatelibrary_wizard.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
-#include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "gui/pin_model/pin_item.h"
 
 #include <QComboBox>
 #include <QHeaderView>
 #include <QSpinBox>
-#include <QHBoxLayout>
 
 namespace hal
 {
@@ -35,26 +33,20 @@ namespace hal
         QWidget*     btnWidget = new QWidget(this);
         QHBoxLayout* btnLayout = new QHBoxLayout(btnWidget);
         btnLayout->setContentsMargins(0, 0, 0, 0);
-        mAddBtn    = new QPushButton("+", btnWidget);
-        mRemoveBtn = new QPushButton("-", btnWidget);
-        btnLayout->addWidget(mAddBtn);
-        btnLayout->addWidget(mRemoveBtn);
         btnLayout->addStretch();
         mLayout->addWidget(btnWidget, 2, 0, 1, 2);
 
         setLayout(mLayout);
 
         connect(mAscending, &QCheckBox::stateChanged, this, &LUTWizardPage::completeChanged);
-        connect(mAddBtn,    &QPushButton::clicked,    this, &LUTWizardPage::addRow);
-        connect(mRemoveBtn, &QPushButton::clicked,    this, &LUTWizardPage::removeSelectedRow);
+        connect(mPinConfigTable, &QTableWidget::itemChanged, this, &LUTWizardPage::completeChanged);
     }
 
     void LUTWizardPage::setData(GateType* gate)
     {
         mSavedConfigs.clear();
-        mTableInitialized = false;
 
-        if (gate == nullptr || !gate->has_component_of_type(GateTypeComponent::ComponentType::init))
+        if (gate == nullptr || !gate->has_component_of_type(GateTypeComponent::ComponentType::lut))
             return;
 
         auto* lutc = gate->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
@@ -73,24 +65,37 @@ namespace hal
 
     void LUTWizardPage::initializePage()
     {
-        const QStringList pins = getOutputPinsFromWizard();
+        const QStringList pins = getLutPinsFromWizard();
 
-        if (!mTableInitialized)
+        auto* wiz = static_cast<GateLibraryWizard*>(wizard());
+        int n = wiz ? wiz->mPinModel->getInputPins().size() : 0;
+        if (n > 30) n = 30;
+        const u32 maxBitCount = 1u << n;
+
+        mPinConfigTable->setRowCount(0);
+        for (const QString& pin : pins)
         {
-            mTableInitialized = true;
-            mPinConfigTable->setRowCount(0);
+            const std::string pinName = pin.toStdString();
+
+            // prefill from an existing configuration if this pin already has one
+            const SavedConfig* saved = nullptr;
             for (const auto& cfg : mSavedConfigs)
-                addTableRow(QString::fromStdString(cfg.pinName),
-                            QString::fromStdString(cfg.initIdentifier),
-                            cfg.bitOffset, cfg.bitCount, pins);
-        }
-        else
-        {
-            updateDropdowns(pins);
+            {
+                if (cfg.pinName == pinName)
+                {
+                    saved = &cfg;
+                    break;
+                }
+            }
+
+            if (saved != nullptr)
+                addTableRow(pin, QString::fromStdString(saved->initIdentifier), saved->bitOffset, saved->bitCount, maxBitCount);
+            else
+                addTableRow(pin, "INIT", 0, 1, maxBitCount);
         }
     }
 
-    QStringList LUTWizardPage::getOutputPinsFromWizard() const
+    QStringList LUTWizardPage::getLutPinsFromWizard() const
     {
         auto* wiz = static_cast<GateLibraryWizard*>(wizard());
         if (!wiz) return {};
@@ -102,63 +107,35 @@ namespace hal
             {
                 auto* pin = static_cast<PinItem*>(child);
                 if (pin->getItemType() == PinItem::TreeItemType::Pin &&
-                    pin->getDirection() == PinDirection::output)
+                    pin->getPinType()  == PinType::lut)
                     result << pin->getName();
             }
         }
         return result;
     }
 
-    void LUTWizardPage::addTableRow(const QString& pinName, const QString& initId,
-                                     u32 bitOffset, u32 bitCount,
-                                     const QStringList& availablePins)
+    void LUTWizardPage::addTableRow(const QString& pinName, const QString& initId, u32 bitOffset, u32 bitCount, u32 maxBitCount)
     {
         int row = mPinConfigTable->rowCount();
         mPinConfigTable->insertRow(row);
 
-        auto* combo = new QComboBox(mPinConfigTable);
-        combo->addItems(availablePins);
-        int idx = combo->findText(pinName);
-        if (idx >= 0) combo->setCurrentIndex(idx);
-        mPinConfigTable->setCellWidget(row, 0, combo);
+        auto* pinItem = new QTableWidgetItem(pinName);
+        pinItem->setFlags(pinItem->flags() & ~Qt::ItemIsEditable);
+        mPinConfigTable->setItem(row, 0, pinItem);
 
-        mPinConfigTable->setItem(row, 1, new QTableWidgetItem(initId.isEmpty() ? "INIT" : initId));
+        mPinConfigTable->setItem(row, 1, new QTableWidgetItem(initId));
 
         auto* offsetSpin = new QSpinBox(mPinConfigTable);
         offsetSpin->setRange(0, 1 << 20);
         offsetSpin->setValue(static_cast<int>(bitOffset));
         mPinConfigTable->setCellWidget(row, 2, offsetSpin);
 
-        auto* countSpin = new QSpinBox(mPinConfigTable);
-        countSpin->setRange(1, 1 << 20);
-        countSpin->setValue(static_cast<int>(bitCount > 0 ? bitCount : 1));
-        mPinConfigTable->setCellWidget(row, 3, countSpin);
-    }
-
-    void LUTWizardPage::updateDropdowns(const QStringList& pins)
-    {
-        for (int r = 0; r < mPinConfigTable->rowCount(); ++r)
-        {
-            auto* combo = qobject_cast<QComboBox*>(mPinConfigTable->cellWidget(r, 0));
-            if (!combo) continue;
-            const QString current = combo->currentText();
-            combo->clear();
-            combo->addItems(pins);
-            int idx = combo->findText(current);
-            if (idx >= 0) combo->setCurrentIndex(idx);
-        }
-    }
-
-    void LUTWizardPage::addRow()
-    {
-        addTableRow("", "INIT", 0, 1, getOutputPinsFromWizard());
-    }
-
-    void LUTWizardPage::removeSelectedRow()
-    {
-        const int row = mPinConfigTable->currentRow();
-        if (row >= 0)
-            mPinConfigTable->removeRow(row);
+        auto* countCombo = new QComboBox(mPinConfigTable);
+        for (u32 count = 1; count <= maxBitCount; count <<= 1)
+            countCombo->addItem(QString::number(count), count);
+        countCombo->setCurrentIndex(countCombo->findData(bitCount));
+        mPinConfigTable->setCellWidget(row, 3, countCombo);
+        connect(countCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LUTWizardPage::completeChanged);
     }
 
     QVector<LUTWizardPage::OutputPinEntry> LUTWizardPage::getOutputPinConfigs() const
@@ -166,21 +143,35 @@ namespace hal
         QVector<OutputPinEntry> result;
         for (int r = 0; r < mPinConfigTable->rowCount(); ++r)
         {
-            auto* combo      = qobject_cast<QComboBox*>(mPinConfigTable->cellWidget(r, 0));
+            auto* pinItem    = mPinConfigTable->item(r, 0);
             auto* offsetSpin = qobject_cast<QSpinBox*>(mPinConfigTable->cellWidget(r, 2));
-            auto* countSpin  = qobject_cast<QSpinBox*>(mPinConfigTable->cellWidget(r, 3));
+            auto* countCombo = qobject_cast<QComboBox*>(mPinConfigTable->cellWidget(r, 3));
 
-            const QString pin = combo ? combo->currentText() : QString();
+            const QString pin = pinItem ? pinItem->text() : QString();
             if (pin.isEmpty()) continue;
 
-            const QString id = (mPinConfigTable->item(r, 1) && !mPinConfigTable->item(r, 1)->text().isEmpty())
-                               ? mPinConfigTable->item(r, 1)->text()
-                               : "INIT";
+            auto* idItem     = mPinConfigTable->item(r, 1);
+            const QString id = idItem ? idItem->text() : QString();
 
             result.push_back({pin, id,
                                static_cast<u32>(offsetSpin ? offsetSpin->value() : 0),
-                               static_cast<u32>(countSpin  ? countSpin->value()  : 0)});
+                               countCombo ? countCombo->currentData().toUInt() : 0});
         }
         return result;
+    }
+
+    bool LUTWizardPage::isComplete() const
+    {
+        for (int row = 0; row < mPinConfigTable->rowCount(); ++row)
+        {
+            auto* pinInitIdentifier = mPinConfigTable->item(row, 1);
+            if (pinInitIdentifier == nullptr || pinInitIdentifier->text().trimmed().isEmpty()) return false;
+
+            auto* countCombo = qobject_cast<QComboBox*>(mPinConfigTable->cellWidget(row, 3));
+            const u32 count  = countCombo ? countCombo->currentData().toUInt() : 0;
+            if (count == 0 || count & (count - 1)) return false; // ensure bit count is non-zero power of two
+        }
+
+        return true;
     }
 }

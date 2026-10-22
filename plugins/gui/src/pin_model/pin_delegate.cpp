@@ -20,10 +20,42 @@ namespace hal
 
     }
 
+    bool PinDelegate::containsLutType(const PinItem* item)
+    {
+        if(item->getPinType() == PinType::lut)
+            return true;
+
+        // editing a pin group propagates type and direction to all of its pins, so a group has to be
+        // treated like a lut pin as soon as one of its pins is of that type
+        for(const BaseTreeItem* child : item->getChildren())
+        {
+            if(static_cast<const PinItem*>(child)->getPinType() == PinType::lut)
+                return true;
+        }
+        return false;
+    }
+
+    bool PinDelegate::containsInputDirection(const PinItem* item)
+    {
+        if(item->getDirection() == PinDirection::input)
+            return true;
+
+        for(const BaseTreeItem* child : item->getChildren())
+        {
+            if(static_cast<const PinItem*>(child)->getDirection() == PinDirection::input)
+                return true;
+        }
+        return false;
+    }
+
     QWidget* PinDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
     {
-        PinItem::TreeItemType itemType = static_cast<PinItem*>(index.internalPointer())->getItemType();
+        const PinItem* pinItem         = static_cast<const PinItem*>(index.internalPointer());
+        PinItem::TreeItemType itemType = pinItem->getItemType();
         //TODO create editors
+
+        const bool allowInput = !containsLutType(pinItem) || pinItem->getDirection() == PinDirection::input;
+        const bool allowLut   = !containsInputDirection(pinItem) || pinItem->getPinType() == PinType::lut;
 
         // Column 0: Name, Column 1: Type, Column 2: Direction, Column 3: Delete button
         switch(index.column()){
@@ -38,7 +70,8 @@ namespace hal
                     return nullptr;
                 auto comboBox = new QComboBox(parent);
                 //TODO provide enum to string method
-                comboBox->addItem("input");
+                if(allowInput)
+                    comboBox->addItem("input");
                 comboBox->addItem("output");
                 comboBox->addItem("inout");
                 comboBox->addItem("internal");
@@ -55,7 +88,8 @@ namespace hal
                 comboBox->addItem("none");
                 comboBox->addItem("power");
                 comboBox->addItem("ground");
-                comboBox->addItem("lut");
+                if(allowLut)
+                    comboBox->addItem("lut");
                 comboBox->addItem("state");
                 comboBox->addItem("neg_state");
                 comboBox->addItem("clock");
