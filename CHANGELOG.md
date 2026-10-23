@@ -205,7 +205,7 @@ All notable changes to this project will be documented in this file.
     * fixed the GUI crashing when a pin group that still holds pins is deleted
     * fixed the GUI crashing when `Delete pin group` is chosen for a group that holds a single pin named like the group
     * fixed toggling a pin group between ascending and descending losing the direction and the type of the group, and deleting a pin group creating the single-pin groups for its pins without direction and type
-    * fixed a module that reuses the ID of a deleted module being shown with the colour icon of the deleted one in the selection details
+    * fixed a module that reuses the ID of a deleted module being shown with the color icon of the deleted one in the selection details
     * fixed the GUI at times not registering the first change to a netlist after start, and so not offering to save it on close
     * fixed unloading the waveform viewer or the DOT viewer plugin leaving its dock button behind
     * fixed the GUI crashing when the selection is to be brought into view before the graph view has rendered its layout, e.g. by `GuiApi::selectGate` with `navigate_to_selection` set right after opening a netlist, the scene had no item for the selected element yet
@@ -214,6 +214,7 @@ All notable changes to this project will be documented in this file.
     * fixed the GUI hanging for minutes when a module with many gates is selected
     * fixed the GUI stalling when a large module is unfolded within a list of modules
     * fixed the Python editor and the comment editor hanging when the search string is empty or the regular expression matches an empty string
+    * fixed the line number in the error message issued by Python interpreter so it matches with the line number in editor
     * fixed the module tree to not rebuild itself twice per selection change
     * fixed `GuiApi.selectGate`, `selectNet` and `selectModule` with `clear_current_selection` set, which is the default, keeping the previous selection
     * fixed `GuiApi.getSelectedModules` and `getSelectedItems` not tying the returned modules to the netlist
