@@ -1,5 +1,6 @@
 var NAVTREEINDEX35 =
 {
+"hal__qt__compat_8h.html#afb99334d05bd69847dbd16929682b81f":[10,0,1,8,0,0,26,0,8],
 "hal__qt__compat_8h.html#aff5ecc76d6728554e9903661f1e91bce":[10,0,1,8,0,0,26,0,9],
 "hal__qt__compat_8h_source.html":[10,0,1,8,0,0,26,0],
 "hexadecimal__validator_8cpp.html":[10,0,1,8,2,51,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX35 =
 "mac__component_8cpp_source.html":[10,0,2,0,3,3,5],
 "mac__component_8h.html":[10,0,0,0,1,3,3,5],
 "mac__component_8h_source.html":[10,0,0,0,1,3,3,5],
-"main__settings__widget_8cpp.html":[10,0,1,8,2,54],
-"main__settings__widget_8cpp_source.html":[10,0,1,8,2,54]
+"main__settings__widget_8cpp.html":[10,0,1,8,2,54]
 };
