@@ -12,12 +12,14 @@ namespace hal
         // remove questionmark from title bar, it is not implemented and only confusing
         setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
         mLayout = new QVBoxLayout(this);
-        mLayout->addWidget(new QLabel(QString("hal %1.%2.%3 (%4)")
-                                      .arg(hal_version::major)
-                                      .arg(hal_version::minor)
-                                      .arg(hal_version::patch)
-                                      .arg(hal_version::version.c_str())
-                                      ,this));
+        QLabel* versionLabel = new QLabel(QString("hal %1.%2.%3 (%4)")
+                                              .arg(hal_version::major)
+                                              .arg(hal_version::minor)
+                                              .arg(hal_version::patch)
+                                              .arg(hal_version::version.c_str()),
+                                          this);
+        versionLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+        mLayout->addWidget(versionLabel);
         mLayout->addWidget(new QLabel(QString("Compiled with Qt Version %1")
                                       .arg(QT_VERSION_STR)
                                       ,this));

@@ -194,6 +194,7 @@ All notable changes to this project will be documented in this file.
     * added `Automatically rename pins` to the context menu of a pin group, which renames every pin of the group to `<group name>(<index>)`
     * added `Set focus to pin` to the context menu of a pin in the pin tree of a gate and of a module, which moves the sub-focus of the graph view to that pin
   * misc
+    * added feature in Help->About, version string can be selected for copy to clipboard
     * added restoring the GUI layout of the previous session on start
     * changed the plugin manager of the GUI to unload a plugin, and the dependencies it pulled in, right after loading it to read its description, so that only plugins requested by the user or required by such a plugin stay loaded
     * added context menu entries to the GUI for `remove_buffers`, `unify_ff_outputs`, `split_luts`, and `split_shift_registers`, each applicable to the current selection or to the entire netlist
