@@ -22,6 +22,7 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QInputDialog>
 #include <QMenu>
 #include <QShortcut>
 #include <QTabBar>
@@ -926,6 +927,9 @@ namespace hal
         action->setData(absFilename);
         action->setDisabled(absFilename.isEmpty());
         connect(action, &QAction::triggered, this, &PythonEditor::handleActionShowFile);
+        action = context_menu.addAction("Rename");
+        action->setDisabled(absFilename.isEmpty());
+        connect(action, &QAction::triggered, this, &PythonEditor::handleActionRenameFile);
 
         context_menu.exec(QCursor::pos());
     }
@@ -1010,6 +1014,59 @@ namespace hal
         }
 
         QDesktopServices::openUrl(QUrl(info.absolutePath(), QUrl::TolerantMode));
+    }
+
+    void PythonEditor::handleActionRenameFile()
+    {
+        renameFile(mTabRightclicked);
+    }
+
+    void PythonEditor::renameFile(int index)
+    {
+        PythonCodeEditor* editor = getPythonEditor(index);
+        if (!editor || editor->getAbsFilename().isEmpty())
+            return;
+
+        QString oldFilename = editor->getAbsFilename();
+        QFileInfo info(oldFilename);
+        bool confirm;
+        QString newName = QInputDialog::getText(this, "Rename Script", "New name:", QLineEdit::Normal, info.fileName(), &confirm).trimmed();
+        if (!confirm || newName.isEmpty())
+            return;
+        if (newName != QFileInfo(newName).fileName())
+        {
+            QMessageBox::warning(this, "Rename Script Error", "Not a file name\n<" + newName + ">");
+            return;
+        }
+        if (!newName.endsWith(".py"))
+            newName.append(".py");
+
+        QString newFilename = info.dir().absoluteFilePath(newName);
+        if (newFilename == oldFilename)
+            return;
+
+        // unwatch first, otherwise the rename is reported as the file having been moved on disk
+        bool isFileWatched = mFileWatcher->removePath(oldFilename);
+
+        // QFile::rename never overwrites an existing file and handles renames that only change the case of the name
+        QFile file(oldFilename);
+        if (!file.rename(newFilename))
+        {
+            if (isFileWatched)
+                mFileWatcher->addPath(oldFilename);
+            log_error("gui", "could not rename python script '{}' to '{}': {}", oldFilename.toStdString(), newFilename.toStdString(), file.errorString().toStdString());
+            QMessageBox::warning(this, "Rename Script Error", "Cannot rename python script to\n<" + newFilename + ">\n" + file.errorString());
+            return;
+        }
+
+        removeSnapshotFile(editor);
+        editor->setFilename(newFilename);
+        mPathEditorMap.remove(oldFilename);
+        mPathEditorMap.insert(newFilename, editor);
+        if (isFileWatched)
+            mFileWatcher->addPath(newFilename);
+        mTabWidget->setTabText(index, QFileInfo(newFilename).fileName() + (mTabWidget->tabText(index).endsWith("*") ? "*" : ""));
+        saveControl();
     }
 
     void PythonEditor::handleTabFileChanged(QString path)

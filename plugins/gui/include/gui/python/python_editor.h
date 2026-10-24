@@ -231,6 +231,11 @@ namespace hal
         void handleActionShowFile();
 
         /**
+         * Action to rename the file of the tab the mouse is on.
+         */
+        void handleActionRenameFile();
+
+        /**
          * Open a file in the tab given by its index. Later on, all saved modification will be applied to the opened file.
          *
          * @param index - The index of the tab the file should opened in.
@@ -256,6 +261,13 @@ namespace hal
          * @returns `true` if the tab was saved, `false` otherwise
          */
         bool saveFile(bool isAutosave, QueryFilenamePolicy queryPolicy, int index = -1);
+
+        /**
+         * Renames the file of a tab within its directory. The user is asked for the new name.
+         *
+         * @param index - The tab index
+         */
+        void renameFile(int index);
 
         /**
          * Saves all open tabs. Will use generic filenames if no name was given so far.
