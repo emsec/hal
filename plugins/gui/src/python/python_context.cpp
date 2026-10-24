@@ -38,8 +38,8 @@ extern grammar _PyParser_Grammar;
 namespace hal
 {
     PythonContext::PythonContext(QObject *parent)
-        : QObject(parent), mContext(nullptr), mSender(nullptr), mTriggerReset(false), mThread(nullptr),
-          mThreadAborted(false), mInterpreterCaller(nullptr)
+        : QObject(parent), mContext(nullptr), mSender(nullptr), mTriggerReset(false), mTriggerClear(false),
+          mThread(nullptr), mThreadAborted(false), mInterpreterCaller(nullptr)
     {
         py::initialize_interpreter();
         initPython();
