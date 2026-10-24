@@ -71,10 +71,25 @@ namespace hal
         rule.mFormat = PythonQssAdapter::instance()->mNumberFormat;
         mHighlightingRules.append(rule);
 
-        rule.mPattern = QRegularExpression("#[^\\n]*");
-        rule.mPattern.optimize();
-        rule.mFormat = PythonQssAdapter::instance()->mCommentFormat;
-        mHighlightingRules.append(rule);
+        // match a '#' that is not inside a string literal
+        //
+        //   \G         anchor the match at the offset it is given
+        //   (?: ... )* consume everything that cannot start a comment:
+        //                [^"'#\\]  an ordinary character
+        //                \\.       an escape, so \" does not end a string
+        //                "..."     a complete double quoted string
+        //                '...'     a complete single quoted string
+        //   \K         drop all of that from the reported match
+        //   #.*        the comment itself
+        //
+        //     print("#")  # here
+        //     |________|  |
+        //      consumed   reported as the match
+        //
+        // an unterminated quote never gets past the loop, so a '#' inside an
+        // unclosed string or after an opening """ is left alone
+        mSingleLineComment = QRegularExpression(R"(\G(?:[^"'#\\]|\\.|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')*\K#.*)");
+        mSingleLineComment.optimize();
     }
 
     void PythonSyntaxHighlighter::highlightBlock(const QString& text)
@@ -119,9 +134,13 @@ namespace hal
             }
         }
 
+        int comment_index = mSingleLineComment.match(text, current_index).capturedStart();
+        if (comment_index >= 0)
+            setFormat(comment_index, text.length() - comment_index, PythonQssAdapter::instance()->mCommentFormat);
+
         QRegularExpressionMatch match = mMultiLineCommentDelimiter.match(text, current_index);
 
-        while (match.hasMatch())
+        while (match.hasMatch() && (comment_index < 0 || match.capturedStart() < comment_index))
         {
             // check which delimiter was found
             // check for closing delimiter
