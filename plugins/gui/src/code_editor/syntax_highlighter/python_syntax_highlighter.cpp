@@ -46,12 +46,12 @@ namespace hal
         rule.mFormat = PythonQssAdapter::instance()->mBraceFormat;
         mHighlightingRules.append(rule);
 
-        rule.mPattern = QRegularExpression("'[^']*'");
+        rule.mPattern = QRegularExpression(R"('(?:[^'\\]|\\.)*')");
         rule.mPattern.optimize();
         rule.mFormat = PythonQssAdapter::instance()->mSingleQuotedStringFormat;
         mHighlightingRules.append(rule);
 
-        rule.mPattern = QRegularExpression("\"[^\"]*\"");
+        rule.mPattern = QRegularExpression(R"("(?:[^"\\]|\\.)*")");
         rule.mPattern.optimize();
         rule.mFormat = PythonQssAdapter::instance()->mDoubleQuotedStringFormat;
         mHighlightingRules.append(rule);
