@@ -9,6 +9,7 @@
 #include "hal_core/netlist/gate.h"
 #include <QApplication>
 #include <QDebug>
+#include <QRegularExpression>
 
 namespace hal {
     PythonMutex::PythonMutex()
@@ -60,7 +61,21 @@ namespace hal {
         catch (py::error_already_set& e)
         {
             qDebug() << "AlreadySet";
-            mErrorMessage = QString::fromStdString(std::string(e.what()) + "\n");
+            mErrorMessage = QString::fromStdString(std::string(e.what()));
+
+            // pybind11 prepends a coding line to the script, so reported line numbers are
+            // one too high. Rewrite "At:\n  <string>(6):" to "At line 5:" if it matches,
+            // otherwise leave the message unchanged.
+            QRegularExpression re("At:\\s*\\n\\s*<string>\\((\\d+)\\):");
+            QRegularExpressionMatch match = re.match(mErrorMessage);
+            if (match.hasMatch())
+            {
+                int line = match.captured(1).toInt() - 1;
+                if (line >= 1)
+                    mErrorMessage.replace(match.capturedStart(0), match.capturedLength(0),
+                                          QString("At line %1:").arg(line));
+            }
+            mErrorMessage += "\n";
             e.restore();
             PyErr_Clear();
         }

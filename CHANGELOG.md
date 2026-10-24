@@ -1,4 +1,4 @@
-# Changelog
+a# Changelog
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
@@ -194,6 +194,7 @@ All notable changes to this project will be documented in this file.
     * added `Automatically rename pins` to the context menu of a pin group, which renames every pin of the group to `<group name>(<index>)`
     * added `Set focus to pin` to the context menu of a pin in the pin tree of a gate and of a module, which moves the sub-focus of the graph view to that pin
   * misc
+    * added feature in Help->About, version string can be selected for copy to clipboard
     * added restoring the GUI layout of the previous session on start
     * changed the plugin manager of the GUI to unload a plugin, and the dependencies it pulled in, right after loading it to read its description, so that only plugins requested by the user or required by such a plugin stay loaded
     * added context menu entries to the GUI for `remove_buffers`, `unify_ff_outputs`, `split_luts`, and `split_shift_registers`, each applicable to the current selection or to the entire netlist
@@ -205,7 +206,7 @@ All notable changes to this project will be documented in this file.
     * fixed the GUI crashing when a pin group that still holds pins is deleted
     * fixed the GUI crashing when `Delete pin group` is chosen for a group that holds a single pin named like the group
     * fixed toggling a pin group between ascending and descending losing the direction and the type of the group, and deleting a pin group creating the single-pin groups for its pins without direction and type
-    * fixed a module that reuses the ID of a deleted module being shown with the colour icon of the deleted one in the selection details
+    * fixed a module that reuses the ID of a deleted module being shown with the color icon of the deleted one in the selection details
     * fixed the GUI at times not registering the first change to a netlist after start, and so not offering to save it on close
     * fixed unloading the waveform viewer or the DOT viewer plugin leaving its dock button behind
     * fixed the GUI crashing when the selection is to be brought into view before the graph view has rendered its layout, e.g. by `GuiApi::selectGate` with `navigate_to_selection` set right after opening a netlist, the scene had no item for the selected element yet
@@ -214,6 +215,7 @@ All notable changes to this project will be documented in this file.
     * fixed the GUI hanging for minutes when a module with many gates is selected
     * fixed the GUI stalling when a large module is unfolded within a list of modules
     * fixed the Python editor and the comment editor hanging when the search string is empty or the regular expression matches an empty string
+    * fixed the line number in the error message issued by Python interpreter so it matches with the line number in editor
     * fixed the module tree to not rebuild itself twice per selection change
     * fixed `GuiApi.selectGate`, `selectNet` and `selectModule` with `clear_current_selection` set, which is the default, keeping the previous selection
     * fixed `GuiApi.getSelectedModules` and `getSelectedItems` not tying the returned modules to the netlist
@@ -221,7 +223,7 @@ All notable changes to this project will be documented in this file.
     * fixed sorting the groupings table, which compared all columns as text, sorting colors by their hex code; IDs are now compared as numbers and colors by hue, saturation, and value
     * removed a leftover debug output that printed every search string of the log widget to stdout
     * fixed the option to copy the gate library into the project directory in the netlist import dialog staying enabled when the gate library is detected automatically, in which case there is no file to copy and the option had no effect
-    * fixed `New Project` failing with `cannot load gate library` for every gate library, since the parser plugin for the file type of the library was never loaded
+    * fixed action enable behavior in View Manager when deleting an entry
 * Build and dependencies
   * changed the GUI from Qt 5 to Qt 6
   * updated the vendored QuaZip from 1.3 to 1.5 as part of the move to Qt 6
