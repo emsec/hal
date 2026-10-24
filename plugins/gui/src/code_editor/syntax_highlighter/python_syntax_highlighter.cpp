@@ -75,10 +75,11 @@ namespace hal
         //
         //   \G         anchor the match at the offset it is given
         //   (?: ... )* consume everything that cannot start a comment:
-        //                [^"'#\\]  an ordinary character
-        //                \\.       an escape, so \" does not end a string
-        //                "..."     a complete double quoted string
-        //                '...'     a complete single quoted string
+        //                [^"'#\\]   an ordinary character
+        //                \\.        an escape, so \" does not end a string
+        //                """..."""  a complete triple quoted string, likewise '''...'''
+        //                "..."      a complete double quoted string, unless the quote opens a """
+        //                '...'      a complete single quoted string, unless the quote opens a '''
         //   \K         drop all of that from the reported match
         //   #.*        the comment itself
         //
@@ -88,7 +89,7 @@ namespace hal
         //
         // an unterminated quote never gets past the loop, so a '#' inside an
         // unclosed string or after an opening """ is left alone
-        mSingleLineComment = QRegularExpression(R"(\G(?:[^"'#\\]|\\.|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')*\K#.*)");
+        mSingleLineComment = QRegularExpression(R"(\G(?:[^"'#\\]|\\.|"""(?:[^"\\]|\\.|"(?!""))*"""|'''(?:[^'\\]|\\.|'(?!''))*'''|"(?!"")(?:[^"\\]|\\.)*"|'(?!'')(?:[^'\\]|\\.)*')*\K#.*)");
         mSingleLineComment.optimize();
     }
 
