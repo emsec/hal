@@ -200,6 +200,7 @@ All notable changes to this project will be documented in this file.
     * added context menu entries to the GUI for `remove_buffers`, `unify_ff_outputs`, `split_luts`, and `split_shift_registers`, each applicable to the current selection or to the entire netlist
     * changed duplicating a view to place the modules and gates of the copy where they are in the original instead of laying the copy out anew
     * changed the modules widget to list the nets that belong to no module, i.e., the global inputs and outputs of the netlist and nets without any source or destination, below the top module when nets are shown, so that every net of the netlist appears in the tree
+    * changed the content window of a grouping to no longer block the rest of HAL, so several can be open side by side; it follows renaming, recoloring and changes to the content of its grouping, closes when the grouping is deleted, and showing the content of a grouping whose window is already open brings that window to the front
   * bugfixes
     * fixed the module trees keeping a net under its module after the net was marked as a global input or output, and leaving a net out after it was unmarked
     * fixed `Number of nets` in the details of a module showing the number of internal nets; it now counts every net with a source or a destination inside the module, as `Module::get_nets` returns them

@@ -3,6 +3,7 @@
 #include "gui/action/action.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/grouping/grouping_color_delegate.h"
+#include "gui/grouping/grouping_content_dialog.h"
 #include "gui/grouping/grouping_proxy_model.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
@@ -19,7 +20,6 @@
 #include "gui/user_action/user_action_compound.h"
 #include "gui/user_action/action_remove_items_from_object.h"
 #include "hal_core/utilities/log.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 #include "gui/grouping_dialog/grouping_dialog.h"
 
 #include <QAction>
@@ -551,44 +551,11 @@ namespace hal
         if (!currentIndex.isValid())
             return;
 
-        int irow = currentIndex.row();
-        GroupingTableEntry gte = mGroupingTableModel->groupingAt(irow);
-
-        QString grpName  = gte.name();
-        u32     grpId    = gte.id();
-        QColor  grpColor = gte.color();
-
-        QDialog dialog;
-        dialog.setWindowTitle(QString("Content of %1 (ID: %2)").arg(grpName).arg(grpId));
-
-        // Create color rectangle
-        QLabel colorRectangle(&dialog);
-        colorRectangle.setText(QString());  // Empty text to visualize grouping color
-        colorRectangle.setStyleSheet("background-color: " + grpColor.name());
-        colorRectangle.setFixedSize(25, 25);  // Adapt size of grouping color
-        colorRectangle.setAutoFillBackground(true);
-
-        // Replace InputDialog with SelectionTreeView
-        SelectionTreeView selectionTreeView(&dialog, true);
-        SelectionTreeProxyModel selectionTreeProxyModel(&dialog);
-        ModuleModel moduleModel(&dialog); // Need to fully initialise SelectionTreeView with a model
-        selectionTreeProxyModel.setSourceModel(&moduleModel);
-        selectionTreeView.setModel(&selectionTreeProxyModel);
-        
-        selectionTreeView.populate(true, grpId);
-
-        QPushButton closeButton("Close",&dialog);// = new QPushButton("Close", &dialog);
-        connect(&closeButton, &QPushButton::clicked, [&dialog](){ dialog.close(); });
-
-        QVBoxLayout layout(&dialog);
-        QHBoxLayout hlay(&dialog);
-        hlay.addStretch();
-        hlay.addWidget(&colorRectangle);
-        layout.addLayout(&hlay);
-        layout.addWidget(&selectionTreeView);
-        layout.addWidget(&closeButton);
-
-        dialog.exec();
+        Grouping* grouping = mGroupingTableModel->groupingAt(currentIndex.row()).grouping();
+        if (grouping)
+        {
+            GroupingContentDialog::showGrouping(grouping, this);
+        }
     }
 
     void GroupingManagerWidget::handleDeleteGroupingClicked()

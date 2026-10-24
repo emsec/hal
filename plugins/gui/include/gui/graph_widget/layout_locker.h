@@ -47,6 +47,7 @@ namespace hal
         static LayoutLockerManager* instance();
         void addLock();
         void removeLock();
+        bool isLocked() const;
         bool canUpdate(GraphContext* ctx);
         void removeWaitingContext(GraphContext* ctx);
     };
