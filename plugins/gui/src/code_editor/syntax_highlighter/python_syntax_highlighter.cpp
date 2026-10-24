@@ -3,8 +3,7 @@
 #include "gui/code_editor/syntax_highlighter/python_qss_adapter.h"
 namespace hal
 {
-    PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument* parent)
-        : QSyntaxHighlighter(parent), mMultiLineCommentDelimiter("('''|\"\"\")"), mTrippleSingleQuote("'''"), mTrippleDoubleQuote("\"\"\"")
+    PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument* parent) : QSyntaxHighlighter(parent), mTrippleSingleQuote("'''"), mTrippleDoubleQuote("\"\"\"")
     //      //mKeywordColor(177, 240, 0),
     //      //mKeywordColor("#ffd200"),
     //      mKeywordColor("#CC7832"),
@@ -71,17 +70,16 @@ namespace hal
         rule.mFormat = PythonQssAdapter::instance()->mNumberFormat;
         mHighlightingRules.append(rule);
 
-        // match a '#' that is not inside a string literal
+        // a '#' starts a comment, and a ''' or """ a multi-line string, only outside of string literals
         //
         //   \G         anchor the match at the offset it is given
-        //   (?: ... )* consume everything that cannot start a comment:
+        //   (?: ... )* consume everything that cannot start a comment or a multi-line string:
         //                [^"'#\\]   an ordinary character
         //                \\.        an escape, so \" does not end a string
         //                """..."""  a complete triple quoted string, likewise '''...'''
         //                "..."      a complete double quoted string, unless the quote opens a """
         //                '...'      a complete single quoted string, unless the quote opens a '''
         //   \K         drop all of that from the reported match
-        //   #.*        the comment itself
         //
         //     print("#")  # here
         //     |________|  |
@@ -89,8 +87,11 @@ namespace hal
         //
         // an unterminated quote never gets past the loop, so a '#' inside an
         // unclosed string or after an opening """ is left alone
-        mSingleLineComment = QRegularExpression(R"(\G(?:[^"'#\\]|\\.|"""(?:[^"\\]|\\.|"(?!""))*"""|'''(?:[^'\\]|\\.|'(?!''))*'''|"(?!"")(?:[^"\\]|\\.)*"|'(?!'')(?:[^'\\]|\\.)*')*\K#.*)");
+        const QString skip_strings = R"(\G(?:[^"'#\\]|\\.|"""(?:[^"\\]|\\.|"(?!""))*"""|'''(?:[^'\\]|\\.|'(?!''))*'''|"(?!"")(?:[^"\\]|\\.)*"|'(?!'')(?:[^'\\]|\\.)*')*\K)";
+        mSingleLineComment         = QRegularExpression(skip_strings + "#.*");
         mSingleLineComment.optimize();
+        mMultiLineCommentDelimiter = QRegularExpression(skip_strings + R"(('''|"""))");
+        mMultiLineCommentDelimiter.optimize();
     }
 
     void PythonSyntaxHighlighter::highlightBlock(const QString& text)
