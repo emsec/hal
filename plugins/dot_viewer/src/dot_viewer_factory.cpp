@@ -46,7 +46,7 @@ namespace hal {
 
         QJsonObject dvObj;
         std::filesystem::path relDotPath = ProjectManager::instance()->get_project_directory().get_relative_file_path(dv->filename().toStdString());
-        dvObj["filename"] = QString::fromStdString(relDotPath);
+        dvObj["filename"] = QString::fromStdString(relDotPath.string());
         dvObj["creator"] = dv->creatorPlugin();
 
         dvFile.write(QJsonDocument(dvObj).toJson(QJsonDocument::Compact));

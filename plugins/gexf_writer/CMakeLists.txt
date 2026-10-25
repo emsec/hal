@@ -41,7 +41,10 @@ if(PL_GEXF_WRITER OR BUILD_ALL_PLUGINS)
     if(APPLE AND CMAKE_HOST_APPLE)
         set_target_properties(gexf_writer PROPERTIES SUFFIX ".so")
         set_target_properties(gexf_writer PROPERTIES INSTALL_NAME_DIR ${PLUGIN_LIBRARY_INSTALL_DIRECTORY})
-    endif(APPLE AND CMAKE_HOST_APPLE)
+    elseif(WIN32)
+        # Python only imports extension modules with the .pyd suffix on Windows
+        set_target_properties(gexf_writer PROPERTIES SUFFIX ".pyd")
+    endif()
 
     target_link_libraries(gexf_writer
                           PUBLIC gui

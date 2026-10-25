@@ -3,6 +3,7 @@
 #include <boost/fusion/include/at_c.hpp>
 #include <boost/fusion/sequence/intrinsic/at_c.hpp>
 #include <boost/spirit/home/x3.hpp>
+#include <cstdio>
 #include <mutex>
 #include <sstream>
 #include <string>
@@ -797,12 +798,27 @@ namespace hal
                 // (2.2) compute the right-hand side Boolean function expression via
                 //       in-memory FILE* to mimic the original interface without the
                 //       use of an actual file read/write operation
+#ifdef _WIN32
+                // Windows has no open_memstream, so the data is round-tripped through a temporary file
+                auto stream = std::tmpfile();
+                Hop_ObjPrintVerilog(stream, (Hop_Obj_t*)node->pData, vLevels, 0, 0);
+                std::fflush(stream);
+                std::rewind(stream);
+
+                std::string rhs;
+                char chunk[4096];
+                while (const auto read = std::fread(chunk, 1, sizeof(chunk), stream))
+                {
+                    rhs.append(chunk, read);
+                }
+#else
                 char* rhs{};
                 size_t len{};
 
                 auto stream = open_memstream(&rhs, &len);
                 Hop_ObjPrintVerilog(stream, (Hop_Obj_t*)node->pData, vLevels, 0, 0);
                 fflush(stream);
+#endif
 
                 // (2.3) assemble "assign $(LHS) = $(RHS);"
                 ss << "assign " << lhs << " = " << rhs << ";" << std::endl;

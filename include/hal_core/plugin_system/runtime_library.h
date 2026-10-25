@@ -29,15 +29,20 @@
 
 #include <string>
 
+// operating system headers have to be included at global scope, not inside namespace hal
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <dlfcn.h>
+#endif
+
 namespace hal
 {
 // operating systems independent type definitions for function and handle access
 #ifdef _WIN32
-#include <windows.h>
     using lib_fn_ptr_t = FARPROC;
     using handle_ptr_t = HINSTANCE;
 #else
-#include <dlfcn.h>
     using lib_fn_ptr_t = void (*)();
     using handle_ptr_t = void*;
 #endif

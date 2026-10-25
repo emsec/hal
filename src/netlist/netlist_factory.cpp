@@ -10,7 +10,6 @@
 #include "hal_core/utilities/project_directory.h"
 
 #include <fstream>
-#include <unistd.h>
 
 namespace hal
 {
@@ -46,7 +45,7 @@ namespace hal
 
         std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file)
         {
-            if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
+            if (!std::ifstream(netlist_file).good())
             {
                 log_critical("netlist", "could not access file '{}'.", netlist_file.string());
                 return nullptr;
@@ -81,7 +80,7 @@ namespace hal
 
         std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, GateLibrary* gate_library)
         {
-            if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
+            if (!std::ifstream(netlist_file).good())
             {
                 log_critical("netlist", "could not access file '{}'.", netlist_file.string());
                 return nullptr;
@@ -126,7 +125,7 @@ namespace hal
         {
             std::filesystem::path netlist_file = args.is_option_set("--import-netlist") ? std::filesystem::path(args.get_parameter("--import-netlist")) : pdir.get_default_filename();
 
-            if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
+            if (!std::ifstream(netlist_file).good())
             {
                 log_critical("netlist", "cannot access file '{}'.", netlist_file.string());
                 return nullptr;
@@ -144,7 +143,7 @@ namespace hal
 
         std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& netlist_file)
         {
-            if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
+            if (!std::ifstream(netlist_file).good())
             {
                 log_critical("netlist", "could not access file '{}'.", netlist_file.string());
                 return {};

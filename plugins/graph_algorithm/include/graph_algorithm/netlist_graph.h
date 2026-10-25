@@ -63,6 +63,12 @@ namespace hal
              * @enum Direction
              * @brief The direction of exploration within the graph.
              */
+// windows.h defines IN and OUT as empty SAL annotation macros
+#ifdef _WIN32
+#undef IN
+#undef OUT
+#endif
+
             enum class Direction
             {
                 /**

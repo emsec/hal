@@ -67,6 +67,11 @@ extract_var(SEPARATOR_LIBS ABC_LIBS ${MAKE_OUTPUT})
 extract_var(SEPARATOR_CFLAGS ABC_CFLAGS ${MAKE_OUTPUT})
 extract_var(SEPARATOR_CXXFLAGS ABC_CXXFLAGS ${MAKE_OUTPUT})
 
+if(WIN32)
+    # dlopen and the realtime clock live in the CRT on Windows, there is no -ldl or -lrt
+    list(REMOVE_ITEM ABC_LIBS "-ldl" "-lrt")
+endif()
+
 if(ABC_USE_NAMESPACE)
     set_source_files_properties(${ABC_SRC} PROPERTIES LANGUAGE CXX)
 endif()
@@ -90,5 +95,11 @@ list(REMOVE_ITEM ABC_SRC ${ABC_MAIN_SRC})
 
 add_library(libabc-pic EXCLUDE_FROM_ALL ${ABC_SRC})
 abc_properties(libabc-pic PUBLIC)
+
+if(WIN32)
+    # without this abc declares its whole api __declspec(dllimport), including inside the library
+    # itself; MinGW exports and imports the symbols on its own
+    target_compile_definitions(libabc-pic PUBLIC WIN32_NO_DLL)
+endif()
 set_property(TARGET libabc-pic PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET libabc-pic PROPERTY OUTPUT_NAME abc-pic)

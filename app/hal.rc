@@ -1,0 +1,2 @@
+// embeds hal.manifest as the application manifest (resource type 24 = RT_MANIFEST)
+1 24 "hal.manifest"

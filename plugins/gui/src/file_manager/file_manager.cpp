@@ -259,7 +259,7 @@ namespace hal
     {
         ProjectManager* pm = ProjectManager::instance();
         if (pm->get_project_status() == ProjectManager::ProjectStatus::NONE) return;
-        QDir shDir(QString::fromStdString(pm->get_project_directory().get_shadow_dir()));
+        QDir shDir(QString::fromStdString(pm->get_project_directory().get_shadow_dir().string()));
         if (shDir.exists())
         {
             shDir.removeRecursively();
@@ -282,6 +282,8 @@ namespace hal
             QMessageBox::warning(qApp->activeWindow(),"Aborted", "Cannot create project <" + projdir + ">, no gate library selected");
             return;
         }
+        QString glSuffix = QFileInfo(gatelib).suffix();
+        gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,"."+glSuffix);
         GateLibrary* glib = gate_library_manager::load(gatelib.toStdString());
         if (!glib)
         {
@@ -453,7 +455,7 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         pm->set_project_directory(projPath.toStdString());
 
-        QDir shDir(QString::fromStdString(pm->get_project_directory().get_shadow_dir()));
+        QDir shDir(QString::fromStdString(pm->get_project_directory().get_shadow_dir().string()));
         QFileInfo shInfo(shDir.absoluteFilePath(QString::fromStdString(ProjectManager::s_project_file)));
         if (shInfo.exists() && shInfo.isFile())
         {

@@ -7,6 +7,9 @@ if(PL_GATE_LIBRARIES OR BUILD_ALL_PLUGINS)
     set_property(GLOBAL PROPERTY GATE_LIBS_DEFINITIONS "${CMAKE_CURRENT_SOURCE_DIR}/definitions")
     message(STATUS "GATE_LIBS: ${GATE_LIBS}")
     foreach(file ${GATE_LIBS})
+        if(IS_DIRECTORY ${file})
+            continue()
+        endif()
         get_filename_component(f ${file} NAME)
         list(APPEND SOURCE_GATE_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/definitions/${f})
         list(APPEND DESTINATION_GATE_LIBS ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/${f})
@@ -24,8 +27,8 @@ if(PL_GATE_LIBRARIES OR BUILD_ALL_PLUGINS)
 
     add_custom_target(update_internal_gate_library_definitions ALL
                       BYPRODUCTS ${DESTINATION_GATE_LIBS} ${DESTINATION_HELPER_GATE_LIBS}
-                      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/definitions/* ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/
-                      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/definitions/helper_libs/* ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/
+                      COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE_GATE_LIBS} ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/
+                      COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE_HELPER_GATE_LIBS} ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/
                       DEPENDS ${SOURCE_GATE_LIBS}  ${SOURCE_HELPER_GATE_LIBS}
                       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                       COMMENT "Update gate library definitions")

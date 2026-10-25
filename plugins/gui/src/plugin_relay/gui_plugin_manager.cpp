@@ -373,7 +373,7 @@ namespace hal {
 
     void GuiPluginTable::populateTable(bool refresh)
     {
-        QDir userConfigDir(QString::fromStdString(utils::get_user_config_directory()));
+        QDir userConfigDir(QString::fromStdString(utils::get_user_config_directory().string()));
         QMap<QString,GuiPluginEntry*> pluginEntries;
         mSettings = new QSettings(userConfigDir.absoluteFilePath("plugins.ini"),QSettings::IniFormat);
 
@@ -489,6 +489,9 @@ namespace hal {
                     {
                         // unload dependencies unless they are required from other side
                         if (pluginEntries.contains(dep) && pluginEntries.value(dep)->mLoadState > GuiPluginEntry::NotLoaded) continue;
+                        // a dependency that was loaded before the dummy load is not ours to unload, this
+                        // covers hal_gui itself, which a plugin like dot_viewer depends on
+                        if (pluginsBeforeLoad.find(dep.toStdString()) != pluginsBeforeLoad.end()) continue;
                         plugin_manager::unload(dep.toStdString());
                     }
                 }

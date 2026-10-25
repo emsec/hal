@@ -225,11 +225,6 @@ namespace hal
         }
         else
         {
-#ifdef _WIN32
-            // todo: to be implemented for windows
-            sink->spdlog_sink = nullptr;
-            log_error("stdout", "create_stdout_sink() has to be implemented for Windows.");
-#else
             auto stdout_sink = std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>();
             stdout_sink->set_color(spdlog::level::trace, stdout_sink->green);
             stdout_sink->set_color(spdlog::level::debug, stdout_sink->blue);
@@ -238,7 +233,6 @@ namespace hal
             stdout_sink->set_color(spdlog::level::err, stdout_sink->red);
             stdout_sink->set_color(spdlog::level::critical, stdout_sink->red_bold);
             sink->spdlog_sink = stdout_sink;
-#endif
         }
 
         return sink;

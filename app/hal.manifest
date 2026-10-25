@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  Runs hal with UTF-8 as its active code page. HAL passes paths around as std::string, and libstdc++
+  treats narrow paths as UTF-8 on Windows, so the narrow Windows APIs have to agree, otherwise any
+  non-ASCII character in a path (e.g. an install directory below "Einführung") breaks.
+-->
+<assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings>
+      <activeCodePage xmlns="http://schemas.microsoft.com/SMI/2019/WindowsSettings">UTF-8</activeCodePage>
+    </windowsSettings>
+  </application>
+</assembly>

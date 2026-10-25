@@ -104,9 +104,9 @@ namespace hal
                               "import io, sys, threading, builtins\n";
         for (auto path : utils::get_plugin_directories())
         {
-            command += "sys.path.append('" + path.string() + "')\n";
+            command += "sys.path.append('" + path.generic_string() + "')\n";
         }
-        command += "sys.path.append('" + utils::get_library_directory().string()
+        command += "sys.path.append('" + utils::get_library_directory().generic_string()
                    + "')\n"
                      "from hal_gui.console import reset\n"
                      "from hal_gui.console import clear\n"

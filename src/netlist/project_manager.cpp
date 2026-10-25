@@ -107,7 +107,7 @@ namespace hal
         }
         if (!success)
             return false;
-        m_netlist_file = m_proj_dir.get_default_filename(".hal");
+        m_netlist_file = m_proj_dir.get_default_filename(".hal").string();
 
         std::filesystem::create_directory(m_proj_dir.get_filename("py"));
         std::filesystem::create_directory(m_proj_dir.get_filename(ProjectDirectory::s_shadow_dir));
@@ -146,9 +146,9 @@ namespace hal
         if (gl)
             m_gatelib_path = gl->get_path().string();
         if (shadow)
-            m_netlist_file = m_proj_dir.get_shadow_filename(".hal");
+            m_netlist_file = m_proj_dir.get_shadow_filename(".hal").string();
         else
-            m_netlist_file = m_proj_dir.get_default_filename(".hal");
+            m_netlist_file = m_proj_dir.get_default_filename(".hal").string();
 
         if (!netlist_serializer::serialize_to_file(m_netlist_save, m_netlist_file))
             return false;

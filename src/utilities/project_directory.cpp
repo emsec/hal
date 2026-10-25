@@ -37,7 +37,7 @@ namespace hal {
 
     std::filesystem::path ProjectDirectory::get_default_filename(const std::string& extension) const
     {
-        std::string name(filename());
+        std::string name(filename().string());
         name += extension.empty() ?  std::string(".hal") : extension;
         std::filesystem::path retval(get_canonical_path());
         retval.append(name);
@@ -57,7 +57,7 @@ namespace hal {
 
     std::filesystem::path ProjectDirectory::get_shadow_filename(const std::string& extension) const
     {
-        std::string name(filename());
+        std::string name(filename().string());
         name += extension.empty() ?  std::string(".hal") : extension;
         std::filesystem::path retval = get_shadow_dir();
         retval.append(name);

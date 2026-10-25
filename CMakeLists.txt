@@ -172,7 +172,8 @@ include(detect_dependencies)
 # ###############################
 
 # Set UNIX (macOS or Linux) compiler flags (clang or gcc). Set optimization level for debug or release.
-if(UNIX)
+# MinGW is gcc as well, so it takes the same flags.
+if(UNIX OR MINGW)
     message(STATUS "Checking supported compiler flags...")
 
     enable_c_compile_option_if_supported("-Wall" "" "PRIVATE")
@@ -229,8 +230,20 @@ if(UNIX)
     message(VERBOSE "COMPILE_OPTIONS_PRIVATE: ${COMPILE_OPTIONS_PRIVATE}")
     message(VERBOSE "COMPILE_OPTIONS_PUBLIC: ${COMPILE_OPTIONS_PUBLIC}")
     message(VERBOSE "COMPILE_OPTIONS_INTERFACE: ${COMPILE_OPTIONS_INTERFACE}")
+    if(MINGW)
+        # the python bindings and the gui exceed the default COFF section limit
+        enable_cxx_compile_option_if_supported("-Wa,-mbig-obj" "" "PUBLIC")
+
+        # HAL marks its api with CORE_API/NETLIST_API/PLUGIN_API, which expand to nothing on MinGW,
+        # so let the linker export everything instead of annotating every symbol by hand.
+        # ld only exports everything by default while nothing is marked dllexport, and pybind11
+        # marks its module entry points, so the flag has to be passed explicitly.
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--export-all-symbols")
+        set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--export-all-symbols")
+    endif(MINGW)
+
     message(VERBOSE " ")
-endif(UNIX)
+endif(UNIX OR MINGW)
 
 # Enable Debug Symbols for Libcpp on macOS
 if(${CMAKE_BUILD_TYPE} EQUAL "Debug" AND APPLE AND CMAKE_HOST_APPLE)

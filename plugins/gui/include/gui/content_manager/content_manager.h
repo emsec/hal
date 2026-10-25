@@ -65,6 +65,8 @@ namespace hal
         QString mPluginName;
     public:
         ContentFactory(const QString& nam=QString()) : mPluginName(nam) {;}
+        // factories are deleted through this base, and may have further bases such as ProjectSerializer
+        virtual ~ContentFactory() {;}
         QString name() const {return mPluginName; }
         virtual ExternalContentWidget* contentFactory() const = 0;
     };

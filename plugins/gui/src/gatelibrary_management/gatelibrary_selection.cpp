@@ -133,7 +133,7 @@ namespace hal {
         QMap<QString,int> nameMap;
         for (const std::filesystem::path& path : gate_library_manager::get_all_path())
         {
-            QString name = QString::fromStdString(path.filename());
+            QString name = QString::fromStdString(path.filename().string());
             mEntries.append(GateLibrarySelectionEntry(name, QString::fromStdString(path.string()), nameMap[name]++));
         }
     }

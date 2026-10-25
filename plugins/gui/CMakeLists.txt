@@ -107,7 +107,10 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
     set_target_properties(gui PROPERTIES PREFIX "")
     if(APPLE AND CMAKE_HOST_APPLE)
         set_target_properties(gui PROPERTIES SUFFIX ".so")
-    endif(APPLE AND CMAKE_HOST_APPLE)
+    elseif(WIN32)
+        # Python only imports extension modules with the .pyd suffix on Windows
+        set_target_properties(gui PROPERTIES SUFFIX ".pyd")
+    endif()
     target_include_directories(gui
                                PUBLIC
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

@@ -165,11 +165,11 @@ namespace hal
 			 * 		 https://smtlib.cs.uiowa.edu/language.shtml
 			 *
 			 * @param[in] was_killed - Indicates whether solver process was killed.
-			 * @param[in] stdout - Stdout of solver process.
+			 * @param[in] solver_output - Stdout of solver process.
 			 * @param[in] config - SMT solver configuration.
 			 * @returns Ok() and SMT solver result on success, Err() otherwise.
 			 */
-            static Result<SolverResult> translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config);
+            static Result<SolverResult> translate_from_smt2(bool was_killed, std::string solver_output, const QueryConfig& config);
         };
     }    // namespace SMT
 }    // namespace hal

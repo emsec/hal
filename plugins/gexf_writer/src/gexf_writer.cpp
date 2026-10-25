@@ -37,7 +37,7 @@ namespace hal
         {
             return ERR("could not write netlist to GEXF file '" + file_path.string() + "': file path is empty");
         }
-        QString filename = QString::fromStdString(file_path);
+        QString filename = QString::fromStdString(file_path.string());
 
         if (!filename.endsWith(".gexf"))
         {

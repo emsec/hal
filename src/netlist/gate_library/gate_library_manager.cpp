@@ -205,7 +205,7 @@ namespace hal
                 auto stripped_name = std::filesystem::path(file_path).filename();
                 log_info("gate_library_manager", "file '{}' does not exist, searching for '{}' in the default gate library directories...", file_path, stripped_name.string());
 
-                auto lib_path = utils::get_file(stripped_name, utils::get_gate_library_directories());
+                auto lib_path = utils::get_file(stripped_name.string(), utils::get_gate_library_directories());
                 if (lib_path.empty())
                 {
                     log_info("gate_library_manager", "could not find gate library file '{}'.", stripped_name.string());
