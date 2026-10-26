@@ -207,6 +207,7 @@ All notable changes to this project will be documented in this file.
     * fixed the GUI crashing when `Delete pin group` is chosen for a group that holds a single pin named like the group
     * fixed toggling a pin group between ascending and descending losing the direction and the type of the group, and deleting a pin group creating the single-pin groups for its pins without direction and type
     * fixed a module that reuses the ID of a deleted module being shown with the color icon of the deleted one in the selection details
+    * fixed behavior of an isolated view which is not bound to a module not to remove all gates when module gets deleted
     * fixed the GUI at times not registering the first change to a netlist after start, and so not offering to save it on close
     * fixed unloading the waveform viewer or the DOT viewer plugin leaving its dock button behind
     * fixed the GUI crashing when the selection is to be brought into view before the graph view has rendered its layout, e.g. by `GuiApi::selectGate` with `navigate_to_selection` set right after opening a netlist, the scene had no item for the selected element yet
