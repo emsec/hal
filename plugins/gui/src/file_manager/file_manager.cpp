@@ -282,6 +282,7 @@ namespace hal
             QMessageBox::warning(qApp->activeWindow(),"Aborted", "Cannot create project <" + projdir + ">, no gate library selected");
             return;
         }
+        gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,"."+QFileInfo(gatelib).suffix());
         GateLibrary* glib = gate_library_manager::load(gatelib.toStdString());
         if (!glib)
         {
