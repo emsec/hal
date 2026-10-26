@@ -1,4 +1,4 @@
-a# Changelog
+# Changelog
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
@@ -217,6 +217,7 @@ All notable changes to this project will be documented in this file.
     * fixed the GUI stalling when a large module is unfolded within a list of modules
     * fixed the Python editor and the comment editor hanging when the search string is empty or the regular expression matches an empty string
     * fixed the line number in the error message issued by Python interpreter so it matches with the line number in editor
+    * fixed the bogus Python console error message "clear()" after running first script
     * fixed the module tree to not rebuild itself twice per selection change
     * fixed `GuiApi.selectGate`, `selectNet` and `selectModule` with `clear_current_selection` set, which is the default, keeping the previous selection
     * fixed `GuiApi.getSelectedModules` and `getSelectedItems` not tying the returned modules to the netlist
