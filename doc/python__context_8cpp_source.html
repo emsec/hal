@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-152-gc923080be</span>
+   &#160;<span id="projectnumber">v4.5.0-154-g92b5cea2f</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -128,8 +128,8 @@ $(document).ready(function(){initNavTree('python__context_8cpp_source.html','');
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;{</div>
 <div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classhal_1_1_python_context.html#a0cc2f478ece1bf3dfc91fb57024cdb57">   40</a></span>&#160;    <a class="code" href="classhal_1_1_python_context.html#a0cc2f478ece1bf3dfc91fb57024cdb57">PythonContext::PythonContext</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *parent)</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        : <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>(parent), mContext(nullptr), mSender(nullptr), mTriggerReset(false), mThread(nullptr),</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;          mThreadAborted(false), mInterpreterCaller(nullptr)</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        : <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>(parent), mContext(nullptr), mSender(nullptr), mTriggerReset(false), mTriggerClear(false),</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;          mThread(nullptr), mThreadAborted(false), mInterpreterCaller(nullptr)</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    {</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        py::initialize_interpreter();</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <a class="code" href="classhal_1_1_python_context.html#a75c57f7aad8aef06827034a24de98cb1">initPython</a>();</div>
