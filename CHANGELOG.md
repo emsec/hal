@@ -201,6 +201,7 @@ All notable changes to this project will be documented in this file.
     * changed duplicating a view to place the modules and gates of the copy where they are in the original instead of laying the copy out anew
     * changed the modules widget to list the nets that belong to no module, i.e., the global inputs and outputs of the netlist and nets without any source or destination, below the top module when nets are shown, so that every net of the netlist appears in the tree
   * bugfixes
+    * fixed gate library parsing error when creating new project by loading the parser plugin
     * fixed the module trees keeping a net under its module after the net was marked as a global input or output, and leaving a net out after it was unmarked
     * fixed `Number of nets` in the details of a module showing the number of internal nets; it now counts every net with a source or a destination inside the module, as `Module::get_nets` returns them
     * fixed the GUI crashing when a pin group that still holds pins is deleted
