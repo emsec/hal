@@ -539,15 +539,15 @@ namespace hal
             return ERR_APPEND(constraints_str.get_error(), "could not translate constraint to SMT-LIB v2: unable to generate translation constraints");
         }
 
-        Result<SolverResult> Solver::translate_from_smt2(bool was_killed, std::string stdout, const QueryConfig& config)
+        Result<SolverResult> Solver::translate_from_smt2(bool was_killed, std::string solver_output, const QueryConfig& config)
         {
             if (was_killed)
             {
                 return ERR("could not parse SMT result from string: the SMT solver was killed");
             }
 
-            auto position            = stdout.find_first_of('\n');
-            auto [result, model_str] = std::make_tuple(std::string(stdout, 0, position), std::string(stdout, position + 1));
+            auto position            = solver_output.find_first_of('\n');
+            auto [result, model_str] = std::make_tuple(std::string(solver_output, 0, position), std::string(solver_output, position + 1));
 
             auto to_lowercase = [](const auto& s) -> std::string {
                 auto lowercase = s;

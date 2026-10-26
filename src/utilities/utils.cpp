@@ -28,6 +28,23 @@ namespace hal
 {
     namespace utils
     {
+        namespace
+        {
+            /** Windows does not set HOME, the per-user root is USERPROFILE there. */
+            std::filesystem::path get_home_directory()
+            {
+                for (const char* variable : {"HOME", "USERPROFILE"})
+                {
+                    const char* value = std::getenv(variable);
+                    if (value != nullptr && *value != '\0')
+                    {
+                        return std::filesystem::path(value);
+                    }
+                }
+                return std::filesystem::temp_directory_path();
+            }
+        }    // namespace
+
         bool file_exists(const std::string& filename)
         {
             std::ifstream ifile(filename.c_str());
@@ -37,21 +54,8 @@ namespace hal
         bool folder_exists_and_is_accessible(const std::filesystem::path& folder)
         {
 #ifdef _WIN32
-            DWORD ftyp = GetFileAttributesA(folder.c_str());
-            if (ftyp == INVALID_FILE_ATTRIBUTES)
-            {
-                return false;    //something is wrong with your path!
-            }
-
-            if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
-            {
-                if (0 == access(folder.c_str(), R_OK))
-                {
-                    return true;
-                }
-            }
-
-            return false;    // this is not a directory!
+            hal::error_code ec;
+            return std::filesystem::is_directory(folder, ec);
 #else
 
             struct stat sb;
@@ -71,12 +75,18 @@ namespace hal
         {
             char buf[1024] = {0};
 #ifdef _WIN32
-            DWORD ret = GetModuleFileNameA(NULL, buf, sizeof(buf));
-            if (ret == 0 || ret == sizeof(buf))
+            // the wide API hands the path over without any code page conversion, which would throw
+            // for non-ASCII characters (this runs during static initialization of the plugin manager)
+            wchar_t wbuf[MAX_PATH] = {0};
+            DWORD ret = GetModuleFileNameW(NULL, wbuf, MAX_PATH);
+            if (ret == 0 || ret == MAX_PATH)
             {
                 return std::string();
             }
-            return std::filesystem::path(buf);
+            UNUSED(buf);
+            hal::error_code ec;
+            auto p = std::filesystem::canonical(std::filesystem::path(wbuf), ec);
+            return p.make_preferred().parent_path();
 #elif __APPLE__ && __MACH__
             uint32_t size = sizeof(buf);
             int ret       = _NSGetExecutablePath(buf, &size);
@@ -105,10 +115,15 @@ namespace hal
                 return std::filesystem::path(environ_path).make_preferred();
             }
             hal::error_code ec;
+#ifdef _WIN32
+            const std::filesystem::path hal_binary = "hal.exe";
+#else
+            const std::filesystem::path hal_binary = "hal";
+#endif
             auto bin_dir = get_binary_directory();
             while (std::filesystem::exists(bin_dir))
             {
-                if (std::filesystem::exists(bin_dir / "hal", ec))
+                if (std::filesystem::exists(bin_dir / hal_binary, ec))
                 {
                     return bin_dir.parent_path();
                 }
@@ -118,7 +133,7 @@ namespace hal
                 }
                 bin_dir = bin_dir.parent_path();
             }
-            std::filesystem::path which_result = which("hal");
+            std::filesystem::path which_result = which(hal_binary.string());
             if (!which_result.empty())
             {
                 return which_result.parent_path().parent_path();
@@ -129,6 +144,9 @@ namespace hal
         std::filesystem::path get_library_directory()
         {
             std::vector<std::filesystem::path> path_hints = {
+#ifdef _WIN32
+                get_base_directory() / "bin/",
+#endif
                 get_base_directory() / "lib/x86_64-linux-gnu",
                 get_base_directory() / "lib64/",
                 get_base_directory() / "lib/",
@@ -156,7 +174,7 @@ namespace hal
 
         std::filesystem::path get_user_share_directory()
         {
-            std::filesystem::path dir = std::filesystem::path(getenv("HOME")) / ".local/share/hal";
+            std::filesystem::path dir = get_home_directory() / ".local/share/hal";
             std::filesystem::create_directories(dir);
             return dir;
         }
@@ -171,7 +189,7 @@ namespace hal
 
         std::filesystem::path get_user_config_directory()
         {
-            std::filesystem::path dir = std::filesystem::path(getenv("HOME")) / ".config/hal";
+            std::filesystem::path dir = get_home_directory() / ".config/hal";
             std::filesystem::create_directories(dir);
             return dir;
         }
@@ -199,7 +217,7 @@ namespace hal
                 get_library_directory() / "hal_plugins/",
                 get_library_directory() / "plugins/",
                 get_user_share_directory() / "plugins/",
-                std::filesystem::path(getenv("HOME")) / "plugins/",
+                get_home_directory() / "plugins/",
             };
             return path_hints;
         }
@@ -253,7 +271,6 @@ namespace hal
             }
 #ifdef _WIN32
             const char which_delimiter = ';';
-            return std::filesystem::path();    // Curerently no support for windows. Sorry ...
 #else
             const char which_delimiter = ':';
 #endif
@@ -263,12 +280,26 @@ namespace hal
                 hal::error_code ec;
                 UNUSED(ec);
                 std::filesystem::path p = std::filesystem::path(folder) / name;
+#ifdef _WIN32
+                // Windows has no executable bit, and callers pass the name without the suffix
+                if (std::filesystem::is_regular_file(p, ec))
+                {
+                    return p;
+                }
+                std::filesystem::path with_suffix = p;
+                with_suffix += ".exe";
+                if (std::filesystem::is_regular_file(with_suffix, ec))
+                {
+                    return with_suffix;
+                }
+#else
                 struct stat sb;
 
                 if (stat(p.c_str(), &sb) == 0 && sb.st_mode & S_IXUSR)
                 {
                     return p;
                 }
+#endif
             }
             return std::filesystem::path();
         }

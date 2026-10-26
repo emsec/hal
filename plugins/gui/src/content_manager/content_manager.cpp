@@ -54,7 +54,12 @@ namespace hal
         auto it = begin();
         while (it != end())
             if ((*it)->name() == pluginName)
+            {
+                // the factory lives as long as its plugin, deleting it here (while the plugin is still loaded)
+                // also unregisters it from everything it registered with, e.g. as a project serializer
+                delete *it;
                 it = erase(it);
+            }
             else
                 ++it;
 

@@ -1,6 +1,10 @@
 set(SRC main.cpp)
 
 add_executable(hal ${SRC})
+if(MINGW)
+    # UTF-8 active code page, see hal.manifest
+    target_sources(hal PRIVATE hal.rc)
+endif()
 set_target_properties(hal PROPERTIES OUTPUT_NAME "hal")
 set_target_properties(hal PROPERTIES ENABLE_EXPORTS 1)
 set_target_properties(hal PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_RPATH}")

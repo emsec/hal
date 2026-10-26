@@ -61,6 +61,10 @@ namespace hal
 /* Microsoft */
 #define EXPORT __declspec(dllexport)
 #define IMPORT __declspec(dllimport)
+#elif defined(_WIN32)
+/* MinGW: symbols are exported via CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS, not per-symbol attributes */
+#define EXPORT
+#define IMPORT
 #else
 /* other */
 #define EXPORTED __attribute__((visibility("default")))

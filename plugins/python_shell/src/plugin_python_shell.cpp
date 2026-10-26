@@ -79,7 +79,7 @@ namespace hal
         PySys_SetArgv(argc, argv);
 
         PyRun_SimpleString("import sys");
-        PyRun_SimpleString(std::string("sys.path.append(\"" + utils::get_library_directory().string() + "\")").c_str());
+        PyRun_SimpleString(std::string("sys.path.append(\"" + utils::get_library_directory().generic_string() + "\")").c_str());
         PyRun_SimpleString("from hal_py import *");
         PyRun_SimpleString("import hal_py");
 

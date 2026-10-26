@@ -13,6 +13,10 @@ function(hal_add_plugin target_name)
         message(FATAL_ERROR "Can't be both MODULE and SHARED")
     elseif(ARG_SHARED)
         set(lib_type SHARED)
+    elseif(WIN32)
+        # plugins link against each other, which needs an import library, and Windows does not
+        # produce one for a MODULE library
+        set(lib_type SHARED)
     else()
         set(lib_type MODULE)
     endif()
@@ -54,7 +58,10 @@ function(hal_add_plugin target_name)
     if(APPLE AND CMAKE_HOST_APPLE)
         set_target_properties(${target_name} PROPERTIES SUFFIX ".so")
         set_target_properties(${target_name} PROPERTIES INSTALL_NAME_DIR ${PLUGIN_LIBRARY_INSTALL_DIRECTORY})
-    endif(APPLE AND CMAKE_HOST_APPLE)
+    elseif(WIN32)
+        # Python only imports extension modules with the .pyd suffix on Windows
+        set_target_properties(${target_name} PROPERTIES SUFFIX ".pyd")
+    endif()
 
     target_link_libraries(${target_name}
                           PUBLIC hal::core hal::netlist ${Python3_LIBRARIES} pybind11::pybind11

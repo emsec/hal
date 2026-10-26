@@ -20,7 +20,10 @@ target_compile_options(py
 set_target_properties(py PROPERTIES PREFIX "")
 if(APPLE AND CMAKE_HOST_APPLE)
     set_target_properties(py PROPERTIES SUFFIX ".so")
-endif(APPLE AND CMAKE_HOST_APPLE)
+elseif(WIN32)
+    # Python only imports extension modules with the .pyd suffix on Windows
+    set_target_properties(py PROPERTIES SUFFIX ".pyd")
+endif()
 target_link_libraries(py PUBLIC PRIVATE ${Python3_LIBRARIES} pybind11::module hal::netlist hal::utilities hal::plugin_system)
 install(TARGETS py
         EXPORT hal

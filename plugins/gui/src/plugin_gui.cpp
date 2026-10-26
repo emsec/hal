@@ -117,7 +117,7 @@ namespace hal
             FileManager::get_instance()->openProject(QString::fromStdString(projDir.string()));
             break;
         case DefaultImport:
-            projDir = ProjectDirectory(fileName);
+            projDir = ProjectDirectory(fileName.string());
             [[fallthrough]];
             // continue with Import
         case ImportToProject:

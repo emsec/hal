@@ -1,5 +1,7 @@
 #include "hal_core/plugin_system/runtime_library.h"
 
+#include <filesystem>
+
 #include "hal_core/utilities/log.h"
 
 namespace hal
@@ -26,7 +28,13 @@ namespace hal
     bool RuntimeLibrary::load_library(const std::string& file_name)
     {
 #ifdef _WIN32
-        m_handle = LoadLibrary(file_name.c_str());
+        // plugins link against each other, so the directory of the plugin being loaded has to be
+        // searched for its dependencies as well. SetDllDirectory adds it to the standard search
+        // order, which keeps both the directory of hal itself and PATH in the search.
+        const auto native_path = std::filesystem::absolute(std::filesystem::path(file_name)).make_preferred();
+        SetDllDirectoryA(native_path.parent_path().string().c_str());
+        m_handle = LoadLibraryA(native_path.string().c_str());
+        SetDllDirectoryA(NULL);
 #else
         m_handle      = dlopen((file_name).c_str(), RTLD_GLOBAL | RTLD_LAZY);
 #endif
@@ -40,7 +48,18 @@ namespace hal
 
         auto error_message = std::string("");
 #ifdef _WIN32
-        error_message = "to be implemented for windows based operating systems.";
+        char* buffer = NULL;
+        const auto length =
+            FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, GetLastError(), 0, (char*)&buffer, 0, NULL);
+        if (length != 0)
+        {
+            error_message = std::string(buffer, length);
+            while (!error_message.empty() && (error_message.back() == '\n' || error_message.back() == '\r'))
+            {
+                error_message.pop_back();
+            }
+        }
+        LocalFree(buffer);
 #else
         error_message = dlerror();
 #endif
@@ -56,7 +75,8 @@ namespace hal
             return true;
         }
 #ifdef _WIN32
-        if (FreeLibrary(m_handle) == 0)
+        // FreeLibrary reports success with a non-zero value, unlike dlclose
+        if (FreeLibrary(m_handle) != 0)
         {
             log_debug("core", "unloaded library '{}'", m_file_name);
             m_handle = NULL;

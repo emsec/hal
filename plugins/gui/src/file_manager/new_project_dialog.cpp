@@ -65,7 +65,7 @@ namespace hal
         for (const std::filesystem::path& path : gate_library_manager::get_all_path())
         {
             int n         = mGateLibraryPath.size();
-            QString qName = QString::fromStdString(path.filename());
+            QString qName = QString::fromStdString(path.filename().string());
             mGateLibraryMap.insert(qName, n);
             QString qPath = QString::fromStdString(path.string());
             mGateLibraryPath.append(qPath);
