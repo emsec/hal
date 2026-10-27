@@ -1009,7 +1009,7 @@ namespace hal
             return;
         }
 
-        QDesktopServices::openUrl(QUrl(info.absolutePath(), QUrl::TolerantMode));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(info.absolutePath()));
     }
 
     void PythonEditor::handleTabFileChanged(QString path)

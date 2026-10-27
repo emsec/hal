@@ -217,10 +217,12 @@ All notable changes to this project will be documented in this file.
     * fixed the GUI hanging for minutes when a module with many gates is selected
     * fixed the GUI stalling when a large module is unfolded within a list of modules
     * fixed the Python editor and the comment editor hanging when the search string is empty or the regular expression matches an empty string
+    * fixed Python editor tabs repeating part of a file name with several dots, e.g. `quirk.v2.v2.py` for `quirk.v2.py`
+    * fixed Python editor "Show in system explorer" function so that it does not stumble over non-standard character in path name
     * fixed the line number in the error message issued by Python interpreter so it matches with the line number in editor
     * fixed the bogus Python console error message "clear()" after running first script
     * fixed the module tree to not rebuild itself twice per selection change
-    * fixed the content window of a grouping leaking every entry it listed each time it was closed, about 200 KB per 1000 gates
+    * fixed memory leak in module tree model which gets used (among other) in grouping content info
     * fixed `GuiApi.selectGate`, `selectNet` and `selectModule` with `clear_current_selection` set, which is the default, keeping the previous selection
     * fixed `GuiApi.getSelectedModules` and `getSelectedItems` not tying the returned modules to the netlist
     * fixed tooltip `dragTest` being shown whenever dragging gates in the graph view
@@ -228,7 +230,6 @@ All notable changes to this project will be documented in this file.
     * removed a leftover debug output that printed every search string of the log widget to stdout
     * fixed the option to copy the gate library into the project directory in the netlist import dialog staying enabled when the gate library is detected automatically, in which case there is no file to copy and the option had no effect
     * fixed action enable behavior in View Manager when deleting an entry
-    * fixed Python editor tabs repeating part of a file name with several dots, e.g. `quirk.v2.v2.py` for `quirk.v2.py`
 * Build and dependencies
   * changed the GUI from Qt 5 to Qt 6
   * updated the vendored QuaZip from 1.3 to 1.5 as part of the move to Qt 6
