@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-163-g6efdfad25</span>
+   &#160;<span id="projectnumber">v4.5.0-164-gc68bc5c21</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -1099,7 +1099,7 @@ $(document).ready(function(){initNavTree('python__editor_8cpp_source.html',''); 
 <div class="line"><a name="l01009"></a><span class="lineno"> 1009</span>&#160;            <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160;        }</div>
 <div class="line"><a name="l01011"></a><span class="lineno"> 1011</span>&#160; </div>
-<div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qdesktopservices.html#openUrl">QDesktopServices::openUrl</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qurl.html">QUrl</a>(info.<a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html#absolutePath">absolutePath</a>(), <a class="codeRef" href="https://doc.qt.io/qt-5/qurl.html#ParsingMode-enum">QUrl::TolerantMode</a>));</div>
+<div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qdesktopservices.html#openUrl">QDesktopServices::openUrl</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qurl.html#fromLocalFile">QUrl::fromLocalFile</a>(info.<a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html#absolutePath">absolutePath</a>()));</div>
 <div class="line"><a name="l01013"></a><span class="lineno"> 1013</span>&#160;    }</div>
 <div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160; </div>
 <div class="line"><a name="l01015"></a><span class="lineno"><a class="line" href="classhal_1_1_python_editor.html#a1deab1d739877aab49967f3e8fd29fa9"> 1015</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_editor.html#a1deab1d739877aab49967f3e8fd29fa9">PythonEditor::handleTabFileChanged</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path)</div>
@@ -2106,8 +2106,7 @@ $(document).ready(function(){initNavTree('python__editor_8cpp_source.html',''); 
 <div class="ttc" id="aqtextdocument_html_modified-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtextdocument.html#modified-prop">QTextDocument::isModified</a></div><div class="ttdeci">bool isModified() const const</div></div>
 <div class="ttc" id="aqtextstream_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtextstream.html">QTextStream</a></div></div>
 <div class="ttc" id="aqtoolbar_html_addAction"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtoolbar.html#addAction">QToolBar::addAction</a></div><div class="ttdeci">QAction * addAction(const QString &amp;text)</div></div>
-<div class="ttc" id="aqurl_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qurl.html">QUrl</a></div></div>
-<div class="ttc" id="aqurl_html_ParsingMode-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qurl.html#ParsingMode-enum">QUrl::TolerantMode</a></div><div class="ttdeci">TolerantMode</div></div>
+<div class="ttc" id="aqurl_html_fromLocalFile"><div class="ttname"><a href="https://doc.qt.io/qt-5/qurl.html#fromLocalFile">QUrl::fromLocalFile</a></div><div class="ttdeci">QUrl fromLocalFile(const QString &amp;localFile)</div></div>
 <div class="ttc" id="aqvariant_html_toBool"><div class="ttname"><a href="https://doc.qt.io/qt-5/qvariant.html#toBool">QVariant::toBool</a></div><div class="ttdeci">bool toBool() const const</div></div>
 <div class="ttc" id="aqvariant_html_toInt"><div class="ttname"><a href="https://doc.qt.io/qt-5/qvariant.html#toInt">QVariant::toInt</a></div><div class="ttdeci">int toInt(bool *ok) const const</div></div>
 <div class="ttc" id="aqvariant_html_toString"><div class="ttname"><a href="https://doc.qt.io/qt-5/qvariant.html#toString">QVariant::toString</a></div><div class="ttdeci">QString toString() const const</div></div>
