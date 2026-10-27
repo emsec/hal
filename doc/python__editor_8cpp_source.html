@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-161-g1024c97b0</span>
+   &#160;<span id="projectnumber">v4.5.0-163-g6efdfad25</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -676,7 +676,7 @@ $(document).ready(function(){initNavTree('python__editor_8cpp_source.html',''); 
 <div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;        {</div>
 <div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;            tab-&gt;document()-&gt;setModified(<span class="keyword">false</span>);</div>
 <div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;            tab-&gt;setFilename(fileName);</div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;            mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#setTabText">setTabText</a>(mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#indexOf">indexOf</a>(tab), info.<a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html#completeBaseName">completeBaseName</a>() + <span class="stringliteral">&quot;.&quot;</span> + info.<a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html#completeSuffix">completeSuffix</a>());</div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;            mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#setTabText">setTabText</a>(mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#indexOf">indexOf</a>(tab), info.<a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html#fileName">fileName</a>());</div>
 <div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;            mNewFileCounter--;</div>
 <div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160; </div>
 <div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;            mPathEditorMap.insert(fileName, tab);</div>
@@ -814,7 +814,7 @@ $(document).ready(function(){initNavTree('python__editor_8cpp_source.html',''); 
 <div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;                mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#setTabText">setTabText</a>(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>, unnamedTabName);</div>
 <div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;            }</div>
 <div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;                mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#setTabText">setTabText</a>(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>, info.<a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html#completeBaseName">completeBaseName</a>() + <span class="stringliteral">&quot;.&quot;</span> + info.<a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html#completeSuffix">completeSuffix</a>());</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;                mTabWidget-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtabwidget.html#setTabText">setTabText</a>(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>, info.<a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html#fileName">fileName</a>());</div>
 <div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;        }</div>
 <div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160; </div>
 <div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
@@ -2003,8 +2003,6 @@ $(document).ready(function(){initNavTree('python__editor_8cpp_source.html',''); 
 <div class="ttc" id="aqfileinfo_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfileinfo.html">QFileInfo</a></div></div>
 <div class="ttc" id="aqfileinfo_html_absoluteFilePath"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfileinfo.html#absoluteFilePath">QFileInfo::absoluteFilePath</a></div><div class="ttdeci">QString absoluteFilePath() const const</div></div>
 <div class="ttc" id="aqfileinfo_html_absolutePath"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfileinfo.html#absolutePath">QFileInfo::absolutePath</a></div><div class="ttdeci">QString absolutePath() const const</div></div>
-<div class="ttc" id="aqfileinfo_html_completeBaseName"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfileinfo.html#completeBaseName">QFileInfo::completeBaseName</a></div><div class="ttdeci">QString completeBaseName() const const</div></div>
-<div class="ttc" id="aqfileinfo_html_completeSuffix"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfileinfo.html#completeSuffix">QFileInfo::completeSuffix</a></div><div class="ttdeci">QString completeSuffix() const const</div></div>
 <div class="ttc" id="aqfileinfo_html_exists"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfileinfo.html#exists">QFileInfo::exists</a></div><div class="ttdeci">bool exists() const const</div></div>
 <div class="ttc" id="aqfileinfo_html_fileName"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfileinfo.html#fileName">QFileInfo::fileName</a></div><div class="ttdeci">QString fileName() const const</div></div>
 <div class="ttc" id="aqfileinfo_html_filePath"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfileinfo.html#filePath">QFileInfo::filePath</a></div><div class="ttdeci">QString filePath() const const</div></div>

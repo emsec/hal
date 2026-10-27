@@ -1,6 +1,5 @@
 var NAVTREEINDEX38 =
 {
-"namespacehal_1_1dataflow_1_1processing_1_1pass__collection.html#aaa085d3d6fd904f33051d0a22be59648":[8,0,0,7,9,0,1],
 "namespacehal_1_1dataflow_1_1remove__duplicates.html":[8,0,0,7,10],
 "namespacehal_1_1dataflow_1_1remove__duplicates.html#aca700626be25342d5accfae54fab3b04":[8,0,0,7,10,0],
 "namespacehal_1_1dataflow_1_1scoring.html":[8,0,0,7,11],
@@ -249,5 +248,6 @@ var NAVTREEINDEX38 =
 "namespacehal_1_1simulation__utils.html#a8942829681b2f8b38e17aa8bf46d74cc":[8,0,0,32,1],
 "namespacehal_1_1simulation__utils.html#aaff736212c3454ae94ac758f80af2b3d":[8,0,0,32,4],
 "namespacehal_1_1simulation__utils.html#ae50da9e74fadf4924c7be1cc1af8797e":[8,0,0,32,2],
-"namespacehal_1_1solve__fsm.html":[8,0,0,34]
+"namespacehal_1_1solve__fsm.html":[8,0,0,34],
+"namespacehal_1_1solve__fsm.html#a1904a30a825e214e11c1469a09820630":[8,0,0,34,2]
 };
