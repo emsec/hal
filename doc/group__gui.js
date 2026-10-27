@@ -334,6 +334,7 @@ var group__gui =
     ] ],
     [ "ModuleModel", "classhal_1_1_module_model.html", [
       [ "ModuleModel", "classhal_1_1_module_model.html#aa0f4446475325e5c503e9c70e3b83c0b", null ],
+      [ "~ModuleModel", "classhal_1_1_module_model.html#a8d144dcb08ec2dfd9580dee1c6a2ba81", null ],
       [ "addGate", "classhal_1_1_module_model.html#a741fe7fd9d642917abb34e912d6a044c", null ],
       [ "addModule", "classhal_1_1_module_model.html#a95e85288c7afef01a5ec11f1117392d8", null ],
       [ "addNet", "classhal_1_1_module_model.html#a4402cda06af16279b4960a282e5e9079", null ],

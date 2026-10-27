@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-158-g93f26ed58</span>
+   &#160;<span id="projectnumber">v4.5.0-161-g1024c97b0</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -126,6 +126,8 @@ Collaboration diagram for hal::ModuleModel:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0f4446475325e5c503e9c70e3b83c0b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_model.html#aa0f4446475325e5c503e9c70e3b83c0b">ModuleModel</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="el" href="classhal_1_1_base_tree_model.html#a1b76d0eea8c5a6f0d52d8025ddda6813">parent</a>=nullptr)</td></tr>
 <tr class="separator:aa0f4446475325e5c503e9c70e3b83c0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d144dcb08ec2dfd9580dee1c6a2ba81"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_model.html#a8d144dcb08ec2dfd9580dee1c6a2ba81">~ModuleModel</a> ()</td></tr>
+<tr class="separator:a8d144dcb08ec2dfd9580dee1c6a2ba81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99479fd9bf082b812515289f4a2e3e59"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_model.html#a99479fd9bf082b812515289f4a2e3e59">data</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;<a class="el" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>, int role) const override</td></tr>
 <tr class="separator:a99479fd9bf082b812515289f4a2e3e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a129509c2c741b517a0bbbfcc1b2f0a0f"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemFlags</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_model.html#a129509c2c741b517a0bbbfcc1b2f0a0f">flags</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;<a class="el" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>) const override</td></tr>
@@ -637,6 +639,28 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a8d144dcb08ec2dfd9580dee1c6a2ba81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d144dcb08ec2dfd9580dee1c6a2ba81">&#9670;&nbsp;</a></span>~ModuleModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">hal::ModuleModel::~ModuleModel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Destructor. </p>
+
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00044">44</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="base__tree__model_8h_source.html#l00152">hal::BaseTreeModel::mRootItem</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a741fe7fd9d642917abb34e912d6a044c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a741fe7fd9d642917abb34e912d6a044c">&#9670;&nbsp;</a></span>addGate()</h2>
@@ -672,9 +696,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00278">278</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00283">283</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00355">createChildItem()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00195">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00615">hal::Netlist::get_module_by_id()</a>, and <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>.</p>
+<p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00360">createChildItem()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00195">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00615">hal::Netlist::get_module_by_id()</a>, and <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>.</p>
 
 </div>
 </div>
@@ -712,9 +736,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00266">266</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00271">271</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00355">createChildItem()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00615">hal::Netlist::get_module_by_id()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, and <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">hal::ModuleItem::Module</a>.</p>
+<p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00360">createChildItem()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00615">hal::Netlist::get_module_by_id()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, and <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">hal::ModuleItem::Module</a>.</p>
 
 </div>
 </div>
@@ -752,9 +776,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00290">290</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00295">295</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00355">createChildItem()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00615">hal::Netlist::get_module_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00355">hal::Netlist::get_net_by_id()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, and <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca">hal::ModuleItem::Net</a>.</p>
+<p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00360">createChildItem()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00615">hal::Netlist::get_module_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00355">hal::Netlist::get_net_by_id()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, and <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca">hal::ModuleItem::Net</a>.</p>
 
 </div>
 </div>
@@ -792,11 +816,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00301">301</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00306">306</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00355">createChildItem()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00400">hal::Module::get_gates()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00083">hal::Module::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00268">hal::Module::get_submodules()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">hal::ModuleItem::Module</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00748">hal::ShortestPath::module()</a>, and <a class="el" href="base__tree__model_8h_source.html#l00152">hal::BaseTreeModel::mRootItem</a>.</p>
+<p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00360">createChildItem()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00400">hal::Module::get_gates()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00083">hal::Module::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00268">hal::Module::get_submodules()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">hal::ModuleItem::Module</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00748">hal::ShortestPath::module()</a>, and <a class="el" href="base__tree__model_8h_source.html#l00152">hal::BaseTreeModel::mRootItem</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00220">populateTree()</a>, and <a class="el" href="module__model_8cpp_source.html#l00779">updateModuleParent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00225">populateTree()</a>, and <a class="el" href="module__model_8cpp_source.html#l00784">updateModuleParent()</a>.</p>
 
 </div>
 </div>
@@ -826,11 +850,11 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classhal_1_1_base_tree_model.html#a7e771dcacc1c8bff919fae75ff78abf2">hal::BaseTreeModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00168">168</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00173">173</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00089">hal::BaseTreeModel::clear()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="selection__tree__view_8cpp_source.html#l00122">hal::SelectionTreeView::populate()</a>, <a class="el" href="module__model_8cpp_source.html#l00179">populateFromGatelist()</a>, <a class="el" href="module__model_8cpp_source.html#l00220">populateTree()</a>, and <a class="el" href="module__elements__tree_8cpp_source.html#l00061">hal::ModuleElementsTree::removeContent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="selection__tree__view_8cpp_source.html#l00122">hal::SelectionTreeView::populate()</a>, <a class="el" href="module__model_8cpp_source.html#l00184">populateFromGatelist()</a>, <a class="el" href="module__model_8cpp_source.html#l00225">populateTree()</a>, and <a class="el" href="module__elements__tree_8cpp_source.html#l00061">hal::ModuleElementsTree::removeContent()</a>.</p>
 
 </div>
 </div>
@@ -883,11 +907,11 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Point to new tree item </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00355">355</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00360">360</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="base__tree__item_8cpp_source.html#l00039">hal::BaseTreeItem::appendChild()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginInsertRows">QAbstractItemModel::beginInsertRows()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endInsertRows">QAbstractItemModel::endInsertRows()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00079">hal::BaseTreeItem::getChildCount()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00123">hal::BaseTreeModel::getIndexFromItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">hal::BaseTreeModel::index()</a>, <a class="el" href="module__model_8h_source.html#l00055">ModuleItem</a>, and <a class="el" href="base__tree__model_8h_source.html#l00152">hal::BaseTreeModel::mRootItem</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00278">addGate()</a>, <a class="el" href="module__model_8cpp_source.html#l00266">addModule()</a>, <a class="el" href="module__model_8cpp_source.html#l00290">addNet()</a>, <a class="el" href="module__model_8cpp_source.html#l00301">addRecursively()</a>, <a class="el" href="module__model_8cpp_source.html#l00640">moduleAssignGate()</a>, and <a class="el" href="module__model_8cpp_source.html#l00705">updateNetParent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00283">addGate()</a>, <a class="el" href="module__model_8cpp_source.html#l00271">addModule()</a>, <a class="el" href="module__model_8cpp_source.html#l00295">addNet()</a>, <a class="el" href="module__model_8cpp_source.html#l00306">addRecursively()</a>, <a class="el" href="module__model_8cpp_source.html#l00645">moduleAssignGate()</a>, and <a class="el" href="module__model_8cpp_source.html#l00710">updateNetParent()</a>.</p>
 
 </div>
 </div>
@@ -938,7 +962,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classhal_1_1_select_gate_model.html#a50a7aa39ac724da7ade9f2d072258fb3">hal::SelectGateModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00044">44</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00049">49</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignLeft</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignRight</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#column">QModelIndex::column()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::DecorationRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::DisplayRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::ForegroundRole</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="el" href="selection__details__icon__provider_8h_source.html#l00048">hal::SelectionDetailsIconProvider::GateIcon</a>, <a class="el" href="module__item_8cpp_source.html#l00088">hal::ModuleItem::getData()</a>, <a class="el" href="module__item_8cpp_source.html#l00144">hal::ModuleItem::getType()</a>, <a class="el" href="module__item_8cpp_source.html#l00133">hal::ModuleItem::highlighted()</a>, <a class="el" href="module__item_8cpp_source.html#l00128">hal::ModuleItem::id()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">hal::BaseTreeModel::index()</a>, <a class="el" href="selection__details__icon__provider_8cpp_source.html#l00033">hal::SelectionDetailsIconProvider::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">hal::ModuleItem::Module</a>, <a class="el" href="selection__details__icon__provider_8h_source.html#l00048">hal::SelectionDetailsIconProvider::ModuleIcon</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca">hal::ModuleItem::Net</a>, <a class="el" href="selection__details__icon__provider_8h_source.html#l00048">hal::SelectionDetailsIconProvider::NetIcon</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::TextAlignmentRole</a>.</p>
 
@@ -982,7 +1006,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classhal_1_1_select_gate_model.html#afd1ef31a633bf4ddbbe572909a876e44">hal::SelectGateModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00142">142</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00147">147</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#flags">QAbstractItemModel::flags()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">hal::BaseTreeModel::index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemIsDragEnabled</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::NoItemFlags</a>.</p>
 
@@ -1014,7 +1038,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the module item at the specified index </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00150">150</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00155">155</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="base__tree__model_8cpp_source.html#l00036">hal::BaseTreeModel::index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>.</p>
 
@@ -1057,7 +1081,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> with the specified id and type. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00158">158</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00163">163</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>.</p>
 
@@ -1098,7 +1122,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a> of ModuleItems with the specified id and type. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00163">163</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00168">168</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>.</p>
 
@@ -1123,7 +1147,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Returns <code>true</code> if the item model is currently changed/updated. This is the case while adding and removing modules to/from the item model. It can be used to ignore certain signals sent by the item model while the model is modified.</p>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> while the item model is modified. Returns <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00926">926</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00931">931</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00267">hal::ModuleWidget::handleTreeSelectionChanged()</a>.</p>
 
@@ -1155,7 +1179,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#mimeData">QAbstractItemModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00092">92</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00097">97</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00141">hal::BaseTreeModel::getItemFromIndex()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, <a class="el" href="module__item_8cpp_source.html#l00144">hal::ModuleItem::getType()</a>, <a class="el" href="module__item_8cpp_source.html#l00128">hal::ModuleItem::id()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">hal::ModuleItem::Module</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca">hal::ModuleItem::Net</a>, <a class="el" href="py__code__provider_8cpp_source.html#l00023">hal::PyCodeProvider::pyCodeGate()</a>, <a class="el" href="py__code__provider_8cpp_source.html#l00276">hal::PyCodeProvider::pyCodeModule()</a>, <a class="el" href="py__code__provider_8cpp_source.html#l00212">hal::PyCodeProvider::pyCodeNet()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmimedata.html#setData">QMimeData::setData()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmimedata.html#setText">QMimeData::setText()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>.</p>
 
@@ -1188,9 +1212,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Handles the assigment of gates to modules. If the gate does not yet exist in the item model, a new one is created. </p>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00640">640</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00645">645</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="module__model_8cpp_source.html#l00355">createChildItem()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00195">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="module__item_8cpp_source.html#l00128">hal::ModuleItem::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="module__item_8cpp_source.html#l00138">hal::ModuleItem::isToplevelItem()</a>, and <a class="el" href="module__model_8cpp_source.html#l00381">removeChildItem()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="module__model_8cpp_source.html#l00360">createChildItem()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00195">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="module__item_8cpp_source.html#l00128">hal::ModuleItem::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="module__item_8cpp_source.html#l00138">hal::ModuleItem::isToplevelItem()</a>, and <a class="el" href="module__model_8cpp_source.html#l00386">removeChildItem()</a>.</p>
 
 </div>
 </div>
@@ -1211,11 +1235,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Handles the assigment of nets to modules for nets connected to gates of list. If the gate list is empty all nets connected to modules in tree are considered. </p>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00678">678</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00683">683</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2gate_8cpp_source.html#l00591">hal::Gate::get_fan_in_nets()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00735">hal::Gate::get_fan_out_nets()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00195">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#isEmpty">QList::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#keys">QHash::keys()</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">hal::BaseTreeModel::mRootItem</a>, and <a class="el" href="module__model_8cpp_source.html#l00705">updateNetParent()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2gate_8cpp_source.html#l00591">hal::Gate::get_fan_in_nets()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00735">hal::Gate::get_fan_out_nets()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00195">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#isEmpty">QList::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#keys">QHash::keys()</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">hal::BaseTreeModel::mRootItem</a>, and <a class="el" href="module__model_8cpp_source.html#l00710">updateNetParent()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00220">populateTree()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00225">populateTree()</a>.</p>
 
 </div>
 </div>
@@ -1242,9 +1266,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00179">179</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00184">184</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="base__tree__item_8cpp_source.html#l00039">hal::BaseTreeItem::appendChild()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="el" href="module__model_8cpp_source.html#l00168">clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00083">hal::Module::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00126">hal::Module::get_parent_module()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#insert">QMap::insert()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">hal::ModuleItem::Module</a>, <a class="el" href="module__model_8h_source.html#l00055">ModuleItem</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">hal::BaseTreeModel::mRootItem</a>, <a class="el" href="module__model_8cpp_source.html#l00931">setIsModifying()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#value">QMap::value()</a>.</p>
+<p class="reference">References <a class="el" href="base__tree__item_8cpp_source.html#l00039">hal::BaseTreeItem::appendChild()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="el" href="module__model_8cpp_source.html#l00173">clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00083">hal::Module::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00126">hal::Module::get_parent_module()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#insert">QMap::insert()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">hal::ModuleItem::Module</a>, <a class="el" href="module__model_8h_source.html#l00055">ModuleItem</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">hal::BaseTreeModel::mRootItem</a>, <a class="el" href="module__model_8cpp_source.html#l00936">setIsModifying()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#value">QMap::value()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="logic__evaluator__dialog_8cpp_source.html#l00034">hal::LogicEvaluatorDialog::LogicEvaluatorDialog()</a>.</p>
 
@@ -1291,9 +1315,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00220">220</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00225">225</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00301">addRecursively()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00039">hal::BaseTreeItem::appendChild()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="el" href="module__model_8cpp_source.html#l00168">clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00615">hal::Netlist::get_module_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00366">hal::Netlist::get_nets()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="module__model_8cpp_source.html#l00678">moduleAssignNets()</a>, <a class="el" href="module__model_8h_source.html#l00055">ModuleItem</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">hal::BaseTreeModel::mRootItem</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca">hal::ModuleItem::Net</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, and <a class="el" href="module__model_8cpp_source.html#l00931">setIsModifying()</a>.</p>
+<p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00306">addRecursively()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00039">hal::BaseTreeItem::appendChild()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="el" href="module__model_8cpp_source.html#l00173">clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00615">hal::Netlist::get_module_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00366">hal::Netlist::get_nets()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="module__model_8cpp_source.html#l00683">moduleAssignNets()</a>, <a class="el" href="module__model_8h_source.html#l00055">ModuleItem</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">hal::BaseTreeModel::mRootItem</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca">hal::ModuleItem::Net</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, and <a class="el" href="module__model_8cpp_source.html#l00936">setIsModifying()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00031">hal::ModuleWidget::ModuleWidget()</a>, <a class="el" href="selection__tree__view_8cpp_source.html#l00122">hal::SelectionTreeView::populate()</a>, and <a class="el" href="module__elements__tree_8cpp_source.html#l00044">hal::ModuleElementsTree::setModule()</a>.</p>
 
@@ -1340,11 +1364,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00381">381</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00386">386</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginRemoveRows">QAbstractItemModel::beginRemoveRows()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endRemoveRows">QAbstractItemModel::endRemoveRows()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00079">hal::BaseTreeItem::getChildCount()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00034">hal::BaseTreeItem::getChildren()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00123">hal::BaseTreeModel::getIndexFromItem()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00098">hal::BaseTreeItem::getOwnRow()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">hal::BaseTreeModel::index()</a>, and <a class="el" href="base__tree__item_8cpp_source.html#l00067">hal::BaseTreeItem::removeChild()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00640">moduleAssignGate()</a>, <a class="el" href="module__model_8cpp_source.html#l00327">removeGate()</a>, <a class="el" href="module__model_8cpp_source.html#l00313">removeModule()</a>, <a class="el" href="module__model_8cpp_source.html#l00341">removeNet()</a>, <a class="el" href="module__model_8cpp_source.html#l00779">updateModuleParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00705">updateNetParent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00645">moduleAssignGate()</a>, <a class="el" href="module__model_8cpp_source.html#l00332">removeGate()</a>, <a class="el" href="module__model_8cpp_source.html#l00318">removeModule()</a>, <a class="el" href="module__model_8cpp_source.html#l00346">removeNet()</a>, <a class="el" href="module__model_8cpp_source.html#l00784">updateModuleParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00710">updateNetParent()</a>.</p>
 
 </div>
 </div>
@@ -1371,9 +1395,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00327">327</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00332">332</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00381">removeChildItem()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00386">removeChildItem()</a>.</p>
 
 </div>
 </div>
@@ -1400,9 +1424,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00313">313</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00318">318</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00381">removeChildItem()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00386">removeChildItem()</a>.</p>
 
 </div>
 </div>
@@ -1429,9 +1453,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00341">341</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00346">346</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00381">removeChildItem()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00386">removeChildItem()</a>.</p>
 
 </div>
 </div>
@@ -1460,9 +1484,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>See <a class="el" href="classhal_1_1_module_model.html#a37147ee3ccd0f7401622dd6a8337dc4d">isModifying()</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00931">931</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00936">936</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00179">populateFromGatelist()</a>, and <a class="el" href="module__model_8cpp_source.html#l00220">populateTree()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00184">populateFromGatelist()</a>, and <a class="el" href="module__model_8cpp_source.html#l00225">populateTree()</a>.</p>
 
 </div>
 </div>
@@ -1489,7 +1513,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00256">256</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00261">261</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>.</p>
 
@@ -1513,7 +1537,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if nets that belong to no module are listed as top-level items, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00261">261</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00266">266</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 </div>
 </div>
@@ -1540,7 +1564,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00893">893</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00898">898</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">QAbstractItemModel::dataChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00195">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00123">hal::BaseTreeModel::getIndexFromItem()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">hal::BaseTreeModel::index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="module__item_8cpp_source.html#l00148">hal::ModuleItem::setName()</a>.</p>
 
@@ -1569,7 +1593,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00861">861</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00866">866</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">QAbstractItemModel::dataChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00615">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00088">hal::Module::get_name()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00123">hal::BaseTreeModel::getIndexFromItem()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">hal::BaseTreeModel::index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="module__item_8cpp_source.html#l00148">hal::ModuleItem::setName()</a>.</p>
 
@@ -1598,9 +1622,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00779">779</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00784">784</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00301">addRecursively()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00039">hal::BaseTreeItem::appendChild()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginInsertRows">QAbstractItemModel::beginInsertRows()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginRemoveRows">QAbstractItemModel::beginRemoveRows()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endInsertRows">QAbstractItemModel::endInsertRows()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endRemoveRows">QAbstractItemModel::endRemoveRows()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00083">hal::Module::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00126">hal::Module::get_parent_module()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00079">hal::BaseTreeItem::getChildCount()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00123">hal::BaseTreeModel::getIndexFromItem()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00098">hal::BaseTreeItem::getOwnRow()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, <a class="el" href="module__item_8cpp_source.html#l00128">hal::ModuleItem::id()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">hal::BaseTreeModel::index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="module__item_8cpp_source.html#l00138">hal::ModuleItem::isToplevelItem()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00748">hal::ShortestPath::module()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00067">hal::BaseTreeItem::removeChild()</a>, and <a class="el" href="module__model_8cpp_source.html#l00381">removeChildItem()</a>.</p>
+<p class="reference">References <a class="el" href="module__model_8cpp_source.html#l00306">addRecursively()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00039">hal::BaseTreeItem::appendChild()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginInsertRows">QAbstractItemModel::beginInsertRows()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginRemoveRows">QAbstractItemModel::beginRemoveRows()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endInsertRows">QAbstractItemModel::endInsertRows()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endRemoveRows">QAbstractItemModel::endRemoveRows()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00083">hal::Module::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00126">hal::Module::get_parent_module()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00079">hal::BaseTreeItem::getChildCount()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00123">hal::BaseTreeModel::getIndexFromItem()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00098">hal::BaseTreeItem::getOwnRow()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, <a class="el" href="module__item_8cpp_source.html#l00128">hal::ModuleItem::id()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">hal::BaseTreeModel::index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="module__item_8cpp_source.html#l00138">hal::ModuleItem::isToplevelItem()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00748">hal::ShortestPath::module()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00067">hal::BaseTreeItem::removeChild()</a>, and <a class="el" href="module__model_8cpp_source.html#l00386">removeChildItem()</a>.</p>
 
 </div>
 </div>
@@ -1627,7 +1651,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00877">877</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00882">882</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">QAbstractItemModel::dataChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00615">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00107">hal::Module::get_type()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00123">hal::BaseTreeModel::getIndexFromItem()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">hal::BaseTreeModel::index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="module__item_8cpp_source.html#l00079">hal::ModuleItem::setModuleType()</a>.</p>
 
@@ -1656,7 +1680,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00909">909</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00914">914</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">QAbstractItemModel::dataChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00098">hal::Net::get_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00355">hal::Netlist::get_net_by_id()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00123">hal::BaseTreeModel::getIndexFromItem()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">hal::BaseTreeModel::index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="module__item_8cpp_source.html#l00148">hal::ModuleItem::setName()</a>.</p>
 
@@ -1696,11 +1720,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00705">705</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__model_8cpp_source.html#l00710">710</a> of file <a class="el" href="module__model_8cpp_source.html">module_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="module__model_8cpp_source.html#l00355">createChildItem()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00083">hal::Module::get_id()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, <a class="el" href="module__item_8cpp_source.html#l00128">hal::ModuleItem::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca">hal::ModuleItem::Net</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="el" href="module__model_8cpp_source.html#l00381">removeChildItem()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#value">QHash::value()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="module__model_8cpp_source.html#l00360">createChildItem()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00083">hal::Module::get_id()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, <a class="el" href="module__item_8cpp_source.html#l00128">hal::ModuleItem::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca">hal::ModuleItem::Net</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="el" href="module__model_8cpp_source.html#l00386">removeChildItem()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#value">QHash::value()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00678">moduleAssignNets()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00683">moduleAssignNets()</a>.</p>
 
 </div>
 </div>
@@ -1727,7 +1751,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="module__model_8h_source.html#l00055">55</a> of file <a class="el" href="module__model_8h_source.html">module_model.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00355">createChildItem()</a>, <a class="el" href="module__model_8cpp_source.html#l00179">populateFromGatelist()</a>, and <a class="el" href="module__model_8cpp_source.html#l00220">populateTree()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00360">createChildItem()</a>, <a class="el" href="module__model_8cpp_source.html#l00184">populateFromGatelist()</a>, and <a class="el" href="module__model_8cpp_source.html#l00225">populateTree()</a>.</p>
 
 </div>
 </div>

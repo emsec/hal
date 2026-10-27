@@ -1,5 +1,6 @@
 var NAVTREEINDEX10 =
 {
+"classhal_1_1_graphics_scene.html#a9e234c63034c95b2f3aaf64be8fa1f5f":[7,1,0,7,10],
 "classhal_1_1_graphics_scene.html#abe36d4d9883465a8a38e210724709b12":[7,1,0,7,6],
 "classhal_1_1_graphics_scene.html#ac9a772666fbc371103f4667ddc4927d9":[7,1,0,7,2],
 "classhal_1_1_graphics_scene.html#ac9e79075b461b21661de16918b2754e9":[7,1,0,7,7],
@@ -51,8 +52,6 @@ var NAVTREEINDEX10 =
 "classhal_1_1_grouping.html#ad71395c6a5fec7d319237a6803c5dfa2":[7,0,0,13,1],
 "classhal_1_1_grouping.html#ae987f8404ba96b884090f63966827fa6":[7,0,0,13,4],
 "classhal_1_1_grouping.html#af61fefef5d401834f0738cb354f361ef":[7,0,0,13,19],
-"qt.html#FocusReason-enum":[8,0,4,1059],
-"":[8,0,4],
 "classhal_1_1_grouping_color_delegate.html":[7,1,7,2,1],
 "classhal_1_1_grouping_color_delegate.html#a2d08686e780e4c5ab121d92147cfade9":[7,1,7,2,1,0],
 "classhal_1_1_grouping_color_delegate.html#a39cd8e31605d480b767a28019fed0a8b":[7,1,7,2,1,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX10 =
 "classhal_1_1_gui_api.html#ad3a2e0a2931cb638dda0a590c1621b5b":[7,1,18,14],
 "classhal_1_1_gui_api.html#ad4b9d92d701eaa1d8694d0ad9f17cc73":[7,1,18,47],
 "classhal_1_1_gui_api.html#ad64c8a211d0b3122afcae1a62049e111":[7,1,18,34],
-"classhal_1_1_gui_api.html#ad69d7291cd977c5a27fe83bb796fc76d":[7,1,18,12]
+"classhal_1_1_gui_api.html#ad69d7291cd977c5a27fe83bb796fc76d":[7,1,18,12],
+"classhal_1_1_gui_api.html#ad8ec7690039f4f5ead062b236740e60e":[7,1,18,24]
 };

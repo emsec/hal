@@ -1,6 +1,5 @@
 var NAVTREEINDEX11 =
 {
-"classhal_1_1_gui_api.html#ad8ec7690039f4f5ead062b236740e60e":[7,1,18,24],
 "classhal_1_1_gui_api.html#ade3dc5c0c5dc7b17131b80ad054bba53":[7,1,18,46],
 "classhal_1_1_gui_api.html#ae279afeff30835e70a19c56e5396ab55":[7,1,18,31],
 "classhal_1_1_gui_api.html#ae7b50e46f75229122c7229b1c2a510c1":[7,1,18,42],
@@ -249,5 +248,6 @@ var NAVTREEINDEX11 =
 "classhal_1_1_import_project_dialog.html#a2007fc4a4a11d18565bb2fec5d592f30":[9,0,0,168,3],
 "classhal_1_1_import_project_dialog.html#a294ebcef84e29fb3b4054440e66cd478":[9,0,0,168,2],
 "classhal_1_1_import_project_dialog.html#a3227f983fb6b5e7c7d46871b4e1d0aee":[9,0,0,168,5],
-"classhal_1_1_import_project_dialog.html#a9b7af9fa1cf0d45f3f24e0633397adc6":[9,0,0,168,1]
+"classhal_1_1_import_project_dialog.html#a9b7af9fa1cf0d45f3f24e0633397adc6":[9,0,0,168,1],
+"classhal_1_1_import_project_dialog.html#ac277dfe4f14e954702c7951d93929e17":[9,0,0,168,0]
 };
