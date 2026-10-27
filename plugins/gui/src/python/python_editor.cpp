@@ -586,7 +586,7 @@ namespace hal
         {
             tab->document()->setModified(false);
             tab->setFilename(fileName);
-            mTabWidget->setTabText(mTabWidget->indexOf(tab), info.completeBaseName() + "." + info.completeSuffix());
+            mTabWidget->setTabText(mTabWidget->indexOf(tab), info.fileName());
             mNewFileCounter--;
 
             mPathEditorMap.insert(fileName, tab);
@@ -724,7 +724,7 @@ namespace hal
                 mTabWidget->setTabText(index, unnamedTabName);
             }
             else
-                mTabWidget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
+                mTabWidget->setTabText(index, info.fileName());
         }
 
         return true;
