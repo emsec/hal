@@ -232,6 +232,11 @@ All notable changes to this project will be documented in this file.
     * fixed action enable behavior in View Manager when deleting an entry
     * fixed the Python editor highlighting a `#` inside a string as the start of a comment, and a `"""` or `'''` inside a comment as the start of a multi-line string
     * fixed the Python editor ending a highlighted string at an escaped quote, so `"a \" b"` and `'it\'s'` are now highlighted as one string
+    * fixed the Python console commands `help()` and `license()` which were disabled by historic reasons
+    * fixed the Python console not showing a new prompt after an empty line or after `quit()`, `help()` and `license()`, so that the next [Enter] switched to the `...` prompt and added an invisible entry to the history
+    * fixed the Python console getting stuck at the `...` prompt after a line that could not be parsed, since the parse error was never cleared
+    * fixed memory leak when checking whether a Python console command is complete
+    * added [Esc] key to discard a multi-line statement at the `...` prompt of the Python console
 * Build and dependencies
   * changed the GUI from Qt 5 to Qt 6
   * updated the vendored QuaZip from 1.3 to 1.5 as part of the move to Qt 6

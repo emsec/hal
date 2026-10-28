@@ -104,6 +104,9 @@ namespace hal
             {
             case Qt::Key_Return:
             case Qt::Key_Enter:
+                // console is read only while a thread is running, the next prompt follows when it has finished
+                if (gPythonContext->isThreadRunning())
+                    return;
                 moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
                 interpretCommand();
                 mCurrentHistoryIndex = -1;
@@ -190,6 +193,19 @@ namespace hal
             case Qt::Key_Tab:
                 handleTabKeyPressed();
                 return;
+
+            case Qt::Key_Escape:
+                // discard the compound statement entered so far
+                if (isCompound())
+                {
+                    moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+                    textCursor().insertText("\n");
+                    mCurrentCompoundInput = "";
+                    mPromptType           = Standard;
+                    displayPrompt();
+                    return;
+                }
+                break;
 
             default:
                 if (textCursor().selectionStart() < mPromptEndPosition)
@@ -297,7 +313,15 @@ namespace hal
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::End);
         cursor.insertText("\n");
-        if (!input.isEmpty())
+
+        // an empty line outside of a compound statement has nothing to execute, just show a new prompt
+        if (!isCompound() && input.trimmed().isEmpty())
+        {
+            displayPrompt();
+            return;
+        }
+
+        if (!input.trimmed().isEmpty())
         {
             //        gPythonContext->addHistory(input);
             mHistory->addHistory(input.toStdString());
@@ -305,17 +329,22 @@ namespace hal
         if ((!isCompound() && gPythonContext->checkCompleteStatement(input) != 0) || (isCompound() && input.isEmpty() && gPythonContext->checkCompleteStatement(input) != 0))
         {
             mCurrentCompoundInput += input;
+            bool threadStarted;
             if (isCompound())
             {
-                gPythonContext->interpretBackground(this, mCurrentCompoundInput, true);
+                threadStarted = gPythonContext->interpretBackground(this, mCurrentCompoundInput, true);
             }
             else
             {
-                gPythonContext->interpretBackground(this, input, false);
+                threadStarted = gPythonContext->interpretBackground(this, input, false);
             }
             mPromptType     = Standard;
             mCurrentCompoundInput = "";
-            mAbortThreadWidget->start();
+            // without a thread there is no finished signal which would display the next prompt
+            if (threadStarted)
+                mAbortThreadWidget->start();
+            else
+                displayPrompt();
         }
         else
         {
@@ -333,7 +362,8 @@ namespace hal
         cursor.setPosition(mPromptEndPosition);
         cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
 
-        QString command = cursor.selectedText();
+        // selectedText() returns line breaks as U+2029 (paragraph separator) which python cannot parse
+        QString command = cursor.selectedText().replace(QChar::ParagraphSeparator, '\n');
         cursor.clearSelection();
         return command;
     }
