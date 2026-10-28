@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-169-g4c3c6a2ed</span>
+   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -96,54 +96,68 @@ $(document).ready(function(){initNavTree('python__console__history_8cpp_source.h
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;{</div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#add8d28f16071f60c44d2f91a70e27fbf">    9</a></span>&#160;    <a class="code" href="classhal_1_1_python_console_history.html#add8d28f16071f60c44d2f91a70e27fbf">PythonConsoleHistory::PythonConsoleHistory</a>() : mFileName(<a class="codeRef" href="https://doc.qt.io/qt-5/qdir.html">QDir</a>::home().filePath(<span class="stringliteral">&quot;.hal_history&quot;</span>).toLocal8Bit().constData()), mHistory()</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">namespace</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    {</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <a class="code" href="classhal_1_1_python_console_history.html#a021bb1e36c8440c11f354d1b00039f40">updateFromFile</a>();</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    }</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <span class="comment">// one history entry per line in file, line breaks within multi-line commands are stored as U+2029 (UTF-8)</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">const</span> std::string sFileLineBreak = <span class="stringliteral">&quot;\xE2\x80\xA9&quot;</span>;</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#aa475c3d950cf6297b6aef02132b4ae8b">   14</a></span>&#160;    <a class="code" href="classhal_1_1_python_console_history.html#aa475c3d950cf6297b6aef02132b4ae8b">PythonConsoleHistory::~PythonConsoleHistory</a>()</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    }</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">   18</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">PythonConsoleHistory::addHistory</a>(<span class="keyword">const</span> std::string&amp; command)</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    {</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        mHistory.push_back(command);</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        appendToFile(command);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    }</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#a720587a5ac6d094e2a74e078188bcde6">   24</a></span>&#160;    <span class="keyword">const</span> std::string&amp; <a class="code" href="classhal_1_1_python_console_history.html#a720587a5ac6d094e2a74e078188bcde6">PythonConsoleHistory::getHistoryItem</a>(<span class="keyword">const</span> <span class="keywordtype">int</span>&amp; <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordflow">return</span> mHistory.at(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    }</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#a44297bb65cdf4fce56747c0b81750da2">   29</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_python_console_history.html#a44297bb65cdf4fce56747c0b81750da2">PythonConsoleHistory::size</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keywordflow">return</span> mHistory.size();</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    }</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#a021bb1e36c8440c11f354d1b00039f40">   34</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console_history.html#a021bb1e36c8440c11f354d1b00039f40">PythonConsoleHistory::updateFromFile</a>()</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        std::ifstream f(mFileName);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        mHistory.clear();</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        std::string line;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">while</span> (std::getline(f, line))</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            mHistory.push_back(line);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordtype">void</span> PythonConsoleHistory::appendToFile(<span class="keyword">const</span> std::string&amp; command)</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    {</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        std::ofstream f(mFileName, std::ios::out | std::ios::app);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        f &lt;&lt; command &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    }</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div>
-<div class="ttc" id="aclasshal_1_1_python_console_history_html_a021bb1e36c8440c11f354d1b00039f40"><div class="ttname"><a href="classhal_1_1_python_console_history.html#a021bb1e36c8440c11f354d1b00039f40">hal::PythonConsoleHistory::updateFromFile</a></div><div class="ttdeci">void updateFromFile()</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00034">python_console_history.cpp:34</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_console_history_html_a44297bb65cdf4fce56747c0b81750da2"><div class="ttname"><a href="classhal_1_1_python_console_history.html#a44297bb65cdf4fce56747c0b81750da2">hal::PythonConsoleHistory::size</a></div><div class="ttdeci">int size() const</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00029">python_console_history.cpp:29</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_console_history_html_a720587a5ac6d094e2a74e078188bcde6"><div class="ttname"><a href="classhal_1_1_python_console_history.html#a720587a5ac6d094e2a74e078188bcde6">hal::PythonConsoleHistory::getHistoryItem</a></div><div class="ttdeci">const std::string &amp; getHistoryItem(const int &amp;index) const</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00024">python_console_history.cpp:24</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_console_history_html_aa475c3d950cf6297b6aef02132b4ae8b"><div class="ttname"><a href="classhal_1_1_python_console_history.html#aa475c3d950cf6297b6aef02132b4ae8b">hal::PythonConsoleHistory::~PythonConsoleHistory</a></div><div class="ttdeci">~PythonConsoleHistory()</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00014">python_console_history.cpp:14</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_console_history_html_ad6c9a158ab9448a7b42725a4cf920cd3"><div class="ttname"><a href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">hal::PythonConsoleHistory::addHistory</a></div><div class="ttdeci">void addHistory(const std::string &amp;command)</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00018">python_console_history.cpp:18</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_console_history_html_add8d28f16071f60c44d2f91a70e27fbf"><div class="ttname"><a href="classhal_1_1_python_console_history.html#add8d28f16071f60c44d2f91a70e27fbf">hal::PythonConsoleHistory::PythonConsoleHistory</a></div><div class="ttdeci">PythonConsoleHistory()</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00009">python_console_history.cpp:9</a></div></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        std::string replaceAll(std::string text, <span class="keyword">const</span> std::string&amp; from, <span class="keyword">const</span> std::string&amp; <a class="code" href="namespacehal_1_1core__strings.html#a37f09aeed09bf8c9d56b599ffcdceef2">to</a>)</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> pos = text.find(from); pos != std::string::npos; pos = text.find(from, pos + <a class="code" href="namespacehal_1_1core__strings.html#a37f09aeed09bf8c9d56b599ffcdceef2">to</a>.size()))</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                text.replace(pos, from.size(), <a class="code" href="namespacehal_1_1core__strings.html#a37f09aeed09bf8c9d56b599ffcdceef2">to</a>);</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            <span class="keywordflow">return</span> text;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        }</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    }</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#add8d28f16071f60c44d2f91a70e27fbf">   22</a></span>&#160;    <a class="code" href="classhal_1_1_python_console_history.html#add8d28f16071f60c44d2f91a70e27fbf">PythonConsoleHistory::PythonConsoleHistory</a>() : mFileName(<a class="codeRef" href="https://doc.qt.io/qt-5/qdir.html">QDir</a>::home().filePath(<span class="stringliteral">&quot;.hal_history&quot;</span>).toLocal8Bit().constData()), mHistory()</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <a class="code" href="classhal_1_1_python_console_history.html#a021bb1e36c8440c11f354d1b00039f40">updateFromFile</a>();</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    }</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#aa475c3d950cf6297b6aef02132b4ae8b">   27</a></span>&#160;    <a class="code" href="classhal_1_1_python_console_history.html#aa475c3d950cf6297b6aef02132b4ae8b">PythonConsoleHistory::~PythonConsoleHistory</a>()</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    }</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">   31</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">PythonConsoleHistory::addHistory</a>(<span class="keyword">const</span> std::string&amp; command)</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        mHistory.push_back(command);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        appendToFile(command);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#a720587a5ac6d094e2a74e078188bcde6">   37</a></span>&#160;    <span class="keyword">const</span> std::string&amp; <a class="code" href="classhal_1_1_python_console_history.html#a720587a5ac6d094e2a74e078188bcde6">PythonConsoleHistory::getHistoryItem</a>(<span class="keyword">const</span> <span class="keywordtype">int</span>&amp; <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">return</span> mHistory.at(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    }</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#a44297bb65cdf4fce56747c0b81750da2">   42</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_python_console_history.html#a44297bb65cdf4fce56747c0b81750da2">PythonConsoleHistory::size</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordflow">return</span> mHistory.size();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classhal_1_1_python_console_history.html#a021bb1e36c8440c11f354d1b00039f40">   47</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console_history.html#a021bb1e36c8440c11f354d1b00039f40">PythonConsoleHistory::updateFromFile</a>()</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    {</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        std::ifstream f(mFileName);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        mHistory.clear();</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        std::string line;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordflow">while</span> (std::getline(f, line))</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            mHistory.push_back(replaceAll(line, sFileLineBreak, <span class="stringliteral">&quot;\n&quot;</span>));</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        }</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    }</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">void</span> PythonConsoleHistory::appendToFile(<span class="keyword">const</span> std::string&amp; command)</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        std::ofstream f(mFileName, std::ios::out | std::ios::app);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        f &lt;&lt; replaceAll(command, <span class="stringliteral">&quot;\n&quot;</span>, sFileLineBreak) &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    }</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;}</div>
+<div class="ttc" id="aclasshal_1_1_python_console_history_html_a021bb1e36c8440c11f354d1b00039f40"><div class="ttname"><a href="classhal_1_1_python_console_history.html#a021bb1e36c8440c11f354d1b00039f40">hal::PythonConsoleHistory::updateFromFile</a></div><div class="ttdeci">void updateFromFile()</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00047">python_console_history.cpp:47</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_console_history_html_a44297bb65cdf4fce56747c0b81750da2"><div class="ttname"><a href="classhal_1_1_python_console_history.html#a44297bb65cdf4fce56747c0b81750da2">hal::PythonConsoleHistory::size</a></div><div class="ttdeci">int size() const</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00042">python_console_history.cpp:42</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_console_history_html_a720587a5ac6d094e2a74e078188bcde6"><div class="ttname"><a href="classhal_1_1_python_console_history.html#a720587a5ac6d094e2a74e078188bcde6">hal::PythonConsoleHistory::getHistoryItem</a></div><div class="ttdeci">const std::string &amp; getHistoryItem(const int &amp;index) const</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00037">python_console_history.cpp:37</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_console_history_html_aa475c3d950cf6297b6aef02132b4ae8b"><div class="ttname"><a href="classhal_1_1_python_console_history.html#aa475c3d950cf6297b6aef02132b4ae8b">hal::PythonConsoleHistory::~PythonConsoleHistory</a></div><div class="ttdeci">~PythonConsoleHistory()</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00027">python_console_history.cpp:27</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_console_history_html_ad6c9a158ab9448a7b42725a4cf920cd3"><div class="ttname"><a href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">hal::PythonConsoleHistory::addHistory</a></div><div class="ttdeci">void addHistory(const std::string &amp;command)</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00031">python_console_history.cpp:31</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_console_history_html_add8d28f16071f60c44d2f91a70e27fbf"><div class="ttname"><a href="classhal_1_1_python_console_history.html#add8d28f16071f60c44d2f91a70e27fbf">hal::PythonConsoleHistory::PythonConsoleHistory</a></div><div class="ttdeci">PythonConsoleHistory()</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00022">python_console_history.cpp:22</a></div></div>
+<div class="ttc" id="anamespacehal_1_1core__strings_html_a37f09aeed09bf8c9d56b599ffcdceef2"><div class="ttname"><a href="namespacehal_1_1core__strings.html#a37f09aeed09bf8c9d56b599ffcdceef2">hal::core_strings::to</a></div><div class="ttdeci">S to(const T &amp;str)</div><div class="ttdef"><b>Definition:</b> <a href="special__strings_8h_source.html#l00048">special_strings.h:48</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l02085">netlist_preprocessing.cpp:2085</a></div></div>
 <div class="ttc" id="apython__console__history_8h_html"><div class="ttname"><a href="python__console__history_8h.html">python_console_history.h</a></div></div>

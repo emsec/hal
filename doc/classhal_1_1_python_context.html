@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-169-g4c3c6a2ed</span>
+   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -124,8 +124,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa85bf1106ac19872ffb7cd74086c3924"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab693bb1cd4fa9378eb07785329c9dcfb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_context.html#ab693bb1cd4fa9378eb07785329c9dcfb">interpretForeground</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;input)</td></tr>
 <tr class="separator:ab693bb1cd4fa9378eb07785329c9dcfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a709a9ff55917993b0bef32e33498e00d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_context.html#a709a9ff55917993b0bef32e33498e00d">interpretBackground</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *caller, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;input, bool multiple_expressions=false)</td></tr>
-<tr class="separator:a709a9ff55917993b0bef32e33498e00d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4caa0c29586491b9a318c9efb88ad08e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_context.html#a4caa0c29586491b9a318c9efb88ad08e">interpretBackground</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *caller, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;input, bool multiple_expressions=false)</td></tr>
+<tr class="separator:a4caa0c29586491b9a318c9efb88ad08e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a908c9392366eff266214641dffc2b5dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_context.html#a908c9392366eff266214641dffc2b5dc">interpretScript</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *caller, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;input)</td></tr>
 <tr class="separator:a908c9392366eff266214641dffc2b5dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace06f5b77729c2ca49555820ba7e6fb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_context.html#ace06f5b77729c2ca49555820ba7e6fb8">forwardStdout</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;output)</td></tr>
@@ -379,7 +379,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00040">40</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__context_8cpp_source.html#l00175">initPython()</a>.</p>
+<p class="reference">References <a class="el" href="python__context_8cpp_source.html#l00183">initPython()</a>.</p>
 
 </div>
 </div>
@@ -401,7 +401,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00063">63</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__context_8cpp_source.html#l00189">closePython()</a>.</p>
+<p class="reference">References <a class="el" href="python__context_8cpp_source.html#l00197">closePython()</a>.</p>
 
 </div>
 </div>
@@ -473,11 +473,11 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>-1 on error, 0 for an incomplete statement and 1 for an complete statement. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00539">539</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00536">536</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__context_8cpp.html#a16c326d0baf4bc62c564559c42b65c28">_PyParser_Grammar</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
+<p class="reference">References <a class="el" href="python__context_8cpp.html#a16c326d0baf4bc62c564559c42b65c28">_PyParser_Grammar</a>, <a class="el" href="python__context_8cpp_source.html#l00487">complete()</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00294">hal::PythonConsole::interpretCommand()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00310">hal::PythonConsole::interpretCommand()</a>.</p>
 
 </div>
 </div>
@@ -497,7 +497,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Close the current context. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00189">189</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00197">197</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__context_8cpp_source.html#l00063">~PythonContext()</a>.</p>
 
@@ -540,11 +540,11 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a vector of all possible auto completion candidates. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00490">490</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00487">487</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__context_8cpp_source.html#l00481">forwardError()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="python__context_8cpp_source.html#l00099">initializeContext()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
+<p class="reference">References <a class="el" href="python__context_8cpp_source.html#l00478">forwardError()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="python__context_8cpp_source.html#l00099">initializeContext()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00411">hal::PythonConsole::handleTabKeyPressed()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__context_8cpp_source.html#l00536">checkCompleteStatement()</a>, and <a class="el" href="python__console_8cpp_source.html#l00441">hal::PythonConsole::handleTabKeyPressed()</a>.</p>
 
 </div>
 </div>
@@ -571,11 +571,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00481">481</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00478">478</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__console_8cpp_source.html#l00233">hal::PythonConsole::handleError()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+<p class="reference">References <a class="el" href="python__console_8cpp_source.html#l00249">hal::PythonConsole::handleError()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__context_8cpp_source.html#l00490">complete()</a>, <a class="el" href="python__context_8cpp_source.html#l00196">interpretBackground()</a>, <a class="el" href="python__context_8cpp_source.html#l00244">interpretForeground()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00032">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__context_8cpp_source.html#l00487">complete()</a>, <a class="el" href="python__context_8cpp_source.html#l00204">interpretBackground()</a>, <a class="el" href="python__context_8cpp_source.html#l00241">interpretForeground()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00032">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -602,11 +602,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00469">469</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00466">466</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__console_8cpp_source.html#l00228">hal::PythonConsole::handleStdout()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, and <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00382">hal::utils::rtrim()</a>.</p>
+<p class="reference">References <a class="el" href="python__console_8cpp_source.html#l00244">hal::PythonConsole::handleStdout()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, and <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00382">hal::utils::rtrim()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__context_8cpp_source.html#l00244">interpretForeground()</a>, <a class="el" href="python__context_8cpp_source.html#l00291">interpretScript()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00032">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__context_8cpp_source.html#l00241">interpretForeground()</a>, <a class="el" href="python__context_8cpp_source.html#l00288">interpretScript()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00032">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -638,7 +638,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00129">hal::utils::get_library_directory()</a>, <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00195">hal::utils::get_plugin_directories()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00087">hal::gGuiApi</a>, and <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlistOwner</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__context_8cpp_source.html#l00490">complete()</a>, and <a class="el" href="python__context_8cpp_source.html#l00175">initPython()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__context_8cpp_source.html#l00487">complete()</a>, and <a class="el" href="python__context_8cpp_source.html#l00183">initPython()</a>.</p>
 
 </div>
 </div>
@@ -666,7 +666,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00154">154</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00162">162</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="plugin__gui_8cpp_source.html#l00087">hal::gGuiApi</a>, and <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlistOwner</a>.</p>
 
@@ -690,7 +690,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Initializes the context to work with hal. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00175">175</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00183">183</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="python__context_8cpp_source.html#l00099">initializeContext()</a>.</p>
 
@@ -698,14 +698,14 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a709a9ff55917993b0bef32e33498e00d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a709a9ff55917993b0bef32e33498e00d">&#9670;&nbsp;</a></span>interpretBackground()</h2>
+<a id="a4caa0c29586491b9a318c9efb88ad08e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4caa0c29586491b9a318c9efb88ad08e">&#9670;&nbsp;</a></span>interpretBackground()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void hal::PythonContext::interpretBackground </td>
+          <td class="memname">bool hal::PythonContext::interpretBackground </td>
           <td>(</td>
           <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *&#160;</td>
           <td class="paramname"><em>caller</em>, </td>
@@ -738,12 +738,13 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if a thread was started, <code>false</code> if the input was rejected without starting one. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00196">196</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00204">204</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__context_8cpp_source.html#l00481">forwardError()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, and <a class="el" href="log_8h_source.html#l00070">log_info</a>.</p>
+<p class="reference">References <a class="el" href="python__context_8cpp_source.html#l00478">forwardError()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, and <a class="el" href="log_8h_source.html#l00070">log_info</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00294">hal::PythonConsole::interpretCommand()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00310">hal::PythonConsole::interpretCommand()</a>.</p>
 
 </div>
 </div>
@@ -770,9 +771,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00244">244</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00241">241</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__context_8cpp_source.html#l00481">forwardError()</a>, <a class="el" href="python__context_8cpp_source.html#l00469">forwardStdout()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>.</p>
+<p class="reference">References <a class="el" href="python__context_8cpp_source.html#l00478">forwardError()</a>, <a class="el" href="python__context_8cpp_source.html#l00466">forwardStdout()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00020">hal::PythonConsole::PythonConsole()</a>.</p>
 
@@ -812,9 +813,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00291">291</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00288">288</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__context_8cpp_source.html#l00469">forwardStdout()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="log_8h_source.html#l00076">log_warning</a>.</p>
+<p class="reference">References <a class="el" href="python__context_8cpp_source.html#l00466">forwardStdout()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="log_8h_source.html#l00076">log_warning</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__editor_8cpp_source.html#l00841">hal::PythonEditor::handleActionRun()</a>.</p>
 
@@ -843,7 +844,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__context_8h_source.html#l00205">205</a> of file <a class="el" href="python__context_8h_source.html">python_context.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8h_source.html#l00206">206</a> of file <a class="el" href="python__context_8h_source.html">python_context.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__console_8cpp_source.html#l00075">hal::PythonConsole::keyPressEvent()</a>.</p>
 
 </div>
 </div>
@@ -884,7 +887,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Clears the python console. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00609">609</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00610">610</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00032">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -906,7 +909,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Resets the python console. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00604">604</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00605">605</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00032">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -959,7 +962,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Update the current netlist the python context works with. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00614">614</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__context_8cpp_source.html#l00615">615</a> of file <a class="el" href="python__context_8cpp_source.html">python_context.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlistOwner</a>, and <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>.</p>
 
