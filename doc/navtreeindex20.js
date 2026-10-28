@@ -1,6 +1,5 @@
 var NAVTREEINDEX20 =
 {
-"classhal_1_1_python_editor.html#ad66ff4c1e9e81fb40c5bd8402a525602":[7,1,1,0,6,55],
 "classhal_1_1_python_editor.html#ad75d92772579c2ca31fd92b16b5cbbdd":[7,1,1,0,6,49],
 "classhal_1_1_python_editor.html#ad913089f49e1edfaea338cdeafb217ed":[7,1,1,0,6,29],
 "classhal_1_1_python_editor.html#ae67327ef76e06f517658ccff564c761d":[7,1,1,0,6,16],
@@ -249,5 +248,6 @@ var NAVTREEINDEX20 =
 "classhal_1_1_saleae_directory_composed_entry.html#a72dda7768d96891e914633f115c0b5f3":[9,0,0,550,4],
 "classhal_1_1_saleae_directory_composed_entry.html#a8b0bc1a3e8fa7826b5c3f3b6c1d63326":[9,0,0,550,2],
 "classhal_1_1_saleae_directory_composed_entry.html#a911c7ac3598548dba1b6530265375b31":[9,0,0,550,10],
-"classhal_1_1_saleae_directory_composed_entry.html#a9651a53b68767817f1f748d32f06a5b8":[9,0,0,550,6]
+"classhal_1_1_saleae_directory_composed_entry.html#a9651a53b68767817f1f748d32f06a5b8":[9,0,0,550,6],
+"classhal_1_1_saleae_directory_composed_entry.html#ac2bcd0144348d718299bb8294cf59061":[9,0,0,550,7]
 };
