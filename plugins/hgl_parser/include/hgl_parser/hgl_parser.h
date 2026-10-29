@@ -62,6 +62,7 @@ namespace hal
 
         std::set<std::string> m_cell_names;
 
+        Result<std::monostate> upgrade_outdated_file(rapidjson::Document& document);
         Result<std::monostate> parse_gate_library(const rapidjson::Document& document);
         Result<std::monostate> parse_gate_type(const rapidjson::Value& gate_type);
         Result<std::unique_ptr<GateTypeComponent>> parse_lut_config(const rapidjson::Value& lut_config);

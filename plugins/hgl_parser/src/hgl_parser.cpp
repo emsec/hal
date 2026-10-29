@@ -11,6 +11,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/result.h"
+#include "hgl_parser/upgrade_hgl.h"
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/stringbuffer.h"
 
@@ -37,21 +38,64 @@ namespace hal
             return ERR("could not parse HGL file '" + m_path.string() + "': failed parsing JSON format");
         }
 
+        if (auto res = upgrade_outdated_file(document); res.is_error())
+        {
+            return ERR_APPEND(res.get_error(), "could not parse HGL file '" + m_path.string() + "': failed to upgrade outdated file format");
+        }
+
         if (auto res = parse_gate_library(document); res.is_error())
         {
             return ERR_APPEND(res.get_error(), "could not parse HGL file '" + m_path.string() + "': failed to parse gate library");
         }
 
+        set_parse_status(ParseStatus::NoError);
+
         return OK(std::move(m_gate_lib));
+    }
+
+    Result<std::monostate> HGLParser::upgrade_outdated_file(rapidjson::Document& document)
+    {
+        if (!document.IsObject() || !document.HasMember("version") || !document["version"].IsUint() || document["version"].GetUint() >= HGL_FORMAT_VERSION)
+        {
+            // up to date, or not upgradable at all, which parse_gate_library reports
+            return OK({});
+        }
+
+        const u32 version = document["version"].GetUint();
+
+        // the upgrade happens in memory first, so that cells requiring manual work are reported before the file gets replaced
+        auto res = hgl_upgrade::upgrade_document(document);
+        if (res.is_error())
+        {
+            return ERR(res.get_error());
+        }
+        for (const std::string& warning : res.get())
+        {
+            log_warning("gate_library_parser", "'{}' cannot be upgraded to HGL format version {} completely: {}", m_path.string(), HGL_FORMAT_VERSION, warning);
+        }
+
+        // replacing the file requires the consent of the user
+        if (!is_upgrade_requested())
+        {
+            set_parse_status(ParseStatus::NeedsUpgrade);
+            return ERR("HGL file format version " + std::to_string(version) + " is outdated (requires version " + std::to_string(HGL_FORMAT_VERSION) + "), the file needs to be upgraded");
+        }
+
+        auto res_replace = hgl_upgrade::replace_file(document, m_path);
+        if (res_replace.is_error())
+        {
+            return ERR(res_replace.get_error());
+        }
+
+        log_info("gate_library_parser", "upgraded gate library '{}' from HGL format version {} to {}, the original file was kept as '{}'.", m_path.string(), version, HGL_FORMAT_VERSION, res_replace.get().string());
+        return OK({});
     }
 
     Result<std::monostate> HGLParser::parse_gate_library(const rapidjson::Document& document)
     {
         if (!document.HasMember("version") || !document["version"].IsUint() || document["version"].GetUint() < HGL_FORMAT_VERSION)
         {
-            return ERR("could not parse gate library: HGL file format version is outdated (requires version " + std::to_string(HGL_FORMAT_VERSION)
-                       + "). Please upgrade the file using the tools/upgrade_hgl.py script. Manual corrections might still be necessary after the upgrade, please check the output of the upgrade "
-                         "script for details.");
+            return ERR("could not parse gate library: HGL file format version is outdated (requires version " + std::to_string(HGL_FORMAT_VERSION) + ")");
         }
 
         if (!document.HasMember("library"))
