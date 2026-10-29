@@ -78,11 +78,11 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            if (xmlIn.name() == "name")
+            if (xmlIn.name() == QString("name"))
             {
                 mParameterName = xmlIn.readElementText();
             }
-            else if (xmlIn.name() == "value")
+            else if (xmlIn.name() == QString("value"))
             {
                 mValue = xmlIn.readElementText();
             }

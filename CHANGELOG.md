@@ -65,6 +65,8 @@ All notable changes to this project will be documented in this file.
     * fixed the pin events of assigning several pins to a group being delivered in pin ID order rather than in the order the rows come were created, which could crash the pins tree of the GUI
   * gate library
     * added the `GateTypeProperty::delay` gate type property for dedicated delay cells, such as those of a clock distribution network, which HGL files read and write as `delay`
+    * added the `GateLibrary::get_parse_status` function which can report whether parsing failed do to required upgrade to new .hgl format
+    * added an upgrade function to convert gate libraries from older .hgl file format to latest version
     * fixed reloading a gate library destroying the library a netlist was built against, which silently replaced every gate type of that netlist. Gate libraries are now owned through a `shared_ptr` and outlive both the netlists and the Python handles that refer to them
     * fixed `GateLibraryManager.get_gate_libraries` handing each library to Python as a newly constructed `shared_ptr` over a pointer it had only borrowed, which freed the library twice
     * fixed `GateLibrary::get_path` and the `path` property returning the name of the library instead of its path
@@ -252,6 +254,7 @@ All notable changes to this project will be documented in this file.
     * added `Set focus to pin` to the context menu of a pin in the pin tree of a gate and of a module, which moves the sub-focus of the graph view to that pin
   * misc
     * updated the gate library wizard to support multi-output LUT type creation and INIT configuration per output pin
+    * changed the gate library loading policy : if old .hgl format gets detected it will request to run automated upgrade
     * changed the context menu for data in the selection details, which can now add, modify, or delete data rows
     * added feature in Help->About, version string can be selected for copy to clipboard
     * added restoring the GUI layout of the previous session on start
