@@ -38,8 +38,8 @@ extern grammar _PyParser_Grammar;
 namespace hal
 {
     PythonContext::PythonContext(QObject *parent)
-        : QObject(parent), mContext(nullptr), mSender(nullptr), mTriggerReset(false), mThread(nullptr),
-          mThreadAborted(false), mInterpreterCaller(nullptr)
+        : QObject(parent), mContext(nullptr), mSender(nullptr), mTriggerReset(false), mTriggerClear(false),
+          mThread(nullptr), mThreadAborted(false), mInterpreterCaller(nullptr)
     {
         py::initialize_interpreter();
         initPython();
@@ -139,6 +139,14 @@ namespace hal
                      "sys.__stderr__ = sys.stderr\n"
                      "builtins.input = redirect_input\n"
                      "builtins.raw_input = redirect_input\n"
+                     // help('modules') would import every installed package, some of them crash HAL (e.g. OpenGL.Tk opens a Tk window)
+                     "import pydoc, pkgutil\n"
+                     "def hal_listmodules(self, key=''):\n"
+                     "    names = set(sys.builtin_module_names) | {m.name for m in pkgutil.iter_modules()}\n"
+                     "    if key:\n"
+                     "        names = {n for n in names if key.lower() in n.lower()}\n"
+                     "    self.list(sorted(names))\n"
+                     "pydoc.Helper.listmodules = hal_listmodules\n"
                      "import hal_py\n";
 
         py::exec(command, *context, *context);
@@ -193,40 +201,29 @@ namespace hal
         mContext = nullptr;
     }
 
-    void PythonContext::interpretBackground(QObject* caller, const QString& input, bool multiple_expressions)
+    bool PythonContext::interpretBackground(QObject* caller, const QString& input, bool multiple_expressions)
     {
         if (input.isEmpty())
         {
-            return;
+            return false;
         }
 
         if (input == "quit()")
         {
             forwardError("quit() cannot be used in this interpreter. Use console.reset() to restart it.\n");
-            return;
+            return false;
         }
 
-        if (input == "help()")
-        {
-            forwardError("help() cannot be used in this interpreter.\n");
-            return;
-        }
-
-        if (input == "license()")
-        {
-            forwardError("license() cannot be used in this interpreter.\n");
-            return;
-        }
-        
         if (mThread)
         {
             forwardError("python thread already running. Please retry after other thread finished.\n");
-            return;
+            return false;
         }
         log_info("python", "Python console execute: \"{}\".", input.toStdString());
 
         mInterpreterCaller = caller;
         startThread(input,!multiple_expressions);
+        return true;
     }
 
     void PythonContext::startThread(const QString& input, bool singleStatement)
@@ -569,9 +566,13 @@ namespace hal
         PyCompilerFlags flags {PyCF_ONLY_AST, PY_MINOR_VERSION};
         PyObject* o = Py_CompileStringExFlags(text.toStdString().c_str(), "stdin", Py_file_input, &flags, 0);
         // if parsing failed (-> not a complete statement), nullptr is returned
-        // (apparently no need to PyObject_Free(o) here)
+        bool complete = o != nullptr;
+        // a failed parse leaves its error set, which would fail every later parse as well
+        if (!complete)
+            PyErr_Clear();
+        Py_XDECREF(o);
         PyGILState_Release(state);
-        return o != nullptr;
+        return complete;
 
         #endif
     }

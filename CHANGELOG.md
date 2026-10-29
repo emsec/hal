@@ -253,18 +253,21 @@ All notable changes to this project will be documented in this file.
   * misc
     * updated the gate library wizard to support multi-output LUT type creation and INIT configuration per output pin
     * changed the context menu for data in the selection details, which can now add, modify, or delete data rows
+    * added feature in Help->About, version string can be selected for copy to clipboard
     * added restoring the GUI layout of the previous session on start
     * changed the plugin manager of the GUI to unload a plugin, and the dependencies it pulled in, right after loading it to read its description, so that only plugins requested by the user or required by such a plugin stay loaded
     * added context menu entries to the GUI for `remove_buffers`, `unify_ff_outputs`, `split_luts`, and `split_shift_registers`, each applicable to the current selection or to the entire netlist
     * changed duplicating a view to place the modules and gates of the copy where they are in the original instead of laying the copy out anew
     * changed the modules widget to list the nets that belong to no module, i.e., the global inputs and outputs of the netlist and nets without any source or destination, below the top module when nets are shown, so that every net of the netlist appears in the tree
   * bugfixes
+    * fixed gate library parsing error when creating new project by loading the parser plugin
     * fixed the module trees keeping a net under its module after the net was marked as a global input or output, and leaving a net out after it was unmarked
     * fixed `Number of nets` in the details of a module showing the number of internal nets; it now counts every net with a source or a destination inside the module, as `Module::get_nets` returns them
     * fixed the GUI crashing when a pin group that still holds pins is deleted
     * fixed the GUI crashing when `Delete pin group` is chosen for a group that holds a single pin named like the group
     * fixed toggling a pin group between ascending and descending losing the direction and the type of the group, and deleting a pin group creating the single-pin groups for its pins without direction and type
-    * fixed a module that reuses the ID of a deleted module being shown with the colour icon of the deleted one in the selection details
+    * fixed a module that reuses the ID of a deleted module being shown with the color icon of the deleted one in the selection details
+    * fixed behavior of an isolated view which is not bound to a module not to remove all gates when module gets deleted
     * fixed the GUI at times not registering the first change to a netlist after start, and so not offering to save it on close
     * fixed unloading the waveform viewer or the DOT viewer plugin leaving its dock button behind
     * fixed the GUI crashing when the selection is to be brought into view before the graph view has rendered its layout, e.g. by `GuiApi::selectGate` with `navigate_to_selection` set right after opening a netlist, the scene had no item for the selected element yet
@@ -273,7 +276,12 @@ All notable changes to this project will be documented in this file.
     * fixed the GUI hanging for minutes when a module with many gates is selected
     * fixed the GUI stalling when a large module is unfolded within a list of modules
     * fixed the Python editor and the comment editor hanging when the search string is empty or the regular expression matches an empty string
+    * fixed Python editor tabs repeating part of a file name with several dots, e.g. `quirk.v2.v2.py` for `quirk.v2.py`
+    * fixed Python editor "Show in system explorer" function so that it does not stumble over non-standard character in path name
+    * fixed the line number in the error message issued by Python interpreter so it matches with the line number in editor
+    * fixed the bogus Python console error message "clear()" after running first script
     * fixed the module tree to not rebuild itself twice per selection change
+    * fixed memory leak in module tree model which gets used (among other) in grouping content info
     * fixed `GuiApi.selectGate`, `selectNet` and `selectModule` with `clear_current_selection` set, which is the default, keeping the previous selection
     * fixed `GuiApi.getSelectedModules` and `getSelectedItems` not tying the returned modules to the netlist
     * fixed tooltip `dragTest` being shown whenever dragging gates in the graph view
@@ -281,6 +289,13 @@ All notable changes to this project will be documented in this file.
     * removed a leftover debug output that printed every search string of the log widget to stdout
     * fixed the option to copy the gate library into the project directory in the netlist import dialog staying enabled when the gate library is detected automatically, in which case there is no file to copy and the option had no effect
     * fixed action enable behavior in View Manager when deleting an entry
+    * fixed the Python editor highlighting a `#` inside a string as the start of a comment, and a `"""` or `'''` inside a comment as the start of a multi-line string
+    * fixed the Python editor ending a highlighted string at an escaped quote, so `"a \" b"` and `'it\'s'` are now highlighted as one string
+    * fixed the Python console commands `help()` and `license()` which were disabled by historic reasons
+    * fixed the Python console not showing a new prompt after an empty line or after `quit()`, `help()` and `license()`, so that the next [Enter] switched to the `...` prompt and added an invisible entry to the history
+    * fixed the Python console getting stuck at the `...` prompt after a line that could not be parsed, since the parse error was never cleared
+    * fixed memory leak when checking whether a Python console command is complete
+    * added [Esc] key to discard a multi-line statement at the `...` prompt of the Python console
 * Build and dependencies
   * changed the GUI from Qt 5 to Qt 6
   * updated the vendored QuaZip from 1.3 to 1.5 as part of the move to Qt 6

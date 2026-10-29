@@ -114,8 +114,9 @@ namespace hal
          * @param input - The input string in python format.
          * @param multiple_expressions - Must be set to `true` if the input contains multiple expressions
          *                               (i.e. is a compound statement).
+         * @returns `true` if a thread was started, `false` if the input was rejected without starting one.
          */
-        void interpretBackground(QObject* caller, const QString& input, bool multiple_expressions = false);
+        bool interpretBackground(QObject* caller, const QString& input, bool multiple_expressions = false);
 
         /**
          * Interprets a python script.
