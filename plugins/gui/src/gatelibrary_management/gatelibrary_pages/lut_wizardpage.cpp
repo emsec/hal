@@ -54,7 +54,7 @@ namespace hal
             return;
 
         const auto& configs = lutc->get_output_pin_configs();
-        bool first_ascending = true;
+        bool first_ascending = false;
         if (!configs.empty())
             first_ascending = configs.begin()->second.is_ascending;
         mAscending->setChecked(first_ascending);

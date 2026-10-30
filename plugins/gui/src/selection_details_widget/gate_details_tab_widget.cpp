@@ -8,12 +8,11 @@
 #include "gui/selection_details_widget/gate_details_widget/gate_info_table.h"
 #include "gui/selection_details_widget/gate_details_widget/gate_pin_tree.h"
 #include "gui/user_action/action_add_boolean_function.h"
-#include "gui/user_action/action_set_object_data.h"
+#include "gui/user_action/action_set_parameter_value.h"
 #include "gui/validator/hexadecimal_validator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
@@ -35,6 +34,37 @@
 
 namespace hal
 {
+    namespace
+    {
+        // Returns the hex digits (without "0x") of the INIT parameter of a LUT gate, padded with leading zeros to the
+        // declared width. Falls back to the default of the gate type if the gate holds no instance value.
+        Result<std::string> getLutInitHex(const Gate* gate, const std::string& initKey)
+        {
+            Result<Parameter> decl = gate->has_parameter(initKey) ? gate->get_parameter_declaration(initKey) : gate->get_type()->get_parameter(initKey);
+            if (decl.is_error())
+            {
+                return ERR_APPEND(decl.get_error(), "no INIT parameter '" + initKey + "' declared");
+            }
+
+            std::string hex = gate->has_parameter(initKey) ? gate->get_parameter_value(initKey).get() : decl.get().get_default_value();
+            if (hex.size() >= 2 && hex[0] == '0' && (hex[1] == 'x' || hex[1] == 'X'))
+            {
+                hex = hex.substr(2);
+            }
+            if (hex.empty())
+            {
+                hex = "0";
+            }
+
+            const size_t numDigits = (static_cast<size_t>(decl.get().get_size()) + 3) / 4;
+            if (hex.size() < numDigits)
+            {
+                hex.insert(0, numDigits - hex.size(), '0');
+            }
+            return OK(hex);
+        }
+    }    // namespace
+
     GateDetailsTabWidget::GateDetailsTabWidget(QWidget* parent) : DetailsTabWidget(parent)
     {
         setIcon(SelectionDetailsIconProvider::GateIcon);
@@ -278,38 +308,35 @@ namespace hal
             mLutConfigLabel->setText(" Could not load init string.");
             return;
         }
-        const std::string& initKey    = cfg->init_identifier;
-        const u32          bit_offset = cfg->bit_offset;
-        const u32          bit_count  = cfg->bit_count;
-
-        const auto& params = mCurrentGate->get_parameters();
-        auto it = params.find(initKey);
-        const std::string raw_str = (it != params.end()) ? it->second.second : "";
-        const auto        slice_res  = LUTComponent::extract_init_slice(raw_str, bit_offset, bit_count);
-        const std::string displayHex = slice_res.is_ok() ? slice_res.get() : raw_str;
+        auto initHex = getLutInitHex(mCurrentGate, cfg->init_identifier);
+        if (initHex.is_error())
+        {
+            mLutConfigLabel->setText(" Could not load init string.");
+            return;
+        }
+        const auto        sliceRes   = LUTComponent::extract_init_slice(initHex.get(), cfg->bit_offset, cfg->bit_count);
+        const std::string displayHex = sliceRes.is_ok() ? sliceRes.get() : initHex.get();
         mLutConfigLabel->setText(" 0x" + QString::fromStdString(displayHex));
     }
 
     void GateDetailsTabWidget::handleLutConfigContextMenuRequested(QPoint pos)
     {
-        auto resolveInitKey = [this](InitComponent* ic) -> std::string {
-            std::string key = ic->get_init_identifiers()[0];
-            if (LUTComponent* lc = mCurrentGate->get_type()->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lc != nullptr)
-                if (const LUTComponent::LUTOutputConfig* cfg = lc->get_output_pin_config(mSelectedLutPin); cfg != nullptr)
-                    key = cfg->init_identifier;
-            return key;
-        };
-
-        // Resolve the bit slice for the currently selected pin
-        u32 bit_offset = 0, bit_count = 0;
-        if (LUTComponent* lc = mCurrentGate->get_type()->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lc != nullptr)
-            if (const LUTComponent::LUTOutputConfig* cfg = lc->get_output_pin_config(mSelectedLutPin); cfg != nullptr)
-            { bit_offset = cfg->bit_offset; bit_count = cfg->bit_count; }
+        // Resolve the INIT parameter and bit slice of the currently selected pin
+        const LUTComponent* lc = mCurrentGate->get_type()->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+        const LUTComponent::LUTOutputConfig* cfg = (lc != nullptr) ? lc->get_output_pin_config(mSelectedLutPin) : nullptr;
+        if (cfg == nullptr)
+        {
+            log_error("gui", "Could not load LUT configuration of pin '{}' from gate with id {}.", mSelectedLutPin, mCurrentGate->get_id());
+            return;
+        }
+        const std::string initKey = cfg->init_identifier;
+        const u32 bitOffset       = cfg->bit_offset;
+        const u32 bitCount        = cfg->bit_count;
 
         QMenu menu;
 
         menu.addAction("Configuration string to clipboard", [this]() { QApplication::clipboard()->setText(mLutConfigLabel->text().remove(" 0x")); });
-        menu.addAction("Change configuration string", [this, resolveInitKey, bit_offset, bit_count]() {
+        menu.addAction("Change configuration string", [this, initKey, bitOffset, bitCount]() {
             // Strip leading " 0x" from the label to get the current hex digits
             QString currentHex = mLutConfigLabel->text().trimmed();
             if (currentHex.startsWith("0x", Qt::CaseInsensitive)) currentHex = currentHex.mid(2);
@@ -319,36 +346,36 @@ namespace hal
             ipd.addValidator(&hexValidator);
             if (ipd.exec() != QDialog::Accepted || ipd.textValue().isEmpty()) return;
 
-            InitComponent* ic = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
-            if (!ic) { log_error("gui", "Could not load InitComponent from gate with id {}.", mCurrentGate->get_id()); return; }
-
-            const std::string cat    = ic->get_init_category();
-            const std::string key    = resolveInitKey(ic);
-            QString           result = ipd.textValue().toUpper();
-
-            if (bit_count > 0)
+            // the slice of the selected pin has a fixed number of digits, shorter input is padded with leading zeros
+            const int numDigits = (bitCount + 3) / 4;
+            QString sliceHex    = ipd.textValue().toUpper();
+            if (sliceHex.size() > numDigits)
             {
-                const std::string raw_str  = std::get<1>(mCurrentGate->get_data(cat, key));
-                auto              splice_r = LUTComponent::splice_init_slice(raw_str, ipd.textValue().toStdString(), bit_offset, bit_count);
-                if (splice_r.is_ok())
-                    result = QString::fromStdString(splice_r.get());
+                log_error("gui", "Configuration string '{}' exceeds the {} bits of pin '{}'.", sliceHex.toStdString(), bitCount, mSelectedLutPin);
+                return;
+            }
+            sliceHex = sliceHex.rightJustified(numDigits, '0');
+
+            auto initHex = getLutInitHex(mCurrentGate, initKey);
+            if (initHex.is_error())
+            {
+                log_error("gui", "Could not load INIT parameter from gate with id {}: {}", mCurrentGate->get_id(), initHex.get_error().get());
+                return;
+            }
+            auto spliceRes = LUTComponent::splice_init_slice(initHex.get(), sliceHex.toStdString(), bitOffset, bitCount);
+            if (spliceRes.is_error())
+            {
+                log_error("gui", "Could not change configuration string of gate with id {}: {}", mCurrentGate->get_id(), spliceRes.get_error().get());
+                return;
             }
 
-            ActionSetObjectData* act = new ActionSetObjectData(ActionSetObjectData::ModifyAction, DataTableEntry(QString::fromStdString(cat), QString::fromStdString(key),
-                                                                                                                  "bit_vector", result));
+            ActionSetParameterValue* act = new ActionSetParameterValue(QString::fromStdString(initKey), "0x" + QString::fromStdString(spliceRes.get()));
             act->setObject(UserActionObject(mCurrentGate->get_id(), UserActionObjectType::Gate));
             act->exec();
-            setGate(mCurrentGate);    // must update config string and data table, no signal for that
+            setGate(mCurrentGate);    // must update config string and parameter table, no signal for that
         });
-        menu.addAction(QIcon(":/icons/python"), "Get configuration string", [this, resolveInitKey]() {
-            if (InitComponent* ic = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); ic != nullptr)
-            {
-                std::string cat = ic->get_init_category();
-                std::string key = resolveInitKey(ic);
-                QApplication::clipboard()->setText(PyCodeProvider::pyCodeGateData(mCurrentGate->get_id(), QString::fromStdString(cat), QString::fromStdString(key)));
-            }
-            else
-                log_error("gui", "Could not load InitComponent from gate with id {}.", mCurrentGate->get_id());
+        menu.addAction(QIcon(":/icons/python"), "Get configuration string", [this, initKey]() {
+            QApplication::clipboard()->setText(PyCodeProvider::pyCodeGateParameterValue(mCurrentGate->get_id(), QString::fromStdString(initKey)));
         });
 
         menu.exec(mLutConfigLabel->mapToGlobal(pos));

@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
     * **[BREAKING]** component factory functions moved from `GateTypeComponent` to the individual component classes as static `create()` methods
     * **[BREAKING]** `Gate::get_init_data()` and `Gate::set_init_data()` replaced with per-pin `get_init_string()` / `set_init_string()`
     * **[BREAKING]** `Gate::get_resolved_boolean_function()` replaced by the new `get_boolean_function()` overloads with `inlined` / `substitute_nets` parameters
-    * **[BREAKING]** HGL format version bumped from 4 to 6; old files with version ≤ 5 are still read
+    * **[BREAKING]** HGL format version bumped from 4 to 6; gate libraries with version ≤ 5 are no longer read directly and have to undergo an automatic upgrade when loaded
     * added new `Parameter` struct for typed gate-type parameters (Boolean, BitVector, LogicVector, Integer, String, Float, Time, Enum)
     * added parameter support to `GateType` and `DataContainer`, including Python bindings
     * extended the netlist serializer to persist typed `Parameter` values alongside legacy `data` entries

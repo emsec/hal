@@ -72,7 +72,7 @@ namespace hal
             std::string init_identifier;
             u32 bit_offset               = 0;
             u32 bit_count                = 0;
-            bool is_ascending            = true;
+            bool is_ascending            = false;
             std::vector<std::string> input_pins;
         };
 

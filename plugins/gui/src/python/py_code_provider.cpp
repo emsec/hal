@@ -209,6 +209,13 @@ namespace hal
         return buildPyCode(gateCodePrefix, suffix, gateId);
     }
 
+    QString PyCodeProvider::pyCodeGateParameterValue(u32 gateId, QString name)
+    {
+        const QString suffix = QString("get_parameter_value(\"%1\")").arg(name);
+
+        return buildPyCode(gateCodePrefix, suffix, gateId);
+    }
+
     QString PyCodeProvider::pyCodeNet(u32 netId)
     {
         return netCodePrefix.arg(netId);

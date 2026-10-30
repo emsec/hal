@@ -47,6 +47,8 @@ namespace hal
          *
          * @param parameterName - The name of the parameter to modify.
          * @param value - The new value, formatted as the core expects it for the parameter's type.
+         *                If the gate has no instance value yet, the declaration of its gate type is used.
+         *                An empty value removes the instance value from the gate.
          */
         ActionSetParameterValue(const QString& parameterName = QString(), const QString& value = QString());
 

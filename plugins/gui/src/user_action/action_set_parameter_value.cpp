@@ -34,29 +34,42 @@ namespace hal
             return false;
         }
 
-        // Capture the current value BEFORE mutating, for the undo action:
-        Result<std::string> old = gate->get_parameter_value(mParameterName.toStdString());
-        if (old.is_error())
+        const std::string name = mParameterName.toStdString();
+
+        // An empty value removes the instance value, so that the gate falls back to the default of its type.
+        // This is only used to undo setting a parameter that had no instance value before.
+        if (mValue.isEmpty())
         {
-            return false;
+            if (!gate->has_parameter(name))
+            {
+                return false;
+            }
+            auto* undo = new ActionSetParameterValue(mParameterName, QString::fromStdString(gate->get_parameter_value(name).get()));
+            undo->setObject(mObject);
+            mUndoAction = undo;
+            gate->delete_parameter(name);
         }
-
-        // Build the inverse action and store it in mUndoAction:
-        auto* undo = new ActionSetParameterValue(mParameterName, QString::fromStdString(old.get()));
-        undo->setObject(mObject);
-        mUndoAction = undo;
-
-        // Perform the mutation
-        Result<Parameter> decl = gate->get_parameter_declaration(mParameterName.toStdString());
-        if (decl.is_error())
+        else
         {
-            return false;
-        }
+            // The gate may not hold an instance value yet, in that case the declaration is taken from its type
+            // and undo removes the instance value again.
+            Result<Parameter> decl = gate->has_parameter(name) ? gate->get_parameter_declaration(name) : gate->get_type()->get_parameter(name);
+            if (decl.is_error())
+            {
+                return false;
+            }
 
-        auto result = gate->set_parameter(decl.get(), mValue.toStdString());
-        if (result.is_error())
-        {
-            return false;
+            // Capture the current value BEFORE mutating, for the undo action:
+            const QString oldValue = gate->has_parameter(name) ? QString::fromStdString(gate->get_parameter_value(name).get()) : QString();
+
+            if (gate->set_parameter(decl.get(), mValue.toStdString()).is_error())
+            {
+                return false;
+            }
+
+            auto* undo = new ActionSetParameterValue(mParameterName, oldValue);
+            undo->setObject(mObject);
+            mUndoAction = undo;
         }
 
         Q_EMIT gNetlistRelay->gateBooleanFunctionChanged(gate);
