@@ -35,6 +35,11 @@ namespace hal {
         }
     }
 
+    bool LayoutLockerManager::isLocked() const
+    {
+        return mLockCount > 0;
+    }
+
     bool LayoutLockerManager::canUpdate(GraphContext* ctx)
     {
         if (!ctx) return false;
