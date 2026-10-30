@@ -79,9 +79,7 @@ namespace hal
 
     void ParameterTableModel::updateData(Gate* gate)
     {
-        beginResetModel();
-        mGate = gate;
-        mRows.clear();
+        QVector<ParameterRow> rows;
 
         for (const auto& [name, declAndValue] : gate->get_parameters())
         {
@@ -102,12 +100,33 @@ namespace hal
                 }
             }
 
-            mRows.append(row);
+            rows.append(row);
         }
 
         // get_parameters() returns an unordered_map, so sort by name for a stable display order.
-        std::sort(mRows.begin(), mRows.end(), [](const ParameterRow& a, const ParameterRow& b) { return a.name < b.name; });
+        std::sort(rows.begin(), rows.end(), [](const ParameterRow& a, const ParameterRow& b) { return a.name < b.name; });
 
+        // Editing a value triggers this update synchronously from within setData(). A model reset at that point
+        // would discard the editor that is still committing, so values of the same gate are updated in place.
+        bool sameRows = (gate == mGate && rows.size() == mRows.size());
+        for (int i = 0; sameRows && i < rows.size(); ++i)
+        {
+            sameRows = (rows.at(i).name == mRows.at(i).name);
+        }
+
+        if (sameRows)
+        {
+            mRows = rows;
+            if (!mRows.isEmpty())
+            {
+                Q_EMIT dataChanged(index(0, 0), index(mRows.size() - 1, columnCount() - 1));
+            }
+            return;
+        }
+
+        beginResetModel();
+        mGate = gate;
+        mRows = rows;
         endResetModel();
     }
 
