@@ -299,6 +299,7 @@ All notable changes to this project will be documented in this file.
     * fixed the Python console getting stuck at the `...` prompt after a line that could not be parsed, since the parse error was never cleared
     * fixed memory leak when checking whether a Python console command is complete
     * added [Esc] key to discard a multi-line statement at the `...` prompt of the Python console
+    * fixed pasting multi-line code into the Python console failing with `SyntaxError: invalid non-printable character U+2029`, and since then with `SyntaxError: multiple statements found while compiling a single statement`
 * Build and dependencies
   * changed the GUI from Qt 5 to Qt 6
   * updated the vendored QuaZip from 1.3 to 1.5 as part of the move to Qt 6

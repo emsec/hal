@@ -336,7 +336,7 @@ namespace hal
             }
             else
             {
-                threadStarted = gPythonContext->interpretBackground(this, input, false);
+                threadStarted = gPythonContext->interpretBackground(this, input, input.contains('\n'));
             }
             mPromptType     = Standard;
             mCurrentCompoundInput = "";
