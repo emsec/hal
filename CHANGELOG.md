@@ -10,13 +10,51 @@ All notable changes to this project will be documented in this file.
   there yet.
 -->
 * Core
+  * multi-output LUTs and typed gate parameters
+    * **[BREAKING]** multi-output LUT support: complete overhaul of `LUTComponent` and the related INIT APIs, see the API breaks below
+    * **[BREAKING]** component factory functions moved from `GateTypeComponent` to the individual component classes as static `create()` methods
+    * **[BREAKING]** `Gate::get_init_data()` and `Gate::set_init_data()` replaced with per-pin `get_init_string()` / `set_init_string()`
+    * **[BREAKING]** `Gate::get_resolved_boolean_function()` replaced by the new `get_boolean_function()` overloads with `inlined` / `substitute_nets` parameters
+    * **[BREAKING]** HGL format version bumped from 4 to 6; gate libraries with version ≤ 5 are no longer read directly and have to undergo an automatic upgrade when loaded
+    * added new `Parameter` struct for typed gate-type parameters (Boolean, BitVector, LogicVector, Integer, String, Float, Time, Enum)
+    * added parameter support to `GateType` and `DataContainer`, including Python bindings
+    * extended the netlist serializer to persist typed `Parameter` values alongside legacy `data` entries
+    * API breaks in detail
+    * `Gate`
+      * **[BREAKING]** removed `get_resolved_boolean_function(pin, use_net_variables)` — use `get_boolean_function(pin, inlined=true, substitute_nets=true)` instead
+      * **[BREAKING]** removed `get_init_data()` — use `get_init_string(pin_name)` or `get_init_string(pin*)` instead
+      * **[BREAKING]** removed `set_init_data(init_data)` — use `set_init_string(pin_name, hex)` or `set_init_string(pin*, hex)` instead
+      * added `get_boolean_function(name, inlined, substitute_nets)` and `get_boolean_function(pin, inlined, substitute_nets)` overloads returning `Result<BooleanFunction>` with optional inlining and net substitution
+      * added `get_boolean_functions(only_custom, inlined, substitute_nets)` overload returning `Result<std::unordered_map<std::string, BooleanFunction>>`
+      * added `get_init_string(pin_name)` and `get_init_string(pin*)` returning an uppercase hex string for the given LUT output or internal pin
+      * added `set_init_string(pin_name, hex)` and `set_init_string(pin*, hex)` for writing a per-pin INIT hex slice
+    * `LUTComponent`
+      * **[BREAKING]** removed constructor `LUTComponent(component, init_ascending)` — use `LUTComponent::create(configs)` instead
+      * **[BREAKING]** removed `is_init_ascending()` and `set_init_ascending()` — per-output-pin bit-order is now encoded in `LUTOutputConfig::is_ascending`
+      * added `LUTComponent::LUTOutputConfig` struct holding per-pin INIT identifier, bit offset, bit count, bit order, and input pin list for multi-output LUT support
+      * added static factory `LUTComponent::create(configs)` replacing the old constructor
+      * added `get_output_pin_config(pin_name)` and `get_output_pin_configs()` accessors
+      * added static helpers `extract_init_slice(full_hex, bit_offset, bit_count)` and `splice_init_slice(full_hex, slice_hex, bit_offset, bit_count)`
+    * `GateTypeComponent` (factory functions)
+      * **[BREAKING]** removed `GateTypeComponent::create_lut_component()` — use `LUTComponent::create()` instead
+      * **[BREAKING]** removed `GateTypeComponent::create_ff_component()` — use `FFComponent::create()` instead
+      * **[BREAKING]** removed `GateTypeComponent::create_latch_component()` — use `LatchComponent::create()` instead
+      * **[BREAKING]** removed `GateTypeComponent::create_ram_component()` — use `RAMComponent::create()` instead
+      * **[BREAKING]** removed `GateTypeComponent::create_mac_component()` — use `MACComponent::create()` instead
+      * **[BREAKING]** removed `GateTypeComponent::create_init_component()` — use `InitComponent::create()` instead
+      * **[BREAKING]** removed `GateTypeComponent::create_state_component()` — use `StateComponent::create()` instead
+      * **[BREAKING]** removed `GateTypeComponent::create_ram_port_component()` — use `RAMPortComponent::create()` instead
+      * all component constructors (`FFComponent`, `InitComponent`, `LatchComponent`, `MACComponent`, `RAMComponent`, `RAMPortComponent`, `StateComponent`) made private; each class now exposes a static `create()` factory
+    * `GateType`
+      * added `add_parameter(param)`, `get_parameters()`, `get_parameter(name)`, and `has_parameter(name)` for typed parameter declarations
+    * `DataContainer`
+      * added `set_parameter(param, value)`, `get_parameter_value(name)`, `get_parameter_declaration(name)`, `has_parameter(param/name)`, `delete_parameter(name)`, and `get_parameters()` for storing and querying typed parameter values on gate instances
   * netlist
     * changed `Net` and `Gate` to identify a pin by pointer identity instead of by value when looking up an endpoint
     * sped up deleting gates, nets and modules, which searched the object vectors of the netlist and of the owning module linearly; every such vector now tracks the positions of its elements and removal is a constant-time swap
     * sped up `Module::is_parent_module_of`, which walked the whole subtree of the module once per endpoint whenever module nets are recomputed; it now walks up the parent chain of the queried module. Together with the constant-time removal, parsing the OpenTitan Earl Grey netlist of 25,906 modules went from 709 s to 31 s
     * fixed `utils::split` reading the last character of an empty string
     * fixed crash when passing a `nullptr` pin to `Net::remove_source` or `Net::remove_destination`
-    * renamed the parameter `use_net_variables` of `Gate::get_resolved_boolean_function` to `use_pin_names`, since the old name stated the opposite of its effect: `false` (the default) replaces input pin variables by net variables, `true` keeps the input pin names; Python code passing the argument by keyword has to be updated
     * fixed Python binding `Grouping.remove_module_by_id` removing the gate with the given ID instead of the module
   * module pins
     * sped up assigning gates to a module and removing them from it, `Module::get_pin_by_net` scanned every pin of the module for every net of every gate that enters or leaves it; the pins are now indexed by net
@@ -27,6 +65,8 @@ All notable changes to this project will be documented in this file.
     * fixed the pin events of assigning several pins to a group being delivered in pin ID order rather than in the order the rows come were created, which could crash the pins tree of the GUI
   * gate library
     * added the `GateTypeProperty::delay` gate type property for dedicated delay cells, such as those of a clock distribution network, which HGL files read and write as `delay`
+    * added the `GateLibrary::get_parse_status` function which can report whether parsing failed do to required upgrade to new .hgl format
+    * added an upgrade function to convert gate libraries from older .hgl file format to latest version
     * fixed reloading a gate library destroying the library a netlist was built against, which silently replaced every gate type of that netlist. Gate libraries are now owned through a `shared_ptr` and outlive both the netlists and the Python handles that refer to them
     * fixed `GateLibraryManager.get_gate_libraries` handing each library to Python as a newly constructed `shared_ptr` over a pointer it had only borrowed, which freed the library twice
     * fixed `GateLibrary::get_path` and the `path` property returning the name of the library instead of its path
@@ -46,6 +86,9 @@ All notable changes to this project will be documented in this file.
     * fixed `BooleanFunction::to_string` reading past the end of its digit table when a bit-vector that contains an `X` or `Z` is converted to an octal or hexadecimal string
     * fixed `BooleanFunction::from_string` rejecting Liberty expressions that combine Liberty-only syntax such as `A'` or `+` with spaces around the operators; if neither grammar accepts an expression, it is parsed once more with every space removed, added as `BooleanFunctionParser::ParserType::LibertyNoSpace`
     * changed `BooleanFunction.nodes` from a method to a read-only property in Python, which is what its documentation always claimed
+    * added `BooleanFunction::from_string()` overload accepting a `var_sizes` map for multi-bit variables, e.g. those compared against multi-bit constants in parameter equality checks
+    * added `Eq`, `Add`, `Sub`, `Mul`, and ternary `Ite` operations to `BooleanFunction` and its parser
+    * added support for parsing multi-bit constants and variables in `BooleanFunction`
   * SMT
     * added `to_string` to `SMT::QueryConfig`, `SMT::Model` and `SMT::SolverResult`, so that all four SMT types offer it the way `SMT::Constraint` already did, and `__str__` to all four in Python
     * added `SMT::SymbolicState::get_bindings`, which returns the variables bound in a symbolic state indexed by their name
@@ -168,6 +211,11 @@ All notable changes to this project will be documented in this file.
     * added tests
     * fixed `split_luts` crashing on a Xilinx `LUT6_2` that only uses one of its two output pins
     * fixed the documentation of `split_shift_registers`, which claimed that only `SRL16E` is supported although `SRLC32E` is handled as well
+    * **[BREAKING]** `split_luts(Netlist*, gates)` and `split_shift_registers(Netlist*, gates)` take an optional `create_module` parameter as third argument; added `split_luts(std::vector<Gate*>, create_module)`, `split_lut(Gate*, create_module)`, `split_shift_registers(std::vector<Gate*>, create_module)`, and `split_shift_register(Gate*, create_module)`
+    * changed `split_shift_registers` to also handle `SRL16` and `SRLC16E`
+    * added a plugin parameter dialog to the GUI extension for splitting all LUTs and shift registers of the netlist
+    * added comprehensive tests for the split-LUT and split-shift-register functions
+    * fixed revert not working properly after an INIT string change
   * bit-order propagation
     * changed the interface to speak in a `BitOrder`, which is the order of one module pin group, and a `BitOrderResult`, which is what a propagation reports, instead of maps
     * added tests
@@ -178,10 +226,21 @@ All notable changes to this project will be documented in this file.
   * module identification
     * changed the pin groups of an identified module to be descending. The pin indices are unchanged, and the `CTRL` group is now of type `control` instead of `enable`
     * fixed `CandidateType.addition_offset` being bound to `addition` in Python, which made the two indistinguishable
+  * gate libraries
+    * **[BREAKING]** removed `XILINX_SIMPRIM.hgl` from the distribution
+    * updated `XILINX_UNISIM.hgl` and `XILINX_UNISIM_hal.hgl` with multi-output LUT type definitions for all `LUT6_2` variants
+    * updated `ice40ultra.hgl`, `ice40ultra_hal.hgl`, and `example_library.hgl` with multi-output LUT support
+    * bumped the HGL format version to 6 for all shipped libraries
+  * HGL parser and writer
+    * bumped the format version from 4 to 6; added serialization for typed parameter declarations and multi-output LUT configurations
+  * Verilog writer
+    * changed the parameter output to `write_typed_parameter_value()` based on the `Parameter` type; removed the `valid_types` whitelist
   * Verilog parser
+    * changed generics to be parsed into typed `Parameter` objects stored via `DataContainer::set_parameter()` instead of `set_data()`; vector parameters are normalized to uppercase
     * added support for a port expression in a module header that is a concatenation, e.g. `.sum({\<const0> ,\^sum [1:0]})`, which Vivado writes for a port that is partly constant; every hierarchical Vivado netlist with such a port failed to parse before
     * changed the choice of the top module to honour a module marked `(* top = 1 *)`, as Yosys writes it, before falling back to the one module nothing instantiates; a Yosys netlist that keeps unused modules failed as ambiguous before, and the error now names the candidates
   * VHDL parser
+    * changed generics to be parsed into typed `Parameter` objects; existing HAL projects are converted from the old `data`-based storage
     * fixed the `'0'` and `'1'` literals being left without a driver whenever the netlist already contains a GND or VCC instance; each literal now gets a GND or VCC gate of its own, and an instance that is in the netlist drives only what it drives there
   * Liberty parser
     * fixed the Liberty parser rejecting a `type` group that declares `bit_to`
@@ -194,6 +253,9 @@ All notable changes to this project will be documented in this file.
     * added `Automatically rename pins` to the context menu of a pin group, which renames every pin of the group to `<group name>(<index>)`
     * added `Set focus to pin` to the context menu of a pin in the pin tree of a gate and of a module, which moves the sub-focus of the graph view to that pin
   * misc
+    * updated the gate library wizard to support multi-output LUT type creation and INIT configuration per output pin
+    * changed the gate library loading policy : if old .hgl format gets detected it will request to run automated upgrade
+    * changed the context menu for data in the selection details, which can now add, modify, or delete data rows
     * added feature in Help->About, version string can be selected for copy to clipboard
     * added restoring the GUI layout of the previous session on start
     * changed the plugin manager of the GUI to unload a plugin, and the dependencies it pulled in, right after loading it to read its description, so that only plugins requested by the user or required by such a plugin stay loaded

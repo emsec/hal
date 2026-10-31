@@ -1,4 +1,5 @@
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
@@ -36,6 +37,15 @@ namespace hal
         virtual void TearDown()
         {
             test_utils::remove_sandbox_directory();
+        }
+
+        /**
+         * Set the 64-bit INIT string of a `LUT6_2` gate. The INIT of `O6` covers the INIT of `O5` as well.
+         */
+        bool set_lut6_2_init(Gate* g, const std::string& init) const
+        {
+            const auto* lc = g->get_type()->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            return lc != nullptr && lc->set_init_string(g, "O6", init).is_ok();
         }
 
         /**
@@ -89,7 +99,7 @@ namespace hal
             for (const std::string& name : {"l0", "l1"})
             {
                 Gate* l = nl->create_gate(lut6_2, name);
-                ASSERT_TRUE(l->set_init_data({"ABCDEF0123456789"}).is_ok());
+                ASSERT_TRUE(set_lut6_2_init(l, "ABCDEF0123456789"));
 
                 for (u32 i = 0; i < 6; i++)
                 {
@@ -135,7 +145,7 @@ namespace hal
             ASSERT_NE(nl, nullptr);
 
             Gate* l = nl->create_gate(m_gl->get_gate_type_by_name("LUT6_2"), "l0");
-            ASSERT_TRUE(l->set_init_data({"ABCDEF0123456789"}).is_ok());
+            ASSERT_TRUE(set_lut6_2_init(l, "ABCDEF0123456789"));
 
             for (u32 i = 0; i < 6; i++)
             {
@@ -207,7 +217,7 @@ namespace hal
             EXPECT_EQ(res.get(), 1);
 
             EXPECT_EQ(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "SRL16E"; }).size(), 1);
-            EXPECT_EQ(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "FDE"; }).size(), 1);
+            EXPECT_EQ(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "FDCE"; }).size(), 1);
 
             // without a scope the remaining shift register is replaced as well
             res = xilinx_toolbox::split_shift_registers(nl.get());
@@ -215,7 +225,7 @@ namespace hal
             EXPECT_EQ(res.get(), 1);
 
             EXPECT_TRUE(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "SRL16E"; }).empty());
-            EXPECT_EQ(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "FDE"; }).size(), 2);
+            EXPECT_EQ(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "FDCE"; }).size(), 2);
         }
         {
             // the created flip-flops belong to the module of the shift register, not to the top module
@@ -232,7 +242,7 @@ namespace hal
             ASSERT_TRUE(res.is_ok());
             EXPECT_EQ(res.get(), 1);
 
-            auto ffs = nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "FDE"; });
+            auto ffs = nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "FDCE"; });
             ASSERT_EQ(ffs.size(), 1);
             EXPECT_EQ(ffs.front()->get_module(), mod);
         }
@@ -268,7 +278,7 @@ namespace hal
             for (const std::string& name : {"l0", "l1"})
             {
                 Gate* l = nl->create_gate(m_gl->get_gate_type_by_name("LUT6_2"), name);
-                ASSERT_TRUE(l->set_init_data({"ABCDEF0123456789"}).is_ok());
+                ASSERT_TRUE(set_lut6_2_init(l, "ABCDEF0123456789"));
 
                 for (u32 i = 0; i < 6; i++)
                 {

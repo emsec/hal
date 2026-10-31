@@ -33,6 +33,36 @@ namespace hal
             return Token(TokenType::Xor, {}, {});
         }
 
+        Token Token::Eq()
+        {
+            return Token(TokenType::Eq, {}, {});
+        }
+
+        Token Token::Question()
+        {
+            return Token(TokenType::Question, {}, {});
+        }
+
+        Token Token::Colon()
+        {
+            return Token(TokenType::Colon, {}, {});
+        }
+
+        Token Token::Add()
+        {
+            return Token(TokenType::Add, {}, {});
+        }
+
+        Token Token::Sub()
+        {
+            return Token(TokenType::Sub, {}, {});
+        }
+
+        Token Token::Mul()
+        {
+            return Token(TokenType::Mul, {}, {});
+        }
+
         Token Token::Variable(std::string name, u16 size)
         {
             return Token(TokenType::Variable, std::make_tuple(name, size), {});
@@ -66,10 +96,16 @@ namespace hal
                  })},
                 {ParserType::Standard,
                  std::map<TokenType, unsigned>({
-                     {TokenType::Not, 4},
-                     {TokenType::And, 3},
-                     {TokenType::Xor, 2},
-                     {TokenType::Or, 1},
+                     {TokenType::Not, 8},
+                     {TokenType::Mul, 7},
+                     {TokenType::Add, 6},
+                     {TokenType::Sub, 6},
+                     {TokenType::Eq, 5},
+                     {TokenType::And, 4},
+                     {TokenType::Xor, 3},
+                     {TokenType::Or, 2},
+                     {TokenType::Question, 1},
+                     {TokenType::Colon, 1},
                  })},
             };
 
@@ -79,7 +115,14 @@ namespace hal
                 return iter->second;
             }
 
-            return 5;
+            return 9;
+        }
+
+        bool Token::is_left_associative() const
+        {
+            // Arithmetic operators follow C-style left-associativity. All other operators
+            // remain right-associative (the long-standing default for the BF parser).
+            return this->type == TokenType::Add || this->type == TokenType::Sub || this->type == TokenType::Mul;
         }
 
         bool Token::is(TokenType _type) const
@@ -95,6 +138,12 @@ namespace hal
                 {TokenType::Not, "Not"},
                 {TokenType::NotSuffix, "NotSuffix"},
                 {TokenType::Xor, "Xor"},
+                {TokenType::Eq, "Eq"},
+                {TokenType::Question, "Question"},
+                {TokenType::Colon, "Colon"},
+                {TokenType::Add, "Add"},
+                {TokenType::Sub, "Sub"},
+                {TokenType::Mul, "Mul"},
 
                 {TokenType::BracketOpen, "BracketOpen"},
                 {TokenType::BracketClose, "BracketClose"},
@@ -136,6 +185,31 @@ namespace hal
 
         Result<std::vector<Token>> reverse_polish_notation(std::vector<Token>&& tokens, const std::string& expression, const ParserType& parser)
         {
+            // Validate ternary structure: every `:` must be preceded (in source order) by an
+            // unmatched `?`, and every `?` must eventually have a matching `:`. This catches
+            // isolated `?`/`:`, wrong order (e.g. `a : b ? c`), and unbalanced/incomplete
+            // ternaries before the Shunting Yard step silently accepts them.
+            int ternary_depth = 0;
+            for (const auto& tok : tokens)
+            {
+                if (tok.is(TokenType::Question))
+                {
+                    ++ternary_depth;
+                }
+                else if (tok.is(TokenType::Colon))
+                {
+                    if (ternary_depth == 0)
+                    {
+                        return ERR("could not translate '" + expression + "' to reverse polish notation: unmatched ':' in ternary expression");
+                    }
+                    --ternary_depth;
+                }
+            }
+            if (ternary_depth != 0)
+            {
+                return ERR("could not translate '" + expression + "' to reverse polish notation: unmatched '?' in ternary expression");
+            }
+
             std::stack<Token> operator_stack;
             std::vector<Token> output;
 
@@ -155,8 +229,17 @@ namespace hal
                     case TokenType::And:
                     case TokenType::Or:
                     case TokenType::Not:
-                    case TokenType::Xor: {
-                        while (!operator_stack.empty() && !operator_stack.top().is(TokenType::BracketOpen) && operator_stack.top().precedence(parser) > token.precedence(parser))
+                    case TokenType::Xor:
+                    case TokenType::Eq:
+                    case TokenType::Question:
+                    case TokenType::Colon:
+                    case TokenType::Add:
+                    case TokenType::Sub:
+                    case TokenType::Mul: {
+                        const bool left_assoc = token.is_left_associative();
+                        while (!operator_stack.empty() && !operator_stack.top().is(TokenType::BracketOpen)
+                               && (operator_stack.top().precedence(parser) > token.precedence(parser)
+                                   || (left_assoc && operator_stack.top().precedence(parser) == token.precedence(parser))))
                         {
                             output.emplace_back(operator_stack.top());
                             operator_stack.pop();
@@ -218,7 +301,10 @@ namespace hal
 
             for (auto&& token : tokens)
             {
-                if ((token.is(BooleanFunctionParser::TokenType::And) || token.is(BooleanFunctionParser::TokenType::Or) || token.is(BooleanFunctionParser::TokenType::Not) || token.is(BooleanFunctionParser::TokenType::Xor)) && nodes.empty())
+                if ((token.is(BooleanFunctionParser::TokenType::And) || token.is(BooleanFunctionParser::TokenType::Or) || token.is(BooleanFunctionParser::TokenType::Not) || token.is(BooleanFunctionParser::TokenType::Xor)
+                     || token.is(BooleanFunctionParser::TokenType::Eq) || token.is(BooleanFunctionParser::TokenType::Colon)
+                     || token.is(BooleanFunctionParser::TokenType::Add) || token.is(BooleanFunctionParser::TokenType::Sub) || token.is(BooleanFunctionParser::TokenType::Mul))
+                    && nodes.empty())
                 {
                     return ERR("could not translate tokens: tokens are imbalanced, i.e., the operation comes before the operand nodes");
                 }
@@ -237,6 +323,33 @@ namespace hal
                     case BooleanFunctionParser::TokenType::Xor:
                         nodes.emplace_back(BooleanFunction::Node::Operation(BooleanFunction::NodeType::Xor, nodes.back().size));
                         break;
+                    case BooleanFunctionParser::TokenType::Add:
+                        nodes.emplace_back(BooleanFunction::Node::Operation(BooleanFunction::NodeType::Add, nodes.back().size));
+                        break;
+                    case BooleanFunctionParser::TokenType::Sub:
+                        nodes.emplace_back(BooleanFunction::Node::Operation(BooleanFunction::NodeType::Sub, nodes.back().size));
+                        break;
+                    case BooleanFunctionParser::TokenType::Mul:
+                        nodes.emplace_back(BooleanFunction::Node::Operation(BooleanFunction::NodeType::Mul, nodes.back().size));
+                        break;
+                    case BooleanFunctionParser::TokenType::Eq:
+                        // Eq returns a 1-bit boolean result regardless of operand width.
+                        nodes.emplace_back(BooleanFunction::Node::Operation(BooleanFunction::NodeType::Eq, 1));
+                        break;
+                    case BooleanFunctionParser::TokenType::Question:
+                        // `?` is a syntactic marker; the actual Ite node is emitted on `:`.
+                        break;
+                    case BooleanFunctionParser::TokenType::Colon: {
+                        // The result size of Ite matches the size of the then/else branches.
+                        // The branches are the two top-most nodes (then below else on the stack).
+                        if (nodes.size() < 3)
+                        {
+                            return ERR("could not translate tokens: ternary `:` requires three preceding operands");
+                        }
+                        const u16 ite_size = nodes.back().size;
+                        nodes.emplace_back(BooleanFunction::Node::Operation(BooleanFunction::NodeType::Ite, ite_size));
+                        break;
+                    }
 
                     case BooleanFunctionParser::TokenType::Variable:
                         nodes.emplace_back(BooleanFunction::Node::Variable(std::get<0>(token.variable), std::get<1>(token.variable)));

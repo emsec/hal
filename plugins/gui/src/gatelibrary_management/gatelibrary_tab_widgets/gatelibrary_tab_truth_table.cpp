@@ -210,7 +210,7 @@ namespace hal
             for (int nsiCol = 0; nsiCol < nextStateInputs.size(); nsiCol++)
             {
                 int icol = inputColHash.value(nextStateInputs.at(nsiCol),-1);
-                Q_ASSERT(icol >= 0);
+                if (icol < 0) return false;
                 QString cellVal(irow & (1<<nsiCol) ? "H" : "L");
                 mTableWidget->setItem(irow, icol, new QTableWidgetItem(cellVal));
             }
@@ -231,7 +231,7 @@ namespace hal
             for (int nsiCol = 0; nsiCol < nextStateInputs.size(); nsiCol++)
             {
                 int icol = inputColHash.value(nextStateInputs.at(nsiCol),-1);
-                Q_ASSERT(icol >= 0);
+                if (icol < 0) return false;
                 mTableWidget->setItem(irow, icol, new QTableWidgetItem("X"));
             }
             if (icolClock >= 0)

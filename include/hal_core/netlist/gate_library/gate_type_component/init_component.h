@@ -27,6 +27,8 @@
 
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
+#include <memory>
+
 namespace hal
 {
     /**
@@ -36,12 +38,13 @@ namespace hal
     {
     public:
         /**
-         * Construct a new InitComponent with given child component, the category and a vector of identifiers pointing to the initialization data.
-         * 
+         * Create a new InitComponent with the category and a vector of identifiers pointing to the initialization data.
+         *
          * @param[in] init_category - The data category.
          * @param[in] init_identifiers - The data identifiers.
+         * @returns The InitComponent.
          */
-        InitComponent(const std::string& init_category, const std::vector<std::string>& init_identifiers);
+        static std::unique_ptr<InitComponent> create(const std::string& init_category, const std::vector<std::string>& init_identifiers);
 
         /**
          * Get the type of the gate type component.
@@ -96,6 +99,8 @@ namespace hal
         void set_init_identifiers(const std::vector<std::string>& init_identifiers);
 
     private:
+        InitComponent(const std::string& init_category, const std::vector<std::string>& init_identifiers);
+
         static constexpr ComponentType m_type = ComponentType::init;
 
         std::string m_init_category                 = "";

@@ -1,9 +1,16 @@
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 
+#include <memory>
+
 namespace hal
 {
     InitComponent::InitComponent(const std::string& init_category, const std::vector<std::string>& init_identifiers) : m_init_category(init_category), m_init_identifiers(init_identifiers)
     {
+    }
+
+    std::unique_ptr<InitComponent> InitComponent::create(const std::string& init_category, const std::vector<std::string>& init_identifiers)
+    {
+        return std::unique_ptr<InitComponent>(new InitComponent(init_category, init_identifiers));
     }
 
     InitComponent::ComponentType InitComponent::get_type() const

@@ -28,6 +28,7 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/enums/gate_type_property.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
+#include "hal_core/netlist/parameter.h"
 #include "hal_core/netlist/pins/gate_pin.h"
 #include "hal_core/netlist/pins/pin_group.h"
 #include "hal_core/utilities/enums.h"
@@ -41,7 +42,6 @@
 namespace hal
 {
     class GateLibrary;
-
 
     /**
      * A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
@@ -443,6 +443,37 @@ namespace hal
          */
         BooleanFunction get_boolean_function(const GatePin* pin = nullptr) const;
 
+        /**
+         * Declare a typed parameter on this gate type.
+         *
+         * @param[in] param - The parameter declaration.
+         * @returns OK() on success, an error otherwise.
+         */
+        Result<std::monostate> add_parameter(const Parameter& param);
+
+        /**
+         * Get all parameters declared on this gate type as a map from `name` to parameter declaration.
+         *
+         * @returns The parameter map.
+         */
+        const std::unordered_map<std::string, Parameter>& get_parameters() const;
+
+        /**
+         * Look up a parameter declaration by name.
+         *
+         * @param[in] name - The parameter name.
+         * @returns Ok() and the parameter on success, an error otherwise.
+         */
+        Result<Parameter> get_parameter(const std::string& name) const;
+
+        /**
+         * Check whether a parameter with the given name is declared on this gate type.
+         *
+         * @param[in] name - The parameter name.
+         * @returns `true` if the parameter exists, `false` otherwise.
+         */
+        bool has_parameter(const std::string& name) const;
+
     private:
         friend class GateLibrary;
 
@@ -470,6 +501,9 @@ namespace hal
 
         // Boolean functions
         std::unordered_map<std::string, BooleanFunction> m_functions;
+
+        // Typed parameters
+        std::unordered_map<std::string, Parameter> m_parameters;
 
         GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component = nullptr);
 

@@ -869,7 +869,8 @@ namespace hal {
     }
 
     /**
-     * Testing the correct storage of data, passed by the "generic map" keyword
+     * Testing the correct storage of typed parameters via the "generic map" keyword.
+     * Each VHDL generic produces a typed Parameter stored via set_parameter().
      *
      * Functions: parse
      */
@@ -877,7 +878,8 @@ namespace hal {
 
         TEST_START
             {
-                // Store an instance of all possible data types in one Gate + some special cases
+                // One gate with one generic of every supported type.
+                // D"..." (decimal base) is intentionally absent — it is not yet supported and causes a parse error.
                 std::string netlist_input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
@@ -889,20 +891,26 @@ namespace hal {
                                         "  gate_0 : BUF"
                                         "    generic map("
                                         "      key_integer => 1234,"
+                                        "      key_neg_integer => -42,"
                                         "      key_floating_point => 1.234,"
                                         "      key_string => \"test_string\","
-                                        "      key_bit_vector_hex => X\"abc\","    // <- all values are 0xABC
-                                        "      key_bit_vector_dec => D\"2748\","
+                                        "      key_string_with_comma => \"test,1,2,3\","
+                                        "      key_string_looks_like_float => \"1.234\","
+                                        "      key_bit_vector_hex => X\"abc\","
                                         "      key_bit_vector_oct => O\"5274\","
                                         "      key_bit_vector_bin => B\"1010_1011_1100\","
-                                        // special characters in '"'
-                                        "      key_negative_comma_string => \"test,1,2,3\","
-                                        "      key_negative_float_string => \"1.234\","
-                                        // -- VHDL specific Data Types:
-                                        "      key_boolean => true,"
-                                        "      key_time => 1.234sec,"
-                                        "      key_bit_value => '1'"
-
+                                        "      key_boolean_true => true,"
+                                        "      key_boolean_false => FALSE,"
+                                        "      key_time => 1.234 sec,"
+                                        "      key_time_ns => 10 ns,"
+                                        "      key_time_fs => 5 fs,"
+                                        "      key_time_ps => 250 ps,"
+                                        "      key_time_us => 3 us,"
+                                        "      key_time_ms => 2 ms,"
+                                        "      key_time_min => 1 min,"
+                                        "      key_time_hr => 1 hr,"
+                                        "      key_bit_value => '1',"
+                                        "      key_bit_value_zero => '0'"
                                         "    )"
                                         "    port map ( "
                                         "      I => net_global_input "
@@ -919,28 +927,367 @@ namespace hal {
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).size(), 1);
                 Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
 
-                // Integers are stored in their hex representation
-                EXPECT_EQ(gate_0->get_data("generic", "key_integer"), std::make_tuple("integer", "1234"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_floating_point"),
-                          std::make_tuple("floating_point", "1.234"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_string"), std::make_tuple("string", "test_string"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_hex"),
-                          std::make_tuple("bit_vector", "ABC"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_dec"),
-                          std::make_tuple("bit_vector", "ABC"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_oct"),
-                          std::make_tuple("bit_vector", "ABC"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_bin"),
-                          std::make_tuple("bit_vector", "ABC"));
-                // Special Characters
-                EXPECT_EQ(gate_0->get_data("generic", "key_negative_comma_string"),
-                          std::make_tuple("string", "test,1,2,3"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_negative_float_string"),
-                          std::make_tuple("string", "1.234"));
-                // -- VHDL specific Data Types:
-                EXPECT_EQ(gate_0->get_data("generic", "key_boolean"), std::make_tuple("boolean", "true"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_time"), std::make_tuple("time", "1.234sec"));
-                EXPECT_EQ(gate_0->get_data("generic", "key_bit_value"), std::make_tuple("bit_value", "1"));
+                // Integer
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_integer");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Integer);
+                    auto val = gate_0->get_parameter_value("key_integer");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "1234");
+                }
+                // Negative integer
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_neg_integer");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Integer);
+                    auto val = gate_0->get_parameter_value("key_neg_integer");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "-42");
+                }
+                // Float
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_floating_point");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Float);
+                    auto val = gate_0->get_parameter_value("key_floating_point");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "1.234");
+                }
+                // String
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_string");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::String);
+                    auto val = gate_0->get_parameter_value("key_string");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "test_string");
+                }
+                // String with comma
+                {
+                    auto val = gate_0->get_parameter_value("key_string_with_comma");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "test,1,2,3");
+                }
+                // String that looks like a float (outer quotes force string)
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_string_looks_like_float");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::String);
+                    auto val = gate_0->get_parameter_value("key_string_looks_like_float");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "1.234");
+                }
+                // BitVector from hex (X"abc" → 3 digits × 4 bits = 12 bits, value "0xABC")
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_bit_vector_hex");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                    EXPECT_EQ(decl.get().get_size(), 12);
+                    auto val = gate_0->get_parameter_value("key_bit_vector_hex");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "0xABC");
+                }
+                // BitVector from octal (O"5274" → 4 digits × 3 bits = 12 bits, value "0o5274")
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_bit_vector_oct");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                    EXPECT_EQ(decl.get().get_size(), 12);
+                    auto val = gate_0->get_parameter_value("key_bit_vector_oct");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "0o5274");
+                }
+                // BitVector from binary (B"1010_1011_1100" → 12 bits after stripping underscores, value "0b101010111100")
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_bit_vector_bin");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                    EXPECT_EQ(decl.get().get_size(), 12);
+                    auto val = gate_0->get_parameter_value("key_bit_vector_bin");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "0b101010111100");
+                }
+                // Boolean true (case-insensitive; normalized to lowercase)
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_boolean_true");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Boolean);
+                    auto val = gate_0->get_parameter_value("key_boolean_true");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "true");
+                }
+                // Boolean false (uppercase FALSE → normalized to "false")
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_boolean_false");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Boolean);
+                    auto val = gate_0->get_parameter_value("key_boolean_false");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "false");
+                }
+                // Time: 1.234sec → unit "sec" maps to "s"
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    auto val = gate_0->get_parameter_value("key_time");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "1.234s");
+                }
+                // Time: 10ns → no unit remapping
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time_ns");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    auto val = gate_0->get_parameter_value("key_time_ns");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "10ns");
+                }
+                // Time: 5fs
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time_fs");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    EXPECT_EQ(gate_0->get_parameter_value("key_time_fs").get(), "5fs");
+                }
+                // Time: 250ps
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time_ps");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    EXPECT_EQ(gate_0->get_parameter_value("key_time_ps").get(), "250ps");
+                }
+                // Time: 3us
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time_us");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    EXPECT_EQ(gate_0->get_parameter_value("key_time_us").get(), "3us");
+                }
+                // Time: 2ms
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time_ms");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    EXPECT_EQ(gate_0->get_parameter_value("key_time_ms").get(), "2ms");
+                }
+                // Time: 1min → no remapping
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time_min");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    EXPECT_EQ(gate_0->get_parameter_value("key_time_min").get(), "1min");
+                }
+                // Time: 1hr → normalized to "1h"
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time_hr");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    EXPECT_EQ(gate_0->get_parameter_value("key_time_hr").get(), "1h");
+                }
+                // Bit value '1' → BitVector(size=1), value "0b1"
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_bit_value");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                    EXPECT_EQ(decl.get().get_size(), 1);
+                    auto val = gate_0->get_parameter_value("key_bit_value");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "0b1");
+                }
+                // Bit value '0' → BitVector(size=1), value "0b0"
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_bit_value_zero");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                    EXPECT_EQ(decl.get().get_size(), 1);
+                    auto val = gate_0->get_parameter_value("key_bit_value_zero");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "0b0");
+                }
+            }
+        {
+            // Enum parameter: PARAM_TEST gate type declares Enum("mode",{"normal","inverted"})
+            // and BitVector("width",16). The parser infers String for the quoted enum value;
+            // the gate-type-declaration override must correct this to Enum.
+            std::string netlist_input("entity TEST_Comp is "
+                                    "  port ( "
+                                    "    net_in : in STD_LOGIC := 'X'; "
+                                    "    net_out : out STD_LOGIC; "
+                                    "  ); "
+                                    "end TEST_Comp; "
+                                    "architecture STRUCTURE of TEST_Comp is "
+                                    "begin"
+                                    "  gate_0 : PARAM_TEST"
+                                    "    generic map("
+                                    "      mode => \"inverted\","
+                                    "      width => X\"ABCD\""
+                                    "    )"
+                                    "    port map ( "
+                                    "      I0 => net_in, "
+                                    "      I1 => net_in, "
+                                    "      O => net_out "
+                                    "    ); "
+                                    "end STRUCTURE;");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist_enum.v", netlist_input);
+            VHDLParser vhdl_parser;
+            auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
+            ASSERT_NE(nl, nullptr);
+
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("PARAM_TEST", "gate_0")).size(), 1);
+            Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("PARAM_TEST", "gate_0")).begin();
+
+            // Enum parameter — type must be Enum, not String
+            {
+                auto decl = gate_0->get_parameter_declaration("mode");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::Enum);
+                EXPECT_EQ(decl.get().get_enum_values(), std::vector<std::string>({"normal", "inverted"}));
+                auto val = gate_0->get_parameter_value("mode");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "inverted");
+            }
+            // BitVector parameter — gate type declaration (size=16) is used
+            {
+                auto decl = gate_0->get_parameter_declaration("width");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().get_size(), 16);
+                auto val = gate_0->get_parameter_value("width");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0xABCD");
+            }
+        }
+        TEST_END
+    }
+
+    /**
+     * Testing generic map with std_logic state characters ('X', 'Z', 'U', etc.)
+     * and logic-vector literals containing state chars (e.g. B"XX01").
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_generic_map_std_logic) {
+
+        TEST_START
+            {
+                std::string netlist_input("entity TEST_Comp is "
+                                        "  port ( "
+                                        "    net_global_input : in STD_LOGIC := 'X'; "
+                                        "  ); "
+                                        "end TEST_Comp; "
+                                        "architecture STRUCTURE of TEST_Comp is "
+                                        "begin"
+                                        "  gate_0 : BUF"
+                                        "    generic map("
+                                        "      key_x      => 'X',"
+                                        "      key_z      => 'Z',"
+                                        "      key_u      => 'U',"
+                                        "      key_bvec   => B\"XX01\","
+                                        "      key_xvec_x => X\"aXb\""
+                                        "    )"
+                                        "    port map ( "
+                                        "      I => net_global_input "
+                                        "    ); "
+                                        "end STRUCTURE;");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+                ASSERT_NE(nl, nullptr);
+
+                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
+
+                // Single std_logic state char 'X' → LogicVector(size=1)
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_x");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::LogicVector);
+                    EXPECT_EQ(decl.get().get_size(), 1);
+                    auto val = gate_0->get_parameter_value("key_x");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "0bX");
+                }
+                // 'Z' → LogicVector(size=1)
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_z");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::LogicVector);
+                    EXPECT_EQ(decl.get().get_size(), 1);
+                    auto val = gate_0->get_parameter_value("key_z");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "0bZ");
+                }
+                // 'U' → LogicVector(size=1)
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_u");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::LogicVector);
+                    EXPECT_EQ(decl.get().get_size(), 1);
+                    auto val = gate_0->get_parameter_value("key_u");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "0bU");
+                }
+                // B"XX01" → 4 binary digits with state chars → LogicVector(size=4), value "0bXX01"
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_bvec");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::LogicVector);
+                    EXPECT_EQ(decl.get().get_size(), 4);
+                    auto val = gate_0->get_parameter_value("key_bvec");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "0bXX01");
+                }
+                // X"aXb" → 3 hex digits with state char → LogicVector(size=12), value "0xAXB"
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_xvec_x");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::LogicVector);
+                    EXPECT_EQ(decl.get().get_size(), 12);
+                    auto val = gate_0->get_parameter_value("key_xvec_x");
+                    ASSERT_TRUE(val.is_ok());
+                    EXPECT_EQ(val.get(), "0xAXB");
+                }
+            }
+        TEST_END
+    }
+
+    /**
+     * Testing that D"..." (decimal base-prefixed) generics are not yet supported
+     * and cause the parser to return an error.
+     *
+     * Functions: parse
+     */
+    TEST_F(VHDLParserTest, check_generic_map_d_base_unsupported) {
+
+        TEST_START
+            {
+                std::string netlist_input("entity TEST_Comp is "
+                                        "  port ( "
+                                        "    net_global_input : in STD_LOGIC := 'X'; "
+                                        "  ); "
+                                        "end TEST_Comp; "
+                                        "architecture STRUCTURE of TEST_Comp is "
+                                        "begin"
+                                        "  gate_0 : BUF"
+                                        "    generic map("
+                                        "      key_dec => D\"2748\""
+                                        "    )"
+                                        "    port map ( "
+                                        "      I => net_global_input "
+                                        "    ); "
+                                        "end STRUCTURE;");
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VHDLParser vhdl_parser;
+                auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+                EXPECT_TRUE(nl_res.is_error());
             }
         TEST_END
     }
@@ -2158,16 +2505,16 @@ namespace hal {
 
                 // Test that the comments did not removed other parts (all no_comment_n generics should be created)
                 for (std::string key : std::set<std::string>({"no_comment_0", "no_comment_1", "no_comment_2"})) {
-                    EXPECT_NE(test_gate->get_data("generic", key), std::make_tuple("", ""));
-                    if (test_gate->get_data("generic", key) == std::make_tuple("", "")) {
+                    EXPECT_TRUE(test_gate->has_parameter(key));
+                    if (!test_gate->has_parameter(key)) {
                         std::cout << "comment test failed for: " << key << std::endl;
                     }
                 }
 
                 // Test that the comments are not interpreted (all comment_n generics shouldn't be created)
                 for (std::string key : std::set<std::string>({"comment_0", "comment_1", "comment_2"})) {
-                    EXPECT_EQ(test_gate->get_data("generic", key), std::make_tuple("", ""));
-                    if (test_gate->get_data("generic", key) != std::make_tuple("", "")) {
+                    EXPECT_FALSE(test_gate->has_parameter(key));
+                    if (test_gate->has_parameter(key)) {
                         std::cout << "comment failed for: " << key << std::endl;
                     }
                 }

@@ -76,13 +76,20 @@ namespace hal
 
     void BoolWizardPage::initializePage(){
         mWizard = static_cast<GateLibraryWizard*>(wizard());
-        QList<PinItem*> pinGroups = mWizard->getPingroups();
 
-        QList<PinItem*> inputPins = mWizard->mPinModel->getInputPins();
-        QList<PinItem*> outputPins = mWizard->mPinModel->getOutputPins();
         std::set<std::string> legVars;
-        for (PinItem* pi : inputPins)
+        for (PinItem* pi : mWizard->mPinModel->getInputPins())
             legVars.insert(pi->getName().toStdString());
+
+        for (PinItem* pi : mWizard->mPinModel->getInternalPins())
+            legVars.insert(pi->getName().toStdString());
+
+        if(mWizard->generalInfoPage->getProperties().contains(GateTypeProperty::ff)
+                || mWizard->generalInfoPage->getProperties().contains(GateTypeProperty::latch))
+        {
+            legVars.insert(mWizard->statePage->mStateIdentifier->text().toStdString());
+            legVars.insert(mWizard->statePage->mNegStateIdentifier->text().toStdString());
+        }
 
         if (!mEditFunctions.isEmpty())
         {
@@ -91,70 +98,37 @@ namespace hal
             mEditFunctions.clear();
         }
 
-        if(mGate != nullptr){
-            std::unordered_map<std::string, BooleanFunction> boolFunctions = mGate->get_boolean_functions();
-            auto list = QList<QPair<QString, BooleanFunction>>();
-            int boolFuncCnt = 0;
+        std::unordered_map<std::string, BooleanFunction> boolFunctions;
+        if(mGate != nullptr)
+            boolFunctions = mGate->get_boolean_functions();
 
-            for(PinItem* pi : outputPins)
+        int boolFuncCnt = 0;
+        for(PinItem* pin : mWizard->mPinModel->getOutputPins())
+        {
+            if(mWizard->isDefinedByLut(pin))
             {
-                QLabel* label = new QLabel(pi->getName());
-                BooleanFunctionEdit* lineEdit;
-                if(mWizard->generalInfoPage->getProperties().contains(GateTypeProperty::ff)
-                        || mWizard->generalInfoPage->getProperties().contains(GateTypeProperty::latch))
-                {
-                    legVars.insert(mWizard->statePage->mStateIdentifier->text().toStdString());
-                    legVars.insert(mWizard->statePage->mNegStateIdentifier->text().toStdString());
-                }
-                lineEdit = new BooleanFunctionEdit(legVars, this);
-                mLayout->addWidget(label, boolFuncCnt, 0);
-                mLayout->addWidget(lineEdit, boolFuncCnt, 1);
-
-                if(auto bf = boolFunctions.find(pi->getName().toStdString()); bf != boolFunctions.end())
-                {
-                    lineEdit->setText(QString::fromStdString(bf->second.to_string()));
-                }
-                connect(lineEdit, &BooleanFunctionEdit::stateChanged,this,&BoolWizardPage::handleStateChanged);
-                connect(lineEdit, &BooleanFunctionEdit::textChanged, this, &BoolWizardPage::handleTextChanged);
-                mEditFunctions.append(lineEdit);
-                mOutputPins.append(label->text());
-                boolFuncCnt++;
+                //the LUT defines this pin already, so it may be used as input of the remaining functions
+                legVars.insert(pin->getName().toStdString());
+                continue;
             }
-        }
-        else{
-            if(!pinGroups.empty())
+
+            QLabel* label = new QLabel(pin->getName(), this);
+            BooleanFunctionEdit* lineEdit = new BooleanFunctionEdit(legVars, this);
+            mLayout->addWidget(label, boolFuncCnt, 0);
+            mLayout->addWidget(lineEdit, boolFuncCnt, 1);
+
+            if(auto bf = boolFunctions.find(pin->getName().toStdString()); bf != boolFunctions.end())
             {
-                int rowCount = 0;
-                for(PinItem* pinGroup : pinGroups){
-                    if(pinGroup->getItemType() != PinItem::TreeItemType::GroupCreator && pinGroup->getDirection() == PinDirection::output){
-                        for(auto item : pinGroup->getChildren())
-                        {
-                            PinItem* pin = static_cast<PinItem*>(item);
-                            if(pin->getItemType() != PinItem::TreeItemType::PinCreator){
-                                QLabel* label = new QLabel(pin->getName());
-                                QString name = label->text();
-                                BooleanFunctionEdit* lineEdit;
-
-                                if(mWizard->generalInfoPage->getProperties().contains(GateTypeProperty::ff) ||
-                                        mWizard->generalInfoPage->getProperties().contains(GateTypeProperty::latch))
-                                {
-                                    legVars.insert(mWizard->statePage->mStateIdentifier->text().toStdString());
-                                    legVars.insert(mWizard->statePage->mNegStateIdentifier->text().toStdString());
-                                }
-                                lineEdit = new BooleanFunctionEdit(legVars, this);
-
-                                mLayout->addWidget(label, rowCount, 0);
-                                mLayout->addWidget(lineEdit, rowCount, 1);
-                                connect(lineEdit,&BooleanFunctionEdit::stateChanged,this,&BoolWizardPage::handleStateChanged);
-                                connect(lineEdit, &BooleanFunctionEdit::textChanged, this, &BoolWizardPage::handleTextChanged);
-                                mEditFunctions.append(lineEdit);
-                                mOutputPins.append(label->text());
-                                rowCount++;
-                            }
-                        }
-                    }
-                }
+                lineEdit->setText(QString::fromStdString(bf->second.to_string()));
             }
+            connect(lineEdit, &BooleanFunctionEdit::stateChanged,this,&BoolWizardPage::handleStateChanged);
+            connect(lineEdit, &BooleanFunctionEdit::textChanged, this, &BoolWizardPage::handleTextChanged);
+            mEditFunctions.append(lineEdit);
+            mOutputPins.append(pin->getName());
+
+            //an output pin whose function is defined above may be used as input of the functions below it
+            legVars.insert(pin->getName().toStdString());
+            boolFuncCnt++;
         }
 
         setLayout(mLayout);

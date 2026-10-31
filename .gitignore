@@ -45,6 +45,7 @@ build*/
 deps/buddy-2.4/autom4te.cache/
 .vagrant
 .vscode/*
+.claude/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json

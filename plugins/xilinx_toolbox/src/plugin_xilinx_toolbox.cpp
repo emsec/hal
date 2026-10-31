@@ -40,6 +40,30 @@ namespace hal
         return {};
     }
 
+    std::vector<PluginParameter> GuiExtensionXilinxToolbox::get_parameter() const
+    {
+        return {
+            {PluginParameter::Boolean, "split_luts", "Split all LUT6_2 gates", mSplitLuts ? "true" : "false"},
+            {PluginParameter::Boolean, "split_shift_registers", "Split all shift register gates", mSplitShiftRegisters ? "true" : "false"},
+            {PluginParameter::PushButton, "execute", "Execute"},
+        };
+    }
+
+    void GuiExtensionXilinxToolbox::set_parameter(const std::vector<PluginParameter>& params)
+    {
+        for (const auto& p : params)
+        {
+            if (p.get_tagname() == "split_luts")
+            {
+                mSplitLuts = (p.get_value() == "true");
+            }
+            else if (p.get_tagname() == "split_shift_registers")
+            {
+                mSplitShiftRegisters = (p.get_value() == "true");
+            }
+        }
+    }
+
     namespace
     {
         /**
@@ -134,7 +158,25 @@ namespace hal
             }
         }
 
-        if (tag == "split_luts_selection" || tag == "split_luts_netlist")
+        if (tag == "execute")
+        {
+            // the plugin parameter dialog runs the chosen steps on the entire netlist
+            if (mSplitLuts)
+            {
+                if (const auto res = xilinx_toolbox::split_luts(nl); res.is_error())
+                {
+                    log_error("xilinx_toolbox", "failed to split LUTs: {}", res.get_error().get());
+                }
+            }
+            if (mSplitShiftRegisters)
+            {
+                if (const auto res = xilinx_toolbox::split_shift_registers(nl); res.is_error())
+                {
+                    log_error("xilinx_toolbox", "failed to split shift registers: {}", res.get_error().get());
+                }
+            }
+        }
+        else if (tag == "split_luts_selection" || tag == "split_luts_netlist")
         {
             if (const auto res = xilinx_toolbox::split_luts(nl, scope); res.is_error())
             {

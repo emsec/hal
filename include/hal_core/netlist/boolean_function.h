@@ -779,11 +779,25 @@ namespace hal
 
         /**
          * Parses a Boolean function from a string expression.
-         * 
+         *
          * @param[in] expression - Boolean function string.
          * @returns Ok() and the Boolean function on success, an error otherwise.
          */
         static Result<BooleanFunction> from_string(const std::string& expression);
+
+        /**
+         * Parses a Boolean function from a string expression. Variables whose bit-width differs
+            from the default of one bit can be sized via the optional `var_sizes` map.
+         *
+         * Useful when comparing variables against multi-bit constants (e.g. parameter equality
+         * checks like `mode == 0b10`); without the map the parser would default the variable
+         * to 1 bit and produce a malformed function.
+         *
+         * @param[in] expression - Boolean function string.
+         * @param[in] var_sizes - Optional map from variable name to bit-width.
+         * @returns Ok() and the Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> from_string(const std::string& expression, const std::map<std::string, u16>& var_sizes);
 
         ////////////////////////////////////////////////////////////////////////
         // Interface: Simplification / Substitution / Evaluation

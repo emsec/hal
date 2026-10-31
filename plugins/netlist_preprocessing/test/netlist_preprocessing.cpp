@@ -1,4 +1,5 @@
 #include "netlist_preprocessing/netlist_preprocessing.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 
 #include "netlist_preprocessing/plugin_netlist_preprocessing.h"
 
@@ -729,12 +730,14 @@ namespace hal {
             gnd_net->add_source(gnd_gate, "O");
 
             GateType* lut2 = gl->get_gate_type_by_name("LUT2");
+            const LUTComponent* lc = lut2->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            ASSERT_NE(lc, nullptr);
 
             // both LUTs compute 'I0 & I1' with 'I0' tied to GND, so both are constant 0
             Gate* l0 = nl->create_gate(lut2, "l0");
             Gate* l1 = nl->create_gate(lut2, "l1");
-            ASSERT_TRUE(l0->set_init_data({"8"}).is_ok());
-            ASSERT_TRUE(l1->set_init_data({"8"}).is_ok());
+            ASSERT_TRUE(lc->set_init_string(l0, "O", "8").is_ok());
+            ASSERT_TRUE(lc->set_init_string(l1, "O", "8").is_ok());
 
             gnd_net->add_destination(l0, "I0");
             gnd_net->add_destination(l1, "I0");
@@ -752,13 +755,13 @@ namespace hal {
             ASSERT_TRUE(res.is_ok());
             EXPECT_EQ(res.get(), 1);
 
-            auto l0_init = l0->get_init_data();
+            auto l0_init = lc->get_init_string(l0, "O");
             ASSERT_TRUE(l0_init.is_ok());
-            EXPECT_NE(l0_init.get().front(), "8");
+            EXPECT_NE(l0_init.get(), "8");
 
-            auto l1_init = l1->get_init_data();
+            auto l1_init = lc->get_init_string(l1, "O");
             ASSERT_TRUE(l1_init.is_ok());
-            EXPECT_EQ(l1_init.get().front(), "8");
+            EXPECT_EQ(l1_init.get(), "8");
         }
         {
             // a LUT whose output pin is unconnected is skipped instead of crashing
@@ -772,8 +775,12 @@ namespace hal {
             Net* gnd_net = nl->create_net("gnd");
             gnd_net->add_source(gnd_gate, "O");
 
-            Gate* l0 = nl->create_gate(gl->get_gate_type_by_name("LUT2"), "l0");
-            ASSERT_TRUE(l0->set_init_data({"8"}).is_ok());
+            GateType* lut2 = gl->get_gate_type_by_name("LUT2");
+            const LUTComponent* lc = lut2->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            ASSERT_NE(lc, nullptr);
+
+            Gate* l0 = nl->create_gate(lut2, "l0");
+            ASSERT_TRUE(lc->set_init_string(l0, "O", "8").is_ok());
             gnd_net->add_destination(l0, "I0");
 
             Net* n0 = nl->create_net("n0");
@@ -784,9 +791,9 @@ namespace hal {
             ASSERT_TRUE(res.is_ok());
             EXPECT_EQ(res.get(), 0);
 
-            auto l0_init = l0->get_init_data();
+            auto l0_init = lc->get_init_string(l0, "O");
             ASSERT_TRUE(l0_init.is_ok());
-            EXPECT_EQ(l0_init.get().front(), "8");
+            EXPECT_EQ(l0_init.get(), "8");
         }
         TEST_END
     }

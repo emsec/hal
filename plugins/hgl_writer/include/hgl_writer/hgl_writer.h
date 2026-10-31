@@ -62,7 +62,7 @@ namespace hal
         bool write(const GateLibrary* gate_lib, const std::filesystem::path& file_path) override;
 
     private:
-        const u32 HGL_FORMAT_VERSION = 4;
+        const u32 HGL_FORMAT_VERSION = 6;
 
         /**
          * Holds the name, direction, type, and Boolean functions of a single pin while it is being written.

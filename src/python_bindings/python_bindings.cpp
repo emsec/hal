@@ -12,6 +12,8 @@ namespace hal
         py::module m("hal_py", "hal python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
+        parameter_init(m);
+
         data_container_init(m);
 
         core_utils_init(m);

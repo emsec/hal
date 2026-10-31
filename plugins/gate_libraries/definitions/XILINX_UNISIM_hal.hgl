@@ -1,5 +1,5 @@
 {
-    "version": 4,
+    "version": 6,
     "library": "XILINX_UNISIM_WITH_HAL_TYPES",
     "gate_locations": {
         "data_category": "generic",
@@ -6720,6 +6720,20 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 32,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_CLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -6864,6 +6878,20 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 32,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_CLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -6962,6 +6990,25 @@
                             "type": "state"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "DDR_CLK_EDGE",
+                    "type": "string",
+                    "default": "OPPOSITE_EDGE"
+                },
+                {
+                    "name": "IS_CB_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_C_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -154091,7 +154138,37 @@
             "lut_config": {
                 "bit_order": "descending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O6",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 64,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4",
+                            "I5"
+                        ],
+                        "is_ascending": false
+                    },
+                    {
+                        "pin": "O5",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 32,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -154213,6 +154290,14 @@
                             "type": "lut"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
                 }
             ]
         },
@@ -200738,6 +200823,32 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_CLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "RAM_ADDRESS_MASK",
+                    "type": "bit_vector",
+                    "size": 3,
+                    "default": "0x0"
+                },
+                {
+                    "name": "RAM_ADDRESS_SPACE",
+                    "type": "bit_vector",
+                    "size": 3,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -202604,6 +202715,32 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x1"
+                },
+                {
+                    "name": "IS_C_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_D_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_PRE_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -202683,6 +202820,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x1"
+                }
             ]
         },
         {
@@ -202755,7 +202900,23 @@
             "lut_config": {
                 "bit_order": "descending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 64,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4",
+                            "I5"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -202862,6 +203023,330 @@
                             "type": "lut"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                }
+            ]
+        },
+        {
+            "name": "LUT6_L",
+            "types": [
+                "combinational",
+                "c_lut"
+            ],
+            "lut_config": {
+                "bit_order": "descending",
+                "data_category": "generic",
+                "output_pins": [
+                    {
+                        "pin": "LO",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 64,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4",
+                            "I5"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "I0",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I1",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I2",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I3",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I4",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I5",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I5",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "LO",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "LO",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                }
+            ]
+        },
+        {
+            "name": "LUT6_D",
+            "types": [
+                "combinational",
+                "c_lut"
+            ],
+            "lut_config": {
+                "bit_order": "descending",
+                "data_category": "generic",
+                "output_pins": [
+                    {
+                        "pin": "LO",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 64,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4",
+                            "I5"
+                        ],
+                        "is_ascending": false
+                    },
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 64,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4",
+                            "I5"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "I0",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I1",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I2",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I3",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I4",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I5",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I5",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
+                },
+                {
+                    "name": "LO",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "LO",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
                 }
             ]
         },
@@ -203181,6 +203666,38 @@
                             "type": "data"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT_A",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_B",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_C",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_D",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -243141,6 +243658,20 @@
                             "type": "data"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_CLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -382482,6 +383013,20 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 128,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -382610,6 +383155,20 @@
                             "type": "state"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 16,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_CLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -383290,6 +383849,20 @@
                             "type": "data"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -384665,7 +385238,19 @@
             "lut_config": {
                 "bit_order": "descending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 4,
+                        "input_pins": [
+                            "I0",
+                            "I1"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -384713,6 +385298,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 4,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -384724,7 +385317,30 @@
             "lut_config": {
                 "bit_order": "descending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "LO",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 4,
+                        "input_pins": [
+                            "I0",
+                            "I1"
+                        ],
+                        "is_ascending": false
+                    },
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 4,
+                        "input_pins": [
+                            "I0",
+                            "I1"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -384786,6 +385402,93 @@
                             "type": "lut"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 4,
+                    "default": "0x0"
+                }
+            ]
+        },
+        {
+            "name": "LUT2_L",
+            "types": [
+                "combinational",
+                "c_lut"
+            ],
+            "lut_config": {
+                "bit_order": "descending",
+                "data_category": "generic",
+                "output_pins": [
+                    {
+                        "pin": "LO",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 4,
+                        "input_pins": [
+                            "I0",
+                            "I1"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "I0",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I1",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "LO",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "LO",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 4,
+                    "default": "0x0"
                 }
             ]
         },
@@ -481558,6 +482261,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -483912,6 +484623,20 @@
                             "type": "data"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -494598,6 +495323,20 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 32,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_CLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -495142,6 +495881,62 @@
                             "type": "data"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT_A",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_B",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_C",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_D",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_E",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_F",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_G",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_H",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -504602,6 +505397,20 @@
                             "type": "state"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 16,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_CLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -520518,6 +521327,32 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_C_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_CLR_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_D_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -520613,6 +521448,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -520691,6 +521534,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -528753,6 +529604,32 @@
                             "type": "data"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_CLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "RAM_ADDRESS_MASK",
+                    "type": "bit_vector",
+                    "size": 2,
+                    "default": "0x0"
+                },
+                {
+                    "name": "RAM_ADDRESS_SPACE",
+                    "type": "bit_vector",
+                    "size": 2,
+                    "default": "0x0"
                 }
             ]
         },
@@ -540800,7 +541677,22 @@
             "lut_config": {
                 "bit_order": "descending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 32,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -540892,6 +541784,297 @@
                             "type": "lut"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 32,
+                    "default": "0x0"
+                }
+            ]
+        },
+        {
+            "name": "LUT5_L",
+            "types": [
+                "combinational",
+                "c_lut"
+            ],
+            "lut_config": {
+                "bit_order": "descending",
+                "data_category": "generic",
+                "output_pins": [
+                    {
+                        "pin": "LO",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 32,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "I0",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I1",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I2",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I3",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I4",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "LO",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "LO",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 32,
+                    "default": "0x0"
+                }
+            ]
+        },
+        {
+            "name": "LUT5_D",
+            "types": [
+                "combinational",
+                "c_lut"
+            ],
+            "lut_config": {
+                "bit_order": "descending",
+                "data_category": "generic",
+                "output_pins": [
+                    {
+                        "pin": "LO",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 32,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4"
+                        ],
+                        "is_ascending": false
+                    },
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 32,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "I0",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I1",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I2",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I3",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I4",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
+                },
+                {
+                    "name": "LO",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "LO",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 32,
+                    "default": "0x0"
                 }
             ]
         },
@@ -541496,7 +542679,18 @@
             "lut_config": {
                 "bit_order": "descending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 2,
+                        "input_pins": [
+                            "I0"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -541528,6 +542722,14 @@
                             "type": "lut"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 2,
+                    "default": "0x0"
                 }
             ]
         },
@@ -570180,6 +571382,20 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 32,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -570383,6 +571599,20 @@
                             "type": "data"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 16,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -629521,6 +630751,20 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 32,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -674284,6 +675528,32 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_CLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "RAM_ADDRESS_MASK",
+                    "type": "bit_vector",
+                    "size": 2,
+                    "default": "0x0"
+                },
+                {
+                    "name": "RAM_ADDRESS_SPACE",
+                    "type": "bit_vector",
+                    "size": 2,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -674407,6 +675677,20 @@
                             "type": "data"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 512,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -675893,7 +677177,21 @@
             "lut_config": {
                 "bit_order": "descending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 16,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -675970,6 +677268,264 @@
                             "type": "lut"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 16,
+                    "default": "0x0"
+                }
+            ]
+        },
+        {
+            "name": "LUT4_L",
+            "types": [
+                "combinational",
+                "c_lut"
+            ],
+            "lut_config": {
+                "bit_order": "descending",
+                "data_category": "generic",
+                "output_pins": [
+                    {
+                        "pin": "LO",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 16,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "I0",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I1",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I2",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I3",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "LO",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "LO",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 16,
+                    "default": "0x0"
+                }
+            ]
+        },
+        {
+            "name": "LUT4_D",
+            "types": [
+                "combinational",
+                "c_lut"
+            ],
+            "lut_config": {
+                "bit_order": "descending",
+                "data_category": "generic",
+                "output_pins": [
+                    {
+                        "pin": "LO",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 16,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3"
+                        ],
+                        "is_ascending": false
+                    },
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 16,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "I0",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I1",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I2",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I3",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
+                },
+                {
+                    "name": "LO",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "LO",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 16,
+                    "default": "0x0"
                 }
             ]
         },
@@ -685761,6 +687317,20 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -688144,6 +689714,42 @@
                             "type": "state"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "DDR_CLK_EDGE",
+                    "type": "string",
+                    "default": "OPPOSITE_EDGE"
+                },
+                {
+                    "name": "INIT_Q1",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_Q2",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_C_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_D_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "SRTYPE",
+                    "type": "string",
+                    "default": "SYNC"
                 }
             ]
         },
@@ -727438,6 +729044,20 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -727852,6 +729472,20 @@
                             "type": "data"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 128,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -733393,6 +735027,32 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x1"
+                },
+                {
+                    "name": "IS_C_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_D_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_S_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -746244,6 +747904,38 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT_A",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_B",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_C",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_D",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -753890,6 +755582,62 @@
                             "type": "data"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT_A",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_B",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_C",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_D",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_E",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_F",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_G",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_H",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -781655,6 +783403,32 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_C_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_D_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_R_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -781747,6 +783521,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -781877,6 +783659,20 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 16,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_CLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -781954,6 +783750,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -782033,6 +783837,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -782095,6 +783907,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -786614,6 +788434,62 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT_A",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_B",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_C",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_D",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_E",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_F",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_G",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_H",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "IS_WCLK_INVERTED",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -786986,7 +788862,20 @@
             "lut_config": {
                 "bit_order": "descending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 8,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -787048,6 +788937,14 @@
                             "type": "lut"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 8,
+                    "default": "0x0"
                 }
             ]
         },
@@ -787060,7 +788957,32 @@
             "lut_config": {
                 "bit_order": "descending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "LO",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 8,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2"
+                        ],
+                        "is_ascending": false
+                    },
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 8,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -787138,6 +789060,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 8,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -787149,7 +789079,20 @@
             "lut_config": {
                 "bit_order": "descending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "LO",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 8,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2"
+                        ],
+                        "is_ascending": false
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -787211,6 +789154,14 @@
                             "type": "lut"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 8,
+                    "default": "0x0"
                 }
             ]
         },

@@ -10,6 +10,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/event_system/event_handler.h"
+#include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 
 #include <iostream>
 #include <iomanip>
@@ -41,11 +42,11 @@ namespace hal
 
             if (len >= 0)
             {
-                ss << std::hex << std::setfill('0') << std::setw(len) << i;
+                ss << std::hex << std::uppercase << std::setfill('0') << std::setw(len) << i;
             }
             else
             {
-                ss << std::hex << i;
+                ss << std::hex << std::uppercase << i;
             }
 
             return ss.str();
@@ -967,7 +968,7 @@ namespace hal
             
             ASSERT_TRUE(co3 != nullptr);
 
-            const Result<BooleanFunction> res = test_gate->get_resolved_boolean_function(co3);
+            const auto res = test_gate->get_boolean_function(co3, true, true);
 
             EXPECT_TRUE(res.is_ok());
 
@@ -1019,7 +1020,7 @@ namespace hal
             net_s3->add_destination(test_gate, "S(3)");
 
             // call with nullptr
-            const Result<BooleanFunction> res = test_gate->get_resolved_boolean_function(nullptr);
+            const auto res = test_gate->get_boolean_function(static_cast<const GatePin*>(nullptr), true, true);
             EXPECT_TRUE(res.is_error());
         }
         {
@@ -1035,10 +1036,10 @@ namespace hal
             
             ASSERT_TRUE(co3 != nullptr);
 
-            const Result<BooleanFunction> res = test_gate->get_resolved_boolean_function(co3);
+            const auto res = test_gate->get_boolean_function(co3, true, true);
 
             EXPECT_TRUE(res.is_error());
-        }   
+        }
         {
             auto nl = test_utils::create_empty_netlist();
             Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "test_gate");
@@ -1081,9 +1082,249 @@ namespace hal
             
             ASSERT_TRUE(co3 != nullptr);
 
-            const Result<BooleanFunction> res = test_gate->get_resolved_boolean_function(co3);
+            const auto res = test_gate->get_boolean_function(co3, true, true);
 
             EXPECT_TRUE(res.is_error());
+        }
+        TEST_END
+    }
+
+    /**
+     * Testing get_boolean_function(pin/name, inlined=true):
+     *   - inlining of internal pins (CARRY4)
+     *   - parameter reduction using gate-instance parameters (PARAM_TEST)
+     */
+    TEST_F(GateTest, check_get_boolean_function_inlined)
+    {
+        TEST_START
+        {
+            // Inlining internal pins: CARRY4 CO(3) with all inputs connected.
+            // get_boolean_function(pin, true) should inline all internal carries and
+            // produce a BF expressed only in terms of input pin names.
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "c4");
+
+            for (const auto& pin_name : {"CI", "CYINIT", "DI(0)", "DI(1)", "DI(2)", "DI(3)", "S(0)", "S(1)", "S(2)", "S(3)"})
+            {
+                auto* net = nl->create_net(std::string(pin_name) + "_net");
+                net->add_destination(g, pin_name);
+            }
+
+            const GatePin* co3 = g->get_type()->get_pin_by_name("CO(3)");
+            ASSERT_NE(co3, nullptr);
+
+            // inlined result must not contain any internal/output pin variable
+            auto bf_inlined_res = g->get_boolean_function(co3, true, false);
+            ASSERT_TRUE(bf_inlined_res.is_ok());
+            BooleanFunction bf_inlined = bf_inlined_res.get();
+            ASSERT_FALSE(bf_inlined.is_empty());
+
+            for (const auto& var : bf_inlined.get_variable_names())
+            {
+                const GatePin* var_pin = g->get_type()->get_pin_by_name(var);
+                ASSERT_NE(var_pin, nullptr) << "variable '" << var << "' is not a known pin";
+                EXPECT_EQ(var_pin->get_direction(), PinDirection::input) << "variable '" << var << "' is not an input pin";
+            }
+        }
+        {
+            // Circular dependency: get_boolean_function with inlined=true must return empty BF (+ warning).
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "c4");
+            ASSERT_TRUE(g->add_boolean_function("CO(3)", BooleanFunction::from_string("CO(3)").get()));
+            const GatePin* co3 = g->get_type()->get_pin_by_name("CO(3)");
+            ASSERT_NE(co3, nullptr);
+            EXPECT_TRUE(g->get_boolean_function(co3, true, false).is_error());
+        }
+        {
+            // Parameter reduction – PARAM_TEST BF: ((mode == 0b1) & (width == 0xCAFE)) ? !I0 : (I0 & I1)
+            // Case A: mode="inverted" (1), width="0xCAFE" → condition true → reduces to !I0
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("PARAM_TEST"), "pt");
+            auto mode_decl  = g->get_type()->get_parameter("mode");
+            auto width_decl = g->get_type()->get_parameter("width");
+            ASSERT_TRUE(mode_decl.is_ok());
+            ASSERT_TRUE(width_decl.is_ok());
+            ASSERT_TRUE(g->set_parameter(mode_decl.get(), "inverted").is_ok());
+            ASSERT_TRUE(g->set_parameter(width_decl.get(), "0xCAFE").is_ok());
+
+            auto bf_res = g->get_boolean_function("O", true, false);
+            ASSERT_TRUE(bf_res.is_ok());
+            BooleanFunction bf = bf_res.get();
+            ASSERT_FALSE(bf.is_empty());
+            EXPECT_EQ(bf, ~BooleanFunction::Var("I0"));
+        }
+        {
+            // Case B: mode="normal" (0) → condition false → reduces to I0 & I1
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("PARAM_TEST"), "pt");
+            auto mode_decl = g->get_type()->get_parameter("mode");
+            ASSERT_TRUE(mode_decl.is_ok());
+            ASSERT_TRUE(g->set_parameter(mode_decl.get(), "normal").is_ok());
+
+            auto bf_res = g->get_boolean_function("O", true, false);
+            ASSERT_TRUE(bf_res.is_ok());
+            BooleanFunction bf = bf_res.get();
+            ASSERT_FALSE(bf.is_empty());
+            EXPECT_EQ(bf, BooleanFunction::Var("I0") & BooleanFunction::Var("I1"));
+        }
+        {
+            // Case C: mode="inverted" but width="0x0001" (mismatch) → condition false → reduces to I0 & I1
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("PARAM_TEST"), "pt");
+            auto mode_decl  = g->get_type()->get_parameter("mode");
+            auto width_decl = g->get_type()->get_parameter("width");
+            ASSERT_TRUE(mode_decl.is_ok());
+            ASSERT_TRUE(width_decl.is_ok());
+            ASSERT_TRUE(g->set_parameter(mode_decl.get(), "inverted").is_ok());
+            ASSERT_TRUE(g->set_parameter(width_decl.get(), "0x0001").is_ok());
+
+            auto bf_res = g->get_boolean_function("O", true, false);
+            ASSERT_TRUE(bf_res.is_ok());
+            BooleanFunction bf = bf_res.get();
+            ASSERT_FALSE(bf.is_empty());
+            EXPECT_EQ(bf, BooleanFunction::Var("I0") & BooleanFunction::Var("I1"));
+        }
+        {
+            // Case D: no parameters set → BF stays symbolic (still contains mode and width variables)
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("PARAM_TEST"), "pt");
+
+            BooleanFunction bf_raw = g->get_boolean_function("O");
+            auto bf_inlined_res   = g->get_boolean_function("O", true, false);
+            ASSERT_TRUE(bf_inlined_res.is_ok());
+            BooleanFunction bf_inlined = bf_inlined_res.get();
+
+            // No parameters set → parameter reduction is a no-op; result equals raw BF
+            EXPECT_EQ(bf_raw, bf_inlined);
+        }
+        TEST_END
+    }
+
+    /**
+     * Testing the Result-returning get_boolean_function and get_boolean_functions overloads:
+     *   - error on empty name
+     *   - error on null pin
+     *   - error when substitute_nets=true but inlined=false
+     *   - inlined=true, substitute_nets=false: pin-name variables, parameter reduction
+     *   - inlined=true, substitute_nets=true: net-ID variables
+     *   - get_boolean_functions with inlined=true and substitute_nets=true
+     *   - get_boolean_functions aborts on first missing net
+     */
+    TEST_F(GateTest, check_get_boolean_function_result)
+    {
+        TEST_START
+        {
+            // error on empty name
+            auto nl   = test_utils::create_empty_netlist();
+            Gate* g   = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            EXPECT_TRUE(g->get_boolean_function("", false, false).is_error());
+        }
+        {
+            // error on null pin
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            EXPECT_TRUE(g->get_boolean_function(static_cast<const GatePin*>(nullptr), false, false).is_error());
+        }
+        {
+            // error when substitute_nets=true but inlined=false
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            EXPECT_TRUE(g->get_boolean_function("O", false, true).is_error());
+        }
+        {
+            // inlined=true, substitute_nets=false: result expressed in input pin names, no net variables
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "c4");
+            for (const auto& pin_name : {"CI", "CYINIT", "DI(0)", "DI(1)", "DI(2)", "DI(3)", "S(0)", "S(1)", "S(2)", "S(3)"})
+            {
+                auto* net = nl->create_net(std::string(pin_name) + "_net");
+                net->add_destination(g, pin_name);
+            }
+            const GatePin* co3 = g->get_type()->get_pin_by_name("CO(3)");
+            ASSERT_NE(co3, nullptr);
+
+            auto res = g->get_boolean_function(co3, true, false);
+            ASSERT_TRUE(res.is_ok());
+
+            for (const auto& var : res.get().get_variable_names())
+            {
+                const GatePin* var_pin = g->get_type()->get_pin_by_name(var);
+                ASSERT_NE(var_pin, nullptr) << "variable '" << var << "' should be an input pin name";
+                EXPECT_EQ(var_pin->get_direction(), PinDirection::input);
+            }
+        }
+        {
+            // inlined=true, substitute_nets=true: result expressed in net-ID variables
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            Net* net_i = nl->create_net("net_I");
+            net_i->add_destination(g, "I");
+
+            auto res = g->get_boolean_function("O", true, true);
+            ASSERT_TRUE(res.is_ok());
+
+            // result variables must be net-decorator names, not pin names
+            for (const auto& var : res.get().get_variable_names())
+            {
+                EXPECT_EQ(g->get_type()->get_pin_by_name(var), nullptr)
+                    << "variable '" << var << "' should be a net ID variable, not a pin name";
+            }
+            // must equal the net-substituted version of !I
+            auto expected = BooleanFunctionNetDecorator(*net_i).get_boolean_variable();
+            EXPECT_EQ(res.get(), ~expected);
+        }
+        {
+            // error when substitute_nets=true and an input pin has no connected net
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            // no net connected to "I"
+            EXPECT_TRUE(g->get_boolean_function("O", true, true).is_error());
+        }
+        {
+            // get_boolean_functions with inlined=true, substitute_nets=false: values are inlined
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "c4");
+            for (const auto& pin_name : {"CI", "CYINIT", "DI(0)", "DI(1)", "DI(2)", "DI(3)", "S(0)", "S(1)", "S(2)", "S(3)"})
+            {
+                auto* net = nl->create_net(std::string(pin_name) + "_net");
+                net->add_destination(g, pin_name);
+            }
+            auto res = g->get_boolean_functions(false, true, false);
+            ASSERT_TRUE(res.is_ok());
+
+            for (const auto& [name, bf] : res.get())
+            {
+                for (const auto& var : bf.get_variable_names())
+                {
+                    const GatePin* var_pin = g->get_type()->get_pin_by_name(var);
+                    ASSERT_NE(var_pin, nullptr) << "in function '" << name << "': variable '" << var << "' should be an input pin";
+                    EXPECT_EQ(var_pin->get_direction(), PinDirection::input);
+                }
+            }
+        }
+        {
+            // get_boolean_functions with substitute_nets=true: net-ID variables in all values
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            Net* net_i = nl->create_net("net_I");
+            net_i->add_destination(g, "I");
+
+            auto res = g->get_boolean_functions(false, true, true);
+            ASSERT_TRUE(res.is_ok());
+            ASSERT_TRUE(res.get().count("O"));
+
+            for (const auto& var : res.get().at("O").get_variable_names())
+            {
+                EXPECT_EQ(g->get_type()->get_pin_by_name(var), nullptr)
+                    << "variable '" << var << "' should be a net ID variable, not a pin name";
+            }
+        }
+        {
+            // get_boolean_functions aborts on first missing net when substitute_nets=true
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            // no net connected to "I"
+            EXPECT_TRUE(g->get_boolean_functions(false, true, true).is_error());
         }
         TEST_END
     }
@@ -1102,12 +1343,11 @@ namespace hal
             GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
             Gate* lut_gate = nl->create_gate(lut_type, "lut");
 
+            LUTComponent* lc = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            ASSERT_NE(lc, nullptr);
             int i = 1;
-            const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
-            ASSERT_NE(init_component, nullptr);
             auto init_string = i_to_hex_string(i, 2);
-            auto set_init_res = lut_gate->set_init_data({init_string});
-            ASSERT_TRUE(set_init_res.is_ok());
+            ASSERT_TRUE(lc->set_init_string(lut_gate, "O", init_string).is_ok());
 
             // Testing the access via the function get_boolean_function
             EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_i(i, 8));
@@ -1117,61 +1357,45 @@ namespace hal
             ASSERT_TRUE(functions.find("O") != functions.end());
             EXPECT_EQ(functions["O"].compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_i(i, 8));
 
-            auto get_init_res = lut_gate->get_init_data();
+            auto get_init_res = lc->get_init_string(lut_gate, "O");
             ASSERT_TRUE(get_init_res.is_ok());
-            auto get_init_data = get_init_res.get();
-            EXPECT_EQ(get_init_data.size(), 1);
-            EXPECT_EQ(get_init_data.front(), init_string);
+            EXPECT_EQ(get_init_res.get(), init_string);
         }
-        
+
         {
             // Access the boolean function of a lut, that is stored in ascending order
             auto nl = test_utils::create_empty_netlist();
             GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
             Gate* lut_gate = nl->create_gate(lut_type, "lut");
 
-            const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
-            ASSERT_NE(init_component, nullptr);
-
-            for (int i = 0x0; i <= 0xff; i++) 
+            LUTComponent* lc2 = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            ASSERT_NE(lc2, nullptr);
+            for (int i = 0x0; i <= 0xff; i++)
             {
-                auto init_string = i_to_hex_string(i);
-                auto set_init_res = lut_gate->set_init_data({init_string});
-                ASSERT_TRUE(set_init_res.is_ok());
-                EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_hex_string(i_to_hex_string(i), 8, false));
-                auto get_init_res = lut_gate->get_init_data();
+                auto init_string = i_to_hex_string(i, 2);
+                ASSERT_TRUE(lc2->set_init_string(lut_gate, "O", init_string).is_ok());
+                EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_hex_string(i_to_hex_string(i, 2), 8, false));
+                auto get_init_res = lc2->get_init_string(lut_gate, "O");
                 ASSERT_TRUE(get_init_res.is_ok());
-                auto get_init_data = get_init_res.get();
-                EXPECT_EQ(get_init_data.size(), 1);
-                EXPECT_EQ(get_init_data.front(), init_string);
+                EXPECT_EQ(get_init_res.get(), i_to_hex_string(i, 2));
             }
         }
         {
             // Access the boolean function of a lut, that is stored in descending order
             auto nl = test_utils::create_empty_netlist();
-            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3_desc");
+            ASSERT_NE(lut_type, nullptr);
             Gate* lut_gate = nl->create_gate(lut_type, "lut");
-
-            LUTComponent* lut_component = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::lut; });
-            ASSERT_NE(lut_component, nullptr);
-            const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
-            ASSERT_NE(init_component, nullptr);
-
-            lut_component->set_init_ascending(false);
-
+            LUTComponent* lc3 = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            ASSERT_NE(lc3, nullptr);
             for (int i = 0x0; i <= 0xff; i++) {
-                auto init_string = i_to_hex_string(i);
-                auto set_init_res = lut_gate->set_init_data({init_string});
-                ASSERT_TRUE(set_init_res.is_ok());
-                EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_hex_string(i_to_hex_string(i), 8, true));
-                auto get_init_res = lut_gate->get_init_data();
+                auto init_string = i_to_hex_string(i, 2);
+                ASSERT_TRUE(lc3->set_init_string(lut_gate, "O", init_string).is_ok());
+                EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_hex_string(i_to_hex_string(i, 2), 8, true));
+                auto get_init_res = lc3->get_init_string(lut_gate, "O");
                 ASSERT_TRUE(get_init_res.is_ok());
-                auto get_init_data = get_init_res.get();
-                EXPECT_EQ(get_init_data.size(), 1);
-                EXPECT_EQ(get_init_data.front(), init_string);
+                EXPECT_EQ(get_init_res.get(), i_to_hex_string(i, 2));
             }
-
-            lut_component->set_init_ascending(true);
         }
         {
             // Add a boolean function to a lut pin
@@ -1179,18 +1403,164 @@ namespace hal
             GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
             Gate* lut_gate = nl->create_gate(lut_type, "lut");
 
-            const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
-            ASSERT_NE(init_component, nullptr);
-
+            LUTComponent* lc4 = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            ASSERT_NE(lc4, nullptr);
             BooleanFunction lut_bf = BooleanFunction::from_string("(I2 & (I0 & I1))").get();
             lut_gate->add_boolean_function("O", lut_bf);
             EXPECT_EQ(lut_gate->get_boolean_functions().size(), 1);
             EXPECT_EQ(lut_gate->get_boolean_function("O"), lut_bf);
-            auto get_init_res = lut_gate->get_init_data();
+            auto get_init_res = lc4->get_init_string(lut_gate, "O");
             ASSERT_TRUE(get_init_res.is_ok());
-            auto get_init_data = get_init_res.get();
-            EXPECT_EQ(get_init_data.size(), 1);
-            EXPECT_EQ(get_init_data.front(), "01");
+            EXPECT_EQ(get_init_res.get(), "01");
+        }
+        // ---- Multi-output LUT tests ----
+        {
+            // LUT6_2a: O0 reads the full 64-bit INIT, O1 reads the lower 32 bits of the same INIT.
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT6_2a");
+            ASSERT_NE(lut_type, nullptr);
+            Gate* lut_gate = nl->create_gate(lut_type, "lut6_2a");
+
+            auto all_inputs = lut_type->get_input_pin_names();    // 6 inputs
+            std::vector<std::string> inputs_5(all_inputs.begin(), all_inputs.begin() + 5);
+
+            LUTComponent* lc5 = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            ASSERT_NE(lc5, nullptr);
+            // lower 32 bits = "AAAAAAAA", upper 32 bits = "0000FFFF"
+            const std::string init_str = "0000FFFFAAAAAAAA";
+            ASSERT_TRUE(lc5->set_init_string(lut_gate, "O0", init_str).is_ok());
+
+            // O0 uses all 64 bits
+            EXPECT_EQ(lut_gate->get_boolean_function("O0").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string(init_str, 64, false));
+
+            // O1 uses bits [0, 32) = lower 32 bits
+            EXPECT_EQ(lut_gate->get_boolean_function("O1").compute_truth_table(inputs_5).get()[0],
+                      get_truth_table_from_hex_string("aaaaaaaa", 32, false));
+
+            // Both outputs appear in get_boolean_functions()
+            auto funcs = lut_gate->get_boolean_functions();
+            EXPECT_NE(funcs.find("O0"), funcs.end());
+            EXPECT_NE(funcs.find("O1"), funcs.end());
+        }
+        {
+            // LUT6_2b: O0 and O1 each have their own independent 64-bit INIT string.
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT6_2b");
+            ASSERT_NE(lut_type, nullptr);
+            Gate* lut_gate = nl->create_gate(lut_type, "lut6_2b");
+
+            auto all_inputs = lut_type->get_input_pin_names();
+
+            LUTComponent* lc6 = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            ASSERT_NE(lc6, nullptr);
+            const std::string init1 = "AAAAAAAAAAAAAAAA";
+            const std::string init2 = "5555555555555555";
+            ASSERT_TRUE(lc6->set_init_string(lut_gate, "O0", init1).is_ok());
+            ASSERT_TRUE(lc6->set_init_string(lut_gate, "O1", init2).is_ok());
+
+            EXPECT_EQ(lut_gate->get_boolean_function("O0").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string(init1, 64, false));
+            EXPECT_EQ(lut_gate->get_boolean_function("O1").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string(init2, 64, false));
+        }
+        {
+            // LUT5_2c: O0 and O1 split a shared 64-bit INIT string into two 32-bit halves.
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT5_2c");
+            ASSERT_NE(lut_type, nullptr);
+            Gate* lut_gate = nl->create_gate(lut_type, "lut5_2c");
+
+            auto all_inputs = lut_type->get_input_pin_names();    // 5 inputs
+
+            LUTComponent* lc7 = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            ASSERT_NE(lc7, nullptr);
+            // O0 = bits [0, 32), O1 = bits [32, 32)
+            ASSERT_TRUE(lc7->set_init_string(lut_gate, "O0", "aaaaaaaa").is_ok());
+            ASSERT_TRUE(lc7->set_init_string(lut_gate, "O1", "ffff0000").is_ok());
+
+            // O0: bits [0, 32)
+            EXPECT_EQ(lut_gate->get_boolean_function("O0").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string("aaaaaaaa", 32, false));
+
+            // O1: bits [32, 32)
+            EXPECT_EQ(lut_gate->get_boolean_function("O1").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string("ffff0000", 32, false));
+        }
+        {
+            // add_boolean_function on LUT6_2b: writing O0 updates INIT1 only; O1 is unaffected.
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT6_2b");
+            Gate* lut_gate = nl->create_gate(lut_type, "lut6_2b_add");
+
+            auto all_inputs = lut_type->get_input_pin_names();
+            LUTComponent* lc8 = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            ASSERT_NE(lc8, nullptr);
+            const std::string init2 = "5555555555555555";
+            ASSERT_TRUE(lc8->set_init_string(lut_gate, "O0", "0000000000000000").is_ok());
+            ASSERT_TRUE(lc8->set_init_string(lut_gate, "O1", init2).is_ok());
+
+            BooleanFunction and_bf = BooleanFunction::from_string("((I0 & I1) & (I2 & I3) & (I4 & I5))").get();
+            EXPECT_TRUE(lut_gate->add_boolean_function("O0", and_bf));
+
+            // O0 encodes the AND function
+            EXPECT_EQ(lut_gate->get_boolean_function("O0"), and_bf);
+            EXPECT_EQ(lut_gate->get_boolean_function("O0").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string("0000000000000001", 64, false));
+
+            // O1 still decodes to init2
+            EXPECT_EQ(lut_gate->get_boolean_function("O1").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string(init2, 64, false));
+        }
+        {
+            // add_boolean_function on LUT5_2c: writing O0 and O1 patches independent halves.
+            // After both writes the decoded functions must still match what was written.
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT5_2c");
+            Gate* lut_gate = nl->create_gate(lut_type, "lut5_2c_add");
+            LUTComponent* lc9 = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            ASSERT_NE(lc9, nullptr);
+
+            ASSERT_TRUE(lc9->set_init_string(lut_gate, "O0", "00000000").is_ok());
+            ASSERT_TRUE(lc9->set_init_string(lut_gate, "O1", "00000000").is_ok());
+
+            BooleanFunction bf_o0 = BooleanFunction::from_string("I0 & I1").get();
+            BooleanFunction bf_o1 = BooleanFunction::from_string("I0 | I1").get();
+            EXPECT_TRUE(lut_gate->add_boolean_function("O0", bf_o0));
+            EXPECT_TRUE(lut_gate->add_boolean_function("O1", bf_o1));
+
+            // Each output independently round-trips correctly
+            EXPECT_EQ(lut_gate->get_boolean_function("O0"), bf_o0);
+            EXPECT_EQ(lut_gate->get_boolean_function("O1"), bf_o1);
+        }
+        // ---- nullptr pin handling ----
+        {
+            // get_boolean_function(nullptr) on a multi-output LUT falls back to the first output (O0).
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT6_2a");
+            Gate* lut_gate = nl->create_gate(lut_type, "lut6_2a_null");
+            LUTComponent* lc10 = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            ASSERT_NE(lc10, nullptr);
+
+            ASSERT_TRUE(lc10->set_init_string(lut_gate, "O0", "0000ffffaaaaaaaa").is_ok());
+
+            auto all_inputs = lut_type->get_input_pin_names();
+            EXPECT_EQ(lut_gate->get_boolean_function(static_cast<GatePin*>(nullptr)).compute_truth_table(all_inputs).get()[0],
+                      lut_gate->get_boolean_function("O0").compute_truth_table(all_inputs).get()[0]);
+        }
+        {
+            // get_boolean_function("") on a multi-output LUT falls back to the first output (O0).
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT6_2a");
+            Gate* lut_gate = nl->create_gate(lut_type, "lut6_2a_empty");
+            LUTComponent* lc11 = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            ASSERT_NE(lc11, nullptr);
+
+            ASSERT_TRUE(lc11->set_init_string(lut_gate, "O0", "0000ffffaaaaaaaa").is_ok());
+
+            auto all_inputs = lut_type->get_input_pin_names();
+            EXPECT_EQ(lut_gate->get_boolean_function("").compute_truth_table(all_inputs).get()[0],
+                      lut_gate->get_boolean_function("O0").compute_truth_table(all_inputs).get()[0]);
         }
         // NEGATIVE
         {
@@ -1199,34 +1569,218 @@ namespace hal
             GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
             Gate* lut_gate = nl->create_gate(lut_type, "lut");
 
-            const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
-            ASSERT_NE(init_component, nullptr);
-
-            lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", "");
+            // Set empty data (not a parameter) — lut_init_read only reads parameters, so this is a no-op.
+            lut_gate->set_data("generic", "INIT", "bit_vector", "");
             EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], get_truth_table_from_i(0, 8));
         }
         {
-            // There is invalid data at the config data path
+            // No INIT parameter set: get_boolean_function returns the zero constant
             NO_COUT_TEST_BLOCK;
             auto nl = test_utils::create_empty_netlist();
             GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
             Gate* lut_gate = nl->create_gate(lut_type, "lut");
 
-            const InitComponent* init_component = lut_type->get_component_as<InitComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::init; });
-            ASSERT_NE(init_component, nullptr);
+            EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0],
+                      std::vector<BooleanFunction::Value>(8, BooleanFunction::Value::ZERO));
+        }
+        TEST_END
+    }
 
-            lut_gate->set_data(init_component->get_init_category(), init_component->get_init_identifiers().front(), "bit_vector", "NOHx");
-            EXPECT_EQ(lut_gate->get_boolean_function("O").compute_truth_table(lut_type->get_input_pin_names()).get()[0], std::vector<BooleanFunction::Value>(8, BooleanFunction::X));
+    /**
+     * Testing get_init_string and set_init_string via LUTComponent.
+     *
+     * Functions: LUTComponent::get_init_string, LUTComponent::set_init_string
+     */
+    TEST_F(GateTest, check_get_set_init_string) {
+        TEST_START
+        auto get_lc = [](GateType* gt) -> LUTComponent* {
+            return gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+        };
+        // ---- LUT3: single output, bit_count=8 (2 hex chars) ----
+        {
+            // set and get by pin name
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
+            Gate* lut_gate = nl->create_gate(lut_type, "lut3");
+            LUTComponent* lc = get_lc(lut_type);
+            ASSERT_NE(lc, nullptr);
 
+            ASSERT_TRUE(lc->set_init_string(lut_gate, "O", "A5").is_ok());
+            auto res = lc->get_init_string(lut_gate, "O");
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get(), "A5");
         }
         {
-            // try getting and setting INIT data for non-LUT type
+            // set and get by pin object
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
+            Gate* lut_gate = nl->create_gate(lut_type, "lut3_pin");
+            LUTComponent* lc = get_lc(lut_type);
+            ASSERT_NE(lc, nullptr);
+
+            const GatePin* pin = lut_type->get_pin_by_name("O");
+            ASSERT_NE(pin, nullptr);
+
+            ASSERT_TRUE(lc->set_init_string(lut_gate, pin, "ff").is_ok());
+            auto res = lc->get_init_string(lut_gate, pin);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get(), "FF");
+        }
+        {
+            // lowercase input is returned uppercase — use LUT5 (bit_count=32, 8 hex chars)
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT5");
+            Gate* lut_gate = nl->create_gate(lut_type, "lut5_case");
+            LUTComponent* lc = get_lc(lut_type);
+            ASSERT_NE(lc, nullptr);
+
+            ASSERT_TRUE(lc->set_init_string(lut_gate, "O", "deadbeef").is_ok());
+            auto res = lc->get_init_string(lut_gate, "O");
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get(), "DEADBEEF");
+        }
+        // ---- LUT6_2a: two outputs sharing one INIT (O0 = full, O1 = lower 32 bits) ----
+        {
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT6_2a");
+            ASSERT_NE(lut_type, nullptr);
+            Gate* lut_gate = nl->create_gate(lut_type, "lut6_2a");
+            LUTComponent* lc = get_lc(lut_type);
+            ASSERT_NE(lc, nullptr);
+
+            // Set via O0 (full 64-bit INIT)
+            ASSERT_TRUE(lc->set_init_string(lut_gate, "O0", "0000FFFFAAAAAAAA").is_ok());
+
+            // O0 reads back the full string
+            auto r0 = lc->get_init_string(lut_gate, "O0");
+            ASSERT_TRUE(r0.is_ok());
+            EXPECT_EQ(r0.get(), "0000FFFFAAAAAAAA");
+
+            // O1 reads back only the lower 32 bits
+            auto r1 = lc->get_init_string(lut_gate, "O1");
+            ASSERT_TRUE(r1.is_ok());
+            EXPECT_EQ(r1.get(), "AAAAAAAA");
+
+            // Patching O1 updates only bits [0, 32) of the shared INIT
+            ASSERT_TRUE(lc->set_init_string(lut_gate, "O1", "BBBBBBBB").is_ok());
+            auto r0b = lc->get_init_string(lut_gate, "O0");
+            ASSERT_TRUE(r0b.is_ok());
+            EXPECT_EQ(r0b.get(), "0000FFFFBBBBBBBB");
+            auto r1b = lc->get_init_string(lut_gate, "O1");
+            ASSERT_TRUE(r1b.is_ok());
+            EXPECT_EQ(r1b.get(), "BBBBBBBB");
+        }
+        // ---- LUT6_2b: two outputs with independent INIT strings ----
+        {
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT6_2b");
+            ASSERT_NE(lut_type, nullptr);
+            Gate* lut_gate = nl->create_gate(lut_type, "lut6_2b");
+            LUTComponent* lc = get_lc(lut_type);
+            ASSERT_NE(lc, nullptr);
+
+            ASSERT_TRUE(lc->set_init_string(lut_gate, "O0", "AAAAAAAAAAAAAAAA").is_ok());
+            ASSERT_TRUE(lc->set_init_string(lut_gate, "O1", "5555555555555555").is_ok());
+
+            auto r0 = lc->get_init_string(lut_gate, "O0");
+            ASSERT_TRUE(r0.is_ok());
+            EXPECT_EQ(r0.get(), "AAAAAAAAAAAAAAAA");
+
+            auto r1 = lc->get_init_string(lut_gate, "O1");
+            ASSERT_TRUE(r1.is_ok());
+            EXPECT_EQ(r1.get(), "5555555555555555");
+        }
+        // ---- LUT5_2c: two outputs splitting a shared 64-bit INIT ----
+        {
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT5_2c");
+            ASSERT_NE(lut_type, nullptr);
+            Gate* lut_gate = nl->create_gate(lut_type, "lut5_2c");
+            LUTComponent* lc = get_lc(lut_type);
+            ASSERT_NE(lc, nullptr);
+
+            // Each pin owns exactly 32 bits; length must be 8 hex digits
+            ASSERT_TRUE(lc->set_init_string(lut_gate, "O0", "AAAAAAAA").is_ok());
+            ASSERT_TRUE(lc->set_init_string(lut_gate, "O1", "FFFF0000").is_ok());
+
+            auto r0 = lc->get_init_string(lut_gate, "O0");
+            ASSERT_TRUE(r0.is_ok());
+            EXPECT_EQ(r0.get(), "AAAAAAAA");
+
+            auto r1 = lc->get_init_string(lut_gate, "O1");
+            ASSERT_TRUE(r1.is_ok());
+            EXPECT_EQ(r1.get(), "FFFF0000");
+        }
+        // ---- LUT5_2c: reverse-order write must not corrupt the other slice ----
+        {
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT5_2c");
+            ASSERT_NE(lut_type, nullptr);
+            Gate* lut_gate = nl->create_gate(lut_type, "lut5_2c_rev");
+            LUTComponent* lc = get_lc(lut_type);
+            ASSERT_NE(lc, nullptr);
+
+            // Set O1 (upper 32 bits) first, then O0 (lower 32 bits)
+            ASSERT_TRUE(lc->set_init_string(lut_gate, "O1", "CCCCCCCC").is_ok());
+            ASSERT_TRUE(lc->set_init_string(lut_gate, "O0", "12345678").is_ok());
+
+            auto r1 = lc->get_init_string(lut_gate, "O1");
+            ASSERT_TRUE(r1.is_ok());
+            EXPECT_EQ(r1.get(), "CCCCCCCC");
+
+            auto r0 = lc->get_init_string(lut_gate, "O0");
+            ASSERT_TRUE(r0.is_ok());
+            EXPECT_EQ(r0.get(), "12345678");
+        }
+        // ---- NEGATIVE tests ----
+        {
+            NO_COUT_TEST_BLOCK;
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
+            Gate* lut_gate = nl->create_gate(lut_type, "lut3_neg");
+            LUTComponent* lc = get_lc(lut_type);
+            ASSERT_NE(lc, nullptr);
+
+            // nullptr pin
+            EXPECT_TRUE(lc->get_init_string(lut_gate, static_cast<const GatePin*>(nullptr)).is_error());
+            EXPECT_TRUE(lc->set_init_string(lut_gate, static_cast<const GatePin*>(nullptr), "FF").is_error());
+
+            // non-existent pin name
+            EXPECT_TRUE(lc->get_init_string(lut_gate, "NOSUCHPIN").is_error());
+            EXPECT_TRUE(lc->set_init_string(lut_gate, "NOSUCHPIN", "FF").is_error());
+
+            // input pin — wrong PinType (PinType::input, not PinType::lut)
+            EXPECT_TRUE(lc->get_init_string(lut_gate, "I0").is_error());
+            EXPECT_TRUE(lc->set_init_string(lut_gate, "I0", "FF").is_error());
+
+            // invalid hex string (contains non-hex chars)
+            EXPECT_TRUE(lc->set_init_string(lut_gate, "O", "GG").is_error());
+            EXPECT_TRUE(lc->set_init_string(lut_gate, "O", "").is_error());
+            EXPECT_TRUE(lc->set_init_string(lut_gate, "O", "0x1F").is_error());
+
+            // get_init_string before any set (no parameter stored) must return an error
+            auto nl2 = test_utils::create_empty_netlist();
+            Gate* fresh_gate = nl2->create_gate(lut_type, "lut3_fresh");
+            EXPECT_TRUE(lc->get_init_string(fresh_gate, "O").is_error());
+        }
+        {
+            // wrong length for a bit-ranged pin (LUT5_2c O0 expects exactly 8 hex digits)
+            NO_COUT_TEST_BLOCK;
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT5_2c");
+            ASSERT_NE(lut_type, nullptr);
+            Gate* lut_gate = nl->create_gate(lut_type, "lut5_2c_neg");
+            LUTComponent* lc = get_lc(lut_type);
+            ASSERT_NE(lc, nullptr);
+
+            EXPECT_TRUE(lc->set_init_string(lut_gate, "O0", "AAAA").is_error());       // too short
+            EXPECT_TRUE(lc->set_init_string(lut_gate, "O0", "AAAAAAAABBBB").is_error()); // too long
+        }
+        {
+            // non-LUT gate type: no LUTComponent exists
             auto nl = test_utils::create_empty_netlist();
             GateType* gt = nl->get_gate_library()->get_gate_type_by_name("AND2");
-            Gate* gate = nl->create_gate(gt, "not_a_lut");
-
-            EXPECT_TRUE(gate->get_init_data().is_error());
-            EXPECT_TRUE(gate->set_init_data({"FFFF"}).is_error());
+            EXPECT_EQ(get_lc(gt), nullptr);
         }
         TEST_END
     }
@@ -1337,6 +1891,65 @@ namespace hal
             gate_location_changed_listener.reset_events();
 
             nl->get_event_handler()->unregister_callback("gate_location_changed_cb");
+        }
+        TEST_END
+    }
+
+    /**
+     * Test storing typed parameter values on a Gate against the declarations of
+     * its GateType. Verifies that PARAM_TEST's declared `width` (bit-vector) and
+     * `mode` (enum) parameters can be stored, looked up, and round-tripped on a
+     * gate instance.
+     *
+     * Functions: set_parameter, get_parameter_value, get_parameter_declaration,
+     *            has_parameter, delete_parameter, get_parameters
+     */
+    TEST_F(GateTest, check_parameters)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            auto gt = nl->get_gate_library()->get_gate_type_by_name("PARAM_TEST");
+            ASSERT_NE(gt, nullptr);
+            Gate* gate = nl->create_gate(gt, "g");
+            ASSERT_NE(gate, nullptr);
+
+            // The declarations originate from the gate type and are used verbatim
+            // when storing per-instance values on the gate.
+            const auto width_decl_res = gt->get_parameter("width");
+            const auto mode_decl_res  = gt->get_parameter("mode");
+            ASSERT_TRUE(width_decl_res.is_ok());
+            ASSERT_TRUE(mode_decl_res.is_ok());
+            const Parameter width_decl = width_decl_res.get();
+            const Parameter mode_decl  = mode_decl_res.get();
+
+            EXPECT_TRUE(gate->set_parameter(width_decl, "0x1234").is_ok());
+            EXPECT_TRUE(gate->set_parameter(mode_decl, "inverted").is_ok());
+
+            // Stored values come back as written, paired with the original declaration.
+            EXPECT_EQ(gate->get_parameter_value("width").get(), "0x1234");
+            EXPECT_EQ(gate->get_parameter_value("mode").get(), "inverted");
+            EXPECT_EQ(gate->get_parameter_declaration("width").get(), width_decl);
+            EXPECT_EQ(gate->get_parameter_declaration("mode").get(), mode_decl);
+
+            // get_parameters() exposes the full (declaration, value) map keyed by name.
+            const auto& params = gate->get_parameters();
+            ASSERT_EQ(params.size(), 2u);
+            EXPECT_EQ(params.at("width").first, width_decl);
+            EXPECT_EQ(params.at("width").second, "0x1234");
+            EXPECT_EQ(params.at("mode").first, mode_decl);
+            EXPECT_EQ(params.at("mode").second, "inverted");
+
+            // Values that fail the declaration's `validate` are rejected.
+            EXPECT_TRUE(gate->set_parameter(width_decl, "0x10000").is_error());          // 16-bit overflow
+            EXPECT_TRUE(gate->set_parameter(mode_decl, "unknown_value").is_error());     // not in enum
+
+            // delete_parameter removes the stored entry; lookups then fail.
+            EXPECT_TRUE(gate->delete_parameter("width"));
+            EXPECT_FALSE(gate->has_parameter("width"));
+            EXPECT_TRUE(gate->get_parameter_value("width").is_error());
+            EXPECT_FALSE(gate->delete_parameter("width"));    // already gone
+            EXPECT_EQ(gate->get_parameters().size(), 1u);
         }
         TEST_END
     }

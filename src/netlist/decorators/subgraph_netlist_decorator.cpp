@@ -69,6 +69,11 @@ namespace hal
 
             new_gate->set_data_map(gate->get_data_map());
 
+            for (const auto& [pname, pv] : gate->get_parameters())
+            {
+                new_gate->set_parameter(pv.first, pv.second);
+            }
+
             // mark gnd and vcc gates
             if (gate->is_gnd_gate())
             {
@@ -237,7 +242,7 @@ namespace hal
                 return OK(it->second);
             }
 
-            const auto bf_res = src_gate->get_resolved_boolean_function(src_ep->get_pin());
+            const auto bf_res = src_gate->get_boolean_function(src_ep->get_pin(), true, true);
             if (bf_res.is_error())
             {
                 return ERR_APPEND(bf_res.get_error(), "could not get subgraph function of net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to get function of gate.");
@@ -333,7 +338,7 @@ namespace hal
                 return OK(it->second);
             }
 
-            const auto bf_res = src_gate->get_resolved_boolean_function(src_ep->get_pin());
+            const auto bf_res = src_gate->get_boolean_function(src_ep->get_pin(), true, true);
             if (bf_res.is_error())
             {
                 return ERR_APPEND(bf_res.get_error(), "could not get subgraph function of net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to get function of gate.");
