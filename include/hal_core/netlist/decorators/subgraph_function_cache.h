@@ -29,23 +29,52 @@
 #include "hal_core/netlist/boolean_function.h"
 
 #include <map>
+#include <unordered_set>
 #include <utility>
 
 namespace hal
 {
+    class Gate;
     class GatePin;
+    class Netlist;
 
     /**
-     * Cache for the Boolean functions that `SubgraphNetlistDecorator::get_subgraph_function` computes for the output pins of gates.
-     * It maps a pair of gate ID and output pin to the Boolean function of that pin, with the variables already replaced by the corresponding nets.
+     * A reusable store for the Boolean functions that `SubgraphNetlistDecorator::get_subgraph_function` computes for the output pins of the gates of one specific subgraph.
      *
-     * Passing the same cache to consecutive calls of `get_subgraph_function` avoids recomputing logic that several subgraphs share.
-     * The cache is filled by these calls and should initially be empty.
-     * It must not be reused after the netlist has been modified.
+     * The subgraph a cache belongs to is sealed in when it is created with `SubgraphNetlistDecorator::make_subgraph_function_cache`,
+     * and the cache can only ever be used for exactly that subgraph.
      *
-     * In Python, the cache is available as `hal_py.SubgraphFunctionCache` and is passed by reference, so it is filled across calls just as in C++.
+     * The cache belongs to the netlist it was created for and must be dropped when the netlist is modified, as its entries are not invalidated by netlist events.
      *
      * @ingroup decorators
      */
-    using SubgraphFunctionCache = std::map<std::pair<u32, const GatePin*>, BooleanFunction>;
+    class NETLIST_API SubgraphFunctionCache
+    {
+    public:
+        SubgraphFunctionCache(SubgraphFunctionCache&&)                 = default;
+        SubgraphFunctionCache& operator=(SubgraphFunctionCache&&)      = default;
+        SubgraphFunctionCache(const SubgraphFunctionCache&)            = delete;
+        SubgraphFunctionCache& operator=(const SubgraphFunctionCache&) = delete;
+
+        /**
+         * Get the number of cached Boolean functions.
+         *
+         * @returns The number of cached Boolean functions.
+         */
+        size_t size() const
+        {
+            return m_functions.size();
+        }
+
+    private:
+        friend class SubgraphNetlistDecorator;
+
+        SubgraphFunctionCache(const Netlist* netlist, std::unordered_set<const Gate*> subgraph_gates) : m_netlist(netlist), m_subgraph_gates(std::move(subgraph_gates))
+        {
+        }
+
+        const Netlist* m_netlist;
+        std::unordered_set<const Gate*> m_subgraph_gates;
+        std::map<std::pair<u32, const GatePin*>, BooleanFunction> m_functions;
+    };
 }    // namespace hal

@@ -1039,7 +1039,12 @@ namespace hal
             const std::vector<Gate*> subgraph_gates = sbox->get_combinational_gates();
 
             const auto snd = SubgraphNetlistDecorator(*m_netlist);
-            SubgraphFunctionCache cache;
+            auto cache_res = snd.make_subgraph_function_cache(subgraph_gates);
+            if (cache_res.is_error())
+            {
+                return ERR(cache_res.get_error());
+            }
+            auto cache = cache_res.get();
 
             std::vector<BooleanFunction> bfs;
             std::set<Net*> all_inputs;
@@ -1052,7 +1057,7 @@ namespace hal
                                + " has none or multiple fan-out nets, which is currently not supported");
                 }
 
-                auto bf_res = snd.get_subgraph_function(subgraph_gates, fan_out_nets.front(), cache);
+                auto bf_res = snd.get_subgraph_function(fan_out_nets.front(), cache);
                 if (bf_res.is_error())
                 {
                     return ERR(bf_res.get_error());
