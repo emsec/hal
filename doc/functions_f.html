@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -117,12 +117,14 @@ $(document).ready(function(){initNavTree('functions_f.html',''); initResizable()
 <li>FacUnknown
 : <a class="el" href="classhal_1_1_fac_extension_interface.html#a51208001cb7c820db7b388507c59a4f0a4d5be48004a4ccb282e86829a898cbf4">hal::FacExtensionInterface</a>
 </li>
+<li>Failed
+: <a class="el" href="classhal_1_1_simulation_engine.html#ac9e8ccfbc7655bd1f3604e688db438f2ae2cf25e4a106b3d9eea0459ffa8c6309">hal::SimulationEngine</a>
+</li>
 <li>failed()
 : <a class="el" href="classhal_1_1_simulation_engine.html#a8eb430b51b660c95b315011c9628161e">hal::SimulationEngine</a>
 </li>
 <li>Failed
-: <a class="el" href="classhal_1_1_simulation_engine.html#ac9e8ccfbc7655bd1f3604e688db438f2ae2cf25e4a106b3d9eea0459ffa8c6309">hal::SimulationEngine</a>
-, <a class="el" href="classhal_1_1_wave_data_provider_file.html#a54306a28bc730a4ef4f78ffbd15c5ab9a92faed751348f4952918fb1852e97fe4">hal::WaveDataProviderFile</a>
+: <a class="el" href="classhal_1_1_wave_data_provider_file.html#a54306a28bc730a4ef4f78ffbd15c5ab9a92faed751348f4952918fb1852e97fe4">hal::WaveDataProviderFile</a>
 , <a class="el" href="classhal_1_1_wave_item.html#a17c9c97a613a537acaaaae0a27053d28ae59cd9e38bd408f7acae90ab231c9ae3">hal::WaveItem</a>
 </li>
 <li>failText()
@@ -157,9 +159,6 @@ $(document).ready(function(){initNavTree('functions_f.html',''); initResizable()
 </li>
 <li>FFCompFunc
 : <a class="el" href="classhal_1_1_f_f_component_entry.html#acacc0967af4309c405595bb03b44854a">hal::FFComponentEntry</a>
-</li>
-<li>FFComponent()
-: <a class="el" href="classhal_1_1_f_f_component.html#a672c23a434ff31610500b306a1410502">hal::FFComponent</a>
 </li>
 <li>FFComponentEntry()
 : <a class="el" href="classhal_1_1_f_f_component_entry.html#ab2e49059c27d68cd3083c535310cb667">hal::FFComponentEntry</a>
@@ -309,6 +308,7 @@ $(document).ready(function(){initNavTree('functions_f.html',''); initResizable()
 , <a class="el" href="classhal_1_1_context_tree_model.html#a3307d03a9adb81fbf9004981bcdaba36">hal::ContextTreeModel</a>
 , <a class="el" href="classhal_1_1_module_model.html#a129509c2c741b517a0bbbfcc1b2f0a0f">hal::ModuleModel</a>
 , <a class="el" href="classhal_1_1_module_pins_tree_model.html#a95a545a07f1ae68ee0ec0c33d090862c">hal::ModulePinsTreeModel</a>
+, <a class="el" href="classhal_1_1_parameter_table_model.html#a0f74be6ba2aebd87f1f5a63fee576641">hal::ParameterTableModel</a>
 , <a class="el" href="classhal_1_1_pin_model.html#a26f05e89fa61de1cb5a5252d18a554d8">hal::PinModel</a>
 , <a class="el" href="classhal_1_1_select_gate_model.html#afd1ef31a633bf4ddbbe572909a876e44">hal::SelectGateModel</a>
 , <a class="el" href="classhal_1_1_wave_edit_table.html#a6c9d30c73df5de0896d0b8ef23b43dce">hal::WaveEditTable</a>
@@ -323,8 +323,9 @@ $(document).ready(function(){initNavTree('functions_f.html',''); initResizable()
 , <a class="el" href="classhal_1_1_gate_library_wizard.html#aac4b5d42406c092692b7242a8d743cfc">hal::GateLibraryWizard</a>
 , <a class="el" href="classhal_1_1_state_wizard_page.html#aac4b5d42406c092692b7242a8d743cfc">hal::StateWizardPage</a>
 </li>
-<li>Float
-: <a class="el" href="classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a64911c89f3f485ff0ae51f0121129599">hal::PluginParameter</a>
+<li>Float()
+: <a class="el" href="structhal_1_1_parameter.html#ab6240cf9dffe7e1d1088398688f1f581">hal::Parameter</a>
+, <a class="el" href="classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a64911c89f3f485ff0ae51f0121129599">hal::PluginParameter</a>
 </li>
 <li>flush()
 : <a class="el" href="classhal_1_1_simulation_process_log.html#a5acf4823625c67fa4ab506e822eff447">hal::SimulationProcessLog</a>
@@ -411,6 +412,9 @@ $(document).ready(function(){initNavTree('functions_f.html',''); initResizable()
 </li>
 <li>fromBox()
 : <a class="el" href="classhal_1_1_net_layout_point.html#aff8ec3c7a4d7902eeb53cc68f4593386">hal::NetLayoutPoint</a>
+</li>
+<li>fromContainer()
+: <a class="el" href="classhal_1_1_data_table_entry.html#a1bdf5f1076ce32ec64bab3d76589b416">hal::DataTableEntry</a>
 </li>
 <li>fromHalType()
 : <a class="el" href="classhal_1_1_user_action_object_type.html#a1e9164e422d7db5168f26bd97b3190ed">hal::UserActionObjectType</a>

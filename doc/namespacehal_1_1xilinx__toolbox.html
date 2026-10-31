@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -150,12 +150,24 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ac42334eb4dcc126be846d54ca9cc813f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#ac42334eb4dcc126be846d54ca9cc813f">split_luts</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates={})</td></tr>
-<tr class="memdesc:ac42334eb4dcc126be846d54ca9cc813f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split LUTs with two outputs into two separate LUT gates.  <a href="namespacehal_1_1xilinx__toolbox.html#ac42334eb4dcc126be846d54ca9cc813f">More...</a><br /></td></tr>
-<tr class="separator:ac42334eb4dcc126be846d54ca9cc813f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add3096d73b5fa5e1a093c8ebff0f0b95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#add3096d73b5fa5e1a093c8ebff0f0b95">split_shift_registers</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates={})</td></tr>
-<tr class="memdesc:add3096d73b5fa5e1a093c8ebff0f0b95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split shift register primitives and replaces them with equivalent flip-flops chains.  <a href="namespacehal_1_1xilinx__toolbox.html#add3096d73b5fa5e1a093c8ebff0f0b95">More...</a><br /></td></tr>
-<tr class="separator:add3096d73b5fa5e1a093c8ebff0f0b95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae71961e389f852ec5984ae78c91beb1e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#ae71961e389f852ec5984ae78c91beb1e">split_lut</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *g, bool create_module=false)</td></tr>
+<tr class="memdesc:ae71961e389f852ec5984ae78c91beb1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a single <code>LUT6_2</code> gate into up to two separate LUT gates.  <a href="namespacehal_1_1xilinx__toolbox.html#ae71961e389f852ec5984ae78c91beb1e">More...</a><br /></td></tr>
+<tr class="separator:ae71961e389f852ec5984ae78c91beb1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3d62700d9900c0c817b320c8b7b184f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#af3d62700d9900c0c817b320c8b7b184f">split_luts</a> (const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates, bool create_module=false)</td></tr>
+<tr class="memdesc:af3d62700d9900c0c817b320c8b7b184f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a set of <code>LUT6_2</code> gates into separate LUT gates.  <a href="namespacehal_1_1xilinx__toolbox.html#af3d62700d9900c0c817b320c8b7b184f">More...</a><br /></td></tr>
+<tr class="separator:af3d62700d9900c0c817b320c8b7b184f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7456699354a4e6b70dce30b862a18fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#af7456699354a4e6b70dce30b862a18fb">split_luts</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates={}, bool create_module=false)</td></tr>
+<tr class="memdesc:af7456699354a4e6b70dce30b862a18fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split the <code>LUT6_2</code> gates of the netlist, or of the given gates, into separate LUT gates.  <a href="namespacehal_1_1xilinx__toolbox.html#af7456699354a4e6b70dce30b862a18fb">More...</a><br /></td></tr>
+<tr class="separator:af7456699354a4e6b70dce30b862a18fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ab33ee09ec1d007e2421566fdef78ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#a0ab33ee09ec1d007e2421566fdef78ff">split_shift_register</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *g, bool create_module=false)</td></tr>
+<tr class="memdesc:a0ab33ee09ec1d007e2421566fdef78ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a single shift register primitive into an equivalent chain of <code>FDCE</code> flip-flops.  <a href="namespacehal_1_1xilinx__toolbox.html#a0ab33ee09ec1d007e2421566fdef78ff">More...</a><br /></td></tr>
+<tr class="separator:a0ab33ee09ec1d007e2421566fdef78ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e87979ae869530f44c7b4e8fda7d6de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#a8e87979ae869530f44c7b4e8fda7d6de">split_shift_registers</a> (const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates, bool create_module=false)</td></tr>
+<tr class="memdesc:a8e87979ae869530f44c7b4e8fda7d6de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a set of shift register primitives into equivalent <code>FDCE</code> flip-flop chains.  <a href="namespacehal_1_1xilinx__toolbox.html#a8e87979ae869530f44c7b4e8fda7d6de">More...</a><br /></td></tr>
+<tr class="separator:a8e87979ae869530f44c7b4e8fda7d6de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a834c4a47d9fc627bb1dec4ae711f51a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#a834c4a47d9fc627bb1dec4ae711f51a0">split_shift_registers</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates={}, bool create_module=false)</td></tr>
+<tr class="memdesc:a834c4a47d9fc627bb1dec4ae711f51a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split the shift register primitives of the netlist, or of the given gates, into <code>FDCE</code> flip-flop chains.  <a href="namespacehal_1_1xilinx__toolbox.html#a834c4a47d9fc627bb1dec4ae711f51a0">More...</a><br /></td></tr>
+<tr class="separator:a834c4a47d9fc627bb1dec4ae711f51a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10a671ffba408be19f47837793e2c615"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#a10a671ffba408be19f47837793e2c615">remove_no_load_wires</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &amp;nets={})</td></tr>
 <tr class="memdesc:a10a671ffba408be19f47837793e2c615"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove the "no load wire" nets that Vivado writes for unused output pins.  <a href="namespacehal_1_1xilinx__toolbox.html#a10a671ffba408be19f47837793e2c615">More...</a><br /></td></tr>
 <tr class="separator:a10a671ffba408be19f47837793e2c615"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -343,16 +355,110 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of removed nets on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="preprocessing_8cpp_source.html#l00331">331</a> of file <a class="el" href="preprocessing_8cpp_source.html">preprocessing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="preprocessing_8cpp_source.html#l00466">466</a> of file <a class="el" href="preprocessing_8cpp_source.html">preprocessing.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00345">hal::Netlist::delete_net()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00366">hal::Netlist::get_nets()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__xilinx__toolbox_8cpp_source.html#l00113">hal::GuiExtensionXilinxToolbox::execute_function()</a>, and <a class="el" href="plugins_2xilinx__toolbox_2python_2python__bindings_8cpp_source.html#l00023">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__xilinx__toolbox_8cpp_source.html#l00137">hal::GuiExtensionXilinxToolbox::execute_function()</a>, and <a class="el" href="plugins_2xilinx__toolbox_2python_2python__bindings_8cpp_source.html#l00023">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
-<a id="ac42334eb4dcc126be846d54ca9cc813f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac42334eb4dcc126be846d54ca9cc813f">&#9670;&nbsp;</a></span>split_luts()</h2>
+<a id="ae71961e389f852ec5984ae78c91beb1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae71961e389f852ec5984ae78c91beb1e">&#9670;&nbsp;</a></span>split_lut()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt; hal::xilinx_toolbox::split_lut </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>create_module</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Split a single <code>LUT6_2</code> gate into up to two separate LUT gates. </p>
+<p>Creates replacement gates depending on which outputs are connected:</p><ul>
+<li><code>O6</code> → <code>LUT6</code> using all 64 bits of the INIT string and all 6 inputs.</li>
+<li><code>O5</code> → <code>LUT5</code> using bits [0, 31] of the INIT string and inputs I0-I4 (I5 is excluded, as it only selects the INIT half).</li>
+</ul>
+<p>The original <code>LUT6_2</code> gate is always deleted. The original INIT string is stored on each replacement gate under <code>xilinx_preprocessing_information/original_init</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>- The <code>LUT6_2</code> gate to split. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">create_module</td><td>- If <code>true</code>, a new module named after the original gate is created as a child of its parent module and all replacement gates are placed into it. If <code>false</code> (default), replacement gates inherit the parent module of the original gate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An empty OK result on success, an error if <code>g</code> is not of type <code>LUT6_2</code>, if the INIT string is malformed, or if the gate cannot be deleted. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="preprocessing_8cpp_source.html#l00078">78</a> of file <a class="el" href="preprocessing_8cpp_source.html">preprocessing.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00331">hal::Module::assign_gate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00175">hal::Netlist::create_gate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00589">hal::Netlist::create_module()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00185">hal::Netlist::delete_gate()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="gate__type__component_8h_source.html#l00126">hal::GateTypeComponent::get_component_as()</a>, <a class="el" href="gate__type_8h_source.html#l00089">hal::GateType::get_component_as()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00846">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00954">hal::Gate::get_fan_out_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00134">hal::Netlist::get_gate_library()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00128">hal::GateLibrary::get_gate_type_by_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00132">hal::Gate::get_id()</a>, <a class="el" href="lut__component_8cpp_source.html#l00172">hal::LUTComponent::get_init_string()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00211">hal::Gate::get_module()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00142">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00064">hal::GateType::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00137">hal::Gate::get_netlist()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00162">hal::Gate::get_type()</a>, <a class="el" href="classhal_1_1_gate_type_component.html#a4104ed67b98abffcf8485a42cd49f248">hal::GateTypeComponent::get_type()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00321">hal::Module::is_top_module()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017ab56efdaa67baedcc830a453ecd15b37f">hal::GateTypeComponent::lut</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="netlist_2data__container_8cpp_source.html#l00039">hal::DataContainer::set_data()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2xilinx__toolbox_2python_2python__bindings_8cpp_source.html#l00023">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00199">split_luts()</a>.</p>
+
+</div>
+</div>
+<a id="af3d62700d9900c0c817b320c8b7b184f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3d62700d9900c0c817b320c8b7b184f">&#9670;&nbsp;</a></span>split_luts() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::xilinx_toolbox::split_luts </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>gates</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>create_module</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Split a set of <code>LUT6_2</code> gates into separate LUT gates. </p>
+<p>Calls <code>split_lut</code> for each gate in <code>gates</code>. Gates that cannot be split are skipped with a warning; processing always continues with the remaining gates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">gates</td><td>- The <code>LUT6_2</code> gates to split. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">create_module</td><td>- If <code>true</code>, each split gate's replacements are placed into a new module named after the original gate. If <code>false</code> (default), replacements inherit the parent module of the original gate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of successfully split gates. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="preprocessing_8cpp_source.html#l00199">199</a> of file <a class="el" href="preprocessing_8cpp_source.html">preprocessing.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00078">split_lut()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugin__xilinx__toolbox_8cpp_source.html#l00137">hal::GuiExtensionXilinxToolbox::execute_function()</a>, <a class="el" href="plugins_2xilinx__toolbox_2python_2python__bindings_8cpp_source.html#l00023">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00217">split_luts()</a>.</p>
+
+</div>
+</div>
+<a id="af7456699354a4e6b70dce30b862a18fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7456699354a4e6b70dce30b862a18fb">&#9670;&nbsp;</a></span>split_luts() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -367,7 +473,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>gates</em> = <code>{}</code>&#160;</td>
+          <td class="paramname"><em>gates</em> = <code>{}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>create_module</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -377,27 +489,119 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Split LUTs with two outputs into two separate LUT gates. </p>
-<p>Replaces <code>LUT6_2</code> with a <code>LUT6</code> and a <code>LUT5</code> gate if the respective outputs of the <code>LUT6_2</code> are actually used, i.e., connected to other gates.</p>
+<p>Split the <code>LUT6_2</code> gates of the netlist, or of the given gates, into separate LUT gates. </p>
+<p>Finds all gates of type <code>LUT6_2</code> within <code>gates</code> (or within the netlist if <code>gates</code> is empty) and calls <code>split_luts(gates)</code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The netlist to operate on. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">gates</td><td>- The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">create_module</td><td>- If <code>true</code>, each split gate's replacements are placed into a new module named after the original gate. If <code>false</code> (default), replacements inherit the parent module of the original gate. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The number of split <code>LUT6_2</code> gates on success, an error otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of successfully split <code>LUT6_2</code> gates. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="preprocessing_8cpp_source.html#l00039">39</a> of file <a class="el" href="preprocessing_8cpp_source.html">preprocessing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="preprocessing_8cpp_source.html#l00217">217</a> of file <a class="el" href="preprocessing_8cpp_source.html">preprocessing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00175">hal::Netlist::create_gate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00185">hal::Netlist::delete_gate()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00653">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00617">hal::Gate::get_fan_in_net()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00761">hal::Gate::get_fan_out_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00134">hal::Netlist::get_gate_library()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00128">hal::GateLibrary::get_gate_type_by_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l01034">hal::Gate::get_init_data()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00174">hal::Gate::get_module()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00321">hal::Module::is_top_module()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="netlist_2data__container_8cpp_source.html#l00017">hal::DataContainer::set_data()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="plugin__xilinx__toolbox_8cpp_source.html#l00113">hal::GuiExtensionXilinxToolbox::execute_function()</a>, and <a class="el" href="plugins_2xilinx__toolbox_2python_2python__bindings_8cpp_source.html#l00023">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2gate_8cpp_source.html#l00162">hal::Gate::get_type()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00199">split_luts()</a>.</p>
 
 </div>
 </div>
-<a id="add3096d73b5fa5e1a093c8ebff0f0b95"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add3096d73b5fa5e1a093c8ebff0f0b95">&#9670;&nbsp;</a></span>split_shift_registers()</h2>
+<a id="a0ab33ee09ec1d007e2421566fdef78ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ab33ee09ec1d007e2421566fdef78ff">&#9670;&nbsp;</a></span>split_shift_register()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt; hal::xilinx_toolbox::split_shift_register </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>create_module</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Split a single shift register primitive into an equivalent chain of <code>FDCE</code> flip-flops. </p>
+<p>Supported gate types: <code>SRL16</code>, <code>SRL16E</code>, <code>SRLC16E</code>, <code>SRLC32E</code>.</p>
+<p>Every address pin must be connected and driven by a constant (GND/VCC) net; an error is returned otherwise. The number of flip-flops created equals <code>select_value + 1</code>, where <code>select_value</code> is the binary value encoded by the address pins (A0 = bit 0). When the cascade output (<code>Q15</code> for <code>SRLC16E</code>, <code>Q31</code> for <code>SRLC32E</code>) has downstream consumers, all stages up to the maximum depth (15 or 31) are materialised so that the last flip-flop correctly drives the cascade net.</p>
+<p>The original gate is always deleted on success.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>- The shift register gate to split. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">create_module</td><td>- If <code>true</code>, a new module named after the original gate is created as a child of its parent module and all replacement flip-flops are placed into it. If <code>false</code> (default), replacement flip-flops inherit the parent module of the original gate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An empty OK result on success, an error if <code>g</code> is not a supported shift register type, if any address pin is unconnected or not driven by a constant (GND/VCC) net, or if the gate cannot be deleted. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="preprocessing_8cpp_source.html#l00222">222</a> of file <a class="el" href="preprocessing_8cpp_source.html">preprocessing.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00300">hal::Net::add_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00127">hal::Net::add_source()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00331">hal::Module::assign_gate()</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">hal::clock</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bafc5364bf9dbfa34954526becad136d4b">hal::control</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00175">hal::Netlist::create_gate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00589">hal::Netlist::create_module()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00335">hal::Netlist::create_net()</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">hal::data</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00185">hal::Netlist::delete_gate()</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00450">hal::Net::get_destinations()</a>, <a class="el" href="base__pin_8h_source.html#l00130">hal::BasePin&lt; T &gt;::get_direction()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00810">hal::Gate::get_fan_in_net()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00954">hal::Gate::get_fan_out_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00134">hal::Netlist::get_gate_library()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00128">hal::GateLibrary::get_gate_type_by_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00132">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00211">hal::Gate::get_module()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00142">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00064">hal::GateType::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00137">hal::Gate::get_netlist()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00432">hal::Net::get_num_of_destinations()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00149">hal::DataContainer::get_parameter_value()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00210">hal::GateType::get_pins()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00162">hal::Gate::get_type()</a>, <a class="el" href="base__pin_8h_source.html#l00150">hal::BasePin&lt; T &gt;::get_type()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00190">hal::DataContainer::has_parameter()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00474">hal::Net::is_gnd_net()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00321">hal::Module::is_top_module()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00479">hal::Net::is_vcc_net()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="netlist_2net_8cpp_source.html#l00343">hal::Net::remove_destination()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2xilinx__toolbox_2python_2python__bindings_8cpp_source.html#l00023">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00443">split_shift_registers()</a>.</p>
+
+</div>
+</div>
+<a id="a8e87979ae869530f44c7b4e8fda7d6de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e87979ae869530f44c7b4e8fda7d6de">&#9670;&nbsp;</a></span>split_shift_registers() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::xilinx_toolbox::split_shift_registers </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>gates</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>create_module</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Split a set of shift register primitives into equivalent <code>FDCE</code> flip-flop chains. </p>
+<p>Supported gate types: <code>SRL16</code>, <code>SRL16E</code>, <code>SRLC16E</code>, <code>SRLC32E</code>.</p>
+<p>Calls <code>split_shift_register</code> for each gate in <code>gates</code>. Gates that cannot be split (e.g. because an address pin is not driven by a constant net) are skipped with a warning; processing always continues with the remaining gates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">gates</td><td>- The shift register gates to split. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">create_module</td><td>- If <code>true</code>, each split gate's replacements are placed into a new module named after the original gate. If <code>false</code> (default), replacements inherit the parent module of the original gate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of successfully split gates. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="preprocessing_8cpp_source.html#l00443">443</a> of file <a class="el" href="preprocessing_8cpp_source.html">preprocessing.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00222">split_shift_register()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugin__xilinx__toolbox_8cpp_source.html#l00137">hal::GuiExtensionXilinxToolbox::execute_function()</a>, <a class="el" href="plugins_2xilinx__toolbox_2python_2python__bindings_8cpp_source.html#l00023">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00461">split_shift_registers()</a>.</p>
+
+</div>
+</div>
+<a id="a834c4a47d9fc627bb1dec4ae711f51a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a834c4a47d9fc627bb1dec4ae711f51a0">&#9670;&nbsp;</a></span>split_shift_registers() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -412,7 +616,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>gates</em> = <code>{}</code>&#160;</td>
+          <td class="paramname"><em>gates</em> = <code>{}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>create_module</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -422,22 +632,22 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Split shift register primitives and replaces them with equivalent flip-flops chains. </p>
-<p>Currently only implemented for gate types <code>SRL16E</code> and <code>SRLC32E</code>. The created flip-flops are assigned to the module of the shift register gate that they replace.</p>
+<p>Split the shift register primitives of the netlist, or of the given gates, into <code>FDCE</code> flip-flop chains. </p>
+<p>Supported gate types: <code>SRL16</code>, <code>SRL16E</code>, <code>SRLC16E</code>, <code>SRLC32E</code>.</p>
+<p>Finds all gates of one of the supported types within <code>gates</code> (or within the netlist if <code>gates</code> is empty) and calls <code>split_shift_registers(gates)</code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The netlist to operate on. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">gates</td><td>- The gates to consider. Defaults to an empty vector, in which case all gates of the netlist are considered. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">create_module</td><td>- If <code>true</code>, each split gate's replacements are placed into a new module named after the original gate. If <code>false</code> (default), replacements inherit the parent module of the original gate. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The number of split shift registers on success, an error otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of successfully split shift register gates. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="preprocessing_8cpp_source.html#l00141">141</a> of file <a class="el" href="preprocessing_8cpp_source.html">preprocessing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="preprocessing_8cpp_source.html#l00461">461</a> of file <a class="el" href="preprocessing_8cpp_source.html">preprocessing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00300">hal::Net::add_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00127">hal::Net::add_source()</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">hal::clock</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bafc5364bf9dbfa34954526becad136d4b">hal::control</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00175">hal::Netlist::create_gate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00335">hal::Netlist::create_net()</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">hal::data</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00185">hal::Netlist::delete_gate()</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00134">hal::Netlist::get_gate_library()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00128">hal::GateLibrary::get_gate_type_by_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00077">hal::Netlist::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00064">hal::GateType::get_name()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00432">hal::Net::get_num_of_destinations()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00474">hal::Net::is_gnd_net()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00479">hal::Net::is_vcc_net()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="plugin__xilinx__toolbox_8cpp_source.html#l00113">hal::GuiExtensionXilinxToolbox::execute_function()</a>, and <a class="el" href="plugins_2xilinx__toolbox_2python_2python__bindings_8cpp_source.html#l00023">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00064">hal::GateType::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00162">hal::Gate::get_type()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00443">split_shift_registers()</a>.</p>
 
 </div>
 </div>

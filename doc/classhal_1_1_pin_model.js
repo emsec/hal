@@ -6,6 +6,7 @@ var classhal_1_1_pin_model =
     [ "editNewDone", "classhal_1_1_pin_model.html#a887afd631594eb99d21448bc9f85a27c", null ],
     [ "flags", "classhal_1_1_pin_model.html#a26f05e89fa61de1cb5a5252d18a554d8", null ],
     [ "getInputPins", "classhal_1_1_pin_model.html#a0b2e91394d393fd1fa1118b06aea8054", null ],
+    [ "getInternalPins", "classhal_1_1_pin_model.html#a5cb5627269399723cf1b21025761138a", null ],
     [ "getOutputPins", "classhal_1_1_pin_model.html#a221f926e4ad4291a1146fefbf7191c0b", null ],
     [ "getPinGroups", "classhal_1_1_pin_model.html#a41bf1164b02838aa7e60b8cb107dd6fa", null ],
     [ "handleDeleteItem", "classhal_1_1_pin_model.html#ac68b66d96322839819a296023da5ae7c", null ],

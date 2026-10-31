@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -92,6 +92,7 @@ $(document).ready(function(){initNavTree('preprocessing_8cpp.html',''); initResi
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="gate_8h_source.html">hal_core/netlist/gate.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="lut__component_8h_source.html">hal_core/netlist/gate_library/gate_type_component/lut_component.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="module_8h_source.html">hal_core/netlist/module.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="net_8h_source.html">hal_core/netlist/net.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="include_2hal__core_2netlist_2netlist_8h_source.html">hal_core/netlist/netlist.h</a>&quot;</code><br />
@@ -102,39 +103,42 @@ Include dependency graph for preprocessing.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="preprocessing_8cpp__incl.png" border="0" usemap="#aplugins_2xilinx__toolbox_2src_2preprocessing_8cpp" alt=""/></div>
 <map name="aplugins_2xilinx__toolbox_2src_2preprocessing_8cpp" id="aplugins_2xilinx__toolbox_2src_2preprocessing_8cpp">
-<area shape="rect" title=" " alt="" coords="2579,5,2746,47"/>
-<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1145,355,1311,382"/>
-<area shape="rect" title=" " alt="" coords="2586,713,2673,739"/>
-<area shape="rect" href="module_8h.html" title=" " alt="" coords="1851,273,2037,300"/>
-<area shape="rect" href="net_8h.html" title=" " alt="" coords="2670,445,2829,471"/>
-<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="3152,273,3331,300"/>
-<area shape="rect" href="plugin__xilinx__toolbox_8h.html" title="This file contains all functions related to the HAL plugin API." alt="" coords="3013,95,3171,136"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="2765,795,2905,821"/>
-<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="1184,527,1363,568"/>
-<area shape="rect" title=" " alt="" coords="591,795,641,821"/>
-<area shape="rect" title=" " alt="" coords="1703,623,1745,650"/>
-<area shape="rect" title=" " alt="" coords="579,623,703,650"/>
-<area shape="rect" title=" " alt="" coords="2091,623,2154,650"/>
-<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="3075,527,3229,568"/>
-<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="915,445,1109,471"/>
-<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="347,527,533,568"/>
-<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1387,437,1541,479"/>
-<area shape="rect" title=" " alt="" coords="2923,534,3000,561"/>
-<area shape="rect" href="enums_8h.html" title=" " alt="" coords="779,705,909,747"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="2667,616,2797,657"/>
-<area shape="rect" title=" " alt="" coords="3601,713,3693,739"/>
-<area shape="rect" title=" " alt="" coords="3366,623,3421,650"/>
-<area shape="rect" href="pin__group_8h.html" title=" " alt="" coords="1931,527,2085,568"/>
-<area shape="rect" title=" " alt="" coords="2517,623,2576,650"/>
-<area shape="rect" title=" " alt="" coords="1640,534,1755,561"/>
-<area shape="rect" href="pin__direction_8h.html" title=" " alt="" coords="1045,616,1264,657"/>
-<area shape="rect" href="pin__type_8h.html" title=" " alt="" coords="830,616,1021,657"/>
-<area shape="rect" title=" " alt="" coords="1900,623,1943,650"/>
-<area shape="rect" href="pin__event_8h.html" title=" " alt="" coords="861,527,1059,568"/>
-<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="2012,348,2175,389"/>
-<area shape="rect" href="module__pin_8h.html" title=" " alt="" coords="2619,348,2773,389"/>
-<area shape="rect" href="gui__extension__interface_8h.html" title=" " alt="" coords="3144,184,3339,225"/>
-<area shape="rect" href="plugin__interface__base_8h.html" title=" " alt="" coords="2312,527,2493,568"/>
+<area shape="rect" title=" " alt="" coords="2598,5,2765,47"/>
+<area shape="rect" href="gate_8h.html" title=" " alt="" coords="2833,355,2999,382"/>
+<area shape="rect" title=" " alt="" coords="3781,831,3867,858"/>
+<area shape="rect" href="lut__component_8h.html" title=" " alt="" coords="2334,437,2554,493"/>
+<area shape="rect" href="module_8h.html" title=" " alt="" coords="908,273,1095,300"/>
+<area shape="rect" href="net_8h.html" title=" " alt="" coords="1569,452,1727,479"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="2592,273,2771,300"/>
+<area shape="rect" href="plugin__xilinx__toolbox_8h.html" title="This file contains all functions related to the HAL plugin API." alt="" coords="3782,95,3941,136"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="2142,913,2282,940"/>
+<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="2528,645,2707,687"/>
+<area shape="rect" title=" " alt="" coords="731,913,781,940"/>
+<area shape="rect" title=" " alt="" coords="3283,742,3325,769"/>
+<area shape="rect" title=" " alt="" coords="2250,742,2374,769"/>
+<area shape="rect" title=" " alt="" coords="2738,742,2801,769"/>
+<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="1723,645,1877,687"/>
+<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="3561,831,3756,858"/>
+<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="702,549,887,590"/>
+<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="2104,445,2259,486"/>
+<area shape="rect" title=" " alt="" coords="3659,556,3773,583"/>
+<area shape="rect" title=" " alt="" coords="2611,556,2688,583"/>
+<area shape="rect" href="enums_8h.html" title=" " alt="" coords="1017,824,1148,865"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="1900,735,2031,776"/>
+<area shape="rect" title=" " alt="" coords="398,831,490,858"/>
+<area shape="rect" title=" " alt="" coords="1496,742,1555,769"/>
+<area shape="rect" title=" " alt="" coords="521,742,575,769"/>
+<area shape="rect" href="gate__type__component_8h.html" title=" " alt="" coords="2915,541,3135,597"/>
+<area shape="rect" href="gate__pin_8h.html" title=" " alt="" coords="1571,549,1725,590"/>
+<area shape="rect" href="pin__group_8h.html" title=" " alt="" coords="1190,645,1343,687"/>
+<area shape="rect" href="pin__direction_8h.html" title=" " alt="" coords="1203,735,1421,776"/>
+<area shape="rect" href="pin__type_8h.html" title=" " alt="" coords="987,735,1178,776"/>
+<area shape="rect" title=" " alt="" coords="452,742,495,769"/>
+<area shape="rect" href="pin__event_8h.html" title=" " alt="" coords="2053,645,2251,687"/>
+<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="2481,348,2644,389"/>
+<area shape="rect" href="module__pin_8h.html" title=" " alt="" coords="925,348,1078,389"/>
+<area shape="rect" href="gui__extension__interface_8h.html" title=" " alt="" coords="3916,184,4111,225"/>
+<area shape="rect" href="plugin__interface__base_8h.html" title=" " alt="" coords="3035,645,3216,687"/>
 </map>
 </div>
 </div>
@@ -149,12 +153,24 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ac42334eb4dcc126be846d54ca9cc813f"><td class="memItemLeft" align="right" valign="top">Result&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#ac42334eb4dcc126be846d54ca9cc813f">hal::xilinx_toolbox::split_luts</a> (Netlist *nl, const std::vector&lt; Gate * &gt; &amp;gates={})</td></tr>
-<tr class="memdesc:ac42334eb4dcc126be846d54ca9cc813f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split LUTs with two outputs into two separate LUT gates.  <a href="namespacehal_1_1xilinx__toolbox.html#ac42334eb4dcc126be846d54ca9cc813f">More...</a><br /></td></tr>
-<tr class="separator:ac42334eb4dcc126be846d54ca9cc813f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add3096d73b5fa5e1a093c8ebff0f0b95"><td class="memItemLeft" align="right" valign="top">Result&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#add3096d73b5fa5e1a093c8ebff0f0b95">hal::xilinx_toolbox::split_shift_registers</a> (Netlist *nl, const std::vector&lt; Gate * &gt; &amp;gates={})</td></tr>
-<tr class="memdesc:add3096d73b5fa5e1a093c8ebff0f0b95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split shift register primitives and replaces them with equivalent flip-flops chains.  <a href="namespacehal_1_1xilinx__toolbox.html#add3096d73b5fa5e1a093c8ebff0f0b95">More...</a><br /></td></tr>
-<tr class="separator:add3096d73b5fa5e1a093c8ebff0f0b95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae71961e389f852ec5984ae78c91beb1e"><td class="memItemLeft" align="right" valign="top">Result&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#ae71961e389f852ec5984ae78c91beb1e">hal::xilinx_toolbox::split_lut</a> (Gate *g, bool create_module=false)</td></tr>
+<tr class="memdesc:ae71961e389f852ec5984ae78c91beb1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a single <code>LUT6_2</code> gate into up to two separate LUT gates.  <a href="namespacehal_1_1xilinx__toolbox.html#ae71961e389f852ec5984ae78c91beb1e">More...</a><br /></td></tr>
+<tr class="separator:ae71961e389f852ec5984ae78c91beb1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3d62700d9900c0c817b320c8b7b184f"><td class="memItemLeft" align="right" valign="top">Result&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#af3d62700d9900c0c817b320c8b7b184f">hal::xilinx_toolbox::split_luts</a> (const std::vector&lt; Gate * &gt; &amp;gates, bool create_module=false)</td></tr>
+<tr class="memdesc:af3d62700d9900c0c817b320c8b7b184f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a set of <code>LUT6_2</code> gates into separate LUT gates.  <a href="namespacehal_1_1xilinx__toolbox.html#af3d62700d9900c0c817b320c8b7b184f">More...</a><br /></td></tr>
+<tr class="separator:af3d62700d9900c0c817b320c8b7b184f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7456699354a4e6b70dce30b862a18fb"><td class="memItemLeft" align="right" valign="top">Result&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#af7456699354a4e6b70dce30b862a18fb">hal::xilinx_toolbox::split_luts</a> (Netlist *nl, const std::vector&lt; Gate * &gt; &amp;gates={}, bool create_module=false)</td></tr>
+<tr class="memdesc:af7456699354a4e6b70dce30b862a18fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split the <code>LUT6_2</code> gates of the netlist, or of the given gates, into separate LUT gates.  <a href="namespacehal_1_1xilinx__toolbox.html#af7456699354a4e6b70dce30b862a18fb">More...</a><br /></td></tr>
+<tr class="separator:af7456699354a4e6b70dce30b862a18fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ab33ee09ec1d007e2421566fdef78ff"><td class="memItemLeft" align="right" valign="top">Result&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#a0ab33ee09ec1d007e2421566fdef78ff">hal::xilinx_toolbox::split_shift_register</a> (Gate *g, bool create_module=false)</td></tr>
+<tr class="memdesc:a0ab33ee09ec1d007e2421566fdef78ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a single shift register primitive into an equivalent chain of <code>FDCE</code> flip-flops.  <a href="namespacehal_1_1xilinx__toolbox.html#a0ab33ee09ec1d007e2421566fdef78ff">More...</a><br /></td></tr>
+<tr class="separator:a0ab33ee09ec1d007e2421566fdef78ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e87979ae869530f44c7b4e8fda7d6de"><td class="memItemLeft" align="right" valign="top">Result&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#a8e87979ae869530f44c7b4e8fda7d6de">hal::xilinx_toolbox::split_shift_registers</a> (const std::vector&lt; Gate * &gt; &amp;gates, bool create_module=false)</td></tr>
+<tr class="memdesc:a8e87979ae869530f44c7b4e8fda7d6de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a set of shift register primitives into equivalent <code>FDCE</code> flip-flop chains.  <a href="namespacehal_1_1xilinx__toolbox.html#a8e87979ae869530f44c7b4e8fda7d6de">More...</a><br /></td></tr>
+<tr class="separator:a8e87979ae869530f44c7b4e8fda7d6de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a834c4a47d9fc627bb1dec4ae711f51a0"><td class="memItemLeft" align="right" valign="top">Result&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#a834c4a47d9fc627bb1dec4ae711f51a0">hal::xilinx_toolbox::split_shift_registers</a> (Netlist *nl, const std::vector&lt; Gate * &gt; &amp;gates={}, bool create_module=false)</td></tr>
+<tr class="memdesc:a834c4a47d9fc627bb1dec4ae711f51a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split the shift register primitives of the netlist, or of the given gates, into <code>FDCE</code> flip-flop chains.  <a href="namespacehal_1_1xilinx__toolbox.html#a834c4a47d9fc627bb1dec4ae711f51a0">More...</a><br /></td></tr>
+<tr class="separator:a834c4a47d9fc627bb1dec4ae711f51a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10a671ffba408be19f47837793e2c615"><td class="memItemLeft" align="right" valign="top">Result&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1xilinx__toolbox.html#a10a671ffba408be19f47837793e2c615">hal::xilinx_toolbox::remove_no_load_wires</a> (Netlist *nl, const std::vector&lt; Net * &gt; &amp;nets={})</td></tr>
 <tr class="memdesc:a10a671ffba408be19f47837793e2c615"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove the "no load wire" nets that Vivado writes for unused output pins.  <a href="namespacehal_1_1xilinx__toolbox.html#a10a671ffba408be19f47837793e2c615">More...</a><br /></td></tr>
 <tr class="separator:a10a671ffba408be19f47837793e2c615"><td class="memSeparator" colspan="2">&#160;</td></tr>

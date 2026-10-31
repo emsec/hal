@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -99,10 +99,10 @@ Inheritance diagram for hal::DataContainer:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_data_container__inherit__graph.png" border="0" usemap="#ahal_1_1_data_container_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_data_container_inherit__map" id="ahal_1_1_data_container_inherit__map">
-<area shape="rect" title=" " alt="" coords="139,5,291,156"/>
-<area shape="rect" href="classhal_1_1_gate.html" title=" " alt="" coords="5,204,129,355"/>
-<area shape="rect" href="classhal_1_1_module.html" title=" " alt="" coords="153,204,277,355"/>
-<area shape="rect" href="classhal_1_1_net.html" title=" " alt="" coords="301,204,425,355"/>
+<area shape="rect" title=" " alt="" coords="139,5,291,171"/>
+<area shape="rect" href="classhal_1_1_gate.html" title=" " alt="" coords="5,219,129,369"/>
+<area shape="rect" href="classhal_1_1_module.html" title=" " alt="" coords="153,219,277,369"/>
+<area shape="rect" href="classhal_1_1_net.html" title=" " alt="" coords="301,219,425,369"/>
 </map>
 </div>
 <div class="dynheader">
@@ -110,7 +110,7 @@ Collaboration diagram for hal::DataContainer:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_data_container__coll__graph.png" border="0" usemap="#ahal_1_1_data_container_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1_data_container_coll__map" id="ahal_1_1_data_container_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,157,156"/>
+<area shape="rect" title=" " alt="" coords="5,5,157,171"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -136,16 +136,34 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1067630aa486e2a76391c0572d263a24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc65cb7d330fb44e2c9cf92523832b5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#adc65cb7d330fb44e2c9cf92523832b5e">set_data_map</a> (const std::map&lt; std::tuple&lt; std::string, std::string &gt;, std::tuple&lt; std::string, std::string &gt;&gt; &amp;map)</td></tr>
 <tr class="separator:adc65cb7d330fb44e2c9cf92523832b5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac73aa4c9776d0462ca9a85a79018af12"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#ac73aa4c9776d0462ca9a85a79018af12">set_parameter</a> (const <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &amp;param, const std::string &amp;value)</td></tr>
+<tr class="separator:ac73aa4c9776d0462ca9a85a79018af12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b9ee0904e74514fb9a0777136984abb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#a4b9ee0904e74514fb9a0777136984abb">get_parameter_value</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) const</td></tr>
+<tr class="separator:a4b9ee0904e74514fb9a0777136984abb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d4f68cd46bbbda31668975aaa03f1fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#a7d4f68cd46bbbda31668975aaa03f1fa">get_parameter_value</a> (const <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) const</td></tr>
+<tr class="separator:a7d4f68cd46bbbda31668975aaa03f1fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab54a78f7e902a8f23280839aea249da6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#ab54a78f7e902a8f23280839aea249da6">get_parameter_declaration</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) const</td></tr>
+<tr class="separator:ab54a78f7e902a8f23280839aea249da6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cf370b3380ec96e7811ae5a77402eb8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#a9cf370b3380ec96e7811ae5a77402eb8">has_parameter</a> (const <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &amp;param) const</td></tr>
+<tr class="separator:a9cf370b3380ec96e7811ae5a77402eb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff2a7863149f6b75b7d570e4a1184a4c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#aff2a7863149f6b75b7d570e4a1184a4c">has_parameter</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) const</td></tr>
+<tr class="separator:aff2a7863149f6b75b7d570e4a1184a4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7c7012b4a05be1e074c2772812da3ff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#af7c7012b4a05be1e074c2772812da3ff">delete_parameter</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="separator:af7c7012b4a05be1e074c2772812da3ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa93f7978c76136f1059a79483c39798b"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, std::pair&lt; <a class="el" href="structhal_1_1_parameter.html">Parameter</a>, std::string &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#aa93f7978c76136f1059a79483c39798b">get_parameters</a> () const</td></tr>
+<tr class="separator:aa93f7978c76136f1059a79483c39798b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a379e3abc9ed3ff7e624564785d5425b6"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::tuple&lt; std::string, std::string &gt;, std::tuple&lt; std::string, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#a379e3abc9ed3ff7e624564785d5425b6">m_data</a></td></tr>
 <tr class="separator:a379e3abc9ed3ff7e624564785d5425b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c278569bcbd4f197e9b1d836f7d5de8"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::pair&lt; <a class="el" href="structhal_1_1_parameter.html">Parameter</a>, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_data_container.html#a8c278569bcbd4f197e9b1d836f7d5de8">m_parameters</a></td></tr>
+<tr class="separator:a8c278569bcbd4f197e9b1d836f7d5de8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Container to hold data that is associated with an entity. </p>
 
-<p class="definition">Definition at line <a class="el" href="data__container_8h_source.html#l00041">41</a> of file <a class="el" href="data__container_8h_source.html">data_container.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="data__container_8h_source.html#l00045">45</a> of file <a class="el" href="data__container_8h_source.html">data_container.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a268c27a803da43b036ac0d324dfd31c9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a268c27a803da43b036ac0d324dfd31c9">&#9670;&nbsp;</a></span>DataContainer()</h2>
@@ -241,11 +259,43 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00041">41</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00063">63</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="data__container_8h_source.html#l00123">m_data</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="data__container_8h_source.html#l00192">m_data</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, and <a class="el" href="action__set__object__data_8cpp_source.html#l00021">hal::ActionSetObjectData::exec()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, and <a class="el" href="action__set__object__data_8cpp_source.html#l00026">hal::ActionSetObjectData::exec()</a>.</p>
+
+</div>
+</div>
+<a id="af7c7012b4a05be1e074c2772812da3ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7c7012b4a05be1e074c2772812da3ff">&#9670;&nbsp;</a></span>delete_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::DataContainer::delete_parameter </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Delete an explicitly stored parameter value, if any.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The parameter name. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if a value was deleted, <code>false</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00196">196</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="data__container_8h_source.html#l00193">m_parameters</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, and <a class="el" href="action__set__parameter__value_8cpp_source.html#l00023">hal::ActionSetParameterValue::exec()</a>.</p>
 
 </div>
 </div>
@@ -284,11 +334,11 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The tuple ((1) type, (2) value). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00097">97</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00119">119</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="data__container_8h_source.html#l00123">m_data</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="data__container_8h_source.html#l00192">m_data</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, <a class="el" href="action__set__object__data_8cpp_source.html#l00021">hal::ActionSetObjectData::exec()</a>, and <a class="el" href="clock__tree_8cpp_source.html#l00425">hal::cte::ClockTree::export_dot()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, <a class="el" href="clock__tree_8cpp_source.html#l00425">hal::cte::ClockTree::export_dot()</a>, and <a class="el" href="data__table__entry_8cpp_source.html#l00026">hal::DataTableEntry::fromContainer()</a>.</p>
 
 </div>
 </div>
@@ -309,11 +359,130 @@ Protected Attributes</h2></td></tr>
 <p>Get a map from ((1) category, (2) key) to ((1) type, (2) value) containing all stored data entries.</p>
 <dl class="section return"><dt>Returns</dt><dd>The stored data as a map. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00072">72</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00094">94</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="data__container_8h_source.html#l00123">m_data</a>.</p>
+<p class="reference">References <a class="el" href="data__container_8h_source.html#l00192">m_data</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, <a class="el" href="coordinate__from__data_8cpp_source.html#l00015">hal::CoordinateFromData::fromNode()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00007">operator==()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00031">hal::NetlistModificationDecorator::replace_gate()</a>, <a class="el" href="data__table__widget_8cpp_source.html#l00037">hal::DataTableWidget::setGate()</a>, and <a class="el" href="data__table__widget_8cpp_source.html#l00061">hal::DataTableWidget::setModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, <a class="el" href="coordinate__from__data_8cpp_source.html#l00015">hal::CoordinateFromData::fromNode()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00029">operator==()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00031">hal::NetlistModificationDecorator::replace_gate()</a>, <a class="el" href="data__table__widget_8cpp_source.html#l00062">hal::DataTableWidget::setGate()</a>, and <a class="el" href="data__table__widget_8cpp_source.html#l00086">hal::DataTableWidget::setModule()</a>.</p>
+
+</div>
+</div>
+<a id="ab54a78f7e902a8f23280839aea249da6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab54a78f7e902a8f23280839aea249da6">&#9670;&nbsp;</a></span>get_parameter_declaration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &gt; hal::DataContainer::get_parameter_declaration </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the full declaration of a typed parameter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The parameter name. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK()</a> with the declaration on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00175">175</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="data__container_8h_source.html#l00193">m_parameters</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="action__set__parameter__value_8cpp_source.html#l00023">hal::ActionSetParameterValue::exec()</a>.</p>
+
+</div>
+</div>
+<a id="a7d4f68cd46bbbda31668975aaa03f1fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d4f68cd46bbbda31668975aaa03f1fa">&#9670;&nbsp;</a></span>get_parameter_value() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt; hal::DataContainer::get_parameter_value </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the value of a typed parameter. Returns the explicitly-stored value or an error if the parameter does not exist.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">param</td><td>- The parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK()</a> with the value string on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00159">159</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2parameter_8cpp_source.html#l00294">hal::Parameter::get_name()</a>, <a class="el" href="data__container_8h_source.html#l00193">m_parameters</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+
+</div>
+</div>
+<a id="a4b9ee0904e74514fb9a0777136984abb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b9ee0904e74514fb9a0777136984abb">&#9670;&nbsp;</a></span>get_parameter_value() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt; hal::DataContainer::get_parameter_value </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the value of a typed parameter. Returns the explicitly-stored value or an error if the parameter does not exist.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The parameter name. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK()</a> with the value string on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00149">149</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="data__container_8h_source.html#l00193">m_parameters</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="action__set__parameter__value_8cpp_source.html#l00023">hal::ActionSetParameterValue::exec()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00222">hal::xilinx_toolbox::split_shift_register()</a>.</p>
+
+</div>
+</div>
+<a id="aa93f7978c76136f1059a79483c39798b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa93f7978c76136f1059a79483c39798b">&#9670;&nbsp;</a></span>get_parameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::unordered_map&lt; std::string, std::pair&lt; <a class="el" href="structhal_1_1_parameter.html">Parameter</a>, std::string &gt; &gt; &amp; hal::DataContainer::get_parameters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get all explicitly stored parameters as a map from <code>name</code> to <code>(declaration, value)</code>.</p>
+<dl class="section return"><dt>Returns</dt><dd>The parameter map. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00201">201</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="data__container_8h_source.html#l00193">m_parameters</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00029">operator==()</a>, and <a class="el" href="parameter__table__model_8cpp_source.html#l00080">hal::ParameterTableModel::updateData()</a>.</p>
 
 </div>
 </div>
@@ -352,11 +521,73 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the entry exists, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00082">82</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00104">104</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="data__container_8h_source.html#l00123">m_data</a>.</p>
+<p class="reference">References <a class="el" href="data__container_8h_source.html#l00192">m_data</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, and <a class="el" href="action__set__object__data_8cpp_source.html#l00021">hal::ActionSetObjectData::exec()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, and <a class="el" href="data__table__entry_8cpp_source.html#l00026">hal::DataTableEntry::fromContainer()</a>.</p>
+
+</div>
+</div>
+<a id="a9cf370b3380ec96e7811ae5a77402eb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cf370b3380ec96e7811ae5a77402eb8">&#9670;&nbsp;</a></span>has_parameter() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::DataContainer::has_parameter </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &amp;&#160;</td>
+          <td class="paramname"><em>param</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check whether a parameter exists and has an explicitly stored value.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">param</td><td>- The parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the parameter is explicitly set, <code>false</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00190">190</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2parameter_8cpp_source.html#l00294">hal::Parameter::get_name()</a>, and <a class="el" href="data__container_8h_source.html#l00193">m_parameters</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, <a class="el" href="action__set__parameter__value_8cpp_source.html#l00023">hal::ActionSetParameterValue::exec()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00222">hal::xilinx_toolbox::split_shift_register()</a>.</p>
+
+</div>
+</div>
+<a id="aff2a7863149f6b75b7d570e4a1184a4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff2a7863149f6b75b7d570e4a1184a4c">&#9670;&nbsp;</a></span>has_parameter() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::DataContainer::has_parameter </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check whether a parameter with the given name exists and has an explicitly stored value.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The parameter name. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the parameter is explicitly set, <code>false</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00185">185</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="data__container_8h_source.html#l00193">m_parameters</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
 </div>
 </div>
@@ -384,9 +615,9 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if both data containers are unequal, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00012">12</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00034">34</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2data__container_8cpp_source.html#l00007">operator==()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2data__container_8cpp_source.html#l00029">operator==()</a>.</p>
 
 </div>
 </div>
@@ -414,11 +645,11 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if both data containers are equal, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00007">7</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00029">29</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2data__container_8cpp_source.html#l00072">get_data_map()</a>, and <a class="el" href="data__container_8h_source.html#l00123">m_data</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2data__container_8cpp_source.html#l00094">get_data_map()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00201">get_parameters()</a>, <a class="el" href="data__container_8h_source.html#l00192">m_data</a>, and <a class="el" href="data__container_8h_source.html#l00193">m_parameters</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2data__container_8cpp_source.html#l00012">operator!=()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2data__container_8cpp_source.html#l00034">operator!=()</a>.</p>
 
 </div>
 </div>
@@ -479,11 +710,11 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00017">17</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00039">39</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="data__container_8h_source.html#l00123">m_data</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="data__container_8h_source.html#l00192">m_data</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__identification_2src_2api_2result_8cpp_source.html#l00426">hal::module_identification::Result::create_modules_in_netlist()</a>, <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, <a class="el" href="action__set__object__data_8cpp_source.html#l00021">hal::ActionSetObjectData::exec()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00039">hal::xilinx_toolbox::split_luts()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__identification_2src_2api_2result_8cpp_source.html#l00426">hal::module_identification::Result::create_modules_in_netlist()</a>, <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, <a class="el" href="preprocessing_8cpp_source.html#l00078">hal::xilinx_toolbox::split_lut()</a>, and <a class="el" href="data__table__entry_8cpp_source.html#l00036">hal::DataTableEntry::toContainer()</a>.</p>
 
 </div>
 </div>
@@ -510,11 +741,54 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00077">77</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00099">99</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="data__container_8h_source.html#l00123">m_data</a>.</p>
+<p class="reference">References <a class="el" href="data__container_8h_source.html#l00192">m_data</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, and <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00031">hal::NetlistModificationDecorator::replace_gate()</a>.</p>
+
+</div>
+</div>
+<a id="ac73aa4c9776d0462ca9a85a79018af12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac73aa4c9776d0462ca9a85a79018af12">&#9670;&nbsp;</a></span>set_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt; hal::DataContainer::set_parameter </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &amp;&#160;</td>
+          <td class="paramname"><em>param</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set (or overwrite) the value of a typed parameter as a string. The value is validated and normalized before being stored. Any existing entry with the same name is replaced.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">param</td><td>- The parameter declaration. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>- The value to store as a string. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK()</a> on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00136">136</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2parameter_8cpp_source.html#l00294">hal::Parameter::get_name()</a>, <a class="el" href="netlist_2parameter_8cpp_source.html#l00299">hal::Parameter::get_type()</a>, <a class="el" href="data__container_8h_source.html#l00193">m_parameters</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="netlist_2parameter_8cpp_source.html#l00505">hal::Parameter::validate()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, <a class="el" href="action__set__parameter__value_8cpp_source.html#l00023">hal::ActionSetParameterValue::exec()</a>, and <a class="el" href="lut__component_8cpp_source.html#l00233">hal::LUTComponent::set_init_string()</a>.</p>
 
 </div>
 </div>
@@ -539,9 +813,35 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="data__container_8h_source.html#l00123">123</a> of file <a class="el" href="data__container_8h_source.html">data_container.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="data__container_8h_source.html#l00192">192</a> of file <a class="el" href="data__container_8h_source.html">data_container.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2data__container_8cpp_source.html#l00041">delete_data()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00097">get_data()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00072">get_data_map()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00082">has_data()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00007">operator==()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00017">set_data()</a>, and <a class="el" href="netlist_2data__container_8cpp_source.html#l00077">set_data_map()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2data__container_8cpp_source.html#l00063">delete_data()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00119">get_data()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00094">get_data_map()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00104">has_data()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00029">operator==()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00039">set_data()</a>, and <a class="el" href="netlist_2data__container_8cpp_source.html#l00099">set_data_map()</a>.</p>
+
+</div>
+</div>
+<a id="a8c278569bcbd4f197e9b1d836f7d5de8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c278569bcbd4f197e9b1d836f7d5de8">&#9670;&nbsp;</a></span>m_parameters</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;std::string, std::pair&lt;<a class="el" href="structhal_1_1_parameter.html">Parameter</a>, std::string&gt; &gt; hal::DataContainer::m_parameters</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="data__container_8h_source.html#l00193">193</a> of file <a class="el" href="data__container_8h_source.html">data_container.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2data__container_8cpp_source.html#l00196">delete_parameter()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00175">get_parameter_declaration()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00149">get_parameter_value()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00201">get_parameters()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00185">has_parameter()</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00029">operator==()</a>, and <a class="el" href="netlist_2data__container_8cpp_source.html#l00136">set_parameter()</a>.</p>
 
 </div>
 </div>

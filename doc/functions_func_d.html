@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -112,6 +112,7 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 , <a class="el" href="classhal_1_1_module_select_entry.html#a48b6fbeea6eea03d4319cc7a8682384c">hal::ModuleSelectEntry</a>
 , <a class="el" href="classhal_1_1_module_select_model.html#aabb33c42e8577fc8e745dcdbdc0d073f">hal::ModuleSelectModel</a>
 , <a class="el" href="classhal_1_1_module_table_model.html#a6f44d9e5eb5453e54b70285e09c9e20a">hal::ModuleTableModel</a>
+, <a class="el" href="classhal_1_1_parameter_table_model.html#abe823882e8418ff2314be87be6ab012e">hal::ParameterTableModel</a>
 , <a class="el" href="classhal_1_1_select_gate_model.html#a50a7aa39ac724da7ade9f2d072258fb3">hal::SelectGateModel</a>
 , <a class="el" href="classhal_1_1_wave_data.html#aaa61665bed404bd8320f2463b53ab99c">hal::WaveData</a>
 , <a class="el" href="classhal_1_1_wave_edit_table.html#a9928cb2c15b5c63e81415ec911aa7bf9">hal::WaveEditTable</a>
@@ -123,6 +124,9 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 </li>
 <li>DataContainer()
 : <a class="el" href="classhal_1_1_data_container.html#a268c27a803da43b036ac0d324dfd31c9">hal::DataContainer</a>
+</li>
+<li>DataEntryDialog()
+: <a class="el" href="classhal_1_1_data_entry_dialog.html#ac8567099b679330f08e2c7e5c0afec8a">hal::DataEntryDialog</a>
 </li>
 <li>dataFileIndex()
 : <a class="el" href="classhal_1_1_saleae_directory_net_entry.html#a03eaa3c69373936ab8ce2e95305df06a">hal::SaleaeDirectoryNetEntry</a>
@@ -142,6 +146,9 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 <li>dataMap()
 : <a class="el" href="classhal_1_1_wave_data_provider_file.html#a7305ab83e78667de3728b181f2c052d8">hal::WaveDataProviderFile</a>
 , <a class="el" href="classhal_1_1_wave_edit_dialog.html#aa50616c471d18a1e5a1a60cb4873e1ed">hal::WaveEditDialog</a>
+</li>
+<li>DataTableEntry()
+: <a class="el" href="classhal_1_1_data_table_entry.html#a54ee41a8e6cac8c619972fd1bcf18096">hal::DataTableEntry</a>
 </li>
 <li>DataTableModel()
 : <a class="el" href="classhal_1_1_data_table_model.html#a08b70f2dcd41cf19c8a0d533568fb9b9">hal::DataTableModel</a>
@@ -210,7 +217,7 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 : <a class="el" href="classhal_1_1_data_container.html#ad982665a18a25310ea22abf141dd9b65">hal::DataContainer</a>
 </li>
 <li>delete_edges()
-: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#ad288320ab6a9207742ff581afa2cb931">hal::graph_algorithm::NetlistGraph</a>
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#ad9ac753041fa357f528f7f705cceb7b3">hal::graph_algorithm::NetlistGraph</a>
 </li>
 <li>delete_extension()
 : <a class="el" href="classhal_1_1_base_plugin_interface.html#a2dc79d5a3ef50879122293dc434b0acb">hal::BasePluginInterface</a>
@@ -229,6 +236,9 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 </li>
 <li>delete_net()
 : <a class="el" href="classhal_1_1_netlist.html#a3c2fbba09aa1857d44790bbd16c9df4e">hal::Netlist</a>
+</li>
+<li>delete_parameter()
+: <a class="el" href="classhal_1_1_data_container.html#af7c7012b4a05be1e074c2772812da3ff">hal::DataContainer</a>
 </li>
 <li>delete_pin_group()
 : <a class="el" href="classhal_1_1_gate_type.html#a2a69cb567a7a80212de76a70daa28414">hal::GateType</a>
@@ -306,7 +316,7 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 : <a class="el" href="classhal_1_1_settings_item.html#acf784ad49fbab1403082b7e14cf4751f">hal::SettingsItem</a>
 </li>
 <li>deselect()
-: <a class="el" href="classhal_1_1_gui_api.html#a51cad0af92d062917c3627e801c23295">hal::GuiApi</a>
+: <a class="el" href="classhal_1_1_gui_api.html#a3717d5a140273ac5c2c014b51618dc71">hal::GuiApi</a>
 </li>
 <li>deselectAllItems()
 : <a class="el" href="classhal_1_1_gui_api.html#a244fb080ad7dc733cfb0d245f53964d2">hal::GuiApi</a>
@@ -427,7 +437,7 @@ $(document).ready(function(){initNavTree('functions_func_d.html',''); initResiza
 </li>
 <li>distance()
 : <a class="el" href="classhal_1_1_shadow_effect.html#ab56f5f6b7db4514690eee7a2031203e9">hal::ShadowEffect</a>
-, <a class="el" href="classhal_1_1_wait_to_be_seated_entry.html#a914af9fe2f87682ea758c23ae509d248">hal::WaitToBeSeatedEntry</a>
+, <a class="el" href="classhal_1_1_wait_to_be_seated_entry.html#a9573fa7d0d11ee914c759d78a78df175">hal::WaitToBeSeatedEntry</a>
 </li>
 <li>distanceTo()
 : <a class="el" href="classhal_1_1_net_layout_point.html#a852f2acc5385430ba2bc8254f5fc99a6">hal::NetLayoutPoint</a>

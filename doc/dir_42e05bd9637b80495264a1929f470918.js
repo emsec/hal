@@ -6,5 +6,8 @@ var dir_42e05bd9637b80495264a1929f470918 =
     [ "gate_pin_tree.cpp", "gate__pin__tree_8cpp.html", null ],
     [ "gate_pins_tree_model.cpp", "gate__pins__tree__model_8cpp.html", null ],
     [ "lut_table_model.cpp", "lut__table__model_8cpp.html", null ],
-    [ "lut_table_widget.cpp", "lut__table__widget_8cpp.html", null ]
+    [ "lut_table_widget.cpp", "lut__table__widget_8cpp.html", null ],
+    [ "parameter_table_model.cpp", "parameter__table__model_8cpp.html", null ],
+    [ "parameter_table_widget.cpp", "parameter__table__widget_8cpp.html", null ],
+    [ "parameter_value_delegate.cpp", "parameter__value__delegate_8cpp.html", null ]
 ];

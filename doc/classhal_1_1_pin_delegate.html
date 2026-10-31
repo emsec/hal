@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -372,7 +372,7 @@ Additional Inherited Members</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Renders and edits the cells of the pin tree, e.g., the direction and type drop-downs. </p>
 
-<p class="definition">Definition at line <a class="el" href="pin__delegate_8h_source.html#l00040">40</a> of file <a class="el" href="pin__delegate_8h_source.html">pin_delegate.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__delegate_8h_source.html#l00041">41</a> of file <a class="el" href="pin__delegate_8h_source.html">pin_delegate.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a15163ba5616ae55a5767e431924bf5bb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a15163ba5616ae55a5767e431924bf5bb">&#9670;&nbsp;</a></span>PinDelegate()</h2>
@@ -445,9 +445,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qstyleditemdelegate.html#createEditor">QStyledItemDelegate</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="pin__delegate_8cpp_source.html#l00023">23</a> of file <a class="el" href="pin__delegate_8cpp_source.html">pin_delegate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__delegate_8cpp_source.html#l00051">51</a> of file <a class="el" href="pin__delegate_8cpp_source.html">pin_delegate.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0abfe477728a184280c09927de64f686c1">hal::PinItem::GroupCreator</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02085">index</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0af53de679c43434f3405ee2a34e0b1878">hal::PinItem::PinCreator</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FocusPolicy-enum">Qt::StrongFocus</a>.</p>
+<p class="reference">References <a class="el" href="pin__item_8cpp_source.html#l00096">hal::PinItem::getDirection()</a>, <a class="el" href="pin__item_8cpp_source.html#l00132">hal::PinItem::getItemType()</a>, <a class="el" href="pin__item_8cpp_source.html#l00086">hal::PinItem::getPinType()</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0abfe477728a184280c09927de64f686c1">hal::PinItem::GroupCreator</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02099">index</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bab56efdaa67baedcc830a453ecd15b37f">hal::lut</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0af53de679c43434f3405ee2a34e0b1878">hal::PinItem::PinCreator</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FocusPolicy-enum">Qt::StrongFocus</a>.</p>
 
 </div>
 </div>
@@ -493,9 +493,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qstyleditemdelegate.html#paint">QStyledItemDelegate</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="pin__delegate_8cpp_source.html#l00166">166</a> of file <a class="el" href="pin__delegate_8cpp_source.html">pin_delegate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__delegate_8cpp_source.html#l00200">200</a> of file <a class="el" href="pin__delegate_8cpp_source.html">pin_delegate.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#GlobalColor-enum">Qt::darkRed</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html#fillRect">QPainter::fillRect()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02085">index</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0a15e8ea99c1beb5d737b8685f4480c9e5">hal::PinItem::InvalidPin</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0a7aaa3625d9cf94c8645bcb3a377a5cde">hal::PinItem::InvalidPinGroup</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstyleditemdelegate.html#paint">QStyledItemDelegate::paint()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#GlobalColor-enum">Qt::darkRed</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html#fillRect">QPainter::fillRect()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02099">index</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0a15e8ea99c1beb5d737b8685f4480c9e5">hal::PinItem::InvalidPin</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0a7aaa3625d9cf94c8645bcb3a377a5cde">hal::PinItem::InvalidPinGroup</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstyleditemdelegate.html#paint">QStyledItemDelegate::paint()</a>.</p>
 
 </div>
 </div>
@@ -535,9 +535,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qstyleditemdelegate.html#setEditorData">QStyledItemDelegate</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="pin__delegate_8cpp_source.html#l00083">83</a> of file <a class="el" href="pin__delegate_8cpp_source.html">pin_delegate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__delegate_8cpp_source.html#l00117">117</a> of file <a class="el" href="pin__delegate_8cpp_source.html">pin_delegate.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="pin__item_8cpp_source.html#l00132">hal::PinItem::getItemType()</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0abfe477728a184280c09927de64f686c1">hal::PinItem::GroupCreator</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02085">index</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0a15e8ea99c1beb5d737b8685f4480c9e5">hal::PinItem::InvalidPin</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0ae78e14c5f18f793bdcd4726766f0fa44">hal::PinItem::Pin</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0af53de679c43434f3405ee2a34e0b1878">hal::PinItem::PinCreator</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#currentText-prop">QComboBox::setCurrentText()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#text-prop">QLineEdit::setText()</a>.</p>
+<p class="reference">References <a class="el" href="pin__item_8cpp_source.html#l00132">hal::PinItem::getItemType()</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0abfe477728a184280c09927de64f686c1">hal::PinItem::GroupCreator</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02099">index</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0a15e8ea99c1beb5d737b8685f4480c9e5">hal::PinItem::InvalidPin</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0ae78e14c5f18f793bdcd4726766f0fa44">hal::PinItem::Pin</a>, <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0af53de679c43434f3405ee2a34e0b1878">hal::PinItem::PinCreator</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#currentText-prop">QComboBox::setCurrentText()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#text-prop">QLineEdit::setText()</a>.</p>
 
 </div>
 </div>
@@ -583,9 +583,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qstyleditemdelegate.html#setModelData">QStyledItemDelegate</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="pin__delegate_8cpp_source.html#l00120">120</a> of file <a class="el" href="pin__delegate_8cpp_source.html">pin_delegate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__delegate_8cpp_source.html#l00154">154</a> of file <a class="el" href="pin__delegate_8cpp_source.html">pin_delegate.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0abfe477728a184280c09927de64f686c1">hal::PinItem::GroupCreator</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02085">index</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, and <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0af53de679c43434f3405ee2a34e0b1878">hal::PinItem::PinCreator</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0abfe477728a184280c09927de64f686c1">hal::PinItem::GroupCreator</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02099">index</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, and <a class="el" href="classhal_1_1_pin_item.html#aeab1154647b47f7aa72b28a1f3daafb0af53de679c43434f3405ee2a34e0b1878">hal::PinItem::PinCreator</a>.</p>
 
 </div>
 </div>
@@ -631,7 +631,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qstyleditemdelegate.html#updateEditorGeometry">QStyledItemDelegate</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="pin__delegate_8cpp_source.html#l00160">160</a> of file <a class="el" href="pin__delegate_8cpp_source.html">pin_delegate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__delegate_8cpp_source.html#l00194">194</a> of file <a class="el" href="pin__delegate_8cpp_source.html">pin_delegate.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setGeometry-1">QWidget::setGeometry()</a>.</p>
 

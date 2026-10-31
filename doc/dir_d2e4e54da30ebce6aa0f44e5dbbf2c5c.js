@@ -12,5 +12,8 @@ var dir_d2e4e54da30ebce6aa0f44e5dbbf2c5c =
       [ "GatePinsTreeItem", "classhal_1_1_gate_pins_tree_item.html", "classhal_1_1_gate_pins_tree_item" ]
     ] ],
     [ "lut_table_model.h", "lut__table__model_8h.html", null ],
-    [ "lut_table_widget.h", "lut__table__widget_8h.html", null ]
+    [ "lut_table_widget.h", "lut__table__widget_8h.html", null ],
+    [ "parameter_table_model.h", "parameter__table__model_8h.html", null ],
+    [ "parameter_table_widget.h", "parameter__table__widget_8h.html", null ],
+    [ "parameter_value_delegate.h", "parameter__value__delegate_8h.html", null ]
 ];

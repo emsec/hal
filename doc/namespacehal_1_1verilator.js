@@ -10,7 +10,7 @@ var namespacehal_1_1verilator =
       [ "get_function_for_lut", "namespacehal_1_1verilator_1_1converter.html#a74769f5d000b78e2d5722cff77582026", null ],
       [ "get_gate_gate_types_from_netlist", "namespacehal_1_1verilator_1_1converter.html#ab2dcca0fdd663859cd2e362b4c462c60", null ],
       [ "get_name_for_gate_type", "namespacehal_1_1verilator_1_1converter.html#af86533da69bd3758f69e8ee30855f217", null ],
-      [ "get_parameters_for_gate", "namespacehal_1_1verilator_1_1converter.html#a1bc01790846e968e248ca57d4d266985", null ],
+      [ "get_parameters_for_gate", "namespacehal_1_1verilator_1_1converter.html#a564494d428078d09e79cfe9f71c4658e", null ],
       [ "get_prologue_for_gate_type", "namespacehal_1_1verilator_1_1converter.html#a4a948d01fd415e91da335f494e364233", null ],
       [ "get_provided_models", "namespacehal_1_1verilator_1_1converter.html#ae6b1b1f8dd98c166cbe6394fe88bb5da", null ],
       [ "verilog_function_printer", "namespacehal_1_1verilator_1_1converter.html#a9eac662c5db2cc1b334489ed475a78c6", null ]

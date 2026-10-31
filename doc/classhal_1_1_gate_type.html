@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -190,6 +190,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af14f2febe7d501c08291f38f68c97869"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab844cc0777899ae022db1e2cc30355b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#ab844cc0777899ae022db1e2cc30355b9">get_boolean_function</a> (const <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> *pin=nullptr) const</td></tr>
 <tr class="separator:ab844cc0777899ae022db1e2cc30355b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8173f701a34fd64eb58f9850b7d11a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#ad8173f701a34fd64eb58f9850b7d11a6">add_parameter</a> (const <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &amp;param)</td></tr>
+<tr class="separator:ad8173f701a34fd64eb58f9850b7d11a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1478de0d02e13b545bc64b6a25ebe45"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#ad1478de0d02e13b545bc64b6a25ebe45">get_parameters</a> () const</td></tr>
+<tr class="separator:ad1478de0d02e13b545bc64b6a25ebe45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f7a4a4f5ebf24633b9d2fbc75d48945"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a9f7a4a4f5ebf24633b9d2fbc75d48945">get_parameter</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) const</td></tr>
+<tr class="separator:a9f7a4a4f5ebf24633b9d2fbc75d48945"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39b94ed60cceac3b97966cea3e715a74"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type.html#a39b94ed60cceac3b97966cea3e715a74">has_parameter</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) const</td></tr>
+<tr class="separator:a39b94ed60cceac3b97966cea3e715a74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -272,7 +280,37 @@ Friends</h2></td></tr>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gatelibrary__wizard_8cpp_source.html#l00085">hal::GateLibraryWizard::accept()</a>, and <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gatelibrary__wizard_8cpp_source.html#l00089">hal::GateLibraryWizard::accept()</a>, and <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
+
+</div>
+</div>
+<a id="ad8173f701a34fd64eb58f9850b7d11a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8173f701a34fd64eb58f9850b7d11a6">&#9670;&nbsp;</a></span>add_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt; hal::GateType::add_parameter </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &amp;&#160;</td>
+          <td class="paramname"><em>param</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Declare a typed parameter on this gate type.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">param</td><td>- The parameter declaration. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK()</a> on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00751">751</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2parameter_8cpp_source.html#l00294">hal::Parameter::get_name()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -468,7 +506,7 @@ Friends</h2></td></tr>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, <a class="el" href="enums_8h_source.html#l00053">hal::enum_to_string()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00064">ERR_APPEND</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">id</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gatelibrary__wizard_8cpp_source.html#l00085">hal::GateLibraryWizard::accept()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gatelibrary__wizard_8cpp_source.html#l00089">hal::GateLibraryWizard::accept()</a>.</p>
 
 </div>
 </div>
@@ -629,7 +667,7 @@ Friends</h2></td></tr>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00067">ascending</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00064">ERR_APPEND</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00066">pins</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00068">start_index</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gatelibrary__wizard_8cpp_source.html#l00085">hal::GateLibraryWizard::accept()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gatelibrary__wizard_8cpp_source.html#l00089">hal::GateLibraryWizard::accept()</a>.</p>
 
 </div>
 </div>
@@ -744,7 +782,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00746">746</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="combinational__function_8cpp_source.html#l00019">hal::verilator::converter::get_function_for_combinational_gate()</a>, <a class="el" href="bool__wizardpage_8cpp_source.html#l00077">hal::BoolWizardPage::initializePage()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l00151">hal::netlist_preprocessing::remove_buffers()</a>, <a class="el" href="gatelibrary__tab__general_8cpp_source.html#l00069">hal::GatelibraryFrameBoolean::update()</a>, and <a class="el" href="genlib__writer_8cpp_source.html#l00021">hal::GenlibWriter::write()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="combinational__function_8cpp_source.html#l00019">hal::verilator::converter::get_function_for_combinational_gate()</a>, <a class="el" href="bool__wizardpage_8cpp_source.html#l00077">hal::BoolWizardPage::initializePage()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l00153">hal::netlist_preprocessing::remove_buffers()</a>, <a class="el" href="gatelibrary__tab__general_8cpp_source.html#l00069">hal::GatelibraryFrameBoolean::update()</a>, and <a class="el" href="genlib__writer_8cpp_source.html#l00021">hal::GenlibWriter::write()</a>.</p>
 
 </div>
 </div>
@@ -814,9 +852,9 @@ template&lt;typename T &gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="gate__type_8h_source.html#l00089">89</a> of file <a class="el" href="gate__type_8h_source.html">gate_type.h</a>.</p>
 
-<p class="reference">References <a class="el" href="gate__type__component_8h_source.html#l00153">hal::GateTypeComponent::convert_to()</a>, and <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
+<p class="reference">References <a class="el" href="gate__type__component_8h_source.html#l00074">hal::GateTypeComponent::convert_to()</a>, and <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="ff__function_8cpp_source.html#l00023">hal::verilator::converter::get_function_for_ff()</a>, <a class="el" href="latch__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_latch()</a>, <a class="el" href="lut__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_lut()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00177">hal::verilator::converter::get_parameters_for_gate()</a>, <a class="el" href="py__code__provider_8cpp_source.html#l00085">hal::PyCodeProvider::pyCodeGateAsyncSetResetBehavior()</a>, <a class="el" href="flipflop__wizardpage_8cpp_source.html#l00146">hal::FlipFlopWizardPage::setData()</a>, <a class="el" href="init__wizardpage_8cpp_source.html#l00036">hal::InitWizardPage::setData()</a>, <a class="el" href="latch__wizardpage_8cpp_source.html#l00053">hal::LatchWizardPage::setData()</a>, <a class="el" href="lut__wizardpage_8cpp_source.html#l00025">hal::LUTWizardPage::setData()</a>, <a class="el" href="ram__wizardpage_8cpp_source.html#l00025">hal::RAMWizardPage::setData()</a>, <a class="el" href="state__wizardpage_8cpp_source.html#l00041">hal::StateWizardPage::setData()</a>, <a class="el" href="gatelibrary__frame__ff_8cpp_source.html#l00029">hal::GatelibraryFrameFF::update()</a>, <a class="el" href="gatelibrary__frame__init_8cpp_source.html#l00020">hal::GatelibraryFrameInit::update()</a>, <a class="el" href="gatelibrary__frame__latch_8cpp_source.html#l00020">hal::GateLibraryFrameLatch::update()</a>, <a class="el" href="gatelibrary__frame__lut_8cpp_source.html#l00017">hal::GatelibraryFrameLut::update()</a>, <a class="el" href="gatelibrary__frame__ram_8cpp_source.html#l00018">hal::GateLibraryFrameRAM::update()</a>, <a class="el" href="gatelibrary__frame__state_8cpp_source.html#l00020">hal::GatelibraryFrameState::update()</a>, and <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00437">hal::GatelibraryLutInit::update()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="ff__function_8cpp_source.html#l00023">hal::verilator::converter::get_function_for_ff()</a>, <a class="el" href="latch__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_latch()</a>, <a class="el" href="lut__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_lut()</a>, <a class="el" href="py__code__provider_8cpp_source.html#l00085">hal::PyCodeProvider::pyCodeGateAsyncSetResetBehavior()</a>, <a class="el" href="flipflop__wizardpage_8cpp_source.html#l00146">hal::FlipFlopWizardPage::setData()</a>, <a class="el" href="init__wizardpage_8cpp_source.html#l00048">hal::InitWizardPage::setData()</a>, <a class="el" href="latch__wizardpage_8cpp_source.html#l00053">hal::LatchWizardPage::setData()</a>, <a class="el" href="lut__wizardpage_8cpp_source.html#l00045">hal::LUTWizardPage::setData()</a>, <a class="el" href="ram__wizardpage_8cpp_source.html#l00025">hal::RAMWizardPage::setData()</a>, <a class="el" href="state__wizardpage_8cpp_source.html#l00041">hal::StateWizardPage::setData()</a>, <a class="el" href="preprocessing_8cpp_source.html#l00078">hal::xilinx_toolbox::split_lut()</a>, <a class="el" href="gatelibrary__frame__ff_8cpp_source.html#l00029">hal::GatelibraryFrameFF::update()</a>, <a class="el" href="gatelibrary__frame__init_8cpp_source.html#l00020">hal::GatelibraryFrameInit::update()</a>, <a class="el" href="gatelibrary__frame__latch_8cpp_source.html#l00020">hal::GateLibraryFrameLatch::update()</a>, <a class="el" href="gatelibrary__frame__lut_8cpp_source.html#l00016">hal::GatelibraryFrameLut::update()</a>, <a class="el" href="gatelibrary__frame__ram_8cpp_source.html#l00018">hal::GateLibraryFrameRAM::update()</a>, <a class="el" href="gatelibrary__frame__state_8cpp_source.html#l00020">hal::GatelibraryFrameState::update()</a>, and <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00437">hal::GatelibraryLutInit::update()</a>.</p>
 
 </div>
 </div>
@@ -869,7 +907,7 @@ template&lt;typename T &gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00106">106</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00121">operator==()</a>, and <a class="el" href="netlist__preprocessing_8cpp_source.html#l02607">hal::netlist_preprocessing::unify_ff_outputs()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00121">operator==()</a>, and <a class="el" href="netlist__preprocessing_8cpp_source.html#l02621">hal::netlist_preprocessing::unify_ff_outputs()</a>.</p>
 
 </div>
 </div>
@@ -915,7 +953,7 @@ template&lt;typename T &gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00059">59</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gatelibrary__wizard_8cpp_source.html#l00085">hal::GateLibraryWizard::accept()</a>, <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00121">operator==()</a>, and <a class="el" href="gatelibrary__tab__general_8cpp_source.html#l00033">hal::GatelibraryFrameGeneral::update()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gatelibrary__wizard_8cpp_source.html#l00089">hal::GateLibraryWizard::accept()</a>, <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00121">operator==()</a>, and <a class="el" href="gatelibrary__tab__general_8cpp_source.html#l00033">hal::GatelibraryFrameGeneral::update()</a>.</p>
 
 </div>
 </div>
@@ -940,7 +978,7 @@ template&lt;typename T &gt; </div>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, and <a class="el" href="base__pin_8h_source.html#l00130">hal::BasePin&lt; T &gt;::get_direction()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l00151">hal::netlist_preprocessing::remove_buffers()</a>, and <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00261">hal::GateLibraryTabTruthTable::update()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l00153">hal::netlist_preprocessing::remove_buffers()</a>, and <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00261">hal::GateLibraryTabTruthTable::update()</a>.</p>
 
 </div>
 </div>
@@ -965,7 +1003,7 @@ template&lt;typename T &gt; </div>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, and <a class="el" href="base__pin_8h_source.html#l00130">hal::BasePin&lt; T &gt;::get_direction()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="lut__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_lut()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00177">hal::verilator::converter::get_parameters_for_gate()</a>, <a class="el" href="graphics__gate_8cpp_source.html#l00008">hal::GraphicsGate::GraphicsGate()</a>, <a class="el" href="gate__pin__tree_8cpp_source.html#l00093">hal::GatePinTree::handleContextMenuRequested()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00179">hal::GateLibrary::mark_gnd_gate_type()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00157">hal::GateLibrary::mark_vcc_gate_type()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00285">hal::SelectionRelay::navigateDown()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00192">hal::SelectionRelay::navigateUp()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02607">hal::netlist_preprocessing::unify_ff_outputs()</a>, <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00261">hal::GateLibraryTabTruthTable::update()</a>, and <a class="el" href="genlib__writer_8cpp_source.html#l00021">hal::GenlibWriter::write()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="graphics__gate_8cpp_source.html#l00008">hal::GraphicsGate::GraphicsGate()</a>, <a class="el" href="gate__pin__tree_8cpp_source.html#l00093">hal::GatePinTree::handleContextMenuRequested()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00179">hal::GateLibrary::mark_gnd_gate_type()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00157">hal::GateLibrary::mark_vcc_gate_type()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00285">hal::SelectionRelay::navigateDown()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00192">hal::SelectionRelay::navigateUp()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02621">hal::netlist_preprocessing::unify_ff_outputs()</a>, <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00261">hal::GateLibraryTabTruthTable::update()</a>, and <a class="el" href="genlib__writer_8cpp_source.html#l00021">hal::GenlibWriter::write()</a>.</p>
 
 </div>
 </div>
@@ -988,7 +1026,7 @@ template&lt;typename T &gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00064">64</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__context__menu_8cpp_source.html#l00114">hal::ModuleContextMenu::addGateSubmenu()</a>, <a class="el" href="netlist__comparison_8cpp_source.html#l00467">hal::z3_utils::compare_netlists()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00103">hal::GateLibrary::contains_gate_type()</a>, <a class="el" href="resynthesis_8cpp_source.html#l00768">hal::resynthesis::decompose_gates_of_type()</a>, <a class="el" href="clock__tree_8cpp_source.html#l00425">hal::cte::ClockTree::export_dot()</a>, <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="gatelibrary__wizard_8cpp_source.html#l00020">hal::GateLibraryWizard::GateLibraryWizard()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00038">hal::GateSelectEntry::GateSelectEntry()</a>, <a class="el" href="ff__function_8cpp_source.html#l00023">hal::verilator::converter::get_function_for_ff()</a>, <a class="el" href="latch__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_latch()</a>, <a class="el" href="lut__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_lut()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00156">hal::verilator::converter::get_name_for_gate_type()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00177">hal::verilator::converter::get_parameters_for_gate()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00236">hal::verilator::converter::get_prologue_for_gate_type()</a>, <a class="el" href="graphics__gate_8cpp_source.html#l00008">hal::GraphicsGate::GraphicsGate()</a>, <a class="el" href="event__log_8cpp_source.html#l00025">hal::event_log::handle_gate_event()</a>, <a class="el" href="gatelibrary__manager_8cpp_source.html#l00181">hal::GateLibraryManager::handleDeleteType()</a>, <a class="el" href="netlist__simulator_8cpp_source.html#l00118">hal::NetlistSimulator::load_initial_values_from_netlist()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00179">hal::GateLibrary::mark_gnd_gate_type()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00157">hal::GateLibrary::mark_vcc_gate_type()</a>, <a class="el" href="module__item_8cpp_source.html#l00012">hal::ModuleItem::ModuleItem()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00031">hal::NetlistModificationDecorator::replace_gate()</a>, <a class="el" href="preprocessing_8cpp_source.html#l00141">hal::xilinx_toolbox::split_shift_registers()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02607">hal::netlist_preprocessing::unify_ff_outputs()</a>, <a class="el" href="gatelibrary__tab__general_8cpp_source.html#l00033">hal::GatelibraryFrameGeneral::update()</a>, and <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00261">hal::GateLibraryTabTruthTable::update()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__context__menu_8cpp_source.html#l00114">hal::ModuleContextMenu::addGateSubmenu()</a>, <a class="el" href="netlist__comparison_8cpp_source.html#l00467">hal::z3_utils::compare_netlists()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00103">hal::GateLibrary::contains_gate_type()</a>, <a class="el" href="resynthesis_8cpp_source.html#l00769">hal::resynthesis::decompose_gates_of_type()</a>, <a class="el" href="clock__tree_8cpp_source.html#l00425">hal::cte::ClockTree::export_dot()</a>, <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="gatelibrary__wizard_8cpp_source.html#l00024">hal::GateLibraryWizard::GateLibraryWizard()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00038">hal::GateSelectEntry::GateSelectEntry()</a>, <a class="el" href="ff__function_8cpp_source.html#l00023">hal::verilator::converter::get_function_for_ff()</a>, <a class="el" href="latch__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_latch()</a>, <a class="el" href="lut__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_lut()</a>, <a class="el" href="lut__component_8cpp_source.html#l00172">hal::LUTComponent::get_init_string()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00161">hal::verilator::converter::get_name_for_gate_type()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00186">hal::verilator::converter::get_prologue_for_gate_type()</a>, <a class="el" href="graphics__gate_8cpp_source.html#l00008">hal::GraphicsGate::GraphicsGate()</a>, <a class="el" href="event__log_8cpp_source.html#l00025">hal::event_log::handle_gate_event()</a>, <a class="el" href="gatelibrary__manager_8cpp_source.html#l00181">hal::GateLibraryManager::handleDeleteType()</a>, <a class="el" href="netlist__simulator_8cpp_source.html#l00118">hal::NetlistSimulator::load_initial_values_from_netlist()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00179">hal::GateLibrary::mark_gnd_gate_type()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00157">hal::GateLibrary::mark_vcc_gate_type()</a>, <a class="el" href="module__item_8cpp_source.html#l00012">hal::ModuleItem::ModuleItem()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00031">hal::NetlistModificationDecorator::replace_gate()</a>, <a class="el" href="lut__component_8cpp_source.html#l00219">hal::LUTComponent::set_init_string()</a>, <a class="el" href="preprocessing_8cpp_source.html#l00078">hal::xilinx_toolbox::split_lut()</a>, <a class="el" href="preprocessing_8cpp_source.html#l00222">hal::xilinx_toolbox::split_shift_register()</a>, <a class="el" href="preprocessing_8cpp_source.html#l00461">hal::xilinx_toolbox::split_shift_registers()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02621">hal::netlist_preprocessing::unify_ff_outputs()</a>, <a class="el" href="gatelibrary__tab__general_8cpp_source.html#l00033">hal::GatelibraryFrameGeneral::update()</a>, and <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00261">hal::GateLibraryTabTruthTable::update()</a>.</p>
 
 </div>
 </div>
@@ -1038,7 +1076,62 @@ template&lt;typename T &gt; </div>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, and <a class="el" href="base__pin_8h_source.html#l00130">hal::BasePin&lt; T &gt;::get_direction()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="resynthesis_8cpp_source.html#l00723">hal::resynthesis::decompose_gate()</a>, <a class="el" href="resynthesis_8cpp_source.html#l00768">hal::resynthesis::decompose_gates_of_type()</a>, <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="ff__function_8cpp_source.html#l00023">hal::verilator::converter::get_function_for_ff()</a>, <a class="el" href="latch__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_latch()</a>, <a class="el" href="lut__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_lut()</a>, <a class="el" href="graphics__gate_8cpp_source.html#l00008">hal::GraphicsGate::GraphicsGate()</a>, <a class="el" href="gate__pin__tree_8cpp_source.html#l00093">hal::GatePinTree::handleContextMenuRequested()</a>, <a class="el" href="vhdl__parser_8cpp_source.html#l00241">hal::VHDLParser::instantiate()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00179">hal::GateLibrary::mark_gnd_gate_type()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00157">hal::GateLibrary::mark_vcc_gate_type()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00285">hal::SelectionRelay::navigateDown()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00192">hal::SelectionRelay::navigateUp()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02607">hal::netlist_preprocessing::unify_ff_outputs()</a>, and <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00261">hal::GateLibraryTabTruthTable::update()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="resynthesis_8cpp_source.html#l00724">hal::resynthesis::decompose_gate()</a>, <a class="el" href="resynthesis_8cpp_source.html#l00769">hal::resynthesis::decompose_gates_of_type()</a>, <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="ff__function_8cpp_source.html#l00023">hal::verilator::converter::get_function_for_ff()</a>, <a class="el" href="latch__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_latch()</a>, <a class="el" href="graphics__gate_8cpp_source.html#l00008">hal::GraphicsGate::GraphicsGate()</a>, <a class="el" href="gate__pin__tree_8cpp_source.html#l00093">hal::GatePinTree::handleContextMenuRequested()</a>, <a class="el" href="vhdl__parser_8cpp_source.html#l00267">hal::VHDLParser::instantiate()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00179">hal::GateLibrary::mark_gnd_gate_type()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00157">hal::GateLibrary::mark_vcc_gate_type()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00285">hal::SelectionRelay::navigateDown()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00192">hal::SelectionRelay::navigateUp()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02621">hal::netlist_preprocessing::unify_ff_outputs()</a>, and <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00261">hal::GateLibraryTabTruthTable::update()</a>.</p>
+
+</div>
+</div>
+<a id="a9f7a4a4f5ebf24633b9d2fbc75d48945"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f7a4a4f5ebf24633b9d2fbc75d48945">&#9670;&nbsp;</a></span>get_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &gt; hal::GateType::get_parameter </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Look up a parameter declaration by name.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The parameter name. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ok() and the parameter on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00767">767</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="action__set__parameter__value_8cpp_source.html#l00023">hal::ActionSetParameterValue::exec()</a>.</p>
+
+</div>
+</div>
+<a id="ad1478de0d02e13b545bc64b6a25ebe45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1478de0d02e13b545bc64b6a25ebe45">&#9670;&nbsp;</a></span>get_parameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::unordered_map&lt; std::string, <a class="el" href="structhal_1_1_parameter.html">Parameter</a> &gt; &amp; hal::GateType::get_parameters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get all parameters declared on this gate type as a map from <code>name</code> to parameter declaration.</p>
+<dl class="section return"><dt>Returns</dt><dd>The parameter map. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00762">762</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, and <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00186">hal::verilator::converter::get_prologue_for_gate_type()</a>.</p>
 
 </div>
 </div>
@@ -1102,7 +1195,7 @@ template&lt;typename T &gt; </div>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2net_8cpp_source.html#l00300">hal::Net::add_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00127">hal::Net::add_source()</a>, <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="combinational__function_8cpp_source.html#l00019">hal::verilator::converter::get_function_for_combinational_gate()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00401">hal::Net::is_a_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00227">hal::Net::is_a_source()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00343">hal::Net::remove_destination()</a>, and <a class="el" href="netlist_2net_8cpp_source.html#l00169">hal::Net::remove_source()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2net_8cpp_source.html#l00300">hal::Net::add_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00127">hal::Net::add_source()</a>, <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="combinational__function_8cpp_source.html#l00019">hal::verilator::converter::get_function_for_combinational_gate()</a>, <a class="el" href="lut__component_8cpp_source.html#l00172">hal::LUTComponent::get_init_string()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00401">hal::Net::is_a_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00227">hal::Net::is_a_source()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00343">hal::Net::remove_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00169">hal::Net::remove_source()</a>, and <a class="el" href="lut__component_8cpp_source.html#l00219">hal::LUTComponent::set_init_string()</a>.</p>
 
 </div>
 </div>
@@ -1260,7 +1353,7 @@ template&lt;typename T &gt; </div>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00066">pins</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="ff__function_8cpp_source.html#l00023">hal::verilator::converter::get_function_for_ff()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00236">hal::verilator::converter::get_prologue_for_gate_type()</a>, <a class="el" href="gate__pins__tree__model_8cpp_source.html#l00195">hal::GatePinsTreeModel::getNumberOfDisplayedPins()</a>, and <a class="el" href="gate__pins__tree__model_8cpp_source.html#l00107">hal::GatePinsTreeModel::setGate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="ff__function_8cpp_source.html#l00023">hal::verilator::converter::get_function_for_ff()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00186">hal::verilator::converter::get_prologue_for_gate_type()</a>, <a class="el" href="gate__pins__tree__model_8cpp_source.html#l00195">hal::GatePinsTreeModel::getNumberOfDisplayedPins()</a>, <a class="el" href="gate__pins__tree__model_8cpp_source.html#l00107">hal::GatePinsTreeModel::setGate()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00222">hal::xilinx_toolbox::split_shift_register()</a>.</p>
 
 </div>
 </div>
@@ -1306,7 +1399,7 @@ template&lt;typename T &gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00079">79</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="gatelibrary__wizard_8cpp_source.html#l00020">hal::GateLibraryWizard::GateLibraryWizard()</a>, <a class="el" href="selection__details__icon__provider_8cpp_source.html#l00095">hal::SelectionDetailsIconProvider::getIcon()</a>, and <a class="el" href="gatelibrary__tab__general_8cpp_source.html#l00033">hal::GatelibraryFrameGeneral::update()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="gatelibrary__wizard_8cpp_source.html#l00024">hal::GateLibraryWizard::GateLibraryWizard()</a>, <a class="el" href="selection__details__icon__provider_8cpp_source.html#l00095">hal::SelectionDetailsIconProvider::getIcon()</a>, and <a class="el" href="gatelibrary__tab__general_8cpp_source.html#l00033">hal::GatelibraryFrameGeneral::update()</a>.</p>
 
 </div>
 </div>
@@ -1382,7 +1475,39 @@ template&lt;typename T &gt; </div>
 
 <p class="reference">References <a class="el" href="classhal_1_1_gate_type_component.html#a4104ed67b98abffcf8485a42cd49f248">hal::GateTypeComponent::get_type()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="ram__port__wizardpage_8cpp_source.html#l00016">hal::RAMPortWizardPage::initializePage()</a>, <a class="el" href="flipflop__wizardpage_8cpp_source.html#l00146">hal::FlipFlopWizardPage::setData()</a>, <a class="el" href="init__wizardpage_8cpp_source.html#l00036">hal::InitWizardPage::setData()</a>, <a class="el" href="latch__wizardpage_8cpp_source.html#l00053">hal::LatchWizardPage::setData()</a>, <a class="el" href="lut__wizardpage_8cpp_source.html#l00025">hal::LUTWizardPage::setData()</a>, <a class="el" href="ram__wizardpage_8cpp_source.html#l00025">hal::RAMWizardPage::setData()</a>, <a class="el" href="state__wizardpage_8cpp_source.html#l00041">hal::StateWizardPage::setData()</a>, <a class="el" href="gatelibrary__frame__ff_8cpp_source.html#l00029">hal::GatelibraryFrameFF::update()</a>, <a class="el" href="gatelibrary__frame__init_8cpp_source.html#l00020">hal::GatelibraryFrameInit::update()</a>, <a class="el" href="gatelibrary__frame__latch_8cpp_source.html#l00020">hal::GateLibraryFrameLatch::update()</a>, <a class="el" href="gatelibrary__frame__lut_8cpp_source.html#l00017">hal::GatelibraryFrameLut::update()</a>, <a class="el" href="gatelibrary__frame__ram_8cpp_source.html#l00018">hal::GateLibraryFrameRAM::update()</a>, <a class="el" href="gatelibrary__frame__ram__port_8cpp_source.html#l00015">hal::GateLibraryFrameRAMPort::update()</a>, <a class="el" href="gatelibrary__frame__state_8cpp_source.html#l00020">hal::GatelibraryFrameState::update()</a>, <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00437">hal::GatelibraryLutInit::update()</a>, and <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00261">hal::GateLibraryTabTruthTable::update()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="ram__port__wizardpage_8cpp_source.html#l00016">hal::RAMPortWizardPage::initializePage()</a>, <a class="el" href="flipflop__wizardpage_8cpp_source.html#l00146">hal::FlipFlopWizardPage::setData()</a>, <a class="el" href="init__wizardpage_8cpp_source.html#l00048">hal::InitWizardPage::setData()</a>, <a class="el" href="latch__wizardpage_8cpp_source.html#l00053">hal::LatchWizardPage::setData()</a>, <a class="el" href="lut__wizardpage_8cpp_source.html#l00045">hal::LUTWizardPage::setData()</a>, <a class="el" href="ram__wizardpage_8cpp_source.html#l00025">hal::RAMWizardPage::setData()</a>, <a class="el" href="state__wizardpage_8cpp_source.html#l00041">hal::StateWizardPage::setData()</a>, <a class="el" href="gatelibrary__frame__ff_8cpp_source.html#l00029">hal::GatelibraryFrameFF::update()</a>, <a class="el" href="gatelibrary__frame__init_8cpp_source.html#l00020">hal::GatelibraryFrameInit::update()</a>, <a class="el" href="gatelibrary__frame__latch_8cpp_source.html#l00020">hal::GateLibraryFrameLatch::update()</a>, <a class="el" href="gatelibrary__frame__lut_8cpp_source.html#l00016">hal::GatelibraryFrameLut::update()</a>, <a class="el" href="gatelibrary__frame__ram_8cpp_source.html#l00018">hal::GateLibraryFrameRAM::update()</a>, <a class="el" href="gatelibrary__frame__ram__port_8cpp_source.html#l00015">hal::GateLibraryFrameRAMPort::update()</a>, <a class="el" href="gatelibrary__frame__state_8cpp_source.html#l00020">hal::GatelibraryFrameState::update()</a>, <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00437">hal::GatelibraryLutInit::update()</a>, and <a class="el" href="gatelibrary__tab__truth__table_8cpp_source.html#l00261">hal::GateLibraryTabTruthTable::update()</a>.</p>
+
+</div>
+</div>
+<a id="a39b94ed60cceac3b97966cea3e715a74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39b94ed60cceac3b97966cea3e715a74">&#9670;&nbsp;</a></span>has_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::GateType::has_parameter </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check whether a parameter with the given name is declared on this gate type.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The parameter name. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the parameter exists, <code>false</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00777">777</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>.</p>
 
 </div>
 </div>
@@ -1412,7 +1537,7 @@ template&lt;typename T &gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00101">101</a> of file <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html">gate_type.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__logic__evaluator_8cpp_source.html#l00090">hal::GuiExtensionLogicEvaluator::acceptGate()</a>, <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00338">hal::verilator::converter::get_function_for_gate()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00177">hal::verilator::converter::get_parameters_for_gate()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l00151">hal::netlist_preprocessing::remove_buffers()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02607">hal::netlist_preprocessing::unify_ff_outputs()</a>, <a class="el" href="dataflow__analysis_2src_2api_2configuration_8cpp_source.html#l00271">hal::dataflow::Configuration::with_gate_types()</a>, and <a class="el" href="genlib__writer_8cpp_source.html#l00021">hal::GenlibWriter::write()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__logic__evaluator_8cpp_source.html#l00090">hal::GuiExtensionLogicEvaluator::acceptGate()</a>, <a class="el" href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">hal::gate_type_init()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00293">hal::verilator::converter::get_function_for_gate()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l00153">hal::netlist_preprocessing::remove_buffers()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02621">hal::netlist_preprocessing::unify_ff_outputs()</a>, <a class="el" href="dataflow__analysis_2src_2api_2configuration_8cpp_source.html#l00271">hal::dataflow::Configuration::with_gate_types()</a>, and <a class="el" href="genlib__writer_8cpp_source.html#l00021">hal::GenlibWriter::write()</a>.</p>
 
 </div>
 </div>
@@ -1647,7 +1772,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gate__type_8h_source.html#l00447">447</a> of file <a class="el" href="gate__type_8h_source.html">gate_type.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate__type_8h_source.html#l00478">478</a> of file <a class="el" href="gate__type_8h_source.html">gate_type.h</a>.</p>
 
 </div>
 </div>

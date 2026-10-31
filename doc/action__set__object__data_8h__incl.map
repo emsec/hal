@@ -1,8 +1,9 @@
 <map id="plugins/gui/include/gui/user_action/action_set_object_data.h" name="plugins/gui/include/gui/user_action/action_set_object_data.h">
-<area shape="rect" id="node1" title=" " alt="" coords="188,5,357,61"/>
-<area shape="rect" id="node2" href="$user__action_8h.html" title=" " alt="" coords="218,109,327,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,184,76,211"/>
-<area shape="rect" id="node4" title=" " alt="" coords="100,184,256,211"/>
-<area shape="rect" id="node5" href="$user__action__manager_8h.html" title=" " alt="" coords="281,184,454,211"/>
-<area shape="rect" id="node6" href="$user__action__object_8h.html" title=" " alt="" coords="479,184,635,211"/>
+<area shape="rect" id="node1" title=" " alt="" coords="107,5,277,61"/>
+<area shape="rect" id="node2" href="$user__action_8h.html" title=" " alt="" coords="227,117,336,143"/>
+<area shape="rect" id="node7" href="$data__table__entry_8h.html" title=" " alt="" coords="5,109,203,151"/>
+<area shape="rect" id="node3" title=" " alt="" coords="69,199,139,225"/>
+<area shape="rect" id="node4" title=" " alt="" coords="163,199,319,225"/>
+<area shape="rect" id="node5" href="$user__action__manager_8h.html" title=" " alt="" coords="344,199,517,225"/>
+<area shape="rect" id="node6" href="$user__action__object_8h.html" title=" " alt="" coords="542,199,698,225"/>
 </map>

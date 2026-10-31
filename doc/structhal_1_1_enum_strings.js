@@ -14,6 +14,7 @@ var structhal_1_1_enum_strings =
     [ "data", "structhal_1_1_enum_strings.html#ac84574e17c2a64a2ef221930cd43c036", null ],
     [ "data", "structhal_1_1_enum_strings.html#a28901a293a7c1966a2e8d53f7af02f5e", null ],
     [ "data", "structhal_1_1_enum_strings.html#aee875702a9d377079d6c923a3eae8386", null ],
+    [ "data", "structhal_1_1_enum_strings.html#a663c18a862495f1d51f357895224d098", null ],
     [ "data", "structhal_1_1_enum_strings.html#a9eca2860a581204c06dcdd242e977962", null ],
     [ "data", "structhal_1_1_enum_strings.html#a9eca2860a581204c06dcdd242e977962", null ],
     [ "data", "structhal_1_1_enum_strings.html#a67e3e863142785b878fafa7ac6bd22f3", null ],
@@ -39,5 +40,6 @@ var structhal_1_1_enum_strings =
     [ "data", "structhal_1_1_enum_strings.html#a9182fc77a55b52db0407961d739e1bfc", null ],
     [ "data", "structhal_1_1_enum_strings.html#ac84574e17c2a64a2ef221930cd43c036", null ],
     [ "data", "structhal_1_1_enum_strings.html#a28901a293a7c1966a2e8d53f7af02f5e", null ],
-    [ "data", "structhal_1_1_enum_strings.html#aee875702a9d377079d6c923a3eae8386", null ]
+    [ "data", "structhal_1_1_enum_strings.html#aee875702a9d377079d6c923a3eae8386", null ],
+    [ "data", "structhal_1_1_enum_strings.html#a663c18a862495f1d51f357895224d098", null ]
 ];

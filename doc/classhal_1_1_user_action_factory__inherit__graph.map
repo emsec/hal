@@ -1,5 +1,5 @@
 <map id="hal::UserActionFactory" name="hal::UserActionFactory">
-<area shape="rect" id="node1" title="The UserActionFactory is the abstract base class for registration." alt="" coords="1996,5,2164,112"/>
+<area shape="rect" id="node1" title="The UserActionFactory is the abstract base class for registration." alt="" coords="2117,5,2285,112"/>
 <area shape="rect" id="node2" href="$classhal_1_1_action_add_boolean_function_factory.html" title="The ActionAddBooleanFunctionFactory class." alt="" coords="5,160,229,281"/>
 <area shape="rect" id="node3" href="$classhal_1_1_action_add_items_to_object_factory.html" title="UserActionFactory for ActionAddItemsToObject." alt="" coords="253,167,507,274"/>
 <area shape="rect" id="node4" href="$classhal_1_1_action_create_object_factory.html" title="UserActionFactory for ActionCreateObject." alt="" coords="531,175,754,267"/>
@@ -14,7 +14,8 @@
 <area shape="rect" id="node13" href="$classhal_1_1_action_set_object_color_factory.html" title="UserActionFactory for ActionSetObjectColor." alt="" coords="2729,167,2961,274"/>
 <area shape="rect" id="node14" href="$classhal_1_1_action_set_object_data_factory.html" title="The ActionSetObjectDataFactory class." alt="" coords="2985,167,3215,274"/>
 <area shape="rect" id="node15" href="$classhal_1_1_action_set_object_type_factory.html" title="UserActionFactory for ActionSetObjectType." alt="" coords="3239,167,3467,274"/>
-<area shape="rect" id="node16" href="$classhal_1_1_action_set_selection_focus_factory.html" title="UserActionFactory for ActionSetSelectionFocus." alt="" coords="3492,167,3745,274"/>
-<area shape="rect" id="node17" href="$classhal_1_1_action_unfold_module_factory.html" title="UserActionFactory for ActionUnfoldModule." alt="" coords="3769,175,3999,267"/>
-<area shape="rect" id="node18" href="$classhal_1_1_user_action_compound_factory.html" title=" " alt="" coords="4023,175,4262,267"/>
+<area shape="rect" id="node16" href="$classhal_1_1_action_set_parameter_value_factory.html" title="The ActionSetParameterValueFactory class registers the action with the manager." alt="" coords="3492,167,3751,274"/>
+<area shape="rect" id="node17" href="$classhal_1_1_action_set_selection_focus_factory.html" title="UserActionFactory for ActionSetSelectionFocus." alt="" coords="3775,167,4028,274"/>
+<area shape="rect" id="node18" href="$classhal_1_1_action_unfold_module_factory.html" title="UserActionFactory for ActionUnfoldModule." alt="" coords="4052,175,4281,267"/>
+<area shape="rect" id="node19" href="$classhal_1_1_user_action_compound_factory.html" title=" " alt="" coords="4306,175,4545,267"/>
 </map>

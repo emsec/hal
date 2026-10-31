@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -97,7 +97,7 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 , <a class="el" href="classhal_1_1_context_tree_model.html#a5e6d0b19796aab637ea29e2c5fe4a6be">hal::ContextTreeModel</a>
 , <a class="el" href="classhal_1_1_data_table_model.html#aa40b1c400d113367caf7b5e613dd694f">hal::DataTableModel</a>
 , <a class="el" href="classhal_1_1_endpoint_table_model.html#a2651b1d0da7b903d055b0403b174ffff">hal::EndpointTableModel</a>
-, <a class="el" href="structhal_1_1_enum_strings.html#add991d59bc7851695be21452f5b639fb">hal::EnumStrings&lt; T, typename &gt;</a>
+, <a class="el" href="structhal_1_1_enum_strings.html#a8d0777845c66606744b9982e94103cba">hal::EnumStrings&lt; T, typename &gt;</a>
 , <a class="el" href="classhal_1_1_gate_library_selection_entry.html#a05deb7205565f539f4ecabe0b9036fce">hal::GateLibrarySelectionEntry</a>
 , <a class="el" href="classhal_1_1_gate_library_selection_table.html#a8715af2a194d779d5154e3b64f2c9616">hal::GateLibrarySelectionTable</a>
 , <a class="el" href="classhal_1_1_gatelibrary_table_model.html#ab5fc5eebafca02480d424935bb868fee">hal::GatelibraryTableModel</a>
@@ -115,6 +115,7 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 , <a class="el" href="classhal_1_1_module_select_entry.html#a48b6fbeea6eea03d4319cc7a8682384c">hal::ModuleSelectEntry</a>
 , <a class="el" href="classhal_1_1_module_select_model.html#aabb33c42e8577fc8e745dcdbdc0d073f">hal::ModuleSelectModel</a>
 , <a class="el" href="classhal_1_1_module_table_model.html#a6f44d9e5eb5453e54b70285e09c9e20a">hal::ModuleTableModel</a>
+, <a class="el" href="classhal_1_1_parameter_table_model.html#abe823882e8418ff2314be87be6ab012e">hal::ParameterTableModel</a>
 , <a class="el" href="classhal_1_1_select_gate_model.html#a50a7aa39ac724da7ade9f2d072258fb3">hal::SelectGateModel</a>
 , <a class="el" href="classhal_1_1_wave_data.html#aaa61665bed404bd8320f2463b53ab99c">hal::WaveData</a>
 , <a class="el" href="classhal_1_1_wave_edit_table.html#a9928cb2c15b5c63e81415ec911aa7bf9">hal::WaveEditTable</a>
@@ -132,6 +133,9 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 </li>
 <li>DataContainer()
 : <a class="el" href="classhal_1_1_data_container.html#a268c27a803da43b036ac0d324dfd31c9">hal::DataContainer</a>
+</li>
+<li>DataEntryDialog()
+: <a class="el" href="classhal_1_1_data_entry_dialog.html#ac8567099b679330f08e2c7e5c0afec8a">hal::DataEntryDialog</a>
 </li>
 <li>dataFileIndex()
 : <a class="el" href="classhal_1_1_saleae_directory_net_entry.html#a03eaa3c69373936ab8ce2e95305df06a">hal::SaleaeDirectoryNetEntry</a>
@@ -158,6 +162,9 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 : <a class="el" href="classhal_1_1_wave_data_provider_file.html#a7305ab83e78667de3728b181f2c052d8">hal::WaveDataProviderFile</a>
 , <a class="el" href="classhal_1_1_wave_edit_dialog.html#aa50616c471d18a1e5a1a60cb4873e1ed">hal::WaveEditDialog</a>
 </li>
+<li>DataTableEntry()
+: <a class="el" href="classhal_1_1_data_table_entry.html#a54ee41a8e6cac8c619972fd1bcf18096">hal::DataTableEntry</a>
+</li>
 <li>DataTableModel()
 : <a class="el" href="classhal_1_1_data_table_model.html#a08b70f2dcd41cf19c8a0d533568fb9b9">hal::DataTableModel</a>
 </li>
@@ -165,7 +172,7 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 : <a class="el" href="classhal_1_1_data_table_widget.html#a15f717119c28ca7e9f1769478006d327">hal::DataTableWidget</a>
 </li>
 <li>dataType
-: <a class="el" href="structhal_1_1_data_table_model_1_1_data_entry.html#ad5bc3a6372b8f92dc12377d7737e8b56">hal::DataTableModel::DataEntry</a>
+: <a class="el" href="classhal_1_1_data_table_entry.html#a5879c12a39643362bac8647c5c799bf9">hal::DataTableEntry</a>
 </li>
 <li>deactivate_all_channels()
 : <a class="el" href="classhal_1_1_log_manager.html#a2defb30df0b5f5b3a572b002a551a9c0">hal::LogManager</a>
@@ -251,6 +258,9 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 <li>delete_net()
 : <a class="el" href="classhal_1_1_netlist.html#a3c2fbba09aa1857d44790bbd16c9df4e">hal::Netlist</a>
 </li>
+<li>delete_parameter()
+: <a class="el" href="classhal_1_1_data_container.html#af7c7012b4a05be1e074c2772812da3ff">hal::DataContainer</a>
+</li>
 <li>delete_pin_group()
 : <a class="el" href="classhal_1_1_gate_type.html#a2a69cb567a7a80212de76a70daa28414">hal::GateType</a>
 , <a class="el" href="classhal_1_1_module.html#a7609f55c575b282d28207f084b6733a5">hal::Module</a>
@@ -260,6 +270,9 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 </li>
 <li>DeleteAcknowledged
 : <a class="el" href="classhal_1_1_wave_item.html#a4006d024ce3174f3114527d5aa2b7da4a741971fda71b666da2cdb77e3194b10e">hal::WaveItem</a>
+</li>
+<li>DeleteAction
+: <a class="el" href="classhal_1_1_action_set_object_data.html#a64b26f4319086eb373042fde67433fabac20a8d569c7d7ee47e03e9ad47887606">hal::ActionSetObjectData</a>
 </li>
 <li>deleteAllItems()
 : <a class="el" href="classhal_1_1_graphics_scene.html#a0a15f1459122eb8fc2936f5a60a1af13">hal::GraphicsScene</a>
@@ -334,19 +347,19 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 , <a class="el" href="classhal_1_1_settings_item.html#acf784ad49fbab1403082b7e14cf4751f">hal::SettingsItem</a>
 </li>
 <li>deselect()
-: <a class="el" href="classhal_1_1_gui_api.html#a3071fd2746191ff96be66e1da5f6d7ca">hal::GuiApi</a>
+: <a class="el" href="classhal_1_1_gui_api.html#a3717d5a140273ac5c2c014b51618dc71">hal::GuiApi</a>
 </li>
 <li>deselectAllItems()
 : <a class="el" href="classhal_1_1_gui_api.html#a244fb080ad7dc733cfb0d245f53964d2">hal::GuiApi</a>
 </li>
 <li>deselectGate()
-: <a class="el" href="classhal_1_1_gui_api.html#a8385c0951e46aee2d615b917788c2ed9">hal::GuiApi</a>
+: <a class="el" href="classhal_1_1_gui_api.html#ae9f9de972b1fdd023cc81db4fb4b600d">hal::GuiApi</a>
 </li>
 <li>deselectModule()
-: <a class="el" href="classhal_1_1_gui_api.html#a07beac51748c42e249beb70a911a53a3">hal::GuiApi</a>
+: <a class="el" href="classhal_1_1_gui_api.html#a94e11bfce39bc334e0303f7bd96e1a15">hal::GuiApi</a>
 </li>
 <li>deselectNet()
-: <a class="el" href="classhal_1_1_gui_api.html#a48b7347224a3c22bfc7890603aec9490">hal::GuiApi</a>
+: <a class="el" href="classhal_1_1_gui_api.html#a00dc8f04eb60ac3de9b882647246e2e7">hal::GuiApi</a>
 </li>
 <li>deserialize()
 : <a class="el" href="classhal_1_1_comment_manager.html#a04ab5cb17ea76f2dcd70ca224e2996cf">hal::CommentManager</a>

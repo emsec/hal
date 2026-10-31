@@ -1,44 +1,45 @@
 <map id="plugins/vhdl_parser/include/vhdl_parser/vhdl_parser.h" name="plugins/vhdl_parser/include/vhdl_parser/vhdl_parser.h">
-<area shape="rect" id="node1" title=" " alt="" coords="3240,5,3393,61"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="1207,853,1347,880"/>
-<area shape="rect" id="node7" href="$gate__type_8h.html" title=" " alt="" coords="2847,377,3002,419"/>
-<area shape="rect" id="node11" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="593,675,723,716"/>
+<area shape="rect" id="node1" title=" " alt="" coords="3126,5,3279,61"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="1231,853,1371,880"/>
+<area shape="rect" id="node7" href="$gate__type_8h.html" title=" " alt="" coords="2840,377,2995,419"/>
+<area shape="rect" id="node11" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="597,764,728,805"/>
 <area shape="rect" id="node16" title=" " alt="" coords="3427,682,3551,709"/>
-<area shape="rect" id="node28" title=" " alt="" coords="3287,481,3402,508"/>
-<area shape="rect" id="node29" href="$module_8h.html" title=" " alt="" coords="2029,206,2215,233"/>
-<area shape="rect" id="node34" href="$net_8h.html" title=" " alt="" coords="1256,385,1415,411"/>
-<area shape="rect" id="node36" href="$netlist__parser_8h.html" title=" " alt="" coords="49,109,224,151"/>
-<area shape="rect" id="node38" href="$special__strings_8h.html" title=" " alt="" coords="445,199,580,240"/>
-<area shape="rect" id="node39" href="$token__stream_8h.html" title=" " alt="" coords="3221,578,3351,619"/>
-<area shape="rect" id="node40" title=" " alt="" coords="3615,117,3690,143"/>
-<area shape="rect" id="node41" title=" " alt="" coords="3714,117,3789,143"/>
-<area shape="rect" id="node42" title=" " alt="" coords="3813,117,3873,143"/>
-<area shape="rect" id="node3" title=" " alt="" coords="494,928,585,955"/>
-<area shape="rect" id="node4" title=" " alt="" coords="1233,928,1320,955"/>
-<area shape="rect" id="node5" title=" " alt="" coords="1344,928,1431,955"/>
-<area shape="rect" id="node6" title=" " alt="" coords="1139,928,1209,955"/>
-<area shape="rect" id="node8" href="$boolean__function_8h.html" title=" " alt="" coords="2754,578,2933,619"/>
-<area shape="rect" id="node9" href="$enums_8h.html" title=" " alt="" coords="2774,764,2905,805"/>
-<area shape="rect" id="node10" title=" " alt="" coords="3325,853,3375,880"/>
-<area shape="rect" id="node15" title=" " alt="" coords="2645,682,2687,709"/>
-<area shape="rect" id="node18" href="$gate__type__property_8h.html" title=" " alt="" coords="3008,571,3196,627"/>
-<area shape="rect" id="node19" href="$gate__type__component_8h.html" title=" " alt="" coords="2515,467,2735,523"/>
-<area shape="rect" id="node20" href="$gate__pin_8h.html" title=" " alt="" coords="1880,474,2033,515"/>
-<area shape="rect" id="node25" href="$pin__group_8h.html" title=" " alt="" coords="1797,578,1951,619"/>
-<area shape="rect" id="node27" title=" " alt="" coords="1095,682,1154,709"/>
-<area shape="rect" id="node14" title=" " alt="" coords="3058,682,3143,709"/>
-<area shape="rect" id="node17" title=" " alt="" coords="2141,682,2204,709"/>
-<area shape="rect" id="node12" title=" " alt="" coords="696,771,783,798"/>
-<area shape="rect" id="node13" title=" " alt="" coords="217,771,309,798"/>
-<area shape="rect" id="node21" href="$data__container_8h.html" title=" " alt="" coords="1466,578,1621,619"/>
-<area shape="rect" id="node23" href="$pin__direction_8h.html" title=" " alt="" coords="1831,675,2050,716"/>
-<area shape="rect" id="node24" href="$pin__type_8h.html" title=" " alt="" coords="1616,675,1807,716"/>
-<area shape="rect" id="node22" title=" " alt="" coords="876,682,931,709"/>
-<area shape="rect" id="node26" title=" " alt="" coords="2074,682,2117,709"/>
-<area shape="rect" id="node30" href="$event__handler_8h.html" title=" " alt="" coords="1568,474,1753,515"/>
-<area shape="rect" id="node31" href="$pin__event_8h.html" title=" " alt="" coords="2329,578,2528,619"/>
-<area shape="rect" id="node32" href="$gate__library_8h.html" title=" " alt="" coords="2261,288,2423,329"/>
-<area shape="rect" id="node33" href="$module__pin_8h.html" title=" " alt="" coords="1259,288,1412,329"/>
-<area shape="rect" id="node35" title=" " alt="" coords="1466,481,1543,508"/>
-<area shape="rect" id="node37" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="605,206,783,233"/>
+<area shape="rect" id="node20" href="$parameter_8h.html" title=" " alt="" coords="1693,682,1899,709"/>
+<area shape="rect" id="node29" title=" " alt="" coords="3288,481,3403,508"/>
+<area shape="rect" id="node30" href="$module_8h.html" title=" " alt="" coords="2096,206,2283,233"/>
+<area shape="rect" id="node35" href="$net_8h.html" title=" " alt="" coords="1471,385,1630,411"/>
+<area shape="rect" id="node37" href="$netlist__parser_8h.html" title=" " alt="" coords="94,109,269,151"/>
+<area shape="rect" id="node39" href="$special__strings_8h.html" title=" " alt="" coords="259,199,394,240"/>
+<area shape="rect" id="node40" href="$token__stream_8h.html" title=" " alt="" coords="3627,675,3757,716"/>
+<area shape="rect" id="node41" title=" " alt="" coords="3857,117,3932,143"/>
+<area shape="rect" id="node42" title=" " alt="" coords="3956,117,4031,143"/>
+<area shape="rect" id="node43" title=" " alt="" coords="4055,117,4115,143"/>
+<area shape="rect" id="node3" title=" " alt="" coords="597,928,688,955"/>
+<area shape="rect" id="node4" title=" " alt="" coords="1147,928,1234,955"/>
+<area shape="rect" id="node5" title=" " alt="" coords="1258,928,1345,955"/>
+<area shape="rect" id="node6" title=" " alt="" coords="1369,928,1439,955"/>
+<area shape="rect" id="node8" href="$boolean__function_8h.html" title=" " alt="" coords="2840,578,3019,619"/>
+<area shape="rect" id="node9" href="$enums_8h.html" title=" " alt="" coords="3072,764,3203,805"/>
+<area shape="rect" id="node10" title=" " alt="" coords="3769,853,3820,880"/>
+<area shape="rect" id="node15" title=" " alt="" coords="2904,682,2947,709"/>
+<area shape="rect" id="node18" href="$gate__type__property_8h.html" title=" " alt="" coords="3094,571,3282,627"/>
+<area shape="rect" id="node19" href="$gate__type__component_8h.html" title=" " alt="" coords="2587,467,2807,523"/>
+<area shape="rect" id="node21" title=" " alt="" coords="1171,771,1229,798"/>
+<area shape="rect" id="node22" href="$gate__pin_8h.html" title=" " alt="" coords="1614,474,1767,515"/>
+<area shape="rect" id="node27" href="$pin__group_8h.html" title=" " alt="" coords="2155,578,2309,619"/>
+<area shape="rect" id="node14" title=" " alt="" coords="3463,771,3548,798"/>
+<area shape="rect" id="node17" title=" " alt="" coords="2055,771,2118,798"/>
+<area shape="rect" id="node12" title=" " alt="" coords="391,853,478,880"/>
+<area shape="rect" id="node13" title=" " alt="" coords="162,853,254,880"/>
+<area shape="rect" id="node23" href="$data__container_8h.html" title=" " alt="" coords="1491,578,1645,619"/>
+<area shape="rect" id="node25" href="$pin__direction_8h.html" title=" " alt="" coords="2509,675,2728,716"/>
+<area shape="rect" id="node26" href="$pin__type_8h.html" title=" " alt="" coords="2294,675,2485,716"/>
+<area shape="rect" id="node24" title=" " alt="" coords="905,682,959,709"/>
+<area shape="rect" id="node28" title=" " alt="" coords="2075,682,2117,709"/>
+<area shape="rect" id="node31" href="$event__handler_8h.html" title=" " alt="" coords="1945,474,2130,515"/>
+<area shape="rect" id="node32" href="$pin__event_8h.html" title=" " alt="" coords="3306,578,3505,619"/>
+<area shape="rect" id="node33" href="$gate__library_8h.html" title=" " alt="" coords="2096,288,2259,329"/>
+<area shape="rect" id="node34" href="$module__pin_8h.html" title=" " alt="" coords="1474,288,1627,329"/>
+<area shape="rect" id="node36" title=" " alt="" coords="904,481,981,508"/>
+<area shape="rect" id="node38" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="423,206,601,233"/>
 </map>

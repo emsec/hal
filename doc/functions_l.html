@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -130,9 +130,6 @@ $(document).ready(function(){initNavTree('functions_l.html',''); initResizable()
 <li>LatchCompFunc
 : <a class="el" href="classhal_1_1_latch_component_entry.html#afd72ddde2e8165ad4346b4c8a10a9927">hal::LatchComponentEntry</a>
 </li>
-<li>LatchComponent()
-: <a class="el" href="classhal_1_1_latch_component.html#a8eec953e61e619717656021791e2e133">hal::LatchComponent</a>
-</li>
 <li>LatchComponentEntry()
 : <a class="el" href="classhal_1_1_latch_component_entry.html#acab352b731300adad5dbbe2d6030d406">hal::LatchComponentEntry</a>
 </li>
@@ -195,7 +192,7 @@ $(document).ready(function(){initNavTree('functions_l.html',''); initResizable()
 , <a class="el" href="classhal_1_1_grouping_proxy_model.html#acb1ca2fee26366f8a3efb8b4fbe9188c">hal::GroupingProxyModel</a>
 , <a class="el" href="classhal_1_1_logic_evaluator_truthtable_column.html#a9f1e7ff0d2f6784f6ae32600b7f29d8d">hal::LogicEvaluatorTruthtableColumn</a>
 , <a class="el" href="classhal_1_1_module_proxy_model.html#a31a431cf273f280ca90fc78b336b49cf">hal::ModuleProxyModel</a>
-, <a class="el" href="classhal_1_1_module_select_proxy.html#a3eb5bf3c49040132320c3b62ab0964c1">hal::ModuleSelectProxy</a>
+, <a class="el" href="classhal_1_1_module_select_proxy.html#ae59f1ddd892daeebbbb2ac31b6c11609">hal::ModuleSelectProxy</a>
 , <a class="el" href="classhal_1_1_selection_tree_proxy_model.html#a8787bd5dbb3fc5384ec803639b43a7fa">hal::SelectionTreeProxyModel</a>
 </li>
 <li>Level
@@ -312,6 +309,9 @@ $(document).ready(function(){initNavTree('functions_l.html',''); initResizable()
 <li>loadFile()
 : <a class="el" href="classhal_1_1_gatelibrary_table_model.html#a24dcc4ee52641f51c8639cd16d4de81b">hal::GatelibraryTableModel</a>
 </li>
+<li>loadGateLibrary()
+: <a class="el" href="classhal_1_1_file_manager.html#acd41c54bdfa3bdca5fd6d4b4ae83e707">hal::FileManager</a>
+</li>
 <li>loadIconPath()
 : <a class="el" href="classhal_1_1_gui_plugin_manager.html#a7b050c623d7aabfdf7743512981e7452">hal::GuiPluginManager</a>
 </li>
@@ -404,7 +404,7 @@ $(document).ready(function(){initNavTree('functions_l.html',''); initResizable()
 : <a class="el" href="classhal_1_1_logic_evaluator_hex_spinbox.html#a0e00c37ec9b1be602ea45c35f6bad171">hal::LogicEvaluatorHexSpinbox</a>
 </li>
 <li>LogicEvaluatorPingroup()
-: <a class="el" href="classhal_1_1_logic_evaluator_pingroup.html#a8645dd49559e0078bcc0debf1eeca11c">hal::LogicEvaluatorPingroup</a>
+: <a class="el" href="classhal_1_1_logic_evaluator_pingroup.html#a4205ef29c7dfa4d35228e5489f1e4bbc">hal::LogicEvaluatorPingroup</a>
 </li>
 <li>LogicEvaluatorPlugin()
 : <a class="el" href="classhal_1_1_logic_evaluator_plugin.html#af886dc8ac32fec2f4ec0f13b1a705f9f">hal::LogicEvaluatorPlugin</a>
@@ -427,6 +427,9 @@ $(document).ready(function(){initNavTree('functions_l.html',''); initResizable()
 <li>LogicEvaluatorValue()
 : <a class="el" href="classhal_1_1_logic_evaluator_value.html#a93188a062b0b14d4b947a01252dfeed1">hal::LogicEvaluatorValue</a>
 </li>
+<li>LogicVector()
+: <a class="el" href="structhal_1_1_parameter.html#a62df666d0c716907d8ab313acc8d5c8e">hal::Parameter</a>
+</li>
 <li>lookup()
 : <a class="el" href="classhal_1_1hawkeye_1_1_s_box_database.html#a6ec5f2ad61bb7d50bdcaaf78b0bc5b27">hal::hawkeye::SBoxDatabase</a>
 </li>
@@ -443,8 +446,8 @@ $(document).ready(function(){initNavTree('functions_l.html',''); initResizable()
 <li>LUT
 : <a class="el" href="classhal_1_1_gate_library_wizard.html#afc5ddfbb681daf58d7999f9173e62777ac9152bdccebaa414e0e64443a78a652b">hal::GateLibraryWizard</a>
 </li>
-<li>LUTComponent()
-: <a class="el" href="classhal_1_1_l_u_t_component.html#afbf2834ed8ec8c452e666d899ab0f74c">hal::LUTComponent</a>
+<li>LUTOutputConfig()
+: <a class="el" href="structhal_1_1_l_u_t_component_1_1_l_u_t_output_config.html#a92649201306bee37628f784532ef0bc5">hal::LUTComponent::LUTOutputConfig</a>
 </li>
 <li>LUTTableModel()
 : <a class="el" href="classhal_1_1_l_u_t_table_model.html#a9ba0028e02756ef219d93d1bb7df3252">hal::LUTTableModel</a>
@@ -452,8 +455,9 @@ $(document).ready(function(){initNavTree('functions_l.html',''); initResizable()
 <li>LUTTableWidget()
 : <a class="el" href="classhal_1_1_l_u_t_table_widget.html#a28dc0b09aeb27a19350796defb3f9c0b">hal::LUTTableWidget</a>
 </li>
-<li>LUTWizardPage()
-: <a class="el" href="classhal_1_1_l_u_t_wizard_page.html#abc7843b048d98213736efff1f06db303">hal::LUTWizardPage</a>
+<li>LUTWizardPage
+: <a class="el" href="classhal_1_1_gate_library_wizard.html#af4715c5cc4395272679f0ede44b2beeb">hal::GateLibraryWizard</a>
+, <a class="el" href="classhal_1_1_l_u_t_wizard_page.html#abc7843b048d98213736efff1f06db303">hal::LUTWizardPage</a>
 </li>
 </ul>
 </div><!-- contents -->

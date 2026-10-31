@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -837,7 +837,38 @@ $(document).ready(function(){initNavTree('netlist_2gate__library_2gate__type_8cp
 <div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;        <span class="keywordflow">return</span> m_functions;</div>
 <div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;    }</div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160; </div>
+<div class="line"><a name="l00751"></a><span class="lineno"><a class="line" href="classhal_1_1_gate_type.html#ad8173f701a34fd64eb58f9850b7d11a6">  751</a></span>&#160;    <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> GateType::add_parameter(<span class="keyword">const</span> <a class="code" href="structhal_1_1_parameter.html">Parameter</a>&amp; param)</div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;    {</div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;        <span class="keywordflow">if</span> (m_parameters.find(param.<a class="code" href="structhal_1_1_parameter.html#a84e52e754a7b1c3cde6392f1a4974165">get_name</a>()) != m_parameters.end())</div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;        {</div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not add parameter &#39;&quot;</span> + param.<a class="code" href="structhal_1_1_parameter.html#a84e52e754a7b1c3cde6392f1a4974165">get_name</a>() + <span class="stringliteral">&quot;&#39; to gate type &#39;&quot;</span> + m_name + <span class="stringliteral">&quot;&#39;: a parameter with that name already exists&quot;</span>);</div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;        }</div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160; </div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;        m_parameters[param.<a class="code" href="structhal_1_1_parameter.html#a84e52e754a7b1c3cde6392f1a4974165">get_name</a>()] = param;</div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>({});</div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;    }</div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160; </div>
+<div class="line"><a name="l00762"></a><span class="lineno"><a class="line" href="classhal_1_1_gate_type.html#ad1478de0d02e13b545bc64b6a25ebe45">  762</a></span>&#160;    <span class="keyword">const</span> std::unordered_map&lt;std::string, Parameter&gt;&amp; GateType::get_parameters()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;        <span class="keywordflow">return</span> m_parameters;</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;    }</div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160; </div>
+<div class="line"><a name="l00767"></a><span class="lineno"><a class="line" href="classhal_1_1_gate_type.html#a9f7a4a4f5ebf24633b9d2fbc75d48945">  767</a></span>&#160;    <a class="code" href="classhal_1_1_result.html">Result&lt;Parameter&gt;</a> GateType::get_parameter(<span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">auto</span> it = m_parameters.find(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>); it != m_parameters.end())</div>
+<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;        {</div>
+<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(it-&gt;second);</div>
+<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;        }</div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160; </div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;no parameter named &#39;&quot;</span> + <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a> + <span class="stringliteral">&quot;&#39;&quot;</span>);</div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;    }</div>
+<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160; </div>
+<div class="line"><a name="l00777"></a><span class="lineno"><a class="line" href="classhal_1_1_gate_type.html#a39b94ed60cceac3b97966cea3e715a74">  777</a></span>&#160;    <span class="keywordtype">bool</span> GateType::has_parameter(<span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;        <span class="keywordflow">return</span> m_parameters.find(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) != m_parameters.end();</div>
+<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;    }</div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_base_pin_html_a16eadf80d27bfe48d2d667f2180ae960"><div class="ttname"><a href="classhal_1_1_base_pin.html#a16eadf80d27bfe48d2d667f2180ae960">hal::BasePin::get_name</a></div><div class="ttdeci">const std::string &amp; get_name() const</div><div class="ttdef"><b>Definition:</b> <a href="base__pin_8h_source.html#l00110">base_pin.h:110</a></div></div>
 <div class="ttc" id="aclasshal_1_1_base_pin_html_a2c923fe5745e6588c4247d7967744d09"><div class="ttname"><a href="classhal_1_1_base_pin.html#a2c923fe5745e6588c4247d7967744d09">hal::BasePin::get_id</a></div><div class="ttdeci">u32 get_id() const</div><div class="ttdef"><b>Definition:</b> <a href="base__pin_8h_source.html#l00090">base_pin.h:90</a></div></div>
 <div class="ttc" id="aclasshal_1_1_base_pin_html_a7fc8266508d7bf0c81093449383392da"><div class="ttname"><a href="classhal_1_1_base_pin.html#a7fc8266508d7bf0c81093449383392da">hal::BasePin::get_group</a></div><div class="ttdeci">const std::pair&lt; PinGroup&lt; T &gt; *, i32 &gt; &amp; get_group() const</div><div class="ttdef"><b>Definition:</b> <a href="base__pin_8h_source.html#l00160">base_pin.h:160</a></div></div>
@@ -886,6 +917,8 @@ $(document).ready(function(){initNavTree('netlist_2gate__library_2gate__type_8cp
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a924ab95925fc83b38cba3ac2d8d7e9aa"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a></div><div class="ttdeci">PinDirection direction</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">netlist_serializer.cpp:64</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a9b45b3e13bd9167aab02e17e08916231"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">netlist_serializer.cpp:58</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_ab832d8349a6c8a3927b85c5ada524cb2"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a></div><div class="ttdeci">i32 id</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">netlist_serializer.cpp:56</a></div></div>
+<div class="ttc" id="astructhal_1_1_parameter_html"><div class="ttname"><a href="structhal_1_1_parameter.html">hal::Parameter</a></div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00043">parameter.h:44</a></div></div>
+<div class="ttc" id="astructhal_1_1_parameter_html_a84e52e754a7b1c3cde6392f1a4974165"><div class="ttname"><a href="structhal_1_1_parameter.html#a84e52e754a7b1c3cde6392f1a4974165">hal::Parameter::get_name</a></div><div class="ttdeci">const std::string &amp; get_name() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2parameter_8cpp_source.html#l00294">parameter.cpp:294</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

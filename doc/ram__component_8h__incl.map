@@ -1,8 +1,10 @@
 <map id="include/hal_core/netlist/gate_library/gate_type_component/ram_component.h" name="include/hal_core/netlist/gate_library/gate_type_component/ram_component.h">
-<area shape="rect" id="node1" title=" " alt="" coords="87,5,311,61"/>
-<area shape="rect" id="node2" href="$gate__type__component_8h.html" title=" " alt="" coords="89,109,309,165"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="5,303,145,329"/>
-<area shape="rect" id="node4" href="$boolean__function_8h.html" title=" " alt="" coords="47,213,226,255"/>
-<area shape="rect" id="node5" title=" " alt="" coords="175,303,218,329"/>
-<area shape="rect" id="node6" title=" " alt="" coords="301,221,388,247"/>
+<area shape="rect" id="node1" title=" " alt="" coords="322,5,546,61"/>
+<area shape="rect" id="node2" href="$gate__type__component_8h.html" title=" " alt="" coords="71,109,291,165"/>
+<area shape="rect" id="node6" title=" " alt="" coords="393,303,456,329"/>
+<area shape="rect" id="node8" title=" " alt="" coords="471,124,549,151"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="221,303,361,329"/>
+<area shape="rect" id="node4" href="$boolean__function_8h.html" title=" " alt="" coords="218,213,397,255"/>
+<area shape="rect" id="node5" title=" " alt="" coords="139,303,182,329"/>
+<area shape="rect" id="node7" title=" " alt="" coords="5,221,92,247"/>
 </map>

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -105,7 +105,7 @@ Inheritance diagram for hal::FileManager:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_file_manager__inherit__graph.png" border="0" usemap="#ahal_1_1_file_manager_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_file_manager_inherit__map" id="ahal_1_1_file_manager_inherit__map">
-<area shape="rect" title="Stores information about the currently opened netlist." alt="" coords="5,395,183,648"/>
+<area shape="rect" title="Stores information about the currently opened netlist." alt="" coords="5,395,183,663"/>
 <area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qobject.html" title=" " alt="" coords="11,5,177,347"/>
 </map>
 </div>
@@ -114,7 +114,7 @@ Collaboration diagram for hal::FileManager:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_file_manager__coll__graph.png" border="0" usemap="#ahal_1_1_file_manager_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1_file_manager_coll__map" id="ahal_1_1_file_manager_coll__map">
-<area shape="rect" title="Stores information about the currently opened netlist." alt="" coords="5,395,183,648"/>
+<area shape="rect" title="Stores information about the currently opened netlist." alt="" coords="5,395,183,663"/>
 <area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qobject.html" title=" " alt="" coords="11,5,177,347"/>
 </map>
 </div>
@@ -327,6 +327,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a408006dc497476d24c0114c5c1e37de3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afde93a6dfaa879b6c66e6402fd58f580"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_file_manager.html#afde93a6dfaa879b6c66e6402fd58f580">directoryStatusText</a> (<a class="el" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2">DirectoryStatus</a> stat)</td></tr>
 <tr class="separator:afde93a6dfaa879b6c66e6402fd58f580"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd41c54bdfa3bdca5fd6d4b4ae83e707"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_file_manager.html#acd41c54bdfa3bdca5fd6d4b4ae83e707">loadGateLibrary</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;path)</td></tr>
+<tr class="separator:acd41c54bdfa3bdca5fd6d4b4ae83e707"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_methods_qobject"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_qobject')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qobject.html">QObject</a></td></tr>
 <tr class="memitem:tr inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#tr">tr</a> (const char *sourceText, const char *disambiguation, int n)</td></tr>
 <tr class="separator:tr inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -383,7 +385,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>Stores information about the currently opened netlist. </p>
 <p>The <a class="el" href="classhal_1_1_file_manager.html" title="Stores information about the currently opened netlist.">FileManager</a> handles the status and information of the currently opened netlist file including whether a file is opened or not. This class is implemented with a singleton pattern. </p>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8h_source.html#l00047">47</a> of file <a class="el" href="file__manager_8h_source.html">file_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8h_source.html#l00048">48</a> of file <a class="el" href="file__manager_8h_source.html">file_manager.h</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a5911170f4c0730fb3a214d4d3e7788f2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5911170f4c0730fb3a214d4d3e7788f2">&#9670;&nbsp;</a></span>DirectoryStatus</h2>
@@ -409,7 +411,7 @@ Additional Inherited Members</h2></td></tr>
 <tr><td class="fieldname"><a id="a5911170f4c0730fb3a214d4d3e7788f2a8922a75c41864121a3b89ef279fcdfa5"></a>UnknownDirectoryEntry&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8h_source.html#l00093">93</a> of file <a class="el" href="file__manager_8h_source.html">file_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8h_source.html#l00094">94</a> of file <a class="el" href="file__manager_8h_source.html">file_manager.h</a>.</p>
 
 </div>
 </div>
@@ -438,7 +440,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Serializes the project to the shadowfile. Called in regular intervals that can be set via the settings. </p>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00091">91</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00092">92</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2project__manager_8cpp_source.html#l00091">hal::ProjectManager::get_project_directory()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00129">hal::ProjectManager::get_project_status()</a>, <a class="el" href="project__directory_8cpp_source.html#l00067">hal::ProjectDirectory::get_shadow_dir()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00089">hal::gPythonContext</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00038">instance</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="python__context_8cpp_source.html#l00080">hal::PythonContext::pythonThread()</a>.</p>
 
@@ -468,7 +470,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Closes the file and resets all information regarding the closed file. </p>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00676">676</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00683">683</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist__relay_8cpp_source.html#l00814">hal::NetlistRelay::debugHandleFileClosed()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlistOwner</a>, <a class="el" href="gui__globals_8h_source.html#l00074">hal::gNetlistRelay</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00038">instance</a>, and <a class="el" href="netlist__relay_8cpp_source.html#l00045">hal::NetlistRelay::unregisterNetlistCallbacks()</a>.</p>
 
@@ -516,7 +518,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00496">496</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00501">501</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdialog.html#exec">QDialog::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#exists">QFileInfo::exists()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gFileStatusManager</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlistOwner</a>, <a class="el" href="gui__globals_8h_source.html#l00074">hal::gNetlistRelay</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gPluginRelay</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#lastIndexOf-1">QString::lastIndexOf()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#left">QString::left()</a>, <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00047">hal::netlist_factory::load_netlist()</a>, <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00145">hal::netlist_factory::load_netlists()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00696">hal::GuiPluginTable::loadFeature()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="plugin__relay_8h_source.html#l00068">hal::PluginRelay::mGuiPluginTable</a>, <a class="el" href="file__status__manager_8cpp_source.html#l00042">hal::FileStatusManager::netlistOpened()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#open">QFile::open()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::ReadOnly</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00056">hal::NetlistRelay::registerNetlistCallbacks()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#comboBoxItems-prop">QInputDialog::setComboBoxItems()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#labelText-prop">QInputDialog::setLabelText()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowTitle-prop">QWidget::setWindowTitle()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#suffix">QFileInfo::suffix()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#textValue-prop">QInputDialog::textValue</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
 
@@ -553,7 +555,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>DirectoryStatus enum (see above) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00162">162</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00163">163</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist__parser__manager_8cpp_source.html#l00135">hal::netlist_parser_manager::can_parse()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">QJsonObject::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#exists">QFileInfo::exists()</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsondocument.html#fromJson">QJsonDocument::fromJson()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#isDir">QFileInfo::isDir()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#isFile">QFileInfo::isFile()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsondocument.html#isObject">QJsonDocument::isObject()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonparseerror.html#ParseError-enum">QJsonParseError::NoError</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsondocument.html#object">QJsonDocument::object()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::ReadOnly</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#suffix">QFileInfo::suffix()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
 
@@ -592,7 +594,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Text for status message or message box. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00224">224</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00225">225</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="project__dir__dialog_8cpp_source.html#l00127">hal::ProjectDirDialog::accept()</a>, and <a class="el" href="project__dir__dialog_8cpp_source.html#l00041">hal::ProjectDirDialogStatus::setMessage()</a>.</p>
 
@@ -632,7 +634,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00147">147</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00148">148</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
 
 </div>
 </div>
@@ -780,7 +782,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the filename of the currently opened file. When no file is open an empty string is returned.</p>
 <dl class="section return"><dt>Returns</dt><dd>The filename. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00107">107</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00108">108</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="special__log__content__manager_8cpp_source.html#l00090">hal::SpecialLogContentManager::safePythonEditor()</a>, and <a class="el" href="special__log__content__manager_8cpp_source.html#l00037">hal::SpecialLogContentManager::safeScreenshot()</a>.</p>
 
@@ -803,7 +805,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the status if a file is currently open or not.</p>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> when a file is open, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00086">86</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00087">87</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="main__window_8cpp_source.html#l00554">hal::MainWindow::closeGateLibraryManager()</a>.</p>
 
@@ -869,7 +871,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the singleton instance of the filemanager.</p>
 <dl class="section return"><dt>Returns</dt><dd>The filemanager's instance. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00080">80</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00081">81</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="main__window_8cpp_source.html#l00554">hal::MainWindow::closeGateLibraryManager()</a>, <a class="el" href="main__window_8cpp_source.html#l00584">hal::MainWindow::closePluginManager()</a>, <a class="el" href="main__window_8cpp_source.html#l00544">hal::MainWindow::closeSettings()</a>, <a class="el" href="content__manager_8cpp_source.html#l00107">hal::ContentManager::ContentManager()</a>, <a class="el" href="open__file__widget_8cpp_source.html#l00056">hal::OpenFileWidget::dropEvent()</a>, <a class="el" href="action__open__netlist__file_8cpp_source.html#l00029">hal::ActionOpenNetlistFile::exec()</a>, <a class="el" href="main__window_8cpp_source.html#l00936">hal::MainWindow::handleActionCloseFile()</a>, <a class="el" href="main__window_8cpp_source.html#l00061">hal::MainWindow::MainWindow()</a>, <a class="el" href="file__status__manager_8cpp_source.html#l00034">hal::FileStatusManager::modifiedFilesExisting()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00033">hal::NetlistRelay::NetlistRelay()</a>, <a class="el" href="python__editor_8cpp_source.html#l00207">hal::PythonEditor::PythonEditor()</a>, <a class="el" href="recent__files__widget_8cpp_source.html#l00019">hal::RecentFilesWidget::RecentFilesWidget()</a>, <a class="el" href="special__log__content__manager_8cpp_source.html#l00090">hal::SpecialLogContentManager::safePythonEditor()</a>, and <a class="el" href="special__log__content__manager_8cpp_source.html#l00037">hal::SpecialLogContentManager::safeScreenshot()</a>.</p>
 
@@ -906,11 +908,48 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00330">330</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00331">331</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absolutePath">QDir::absolutePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#ButtonRole-enum">QMessageBox::ActionRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#addButton">QMessageBox::addButton()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgridlayout.html#addItem">QGridLayout::addItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#clickedButton">QMessageBox::clickedButton()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgridlayout.html#columnCount">QGridLayout::columnCount()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#copy">QFile::copy()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00096">hal::ProjectManager::create_project_directory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdialog.html#exec">QDialog::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#exec">QMessageBox::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Expanding</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#fileName">QFileInfo::fileName()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="import__netlist__dialog_8cpp_source.html#l00112">hal::ImportNetlistDialog::gateLibraryPath()</a>, <a class="el" href="project__directory_8cpp_source.html#l00038">hal::ProjectDirectory::get_default_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00162">hal::ProjectManager::get_netlist_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00091">hal::ProjectManager::get_project_directory()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gFileStatusManager</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00038">instance</a>, <a class="el" href="import__netlist__dialog_8cpp_source.html#l00122">hal::ImportNetlistDialog::isCopyGatelibChecked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="import__netlist__dialog_8cpp_source.html#l00117">hal::ImportNetlistDialog::isMoveNetlistChecked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#layout">QWidget::layout()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Minimum</a>, <a class="el" href="file__status__manager_8cpp_source.html#l00048">hal::FileStatusManager::netlistChanged()</a>, <a class="el" href="file__status__manager_8cpp_source.html#l00056">hal::FileStatusManager::netlistSaved()</a>, <a class="el" href="import__netlist__dialog_8cpp_source.html#l00086">hal::ImportNetlistDialog::projectDirectory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#Icon-enum">QMessageBox::Question</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#ButtonRole-enum">QMessageBox::RejectRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#remove">QString::remove()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00117">hal::ProjectManager::remove_project_directory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#rename">QDir::rename()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgridlayout.html#rowCount">QGridLayout::rowCount()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00139">hal::ProjectManager::serialize_project()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#icon-prop">QMessageBox::setIcon()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#text-prop">QMessageBox::setText()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#setWindowTitle">QMessageBox::setWindowTitle()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="open__file__widget_8cpp_source.html#l00056">hal::OpenFileWidget::dropEvent()</a>, and <a class="el" href="action__open__netlist__file_8cpp_source.html#l00029">hal::ActionOpenNetlistFile::exec()</a>.</p>
+
+</div>
+</div>
+<a id="acd41c54bdfa3bdca5fd6d4b4ae83e707"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd41c54bdfa3bdca5fd6d4b4ae83e707">&#9670;&nbsp;</a></span>loadGateLibrary()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> * hal::FileManager::loadGateLibrary </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Loads a gate library. If the file format is outdated, the user is asked whether the file should be upgraded, in which case the original file is kept with extension .json and the upgraded file gets loaded. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>- the path of the gate library file </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The gate library or nullptr if it could not be loaded. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00773">773</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#completeBaseName">QFileInfo::completeBaseName()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#isFile">QFileInfo::isFile()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00075">hal::gate_library_manager::load()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::No</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#question">QMessageBox::question()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Yes</a>.</p>
 
 </div>
 </div>
@@ -938,9 +977,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Creates a new empty hal project </p>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00271">271</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00272">272</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#copy">QFile::copy()</a>, <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00019">hal::netlist_factory::create_netlist()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00096">hal::ProjectManager::create_project_directory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdialog.html#exec">QDialog::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#fileName">QFileInfo::fileName()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="new__project__dialog_8cpp_source.html#l00136">hal::NewProjectDialog::gateLibraryPath()</a>, <a class="el" href="project__directory_8cpp_source.html#l00038">hal::ProjectDirectory::get_default_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00162">hal::ProjectManager::get_netlist_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00091">hal::ProjectManager::get_project_directory()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gFileStatusManager</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlistOwner</a>, <a class="el" href="gui__globals_8h_source.html#l00074">hal::gNetlistRelay</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gPluginRelay</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00038">instance</a>, <a class="el" href="new__project__dialog_8cpp_source.html#l00145">hal::NewProjectDialog::isCopyGatelibChecked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00075">hal::gate_library_manager::load()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00696">hal::GuiPluginTable::loadFeature()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="plugin__relay_8h_source.html#l00068">hal::PluginRelay::mGuiPluginTable</a>, <a class="el" href="file__status__manager_8cpp_source.html#l00048">hal::FileStatusManager::netlistChanged()</a>, <a class="el" href="file__status__manager_8cpp_source.html#l00042">hal::FileStatusManager::netlistOpened()</a>, <a class="el" href="file__status__manager_8cpp_source.html#l00056">hal::FileStatusManager::netlistSaved()</a>, <a class="el" href="new__project__dialog_8cpp_source.html#l00106">hal::NewProjectDialog::projectDirectory()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00056">hal::NetlistRelay::registerNetlistCallbacks()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00139">hal::ProjectManager::serialize_project()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#copy">QFile::copy()</a>, <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00019">hal::netlist_factory::create_netlist()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00096">hal::ProjectManager::create_project_directory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdialog.html#exec">QDialog::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#fileName">QFileInfo::fileName()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="new__project__dialog_8cpp_source.html#l00136">hal::NewProjectDialog::gateLibraryPath()</a>, <a class="el" href="project__directory_8cpp_source.html#l00038">hal::ProjectDirectory::get_default_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00162">hal::ProjectManager::get_netlist_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00091">hal::ProjectManager::get_project_directory()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gFileStatusManager</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlistOwner</a>, <a class="el" href="gui__globals_8h_source.html#l00074">hal::gNetlistRelay</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gPluginRelay</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00038">instance</a>, <a class="el" href="new__project__dialog_8cpp_source.html#l00145">hal::NewProjectDialog::isCopyGatelibChecked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00696">hal::GuiPluginTable::loadFeature()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="plugin__relay_8h_source.html#l00068">hal::PluginRelay::mGuiPluginTable</a>, <a class="el" href="file__status__manager_8cpp_source.html#l00048">hal::FileStatusManager::netlistChanged()</a>, <a class="el" href="file__status__manager_8cpp_source.html#l00042">hal::FileStatusManager::netlistOpened()</a>, <a class="el" href="file__status__manager_8cpp_source.html#l00056">hal::FileStatusManager::netlistSaved()</a>, <a class="el" href="new__project__dialog_8cpp_source.html#l00106">hal::NewProjectDialog::projectDirectory()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00056">hal::NetlistRelay::registerNetlistCallbacks()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00139">hal::ProjectManager::serialize_project()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__open__netlist__file_8cpp_source.html#l00029">hal::ActionOpenNetlistFile::exec()</a>.</p>
 
@@ -977,7 +1016,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00452">452</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00453">453</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#exists">QFileInfo::exists()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="project__json_8h_source.html#l00051">hal::ProjectJson::gateLibraryFilename()</a>, <a class="el" href="project__directory_8cpp_source.html#l00038">hal::ProjectDirectory::get_default_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00169">hal::ProjectManager::get_netlist()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00162">hal::ProjectManager::get_netlist_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00091">hal::ProjectManager::get_project_directory()</a>, <a class="el" href="project__directory_8cpp_source.html#l00067">hal::ProjectDirectory::get_shadow_dir()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gFileStatusManager</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlistOwner</a>, <a class="el" href="gui__globals_8h_source.html#l00074">hal::gNetlistRelay</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gPluginRelay</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00038">instance</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#isFile">QFileInfo::isFile()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#lastModified">QFileInfo::lastModified()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00696">hal::GuiPluginTable::loadFeature()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="plugin__relay_8h_source.html#l00068">hal::PluginRelay::mGuiPluginTable</a>, <a class="el" href="file__status__manager_8cpp_source.html#l00042">hal::FileStatusManager::netlistOpened()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::No</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00069">hal::ProjectManager::open_project()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#question">QMessageBox::question()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00056">hal::NetlistRelay::registerNetlistCallbacks()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00174">hal::ProjectManager::restore_project_file_from_autosave()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00086">hal::ProjectManager::set_project_directory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#suffix">QFileInfo::suffix()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#toString-1">QDateTime::toString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Yes</a>.</p>
 
@@ -1100,7 +1139,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00115">115</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__manager_8cpp_source.html#l00116">116</a> of file <a class="el" href="file__manager_8cpp_source.html">file_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
 

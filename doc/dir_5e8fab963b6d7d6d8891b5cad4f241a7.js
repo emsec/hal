@@ -14,6 +14,7 @@ var dir_5e8fab963b6d7d6d8891b5cad4f241a7 =
     [ "action_set_object_color.cpp", "action__set__object__color_8cpp.html", null ],
     [ "action_set_object_data.cpp", "action__set__object__data_8cpp.html", null ],
     [ "action_set_object_type.cpp", "action__set__object__type_8cpp.html", null ],
+    [ "action_set_parameter_value.cpp", "action__set__parameter__value_8cpp.html", null ],
     [ "action_set_selection_focus.cpp", "action__set__selection__focus_8cpp.html", null ],
     [ "action_unfold_module.cpp", "action__unfold__module_8cpp.html", null ],
     [ "user_action.cpp", "user__action_8cpp.html", null ],

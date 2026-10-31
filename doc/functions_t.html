@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -93,6 +93,12 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 <li>tableIconStyle()
 : <a class="el" href="classhal_1_1_grouping_manager_widget.html#ade75c06f3f7e2a3c01282376c6fc4a38">hal::GroupingManagerWidget</a>
 </li>
+<li>TableInputSymbol
+: <a class="el" href="classhal_1_1_state_table_component.html#af51de8e25de62126f13002f58d374fa4">hal::StateTableComponent</a>
+</li>
+<li>TableOutputSymbol
+: <a class="el" href="classhal_1_1_state_table_component.html#a9010d0eea96781dcc8335e132aa28226">hal::StateTableComponent</a>
+</li>
 <li>tableValues()
 : <a class="el" href="classhal_1_1_boolean_dialog.html#abcbfd734d2cbea866db0a1adeafae035">hal::BooleanDialog</a>
 </li>
@@ -129,6 +135,7 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 , <a class="el" href="classhal_1_1_action_set_object_color.html#ae6c28db0c86cd96605147a2fe2cdec4c">hal::ActionSetObjectColor</a>
 , <a class="el" href="classhal_1_1_action_set_object_data.html#a26bff037413f03808c4f9081effb312c">hal::ActionSetObjectData</a>
 , <a class="el" href="classhal_1_1_action_set_object_type.html#a0a2ac44c98eab5ff2ad8bdc37b776dff">hal::ActionSetObjectType</a>
+, <a class="el" href="classhal_1_1_action_set_parameter_value.html#a543f134cac21227921db9535317c0b71">hal::ActionSetParameterValue</a>
 , <a class="el" href="classhal_1_1_action_set_selection_focus.html#aa0a1f251a6a2fa0d0b19eca4cfda1fd6">hal::ActionSetSelectionFocus</a>
 , <a class="el" href="classhal_1_1_action_unfold_module.html#abaa9a68c859c9c848b58e7a4da949095">hal::ActionUnfoldModule</a>
 , <a class="el" href="classhal_1_1_user_action.html#a0a21a47562362b7a154f7843381c1e0b">hal::UserAction</a>
@@ -187,6 +194,9 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 </li>
 <li>tick()
 : <a class="el" href="class_t_e_s_t_b.html#af5cc155959e7f722454b866aec96a1c2">TESTB&lt; VA &gt;</a>
+</li>
+<li>Time()
+: <a class="el" href="structhal_1_1_parameter.html#a968a38e75fffd304bf468c9e0b26ab60">hal::Parameter</a>
 </li>
 <li>time()
 : <a class="el" href="classhal_1_1_vcd_serializer_element.html#a0530af08eb440aaa81c1bc408a26ded5">hal::VcdSerializerElement</a>
@@ -265,6 +275,9 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 <li>to_z3()
 : <a class="el" href="classhal_1_1_boolean_function.html#a7fc879a01fcd059435970f03e683043f">hal::BooleanFunction</a>
 </li>
+<li>toContainer()
+: <a class="el" href="classhal_1_1_data_table_entry.html#a6a547c6afbe56b63d4bea6102c4ac832">hal::DataTableEntry</a>
+</li>
 <li>toFileDialog()
 : <a class="el" href="classhal_1_1_supported_file_formats.html#a14e611b5ac2ec92c6c8e83f27e900e2e">hal::SupportedFileFormats</a>
 </li>
@@ -325,7 +338,7 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 : <a class="el" href="classhal_1_1_user_action_object_type.html#a8247a7262f0e07ba19673e424ee5f6e0">hal::UserActionObjectType</a>
 </li>
 <li>toInt()
-: <a class="el" href="classhal_1_1_search_options.html#a4f7b5f8c9539e03af8dddeab46fb4f4b">hal::SearchOptions</a>
+: <a class="el" href="classhal_1_1_search_options.html#a65eec69dcdd18c75803c5a5e9a5bac72">hal::SearchOptions</a>
 </li>
 <li>toJson()
 : <a class="el" href="classhal_1_1_comment_entry.html#a2dda7a00e13f564e8722f883f6c45cd2">hal::CommentEntry</a>
@@ -533,7 +546,6 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 <li>type
 : <a class="el" href="structhal_1_1_boolean_function_1_1_node.html#a1d4b856fba4b710a2a43dcfeb0af2610">hal::BooleanFunction::Node</a>
 , <a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#a6e35fef63420a76d8148d6be114b1705">hal::BooleanFunctionParser::Token</a>
-, <a class="el" href="classhal_1_1_data_table_model.html#a1e7dbd4076ddf7a6f85825e964bc36ffaf2af28ca8af13a597912cbb27c5ae29a">hal::DataTableModel</a>
 </li>
 <li>Type
 : <a class="el" href="classhal_1_1_endpoint_table_model.html#aa915111b587c5f60f5d78ecd2edcb915">hal::EndpointTableModel</a>
@@ -551,7 +563,8 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 , <a class="el" href="classhal_1_1_node_box.html#abb2f22657e902c8b764701c6452f2117">hal::NodeBox</a>
 </li>
 <li>Type
-: <a class="el" href="classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2">hal::PinActionType</a>
+: <a class="el" href="structhal_1_1_parameter.html#a2688774ea7baad9abc8ea20c9a4b8863">hal::Parameter</a>
+, <a class="el" href="classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2">hal::PinActionType</a>
 </li>
 <li>type()
 : <a class="el" href="classhal_1_1_saleae_directory_net_entry.html#ac6dfd2e796739b5749e2fa77b42497b8">hal::SaleaeDirectoryNetEntry</a>
@@ -565,6 +578,9 @@ $(document).ready(function(){initNavTree('functions_t.html',''); initResizable()
 </li>
 <li>Type
 : <a class="el" href="struct_hop___obj__t__.html#a006caf7c7691e1c3b903825ad0620445">Hop_Obj_t_</a>
+</li>
+<li>TypeProperty
+: <a class="el" href="classhal_1_1_data_table_entry.html#a0797b38ffa19dbfc4aab5b003475b550a62caac0e3206d8d5f685fd1a07b940ed">hal::DataTableEntry</a>
 </li>
 <li>typeString()
 : <a class="el" href="classhal_1_1_endpoint_table_model.html#afa4ca15367039d6f0ffa368e1d6948d9">hal::EndpointTableModel</a>

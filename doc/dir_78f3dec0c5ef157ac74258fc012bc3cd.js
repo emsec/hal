@@ -4,6 +4,7 @@ var dir_78f3dec0c5ef157ac74258fc012bc3cd =
     [ "module_details_widget", "dir_29703ed93360dbc259961a9c5ee9cd0d.html", "dir_29703ed93360dbc259961a9c5ee9cd0d" ],
     [ "net_details_widget", "dir_cffb807b89ed0f95a0fd37af4c906aa2.html", "dir_cffb807b89ed0f95a0fd37af4c906aa2" ],
     [ "tree_navigation", "dir_d68d351a83d965270859a3ced15f4822.html", "dir_d68d351a83d965270859a3ced15f4822" ],
+    [ "data_table_entry.cpp", "data__table__entry_8cpp.html", null ],
     [ "data_table_model.cpp", "data__table__model_8cpp.html", null ],
     [ "data_table_widget.cpp", "data__table__widget_8cpp.html", null ],
     [ "details_frame_widget.cpp", "details__frame__widget_8cpp.html", null ],

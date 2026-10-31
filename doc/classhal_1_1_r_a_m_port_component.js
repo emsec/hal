@@ -1,6 +1,5 @@
 var classhal_1_1_r_a_m_port_component =
 [
-    [ "RAMPortComponent", "classhal_1_1_r_a_m_port_component.html#acc82a4331c0239ddd884739fe314d488", null ],
     [ "get_address_group", "classhal_1_1_r_a_m_port_component.html#aa946590a84c87481c87e0df2b9b70178", null ],
     [ "get_clock_function", "classhal_1_1_r_a_m_port_component.html#aa0dcc4d24215aa62fb80938990dad8d3", null ],
     [ "get_components", "classhal_1_1_r_a_m_port_component.html#a6285b6c026b434affa0603ef8772bfe4", null ],

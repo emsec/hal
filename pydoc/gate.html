@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gate &mdash; hal_py v4.5.0-170-g3418bd25d documentation</title>
+  <title>Gate &mdash; hal_py v4.5.0-232-g8053ac4b3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-170-g3418bd25d
+                v4.5.0-232-g8053ac4b3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -138,7 +138,7 @@
 <dl class="py property">
 <dt class="sig sig-object py" id="hal_py.Gate.boolean_functions">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">boolean_functions</span></span><a class="headerlink" href="#hal_py.Gate.boolean_functions" title="Permalink to this definition"></a></dt>
-<dd><p>A dictionary from function name to Boolean function for all boolean functions associated with this gate.</p>
+<dd><p>A dictionary from function name to raw Boolean function for all boolean functions associated with this gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)">dict</a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]</p>
@@ -171,6 +171,23 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.Gate.delete_parameter">
+<span class="sig-name descname"><span class="pre">delete_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="data_container.html#hal_py.DataContainer" title="hal_py.DataContainer"><span class="pre">hal_py.DataContainer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.Gate.delete_parameter" title="Permalink to this definition"></a></dt>
+<dd><p>Delete an explicitly stored parameter value, if any.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – The parameter name.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if a value was deleted, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)">bool</a></p>
@@ -229,11 +246,12 @@
 <ol class="arabic">
 <li><p>get_boolean_function(self: hal_py.Gate, name: str) -&gt; hal::BooleanFunction</p>
 <blockquote>
-<div><p>Get the Boolean function specified by the given name.
-This name can for example be an output pin of the gate or any other user-defined function name.</p>
+<div><p>Get the raw Boolean function specified by the given name without inlining or net substitution.
+This name can for example be an <code class="docutils literal notranslate"><span class="pre">output</span></code> pin of the gate or any other user-defined function name.
+For full control over inlining and net substitution use <code class="docutils literal notranslate"><span class="pre">get_boolean_function</span></code> with <code class="docutils literal notranslate"><span class="pre">inlined</span></code> and <code class="docutils literal notranslate"><span class="pre">substitute_nets</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param str name</dt>
-<dd class="field-odd"><p>The name.</p>
+<dd class="field-odd"><p>The name. If empty, the first output pin is used.</p>
 </dd>
 <dt class="field-even">returns</dt>
 <dd class="field-even"><p>The Boolean function on success, an empty Boolean function otherwise.</p>
@@ -244,10 +262,38 @@ This name can for example be an output pin of the gate or any other user-defined
 </dl>
 </div></blockquote>
 </li>
+<li><p>get_boolean_function(self: hal_py.Gate, name: str, inlined: bool, substitute_nets: bool) -&gt; Optional[hal::BooleanFunction]</p>
+<blockquote>
+<div><p>Get the Boolean function specified by the given name, with full error reporting.
+When <code class="docutils literal notranslate"><span class="pre">inlined</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">internal</span></code> and <code class="docutils literal notranslate"><span class="pre">output</span></code> pin variables are recursively substituted with
+their definitions, and any gate-instance parameter values are reduced.
+When <code class="docutils literal notranslate"><span class="pre">substitute_nets</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the remaining input pin variables are additionally substituted
+with variable names derived from the fan-in nets using <code class="docutils literal notranslate"><span class="pre">BooleanFunctionNetDecorator</span></code>.
+<code class="docutils literal notranslate"><span class="pre">substitute_nets</span></code> requires <code class="docutils literal notranslate"><span class="pre">inlined</span></code> to be <code class="docutils literal notranslate"><span class="pre">True</span></code>; passing <code class="docutils literal notranslate"><span class="pre">substitute_nets=True</span></code> with <code class="docutils literal notranslate"><span class="pre">inlined=False</span></code> returns <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param str name</dt>
+<dd class="field-odd"><p>The name. Must not be empty.</p>
+</dd>
+<dt class="field-even">param bool inlined</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to inline <code class="docutils literal notranslate"><span class="pre">internal</span></code> and <code class="docutils literal notranslate"><span class="pre">output</span></code> pins and reduce parameter-conditional expressions.</p>
+</dd>
+<dt class="field-odd">param bool substitute_nets</dt>
+<dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to substitute input pin variables with fan-in net variables. Requires <code class="docutils literal notranslate"><span class="pre">inlined=True</span></code> and every input pin to have a connected net.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The Boolean function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>hal_py.BooleanFunction or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
 <li><p>get_boolean_function(self: hal_py.Gate, pin: hal_py.GatePin = None) -&gt; hal::BooleanFunction</p>
 <blockquote>
-<div><p>Get the Boolean function corresponding to the given output pin.
-If pin is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the Boolean function of the first output pin is returned.</p>
+<div><p>Get the raw Boolean function corresponding to the given <code class="docutils literal notranslate"><span class="pre">output</span></code> pin without inlining or net substitution.
+If <code class="docutils literal notranslate"><span class="pre">pin</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the Boolean function of the first <code class="docutils literal notranslate"><span class="pre">output</span></code> pin is returned.
+For full control over inlining and net substitution use <code class="docutils literal notranslate"><span class="pre">get_boolean_function</span></code> with <code class="docutils literal notranslate"><span class="pre">inlined</span></code> and <code class="docutils literal notranslate"><span class="pre">substitute_nets</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.GatePin pin</dt>
 <dd class="field-odd"><p>The pin.</p>
@@ -261,24 +307,87 @@ If pin is <code class="docutils literal notranslate"><span class="pre">None</spa
 </dl>
 </div></blockquote>
 </li>
+<li><p>get_boolean_function(self: hal_py.Gate, pin: hal_py.GatePin, inlined: bool, substitute_nets: bool) -&gt; Optional[hal::BooleanFunction]</p>
+<blockquote>
+<div><p>Get the Boolean function corresponding to the given <code class="docutils literal notranslate"><span class="pre">output</span></code> pin, with full error reporting.
+When <code class="docutils literal notranslate"><span class="pre">inlined</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">internal</span></code> and <code class="docutils literal notranslate"><span class="pre">output</span></code> pin variables are recursively substituted with
+their definitions, and any gate-instance parameter values are reduced.
+When <code class="docutils literal notranslate"><span class="pre">substitute_nets</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the remaining input pin variables are additionally substituted
+with variable names derived from the fan-in nets using <code class="docutils literal notranslate"><span class="pre">BooleanFunctionNetDecorator</span></code>.
+<code class="docutils literal notranslate"><span class="pre">substitute_nets</span></code> requires <code class="docutils literal notranslate"><span class="pre">inlined</span></code> to be <code class="docutils literal notranslate"><span class="pre">True</span></code>; passing <code class="docutils literal notranslate"><span class="pre">substitute_nets=True</span></code> with <code class="docutils literal notranslate"><span class="pre">inlined=False</span></code> returns <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> if <code class="docutils literal notranslate"><span class="pre">pin</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.GatePin pin</dt>
+<dd class="field-odd"><p>The output pin.</p>
+</dd>
+<dt class="field-even">param bool inlined</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to inline <code class="docutils literal notranslate"><span class="pre">internal</span></code> and <code class="docutils literal notranslate"><span class="pre">output</span></code> pins and reduce parameter-conditional expressions.</p>
+</dd>
+<dt class="field-odd">param bool substitute_nets</dt>
+<dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to substitute input pin variables with fan-in net variables. Requires <code class="docutils literal notranslate"><span class="pre">inlined=True</span></code> and every input pin to have a connected net.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The Boolean function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>hal_py.BooleanFunction or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
 </ol>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.Gate.get_boolean_functions">
-<span class="sig-name descname"><span class="pre">get_boolean_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_custom_functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict[str,</span> <span class="pre">hal::BooleanFunction]</span></span></span><a class="headerlink" href="#hal_py.Gate.get_boolean_functions" title="Permalink to this definition"></a></dt>
-<dd><p>Get a dict from function name to Boolean function for all boolean functions associated with this gate.</p>
+<span class="sig-name descname"><span class="pre">get_boolean_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Gate.get_boolean_functions" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p>get_boolean_functions(self: hal_py.Gate, only_custom_functions: bool = False) -&gt; Dict[str, hal::BooleanFunction]</p>
+<blockquote>
+<div><p>Get a dictionary from function name to raw Boolean function for all boolean functions associated with this gate.
+For full control over inlining and net substitution use <code class="docutils literal notranslate"><span class="pre">get_boolean_functions</span></code> with <code class="docutils literal notranslate"><span class="pre">inlined</span></code> and <code class="docutils literal notranslate"><span class="pre">substitute_nets</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>only_custom_functions</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get only Boolean functions that are local to the gate, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+<dt class="field-odd">param bool only_custom_functions</dt>
+<dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get only Boolean functions that are local to the gate, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">returns</dt>
 <dd class="field-even"><p>A dict from function name to function on success, an empty dict otherwise.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)">dict</a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]</p>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>dict[str,hal_py.BooleanFunction]</p>
 </dd>
 </dl>
+</div></blockquote>
+</li>
+<li><p>get_boolean_functions(self: hal_py.Gate, only_custom_functions: bool, inlined: bool, substitute_nets: bool) -&gt; Optional[Dict[str, hal::BooleanFunction]]</p>
+<blockquote>
+<div><p>Get a dictionary from function name to Boolean function for all boolean functions associated with this gate.
+When <code class="docutils literal notranslate"><span class="pre">inlined</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">internal</span></code> and <code class="docutils literal notranslate"><span class="pre">output</span></code> pin variables are recursively substituted with
+their definitions, and gate-instance parameter values are reduced.
+When <code class="docutils literal notranslate"><span class="pre">substitute_nets</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the remaining input pin variables are additionally substituted with
+variable names derived from the fan-in nets. <code class="docutils literal notranslate"><span class="pre">substitute_nets</span></code> requires <code class="docutils literal notranslate"><span class="pre">inlined</span></code> to be <code class="docutils literal notranslate"><span class="pre">True</span></code>.
+Aborts on the first failure and returns <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param bool only_custom_functions</dt>
+<dd class="field-odd"><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns only functions set via <a class="reference internal" href="#hal_py.Gate.add_boolean_function" title="hal_py.Gate.add_boolean_function"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_boolean_function()</span></code></a>.</p>
+</dd>
+<dt class="field-even">param bool inlined</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to inline <code class="docutils literal notranslate"><span class="pre">internal</span></code> and <code class="docutils literal notranslate"><span class="pre">output</span></code> pins and reduce parameter-conditional expressions.</p>
+</dd>
+<dt class="field-odd">param bool substitute_nets</dt>
+<dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to substitute input pin variables with fan-in net variables. Requires <code class="docutils literal notranslate"><span class="pre">inlined=True</span></code>.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>A map from function name to function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>dict[str,hal_py.BooleanFunction] or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="py method">
@@ -689,21 +798,6 @@ If no grouping contains this gate, <code class="docutils literal notranslate"><s
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="hal_py.Gate.get_init_data">
-<span class="sig-name descname"><span class="pre">get_init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.Gate.get_init_data" title="Permalink to this definition"></a></dt>
-<dd><p>Get the INIT data of the gate, if available. 
-An error is returned in case the gate does not hold any INIT data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The INIT data as a list on success, an empty list otherwise.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)">list</a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="hal_py.Gate.get_location">
 <span class="sig-name descname"><span class="pre">get_location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.Gate.get_location" title="Permalink to this definition"></a></dt>
 <dd><p>Get the physical location of the gate in the layout.
@@ -813,6 +907,77 @@ The optional filter is evaluated on every candidate such that the result only co
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="hal_py.Gate.get_parameter_declaration">
+<span class="sig-name descname"><span class="pre">get_parameter_declaration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="data_container.html#hal_py.DataContainer" title="hal_py.DataContainer"><span class="pre">hal_py.DataContainer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Parameter</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.Gate.get_parameter_declaration" title="Permalink to this definition"></a></dt>
+<dd><p>Get the full declaration of a typed parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – The parameter name.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The parameter declaration on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>hal_py.Parameter or <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.Gate.get_parameter_value">
+<span class="sig-name descname"><span class="pre">get_parameter_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Gate.get_parameter_value" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p>get_parameter_value(self: hal_py.DataContainer, name: str) -&gt; Optional[str]</p>
+<blockquote>
+<div><p>Get the value of a typed parameter. Returns the explicitly-stored value or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the parameter does not exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param str name</dt>
+<dd class="field-odd"><p>The parameter name.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The value string on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>str or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>get_parameter_value(self: hal_py.DataContainer, name: hal_py.Parameter) -&gt; Optional[str]</p>
+<blockquote>
+<div><p>Get the value of a typed parameter. Returns the explicitly-stored value or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the parameter does not exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Parameter param</dt>
+<dd class="field-odd"><p>The parameter.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The value string on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>str or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.Gate.get_parameters">
+<span class="sig-name descname"><span class="pre">get_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="data_container.html#hal_py.DataContainer" title="hal_py.DataContainer"><span class="pre">hal_py.DataContainer</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Parameter</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.Gate.get_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>Get all explicitly stored parameter values as a dict from <code class="docutils literal notranslate"><span class="pre">name</span></code> to <cite>(declaration, value)</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The parameter dict.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)">dict</a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>,<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)">tuple</a>(hal_py.Parameter,<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>)]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="hal_py.Gate.get_predecessor">
 <span class="sig-name descname"><span class="pre">get_predecessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Gate.get_predecessor" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
@@ -868,27 +1033,6 @@ The optional filter is evaluated on every candidate such that the result only co
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)">list</a>[<a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint">hal_py.Endpoint</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="hal_py.Gate.get_resolved_boolean_function">
-<span class="sig-name descname"><span class="pre">get_resolved_boolean_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><span class="pre">hal_py.GatePin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_pin_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional[hal::BooleanFunction]</span></span></span><a class="headerlink" href="#hal_py.Gate.get_resolved_boolean_function" title="Permalink to this definition"></a></dt>
-<dd><p>Get the resolved Boolean function corresponding to the given output pin, i.e., a Boolean function that only depends on input pins (or nets) and no internal or output pins.
-If fan-in nets are used to derive variable names, the variable names are generated using the <code class="docutils literal notranslate"><span class="pre">BooleanFunctionNetDecorator</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pin</strong> (<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a>) – The output pin.</p></li>
-<li><p><strong>use_pin_names</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">False</span></code> to use variable names derived from fan-in nets of the gate, <code class="docutils literal notranslate"><span class="pre">True</span></code> to use input pin names instead. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The Boolean function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1035,6 +1179,46 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)">bool</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.Gate.has_parameter">
+<span class="sig-name descname"><span class="pre">has_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Gate.has_parameter" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p>has_parameter(self: hal_py.DataContainer, name: str) -&gt; bool</p>
+<blockquote>
+<div><p>Check whether a parameter with the given name exists and has an explicitly stored value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param str name</dt>
+<dd class="field-odd"><p>The parameter name.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the parameter is explicitly set, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>has_parameter(self: hal_py.DataContainer, param: hal_py.Parameter) -&gt; bool</p>
+<blockquote>
+<div><p>Check whether a parameter exists and has an explicitly stored value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Parameter param</dt>
+<dd class="field-odd"><p>The parameter.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the parameter is explicitly set, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="py property">
@@ -1218,6 +1402,17 @@ Only positive values are valid, negative values will be regarded as no location 
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="hal_py.Gate.parameters">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameters</span></span><a class="headerlink" href="#hal_py.Gate.parameters" title="Permalink to this definition"></a></dt>
+<dd><p>All explicitly stored parameter values as a dict from <code class="docutils literal notranslate"><span class="pre">name</span></code> to <cite>(declaration, value)</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)">dict</a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>,<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)">tuple</a>(hal_py.Parameter,<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>)]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="hal_py.Gate.predecessors">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">predecessors</span></span><a class="headerlink" href="#hal_py.Gate.predecessors" title="Permalink to this definition"></a></dt>
 <dd><p>A list of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate.</p>
@@ -1242,24 +1437,6 @@ May overwrite an existing entry.</p>
 <li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – The data value.</p></li>
 <li><p><strong>log_with_info_level</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><em>bool</em></a>) – Force explicit logging channel ‘netlist’ with log level ‘info’ to trace GUI events.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="hal_py.Gate.set_init_data">
-<span class="sig-name descname"><span class="pre">set_init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.Gate.set_init_data" title="Permalink to this definition"></a></dt>
-<dd><p>Set the INIT data of the gate, if available.
-An error is returned in case the gate does not hold any INIT data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>init_data</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>]</em>) – The INIT data as a list.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
@@ -1313,6 +1490,26 @@ Only positive values are valid, negative values will be regarded as no location 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – The new name.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.Gate.set_parameter">
+<span class="sig-name descname"><span class="pre">set_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="data_container.html#hal_py.DataContainer" title="hal_py.DataContainer"><span class="pre">hal_py.DataContainer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Parameter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.Gate.set_parameter" title="Permalink to this definition"></a></dt>
+<dd><p>Set (or overwrite) the value of a typed parameter as a string. The value is validated, normalized, and stored; any existing entry with the same name is replaced.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param</strong> (<em>hal_py.Parameter</em>) – The parameter declaration.</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – The value to store as a string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Xilinx Toolbox &mdash; hal_py v4.5.0-170-g3418bd25d documentation</title>
+  <title>Xilinx Toolbox &mdash; hal_py v4.5.0-232-g8053ac4b3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -26,7 +26,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-170-g3418bd25d
+                v4.5.0-232-g8053ac4b3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -109,45 +109,110 @@ Translates the coordinates extracted from the <code class="docutils literal notr
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xilinx_toolbox.split_luts">
-<span class="sig-prename descclassname"><span class="pre">xilinx_toolbox.</span></span><span class="sig-name descname"><span class="pre">split_luts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#xilinx_toolbox.split_luts" title="Permalink to this definition"></a></dt>
-<dd><p>Split LUTs with two outputs into two separate LUT gates.
-Replaces <code class="docutils literal notranslate"><span class="pre">LUT6_2</span></code> with a <code class="docutils literal notranslate"><span class="pre">LUT6</span></code> and a <code class="docutils literal notranslate"><span class="pre">LUT5</span></code> gate if the respective outputs of the <code class="docutils literal notranslate"><span class="pre">LUT6_2</span></code> are actually used, i.e., connected to other gates.</p>
+<span class="sig-prename descclassname"><span class="pre">xilinx_toolbox.</span></span><span class="sig-name descname"><span class="pre">split_luts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xilinx_toolbox.split_luts" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p>split_luts(gates: List[hal_py.Gate], create_module: bool = False) -&gt; int</p>
+<blockquote>
+<div><p>Split a list of <code class="docutils literal notranslate"><span class="pre">LUT6_2</span></code> gates into separate LUT gates.</p>
+<p>Calls <code class="xref py py-func docutils literal notranslate"><span class="pre">split_lut()</span></code> for each gate in <code class="docutils literal notranslate"><span class="pre">gates</span></code>. Gates that cannot be split are skipped
+with a warning; processing always continues with the remaining gates.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p></li>
-<li><p><strong>gates</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.</p></li>
-</ul>
+<dt class="field-odd">param list[hal_py.Gate] gates</dt>
+<dd class="field-odd"><p>The <code class="docutils literal notranslate"><span class="pre">LUT6_2</span></code> gates to split.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The number of split <code class="docutils literal notranslate"><span class="pre">LUT6_2</span></code> gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+<dt class="field-even">param bool create_module</dt>
+<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, each split gate’s replacements are placed into a new module named after the original gate. If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), replacements inherit the parent module of the original gate.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)">int</a> or <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)">None</a></p>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The number of successfully split gates.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>int</p>
 </dd>
 </dl>
+</div></blockquote>
+</li>
+<li><p>split_luts(nl: hal_py.Netlist, gates: List[hal_py.Gate] = [], create_module: bool = False) -&gt; Optional[int]</p>
+<blockquote>
+<div><p>Split the <code class="docutils literal notranslate"><span class="pre">LUT6_2</span></code> gates of the netlist, or of the given gates, into separate LUT gates.</p>
+<p>Finds all gates of type <code class="docutils literal notranslate"><span class="pre">LUT6_2</span></code> within <code class="docutils literal notranslate"><span class="pre">gates</span></code> (or within the netlist if <code class="docutils literal notranslate"><span class="pre">gates</span></code> is empty) and calls <a class="reference internal" href="#xilinx_toolbox.split_luts" title="xilinx_toolbox.split_luts"><code class="xref py py-func docutils literal notranslate"><span class="pre">split_luts()</span></code></a> on them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Netlist nl</dt>
+<dd class="field-odd"><p>The netlist to operate on.</p>
+</dd>
+<dt class="field-even">param list[hal_py.Gate] gates</dt>
+<dd class="field-even"><p>The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.</p>
+</dd>
+<dt class="field-odd">param bool create_module</dt>
+<dd class="field-odd"><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, each split gate’s replacements are placed into a new module named after the original gate. If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), replacements inherit the parent module of the original gate.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The number of successfully split <code class="docutils literal notranslate"><span class="pre">LUT6_2</span></code> gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>int or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xilinx_toolbox.split_shift_registers">
-<span class="sig-prename descclassname"><span class="pre">xilinx_toolbox.</span></span><span class="sig-name descname"><span class="pre">split_shift_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#xilinx_toolbox.split_shift_registers" title="Permalink to this definition"></a></dt>
-<dd><p>Split shift register primitives and replaces them with equivalent flip-flops chains.
-Currently only implemented for gate types <code class="docutils literal notranslate"><span class="pre">SRL16E</span></code> and <code class="docutils literal notranslate"><span class="pre">SRLC32E</span></code>.
-The created flip-flops are assigned to the module of the shift register gate that they replace.</p>
+<span class="sig-prename descclassname"><span class="pre">xilinx_toolbox.</span></span><span class="sig-name descname"><span class="pre">split_shift_registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xilinx_toolbox.split_shift_registers" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p>split_shift_registers(gates: List[hal_py.Gate], create_module: bool = False) -&gt; Optional[int]</p>
+<blockquote>
+<div><p>Split a list of shift register primitives into equivalent <code class="docutils literal notranslate"><span class="pre">FDCE</span></code> flip-flop chains.</p>
+<p>Supported gate types: <code class="docutils literal notranslate"><span class="pre">SRL16</span></code>, <code class="docutils literal notranslate"><span class="pre">SRL16E</span></code>, <code class="docutils literal notranslate"><span class="pre">SRLC16E</span></code>, <code class="docutils literal notranslate"><span class="pre">SRLC32E</span></code>.</p>
+<p>Calls <code class="xref py py-func docutils literal notranslate"><span class="pre">split_shift_register()</span></code> for each gate in <code class="docutils literal notranslate"><span class="pre">gates</span></code>. Gates that cannot be split
+(e.g. because an address pin is not driven by a constant net) are skipped with a warning;
+processing always continues with the remaining gates.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p></li>
-<li><p><strong>gates</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.</p></li>
-</ul>
+<dt class="field-odd">param list[hal_py.Gate] gates</dt>
+<dd class="field-odd"><p>The shift register gates to split.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The number of split shift registers on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+<dt class="field-even">param bool create_module</dt>
+<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, each split gate’s replacements are placed into a new module named after the original gate. If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), replacements inherit the parent module of the original gate.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)">int</a> or <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)">None</a></p>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The number of successfully split gates.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>int</p>
 </dd>
 </dl>
+</div></blockquote>
+</li>
+<li><p>split_shift_registers(nl: hal_py.Netlist, gates: List[hal_py.Gate] = [], create_module: bool = False) -&gt; Optional[int]</p>
+<blockquote>
+<div><p>Split the shift register primitives of the netlist, or of the given gates, into equivalent <code class="docutils literal notranslate"><span class="pre">FDCE</span></code> flip-flop chains.</p>
+<p>Supported gate types: <code class="docutils literal notranslate"><span class="pre">SRL16</span></code>, <code class="docutils literal notranslate"><span class="pre">SRL16E</span></code>, <code class="docutils literal notranslate"><span class="pre">SRLC16E</span></code>, <code class="docutils literal notranslate"><span class="pre">SRLC32E</span></code>.</p>
+<p>Finds all gates of one of the supported types within <code class="docutils literal notranslate"><span class="pre">gates</span></code> (or within the netlist if <code class="docutils literal notranslate"><span class="pre">gates</span></code> is empty)
+and calls <a class="reference internal" href="#xilinx_toolbox.split_shift_registers" title="xilinx_toolbox.split_shift_registers"><code class="xref py py-func docutils literal notranslate"><span class="pre">split_shift_registers()</span></code></a> on them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Netlist nl</dt>
+<dd class="field-odd"><p>The netlist to operate on.</p>
+</dd>
+<dt class="field-even">param list[hal_py.Gate] gates</dt>
+<dd class="field-even"><p>The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.</p>
+</dd>
+<dt class="field-odd">param bool create_module</dt>
+<dd class="field-odd"><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, each split gate’s replacements are placed into a new module named after the original gate. If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), replacements inherit the parent module of the original gate.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The number of successfully split shift register gates.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="py class">

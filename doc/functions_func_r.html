@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -87,12 +87,6 @@ $(document).ready(function(){initNavTree('functions_func_r.html',''); initResiza
 &#160;
 
 <h3><a id="index_r"></a>- r -</h3><ul>
-<li>RAMComponent()
-: <a class="el" href="classhal_1_1_r_a_m_component.html#a658870b57d2c33c441500ad6bdd82bbc">hal::RAMComponent</a>
-</li>
-<li>RAMPortComponent()
-: <a class="el" href="classhal_1_1_r_a_m_port_component.html#acc82a4331c0239ddd884739fe314d488">hal::RAMPortComponent</a>
-</li>
 <li>RAMPortWizardPage()
 : <a class="el" href="classhal_1_1_r_a_m_port_wizard_page.html#a3347b3e191883381fdffcdb2e085b797">hal::RAMPortWizardPage</a>
 </li>
@@ -124,6 +118,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html',''); initResiza
 , <a class="el" href="classhal_1_1_action_set_object_color.html#a6f4f2ce97823690eef511566cc857359">hal::ActionSetObjectColor</a>
 , <a class="el" href="classhal_1_1_action_set_object_data.html#af4cf9dce981e56db34610ce804296c90">hal::ActionSetObjectData</a>
 , <a class="el" href="classhal_1_1_action_set_object_type.html#a06bcc12f134d15d0dd1ec867ac3cd88a">hal::ActionSetObjectType</a>
+, <a class="el" href="classhal_1_1_action_set_parameter_value.html#aafbf1e23dc3570942cbc91b2d075548b">hal::ActionSetParameterValue</a>
 , <a class="el" href="classhal_1_1_action_set_selection_focus.html#a61b1961ce88e1e8ea6c635f0a0afb2df">hal::ActionSetSelectionFocus</a>
 , <a class="el" href="classhal_1_1_user_action.html#ad4976d95d07011dd9be187ddbcf75fde">hal::UserAction</a>
 , <a class="el" href="classhal_1_1_user_action_compound.html#a3b817e201a254a11ef7e03776fb5e239">hal::UserActionCompound</a>
@@ -281,7 +276,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html',''); initResiza
 : <a class="el" href="classhal_1_1_saleae_directory.html#acd0b8ed7f46a1eea45343622363c8dbb">hal::SaleaeDirectory</a>
 </li>
 <li>remove_destination()
-: <a class="el" href="classhal_1_1_net.html#a6b5314b7255685b253ec3794bce11dfe">hal::Net</a>
+: <a class="el" href="classhal_1_1_net.html#ae40450b3dc5ba913bce1e40d90623603">hal::Net</a>
 </li>
 <li>remove_gate()
 : <a class="el" href="classhal_1_1_grouping.html#a8966a24aef0722573bf686dc44e6b3d5">hal::Grouping</a>
@@ -321,7 +316,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html',''); initResiza
 : <a class="el" href="classhal_1_1_log_manager.html#ac7dad63d99c3d3e6bfff4476c33bdee7">hal::LogManager</a>
 </li>
 <li>remove_source()
-: <a class="el" href="classhal_1_1_net.html#a168f5b2ebe17bfe22c9355a75c28f11a">hal::Net</a>
+: <a class="el" href="classhal_1_1_net.html#ae0661594c7a48bedb432c0ee46401a0d">hal::Net</a>
 </li>
 <li>remove_waveform()
 : <a class="el" href="classhal_1_1_wave_data_group.html#a5c3514f44c7e6e6421ae9bc5705c1611">hal::WaveDataGroup</a>
@@ -518,11 +513,17 @@ $(document).ready(function(){initNavTree('functions_func_r.html',''); initResiza
 <li>report()
 : <a class="el" href="classhal_1_1user__feedback_1_1_progress_printer.html#af878a8939a24d3719d538bc1af2d809e">hal::user_feedback::ProgressPrinter</a>
 </li>
+<li>request_upgrade()
+: <a class="el" href="classhal_1_1_gate_library_parser.html#ad1093048a7f49364eb88edb1ed79772e">hal::GateLibraryParser</a>
+</li>
 <li>requestLoad()
 : <a class="el" href="classhal_1_1_gui_plugin_entry.html#aee395c4ed62bddd065132832d3178f00">hal::GuiPluginEntry</a>
 </li>
 <li>requireInput()
 : <a class="el" href="classhal_1_1_python_thread.html#ac01eadc0c157da2027993b6f76ac928b">hal::PythonThread</a>
+</li>
+<li>requiresBooleanFunctions()
+: <a class="el" href="classhal_1_1_gate_library_wizard.html#a4c7d61e1ec964a4ea9bb2fa8bfc91697">hal::GateLibraryWizard</a>
 </li>
 <li>reset()
 : <a class="el" href="classhal_1_1_netlist_relay.html#a5b1738463cab64e14d9392a43b77a357">hal::NetlistRelay</a>
@@ -605,7 +606,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html',''); initResiza
 : <a class="el" href="classhal_1_1_python_thread.html#a3b49ef960eac1d3de38b6426c0173de5">hal::PythonThread</a>
 </li>
 <li>Result()
-: <a class="el" href="classhal_1_1_result.html#a214567a2d7951e57f58aa9fda152a595">hal::Result&lt; T &gt;</a>
+: <a class="el" href="classhal_1_1_result.html#a9e22b1196774fd241d4d36e2479d4fff">hal::Result&lt; T &gt;</a>
 </li>
 <li>ResynthesisPlugin()
 : <a class="el" href="classhal_1_1_resynthesis_plugin.html#a4ee2242102447f3e3d3d4e7b289468f9">hal::ResynthesisPlugin</a>
@@ -652,6 +653,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html',''); initResiza
 , <a class="el" href="classhal_1_1_l_u_t_table_model.html#a25aab3ad46f6c255e2621b0be4c84d82">hal::LUTTableModel</a>
 , <a class="el" href="classhal_1_1_module_select_model.html#a563d7f745bbb21601b052ce4f7670ebc">hal::ModuleSelectModel</a>
 , <a class="el" href="classhal_1_1_module_table_model.html#ac7946fce67b623fc771c84a197de5e1e">hal::ModuleTableModel</a>
+, <a class="el" href="classhal_1_1_parameter_table_model.html#adfede7d5b56f8107c976166f7e9b8563">hal::ParameterTableModel</a>
 , <a class="el" href="classhal_1_1_wave_edit_table.html#a4f5bd93c01da81bf66cb3e17ef0a4045">hal::WaveEditTable</a>
 , <a class="el" href="classhal_1_1_wave_selection_table.html#a15129d4ced67e3b005f848c9d4fd7734">hal::WaveSelectionTable</a>
 , <a class="el" href="classhal_1_1_wave_tree_model.html#a91f3f595225e7f8e4cdc6af7fcb61081">hal::WaveTreeModel</a>

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -136,6 +136,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a43c8cc97ef976493ffa4deca01ab43f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af74d4d7cc58ec1893ae8106cb41b9851"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_py_code_provider.html#af74d4d7cc58ec1893ae8106cb41b9851">pyCodeGateDataMap</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> gateId)</td></tr>
 <tr class="separator:af74d4d7cc58ec1893ae8106cb41b9851"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5a18bf6fcc51a5aae9e2b3be37edf93"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_py_code_provider.html#ac5a18bf6fcc51a5aae9e2b3be37edf93">pyCodeGateParameterValue</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> gateId, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="separator:ac5a18bf6fcc51a5aae9e2b3be37edf93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fa2d50d8068b775aa2a3fec74344ad4"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_py_code_provider.html#a8fa2d50d8068b775aa2a3fec74344ad4">pyCodeStateComp</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> gateId)</td></tr>
 <tr class="separator:a8fa2d50d8068b775aa2a3fec74344ad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b95756361f25d560f66d1273e48fb07"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_py_code_provider.html#a1b95756361f25d560f66d1273e48fb07">pyCodeStateCompPosState</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> gateId)</td></tr>
@@ -492,7 +494,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00085">85</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="el" href="gate__type_8h_source.html#l00089">hal::GateType::get_component_as()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00195">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, and <a class="el" href="py__code__provider_8cpp_source.html#l00042">pyCodeGateType()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="el" href="gate__type_8h_source.html#l00089">hal::GateType::get_component_as()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00195">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00162">hal::Gate::get_type()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, and <a class="el" href="py__code__provider_8cpp_source.html#l00042">pyCodeGateType()</a>.</p>
 
 </div>
 </div>
@@ -784,6 +786,46 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ac5a18bf6fcc51a5aae9e2b3be37edf93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5a18bf6fcc51a5aae9e2b3be37edf93">&#9670;&nbsp;</a></span>pyCodeGateParameterValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::PyCodeProvider::pyCodeGateParameterValue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
+          <td class="paramname"><em>gateId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00212">212</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
+
+</div>
+</div>
 <a id="a40bcc88d19253f16dd883bdbbab26ec1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a40bcc88d19253f16dd883bdbbab26ec1">&#9670;&nbsp;</a></span>pyCodeGateType()</h2>
 
@@ -960,7 +1002,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00434">434</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00441">441</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>.</p>
 
@@ -990,7 +1032,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00446">446</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00453">453</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1018,7 +1060,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00439">439</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00446">446</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1238,7 +1280,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00276">276</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00283">283</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>.</p>
 
@@ -1286,7 +1328,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00373">373</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00380">380</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>.</p>
 
@@ -1316,7 +1358,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00380">380</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00387">387</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1354,7 +1396,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00317">317</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00324">324</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#number-1">QString::number()</a>.</p>
 
@@ -1384,7 +1426,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00281">281</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00288">288</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1412,7 +1454,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00331">331</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00338">338</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1440,7 +1482,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00345">345</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00352">352</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1468,7 +1510,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00359">359</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00366">366</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1496,7 +1538,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00366">366</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00373">373</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1524,7 +1566,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00303">303</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00310">310</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1552,7 +1594,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00288">288</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00295">295</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1580,7 +1622,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00324">324</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00331">331</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1608,7 +1650,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00338">338</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00345">345</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1636,7 +1678,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00352">352</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00359">359</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1674,11 +1716,11 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00405">405</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00412">412</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00148">hal::ModulePinsTree::handleContextMenuRequested()</a>, <a class="el" href="net__module__table_8cpp_source.html#l00064">hal::NetModuleTable::handleContextMenuRequested()</a>, <a class="el" href="module__pins__tree__model_8cpp_source.html#l00146">hal::ModulePinsTreeModel::mimeData()</a>, <a class="el" href="py__code__provider_8cpp_source.html#l00417">pyCodeModulePinDirection()</a>, <a class="el" href="py__code__provider_8cpp_source.html#l00412">pyCodeModulePinName()</a>, and <a class="el" href="py__code__provider_8cpp_source.html#l00422">pyCodeModulePinType()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00148">hal::ModulePinsTree::handleContextMenuRequested()</a>, <a class="el" href="net__module__table_8cpp_source.html#l00064">hal::NetModuleTable::handleContextMenuRequested()</a>, <a class="el" href="module__pins__tree__model_8cpp_source.html#l00146">hal::ModulePinsTreeModel::mimeData()</a>, <a class="el" href="py__code__provider_8cpp_source.html#l00424">pyCodeModulePinDirection()</a>, <a class="el" href="py__code__provider_8cpp_source.html#l00419">pyCodeModulePinName()</a>, and <a class="el" href="py__code__provider_8cpp_source.html#l00429">pyCodeModulePinType()</a>.</p>
 
 </div>
 </div>
@@ -1716,9 +1758,9 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00417">417</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00424">424</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="py__code__provider_8cpp_source.html#l00405">pyCodeModulePinById()</a>.</p>
+<p class="reference">References <a class="el" href="py__code__provider_8cpp_source.html#l00412">pyCodeModulePinById()</a>.</p>
 
 </div>
 </div>
@@ -1756,11 +1798,11 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00386">386</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00393">393</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00148">hal::ModulePinsTree::handleContextMenuRequested()</a>, <a class="el" href="module__pins__tree__model_8cpp_source.html#l00146">hal::ModulePinsTreeModel::mimeData()</a>, and <a class="el" href="py__code__provider_8cpp_source.html#l00400">pyCodeModulePinGroupName()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00148">hal::ModulePinsTree::handleContextMenuRequested()</a>, <a class="el" href="module__pins__tree__model_8cpp_source.html#l00146">hal::ModulePinsTreeModel::mimeData()</a>, and <a class="el" href="py__code__provider_8cpp_source.html#l00407">pyCodeModulePinGroupName()</a>.</p>
 
 </div>
 </div>
@@ -1798,9 +1840,9 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00400">400</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00407">407</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="py__code__provider_8cpp_source.html#l00386">pyCodeModulePinGroup()</a>.</p>
+<p class="reference">References <a class="el" href="py__code__provider_8cpp_source.html#l00393">pyCodeModulePinGroup()</a>.</p>
 
 </div>
 </div>
@@ -1828,7 +1870,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00393">393</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00400">400</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1866,9 +1908,9 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00412">412</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00419">419</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="py__code__provider_8cpp_source.html#l00405">pyCodeModulePinById()</a>.</p>
+<p class="reference">References <a class="el" href="py__code__provider_8cpp_source.html#l00412">pyCodeModulePinById()</a>.</p>
 
 </div>
 </div>
@@ -1896,7 +1938,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00427">427</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00434">434</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1934,9 +1976,9 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00422">422</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00429">429</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="py__code__provider_8cpp_source.html#l00405">pyCodeModulePinById()</a>.</p>
+<p class="reference">References <a class="el" href="py__code__provider_8cpp_source.html#l00412">pyCodeModulePinById()</a>.</p>
 
 </div>
 </div>
@@ -1964,7 +2006,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00310">310</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00317">317</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -1992,7 +2034,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00295">295</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00302">302</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -2020,7 +2062,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00212">212</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00219">219</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>.</p>
 
@@ -2068,7 +2110,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00263">263</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00270">270</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>.</p>
 
@@ -2098,7 +2140,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00270">270</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00277">277</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -2126,7 +2168,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00256">256</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00263">263</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -2154,7 +2196,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00217">217</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00224">224</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -2182,7 +2224,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00224">224</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00231">231</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -2210,7 +2252,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00249">249</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00256">256</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 </div>
 </div>
@@ -2238,7 +2280,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00231">231</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="py__code__provider_8cpp_source.html#l00238">238</a> of file <a class="el" href="py__code__provider_8cpp_source.html">py_code_provider.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>.</p>
 

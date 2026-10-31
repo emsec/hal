@@ -1,6 +1,5 @@
 var classhal_1_1_latch_component =
 [
-    [ "LatchComponent", "classhal_1_1_latch_component.html#a8eec953e61e619717656021791e2e133", null ],
     [ "get_async_reset_function", "classhal_1_1_latch_component.html#a04ca048eb04051494193b3f39af4d05f", null ],
     [ "get_async_set_function", "classhal_1_1_latch_component.html#abaf37f1927310e4ef2e5bad676913777", null ],
     [ "get_async_set_reset_behavior", "classhal_1_1_latch_component.html#a970617404459aab9839dbe00f3d149f8", null ],

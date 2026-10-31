@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -104,7 +104,7 @@ Collaboration diagram for hal::BooleanFunctionParser::Token:</div>
 <div class="dyncontent">
 <div class="center"><img src="structhal_1_1_boolean_function_parser_1_1_token__coll__graph.png" border="0" usemap="#ahal_1_1_boolean_function_parser_1_1_token_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1_boolean_function_parser_1_1_token_coll__map" id="ahal_1_1_boolean_function_parser_1_1_token_coll__map">
-<area shape="rect" title="Token refers to a token identifier and accompanied data." alt="" coords="5,5,204,259"/>
+<area shape="rect" title="Token refers to a token identifier and accompanied data." alt="" coords="5,5,204,273"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -115,6 +115,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8614ed46e24b24b726dccd504e596528"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2e73892823eddfccba5f7481c4fe65b"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#ae2e73892823eddfccba5f7481c4fe65b">precedence</a> (const <a class="el" href="namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78e">ParserType</a> &amp;<a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#a6e35fef63420a76d8148d6be114b1705">type</a>) const</td></tr>
 <tr class="separator:ae2e73892823eddfccba5f7481c4fe65b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48e2dd15526cf8e72e673c84fff8bc8b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#a48e2dd15526cf8e72e673c84fff8bc8b">is_left_associative</a> () const</td></tr>
+<tr class="separator:a48e2dd15526cf8e72e673c84fff8bc8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a976b08310b999cad8b958c804ff8f195"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#a976b08310b999cad8b958c804ff8f195">is</a> (<a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55">TokenType</a> <a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#a6e35fef63420a76d8148d6be114b1705">type</a>) const</td></tr>
 <tr class="separator:a976b08310b999cad8b958c804ff8f195"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a263010999adfeb13424c1f19aeba9aac"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#a263010999adfeb13424c1f19aeba9aac">to_string</a> () const</td></tr>
@@ -132,6 +134,18 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:acdcdc2c8eca296f0f19147176aae080b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5727b027cfded00a7ae77a37353bd71"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#ad5727b027cfded00a7ae77a37353bd71">Xor</a> ()</td></tr>
 <tr class="separator:ad5727b027cfded00a7ae77a37353bd71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a375c5721852b69c731e5b3c2b3c975d2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#a375c5721852b69c731e5b3c2b3c975d2">Eq</a> ()</td></tr>
+<tr class="separator:a375c5721852b69c731e5b3c2b3c975d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e29fda75e06fd2116dc14c90ce466e7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#a1e29fda75e06fd2116dc14c90ce466e7">Question</a> ()</td></tr>
+<tr class="separator:a1e29fda75e06fd2116dc14c90ce466e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab094df90a4670a8cacb802ff81eecaef"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#ab094df90a4670a8cacb802ff81eecaef">Colon</a> ()</td></tr>
+<tr class="separator:ab094df90a4670a8cacb802ff81eecaef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd933a8e8b6dfbd4b197cd04ebd3a38c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#acd933a8e8b6dfbd4b197cd04ebd3a38c">Add</a> ()</td></tr>
+<tr class="separator:acd933a8e8b6dfbd4b197cd04ebd3a38c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab89b883f63d395d437279b14234ad0d4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#ab89b883f63d395d437279b14234ad0d4">Sub</a> ()</td></tr>
+<tr class="separator:ab89b883f63d395d437279b14234ad0d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7f5318b6b15e3b2741adb502d177382"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#ab7f5318b6b15e3b2741adb502d177382">Mul</a> ()</td></tr>
+<tr class="separator:ab7f5318b6b15e3b2741adb502d177382"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a99541bbdd9c3c4600b5589c3fa6e7c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#a9a99541bbdd9c3c4600b5589c3fa6e7c">Variable</a> (std::string <a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="el" href="defines_8h.html#a6dbf9516e516c901604625282c174aa4">u16</a> <a class="el" href="candidate__search_8cpp.html#acfd6273064c5acdcfc39a23a69dd4343">size</a>)</td></tr>
 <tr class="separator:a9a99541bbdd9c3c4600b5589c3fa6e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a711ad3cba500fb72c4f30a0f011d0819"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html#a711ad3cba500fb72c4f30a0f011d0819">Constant</a> (std::vector&lt; <a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">BooleanFunction::Value</a> &gt; value)</td></tr>
@@ -161,7 +175,7 @@ Friends</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html" title="Token refers to a token identifier and accompanied data.">Token</a> refers to a token identifier and accompanied data. </p>
 
-<p class="definition">Definition at line <a class="el" href="parser_8h_source.html#l00066">66</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_8h_source.html#l00074">74</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8614ed46e24b24b726dccd504e596528"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8614ed46e24b24b726dccd504e596528">&#9670;&nbsp;</a></span>Token()</h2>
@@ -205,13 +219,46 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00133">133</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00182">182</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="parser__types_8cpp_source.html#l00011">And()</a>, <a class="el" href="parser__types_8cpp_source.html#l00051">BracketClose()</a>, <a class="el" href="parser__types_8cpp_source.html#l00046">BracketOpen()</a>, <a class="el" href="parser__types_8cpp_source.html#l00041">Constant()</a>, <a class="el" href="parser__types_8cpp_source.html#l00016">Not()</a>, <a class="el" href="parser__types_8cpp_source.html#l00021">NotSuffix()</a>, <a class="el" href="parser__types_8cpp_source.html#l00026">Or()</a>, <a class="el" href="parser__types_8cpp_source.html#l00036">Variable()</a>, and <a class="el" href="parser__types_8cpp_source.html#l00031">Xor()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="parser__types_8cpp_source.html#l00051">Add()</a>, <a class="el" href="parser__types_8cpp_source.html#l00011">And()</a>, <a class="el" href="parser__types_8cpp_source.html#l00081">BracketClose()</a>, <a class="el" href="parser__types_8cpp_source.html#l00076">BracketOpen()</a>, <a class="el" href="parser__types_8cpp_source.html#l00046">Colon()</a>, <a class="el" href="parser__types_8cpp_source.html#l00071">Constant()</a>, <a class="el" href="parser__types_8cpp_source.html#l00036">Eq()</a>, <a class="el" href="parser__types_8cpp_source.html#l00061">Mul()</a>, <a class="el" href="parser__types_8cpp_source.html#l00016">Not()</a>, <a class="el" href="parser__types_8cpp_source.html#l00021">NotSuffix()</a>, <a class="el" href="parser__types_8cpp_source.html#l00026">Or()</a>, <a class="el" href="parser__types_8cpp_source.html#l00041">Question()</a>, <a class="el" href="parser__types_8cpp_source.html#l00056">Sub()</a>, <a class="el" href="parser__types_8cpp_source.html#l00066">Variable()</a>, and <a class="el" href="parser__types_8cpp_source.html#l00031">Xor()</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="acd933a8e8b6dfbd4b197cd04ebd3a38c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd933a8e8b6dfbd4b197cd04ebd3a38c">&#9670;&nbsp;</a></span>Add()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a> hal::BooleanFunctionParser::Token::Add </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates an <code>Add</code> token.</p>
+<dl class="section return"><dt>Returns</dt><dd>The <code>Add</code> token. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00051">51</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55aec211f7c20af43e742bf2570c3cb84f9">hal::BooleanFunctionParser::Add</a>, and <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>.</p>
+
+</div>
+</div>
 <a id="a8bc2d93fc285e53399f5f7877c185a0f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8bc2d93fc285e53399f5f7877c185a0f">&#9670;&nbsp;</a></span>And()</h2>
 
@@ -239,7 +286,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00011">11</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55ac33315685a0cba3ce53be378b3c7874b">hal::BooleanFunctionParser::And</a>, and <a class="el" href="parser__types_8cpp_source.html#l00133">Token()</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55ac33315685a0cba3ce53be378b3c7874b">hal::BooleanFunctionParser::And</a>, and <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="parser__liberty_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_liberty_grammar()</a>, and <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>.</p>
 
@@ -270,9 +317,9 @@ Friends</h2></td></tr>
 <p>Creates an <code>BracketClose</code> token.</p>
 <dl class="section return"><dt>Returns</dt><dd>The <code>BracketClose</code> token. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00051">51</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00081">81</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55aa53f1dc878e492c1d5054669936229a4">hal::BooleanFunctionParser::BracketClose</a>, and <a class="el" href="parser__types_8cpp_source.html#l00133">Token()</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55aa53f1dc878e492c1d5054669936229a4">hal::BooleanFunctionParser::BracketClose</a>, and <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="parser__liberty_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_liberty_grammar()</a>, and <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>.</p>
 
@@ -303,11 +350,44 @@ Friends</h2></td></tr>
 <p>Creates an <code>BracketOpen</code> token.</p>
 <dl class="section return"><dt>Returns</dt><dd>The <code>BracketOpen</code> token. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00046">46</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00076">76</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a144330dfe27435d5a290af3833f59fcd">hal::BooleanFunctionParser::BracketOpen</a>, and <a class="el" href="parser__types_8cpp_source.html#l00133">Token()</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a144330dfe27435d5a290af3833f59fcd">hal::BooleanFunctionParser::BracketOpen</a>, and <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="parser__liberty_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_liberty_grammar()</a>, and <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>.</p>
+
+</div>
+</div>
+<a id="ab094df90a4670a8cacb802ff81eecaef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab094df90a4670a8cacb802ff81eecaef">&#9670;&nbsp;</a></span>Colon()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a> hal::BooleanFunctionParser::Token::Colon </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates a <code>Colon</code> token (ternary <code>:</code>).</p>
+<dl class="section return"><dt>Returns</dt><dd>The <code>Colon</code> token. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00046">46</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3ccf74d463f8895cef06727cb9709d83">hal::BooleanFunctionParser::Colon</a>, and <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>.</p>
 
 </div>
 </div>
@@ -343,11 +423,44 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The <code>Constant</code> token. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00041">41</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00071">71</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55acb17869fe51048b5a5c4c6106551a255">hal::BooleanFunctionParser::Constant</a>, <a class="el" href="parser_8h_source.html#l00077">constant</a>, and <a class="el" href="parser__types_8cpp_source.html#l00133">Token()</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55acb17869fe51048b5a5c4c6106551a255">hal::BooleanFunctionParser::Constant</a>, <a class="el" href="parser_8h_source.html#l00085">constant</a>, and <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="parser__liberty_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_liberty_grammar()</a>, and <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>.</p>
+
+</div>
+</div>
+<a id="a375c5721852b69c731e5b3c2b3c975d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a375c5721852b69c731e5b3c2b3c975d2">&#9670;&nbsp;</a></span>Eq()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a> hal::BooleanFunctionParser::Token::Eq </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates an <code>Eq</code> token.</p>
+<dl class="section return"><dt>Returns</dt><dd>The <code>Eq</code> token. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00036">36</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3718b5ecf60aa0dba49e150e96cb1fc3">hal::BooleanFunctionParser::Eq</a>, and <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>.</p>
 
 </div>
 </div>
@@ -375,9 +488,65 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> in case instance has the same token type, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00085">85</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00128">128</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="parser_8h_source.html#l00073">type</a>.</p>
+<p class="reference">References <a class="el" href="parser_8h_source.html#l00081">type</a>.</p>
+
+</div>
+</div>
+<a id="a48e2dd15526cf8e72e673c84fff8bc8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48e2dd15526cf8e72e673c84fff8bc8b">&#9670;&nbsp;</a></span>is_left_associative()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::BooleanFunctionParser::Token::is_left_associative </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns whether a token's operator is left-associative. Most operators in HAL are right-associative; arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>) follow C-style left-associativity so chains like <code>a - b - c</code> parse as <code>(a - b) - c</code>.</p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> for left-associative operators, <code>false</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00121">121</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55aec211f7c20af43e742bf2570c3cb84f9">hal::BooleanFunctionParser::Add</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a62b6d55816cf737bfc6f42e60df1a3f2">hal::BooleanFunctionParser::Mul</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55ae80155eceb940c89e2de63ad05868db2">hal::BooleanFunctionParser::Sub</a>, and <a class="el" href="parser_8h_source.html#l00081">type</a>.</p>
+
+</div>
+</div>
+<a id="ab7f5318b6b15e3b2741adb502d177382"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7f5318b6b15e3b2741adb502d177382">&#9670;&nbsp;</a></span>Mul()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a> hal::BooleanFunctionParser::Token::Mul </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates a <code>Mul</code> token.</p>
+<dl class="section return"><dt>Returns</dt><dd>The <code>Mul</code> token. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00061">61</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a62b6d55816cf737bfc6f42e60df1a3f2">hal::BooleanFunctionParser::Mul</a>, and <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>.</p>
 
 </div>
 </div>
@@ -408,9 +577,9 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00016">16</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55aa74c05d080620f087c4e523977230666">hal::BooleanFunctionParser::Not</a>, and <a class="el" href="parser__types_8cpp_source.html#l00133">Token()</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55aa74c05d080620f087c4e523977230666">hal::BooleanFunctionParser::Not</a>, and <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="parser__liberty_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_liberty_grammar()</a>, <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>, and <a class="el" href="parser__types_8cpp_source.html#l00137">hal::BooleanFunctionParser::reverse_polish_notation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="parser__liberty_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_liberty_grammar()</a>, <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>, and <a class="el" href="parser__types_8cpp_source.html#l00186">hal::BooleanFunctionParser::reverse_polish_notation()</a>.</p>
 
 </div>
 </div>
@@ -441,7 +610,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00021">21</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3981ab79a6087525c5375aac5cf4a662">hal::BooleanFunctionParser::NotSuffix</a>, and <a class="el" href="parser__types_8cpp_source.html#l00133">Token()</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3981ab79a6087525c5375aac5cf4a662">hal::BooleanFunctionParser::NotSuffix</a>, and <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="parser__liberty_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_liberty_grammar()</a>.</p>
 
@@ -474,7 +643,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00026">26</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3a2d5fe857d8f9541136a124c2edec6c">hal::BooleanFunctionParser::Or</a>, and <a class="el" href="parser__types_8cpp_source.html#l00133">Token()</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3a2d5fe857d8f9541136a124c2edec6c">hal::BooleanFunctionParser::Or</a>, and <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="parser__liberty_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_liberty_grammar()</a>, and <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>.</p>
 
@@ -504,9 +673,75 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An unsigned predecene value between 2 and 4. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00086">86</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55aec211f7c20af43e742bf2570c3cb84f9">hal::BooleanFunctionParser::Add</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55ac33315685a0cba3ce53be378b3c7874b">hal::BooleanFunctionParser::And</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3ccf74d463f8895cef06727cb9709d83">hal::BooleanFunctionParser::Colon</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3718b5ecf60aa0dba49e150e96cb1fc3">hal::BooleanFunctionParser::Eq</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78ea84e1da9e55480128662cfdfe79cb8923">hal::BooleanFunctionParser::Liberty</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a62b6d55816cf737bfc6f42e60df1a3f2">hal::BooleanFunctionParser::Mul</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55aa74c05d080620f087c4e523977230666">hal::BooleanFunctionParser::Not</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3981ab79a6087525c5375aac5cf4a662">hal::BooleanFunctionParser::NotSuffix</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3a2d5fe857d8f9541136a124c2edec6c">hal::BooleanFunctionParser::Or</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55aa97ea56b0e00b2379736ae60869ff66a">hal::BooleanFunctionParser::Question</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78eaeb6d8ae6f20283755b339c0dc273988b">hal::BooleanFunctionParser::Standard</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55ae80155eceb940c89e2de63ad05868db2">hal::BooleanFunctionParser::Sub</a>, and <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a76feb79109026728a20736a8c6504548">hal::BooleanFunctionParser::Xor</a>.</p>
+
+</div>
+</div>
+<a id="a1e29fda75e06fd2116dc14c90ce466e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e29fda75e06fd2116dc14c90ce466e7">&#9670;&nbsp;</a></span>Question()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a> hal::BooleanFunctionParser::Token::Question </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates a <code>Question</code> token (ternary <code>?</code>).</p>
+<dl class="section return"><dt>Returns</dt><dd>The <code>Question</code> token. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00041">41</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55aa97ea56b0e00b2379736ae60869ff66a">hal::BooleanFunctionParser::Question</a>, and <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>.</p>
+
+</div>
+</div>
+<a id="ab89b883f63d395d437279b14234ad0d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab89b883f63d395d437279b14234ad0d4">&#9670;&nbsp;</a></span>Sub()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1_boolean_function_parser_1_1_token.html">Token</a> hal::BooleanFunctionParser::Token::Sub </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates a <code>Sub</code> token.</p>
+<dl class="section return"><dt>Returns</dt><dd>The <code>Sub</code> token. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00056">56</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55ac33315685a0cba3ce53be378b3c7874b">hal::BooleanFunctionParser::And</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78ea84e1da9e55480128662cfdfe79cb8923">hal::BooleanFunctionParser::Liberty</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55aa74c05d080620f087c4e523977230666">hal::BooleanFunctionParser::Not</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3981ab79a6087525c5375aac5cf4a662">hal::BooleanFunctionParser::NotSuffix</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3a2d5fe857d8f9541136a124c2edec6c">hal::BooleanFunctionParser::Or</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78eaeb6d8ae6f20283755b339c0dc273988b">hal::BooleanFunctionParser::Standard</a>, and <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a76feb79109026728a20736a8c6504548">hal::BooleanFunctionParser::Xor</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55ae80155eceb940c89e2de63ad05868db2">hal::BooleanFunctionParser::Sub</a>, and <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>.</p>
 
 </div>
 </div>
@@ -527,7 +762,7 @@ Friends</h2></td></tr>
 <p>Convert the token to its string representation.</p>
 <dl class="section return"><dt>Returns</dt><dd>The string representation of the token. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00126">126</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00175">175</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
 </div>
 </div>
@@ -575,9 +810,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The <code>Variable</code> token. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00036">36</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00066">66</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="candidate__search_8cpp_source.html#l00067">size</a>, <a class="el" href="parser__types_8cpp_source.html#l00133">Token()</a>, and <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a47c14840d8e15331fa420b9b2f757cd9">hal::BooleanFunctionParser::Variable</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="candidate__search_8cpp_source.html#l00067">size</a>, <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>, and <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a47c14840d8e15331fa420b9b2f757cd9">hal::BooleanFunctionParser::Variable</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="parser__liberty_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_liberty_grammar()</a>, and <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>.</p>
 
@@ -610,7 +845,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00031">31</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="parser__types_8cpp_source.html#l00133">Token()</a>, and <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a76feb79109026728a20736a8c6504548">hal::BooleanFunctionParser::Xor</a>.</p>
+<p class="reference">References <a class="el" href="parser__types_8cpp_source.html#l00182">Token()</a>, and <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a76feb79109026728a20736a8c6504548">hal::BooleanFunctionParser::Xor</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="parser__liberty_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_liberty_grammar()</a>, and <a class="el" href="parser__standard_8cpp_source.html#l00013">hal::BooleanFunctionParser::parse_with_standard_grammar()</a>.</p>
 
@@ -660,7 +895,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The output stream. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00090">90</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00133">133</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
 </div>
 </div>
@@ -679,9 +914,9 @@ Friends</h2></td></tr>
 
 <p>optional value in case token is a constant </p>
 
-<p class="definition">Definition at line <a class="el" href="parser_8h_source.html#l00077">77</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_8h_source.html#l00085">85</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="parser__types_8cpp_source.html#l00041">Constant()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="parser__types_8cpp_source.html#l00071">Constant()</a>.</p>
 
 </div>
 </div>
@@ -699,9 +934,9 @@ Friends</h2></td></tr>
 
 <p>refers to the underlying token type identifier </p>
 
-<p class="definition">Definition at line <a class="el" href="parser_8h_source.html#l00073">73</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_8h_source.html#l00081">81</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="parser__types_8cpp_source.html#l00085">is()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="parser__types_8cpp_source.html#l00128">is()</a>, and <a class="el" href="parser__types_8cpp_source.html#l00121">is_left_associative()</a>.</p>
 
 </div>
 </div>
@@ -719,7 +954,7 @@ Friends</h2></td></tr>
 
 <p>optional value and bit-size in case token is a variable </p>
 
-<p class="definition">Definition at line <a class="el" href="parser_8h_source.html#l00075">75</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_8h_source.html#l00083">83</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>

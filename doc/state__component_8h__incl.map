@@ -1,6 +1,7 @@
 <map id="include/hal_core/netlist/gate_library/gate_type_component/state_component.h" name="include/hal_core/netlist/gate_library/gate_type_component/state_component.h">
-<area shape="rect" id="node1" title=" " alt="" coords="84,5,315,61"/>
+<area shape="rect" id="node1" title=" " alt="" coords="171,5,401,61"/>
 <area shape="rect" id="node2" href="$gate__type__component_8h.html" title=" " alt="" coords="89,109,309,165"/>
+<area shape="rect" id="node7" title=" " alt="" coords="334,124,411,151"/>
 <area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="5,303,145,329"/>
 <area shape="rect" id="node4" href="$boolean__function_8h.html" title=" " alt="" coords="47,213,226,255"/>
 <area shape="rect" id="node5" title=" " alt="" coords="175,303,218,329"/>

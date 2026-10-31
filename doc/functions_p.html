@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -189,14 +189,26 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 <li>panModifier()
 : <a class="el" href="classhal_1_1_graph_graphics_view.html#a2bc64975cbb5fd2c68d83be32d2f04e9">hal::GraphGraphicsView</a>
 </li>
+<li>Parameter()
+: <a class="el" href="structhal_1_1_parameter.html#a2f45e7d718e1841ed235c38f9f459d98">hal::Parameter</a>
+</li>
 <li>ParameterReady
 : <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a87d3e7b952aec36f4d73ec92fb880a53a14a37c0c43efd0a54d7f9e1bc4535396">hal::NetlistSimulatorController</a>
 </li>
 <li>ParameterSetup
 : <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a87d3e7b952aec36f4d73ec92fb880a53a953482ea7f90045c4849018971673918">hal::NetlistSimulatorController</a>
 </li>
+<li>ParameterTableModel()
+: <a class="el" href="classhal_1_1_parameter_table_model.html#a771e744c933cc32cbfc65ee75393fb27">hal::ParameterTableModel</a>
+</li>
+<li>ParameterTableWidget()
+: <a class="el" href="classhal_1_1_parameter_table_widget.html#a7cf3290eda625d48560ba8c05cdb4e0a">hal::ParameterTableWidget</a>
+</li>
 <li>ParameterType
 : <a class="el" href="classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3">hal::PluginParameter</a>
+</li>
+<li>ParameterValueDelegate()
+: <a class="el" href="classhal_1_1_parameter_value_delegate.html#a0d6a4f2c92daabf57df3dab58e9c4ea1">hal::ParameterValueDelegate</a>
 </li>
 <li>parent()
 : <a class="el" href="classhal_1_1_base_tree_model.html#a1b76d0eea8c5a6f0d52d8025ddda6813">hal::BaseTreeModel</a>
@@ -242,6 +254,9 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 </li>
 <li>parseLayoutEnabled()
 : <a class="el" href="classhal_1_1_standard_graph_layouter.html#a4cf996c723d93e20bb6e3e84935eb893">hal::StandardGraphLayouter</a>
+</li>
+<li>ParseStatus
+: <a class="el" href="classhal_1_1_gate_library_parser.html#a861eec045adda875d40619858ca90aae">hal::GateLibraryParser</a>
 </li>
 <li>partial_results
 : <a class="el" href="structhal_1_1dataflow_1_1evaluation_1_1_context.html#a0659aeb63a53ff57bca73a566bac8a83">hal::dataflow::evaluation::Context</a>
@@ -391,6 +406,9 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 <li>pin_event_order
 : <a class="el" href="classhal_1_1_pin_changed_event.html#a5ba03375a633d3893cf9856de503c4b0">hal::PinChangedEvent</a>
 </li>
+<li>pin_name
+: <a class="el" href="structhal_1_1_state_table_component_1_1_state_table.html#aa1032a687899cdef2fa9b31d2485b7ba">hal::StateTableComponent::StateTable</a>
+</li>
 <li>PinAsignToGroup
 : <a class="el" href="classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2a173dce598f1790da8792f87bdb1d66d8">hal::PinActionType</a>
 </li>
@@ -434,6 +452,7 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 </li>
 <li>pinName()
 : <a class="el" href="classhal_1_1_gate_pins_tree_item.html#a4c34097e6ae37d2357565d77331cb208">hal::GatePinsTreeItem</a>
+, <a class="el" href="structhal_1_1_l_u_t_wizard_page_1_1_output_pin_entry.html#aa89e78a035168ec58e06982f00c2892a">hal::LUTWizardPage::OutputPinEntry</a>
 </li>
 <li>PinProxyModel()
 : <a class="el" href="classhal_1_1_pin_proxy_model.html#a551621c855b8138373162b0ef040f607">hal::PinProxyModel</a>
@@ -714,7 +733,7 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 : <a class="el" href="classhal_1_1_progress_bar.html#a73c7014ee9bf5ae46bdc1f76e8eb7aba">hal::ProgressBar</a>
 </li>
 <li>ProgressPrinter()
-: <a class="el" href="classhal_1_1user__feedback_1_1_progress_printer.html#a41e76ebb994749ed9751c2578e3159f3">hal::user_feedback::ProgressPrinter</a>
+: <a class="el" href="classhal_1_1user__feedback_1_1_progress_printer.html#a0fe337ec8a4a418eb2593854ad7969ff">hal::user_feedback::ProgressPrinter</a>
 </li>
 <li>ProgressScope()
 : <a class="el" href="classhal_1_1user__feedback_1_1_progress_scope.html#a610e378f60b369578d9f9de6e1744220">hal::user_feedback::ProgressScope</a>
@@ -763,8 +782,8 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 : <a class="el" href="structhal_1_1_list_property_model_1_1_list_property_entry.html#a280c7972f87b0c2238dc6ae4ab788f0d">hal::ListPropertyModel::ListPropertyEntry</a>
 , <a class="el" href="classhal_1_1_list_property_model.html#a7e9915ca8f52e0afad74e4f90dd37d23">hal::ListPropertyModel</a>
 </li>
-<li>propertyType
-: <a class="el" href="classhal_1_1_data_table_model.html#a1e7dbd4076ddf7a6f85825e964bc36ff">hal::DataTableModel</a>
+<li>PropertyType
+: <a class="el" href="classhal_1_1_data_table_entry.html#a0797b38ffa19dbfc4aab5b003475b550">hal::DataTableEntry</a>
 </li>
 <li>proxyModel()
 : <a class="el" href="classhal_1_1_module_widget.html#a7f6a80be5f36a0705a6e41b1bf9cfe1b">hal::ModuleWidget</a>
@@ -859,6 +878,9 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 </li>
 <li>pyCodeGateOutputPins()
 : <a class="el" href="classhal_1_1_py_code_provider.html#ac50334e58da5ed1ccfc37b30a30c3ac6">hal::PyCodeProvider</a>
+</li>
+<li>pyCodeGateParameterValue()
+: <a class="el" href="classhal_1_1_py_code_provider.html#ac5a18bf6fcc51a5aae9e2b3be37edf93">hal::PyCodeProvider</a>
 </li>
 <li>pyCodeGateType()
 : <a class="el" href="classhal_1_1_py_code_provider.html#a40bcc88d19253f16dd883bdbbab26ec1">hal::PyCodeProvider</a>

@@ -13,7 +13,8 @@ var dir_527facc1459bfa3f362f8599485e2a7b =
       [ "LatchComponent", "classhal_1_1_latch_component.html", "classhal_1_1_latch_component" ]
     ] ],
     [ "lut_component.h", "lut__component_8h.html", [
-      [ "LUTComponent", "classhal_1_1_l_u_t_component.html", "classhal_1_1_l_u_t_component" ]
+      [ "LUTComponent", "classhal_1_1_l_u_t_component.html", "classhal_1_1_l_u_t_component" ],
+      [ "LUTOutputConfig", "structhal_1_1_l_u_t_component_1_1_l_u_t_output_config.html", "structhal_1_1_l_u_t_component_1_1_l_u_t_output_config" ]
     ] ],
     [ "mac_component.h", "mac__component_8h.html", [
       [ "MACComponent", "classhal_1_1_m_a_c_component.html", "classhal_1_1_m_a_c_component" ]
@@ -26,5 +27,10 @@ var dir_527facc1459bfa3f362f8599485e2a7b =
     ] ],
     [ "state_component.h", "state__component_8h.html", [
       [ "StateComponent", "classhal_1_1_state_component.html", "classhal_1_1_state_component" ]
+    ] ],
+    [ "state_table_component.h", "state__table__component_8h.html", [
+      [ "StateTableComponent", "classhal_1_1_state_table_component.html", "classhal_1_1_state_table_component" ],
+      [ "TableRow", "structhal_1_1_state_table_component_1_1_table_row.html", "structhal_1_1_state_table_component_1_1_table_row" ],
+      [ "StateTable", "structhal_1_1_state_table_component_1_1_state_table.html", "structhal_1_1_state_table_component_1_1_state_table" ]
     ] ]
 ];

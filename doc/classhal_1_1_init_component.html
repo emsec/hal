@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -99,8 +99,8 @@ Inheritance diagram for hal::InitComponent:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_init_component__inherit__graph.png" border="0" usemap="#ahal_1_1_init_component_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_init_component_inherit__map" id="ahal_1_1_init_component_inherit__map">
-<area shape="rect" title=" " alt="" coords="25,307,193,487"/>
-<area shape="rect" href="classhal_1_1_gate_type_component.html" title=" " alt="" coords="5,5,212,259"/>
+<area shape="rect" title=" " alt="" coords="19,219,187,399"/>
+<area shape="rect" href="classhal_1_1_gate_type_component.html" title=" " alt="" coords="5,5,200,171"/>
 </map>
 </div>
 <div class="dynheader">
@@ -108,15 +108,13 @@ Collaboration diagram for hal::InitComponent:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_init_component__coll__graph.png" border="0" usemap="#ahal_1_1_init_component_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1_init_component_coll__map" id="ahal_1_1_init_component_coll__map">
-<area shape="rect" title=" " alt="" coords="25,307,193,487"/>
-<area shape="rect" href="classhal_1_1_gate_type_component.html" title=" " alt="" coords="5,5,212,259"/>
+<area shape="rect" title=" " alt="" coords="19,219,187,399"/>
+<area shape="rect" href="classhal_1_1_gate_type_component.html" title=" " alt="" coords="5,5,200,171"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a15e16fd17bb74e3016702a58e5d52ba6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_init_component.html#a15e16fd17bb74e3016702a58e5d52ba6">InitComponent</a> (const std::string &amp;init_category, const std::vector&lt; std::string &gt; &amp;init_identifiers)</td></tr>
-<tr class="separator:a15e16fd17bb74e3016702a58e5d52ba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affd26afc5cf0e0108707787afdf2f605"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">ComponentType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_init_component.html#affd26afc5cf0e0108707787afdf2f605">get_type</a> () const override</td></tr>
 <tr class="separator:affd26afc5cf0e0108707787afdf2f605"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac4ee7240cdbffbe707660784ff5b437"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_init_component.html#aac4ee7240cdbffbe707660784ff5b437">get_components</a> (const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> *)&gt; &amp;filter=nullptr) const override</td></tr>
@@ -146,25 +144,10 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a701821878b4becf43a4beffbff30ff10"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_init_component.html">InitComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_init_component.html#a701821878b4becf43a4beffbff30ff10">create</a> (const std::string &amp;init_category, const std::vector&lt; std::string &gt; &amp;init_identifiers)</td></tr>
+<tr class="separator:a701821878b4becf43a4beffbff30ff10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e5574c9566f0ed71f21abb316db8e59"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_init_component.html#a3e5574c9566f0ed71f21abb316db8e59">is_class_of</a> (const <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> *component)</td></tr>
 <tr class="separator:a3e5574c9566f0ed71f21abb316db8e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_static_methods_classhal_1_1_gate_type_component"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classhal_1_1_gate_type_component')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classhal_1_1_gate_type_component.html">hal::GateTypeComponent</a></td></tr>
-<tr class="memitem:a6b00eb30ae108ace3816af92f2c239ed inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#a6b00eb30ae108ace3816af92f2c239ed">create_lut_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component, bool init_ascending)</td></tr>
-<tr class="separator:a6b00eb30ae108ace3816af92f2c239ed inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5c8039e44920ea0ab684b7f943641e4 inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#aa5c8039e44920ea0ab684b7f943641e4">create_ff_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;next_state_bf, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;clock_bf)</td></tr>
-<tr class="separator:aa5c8039e44920ea0ab684b7f943641e4 inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e8b60a3dcff1239bf2cbde39c36782f inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#a7e8b60a3dcff1239bf2cbde39c36782f">create_latch_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component)</td></tr>
-<tr class="separator:a7e8b60a3dcff1239bf2cbde39c36782f inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90523ddb1cda22842e6e56f3ab41fc03 inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#a90523ddb1cda22842e6e56f3ab41fc03">create_ram_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> bit_size)</td></tr>
-<tr class="separator:a90523ddb1cda22842e6e56f3ab41fc03 inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adebe86800325ba44ce254d441ff1ecf9 inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#adebe86800325ba44ce254d441ff1ecf9">create_mac_component</a> ()</td></tr>
-<tr class="separator:adebe86800325ba44ce254d441ff1ecf9 inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7aff5099112bc92dc9a2700c7b3bd0ca inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#a7aff5099112bc92dc9a2700c7b3bd0ca">create_init_component</a> (const std::string &amp;init_category, const std::vector&lt; std::string &gt; &amp;init_identifiers)</td></tr>
-<tr class="separator:a7aff5099112bc92dc9a2700c7b3bd0ca inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55b19360b5eb9fdc8c03304deda75edf inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#a55b19360b5eb9fdc8c03304deda75edf">create_state_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component, const std::string &amp;state_identifier, const std::string &amp;neg_state_identifier)</td></tr>
-<tr class="separator:a55b19360b5eb9fdc8c03304deda75edf inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab188da778f84e82d9543a97f43bbbc8f inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#ab188da778f84e82d9543a97f43bbbc8f">create_ram_port_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component, const std::string &amp;data_group, const std::string &amp;addr_group, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;clock_bf, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;enable_bf, bool is_write)</td></tr>
-<tr class="separator:ab188da778f84e82d9543a97f43bbbc8f inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -179,6 +162,8 @@ Additional Inherited Members</h2></td></tr>
 , <a class="el" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017ae37f0136aa3ffaf149b351f6a4c948e9">init</a>
 , <a class="el" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a9ed39e2ea931586b6a985a6942ef573e">state</a>
 , <a class="el" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a8ece2e6e53ae7532e49f462073d92601">ram_port</a>
+, <br />
+&#160;&#160;<a class="el" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017a7548577dc96a31b7c825fe0783469d0a">state_table</a>
 <br />
  }</td></tr>
 <tr class="separator:a1ee2af2d1a1dba836136b2a9fce0f017 inherit pub_types_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,16 +171,19 @@ Additional Inherited Members</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A gate type component that describes where the initialization data of a gate is stored within its data container. </p>
 
-<p class="definition">Definition at line <a class="el" href="init__component_8h_source.html#l00035">35</a> of file <a class="el" href="init__component_8h_source.html">init_component.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a15e16fd17bb74e3016702a58e5d52ba6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a15e16fd17bb74e3016702a58e5d52ba6">&#9670;&nbsp;</a></span>InitComponent()</h2>
+<p class="definition">Definition at line <a class="el" href="init__component_8h_source.html#l00037">37</a> of file <a class="el" href="init__component_8h_source.html">init_component.h</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a701821878b4becf43a4beffbff30ff10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a701821878b4becf43a4beffbff30ff10">&#9670;&nbsp;</a></span>create()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">hal::InitComponent::InitComponent </td>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classhal_1_1_init_component.html">InitComponent</a> &gt; hal::InitComponent::create </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>init_category</em>, </td>
@@ -212,8 +200,13 @@ Additional Inherited Members</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Construct a new <a class="el" href="classhal_1_1_init_component.html">InitComponent</a> with given child component, the category and a vector of identifiers pointing to the initialization data.</p>
+<p>Create a new <a class="el" href="classhal_1_1_init_component.html">InitComponent</a> with the category and a vector of identifiers pointing to the initialization data.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">init_category</td><td>- The data category. </td></tr>
@@ -221,12 +214,14 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="classhal_1_1_init_component.html">InitComponent</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00005">5</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00011">11</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="gatelibrary__wizard_8cpp_source.html#l00202">hal::GateLibraryWizard::setComponents()</a>.</p>
 
 </div>
 </div>
-<h2 class="groupheader">Member Function Documentation</h2>
 <a id="aac4ee7240cdbffbe707660784ff5b437"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aac4ee7240cdbffbe707660784ff5b437">&#9670;&nbsp;</a></span>get_components()</h2>
 
@@ -261,7 +256,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_gate_type_component.html#a0e836f153556f93f7830390e465cda49">hal::GateTypeComponent</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00019">19</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00026">26</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="defines_8h_source.html#l00049">UNUSED</a>.</p>
 
@@ -284,9 +279,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the category in which to find the initialization data.</p>
 <dl class="section return"><dt>Returns</dt><dd>The data category. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00025">25</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00032">32</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate_8cpp_source.html#l00497">hal::Gate::add_boolean_function()</a>, <a class="el" href="gate__type__components_8cpp_source.html#l00014">hal::gate_type_components_init()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l01034">hal::Gate::get_init_data()</a>, <a class="el" href="netlist__simulator_8cpp_source.html#l00118">hal::NetlistSimulator::load_initial_values_from_netlist()</a>, <a class="el" href="verilator_8cpp_source.html#l00031">hal::verilator::remove_unwanted_parameters_from_netlist()</a>, and <a class="el" href="netlist_2gate_8cpp_source.html#l01055">hal::Gate::set_init_data()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00015">hal::gate_type_components_init()</a>, <a class="el" href="netlist__simulator_8cpp_source.html#l00118">hal::NetlistSimulator::load_initial_values_from_netlist()</a>, and <a class="el" href="verilator_8cpp_source.html#l00031">hal::verilator::remove_unwanted_parameters_from_netlist()</a>.</p>
 
 </div>
 </div>
@@ -307,9 +302,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the vector of identifiers at which to find initialization data.</p>
 <dl class="section return"><dt>Returns</dt><dd>The data identifiers. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00035">35</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00042">42</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate_8cpp_source.html#l00497">hal::Gate::add_boolean_function()</a>, <a class="el" href="gate__type__components_8cpp_source.html#l00014">hal::gate_type_components_init()</a>, <a class="el" href="lut__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_lut()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l01034">hal::Gate::get_init_data()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00177">hal::verilator::converter::get_parameters_for_gate()</a>, <a class="el" href="netlist__simulator_8cpp_source.html#l00118">hal::NetlistSimulator::load_initial_values_from_netlist()</a>, <a class="el" href="verilator_8cpp_source.html#l00031">hal::verilator::remove_unwanted_parameters_from_netlist()</a>, and <a class="el" href="netlist_2gate_8cpp_source.html#l01055">hal::Gate::set_init_data()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00015">hal::gate_type_components_init()</a>, <a class="el" href="netlist__simulator_8cpp_source.html#l00118">hal::NetlistSimulator::load_initial_values_from_netlist()</a>, and <a class="el" href="verilator_8cpp_source.html#l00031">hal::verilator::remove_unwanted_parameters_from_netlist()</a>.</p>
 
 </div>
 </div>
@@ -340,7 +335,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_gate_type_component.html#a4104ed67b98abffcf8485a42cd49f248">hal::GateTypeComponent</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00009">9</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00016">16</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__simulator_8cpp_source.html#l00118">hal::NetlistSimulator::load_initial_values_from_netlist()</a>.</p>
 
@@ -378,11 +373,11 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if component is an <a class="el" href="classhal_1_1_init_component.html">InitComponent</a>, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00014">14</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00021">21</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="classhal_1_1_gate_type_component.html#a4104ed67b98abffcf8485a42cd49f248">hal::GateTypeComponent::get_type()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00014">hal::gate_type_components_init()</a>, <a class="el" href="lut__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_lut()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00177">hal::verilator::converter::get_parameters_for_gate()</a>, <a class="el" href="verilator_8cpp_source.html#l00031">hal::verilator::remove_unwanted_parameters_from_netlist()</a>, <a class="el" href="init__wizardpage_8cpp_source.html#l00036">hal::InitWizardPage::setData()</a>, and <a class="el" href="gatelibrary__frame__init_8cpp_source.html#l00020">hal::GatelibraryFrameInit::update()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00015">hal::gate_type_components_init()</a>, <a class="el" href="verilator_8cpp_source.html#l00031">hal::verilator::remove_unwanted_parameters_from_netlist()</a>, <a class="el" href="init__wizardpage_8cpp_source.html#l00048">hal::InitWizardPage::setData()</a>, and <a class="el" href="gatelibrary__frame__init_8cpp_source.html#l00020">hal::GatelibraryFrameInit::update()</a>.</p>
 
 </div>
 </div>
@@ -409,9 +404,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00030">30</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00037">37</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00014">hal::gate_type_components_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00015">hal::gate_type_components_init()</a>.</p>
 
 </div>
 </div>
@@ -438,9 +433,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00040">40</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="init__component_8cpp_source.html#l00047">47</a> of file <a class="el" href="init__component_8cpp_source.html">init_component.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00014">hal::gate_type_components_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00015">hal::gate_type_components_init()</a>.</p>
 
 </div>
 </div>

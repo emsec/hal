@@ -4,10 +4,13 @@ var dir_a35da49c385fb45d333860c108c1de8d =
     [ "module_details_widget", "dir_723d522cf2fb43470300080d45196f5e.html", "dir_723d522cf2fb43470300080d45196f5e" ],
     [ "net_details_widget", "dir_48bf25e2045e5534e7007423842f8c92.html", "dir_48bf25e2045e5534e7007423842f8c92" ],
     [ "tree_navigation", "dir_9c362a02028ca18fcfb20999e509ef9e.html", "dir_9c362a02028ca18fcfb20999e509ef9e" ],
-    [ "data_table_model.h", "data__table__model_8h.html", [
-      [ "DataEntry", "structhal_1_1_data_table_model_1_1_data_entry.html", "structhal_1_1_data_table_model_1_1_data_entry" ]
+    [ "data_table_entry.h", "data__table__entry_8h.html", [
+      [ "DataTableEntry", "classhal_1_1_data_table_entry.html", "classhal_1_1_data_table_entry" ]
     ] ],
-    [ "data_table_widget.h", "data__table__widget_8h.html", null ],
+    [ "data_table_model.h", "data__table__model_8h.html", null ],
+    [ "data_table_widget.h", "data__table__widget_8h.html", [
+      [ "DataEntryDialog", "classhal_1_1_data_entry_dialog.html", "classhal_1_1_data_entry_dialog" ]
+    ] ],
     [ "details_frame_widget.h", "details__frame__widget_8h.html", [
       [ "DetailsFrameWidget", "classhal_1_1_details_frame_widget.html", "classhal_1_1_details_frame_widget" ]
     ] ],

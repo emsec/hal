@@ -19,6 +19,9 @@ var dir_d073cb70af71c62b53b292149ce80af3 =
       [ "ActionSetObjectDataFactory", "classhal_1_1_action_set_object_data_factory.html", "classhal_1_1_action_set_object_data_factory" ]
     ] ],
     [ "action_set_object_type.h", "action__set__object__type_8h.html", null ],
+    [ "action_set_parameter_value.h", "action__set__parameter__value_8h.html", [
+      [ "ActionSetParameterValueFactory", "classhal_1_1_action_set_parameter_value_factory.html", "classhal_1_1_action_set_parameter_value_factory" ]
+    ] ],
     [ "action_set_selection_focus.h", "action__set__selection__focus_8h.html", null ],
     [ "action_unfold_module.h", "action__unfold__module_8h.html", null ],
     [ "user_action.h", "user__action_8h.html", null ],

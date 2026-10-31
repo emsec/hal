@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -85,7 +85,10 @@ $(document).ready(function(){initNavTree('classhal_1_1_gate_library_parser.html'
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="classhal_1_1_gate_library_parser-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hal::GateLibraryParser Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group__core.html">HAL Core</a> &raquo; <a class="el" href="group__netlist.html">Netlist</a> &raquo; <a class="el" href="group__gate__lib.html">Gate Library</a> &raquo; <a class="el" href="group__gate__lib__parser.html">Gate Library Parser</a></div></div>  </div>
@@ -98,9 +101,9 @@ Inheritance diagram for hal::GateLibraryParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_gate_library_parser__inherit__graph.png" border="0" usemap="#ahal_1_1_gate_library_parser_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_gate_library_parser_inherit__map" id="ahal_1_1_gate_library_parser_inherit__map">
-<area shape="rect" title=" " alt="" coords="59,5,234,112"/>
-<area shape="rect" href="classhal_1_1_h_g_l_parser.html" title=" " alt="" coords="5,160,131,267"/>
-<area shape="rect" href="classhal_1_1_liberty_parser.html" title=" " alt="" coords="155,160,298,267"/>
+<area shape="rect" title=" " alt="" coords="51,5,242,171"/>
+<area shape="rect" href="classhal_1_1_h_g_l_parser.html" title=" " alt="" coords="5,219,131,325"/>
+<area shape="rect" href="classhal_1_1_liberty_parser.html" title=" " alt="" coords="155,219,298,325"/>
 </map>
 </div>
 <div class="dynheader">
@@ -108,32 +111,85 @@ Collaboration diagram for hal::GateLibraryParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_gate_library_parser__coll__graph.png" border="0" usemap="#ahal_1_1_gate_library_parser_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1_gate_library_parser_coll__map" id="ahal_1_1_gate_library_parser_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,180,112"/>
+<area shape="rect" title=" " alt="" coords="5,5,196,171"/>
 </map>
 </div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a861eec045adda875d40619858ca90aae"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library_parser.html#a861eec045adda875d40619858ca90aae">ParseStatus</a> { <a class="el" href="classhal_1_1_gate_library_parser.html#a861eec045adda875d40619858ca90aaea70a47cae4eb221930f2663fd244369ea">NoError</a>
+, <a class="el" href="classhal_1_1_gate_library_parser.html#a861eec045adda875d40619858ca90aaea9130c6356cea2c4009924145d07c6f23">NeedsUpgrade</a>
+, <a class="el" href="classhal_1_1_gate_library_parser.html#a861eec045adda875d40619858ca90aaeabfaef30f1c8011c5cefa38ae470fb7aa">UnknownError</a>
+ }</td></tr>
+<tr class="separator:a861eec045adda875d40619858ca90aae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae465d61b825304d2c03f2bcd795a55c0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library_parser.html#ae465d61b825304d2c03f2bcd795a55c0">GateLibraryParser</a> ()=default</td></tr>
-<tr class="separator:ae465d61b825304d2c03f2bcd795a55c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e5aa9f5e1ce20a506d3a7ecce45fd16"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library_parser.html#a6e5aa9f5e1ce20a506d3a7ecce45fd16">~GateLibraryParser</a> ()=default</td></tr>
-<tr class="separator:a6e5aa9f5e1ce20a506d3a7ecce45fd16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51a515a8b65a261d63ffb3ce20beaec1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library_parser.html#a51a515a8b65a261d63ffb3ce20beaec1">GateLibraryParser</a> ()</td></tr>
+<tr class="separator:a51a515a8b65a261d63ffb3ce20beaec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa68f19194f3e19df9eea27b31c84e32"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library_parser.html#afa68f19194f3e19df9eea27b31c84e32">~GateLibraryParser</a> ()</td></tr>
+<tr class="separator:afa68f19194f3e19df9eea27b31c84e32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8b3fdfc65b6d87782d8fc7da1a33b36"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library_parser.html#ad8b3fdfc65b6d87782d8fc7da1a33b36">parse</a> (const std::filesystem::path &amp;file_path)=0</td></tr>
 <tr class="separator:ad8b3fdfc65b6d87782d8fc7da1a33b36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ab3f7066419924350a0f30a7b5241a23b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_gate_library_parser.html#a861eec045adda875d40619858ca90aae">ParseStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library_parser.html#ab3f7066419924350a0f30a7b5241a23b">get_parse_status</a> ()</td></tr>
+<tr class="separator:ab3f7066419924350a0f30a7b5241a23b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1093048a7f49364eb88edb1ed79772e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library_parser.html#ad1093048a7f49364eb88edb1ed79772e">request_upgrade</a> ()</td></tr>
+<tr class="separator:ad1093048a7f49364eb88edb1ed79772e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-methods"></a>
+Static Protected Member Functions</h2></td></tr>
+<tr class="memitem:a207929eeb95d2d633bd3a314a28ff28e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library_parser.html#a207929eeb95d2d633bd3a314a28ff28e">set_parse_status</a> (<a class="el" href="classhal_1_1_gate_library_parser.html#a861eec045adda875d40619858ca90aae">ParseStatus</a> status)</td></tr>
+<tr class="separator:a207929eeb95d2d633bd3a314a28ff28e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a180a9ff2ffbf894a3d566791da9482f4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_library_parser.html#a180a9ff2ffbf894a3d566791da9482f4">is_upgrade_requested</a> ()</td></tr>
+<tr class="separator:a180a9ff2ffbf894a3d566791da9482f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The gate library parser is the base class that needs to be inherited from all parsers that shall be registered with HAL. </p>
 
 <p class="definition">Definition at line <a class="el" href="gate__library__parser_8h_source.html#l00042">42</a> of file <a class="el" href="gate__library__parser_8h_source.html">gate_library_parser.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ae465d61b825304d2c03f2bcd795a55c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae465d61b825304d2c03f2bcd795a55c0">&#9670;&nbsp;</a></span>GateLibraryParser()</h2>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a861eec045adda875d40619858ca90aae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a861eec045adda875d40619858ca90aae">&#9670;&nbsp;</a></span>ParseStatus</h2>
 
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classhal_1_1_gate_library_parser.html#a861eec045adda875d40619858ca90aae">hal::GateLibraryParser::ParseStatus</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The outcome of the most recent parse as reported by the parser. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a861eec045adda875d40619858ca90aaea70a47cae4eb221930f2663fd244369ea"></a>NoError&#160;</td><td class="fielddoc"><p>The gate library was parsed successfully. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a861eec045adda875d40619858ca90aaea9130c6356cea2c4009924145d07c6f23"></a>NeedsUpgrade&#160;</td><td class="fielddoc"><p>The file format is outdated, it gets upgraded by parsing it again after <code>request_upgrade</code>. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a861eec045adda875d40619858ca90aaeabfaef30f1c8011c5cefa38ae470fb7aa"></a>UnknownError&#160;</td><td class="fielddoc"><p>Parsing failed for any other reason, or the parser does not report its status. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="gate__library__parser_8h_source.html#l00048">48</a> of file <a class="el" href="gate__library__parser_8h_source.html">gate_library_parser.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a51a515a8b65a261d63ffb3ce20beaec1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51a515a8b65a261d63ffb3ce20beaec1">&#9670;&nbsp;</a></span>GateLibraryParser()</h2>
+
+<div class="memitem">
+<div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">hal::GateLibraryParser::GateLibraryParser </td>
@@ -142,17 +198,17 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">default</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+<p>Sets the parse status to <code>UnknownError</code> until the parser reports otherwise. </p>
+
+<p class="definition">Definition at line <a class="el" href="gate__library__parser_8cpp_source.html#l00014">14</a> of file <a class="el" href="gate__library__parser_8cpp_source.html">gate_library_parser.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="classhal_1_1_gate_library_parser.html#a861eec045adda875d40619858ca90aaeabfaef30f1c8011c5cefa38ae470fb7aa">UnknownError</a>.</p>
 
 </div>
 </div>
-<a id="a6e5aa9f5e1ce20a506d3a7ecce45fd16"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e5aa9f5e1ce20a506d3a7ecce45fd16">&#9670;&nbsp;</a></span>~GateLibraryParser()</h2>
+<a id="afa68f19194f3e19df9eea27b31c84e32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa68f19194f3e19df9eea27b31c84e32">&#9670;&nbsp;</a></span>~GateLibraryParser()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -161,7 +217,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual hal::GateLibraryParser::~GateLibraryParser </td>
+          <td class="memname">hal::GateLibraryParser::~GateLibraryParser </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -169,14 +225,76 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Withdraws a pending upgrade request, so that it applies to a single parse only. </p>
+
+<p class="definition">Definition at line <a class="el" href="gate__library__parser_8cpp_source.html#l00019">19</a> of file <a class="el" href="gate__library__parser_8cpp_source.html">gate_library_parser.cpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab3f7066419924350a0f30a7b5241a23b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3f7066419924350a0f30a7b5241a23b">&#9670;&nbsp;</a></span>get_parse_status()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_gate_library_parser.html#a861eec045adda875d40619858ca90aae">GateLibraryParser::ParseStatus</a> hal::GateLibraryParser::get_parse_status </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the outcome of the most recent parse, e.g., to find out why loading a gate library failed.</p>
+<p>If loading fails before any parser is involved, e.g., because the file does not exist, the status still refers to an earlier parse.</p>
+<dl class="section return"><dt>Returns</dt><dd>The parse status. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="gate__library__parser_8cpp_source.html#l00024">24</a> of file <a class="el" href="gate__library__parser_8cpp_source.html">gate_library_parser.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a180a9ff2ffbf894a3d566791da9482f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a180a9ff2ffbf894a3d566791da9482f4">&#9670;&nbsp;</a></span>is_upgrade_requested()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::GateLibraryParser::is_upgrade_requested </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Check whether the current parse may upgrade a gate library file in an outdated format.</p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if an upgrade was requested, <code>false</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="gate__library__parser_8cpp_source.html#l00039">39</a> of file <a class="el" href="gate__library__parser_8cpp_source.html">gate_library_parser.cpp</a>.</p>
+
+</div>
+</div>
 <a id="ad8b3fdfc65b6d87782d8fc7da1a33b36"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8b3fdfc65b6d87782d8fc7da1a33b36">&#9670;&nbsp;</a></span>parse()</h2>
 
@@ -213,8 +331,77 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a id="ad1093048a7f49364eb88edb1ed79772e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1093048a7f49364eb88edb1ed79772e">&#9670;&nbsp;</a></span>request_upgrade()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GateLibraryParser::request_upgrade </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Allow the next parse to upgrade a gate library file in an outdated format.</p>
+<p>The upgrade replaces the file, so it must only be requested with the consent of the user. The request applies to the next parse only and is withdrawn once that parse is done. </p>
+
+<p class="definition">Definition at line <a class="el" href="gate__library__parser_8cpp_source.html#l00029">29</a> of file <a class="el" href="gate__library__parser_8cpp_source.html">gate_library_parser.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a207929eeb95d2d633bd3a314a28ff28e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a207929eeb95d2d633bd3a314a28ff28e">&#9670;&nbsp;</a></span>set_parse_status()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GateLibraryParser::set_parse_status </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_gate_library_parser.html#a861eec045adda875d40619858ca90aae">ParseStatus</a>&#160;</td>
+          <td class="paramname"><em>status</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Report the outcome of the current parse.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">status</td><td>- The parse status. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="gate__library__parser_8cpp_source.html#l00034">34</a> of file <a class="el" href="gate__library__parser_8cpp_source.html">gate_library_parser.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9acb44549b41563697bb490144ec6258">hal::status</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="hgl__parser_8cpp_source.html#l00020">hal::HGLParser::parse()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>include/hal_core/netlist/gate_library/gate_library_parser/<a class="el" href="gate__library__parser_8h_source.html">gate_library_parser.h</a></li>
+<li>src/netlist/gate_library/gate_library_parser/<a class="el" href="gate__library__parser_8cpp_source.html">gate_library_parser.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-170-g3418bd25d</span>
+   &#160;<span id="projectnumber">v4.5.0-232-g8053ac4b3</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -97,63 +97,60 @@ $(document).ready(function(){initNavTree('simulator_2verilator_2src_2converter_8
 <code>#include &quot;<a class="el" href="gate__library_8h_source.html">hal_core/netlist/gate_library/gate_library.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate__type_8h_source.html">hal_core/netlist/gate_library/gate_type.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate__type__component_8h_source.html">hal_core/netlist/gate_library/gate_type_component/gate_type_component.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="init__component_8h_source.html">hal_core/netlist/gate_library/gate_type_component/init_component.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="lut__component_8h_source.html">hal_core/netlist/gate_library/gate_type_component/lut_component.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="net_8h_source.html">hal_core/netlist/net.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="include_2hal__core_2netlist_2netlist_8h_source.html">hal_core/netlist/netlist.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="verilator_8h_source.html">verilator/verilator.h</a>&quot;</code><br />
+<code>#include &lt;cctype&gt;</code><br />
 <code>#include &lt;filesystem&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
 <code>#include &lt;set&gt;</code><br />
 <code>#include &lt;sstream&gt;</code><br />
+<code>#include &lt;unordered_set&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
-<code>#include &lt;cctype&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for converter.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="simulator_2verilator_2src_2converter_8cpp__incl.png" border="0" usemap="#aplugins_2simulator_2verilator_2src_2converter_8cpp" alt=""/></div>
 <map name="aplugins_2simulator_2verilator_2src_2converter_8cpp" id="aplugins_2simulator_2verilator_2src_2converter_8cpp">
-<area shape="rect" title=" " alt="" coords="1768,5,1963,47"/>
-<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="844,467,1023,508"/>
-<area shape="rect" title=" " alt="" coords="971,809,1062,836"/>
-<area shape="rect" title=" " alt="" coords="1504,653,1547,679"/>
-<area shape="rect" title=" " alt="" coords="1564,563,1626,590"/>
-<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1273,184,1440,211"/>
-<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1760,273,1915,315"/>
-<area shape="rect" href="gate__type__component_8h.html" title=" " alt="" coords="414,363,634,419"/>
-<area shape="rect" href="pin__type_8h.html" title=" " alt="" coords="2465,556,2656,597"/>
-<area shape="rect" href="log_8h.html" title=" " alt="" coords="3086,556,3216,597"/>
-<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="1696,177,1859,218"/>
-<area shape="rect" href="init__component_8h.html" title=" " alt="" coords="281,169,501,225"/>
-<area shape="rect" href="lut__component_8h.html" title=" " alt="" coords="525,169,745,225"/>
-<area shape="rect" href="net_8h.html" title=" " alt="" coords="2570,281,2729,307"/>
-<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="2068,95,2247,121"/>
-<area shape="rect" href="verilator_8h.html" title=" " alt="" coords="599,281,746,307"/>
-<area shape="rect" title=" " alt="" coords="3810,95,3884,121"/>
-<area shape="rect" title=" " alt="" coords="3908,95,3983,121"/>
-<area shape="rect" title=" " alt="" coords="4008,95,4073,121"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="1321,735,1461,761"/>
-<area shape="rect" href="enums_8h.html" title=" " alt="" coords="1840,645,1971,687"/>
-<area shape="rect" title=" " alt="" coords="3264,735,3315,761"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="2158,556,2288,597"/>
-<area shape="rect" title=" " alt="" coords="812,563,882,590"/>
-<area shape="rect" title=" " alt="" coords="907,563,992,590"/>
-<area shape="rect" title=" " alt="" coords="1016,563,1086,590"/>
-<area shape="rect" title=" " alt="" coords="1110,563,1186,590"/>
-<area shape="rect" title=" " alt="" coords="1364,563,1488,590"/>
-<area shape="rect" title=" " alt="" coords="1996,653,2082,679"/>
-<area shape="rect" title=" " alt="" coords="2464,653,2556,679"/>
-<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="2910,467,3064,508"/>
-<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="35,474,230,501"/>
-<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="2065,370,2250,411"/>
-<area shape="rect" title=" " alt="" coords="3532,653,3610,679"/>
-<area shape="rect" title=" " alt="" coords="3364,653,3418,679"/>
-<area shape="rect" href="gate__pin_8h.html" title=" " alt="" coords="2630,370,2784,411"/>
-<area shape="rect" href="pin__group_8h.html" title=" " alt="" coords="2452,467,2605,508"/>
-<area shape="rect" title=" " alt="" coords="2834,653,2892,679"/>
-<area shape="rect" title=" " alt="" coords="1926,377,2040,404"/>
-<area shape="rect" href="simulation__engine_8h.html" title=" " alt="" coords="872,370,1073,411"/>
+<area shape="rect" title=" " alt="" coords="1643,5,1837,47"/>
+<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="973,452,1152,493"/>
+<area shape="rect" title=" " alt="" coords="249,795,340,821"/>
+<area shape="rect" title=" " alt="" coords="1331,638,1373,665"/>
+<area shape="rect" title=" " alt="" coords="1491,549,1554,575"/>
+<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1657,177,1823,203"/>
+<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1757,259,1912,300"/>
+<area shape="rect" href="gate__type__component_8h.html" title=" " alt="" coords="1046,348,1266,404"/>
+<area shape="rect" href="pin__type_8h.html" title=" " alt="" coords="2239,541,2430,583"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="3167,541,3297,583"/>
+<area shape="rect" title=" " alt="" coords="1493,363,1608,389"/>
+<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="1368,169,1531,211"/>
+<area shape="rect" href="net_8h.html" title=" " alt="" coords="2521,266,2679,293"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="3212,95,3391,121"/>
+<area shape="rect" href="verilator_8h.html" title=" " alt="" coords="604,266,751,293"/>
+<area shape="rect" title=" " alt="" coords="3579,95,3645,121"/>
+<area shape="rect" title=" " alt="" coords="3669,95,3742,121"/>
+<area shape="rect" title=" " alt="" coords="3767,95,3841,121"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="1305,720,1445,747"/>
+<area shape="rect" href="enums_8h.html" title=" " alt="" coords="2229,631,2360,672"/>
+<area shape="rect" title=" " alt="" coords="3367,720,3417,747"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="2657,541,2788,583"/>
+<area shape="rect" title=" " alt="" coords="1033,549,1103,575"/>
+<area shape="rect" title=" " alt="" coords="1128,549,1213,575"/>
+<area shape="rect" title=" " alt="" coords="839,549,908,575"/>
+<area shape="rect" title=" " alt="" coords="933,549,1009,575"/>
+<area shape="rect" title=" " alt="" coords="1786,549,1910,575"/>
+<area shape="rect" title=" " alt="" coords="2885,638,2971,665"/>
+<area shape="rect" title=" " alt="" coords="2998,638,3090,665"/>
+<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="2520,452,2675,493"/>
+<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="93,459,288,486"/>
+<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="2926,355,3111,397"/>
+<area shape="rect" title=" " alt="" coords="3689,638,3767,665"/>
+<area shape="rect" title=" " alt="" coords="2439,638,2497,665"/>
+<area shape="rect" title=" " alt="" coords="3365,638,3419,665"/>
+<area shape="rect" href="gate__pin_8h.html" title=" " alt="" coords="2291,355,2445,397"/>
+<area shape="rect" href="pin__group_8h.html" title=" " alt="" coords="2190,452,2343,493"/>
+<area shape="rect" href="simulation__engine_8h.html" title=" " alt="" coords="667,355,869,397"/>
 </map>
 </div>
 </div>
@@ -178,8 +175,6 @@ Functions</h2></td></tr>
 <tr class="separator:ab2dcca0fdd663859cd2e362b4c462c60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af86533da69bd3758f69e8ee30855f217"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1verilator_1_1converter.html#af86533da69bd3758f69e8ee30855f217">hal::verilator::converter::get_name_for_gate_type</a> (const GateType *gt)</td></tr>
 <tr class="separator:af86533da69bd3758f69e8ee30855f217"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bc01790846e968e248ca57d4d266985"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1verilator_1_1converter.html#a1bc01790846e968e248ca57d4d266985">hal::verilator::converter::get_parameters_for_gate</a> (const GateType *gt)</td></tr>
-<tr class="separator:a1bc01790846e968e248ca57d4d266985"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a948d01fd415e91da335f494e364233"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1verilator_1_1converter.html#a4a948d01fd415e91da335f494e364233">hal::verilator::converter::get_prologue_for_gate_type</a> (const GateType *gt)</td></tr>
 <tr class="separator:a4a948d01fd415e91da335f494e364233"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9eac662c5db2cc1b334489ed475a78c6"><td class="memItemLeft" align="right" valign="top">Result&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1verilator_1_1converter.html#a9eac662c5db2cc1b334489ed475a78c6">hal::verilator::converter::verilog_function_printer</a> (const BooleanFunction::Node &amp;node, std::vector&lt; std::string &gt; &amp;&amp;operands)</td></tr>

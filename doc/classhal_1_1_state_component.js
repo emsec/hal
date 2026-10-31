@@ -1,6 +1,5 @@
 var classhal_1_1_state_component =
 [
-    [ "StateComponent", "classhal_1_1_state_component.html#accb0f3377497307099e56ba7152dfe4d", null ],
     [ "get_components", "classhal_1_1_state_component.html#ab3273a5373a9567076f3bafb77941354", null ],
     [ "get_neg_state_identifier", "classhal_1_1_state_component.html#a795d40ea17d8d89425e1c1a0b2b7c0a3", null ],
     [ "get_state_identifier", "classhal_1_1_state_component.html#a0d67c158fec2a49c54d9105307a721e6", null ],

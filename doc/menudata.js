@@ -90,6 +90,7 @@ var menudata={children:[
 {text:"n",url:"namespacemembers_vars.html#index_n"},
 {text:"p",url:"namespacemembers_vars.html#index_p"},
 {text:"s",url:"namespacemembers_vars.html#index_s"},
+{text:"t",url:"namespacemembers_vars.html#index_t"},
 {text:"v",url:"namespacemembers_vars.html#index_v"},
 {text:"z",url:"namespacemembers_vars.html#index_z"}]},
 {text:"Typedefs",url:"namespacemembers_type.html"},
@@ -197,6 +198,7 @@ var menudata={children:[
 {text:"z",url:"functions_vars_z.html#index_z"}]},
 {text:"Typedefs",url:"functions_type.html"},
 {text:"Enumerations",url:"functions_enum.html",children:[
+{text:"a",url:"functions_enum.html#index_a"},
 {text:"c",url:"functions_enum.html#index_c"},
 {text:"d",url:"functions_enum.html#index_d"},
 {text:"e",url:"functions_enum.html#index_e"},

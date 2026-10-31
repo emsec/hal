@@ -1,32 +1,38 @@
 <map id="plugins/gui/src/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_truth_table.cpp" name="plugins/gui/src/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_truth_table.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="844,5,1035,76"/>
-<area shape="rect" id="node2" href="$gatelibrary__tab__truth__table_8h.html" title=" " alt="" coords="515,228,729,284"/>
-<area shape="rect" id="node14" title=" " alt="" coords="2040,139,2124,165"/>
-<area shape="rect" id="node15" href="$gui__globals_8h.html" title=" " alt="" coords="1884,139,2016,165"/>
-<area shape="rect" id="node27" href="$lut__component_8h.html" title=" " alt="" coords="277,124,497,180"/>
-<area shape="rect" id="node28" href="$state__component_8h.html" title=" " alt="" coords="756,124,976,180"/>
-<area shape="rect" id="node29" href="$ff__component_8h.html" title=" " alt="" coords="1001,436,1221,492"/>
-<area shape="rect" id="node3" href="$gatelibrary__tab__interface_8h.html" title=" " alt="" coords="5,651,204,678"/>
-<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="1123,733,1263,760"/>
-<area shape="rect" id="node5" href="$gate__type_8h.html" title=" " alt="" coords="771,443,926,485"/>
-<area shape="rect" id="node8" href="$gate_8h.html" title=" " alt="" coords="1204,347,1371,373"/>
-<area shape="rect" id="node9" title=" " alt="" coords="335,451,445,477"/>
-<area shape="rect" id="node10" title=" " alt="" coords="535,451,602,477"/>
-<area shape="rect" id="node11" title=" " alt="" coords="627,347,739,373"/>
-<area shape="rect" id="node12" title=" " alt="" coords="764,347,875,373"/>
-<area shape="rect" id="node13" href="$gatelibrary__component__frame_8h.html" title=" " alt="" coords="328,332,553,388"/>
-<area shape="rect" id="node6" href="$boolean__function_8h.html" title=" " alt="" coords="958,644,1137,685"/>
-<area shape="rect" id="node7" href="$gate__type__component_8h.html" title=" " alt="" coords="739,540,959,596"/>
-<area shape="rect" id="node16" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="2277,651,2455,678"/>
-<area shape="rect" id="node17" href="$file__status__manager_8h.html" title=" " alt="" coords="1051,235,1230,277"/>
-<area shape="rect" id="node18" href="$graph__context__manager_8h.html" title=" " alt="" coords="2500,547,2675,589"/>
-<area shape="rect" id="node19" href="$content__manager_8h.html" title=" " alt="" coords="1254,235,1414,277"/>
-<area shape="rect" id="node20" href="$netlist__relay_8h.html" title=" " alt="" coords="1439,235,1611,277"/>
-<area shape="rect" id="node21" href="$plugin__relay_8h.html" title=" " alt="" coords="1750,644,1921,685"/>
-<area shape="rect" id="node22" href="$python__context_8h.html" title=" " alt="" coords="1635,243,1843,269"/>
-<area shape="rect" id="node23" href="$selection__relay_8h.html" title=" " alt="" coords="2279,547,2424,589"/>
-<area shape="rect" id="node24" href="$gui__api_8h.html" title=" " alt="" coords="2167,243,2323,269"/>
-<area shape="rect" id="node25" href="$comment__manager_8h.html" title=" " alt="" coords="1868,235,2032,277"/>
-<area shape="rect" id="node26" title=" " alt="" coords="2057,243,2142,269"/>
-<area shape="rect" id="node30" href="$async__set__reset__behavior_8h.html" title=" " alt="" coords="1085,540,1249,596"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1003,5,1193,76"/>
+<area shape="rect" id="node2" href="$gatelibrary__tab__truth__table_8h.html" title=" " alt="" coords="396,199,611,255"/>
+<area shape="rect" id="node20" title=" " alt="" coords="2120,124,2204,151"/>
+<area shape="rect" id="node21" href="$gui__globals_8h.html" title=" " alt="" coords="1964,124,2096,151"/>
+<area shape="rect" id="node33" href="$lut__component_8h.html" title=" " alt="" coords="1467,407,1687,463"/>
+<area shape="rect" id="node34" href="$state__component_8h.html" title=" " alt="" coords="1223,407,1443,463"/>
+<area shape="rect" id="node35" href="$ff__component_8h.html" title=" " alt="" coords="927,407,1147,463"/>
+<area shape="rect" id="node3" href="$gatelibrary__tab__interface_8h.html" title=" " alt="" coords="5,711,204,738"/>
+<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="1188,793,1328,820"/>
+<area shape="rect" id="node5" href="$gate__type_8h.html" title=" " alt="" coords="697,414,851,455"/>
+<area shape="rect" id="node13" href="$gate_8h.html" title=" " alt="" coords="817,317,984,344"/>
+<area shape="rect" id="node15" title=" " alt="" coords="103,421,213,448"/>
+<area shape="rect" id="node16" title=" " alt="" coords="343,421,410,448"/>
+<area shape="rect" id="node17" title=" " alt="" coords="494,317,606,344"/>
+<area shape="rect" id="node18" title=" " alt="" coords="631,317,741,344"/>
+<area shape="rect" id="node19" href="$gatelibrary__component__frame_8h.html" title=" " alt="" coords="144,303,369,359"/>
+<area shape="rect" id="node6" href="$boolean__function_8h.html" title=" " alt="" coords="1069,615,1247,656"/>
+<area shape="rect" id="node8" title=" " alt="" coords="1045,711,1169,738"/>
+<area shape="rect" id="node10" href="$gate__type__component_8h.html" title=" " alt="" coords="1216,511,1436,567"/>
+<area shape="rect" id="node11" href="$gate__pin_8h.html" title=" " alt="" coords="697,518,851,559"/>
+<area shape="rect" id="node12" title=" " alt="" coords="1663,622,1722,649"/>
+<area shape="rect" id="node7" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="1245,704,1375,745"/>
+<area shape="rect" id="node9" title=" " alt="" coords="1899,711,1961,738"/>
+<area shape="rect" id="node14" title=" " alt="" coords="1461,525,1538,552"/>
+<area shape="rect" id="node22" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="1714,421,1893,448"/>
+<area shape="rect" id="node23" href="$file__status__manager_8h.html" title=" " alt="" coords="1342,206,1521,247"/>
+<area shape="rect" id="node24" href="$graph__context__manager_8h.html" title=" " alt="" coords="2387,615,2561,656"/>
+<area shape="rect" id="node25" href="$content__manager_8h.html" title=" " alt="" coords="1545,206,1705,247"/>
+<area shape="rect" id="node26" href="$netlist__relay_8h.html" title=" " alt="" coords="1729,206,1901,247"/>
+<area shape="rect" id="node27" href="$plugin__relay_8h.html" title=" " alt="" coords="2117,518,2287,559"/>
+<area shape="rect" id="node28" href="$python__context_8h.html" title=" " alt="" coords="1926,213,2134,240"/>
+<area shape="rect" id="node29" href="$selection__relay_8h.html" title=" " alt="" coords="2019,615,2164,656"/>
+<area shape="rect" id="node30" href="$gui__api_8h.html" title=" " alt="" coords="1161,213,1317,240"/>
+<area shape="rect" id="node31" href="$comment__manager_8h.html" title=" " alt="" coords="2159,206,2323,247"/>
+<area shape="rect" id="node32" title=" " alt="" coords="2347,213,2433,240"/>
+<area shape="rect" id="node36" href="$async__set__reset__behavior_8h.html" title=" " alt="" coords="1028,511,1192,567"/>
 </map>

@@ -16,7 +16,9 @@ var classhal_1_1_gate_library_wizard =
     [ "accept", "classhal_1_1_gate_library_wizard.html#acbd3bab5adbac584ed8d16c3e06d7866", null ],
     [ "getPingroups", "classhal_1_1_gate_library_wizard.html#a804d2d02b4bff7d2f72c64144a0738ff", null ],
     [ "getRecentCreatedGate", "classhal_1_1_gate_library_wizard.html#aa0556f1bb04228190e3d2c6a73248653", null ],
+    [ "isDefinedByLut", "classhal_1_1_gate_library_wizard.html#a16dba10b619cb6ef55bb7db8c83ac7e7", null ],
     [ "nextId", "classhal_1_1_gate_library_wizard.html#a710e7daa597f0d78dadf8724e42b23a7", null ],
+    [ "requiresBooleanFunctions", "classhal_1_1_gate_library_wizard.html#a4c7d61e1ec964a4ea9bb2fa8bfc91697", null ],
     [ "setComponents", "classhal_1_1_gate_library_wizard.html#abb3c7fc763874b8397c651db684ed7fb", null ],
     [ "triggerUnsavedChanges", "classhal_1_1_gate_library_wizard.html#a6d2124183e756542b50f061ff78b0b6d", null ],
     [ "BoolWizardPage", "classhal_1_1_gate_library_wizard.html#a64eb1cb5f00dc8d106cb5952328d476c", null ],
@@ -24,6 +26,7 @@ var classhal_1_1_gate_library_wizard =
     [ "GeneralInfoWizardPage", "classhal_1_1_gate_library_wizard.html#af5ac3e214183845ac3181ca5f1606455", null ],
     [ "InitWizardPage", "classhal_1_1_gate_library_wizard.html#aca69f628609e16c954ba83c6e7410790", null ],
     [ "LatchWizardPage", "classhal_1_1_gate_library_wizard.html#a8b236bb08b847cd1be585d7bd9563e1f", null ],
+    [ "LUTWizardPage", "classhal_1_1_gate_library_wizard.html#af4715c5cc4395272679f0ede44b2beeb", null ],
     [ "PinsWizardPage", "classhal_1_1_gate_library_wizard.html#a55578d357d80ac5f0cda7dfed806e157", null ],
     [ "RAMPortWizardPage", "classhal_1_1_gate_library_wizard.html#a070e1cb5de2237a23bcc2189e91ccb02", null ],
     [ "StateWizardPage", "classhal_1_1_gate_library_wizard.html#a9022ba60622fa92ded2d47808b09cf5c", null ]

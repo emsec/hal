@@ -1,23 +1,10 @@
 var group__utility__widgets_selection__details =
 [
     [ "DataTableModel", "classhal_1_1_data_table_model.html", [
-      [ "DataEntry", "structhal_1_1_data_table_model_1_1_data_entry.html", [
-        [ "getPropertyValueByPropType", "structhal_1_1_data_table_model_1_1_data_entry.html#adc6d69fd258d57b27f152db790feaf07", null ],
-        [ "category", "structhal_1_1_data_table_model_1_1_data_entry.html#af7e68c53d77d4add4fc55e6f415f0378", null ],
-        [ "dataType", "structhal_1_1_data_table_model_1_1_data_entry.html#ad5bc3a6372b8f92dc12377d7737e8b56", null ],
-        [ "key", "structhal_1_1_data_table_model_1_1_data_entry.html#a1597272aee9e50f09ecb40e2b7eb6ee3", null ],
-        [ "value", "structhal_1_1_data_table_model_1_1_data_entry.html#aed5cccde3561d4f0f717a1f7626df303", null ]
-      ] ],
-      [ "propertyType", "classhal_1_1_data_table_model.html#a1e7dbd4076ddf7a6f85825e964bc36ff", [
-        [ "category", "classhal_1_1_data_table_model.html#a1e7dbd4076ddf7a6f85825e964bc36ffab02b9ef3ef66f79138140ee0a5e9eda5", null ],
-        [ "key", "classhal_1_1_data_table_model.html#a1e7dbd4076ddf7a6f85825e964bc36ffa2dc3bcc8a9f62bac3f730cc91b8340cc", null ],
-        [ "type", "classhal_1_1_data_table_model.html#a1e7dbd4076ddf7a6f85825e964bc36ffaf2af28ca8af13a597912cbb27c5ae29a", null ],
-        [ "value", "classhal_1_1_data_table_model.html#a1e7dbd4076ddf7a6f85825e964bc36ffa9025fc417d01de26110fe5d21cc1747e", null ]
-      ] ],
       [ "DataTableModel", "classhal_1_1_data_table_model.html#a08b70f2dcd41cf19c8a0d533568fb9b9", null ],
       [ "columnCount", "classhal_1_1_data_table_model.html#a546ec9014a2f95b1ed17a8e7ae6ea390", null ],
       [ "data", "classhal_1_1_data_table_model.html#aa40b1c400d113367caf7b5e613dd694f", null ],
-      [ "getEntryAtRow", "classhal_1_1_data_table_model.html#a6a29fd9ff4b3f3332ead63224330667d", null ],
+      [ "getEntryAtRow", "classhal_1_1_data_table_model.html#aeb5c6fab25150b350536f004dc0d9995", null ],
       [ "headerData", "classhal_1_1_data_table_model.html#ac19f40bce20d0329fc949287117e5ee2", null ],
       [ "rowCount", "classhal_1_1_data_table_model.html#afe4127671e9f5045744d961e98679c53", null ],
       [ "setData", "classhal_1_1_data_table_model.html#a27cca4722117c4bc76f2113e0466cb48", null ],
@@ -130,6 +117,29 @@ var group__utility__widgets_selection__details =
       [ "getModel", "classhal_1_1_l_u_t_table_widget.html#a4c712d7d62133a5e652292835e873b39", null ],
       [ "resizeEvent", "classhal_1_1_l_u_t_table_widget.html#aaf035e105f41a925c0563e96c7d57f85", null ],
       [ "setBooleanFunction", "classhal_1_1_l_u_t_table_widget.html#a534bd164c7be3100e1eba1bf967283e4", null ]
+    ] ],
+    [ "ParameterTableModel", "classhal_1_1_parameter_table_model.html", [
+      [ "ItemDataRole", "classhal_1_1_parameter_table_model.html#a985a7bc26be16e8ae5b9ac3af78459d6", [
+        [ "EnumValuesRole", "classhal_1_1_parameter_table_model.html#a985a7bc26be16e8ae5b9ac3af78459d6a00b26ad62984587df4d43b84e0f7c21a", null ]
+      ] ],
+      [ "ParameterTableModel", "classhal_1_1_parameter_table_model.html#a771e744c933cc32cbfc65ee75393fb27", null ],
+      [ "columnCount", "classhal_1_1_parameter_table_model.html#a4ddd638ce2908d2260a8966d933ad66c", null ],
+      [ "data", "classhal_1_1_parameter_table_model.html#abe823882e8418ff2314be87be6ab012e", null ],
+      [ "flags", "classhal_1_1_parameter_table_model.html#a0f74be6ba2aebd87f1f5a63fee576641", null ],
+      [ "headerData", "classhal_1_1_parameter_table_model.html#a50844fc8d135bdad9a04f65ef0938bad", null ],
+      [ "rowCount", "classhal_1_1_parameter_table_model.html#adfede7d5b56f8107c976166f7e9b8563", null ],
+      [ "setData", "classhal_1_1_parameter_table_model.html#ac00a993369dfbf492c726e3fc2457cd1", null ],
+      [ "updateData", "classhal_1_1_parameter_table_model.html#a76c091f1d7dfc48bdf146794a0fb857e", null ]
+    ] ],
+    [ "ParameterTableWidget", "classhal_1_1_parameter_table_widget.html", [
+      [ "ParameterTableWidget", "classhal_1_1_parameter_table_widget.html#a7cf3290eda625d48560ba8c05cdb4e0a", null ],
+      [ "setGate", "classhal_1_1_parameter_table_widget.html#aab31d04a22a4f9ea6f64e1bc3cad7fa6", null ]
+    ] ],
+    [ "ParameterValueDelegate", "classhal_1_1_parameter_value_delegate.html", [
+      [ "ParameterValueDelegate", "classhal_1_1_parameter_value_delegate.html#a0d6a4f2c92daabf57df3dab58e9c4ea1", null ],
+      [ "createEditor", "classhal_1_1_parameter_value_delegate.html#ae7e7c85620b31e17717b53fb7995d279", null ],
+      [ "setModelData", "classhal_1_1_parameter_value_delegate.html#a076d4dd9c4fa5d0454554dd9b5290466", null ],
+      [ "updateEditorGeometry", "classhal_1_1_parameter_value_delegate.html#a5787bf63e021363a78db6b3daf375c89", null ]
     ] ],
     [ "GroupingsOfItemWidget", "classhal_1_1_groupings_of_item_widget.html", [
       [ "GroupingsOfItemWidget", "classhal_1_1_groupings_of_item_widget.html#a11b92486b219ac0edf4a9bfb30daa9ea", null ],

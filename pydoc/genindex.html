@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; hal_py v4.5.0-170-g3418bd25d documentation</title>
+  <title>Index &mdash; hal_py v4.5.0-232-g8053ac4b3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -24,7 +24,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-170-g3418bd25d
+                v4.5.0-232-g8053ac4b3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -432,6 +432,8 @@
 </li>
       <li><a href="plugin_manager.html#hal_py.plugin_manager.add_model_changed_callback">add_model_changed_callback() (in module hal_py.plugin_manager)</a>
 </li>
+      <li><a href="gate_type.html#hal_py.GateType.add_parameter">add_parameter() (hal_py.GateType method)</a>
+</li>
       <li><a href="net.html#hal_py.Net.add_source">add_source() (hal_py.Net method)</a>
 </li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.add_trigger_time">add_trigger_time() (netlist_simulator_controller.NetlistSimulatorController method)</a>
@@ -524,6 +526,10 @@
 </li>
       <li><a href="smt.html#hal_py.SMT.SolverCall.Binary">Binary (hal_py.SMT.SolverCall attribute)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.LUTOutputConfig.bit_count">bit_count (hal_py.LUTComponent.LUTOutputConfig property)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.LUTOutputConfig.bit_offset">bit_offset (hal_py.LUTComponent.LUTOutputConfig property)</a>
+</li>
       <li><a href="gate_type_component.html#hal_py.RAMComponent.bit_size">bit_size (hal_py.RAMComponent property)</a>
 </li>
       <li>
@@ -539,14 +545,14 @@
 </li>
       <li><a href="module_identification.html#module_identification.Configuration.blocked_base_candidates">blocked_base_candidates (module_identification.Configuration property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate.html#hal_py.Gate.boolean_functions">boolean_functions (hal_py.Gate property)</a>
 
       <ul>
         <li><a href="gate_type.html#hal_py.GateType.boolean_functions">(hal_py.GateType property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction">BooleanFunction (class in hal_py)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Node">BooleanFunction.Node (class in hal_py)</a>
@@ -794,6 +800,16 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.delete_net">delete_net() (hal_py.Netlist method)</a>
 </li>
+      <li><a href="data_container.html#hal_py.DataContainer.delete_parameter">delete_parameter() (hal_py.DataContainer method)</a>
+
+      <ul>
+        <li><a href="gate.html#hal_py.Gate.delete_parameter">(hal_py.Gate method)</a>
+</li>
+        <li><a href="module.html#hal_py.Module.delete_parameter">(hal_py.Module method)</a>
+</li>
+        <li><a href="net.html#hal_py.Net.delete_parameter">(hal_py.Net method)</a>
+</li>
+      </ul></li>
       <li><a href="gate_type.html#hal_py.GateType.delete_pin_group">delete_pin_group() (hal_py.GateType method)</a>
 
       <ul>
@@ -820,14 +836,14 @@
         <li><a href="xilinx_toolbox.html#xilinx_toolbox.XilinxToolboxPlugin.dependencies">(xilinx_toolbox.XilinxToolboxPlugin property)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_pin_group.html#hal_py.GatePinGroup.descending">descending (hal_py.GatePinGroup property)</a>
 
       <ul>
         <li><a href="module_pin_group.html#hal_py.ModulePinGroup.descending">(hal_py.ModulePinGroup property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bitorder_propagation.html#bitorder_propagation.BitorderPropagationPlugin.description">description (bitorder_propagation.BitorderPropagationPlugin property)</a>
 
       <ul>
@@ -935,10 +951,10 @@
 </li>
       <li><a href="dataflow.html#dataflow.Configuration.enforce_type_consistency">enforce_type_consistency (dataflow.Configuration property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.NodeType.Eq">Eq (hal_py.BooleanFunction.NodeType attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Eq">Eq() (hal_py.BooleanFunction static method)</a>
 </li>
       <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.equivalent_types">equivalent_types (hawkeye.DetectionConfiguration property)</a>
@@ -956,6 +972,8 @@
       <li><a href="module_identification.html#module_identification.execute_on_gates">execute_on_gates() (in module module_identification)</a>
 </li>
       <li><a href="dataflow.html#dataflow.Configuration.expected_sizes">expected_sizes (dataflow.Configuration property)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.extract_init_slice">extract_init_slice() (hal_py.LUTComponent static method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1489,9 +1507,11 @@
       </ul></li>
       <li><a href="gate_type_component.html#hal_py.InitComponent.get_init_category">get_init_category() (hal_py.InitComponent method)</a>
 </li>
-      <li><a href="gate.html#hal_py.Gate.get_init_data">get_init_data() (hal_py.Gate method)</a>
-</li>
       <li><a href="gate_type_component.html#hal_py.InitComponent.get_init_identifier">get_init_identifier() (hal_py.InitComponent method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.RAMComponent.get_init_identifiers">get_init_identifiers() (hal_py.RAMComponent method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.get_init_string">get_init_string() (hal_py.LUTComponent method)</a>
 </li>
       <li><a href="hawkeye.html#hawkeye.CipherCandidate.get_input_ffs_of_gate">get_input_ffs_of_gate() (hawkeye.CipherCandidate method)</a>
 </li>
@@ -1539,8 +1559,6 @@
       </ul></li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.get_max_simulated_time">get_max_simulated_time() (netlist_simulator_controller.NetlistSimulatorController method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_identification.html#module_identification.VerifiedCandidate.get_merged_word_level_operation">get_merged_word_level_operation() (module_identification.VerifiedCandidate method)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.get_module">get_module() (hal_py.Gate method)</a>
@@ -1557,6 +1575,8 @@
         <li><a href="netlist.html#hal_py.Netlist.get_modules">(hal_py.Netlist method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bitorder_propagation.html#bitorder_propagation.BitorderPropagationPlugin.get_name">get_name() (bitorder_propagation.BitorderPropagationPlugin method)</a>
 
       <ul>
@@ -1711,6 +1731,10 @@
         <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.get_output_nets">(netlist_simulator_controller.NetlistSimulatorController method)</a>
 </li>
       </ul></li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.get_output_pin_config">get_output_pin_config() (hal_py.LUTComponent method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.get_output_pin_configs">get_output_pin_configs() (hal_py.LUTComponent method)</a>
+</li>
       <li><a href="gate_type.html#hal_py.GateType.get_output_pin_names">get_output_pin_names() (hal_py.GateType method)</a>
 
       <ul>
@@ -1725,8 +1749,42 @@
       </ul></li>
       <li><a href="hawkeye.html#hawkeye.CipherCandidate.get_output_reg">get_output_reg() (hawkeye.CipherCandidate method)</a>
 </li>
-      <li><a href="boolean_function.html#hal_py.BooleanFunction.get_parameters">get_parameters() (hal_py.BooleanFunction method)</a>
+      <li><a href="gate_type.html#hal_py.GateType.get_parameter">get_parameter() (hal_py.GateType method)</a>
 </li>
+      <li><a href="data_container.html#hal_py.DataContainer.get_parameter_declaration">get_parameter_declaration() (hal_py.DataContainer method)</a>
+
+      <ul>
+        <li><a href="gate.html#hal_py.Gate.get_parameter_declaration">(hal_py.Gate method)</a>
+</li>
+        <li><a href="module.html#hal_py.Module.get_parameter_declaration">(hal_py.Module method)</a>
+</li>
+        <li><a href="net.html#hal_py.Net.get_parameter_declaration">(hal_py.Net method)</a>
+</li>
+      </ul></li>
+      <li><a href="data_container.html#hal_py.DataContainer.get_parameter_value">get_parameter_value() (hal_py.DataContainer method)</a>
+
+      <ul>
+        <li><a href="gate.html#hal_py.Gate.get_parameter_value">(hal_py.Gate method)</a>
+</li>
+        <li><a href="module.html#hal_py.Module.get_parameter_value">(hal_py.Module method)</a>
+</li>
+        <li><a href="net.html#hal_py.Net.get_parameter_value">(hal_py.Net method)</a>
+</li>
+      </ul></li>
+      <li><a href="boolean_function.html#hal_py.BooleanFunction.get_parameters">get_parameters() (hal_py.BooleanFunction method)</a>
+
+      <ul>
+        <li><a href="data_container.html#hal_py.DataContainer.get_parameters">(hal_py.DataContainer method)</a>
+</li>
+        <li><a href="gate.html#hal_py.Gate.get_parameters">(hal_py.Gate method)</a>
+</li>
+        <li><a href="gate_type.html#hal_py.GateType.get_parameters">(hal_py.GateType method)</a>
+</li>
+        <li><a href="module.html#hal_py.Module.get_parameters">(hal_py.Module method)</a>
+</li>
+        <li><a href="net.html#hal_py.Net.get_parameters">(hal_py.Net method)</a>
+</li>
+      </ul></li>
       <li><a href="module.html#hal_py.Module.get_parent_module">get_parent_module() (hal_py.Module method)</a>
 </li>
       <li><a href="module.html#hal_py.Module.get_parent_modules">get_parent_modules() (hal_py.Module method)</a>
@@ -1818,8 +1876,6 @@
       <li><a href="gate_type.html#hal_py.GateType.get_property_list">get_property_list() (hal_py.GateType method)</a>
 </li>
       <li><a href="project_directory.html#hal_py.ProjectDirectory.get_relative_file_path">get_relative_file_path() (hal_py.ProjectDirectory method)</a>
-</li>
-      <li><a href="gate.html#hal_py.Gate.get_resolved_boolean_function">get_resolved_boolean_function() (hal_py.Gate method)</a>
 </li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.get_results">get_results() (netlist_simulator_controller.NetlistSimulatorController method)</a>
 </li>
@@ -2145,8 +2201,6 @@
       </ul></li>
       <li><a href="gate_type.html#hal_py.GateType.has_component_of_type">has_component_of_type() (hal_py.GateType method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.has_constant_value">has_constant_value() (hal_py.BooleanFunction method)</a>
 
       <ul>
@@ -2163,6 +2217,8 @@
         <li><a href="net.html#hal_py.Net.has_data">(hal_py.Net method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.has_index_value">has_index_value() (hal_py.BooleanFunction method)</a>
 
       <ul>
@@ -2173,6 +2229,18 @@
 </li>
       <li><a href="gate.html#hal_py.Gate.has_location">has_location() (hal_py.Gate method)</a>
 </li>
+      <li><a href="data_container.html#hal_py.DataContainer.has_parameter">has_parameter() (hal_py.DataContainer method)</a>
+
+      <ul>
+        <li><a href="gate.html#hal_py.Gate.has_parameter">(hal_py.Gate method)</a>
+</li>
+        <li><a href="gate_type.html#hal_py.GateType.has_parameter">(hal_py.GateType method)</a>
+</li>
+        <li><a href="module.html#hal_py.Module.has_parameter">(hal_py.Module method)</a>
+</li>
+        <li><a href="net.html#hal_py.Net.has_parameter">(hal_py.Net method)</a>
+</li>
+      </ul></li>
       <li><a href="gate_type.html#hal_py.GateType.has_property">has_property() (hal_py.GateType method)</a>
 </li>
       <li><a href="hawkeye.html#hawkeye.CipherCandidate.has_round_function">has_round_function() (hawkeye.CipherCandidate method)</a>
@@ -2264,12 +2332,16 @@
         <li><a href="boolean_function.html#hal_py.BooleanFunction.Node.Index">(hal_py.BooleanFunction.Node static method)</a>
 </li>
       </ul></li>
-      <li><a href="gate_type_component.html#hal_py.LUTComponent.init_ascending">init_ascending (hal_py.LUTComponent property)</a>
-</li>
       <li><a href="gate_type_component.html#hal_py.InitComponent.init_category">init_category (hal_py.InitComponent property)</a>
 </li>
-      <li><a href="gate_type_component.html#hal_py.InitComponent.init_identifiers">init_identifiers (hal_py.InitComponent property)</a>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.LUTOutputConfig.init_identifier">init_identifier (hal_py.LUTComponent.LUTOutputConfig property)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.InitComponent.init_identifiers">init_identifiers (hal_py.InitComponent property)</a>
+
+      <ul>
+        <li><a href="gate_type_component.html#hal_py.RAMComponent.init_identifiers">(hal_py.RAMComponent property)</a>
+</li>
+      </ul></li>
       <li><a href="gate_type_component.html#hal_py.InitComponent">InitComponent (class in hal_py)</a>
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.initialize">initialize() (netlist_simulator.NetlistSimulator method)</a>
@@ -2295,6 +2367,8 @@
       <li><a href="gate_type.html#hal_py.GateType.input_pins">input_pins (hal_py.GateType property)</a>
 
       <ul>
+        <li><a href="gate_type_component.html#hal_py.LUTComponent.LUTOutputConfig.input_pins">(hal_py.LUTComponent.LUTOutputConfig property)</a>
+</li>
         <li><a href="module.html#hal_py.Module.input_pins">(hal_py.Module property)</a>
 </li>
       </ul></li>
@@ -2313,6 +2387,8 @@
       <li><a href="net.html#hal_py.Net.is_a_destination">is_a_destination() (hal_py.Net method)</a>
 </li>
       <li><a href="net.html#hal_py.Net.is_a_source">is_a_source() (hal_py.Net method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.LUTOutputConfig.is_ascending">is_ascending (hal_py.LUTComponent.LUTOutputConfig property)</a>
 </li>
       <li><a href="gate_pin_group.html#hal_py.GatePinGroup.is_ascending">is_ascending() (hal_py.GatePinGroup method)</a>
 
@@ -2394,8 +2470,6 @@
         <li><a href="boolean_function.html#hal_py.BooleanFunction.Node.is_index">(hal_py.BooleanFunction.Node method)</a>
 </li>
       </ul></li>
-      <li><a href="gate_type_component.html#hal_py.LUTComponent.is_init_ascending">is_init_ascending() (hal_py.LUTComponent method)</a>
-</li>
       <li><a href="module.html#hal_py.Module.is_input_net">is_input_net() (hal_py.Module method)</a>
 </li>
       <li><a href="module.html#hal_py.Module.is_internal_net">is_internal_net() (hal_py.Module method)</a>
@@ -2551,6 +2625,8 @@
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Lshr">Lshr() (hal_py.BooleanFunction static method)</a>
 </li>
       <li><a href="gate_type_component.html#hal_py.LUTComponent">LUTComponent (class in hal_py)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.LUTOutputConfig">LUTComponent.LUTOutputConfig (class in hal_py)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -2944,7 +3020,19 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.parameters">parameters (hal_py.BooleanFunction property)</a>
+
+      <ul>
+        <li><a href="data_container.html#hal_py.DataContainer.parameters">(hal_py.DataContainer property)</a>
 </li>
+        <li><a href="gate.html#hal_py.Gate.parameters">(hal_py.Gate property)</a>
+</li>
+        <li><a href="gate_type.html#hal_py.GateType.parameters">(hal_py.GateType property)</a>
+</li>
+        <li><a href="module.html#hal_py.Module.parameters">(hal_py.Module property)</a>
+</li>
+        <li><a href="net.html#hal_py.Net.parameters">(hal_py.Net property)</a>
+</li>
+      </ul></li>
       <li><a href="module.html#hal_py.Module.parent_module">parent_module (hal_py.Module property)</a>
 </li>
       <li><a href="module.html#hal_py.Module.parent_modules">parent_modules (hal_py.Module property)</a>
@@ -2967,6 +3055,8 @@
         <li><a href="module.html#hal_py.Module.pin_names">(hal_py.Module property)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pin_direction.html#hal_py.PinDirection">PinDirection (class in hal_py)</a>
 </li>
       <li><a href="gate_pin_group.html#hal_py.GatePinGroup.pins">pins (hal_py.GatePinGroup property)</a>
@@ -2979,8 +3069,6 @@
         <li><a href="module_pin_group.html#hal_py.ModulePinGroup.pins">(hal_py.ModulePinGroup property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pin_type.html#hal_py.PinType">PinType (class in hal_py)</a>
 </li>
       <li><a href="plugin_manager.html#hal_py.plugin_manager.PluginFeature">PluginFeature (class in hal_py.plugin_manager)</a>
@@ -3260,13 +3348,13 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.set_id">set_id() (hal_py.Netlist method)</a>
 </li>
-      <li><a href="gate_type_component.html#hal_py.LUTComponent.set_init_ascending">set_init_ascending() (hal_py.LUTComponent method)</a>
-</li>
       <li><a href="gate_type_component.html#hal_py.InitComponent.set_init_category">set_init_category() (hal_py.InitComponent method)</a>
 </li>
-      <li><a href="gate.html#hal_py.Gate.set_init_data">set_init_data() (hal_py.Gate method)</a>
-</li>
       <li><a href="gate_type_component.html#hal_py.InitComponent.set_init_identifier">set_init_identifier() (hal_py.InitComponent method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.RAMComponent.set_init_identifiers">set_init_identifiers() (hal_py.RAMComponent method)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.set_init_string">set_init_string() (hal_py.LUTComponent method)</a>
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.set_input">set_input() (netlist_simulator.NetlistSimulator method)</a>
 
@@ -3312,6 +3400,16 @@
 </li>
       <li><a href="module_pin_group.html#hal_py.ModulePinGroup.set_ordered">set_ordered() (hal_py.ModulePinGroup method)</a>
 </li>
+      <li><a href="data_container.html#hal_py.DataContainer.set_parameter">set_parameter() (hal_py.DataContainer method)</a>
+
+      <ul>
+        <li><a href="gate.html#hal_py.Gate.set_parameter">(hal_py.Gate method)</a>
+</li>
+        <li><a href="module.html#hal_py.Module.set_parameter">(hal_py.Module method)</a>
+</li>
+        <li><a href="net.html#hal_py.Net.set_parameter">(hal_py.Net method)</a>
+</li>
+      </ul></li>
       <li><a href="module.html#hal_py.Module.set_parent_module">set_parent_module() (hal_py.Module method)</a>
 </li>
       <li><a href="gate_type.html#hal_py.GateType.set_pin_group_direction">set_pin_group_direction() (hal_py.GateType method)</a>
@@ -3442,6 +3540,8 @@
       <li><a href="endpoint.html#hal_py.Endpoint.source_pin">source_pin (hal_py.Endpoint property)</a>
 </li>
       <li><a href="net.html#hal_py.Net.sources">sources (hal_py.Net property)</a>
+</li>
+      <li><a href="gate_type_component.html#hal_py.LUTComponent.splice_init_slice">splice_init_slice() (hal_py.LUTComponent static method)</a>
 </li>
       <li><a href="dataflow.html#dataflow.Result.split_group">split_group() (dataflow.Result method)</a>
 </li>

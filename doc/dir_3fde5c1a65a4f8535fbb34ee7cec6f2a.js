@@ -20,7 +20,8 @@ var dir_3fde5c1a65a4f8535fbb34ee7cec6f2a =
       [ "LatchWizardPage", "classhal_1_1_latch_wizard_page.html", "classhal_1_1_latch_wizard_page" ]
     ] ],
     [ "lut_wizardpage.h", "lut__wizardpage_8h.html", [
-      [ "LUTWizardPage", "classhal_1_1_l_u_t_wizard_page.html", "classhal_1_1_l_u_t_wizard_page" ]
+      [ "LUTWizardPage", "classhal_1_1_l_u_t_wizard_page.html", "classhal_1_1_l_u_t_wizard_page" ],
+      [ "OutputPinEntry", "structhal_1_1_l_u_t_wizard_page_1_1_output_pin_entry.html", "structhal_1_1_l_u_t_wizard_page_1_1_output_pin_entry" ]
     ] ],
     [ "pins_wizardpage.h", "pins__wizardpage_8h.html", [
       [ "PinsWizardPage", "classhal_1_1_pins_wizard_page.html", "classhal_1_1_pins_wizard_page" ]

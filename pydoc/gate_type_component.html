@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gate Type Component &mdash; hal_py v4.5.0-170-g3418bd25d documentation</title>
+  <title>Gate Type Component &mdash; hal_py v4.5.0-232-g8053ac4b3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-170-g3418bd25d
+                v4.5.0-232-g8053ac4b3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -216,14 +216,162 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <dt class="sig sig-object py" id="hal_py.LUTComponent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hal_py.</span></span><span class="sig-name descname"><span class="pre">LUTComponent</span></span><a class="headerlink" href="#hal_py.LUTComponent" title="Permalink to this definition"></a></dt>
 <dd><p>A LUT component specifying the LUT gate type’s functionality.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="hal_py.LUTComponent.LUTOutputConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LUTOutputConfig</span></span><a class="headerlink" href="#hal_py.LUTComponent.LUTOutputConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Per-output-pin INIT configuration for a LUT component.</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="hal_py.LUTComponent.init_ascending">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_ascending</span></span><a class="headerlink" href="#hal_py.LUTComponent.init_ascending" title="Permalink to this definition"></a></dt>
-<dd><p>The bit-order of the initialization string. 
-<code class="docutils literal notranslate"><span class="pre">True</span></code> if ascending, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+<dt class="sig sig-object py" id="hal_py.LUTComponent.LUTOutputConfig.bit_count">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bit_count</span></span><a class="headerlink" href="#hal_py.LUTComponent.LUTOutputConfig.bit_count" title="Permalink to this definition"></a></dt>
+<dd><p>The number of bits in the slice. Must be a non-zero power of two.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.LUTComponent.LUTOutputConfig.bit_offset">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bit_offset</span></span><a class="headerlink" href="#hal_py.LUTComponent.LUTOutputConfig.bit_offset" title="Permalink to this definition"></a></dt>
+<dd><p>The first bit (LSB = 0) of the slice within the parsed INIT value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.LUTComponent.LUTOutputConfig.init_identifier">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_identifier</span></span><a class="headerlink" href="#hal_py.LUTComponent.LUTOutputConfig.init_identifier" title="Permalink to this definition"></a></dt>
+<dd><p>The data identifier within the INIT category for this output pin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.LUTComponent.LUTOutputConfig.input_pins">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">input_pins</span></span><a class="headerlink" href="#hal_py.LUTComponent.LUTOutputConfig.input_pins" title="Permalink to this definition"></a></dt>
+<dd><p>Ordered list of input pin names used by this output. Must be non-empty; size must equal log2(bit_count).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)">list</a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.LUTComponent.LUTOutputConfig.is_ascending">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_ascending</span></span><a class="headerlink" href="#hal_py.LUTComponent.LUTOutputConfig.is_ascending" title="Permalink to this definition"></a></dt>
+<dd><p>True if the INIT bits are stored in ascending order (LSB first), False for descending.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.LUTComponent.extract_init_slice">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extract_init_slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full_hex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.LUTComponent.extract_init_slice" title="Permalink to this definition"></a></dt>
+<dd><p>Extract a bit slice from a full INIT hex string.
+Returns the slice as an uppercase hex string padded to <code class="docutils literal notranslate"><span class="pre">(bit_count+3)//4</span></code> characters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>full_hex</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – Full INIT value as a hex string; must not be empty and must contain at least <code class="docutils literal notranslate"><span class="pre">(bit_offset+bit_count+3)//4</span></code> hex chars.</p></li>
+<li><p><strong>bit_offset</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><em>int</em></a>) – First bit (LSB = 0) of the slice.</p></li>
+<li><p><strong>bit_count</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><em>int</em></a>) – Number of bits in the slice; must be non-zero.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The extracted hex string, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if <code class="docutils literal notranslate"><span class="pre">full_hex</span></code> is empty, too short, or invalid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a> or <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.LUTComponent.get_init_string">
+<span class="sig-name descname"><span class="pre">get_init_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.LUTComponent.get_init_string" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p>get_init_string(self: hal_py.LUTComponent, gate: hal::Gate, pin_name: str) -&gt; Optional[str]</p>
+<blockquote>
+<div><p>Get the INIT hex string for a specific LUT output pin on a gate instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Gate gate</dt>
+<dd class="field-odd"><p>The gate instance.</p>
+</dd>
+<dt class="field-even">param str pin_name</dt>
+<dd class="field-even"><p>The output pin name.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The hex INIT string (no prefix) on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>str or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>get_init_string(self: hal_py.LUTComponent, gate: hal::Gate, pin: hal::GatePin) -&gt; Optional[str]</p>
+<blockquote>
+<div><p>Get the INIT hex string for a specific LUT output pin on a gate instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Gate gate</dt>
+<dd class="field-odd"><p>The gate instance.</p>
+</dd>
+<dt class="field-even">param hal_py.GatePin pin</dt>
+<dd class="field-even"><p>The output pin.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The hex INIT string (no prefix) on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>str or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.LUTComponent.get_output_pin_config">
+<span class="sig-name descname"><span class="pre">get_output_pin_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.LUTComponent" title="hal_py.LUTComponent"><span class="pre">hal_py.LUTComponent</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hal_py.LUTComponent.LUTOutputConfig" title="hal_py.LUTComponent.LUTOutputConfig"><span class="pre">hal_py.LUTComponent.LUTOutputConfig</span></a></span></span><a class="headerlink" href="#hal_py.LUTComponent.get_output_pin_config" title="Permalink to this definition"></a></dt>
+<dd><p>Get the output configuration for a specific pin, or None if none is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pin_name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – Name of the LUT output pin.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The output configuration or None.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#hal_py.LUTComponent.LUTOutputConfig" title="hal_py.LUTComponent.LUTOutputConfig">hal_py.LUTComponent.LUTOutputConfig</a> or <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.LUTComponent.get_output_pin_configs">
+<span class="sig-name descname"><span class="pre">get_output_pin_configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.LUTComponent" title="hal_py.LUTComponent"><span class="pre">hal_py.LUTComponent</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#hal_py.LUTComponent.LUTOutputConfig" title="hal_py.LUTComponent.LUTOutputConfig"><span class="pre">hal_py.LUTComponent.LUTOutputConfig</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.LUTComponent.get_output_pin_configs" title="Permalink to this definition"></a></dt>
+<dd><p>Get all per-output-pin configurations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict mapping pin name to LUTOutputConfig.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)">dict</a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>, <a class="reference internal" href="#hal_py.LUTComponent.LUTOutputConfig" title="hal_py.LUTComponent.LUTOutputConfig">hal_py.LUTComponent.LUTOutputConfig</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -246,26 +394,77 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="hal_py.LUTComponent.is_init_ascending">
-<span class="sig-name descname"><span class="pre">is_init_ascending</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.LUTComponent" title="hal_py.LUTComponent"><span class="pre">hal_py.LUTComponent</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.LUTComponent.is_init_ascending" title="Permalink to this definition"></a></dt>
-<dd><p>Get the bit-order of the initialization string.</p>
+<dt class="sig sig-object py" id="hal_py.LUTComponent.set_init_string">
+<span class="sig-name descname"><span class="pre">set_init_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.LUTComponent.set_init_string" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p>set_init_string(self: hal_py.LUTComponent, gate: hal::Gate, pin_name: str, hex: str) -&gt; bool</p>
+<blockquote>
+<div><p>Set the INIT hex string for a specific LUT output pin on a gate instance.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if ascending bit-order, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+<dt class="field-odd">param hal_py.Gate gate</dt>
+<dd class="field-odd"><p>The gate instance.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)">bool</a></p>
+<dt class="field-even">param str pin_name</dt>
+<dd class="field-even"><p>The output pin name.</p>
+</dd>
+<dt class="field-odd">param str hex</dt>
+<dd class="field-odd"><p>Hex string without prefix.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
+</div></blockquote>
+</li>
+<li><p>set_init_string(self: hal_py.LUTComponent, gate: hal::Gate, pin: hal::GatePin, hex: str) -&gt; bool</p>
+<blockquote>
+<div><p>Set the INIT hex string for a specific LUT output pin on a gate instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Gate gate</dt>
+<dd class="field-odd"><p>The gate instance.</p>
+</dd>
+<dt class="field-even">param hal_py.GatePin pin</dt>
+<dd class="field-even"><p>The output pin.</p>
+</dd>
+<dt class="field-odd">param str hex</dt>
+<dd class="field-odd"><p>Hex string without prefix.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="hal_py.LUTComponent.set_init_ascending">
-<span class="sig-name descname"><span class="pre">set_init_ascending</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.LUTComponent" title="hal_py.LUTComponent"><span class="pre">hal_py.LUTComponent</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_ascending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.LUTComponent.set_init_ascending" title="Permalink to this definition"></a></dt>
-<dd><p>Set the bit-order of the initialization string.</p>
+<dt class="sig sig-object py" id="hal_py.LUTComponent.splice_init_slice">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">splice_init_slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full_hex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice_hex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.LUTComponent.splice_init_slice" title="Permalink to this definition"></a></dt>
+<dd><p>Splice a new slice value into a full INIT hex string at <code class="docutils literal notranslate"><span class="pre">[bit_offset,</span> <span class="pre">bit_offset+bit_count)</span></code>.
+The output preserves the digit width of <code class="docutils literal notranslate"><span class="pre">full_hex</span></code>; if <code class="docutils literal notranslate"><span class="pre">full_hex</span></code> is empty the minimum width
+needed to hold the splice is used.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>init_ascending</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><em>bool</em></a>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if ascending bit-order, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>full_hex</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – Current full INIT value as a hex string (may be empty).</p></li>
+<li><p><strong>slice_hex</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – New value for the bit slice.</p></li>
+<li><p><strong>bit_offset</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><em>int</em></a>) – First bit (LSB = 0) of the slice.</p></li>
+<li><p><strong>bit_count</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><em>int</em></a>) – Number of bits in the slice; must be non-zero.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated full hex string, or <code class="docutils literal notranslate"><span class="pre">None</span></code> on parse failure.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a> or <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -660,6 +859,31 @@ Returns an empty function if asynchronous set is not supported by the latch.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="hal_py.RAMComponent.get_init_identifiers">
+<span class="sig-name descname"><span class="pre">get_init_identifiers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.RAMComponent" title="hal_py.RAMComponent"><span class="pre">hal_py.RAMComponent</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.RAMComponent.get_init_identifiers" title="Permalink to this definition"></a></dt>
+<dd><p>Get the parameter names used to find initialization data for this RAM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The list of init identifier strings.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)">list</a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.RAMComponent.init_identifiers">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_identifiers</span></span><a class="headerlink" href="#hal_py.RAMComponent.init_identifiers" title="Permalink to this definition"></a></dt>
+<dd><p>The parameter names used to find initialization data for this RAM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)">list</a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="hal_py.RAMComponent.is_class_of">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_class_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">component</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent"><span class="pre">hal_py.GateTypeComponent</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.RAMComponent.is_class_of" title="Permalink to this definition"></a></dt>
 <dd><p>Check whether a component is a RAMComponent.</p>
@@ -683,6 +907,17 @@ Returns an empty function if asynchronous set is not supported by the latch.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>bit_size</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><em>int</em></a>) – The size of the RAM in bits.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.RAMComponent.set_init_identifiers">
+<span class="sig-name descname"><span class="pre">set_init_identifiers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.RAMComponent" title="hal_py.RAMComponent"><span class="pre">hal_py.RAMComponent</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_identifiers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.RAMComponent.set_init_identifiers" title="Permalink to this definition"></a></dt>
+<dd><p>Set the parameter names used to find initialization data for this RAM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>init_identifiers</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>]</em>) – The list of init identifier strings.</p>
 </dd>
 </dl>
 </dd></dl>

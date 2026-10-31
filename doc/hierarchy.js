@@ -155,8 +155,8 @@ var hierarchy =
       [ "hal::Module", "classhal_1_1_module.html", null ],
       [ "hal::Net", "classhal_1_1_net.html", null ]
     ] ],
-    [ "hal::DataTableModel::DataEntry", "structhal_1_1_data_table_model_1_1_data_entry.html", null ],
     [ "hal::DataflowInteractionRegistration", "classhal_1_1_dataflow_interaction_registration.html", null ],
+    [ "hal::DataTableEntry", "classhal_1_1_data_table_entry.html", null ],
     [ "hal::DetailsTableUtilities", "classhal_1_1_details_table_utilities.html", null ],
     [ "hal::hawkeye::DetectionConfiguration", "structhal_1_1hawkeye_1_1_detection_configuration.html", null ],
     [ "hal::utils::DirectoryRange", "classhal_1_1utils_1_1_directory_range.html", null ],
@@ -188,7 +188,8 @@ var hierarchy =
       [ "hal::MACComponent", "classhal_1_1_m_a_c_component.html", null ],
       [ "hal::RAMComponent", "classhal_1_1_r_a_m_component.html", null ],
       [ "hal::RAMPortComponent", "classhal_1_1_r_a_m_port_component.html", null ],
-      [ "hal::StateComponent", "classhal_1_1_state_component.html", null ]
+      [ "hal::StateComponent", "classhal_1_1_state_component.html", null ],
+      [ "hal::StateTableComponent", "classhal_1_1_state_table_component.html", null ]
     ] ],
     [ "hal::GraphShader", "classhal_1_1_graph_shader.html", [
       [ "hal::ModuleShader", "classhal_1_1_module_shader.html", null ]
@@ -229,6 +230,7 @@ var hierarchy =
     [ "hal::LoggerSettings", "structhal_1_1_logger_settings.html", null ],
     [ "hal::LogicEvaluatorTruthtableColumn", "classhal_1_1_logic_evaluator_truthtable_column.html", null ],
     [ "hal::LogManager", "classhal_1_1_log_manager.html", null ],
+    [ "hal::LUTComponent::LUTOutputConfig", "structhal_1_1_l_u_t_component_1_1_l_u_t_output_config.html", null ],
     [ "hal::dataflow::measure_block_time_t", "classhal_1_1dataflow_1_1measure__block__time__t.html", null ],
     [ "hal::SMT::Model", "structhal_1_1_s_m_t_1_1_model.html", null ],
     [ "hal::ModuleContextMenu", "classhal_1_1_module_context_menu.html", null ],
@@ -272,7 +274,9 @@ var hierarchy =
       [ "hal::SaleaeOutputFile", "classhal_1_1_saleae_output_file.html", null ]
     ] ],
     [ "hal::result_constructor_type::OK", "classhal_1_1result__constructor__type_1_1_o_k.html", null ],
+    [ "hal::LUTWizardPage::OutputPinEntry", "structhal_1_1_l_u_t_wizard_page_1_1_output_pin_entry.html", null ],
     [ "hal::cte::PairPtrEq", "structhal_1_1cte_1_1_pair_ptr_eq.html", null ],
+    [ "hal::Parameter", "structhal_1_1_parameter.html", null ],
     [ "hal::SMT::ModelParser::ParserContext", "structhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context.html", null ],
     [ "hal::dataflow::processing::PassConfiguration", "structhal_1_1dataflow_1_1processing_1_1_pass_configuration.html", null ],
     [ "std::filesystem::path", null, [
@@ -399,7 +403,8 @@ var hierarchy =
     [ "QObject", "https://doc.qt.io/qt-5/qobject.html", [
       [ "QAbstractItemDelegate", "https://doc.qt.io/qt-5/qabstractitemdelegate.html", [
         [ "QItemDelegate", "https://doc.qt.io/qt-5/qitemdelegate.html", [
-          [ "hal::GuiPluginDelegate", "classhal_1_1_gui_plugin_delegate.html", null ]
+          [ "hal::GuiPluginDelegate", "classhal_1_1_gui_plugin_delegate.html", null ],
+          [ "hal::ParameterValueDelegate", "classhal_1_1_parameter_value_delegate.html", null ]
         ] ],
         [ "QStyledItemDelegate", "https://doc.qt.io/qt-5/qstyleditemdelegate.html", [
           [ "hal::GroupingColorDelegate", "classhal_1_1_grouping_color_delegate.html", null ],
@@ -441,6 +446,7 @@ var hierarchy =
           [ "hal::LogicEvaluatorTruthtableModel", "classhal_1_1_logic_evaluator_truthtable_model.html", null ],
           [ "hal::ModuleSelectModel", "classhal_1_1_module_select_model.html", null ],
           [ "hal::ModuleTableModel", "classhal_1_1_module_table_model.html", null ],
+          [ "hal::ParameterTableModel", "classhal_1_1_parameter_table_model.html", null ],
           [ "hal::WaveEditTable", "classhal_1_1_wave_edit_table.html", null ],
           [ "hal::WaveSelectionTable", "classhal_1_1_wave_selection_table.html", null ]
         ] ],
@@ -527,6 +533,7 @@ var hierarchy =
           ] ],
           [ "hal::CommentColorPicker", "classhal_1_1_comment_color_picker.html", null ],
           [ "hal::CommentDialog", "classhal_1_1_comment_dialog.html", null ],
+          [ "hal::DataEntryDialog", "classhal_1_1_data_entry_dialog.html", null ],
           [ "hal::GateDialog", "classhal_1_1_gate_dialog.html", null ],
           [ "hal::GateSelectionDialog", "classhal_1_1_gate_selection_dialog.html", null ],
           [ "hal::GroupingDialog", "classhal_1_1_grouping_dialog.html", null ],
@@ -572,7 +579,8 @@ var hierarchy =
                 [ "hal::LUTTableWidget", "classhal_1_1_l_u_t_table_widget.html", null ],
                 [ "hal::ModuleSelectView", "classhal_1_1_module_select_view.html", null ],
                 [ "hal::NetEndpointTable", "classhal_1_1_net_endpoint_table.html", null ],
-                [ "hal::NetModuleTable", "classhal_1_1_net_module_table.html", null ]
+                [ "hal::NetModuleTable", "classhal_1_1_net_module_table.html", null ],
+                [ "hal::ParameterTableWidget", "classhal_1_1_parameter_table_widget.html", null ]
               ] ],
               [ "QTreeView", "https://doc.qt.io/qt-5/qtreeview.html", [
                 [ "QTreeWidget", "https://doc.qt.io/qt-5/qtreewidget.html", [
@@ -864,12 +872,14 @@ var hierarchy =
     [ "hal::SolveFsmInteractionRegistration", "classhal_1_1_solve_fsm_interaction_registration.html", null ],
     [ "hal::SMT::Solver", "classhal_1_1_s_m_t_1_1_solver.html", null ],
     [ "hal::SMT::SolverResult", "structhal_1_1_s_m_t_1_1_solver_result.html", null ],
+    [ "hal::StateTableComponent::StateTable", "structhal_1_1_state_table_component_1_1_state_table.html", null ],
     [ "hal::solve_fsm::StateTransitionGraph", "structhal_1_1solve__fsm_1_1_state_transition_graph.html", null ],
     [ "hal::module_identification::Statistics", "structhal_1_1module__identification_1_1_statistics.html", null ],
     [ "hal::module_identification::StructuralCandidate", "classhal_1_1module__identification_1_1_structural_candidate.html", null ],
     [ "hal::SubgraphNetlistDecorator", "classhal_1_1_subgraph_netlist_decorator.html", null ],
     [ "hal::SMT::SymbolicExecution", "classhal_1_1_s_m_t_1_1_symbolic_execution.html", null ],
     [ "hal::SMT::SymbolicState", "classhal_1_1_s_m_t_1_1_symbolic_state.html", null ],
+    [ "hal::StateTableComponent::TableRow", "structhal_1_1_state_table_component_1_1_table_row.html", null ],
     [ "TESTB< VA >", "class_t_e_s_t_b.html", null ],
     [ "hal::TimeInterval", "classhal_1_1_time_interval.html", null ],
     [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
@@ -896,6 +906,7 @@ var hierarchy =
       [ "hal::ActionSetObjectColor", "classhal_1_1_action_set_object_color.html", null ],
       [ "hal::ActionSetObjectData", "classhal_1_1_action_set_object_data.html", null ],
       [ "hal::ActionSetObjectType", "classhal_1_1_action_set_object_type.html", null ],
+      [ "hal::ActionSetParameterValue", "classhal_1_1_action_set_parameter_value.html", null ],
       [ "hal::ActionSetSelectionFocus", "classhal_1_1_action_set_selection_focus.html", null ],
       [ "hal::ActionUnfoldModule", "classhal_1_1_action_unfold_module.html", null ],
       [ "hal::UserActionCompound", "classhal_1_1_user_action_compound.html", [
@@ -917,6 +928,7 @@ var hierarchy =
       [ "hal::ActionSetObjectColorFactory", "classhal_1_1_action_set_object_color_factory.html", null ],
       [ "hal::ActionSetObjectDataFactory", "classhal_1_1_action_set_object_data_factory.html", null ],
       [ "hal::ActionSetObjectTypeFactory", "classhal_1_1_action_set_object_type_factory.html", null ],
+      [ "hal::ActionSetParameterValueFactory", "classhal_1_1_action_set_parameter_value_factory.html", null ],
       [ "hal::ActionSetSelectionFocusFactory", "classhal_1_1_action_set_selection_focus_factory.html", null ],
       [ "hal::ActionUnfoldModuleFactory", "classhal_1_1_action_unfold_module_factory.html", null ],
       [ "hal::UserActionCompoundFactory", "classhal_1_1_user_action_compound_factory.html", null ]

@@ -19,6 +19,7 @@ var dir_2b1fe3a00210b132c6a6c3a6780f4f6e =
     [ "netlist_factory.cpp", "netlist_2netlist__factory_8cpp.html", "netlist_2netlist__factory_8cpp" ],
     [ "netlist_internal_manager.cpp", "netlist__internal__manager_8cpp.html", null ],
     [ "netlist_utils.cpp", "netlist_2netlist__utils_8cpp.html", "netlist_2netlist__utils_8cpp" ],
+    [ "parameter.cpp", "netlist_2parameter_8cpp.html", null ],
     [ "project_manager.cpp", "netlist_2project__manager_8cpp.html", "netlist_2project__manager_8cpp" ],
     [ "project_serializer.cpp", "project__serializer_8cpp.html", null ]
 ];
