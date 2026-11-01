@@ -20,6 +20,7 @@ var classhal_1_1_python_console =
     [ "handleUpKeyPressed", "classhal_1_1_python_console.html#a3cd612661b945b5b76cdf313e399acd2", null ],
     [ "inputReceived", "classhal_1_1_python_console.html#a49354e20ada84bed8fc20bd38002c489", null ],
     [ "insertAtEnd", "classhal_1_1_python_console.html#aafa0ebd289894f69cf062cf3a8855e5d", null ],
+    [ "insertFromMimeData", "classhal_1_1_python_console.html#a9a04d7f91775c680f86ed856720e486f", null ],
     [ "interpretCommand", "classhal_1_1_python_console.html#a7b65a898c367dd958163933b42ca93e6", null ],
     [ "keyPressEvent", "classhal_1_1_python_console.html#a37220602fec3a55a2be2b7d43359ce63", null ],
     [ "mousePressEvent", "classhal_1_1_python_console.html#a1a9c74ad14277dca87092ad872dc887e", null ],
