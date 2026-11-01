@@ -535,46 +535,30 @@ namespace hal
 
     int PythonContext::checkCompleteStatement(const QString& text)
     {
-
+        // Use Python codeop which is designed for interactive interpreters.
+        // Returns: 0 = incomplete, 1 = complete, -1 = syntax error
         PyGILState_STATE state = PyGILState_Ensure();
-        
-        #if PY_VERSION_HEX < 0x030900a0 // Python 3.9.0
-        // PEG not yet available, use PyParser
 
-        node* n;
-        perrdetail e;
-
-        n = PyParser_ParseString(text.toStdString().c_str(), &_PyParser_Grammar, Py_file_input, &e);
-        if (n == NULL)
+        int result;
+        try
         {
-            if (e.error == E_EOF)
-            {
-                PyGILState_Release(state);
-                return 0;
-            }
-            PyGILState_Release(state);
-            return -1;
+            py::module codeop = py::module::import("codeop");
+            py::object compiled = codeop.attr("compile_command")(text.toStdString(), "stdin", "exec");
+            result = compiled.is_none() ? 0 : 1;
+        }
+        catch (py::error_already_set& e)
+        {
+            result = -1;
+            e.restore();
+            PyErr_Clear();
+        }
+        catch (...)
+        {
+            result = -1;
         }
 
-        PyNode_Free(n);
         PyGILState_Release(state);
-        return 1;
-
-        #else
-
-        // attempt to parse Python expression into AST using PEG
-        PyCompilerFlags flags {PyCF_ONLY_AST, PY_MINOR_VERSION};
-        PyObject* o = Py_CompileStringExFlags(text.toStdString().c_str(), "stdin", Py_file_input, &flags, 0);
-        // if parsing failed (-> not a complete statement), nullptr is returned
-        bool complete = o != nullptr;
-        // a failed parse leaves its error set, which would fail every later parse as well
-        if (!complete)
-            PyErr_Clear();
-        Py_XDECREF(o);
-        PyGILState_Release(state);
-        return complete;
-
-        #endif
+        return result;
     }
 
     void PythonContext::handleReset()

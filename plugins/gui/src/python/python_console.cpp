@@ -75,15 +75,44 @@ namespace hal
     void PythonConsole::keyPressEvent(QKeyEvent* e)
     {
         auto cursor = textCursor();
-        if (textCursor().hasSelection())
+
+        if (e->matches(QKeySequence::Copy))
         {
-            if (e->matches(QKeySequence::Copy))
+            if (textCursor().hasSelection())
             {
                 e->accept();
                 copy();
                 return;
             }
-            else if (e->matches(QKeySequence::Cut))
+            else if (isCompound())
+            {
+                mPromptType = Standard;
+                mCurrentCompoundInput = "";
+                e->accept();
+                QTextCursor cursor(document());
+                cursor.movePosition(QTextCursor::End);
+                cursor.insertText("\n");
+                displayPrompt();
+                return;
+            }
+            else if (gPythonContext->isThreadRunning())
+            {
+                e->accept();
+                gPythonContext->abortThread();
+                return;
+            }
+
+            e->accept();
+            QTextCursor cursor(document());
+            cursor.movePosition(QTextCursor::End);
+            cursor.insertText("\n");
+            displayPrompt();
+            return;
+        }
+
+        if (textCursor().hasSelection())
+        {
+            if (e->matches(QKeySequence::Cut))
             {
                 // cut cutable stuff and copy rest
                 return;
@@ -126,14 +155,26 @@ namespace hal
                 }
                 else
                 {
-                    if (textCursor().selectionStart() > mPromptEndPosition)
-                    {
-                        break;
-                    }
-                    else
+                    if (textCursor().position() <= mPromptEndPosition)
                     {
                         return;
                     }
+
+                    int posInLine = textCursor().position() - mPromptEndPosition;
+                    if (posInLine >= 4 && posInLine % 4 == 0)
+                    {
+                        QString cmd = getCurrentCommand();
+                        QString before = cmd.left(posInLine);
+                        if (before.right(4) == "    ")
+                        {
+                            QTextCursor tc = textCursor();
+                            tc.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, 4);
+                            tc.removeSelectedText();
+                            return;
+                        }
+                    }
+
+                    break;
                 }
 
             case Qt::Key_Up:
@@ -314,43 +355,57 @@ namespace hal
         cursor.movePosition(QTextCursor::End);
         cursor.insertText("\n");
 
-        // an empty line outside of a compound statement has nothing to execute, just show a new prompt
-        if (!isCompound() && input.trimmed().isEmpty())
-        {
-            displayPrompt();
-            return;
-        }
-
         if (!input.trimmed().isEmpty())
         {
             //        gPythonContext->addHistory(input);
             mHistory->addHistory(input.toStdString());
         }
-        if ((!isCompound() && gPythonContext->checkCompleteStatement(input) != 0) || (isCompound() && input.isEmpty() && gPythonContext->checkCompleteStatement(input) != 0))
+        if (!isCompound() && input.trimmed().isEmpty())
         {
-            mCurrentCompoundInput += input;
-            bool threadStarted;
-            if (isCompound())
-            {
-                threadStarted = gPythonContext->interpretBackground(this, mCurrentCompoundInput, true);
-            }
-            else
-            {
-                threadStarted = gPythonContext->interpretBackground(this, input, false);
-            }
-            mPromptType     = Standard;
+            displayPrompt();
+        }
+        else if (!isCompound() && gPythonContext->checkCompleteStatement(input) != 0)
+        {
+            bool threadStarted = gPythonContext->interpretBackground(this, input, false);
+            mPromptType = Standard;
             mCurrentCompoundInput = "";
-            // without a thread there is no finished signal which would display the next prompt
             if (threadStarted)
                 mAbortThreadWidget->start();
             else
                 displayPrompt();
         }
-        else
+        else if (isCompound() && input.trimmed().isEmpty())
         {
-            mCurrentCompoundInput += input + "\n";
-            mPromptType     = Compound;
+            if (gPythonContext->checkCompleteStatement(mCurrentCompoundInput) != 0)
+            {
+                bool threadStarted = gPythonContext->interpretBackground(this, mCurrentCompoundInput, true);
+                mPromptType = Standard;
+                mCurrentCompoundInput = "";
+                if (threadStarted)
+                    mAbortThreadWidget->start();
+                else
+                    displayPrompt();
+            }
+            else
+            {
+                mPromptType = Compound;
+                displayPrompt();
+            }
+        }
+        else
+        {   
+            if (input.trimmed() != "") mCurrentCompoundInput += input + "\n";
+            
+            mPromptType = Compound;
             displayPrompt();
+            
+            QString trimmed = input.trimmed();
+            int indent = 0;
+            while (indent < input.length() && input[indent] == ' ') indent++;
+
+            if (trimmed.endsWith(":")) insertPlainText(QString(indent + 4, ' '));
+            else if (indent > 0) insertPlainText(QString(indent, ' '));
+
         }
         mHistory->updateFromFile();
     }
@@ -449,15 +504,15 @@ namespace hal
             mCurrentInput = getCurrentCommand();
             break;
         case Input:
-            mCurrentInput += "\t";
-            insertPlainText("\t");
+            mCurrentInput += "    ";
+            insertPlainText("    ");
             return;
         }
 
         QString current_line = getCurrentCommand();
-        if (current_line.isEmpty())
+        if (current_line.trimmed().isEmpty())
         {
-            insertPlainText("\t");
+            insertPlainText("    ");
         }
         else
         {
