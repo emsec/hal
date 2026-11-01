@@ -299,6 +299,11 @@ All notable changes to this project will be documented in this file.
     * fixed the Python console getting stuck at the `...` prompt after a line that could not be parsed, since the parse error was never cleared
     * fixed memory leak when checking whether a Python console command is complete
     * added [Esc] key to discard a multi-line statement at the `...` prompt of the Python console
+    * added [Ctrl+C] to the Python console to abort a running command or, when nothing is selected, to discard the line typed so far, as in a terminal
+    * added automatic indentation to the Python console: a new line inside a multi-line statement keeps the indentation of the previous line and goes one level deeper after a line ending with `:`, [Backspace] removes one level of indentation at once
+    * changed the Python console to indent with four spaces instead of a tab, also for code that is pasted or recalled from the history, so that indentation from different sources no longer clashes
+    * fixed the Python console switching to the `...` prompt after a line with a syntax error instead of reporting the error right away
+    * fixed the Python console not executing a multi-line statement when the final empty line still contained indentation
 * Build and dependencies
   * changed the GUI from Qt 5 to Qt 6
   * updated the vendored QuaZip from 1.3 to 1.5 as part of the move to Qt 6

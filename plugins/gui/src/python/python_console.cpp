@@ -5,6 +5,7 @@
 #include "gui/hal_qt_compat/hal_qt_compat.h"
 
 #include <QKeyEvent>
+#include <QMimeData>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -84,29 +85,12 @@ namespace hal
                 copy();
                 return;
             }
-            else if (isCompound())
-            {
-                mPromptType = Standard;
-                mCurrentCompoundInput = "";
-                e->accept();
-                QTextCursor cursor(document());
-                cursor.movePosition(QTextCursor::End);
-                cursor.insertText("\n");
-                displayPrompt();
-                return;
-            }
-            else if (gPythonContext->isThreadRunning())
-            {
-                e->accept();
-                gPythonContext->abortThread();
-                return;
-            }
-
             e->accept();
-            QTextCursor cursor(document());
-            cursor.movePosition(QTextCursor::End);
-            cursor.insertText("\n");
-            displayPrompt();
+            if (gPythonContext->isThreadRunning())
+                gPythonContext->abortThread();
+            else
+                // discards the current line only, [Esc] discards a multi-line statement
+                discardInput(false);
             return;
         }
 
@@ -239,11 +223,7 @@ namespace hal
                 // discard the compound statement entered so far
                 if (isCompound())
                 {
-                    moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
-                    textCursor().insertText("\n");
-                    mCurrentCompoundInput = "";
-                    mPromptType           = Standard;
-                    displayPrompt();
+                    discardInput(true);
                     return;
                 }
                 break;
@@ -399,11 +379,12 @@ namespace hal
             mPromptType = Compound;
             displayPrompt();
             
-            QString trimmed = input.trimmed();
+            // continue at the indentation of the previous line, one level deeper after a ':'
+            QString expanded = expandTabs(input);
             int indent = 0;
-            while (indent < input.length() && input[indent] == ' ') indent++;
+            while (indent < expanded.length() && expanded[indent] == ' ') indent++;
 
-            if (trimmed.endsWith(":")) insertPlainText(QString(indent + 4, ' '));
+            if (expanded.trimmed().endsWith(":")) insertPlainText(QString(indent + 4, ' '));
             else if (indent > 0) insertPlainText(QString(indent, ' '));
 
         }
@@ -428,7 +409,34 @@ namespace hal
         QTextCursor cursor = textCursor();
         cursor.setPosition(mPromptEndPosition);
         cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-        cursor.insertText(new_command);
+        // history entries of older versions are indented with tabs
+        cursor.insertText(expandTabs(new_command));
+    }
+
+    void PythonConsole::insertFromMimeData(const QMimeData* source)
+    {
+        if (source->hasText())
+            insertPlainText(expandTabs(source->text()));
+    }
+
+    void PythonConsole::discardInput(bool wholeStatement)
+    {
+        moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+        textCursor().insertText("\n");
+        if (wholeStatement)
+        {
+            mCurrentCompoundInput = "";
+            mPromptType           = Standard;
+        }
+        mCurrentHistoryIndex = -1;
+        mInCompletion        = false;
+        displayPrompt();
+    }
+
+    QString PythonConsole::expandTabs(const QString& text)
+    {
+        QString retval = text;
+        return retval.replace('\t', QString(4, ' '));
     }
 
     void PythonConsole::appendToCurrentCommand(const QString& appendix)
