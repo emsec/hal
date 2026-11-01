@@ -1,5 +1,6 @@
 var NAVTREEINDEX50 =
 {
+"qt.html#endl":[8,0,4,91],
 "qt.html#fixed":[8,0,4,93],
 "qt.html#flush":[8,0,4,94],
 "qt.html#forcepoint":[8,0,4,95],
@@ -248,6 +249,5 @@ var NAVTREEINDEX50 =
 "settings__widget__slider_8h.html":[10,0,1,8,0,0,45,1,4],
 "settings__widget__slider_8h_source.html":[10,0,1,8,0,0,45,1,4],
 "settings__widget__spinbox_8cpp.html":[10,0,1,8,2,44,1,5],
-"settings__widget__spinbox_8cpp_source.html":[10,0,1,8,2,44,1,5],
-"settings__widget__spinbox_8h.html":[10,0,1,8,0,0,45,1,5]
+"settings__widget__spinbox_8cpp_source.html":[10,0,1,8,2,44,1,5]
 };

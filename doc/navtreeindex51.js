@@ -1,5 +1,6 @@
 var NAVTREEINDEX51 =
 {
+"settings__widget__spinbox_8h.html":[10,0,1,8,0,0,45,1,5],
 "settings__widget__spinbox_8h_source.html":[10,0,1,8,0,0,45,1,5],
 "settings__widget__text_8cpp.html":[10,0,1,8,2,44,1,6],
 "settings__widget__text_8cpp_source.html":[10,0,1,8,2,44,1,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX51 =
 "sort_8h_source.html":[10,0,1,8,0,0,25,4],
 "special__log__content__manager_8cpp.html":[10,0,1,8,2,25,5],
 "special__log__content__manager_8cpp_source.html":[10,0,1,8,2,25,5],
-"special__log__content__manager_8h.html":[10,0,1,8,0,0,25,5],
-"special__log__content__manager_8h_source.html":[10,0,1,8,0,0,25,5]
+"special__log__content__manager_8h.html":[10,0,1,8,0,0,25,5]
 };

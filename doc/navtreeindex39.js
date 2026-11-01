@@ -1,5 +1,6 @@
 var NAVTREEINDEX39 =
 {
+"namespacehal_1_1module__identification.html#af427fe7bad673dbdfb1375848399b61e":[8,0,0,20,30],
 "namespacehal_1_1module__identification_1_1lattice__ice40.html":[8,0,0,20,0],
 "namespacehal_1_1module__identification_1_1lattice__ice40.html#a592d975413792ea153fa6fcb0260993c":[8,0,0,20,0,0],
 "namespacehal_1_1module__identification_1_1xilinx__unisim.html":[8,0,0,20,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX39 =
 "namespacehal_1_1z3__utils.html#aad93f28b0f6e45f9408a286938795451":[8,0,0,43,13],
 "namespacehal_1_1z3__utils.html#ac0cb03d509ab0a729d054d2f6ae2a776":[8,0,0,43,19],
 "namespacehal_1_1z3__utils.html#afb4c8313030fe22c6e0370040c7a9602":[8,0,0,43,15],
-"namespacemembers.html":[8,1,0,0],
-"namespacemembers.html":[8,1,0]
+"namespacemembers.html":[8,1,0,0]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX37 =
 {
+"namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ad20caec3b48a1eef164cb4ca81ba2587":[8,0,0,698,0],
 "namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83af31ee5e3824f1f5e5d206bdf3029f22b":[8,0,0,698,5],
 "namespacehal.html#a034467b937d9c580d84c198167d00929":[8,0,0,767],
 "namespacehal.html#a03ceb066126cbb00eb42bbfc12c0d503":[8,0,0,761],
@@ -248,6 +249,5 @@ var NAVTREEINDEX37 =
 "namespacehal_1_1_s_m_t_1_1_constant_propagation.html":[8,0,0,34,2],
 "namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a03e64a8edd4c1580d9dc76fb88d01f3d":[8,0,0,34,2,14],
 "namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a04835e04416ae8796fa8698e01ad9341":[8,0,0,34,2,12],
-"namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a0ccaa7afe80fd4556f460797500ad305":[8,0,0,34,2,5],
-"namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a2f3fd99940b51455dd9c23f001281d03":[8,0,0,34,2,22]
+"namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a0ccaa7afe80fd4556f460797500ad305":[8,0,0,34,2,5]
 };

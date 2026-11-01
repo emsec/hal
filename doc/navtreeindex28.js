@@ -1,5 +1,6 @@
 var NAVTREEINDEX28 =
 {
+"classhal_1_1_wavedata_table_editor.html#a149b62c8a3f2386e39f1216f7628e745":[9,0,0,644,0],
 "classhal_1_1_wavedata_table_editor.html#a2f8f0df37fd60c8b7ee980ebfaa8ba89":[9,0,0,644,5],
 "classhal_1_1_wavedata_table_editor.html#a3fadf88cf6b6daacc468bfe76a461609":[9,0,0,644,2],
 "classhal_1_1_wavedata_table_editor.html#a620413eb646a5a8a742ccf4f251441e7":[9,0,0,644,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX28 =
 "classhal_1_1module__identification_1_1_structural_candidate.html#a6a51db0784ad09c610e12315a2449783":[9,0,0,9,5,1],
 "classhal_1_1module__identification_1_1_structural_candidate.html#a90c950c80ad41e542d23f79b3a80258a":[9,0,0,9,5,3],
 "classhal_1_1module__identification_1_1_structural_candidate.html#ab22fc07c743c1f3680c443f230659f69":[9,0,0,9,5,0],
-"classhal_1_1module__identification_1_1_structural_candidate.html#af97ada99acd68205d1795b4ec95c822f":[9,0,0,9,5,2],
-"classhal_1_1module__identification_1_1_verified_candidate.html":[9,0,0,9,7]
+"classhal_1_1module__identification_1_1_structural_candidate.html#af97ada99acd68205d1795b4ec95c822f":[9,0,0,9,5,2]
 };

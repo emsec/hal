@@ -1,5 +1,6 @@
 var NAVTREEINDEX43 =
 {
+"plugin__system_2plugin__manager_8cpp.html#a2963a3d18f0df7fa6bb9030810a058c3":[10,0,2,1,4,10],
 "plugin__system_2plugin__manager_8cpp.html#a2db1010e28c8463d208fee5a92a28718":[10,0,2,1,4,8],
 "plugin__system_2plugin__manager_8cpp.html#a439fffc14e5e1a766a5f59d58efa7747":[10,0,2,1,4,17],
 "plugin__system_2plugin__manager_8cpp.html#a54caf767ba2c2f754875e9aad4849767":[10,0,2,1,4,14],
@@ -248,6 +249,5 @@ var NAVTREEINDEX43 =
 "progress__bar_8h_source.html":[10,0,1,8,0,0,20,15],
 "project__dir__dialog_8cpp.html":[10,0,1,8,2,14,3],
 "project__dir__dialog_8cpp_source.html":[10,0,1,8,2,14,3],
-"project__dir__dialog_8h.html":[10,0,1,8,0,0,14,3],
-"project__dir__dialog_8h_source.html":[10,0,1,8,0,0,14,3]
+"project__dir__dialog_8h.html":[10,0,1,8,0,0,14,3]
 };
