@@ -29,6 +29,7 @@
 #include "hal_core/netlist/boolean_function.h"
 
 #include <map>
+#include <set>
 #include <unordered_set>
 #include <utility>
 
@@ -36,10 +37,11 @@ namespace hal
 {
     class Gate;
     class GatePin;
+    class Net;
     class Netlist;
 
     /**
-     * A reusable store for the Boolean functions that `SubgraphNetlistDecorator::get_subgraph_function` computes for the output pins of the gates of one specific subgraph.
+     * A reusable store for the Boolean functions that `SubgraphNetlistDecorator::get_subgraph_function` computes and the inputs that `SubgraphNetlistDecorator::get_subgraph_function_inputs` determines for the output pins of the gates of one specific subgraph.
      *
      * The subgraph a cache belongs to is sealed in when it is created with `SubgraphNetlistDecorator::make_subgraph_function_cache`,
      * and the cache can only ever be used for exactly that subgraph.
@@ -76,5 +78,6 @@ namespace hal
         const Netlist* m_netlist;
         std::unordered_set<const Gate*> m_subgraph_gates;
         std::map<std::pair<u32, const GatePin*>, BooleanFunction> m_functions;
+        std::map<std::pair<u32, const GatePin*>, std::set<const Net*>> m_inputs;
     };
 }    // namespace hal

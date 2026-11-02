@@ -7,7 +7,7 @@ namespace hal
     void subgraph_netlist_decorator_init(py::module& m)
     {
         py::class_<SubgraphFunctionCache> py_subgraph_function_cache(m, "SubgraphFunctionCache", R"(
-            A reusable store for the Boolean functions that ``SubgraphNetlistDecorator.get_subgraph_function`` computes for the output pins of the gates of one specific subgraph.
+            A reusable store for the Boolean functions that ``SubgraphNetlistDecorator.get_subgraph_function`` computes and the inputs that ``SubgraphNetlistDecorator.get_subgraph_function_inputs`` determines for the output pins of the gates of one specific subgraph.
 
             The subgraph a cache belongs to is sealed in when it is created and the cache can only ever be used for exactly that subgraph. Create one with ``SubgraphNetlistDecorator.make_subgraph_function_cache`` and drop it when the netlist is modified.
         )");
@@ -151,8 +151,8 @@ namespace hal
             },
             py::arg("subgraph_gates"),
             R"(
-            Create a cache for the Boolean functions of one specific subgraph, to be passed to ``get_subgraph_function`` in place of the subgraph.
-            The cache shares the Boolean functions computed for the gate outputs of the subgraph across calls, so that logic which the functions of several subgraph output nets have in common is composed only once.
+            Create a cache for one specific subgraph, to be passed to ``get_subgraph_function`` or ``get_subgraph_function_inputs`` in place of the subgraph.
+            The cache shares the Boolean functions and inputs computed for the gate outputs of the subgraph across calls, so that logic which several subgraph output nets have in common is traversed only once.
             The cache belongs to the netlist of this decorator and must be dropped when the netlist is modified.
 
             :param list[hal_py.Gate] subgraph_gates: The gates making up the subgraph to consider.
@@ -176,8 +176,8 @@ namespace hal
             },
             py::arg("subgraph_module"),
             R"(
-            Create a cache for the Boolean functions of one specific subgraph, to be passed to ``get_subgraph_function`` in place of the subgraph.
-            The cache shares the Boolean functions computed for the gate outputs of the subgraph across calls, so that logic which the functions of several subgraph output nets have in common is composed only once.
+            Create a cache for one specific subgraph, to be passed to ``get_subgraph_function`` or ``get_subgraph_function_inputs`` in place of the subgraph.
+            The cache shares the Boolean functions and inputs computed for the gate outputs of the subgraph across calls, so that logic which several subgraph output nets have in common is traversed only once.
             The cache belongs to the netlist of this decorator and must be dropped when the netlist is modified.
 
             :param hal_py.Module subgraph_module: The module making up the subgraph to consider, including the gates of all of its submodules.
@@ -234,6 +234,7 @@ namespace hal
             Get the inputs of the combined Boolean function of a subgraph starting at the source of the provided subgraph output net.
             This does not actually build the Boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
             The subgraph is traversed backwards through its gates. A gate is traversed only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, and at a net without a source, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the ``subgraph_gates``.
+            For repeated calls on the same subgraph, create a cache with ``make_subgraph_function_cache`` and pass it to ``get_subgraph_function_inputs`` instead.
 
             :param list[hal_py.Gate] subgraph_gates: The gates making up the subgraph to consider.
             :param hal_py.Net subgraph_output: The subgraph output net from which to start the back propagation.
@@ -262,9 +263,39 @@ namespace hal
             Get the inputs of the combined Boolean function of a subgraph starting at the source of the provided subgraph output net.
             This does not actually build the Boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
             The subgraph is traversed backwards through its gates. A gate is traversed only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, and at a net without a source, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the ``subgraph_module``.
+            For repeated calls on the same subgraph, create a cache with ``make_subgraph_function_cache`` and pass it to ``get_subgraph_function_inputs`` instead.
 
             :param hal_py.Module subgraph_module: The module making up the subgraph to consider, including the gates of all of its submodules.
             :param hal_py.Net subgraph_output: The subgraph output net from which to start the back propagation.
+            :returns: The input nets that would be the input for the subgraph function on success, ``None`` otherwise.
+            :rtype: set(hal_py.Net) or None
+        )");
+
+        py_subgraph_netlist_decorator.def(
+            "get_subgraph_function_inputs",
+            [](SubgraphNetlistDecorator& self, const Net* subgraph_output, SubgraphFunctionCache& cache) -> std::optional<std::set<const Net*>> {
+                auto res = self.get_subgraph_function_inputs(subgraph_output, cache);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while generating subgraph function:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("subgraph_output"),
+            py::arg("cache"),
+            borrowed(),
+            R"(
+            Get the inputs of the combined Boolean function of the subgraph of the cache starting at the source of the provided subgraph output net.
+            This does not actually build the Boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
+            The subgraph is traversed backwards through its gates. A gate is traversed only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, and at a net without a source, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the subgraph of the ``cache``.
+            The inputs determined for the gate outputs of the subgraph are stored in the ``cache``, and those stored by earlier calls are reused instead of being determined again. The ``cache`` must have been created for the netlist of this decorator.
+
+            :param hal_py.Net subgraph_output: The subgraph output net from which to start the back propagation.
+            :param hal_py.SubgraphFunctionCache cache: The cache holding the subgraph and the inputs determined for it.
             :returns: The input nets that would be the input for the subgraph function on success, ``None`` otherwise.
             :rtype: set(hal_py.Net) or None
         )");

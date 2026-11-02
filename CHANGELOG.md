@@ -130,6 +130,7 @@ All notable changes to this project will be documented in this file.
   * subgraph netlist decorator
     * changed `get_subgraph_function` and `get_subgraph_function_inputs` to stop at gates that are not combinational or have no Boolean function for the output pin they are reached through, even if these gates are part of the subgraph; the net driven by that output pin becomes a variable of the function. Before, both tried to compose such gates and failed, e.g., at every flip-flop, so passing a module or all gates of a netlist failed as soon as the logic reached a flip-flop, a memory, or a vendor buffer without a function
     * changed the cache of `get_subgraph_function` to a `SubgraphFunctionCache` that `make_subgraph_function_cache` creates for one subgraph and that `get_subgraph_function` takes in place of the subgraph. A cached function depends on the subgraph it was composed in, so the former map cache returned wrong functions when shared across calls with different subgraphs. The overloads taking a subgraph and a cache map are removed. In Python, the cache is `hal_py.SubgraphFunctionCache`; the former dict cache was copied for every call and never filled
+    * added a `get_subgraph_function_inputs` overload taking a `SubgraphFunctionCache` in place of the subgraph, which shares the inputs determined for the gate outputs of the subgraph across calls just as `get_subgraph_function` shares their functions
     * changed the module overloads of `copy_subgraph_netlist`, `get_subgraph_function`, and `get_subgraph_function_inputs` to include the gates of all submodules of the module in the subgraph, which were left out before
     * changed the deprecated `netlist_utils::get_subgraph_function` to neither read nor fill the cache passed to it
     * sped up `get_subgraph_function` and `get_subgraph_function_inputs`, which searched the list of subgraph gates linearly for every net they visited
@@ -209,6 +210,7 @@ All notable changes to this project will be documented in this file.
     * fixed `remove_unconnected_gates` looping forever if a gate could not be deleted
     * fixed `remove_redundant_gates` treating two flip-flops as duplicates although they have different initialization values
     * fixed `create_multi_bit_gate_modules` and `create_nets_at_unconnected_pins` handing out modules and nets to Python without keeping the netlist alive
+    * sped up `remove_redundant_logic_trees`, which determined the inputs of every output net of a combinational gate from scratch, over all combinational gates of the netlist; the inputs of logic the output nets have in common are now shared through a `SubgraphFunctionCache`
   * Xilinx toolbox
     * added `remove_no_load_wires` to delete the `NLW_<instance>_<pin>_UNCONNECTED` nets that Vivado writes for unused output pins, available from the GUI context menu as well
     * added an optional gate scope to the preprocessing functions, restricting which gates may be modified or deleted and defaulting to the entire netlist
@@ -231,6 +233,7 @@ All notable changes to this project will be documented in this file.
   * module identification
     * changed the pin groups of an identified module to be descending. The pin indices are unchanged, and the `CTRL` group is now of type `control` instead of `enable`
     * fixed `CandidateType.addition_offset` being bound to `addition` in Python, which made the two indistinguishable
+    * sped up generating the functional candidates of a structural candidate, which determined the inputs of each of its output nets from scratch; the inputs of logic the output nets have in common are now shared through a `SubgraphFunctionCache`
   * gate libraries
     * **[BREAKING]** removed `XILINX_SIMPRIM.hgl` from the distribution
     * updated `XILINX_UNISIM.hgl` and `XILINX_UNISIM_hal.hgl` with multi-output LUT type definitions for all `LUT6_2` variants

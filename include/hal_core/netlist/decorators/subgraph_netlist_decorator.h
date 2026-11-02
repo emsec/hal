@@ -121,9 +121,9 @@ namespace hal
         Result<BooleanFunction> get_subgraph_function(const Module* subgraph_module, const Net* subgraph_output) const;
 
         /**
-         * Create a cache for the Boolean functions of one specific subgraph, to be passed to `get_subgraph_function` in place of the subgraph.
-         * The cache shares the Boolean functions computed for the gate outputs of the subgraph across calls, so that logic which the functions
-         * of several subgraph output nets have in common is composed only once.
+         * Create a cache for one specific subgraph, to be passed to `get_subgraph_function` or `get_subgraph_function_inputs` in place of the subgraph.
+         * The cache shares the Boolean functions and inputs computed for the gate outputs of the subgraph across calls, so that logic which several
+         * subgraph output nets have in common is traversed only once.
          * The cache belongs to the netlist of this decorator and must be dropped when the netlist is modified.
          *
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
@@ -132,9 +132,9 @@ namespace hal
         Result<SubgraphFunctionCache> make_subgraph_function_cache(const std::vector<const Gate*>& subgraph_gates) const;
 
         /**
-         * Create a cache for the Boolean functions of one specific subgraph, to be passed to `get_subgraph_function` in place of the subgraph.
-         * The cache shares the Boolean functions computed for the gate outputs of the subgraph across calls, so that logic which the functions
-         * of several subgraph output nets have in common is composed only once.
+         * Create a cache for one specific subgraph, to be passed to `get_subgraph_function` or `get_subgraph_function_inputs` in place of the subgraph.
+         * The cache shares the Boolean functions and inputs computed for the gate outputs of the subgraph across calls, so that logic which several
+         * subgraph output nets have in common is traversed only once.
          * The cache belongs to the netlist of this decorator and must be dropped when the netlist is modified.
          *
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
@@ -143,9 +143,9 @@ namespace hal
         Result<SubgraphFunctionCache> make_subgraph_function_cache(const std::vector<Gate*>& subgraph_gates) const;
 
         /**
-         * Create a cache for the Boolean functions of one specific subgraph, to be passed to `get_subgraph_function` in place of the subgraph.
-         * The cache shares the Boolean functions computed for the gate outputs of the subgraph across calls, so that logic which the functions
-         * of several subgraph output nets have in common is composed only once.
+         * Create a cache for one specific subgraph, to be passed to `get_subgraph_function` or `get_subgraph_function_inputs` in place of the subgraph.
+         * The cache shares the Boolean functions and inputs computed for the gate outputs of the subgraph across calls, so that logic which several
+         * subgraph output nets have in common is traversed only once.
          * The cache belongs to the netlist of this decorator and must be dropped when the netlist is modified.
          *
          * @param[in] subgraph_module - The module making up the subgraph to consider, including the gates of all of its submodules.
@@ -176,6 +176,7 @@ namespace hal
          * function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, and at a net without
          * a source, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function
          * bound the subgraph function even if they are part of the `subgraph_gates`.
+         * For repeated calls on the same subgraph, create a cache with `make_subgraph_function_cache` and pass it to `get_subgraph_function_inputs` instead.
          *
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
          * @param[in] subgraph_output - The subgraph output net from which to start the back propagation.
@@ -190,6 +191,7 @@ namespace hal
          * function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, and at a net without
          * a source, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function
          * bound the subgraph function even if they are part of the `subgraph_gates`.
+         * For repeated calls on the same subgraph, create a cache with `make_subgraph_function_cache` and pass it to `get_subgraph_function_inputs` instead.
          *
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
          * @param[in] subgraph_output - The subgraph output net from which to start the back propagation.
@@ -204,12 +206,29 @@ namespace hal
          * function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, and at a net without
          * a source, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function
          * bound the subgraph function even if they are part of the `subgraph_module`.
+         * For repeated calls on the same subgraph, create a cache with `make_subgraph_function_cache` and pass it to `get_subgraph_function_inputs` instead.
          *
          * @param[in] subgraph_module - The module making up the subgraph to consider, including the gates of all of its submodules.
          * @param[in] subgraph_output - The subgraph output net from which to start the back propagation.
          * @return The input nets that would be the input for the subgraph function on success, an error otherwise.
          */
         Result<std::set<const Net*>> get_subgraph_function_inputs(const Module* subgraph_module, const Net* subgraph_output) const;
+
+        /**
+         * Get the inputs of the combined Boolean function of the subgraph of the cache starting at the source of the provided subgraph output net.
+         * This does not actually build the Boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
+         * The subgraph is traversed backwards through its gates. A gate is traversed only if its gate type is combinational and it has a Boolean
+         * function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, and at a net without
+         * a source, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function
+         * bound the subgraph function even if they are part of the subgraph of the `cache`.
+         * The inputs determined for the gate outputs of the subgraph are stored in the `cache`, and those stored by earlier calls are reused
+         * instead of being determined again. The `cache` must have been created for the netlist of this decorator.
+         *
+         * @param[in] subgraph_output - The subgraph output net from which to start the back propagation.
+         * @param[inout] cache - The cache holding the subgraph and the inputs determined for it.
+         * @return The input nets that would be the input for the subgraph function on success, an error otherwise.
+         */
+        Result<std::set<const Net*>> get_subgraph_function_inputs(const Net* subgraph_output, SubgraphFunctionCache& cache) const;
 
     private:
         const Netlist& m_netlist;

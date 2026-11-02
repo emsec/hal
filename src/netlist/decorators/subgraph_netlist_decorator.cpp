@@ -484,6 +484,23 @@ namespace hal
             return OK(inputs);
         }
 
+        Result<std::set<const Net*>> subgraph_function_inputs(const Netlist& netlist, const Net* subgraph_output, const GateSet& subgraph_gates, InputsMap& gate_cache)
+        {
+            const auto output_res = check_subgraph_output(netlist, subgraph_output);
+            if (output_res.is_error())
+            {
+                return ERR(output_res.get_error());
+            }
+            else if (output_res.get())
+            {
+                return OK({subgraph_output});
+            }
+
+            std::unordered_set<const Net*> on_stack;
+
+            return subgraph_function_inputs_recursive(subgraph_output, subgraph_gates, gate_cache, on_stack);
+        }
+
     }    // namespace
 
     Result<BooleanFunction> SubgraphNetlistDecorator::get_subgraph_function(const std::vector<const Gate*>& subgraph_gates, const Net* subgraph_output) const
@@ -493,14 +510,14 @@ namespace hal
             return ERR("could not get subgraph function: net is a 'nullptr'");
         }
 
-        const auto gates_res = make_gate_set(m_netlist, subgraph_gates);
-        if (gates_res.is_error())
+        auto cache_res = make_subgraph_function_cache(subgraph_gates);
+        if (cache_res.is_error())
         {
-            return ERR_APPEND(gates_res.get_error(), "could not get subgraph function of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id()));
+            return ERR_APPEND(cache_res.get_error(), "could not get subgraph function of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id()));
         }
+        auto cache = cache_res.get();
 
-        FunctionMap gate_cache;
-        return subgraph_function(m_netlist, subgraph_output, gates_res.get(), gate_cache);
+        return get_subgraph_function(subgraph_output, cache);
     }
 
     Result<BooleanFunction> SubgraphNetlistDecorator::get_subgraph_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output) const
@@ -569,26 +586,14 @@ namespace hal
             return ERR("could not get subgraph function inputs: net is a 'nullptr'");
         }
 
-        const auto gates_res = make_gate_set(m_netlist, subgraph_gates);
-        if (gates_res.is_error())
+        auto cache_res = make_subgraph_function_cache(subgraph_gates);
+        if (cache_res.is_error())
         {
-            return ERR_APPEND(gates_res.get_error(), "could not get subgraph function inputs of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id()));
+            return ERR_APPEND(cache_res.get_error(), "could not get subgraph function inputs of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id()));
         }
+        auto cache = cache_res.get();
 
-        const auto output_res = check_subgraph_output(m_netlist, subgraph_output);
-        if (output_res.is_error())
-        {
-            return ERR(output_res.get_error());
-        }
-        else if (output_res.get())
-        {
-            return OK({subgraph_output});
-        }
-
-        std::unordered_set<const Net*> on_stack;
-        InputsMap gate_cache;
-
-        return subgraph_function_inputs_recursive(subgraph_output, gates_res.get(), gate_cache, on_stack);
+        return get_subgraph_function_inputs(subgraph_output, cache);
     }
 
     Result<std::set<const Net*>> SubgraphNetlistDecorator::get_subgraph_function_inputs(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output) const
@@ -605,6 +610,22 @@ namespace hal
         }
 
         return get_subgraph_function_inputs(subgraph_module->get_gates(nullptr, true), subgraph_output);
+    }
+
+    Result<std::set<const Net*>> SubgraphNetlistDecorator::get_subgraph_function_inputs(const Net* subgraph_output, SubgraphFunctionCache& cache) const
+    {
+        if (subgraph_output == nullptr)
+        {
+            return ERR("could not get subgraph function inputs: net is a 'nullptr'");
+        }
+
+        if (cache.m_netlist != &m_netlist)
+        {
+            return ERR("could not get subgraph function inputs of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id())
+                       + ": cache was created for a different netlist");
+        }
+
+        return subgraph_function_inputs(m_netlist, subgraph_output, cache.m_subgraph_gates, cache.m_inputs);
     }
 
 }    // namespace hal

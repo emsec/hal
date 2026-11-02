@@ -1692,7 +1692,7 @@ namespace hal {
      * Test the subgraph function cache: it is bound to the subgraph and the netlist it was created for, and results shared through it
      * agree with uncached calls.
      *
-     * Functions: make_subgraph_function_cache, get_subgraph_function
+     * Functions: make_subgraph_function_cache, get_subgraph_function, get_subgraph_function_inputs
      */
     TEST_F(DecoratorTest, check_subgraph_netlist_decorator_cache)
     {
@@ -1742,6 +1742,24 @@ namespace hal {
                 auto outer_cache = outer_cache_res.get();
                 EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(o, outer_cache), var(m) + " ^ " + var(c)));
                 EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(std::vector<const Gate*>({outer}), o), var(m) + " ^ " + var(c)));
+
+                // the inputs are shared through the same caches and agree with uncached calls
+                const auto inputs_o = dec.get_subgraph_function_inputs(o, cache);
+                ASSERT_TRUE(inputs_o.is_ok());
+                EXPECT_EQ(inputs_o.get(), std::set<const Net*>({a, b, c}));
+                const auto inputs_m = dec.get_subgraph_function_inputs(m, cache);
+                ASSERT_TRUE(inputs_m.is_ok());
+                EXPECT_EQ(inputs_m.get(), std::set<const Net*>({a, b}));
+                const auto outer_inputs_o = dec.get_subgraph_function_inputs(o, outer_cache);
+                ASSERT_TRUE(outer_inputs_o.is_ok());
+                EXPECT_EQ(outer_inputs_o.get(), std::set<const Net*>({m, c}));
+                const auto uncached_inputs_o = dec.get_subgraph_function_inputs(std::vector<const Gate*>({outer}), o);
+                ASSERT_TRUE(uncached_inputs_o.is_ok());
+                EXPECT_EQ(uncached_inputs_o.get(), outer_inputs_o.get());
+
+                // the functions are unaffected by the inputs stored alongside them
+                EXPECT_EQ(cache.size(), 2);
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(o, cache), "(" + var(a) + " & " + var(b) + ") ^ " + var(c)));
             }
             {
                 // a cache created for a module, with the inner gate in a submodule
@@ -1767,6 +1785,7 @@ namespace hal {
                 ASSERT_TRUE(cache_res.is_ok());
                 auto cache = cache_res.get();
                 EXPECT_TRUE(dec.get_subgraph_function(nullptr, cache).is_error());
+                EXPECT_TRUE(dec.get_subgraph_function_inputs(nullptr, cache).is_error());
             }
             {
                 // a cache created for another netlist, and a cache for gates of another netlist
@@ -1778,6 +1797,7 @@ namespace hal {
                 ASSERT_TRUE(other_cache_res.is_ok());
                 auto other_cache = other_cache_res.get();
                 EXPECT_TRUE(dec.get_subgraph_function(o, other_cache).is_error());
+                EXPECT_TRUE(dec.get_subgraph_function_inputs(o, other_cache).is_error());
 
                 EXPECT_TRUE(dec.make_subgraph_function_cache(std::vector<const Gate*>({inner, other_gate})).is_error());
                 EXPECT_TRUE(dec.get_subgraph_function(std::vector<const Gate*>({inner, other_gate}), o).is_error());
