@@ -6,6 +6,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
 namespace hal
@@ -290,7 +291,7 @@ namespace hal
 
             const Gate* src_gate = src_ep->get_gate();
 
-            // the cache only holds functions of gates that are composed, so it is checked first
+            // a cached function is what the walk would arrive at again, so the cache is checked first
             if (const auto it = gate_cache.find({src_gate->get_id(), src_ep->get_pin()}); it != gate_cache.end())
             {
                 return OK(it->second);
@@ -304,9 +305,21 @@ namespace hal
             }
 
             const auto bf_res = src_gate->get_boolean_function(src_ep->get_pin(), true, true);
+
+            // e.g., an input pin of the gate without a net, so the gate bounds the subgraph function just as one without a Boolean function does
             if (bf_res.is_error())
             {
-                return ERR_APPEND(bf_res.get_error(), "could not get subgraph function of net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to get function of gate.");
+                log_warning("netlist",
+                            "could not get the Boolean function of gate '{}' with ID {} at pin '{}', net '{}' with ID {} becomes a variable of the subgraph function instead:\n{}",
+                            src_gate->get_name(),
+                            src_gate->get_id(),
+                            src_ep->get_pin()->get_name(),
+                            n->get_name(),
+                            n->get_id(),
+                            bf_res.get_error().get());
+                const auto net_dec = BooleanFunctionNetDecorator(*n);
+                gate_cache.insert({{src_gate->get_id(), src_ep->get_pin()}, net_dec.get_boolean_variable()});
+                return OK(net_dec.get_boolean_variable());
             }
 
             // e.g., a LUT without configuration
@@ -412,7 +425,7 @@ namespace hal
 
             const Gate* src_gate = src_ep->get_gate();
 
-            // the cache only holds inputs of gates that are composed, so it is checked first
+            // cached inputs are what the walk would arrive at again, so the cache is checked first
             if (const auto it = gate_cache.find({src_gate->get_id(), src_ep->get_pin()}); it != gate_cache.end())
             {
                 return OK(it->second);
@@ -425,9 +438,20 @@ namespace hal
             }
 
             const auto bf_res = src_gate->get_boolean_function(src_ep->get_pin(), true, true);
+
+            // e.g., an input pin of the gate without a net, so the gate bounds the subgraph function just as one without a Boolean function does
             if (bf_res.is_error())
             {
-                return ERR_APPEND(bf_res.get_error(), "could not get subgraph function of net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to get function of gate.");
+                log_warning("netlist",
+                            "could not get the Boolean function of gate '{}' with ID {} at pin '{}', net '{}' with ID {} becomes an input of the subgraph function instead:\n{}",
+                            src_gate->get_name(),
+                            src_gate->get_id(),
+                            src_ep->get_pin()->get_name(),
+                            n->get_name(),
+                            n->get_id(),
+                            bf_res.get_error().get());
+                gate_cache.insert({{src_gate->get_id(), src_ep->get_pin()}, {n}});
+                return OK({n});
             }
 
             // e.g., a LUT without configuration

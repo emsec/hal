@@ -75,6 +75,16 @@ namespace hal
             EXPECT_EQ(res.get(), BooleanFunction::from_string((net_20_name + " & " + "(!" + net_13_name + ")")).get());
             EXPECT_EQ(cache.size(), 1);
         }
+        {
+            // A gate of the subgraph has unconnected input pins, so the net it drives becomes a variable
+            NO_COUT_TEST_BLOCK;
+            const std::vector<const Gate*> subgraph_gates({gate_7});
+            const Net* output_net = test_nl->get_net_by_id(MIN_NET_ID + 78);
+
+            auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get(), BooleanFunction::from_string(net_78_name).get());
+        }
         // NEGATIVE
         {
             // No subgraph gates are passed
@@ -161,14 +171,6 @@ namespace hal
             
             auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
             EXPECT_TRUE(res.is_error());
-        }
-        {
-            // A gate of the subgraph has unconnected input pins
-            const std::vector<const Gate*> subgraph_gates({gate_7});
-            const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 78);
-            
-            auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-            ASSERT_TRUE(res.is_error());
         }
         TEST_END
     }

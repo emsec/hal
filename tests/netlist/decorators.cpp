@@ -1741,6 +1741,57 @@ namespace hal {
     }
 
     /**
+     * Test that a gate of the subgraph whose Boolean function cannot be built bounds the subgraph functions instead of failing them.
+     *
+     * Functions: get_subgraph_function, get_subgraph_function_inputs
+     */
+    TEST_F(DecoratorTest, check_subgraph_netlist_decorator_unbuildable_function)
+    {
+        TEST_START
+        {
+            NO_COUT_TEST_BLOCK;
+            auto gl = create_subgraph_gate_library();
+            ASSERT_NE(gl, nullptr);
+            auto nl = std::make_unique<Netlist>(gl.get());
+
+            //  a --- g_and --- n_and --- g_xor --- o
+            //  (I1 has no net)  c ------'
+            Gate* g_and = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g_and");
+            Gate* g_xor = nl->create_gate(gl->get_gate_type_by_name("XOR2"), "g_xor");
+            Net* a      = nl->create_net("a");
+            a->add_destination(g_and, "I0");
+            nl->mark_global_input_net(a);
+            Net* c = nl->create_net("c");
+            c->add_destination(g_xor, "I1");
+            nl->mark_global_input_net(c);
+            Net* n_and = test_utils::connect(nl.get(), g_and, "O", g_xor, "I0", "n_and");
+            Net* o     = nl->create_net("o");
+            o->add_source(g_xor, "O");
+
+            const SubgraphNetlistDecorator dec(*nl);
+            const std::vector<const Gate*> gates = {g_and, g_xor};
+
+            // the net driven by the AND gate becomes a variable
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, o), var(n_and) + " ^ " + var(c)));
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, n_and), var(n_and)));
+
+            const auto inputs = dec.get_subgraph_function_inputs(gates, o);
+            ASSERT_TRUE(inputs.is_ok());
+            EXPECT_EQ(inputs.get(), std::set<const Net*>({n_and, c}));
+
+            // the cache remembers the variable along with the function it is part of
+            auto cache_res = dec.make_subgraph_function_cache(gates);
+            ASSERT_TRUE(cache_res.is_ok());
+            auto cache = cache_res.get();
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(o, cache), var(n_and) + " ^ " + var(c)));
+            EXPECT_EQ(cache.size(), 2);
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(n_and, cache), var(n_and)));
+            EXPECT_EQ(cache.size(), 2);
+        }
+        TEST_END
+    }
+
+    /**
      * Test the subgraph function cache: it is bound to the subgraph and the netlist it was created for, and results shared through it
      * agree with uncached calls.
      *
