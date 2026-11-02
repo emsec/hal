@@ -311,16 +311,17 @@ namespace hal
 
             const Gate* src_gate = src_ep->get_gate();
 
+            // the cache only holds functions of gates that are composed, so it is checked first
+            if (const auto it = gate_cache.find({src_gate->get_id(), src_ep->get_pin()}); it != gate_cache.end())
+            {
+                return OK(it->second);
+            }
+
             // source is not composed into the subgraph function
             if (!is_composed(src_gate, src_ep->get_pin(), subgraph_gates))
             {
                 const auto net_dec = BooleanFunctionNetDecorator(*n);
                 return OK(net_dec.get_boolean_variable());
-            }
-
-            if (const auto it = gate_cache.find({src_gate->get_id(), src_ep->get_pin()}); it != gate_cache.end())
-            {
-                return OK(it->second);
             }
 
             const auto bf_res = src_gate->get_boolean_function(src_ep->get_pin(), true, true);
@@ -436,15 +437,16 @@ namespace hal
 
             const Gate* src_gate = src_ep->get_gate();
 
+            // the cache only holds inputs of gates that are composed, so it is checked first
+            if (const auto it = gate_cache.find({src_gate->get_id(), src_ep->get_pin()}); it != gate_cache.end())
+            {
+                return OK(it->second);
+            }
+
             // source is not composed into the subgraph function
             if (!is_composed(src_gate, src_ep->get_pin(), subgraph_gates))
             {
                 return OK({n});
-            }
-
-            if (const auto it = gate_cache.find({src_gate->get_id(), src_ep->get_pin()}); it != gate_cache.end())
-            {
-                return OK(it->second);
             }
 
             const auto bf_res = src_gate->get_boolean_function(src_ep->get_pin(), true, true);
