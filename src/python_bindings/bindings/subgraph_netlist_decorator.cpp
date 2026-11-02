@@ -4,6 +4,27 @@
 
 namespace hal
 {
+    namespace
+    {
+        // Hands a cache to Python that keeps the decorator, and through it the netlist whose gates the cache refers to, alive.
+        // Not done with py::keep_alive: since pybind11 3.1, its post-call hook crashes when a call falls through to the next overload.
+        py::object cache_to_python(const SubgraphNetlistDecorator& decorator, Result<SubgraphFunctionCache> res)
+        {
+            if (res.is_error())
+            {
+                log_error("python_context", "error encountered while creating subgraph function cache:\n{}", res.get_error().get());
+                return py::none();
+            }
+
+            py::object cache = py::cast(std::make_unique<SubgraphFunctionCache>(res.get()));
+            if (const py::handle owner = python_bindings_detail::existing_wrapper(&decorator); owner)
+            {
+                py::detail::keep_alive_impl(cache, owner);
+            }
+            return cache;
+        }
+    }    // namespace
+
     void subgraph_netlist_decorator_init(py::module& m)
     {
         py::class_<SubgraphFunctionCache> py_subgraph_function_cache(m, "SubgraphFunctionCache", R"(
@@ -139,23 +160,12 @@ namespace hal
 
         py_subgraph_netlist_decorator.def(
             "make_subgraph_function_cache",
-            [](SubgraphNetlistDecorator& self, const std::vector<const Gate*>& subgraph_gates) -> std::unique_ptr<SubgraphFunctionCache> {
-                auto res = self.make_subgraph_function_cache(subgraph_gates);
-                if (res.is_ok())
-                {
-                    return std::make_unique<SubgraphFunctionCache>(res.get());
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while creating subgraph function cache:\n{}", res.get_error().get());
-                    return nullptr;
-                }
-            },
+            [](SubgraphNetlistDecorator& self, const std::vector<const Gate*>& subgraph_gates) -> py::object { return cache_to_python(self, self.make_subgraph_function_cache(subgraph_gates)); },
             py::arg("subgraph_gates"),
             R"(
             Create a cache for one specific subgraph, to be passed to ``get_subgraph_function`` or ``get_subgraph_function_inputs`` in place of the subgraph.
             The cache shares the Boolean functions and inputs computed for the gate outputs of the subgraph across calls, so that logic which several subgraph output nets have in common is traversed only once.
-            The cache belongs to the netlist of this decorator and must be dropped when the netlist is modified.
+            The cache belongs to the netlist of this decorator and must be dropped when the netlist is modified. It keeps this decorator and its netlist alive.
 
             :param list[hal_py.Gate] subgraph_gates: The gates making up the subgraph to consider.
             :returns: The cache on success, ``None`` otherwise.
@@ -164,23 +174,12 @@ namespace hal
 
         py_subgraph_netlist_decorator.def(
             "make_subgraph_function_cache",
-            [](SubgraphNetlistDecorator& self, const Module* subgraph_module) -> std::unique_ptr<SubgraphFunctionCache> {
-                auto res = self.make_subgraph_function_cache(subgraph_module);
-                if (res.is_ok())
-                {
-                    return std::make_unique<SubgraphFunctionCache>(res.get());
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while creating subgraph function cache:\n{}", res.get_error().get());
-                    return nullptr;
-                }
-            },
+            [](SubgraphNetlistDecorator& self, const Module* subgraph_module) -> py::object { return cache_to_python(self, self.make_subgraph_function_cache(subgraph_module)); },
             py::arg("subgraph_module"),
             R"(
             Create a cache for one specific subgraph, to be passed to ``get_subgraph_function`` or ``get_subgraph_function_inputs`` in place of the subgraph.
             The cache shares the Boolean functions and inputs computed for the gate outputs of the subgraph across calls, so that logic which several subgraph output nets have in common is traversed only once.
-            The cache belongs to the netlist of this decorator and must be dropped when the netlist is modified.
+            The cache belongs to the netlist of this decorator and must be dropped when the netlist is modified. It keeps this decorator and its netlist alive.
 
             :param hal_py.Module subgraph_module: The module making up the subgraph to consider, including the gates of all of its submodules.
             :returns: The cache on success, ``None`` otherwise.
