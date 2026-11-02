@@ -15,11 +15,14 @@ namespace hal
     {
         namespace
         {
+            // the Boolean function of each gate output pin, keyed by gate ID and pin
+            using GateFunctionCache = std::map<std::pair<u32, const GatePin*>, BooleanFunction>;
+
             Result<z3::expr> get_function_of_net(const std::vector<Gate*>& subgraph_gates,
                                                  const Net* net,
                                                  z3::context& ctx,
                                                  std::map<u32, z3::expr>& net_cache,
-                                                 std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache)
+                                                 GateFunctionCache& gate_cache)
             {
                 if (const auto it = net_cache.find(net->get_id()); it != net_cache.end())
                 {
@@ -111,7 +114,7 @@ namespace hal
                                                                const Net* net,
                                                                z3::context& ctx,
                                                                std::map<u32, z3::expr>& net_cache,
-                                                               std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache)
+                                                               GateFunctionCache& gate_cache)
             {
                 // check validity of subgraph_gates
                 if (subgraph_gates.empty())
@@ -148,7 +151,7 @@ namespace hal
         Result<z3::expr> get_subgraph_z3_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, z3::context& ctx)
         {
             std::map<u32, z3::expr> net_cache;
-            std::map<std::pair<u32, const GatePin*>, BooleanFunction> gate_cache;
+            GateFunctionCache gate_cache;
 
             return get_subgraph_z3_function_internal(subgraph_gates, subgraph_output, ctx, net_cache, gate_cache);
         }
@@ -156,7 +159,7 @@ namespace hal
         Result<std::vector<z3::expr>> get_subgraph_z3_functions(const std::vector<Gate*>& subgraph_gates, const std::vector<Net*>& subgraph_outputs, z3::context& ctx)
         {
             std::map<u32, z3::expr> net_cache;
-            std::map<std::pair<u32, const GatePin*>, BooleanFunction> gate_cache;
+            GateFunctionCache gate_cache;
 
             std::vector<z3::expr> results;
 
