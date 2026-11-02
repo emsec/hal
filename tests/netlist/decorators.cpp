@@ -1741,7 +1741,8 @@ namespace hal {
     }
 
     /**
-     * Test that a gate of the subgraph whose Boolean function cannot be built bounds the subgraph functions instead of failing them.
+     * Test that a gate of the subgraph whose Boolean function cannot be built in terms of nets bounds the subgraph functions instead of failing them,
+     * be it because of an input pin without a net or a gate parameter without a value.
      *
      * Functions: get_subgraph_function, get_subgraph_function_inputs
      */
@@ -1787,6 +1788,50 @@ namespace hal {
             EXPECT_EQ(cache.size(), 2);
             EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(n_and, cache), var(n_and)));
             EXPECT_EQ(cache.size(), 2);
+        }
+        {
+            NO_COUT_TEST_BLOCK;
+            auto gl = std::make_unique<GateLibrary>("imaginary_path", "parameter_gl");
+            ASSERT_NE(add_gate_type(gl.get(), "XOR2", {GateTypeProperty::combinational, GateTypeProperty::c_xor}, {"I0", "I1"}, {{"O", "I0 ^ I1"}}), nullptr);
+            GateType* mux_type = add_gate_type(gl.get(), "MUX_P", {GateTypeProperty::combinational, GateTypeProperty::c_mux}, {"I0", "I1"}, {{"O", "(SEL & I0) | (!SEL & I1)"}});
+            ASSERT_NE(mux_type, nullptr);
+            const auto sel = Parameter::Boolean("SEL", "false");
+            ASSERT_TRUE(sel.is_ok());
+            ASSERT_TRUE(mux_type->add_parameter(sel.get()).is_ok());
+            auto nl = std::make_unique<Netlist>(gl.get());
+
+            //  a, b --- g_mux (parameter SEL) --- n_mux --- g_xor --- o
+            //                                      c ------'
+            Gate* g_mux = nl->create_gate(mux_type, "g_mux");
+            Gate* g_xor = nl->create_gate(gl->get_gate_type_by_name("XOR2"), "g_xor");
+            Net* a      = nl->create_net("a");
+            a->add_destination(g_mux, "I0");
+            nl->mark_global_input_net(a);
+            Net* b = nl->create_net("b");
+            b->add_destination(g_mux, "I1");
+            nl->mark_global_input_net(b);
+            Net* c = nl->create_net("c");
+            c->add_destination(g_xor, "I1");
+            nl->mark_global_input_net(c);
+            Net* n_mux = test_utils::connect(nl.get(), g_mux, "O", g_xor, "I0", "n_mux");
+            Net* o     = nl->create_net("o");
+            o->add_source(g_xor, "O");
+
+            const SubgraphNetlistDecorator dec(*nl);
+            const std::vector<const Gate*> gates = {g_mux, g_xor};
+
+            // without a value for the parameter, the net driven by the multiplexer becomes a variable
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, o), var(n_mux) + " ^ " + var(c)));
+            const auto inputs = dec.get_subgraph_function_inputs(gates, o);
+            ASSERT_TRUE(inputs.is_ok());
+            EXPECT_EQ(inputs.get(), std::set<const Net*>({n_mux, c}));
+
+            // with a value, the multiplexer is composed
+            ASSERT_TRUE(g_mux->set_parameter(sel.get(), "true").is_ok());
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, o), var(a) + " ^ " + var(c)));
+            const auto inputs_with_value = dec.get_subgraph_function_inputs(gates, o);
+            ASSERT_TRUE(inputs_with_value.is_ok());
+            EXPECT_EQ(inputs_with_value.get(), std::set<const Net*>({a, c}));
         }
         TEST_END
     }

@@ -81,7 +81,7 @@ namespace hal
          * and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph,
          * at a net without a source, and at a global input net, the walk stops and the net becomes a variable of the function. Hence, flip-flops, memories, and gates
          * without a Boolean function bound the subgraph function even if they are part of the `subgraph_gates`.
-         * If the Boolean function of a gate cannot be built, e.g., because one of its input pins has no net, a warning is logged and the walk stops at that gate as well.
+         * If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
          * The variables of the resulting Boolean function are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
          * For repeated calls on the same subgraph, create a cache with `make_subgraph_function_cache` and pass it to `get_subgraph_function` instead.
          *
@@ -97,7 +97,7 @@ namespace hal
          * and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph,
          * at a net without a source, and at a global input net, the walk stops and the net becomes a variable of the function. Hence, flip-flops, memories, and gates
          * without a Boolean function bound the subgraph function even if they are part of the `subgraph_gates`.
-         * If the Boolean function of a gate cannot be built, e.g., because one of its input pins has no net, a warning is logged and the walk stops at that gate as well.
+         * If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
          * The variables of the resulting Boolean function are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
          * For repeated calls on the same subgraph, create a cache with `make_subgraph_function_cache` and pass it to `get_subgraph_function` instead.
          *
@@ -113,7 +113,7 @@ namespace hal
          * and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph,
          * at a net without a source, and at a global input net, the walk stops and the net becomes a variable of the function. Hence, flip-flops, memories, and gates
          * without a Boolean function bound the subgraph function even if they are part of the `subgraph_module`.
-         * If the Boolean function of a gate cannot be built, e.g., because one of its input pins has no net, a warning is logged and the walk stops at that gate as well.
+         * If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
          * The variables of the resulting Boolean function are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
          * For repeated calls on the same subgraph, create a cache with `make_subgraph_function_cache` and pass it to `get_subgraph_function` instead.
          *
@@ -162,7 +162,7 @@ namespace hal
          * and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph,
          * at a net without a source, and at a global input net, the walk stops and the net becomes a variable of the function. Hence, flip-flops, memories, and gates
          * without a Boolean function bound the subgraph function even if they are part of the subgraph of the `cache`.
-         * If the Boolean function of a gate cannot be built, e.g., because one of its input pins has no net, a warning is logged and the walk stops at that gate as well.
+         * If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
          * The variables of the resulting Boolean function are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
          * The Boolean functions computed for the gate outputs of the subgraph are stored in the `cache`, and those stored by earlier calls are reused
          * instead of being computed again. The `cache` must have been created for the netlist of this decorator.
@@ -180,7 +180,7 @@ namespace hal
          * function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without
          * a source, and at a global input net, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function
          * bound the subgraph function even if they are part of the `subgraph_gates`.
-         * If the Boolean function of a gate cannot be built, e.g., because one of its input pins has no net, a warning is logged and the walk stops at that gate as well.
+         * If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
          * For repeated calls on the same subgraph, create a cache with `make_subgraph_function_cache` and pass it to `get_subgraph_function_inputs` instead.
          *
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
@@ -196,7 +196,7 @@ namespace hal
          * function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without
          * a source, and at a global input net, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function
          * bound the subgraph function even if they are part of the `subgraph_gates`.
-         * If the Boolean function of a gate cannot be built, e.g., because one of its input pins has no net, a warning is logged and the walk stops at that gate as well.
+         * If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
          * For repeated calls on the same subgraph, create a cache with `make_subgraph_function_cache` and pass it to `get_subgraph_function_inputs` instead.
          *
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
@@ -212,7 +212,7 @@ namespace hal
          * function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without
          * a source, and at a global input net, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function
          * bound the subgraph function even if they are part of the `subgraph_module`.
-         * If the Boolean function of a gate cannot be built, e.g., because one of its input pins has no net, a warning is logged and the walk stops at that gate as well.
+         * If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
          * For repeated calls on the same subgraph, create a cache with `make_subgraph_function_cache` and pass it to `get_subgraph_function_inputs` instead.
          *
          * @param[in] subgraph_module - The module making up the subgraph to consider, including the gates of all of its submodules.
@@ -228,7 +228,7 @@ namespace hal
          * function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without
          * a source, and at a global input net, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function
          * bound the subgraph function even if they are part of the subgraph of the `cache`.
-         * If the Boolean function of a gate cannot be built, e.g., because one of its input pins has no net, a warning is logged and the walk stops at that gate as well.
+         * If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
          * The inputs determined for the gate outputs of the subgraph are stored in the `cache`, and those stored by earlier calls are reused
          * instead of being determined again. The `cache` must have been created for the netlist of this decorator.
          *
