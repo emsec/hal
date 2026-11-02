@@ -406,6 +406,48 @@ namespace hal
         return get_boolean_function(pin->get_name(), inlined, substitute_nets);
     }
 
+    bool Gate::has_boolean_function(const std::string& name) const
+    {
+        // follows the lookup of get_boolean_function
+        std::string internal_name = name;
+        if (internal_name.empty())
+        {
+            auto output_pins = m_type->get_output_pins();
+            if (output_pins.empty())
+            {
+                return false;
+            }
+            internal_name = output_pins.front()->get_name();
+        }
+
+        if (m_type->has_component_of_type(GateTypeComponent::ComponentType::lut))
+        {
+            if (const GatePin* pin = m_type->get_pin_by_name(internal_name); pin != nullptr && pin->get_type() == PinType::lut)
+            {
+                return true;
+            }
+        }
+
+        if (m_functions.find(internal_name) != m_functions.end())
+        {
+            return true;
+        }
+
+        const auto& map = m_type->get_boolean_functions();
+        return map.find(internal_name) != map.end();
+    }
+
+    bool Gate::has_boolean_function(const GatePin* pin) const
+    {
+        if (pin == nullptr)
+        {
+            // checks the first output pin, as get_boolean_function does
+            return has_boolean_function(std::string());
+        }
+
+        return has_boolean_function(pin->get_name());
+    }
+
     std::unordered_map<std::string, BooleanFunction> Gate::get_boolean_functions(bool only_custom_functions) const
     {
         std::unordered_map<std::string, BooleanFunction> result;

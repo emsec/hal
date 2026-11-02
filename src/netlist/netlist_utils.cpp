@@ -143,31 +143,24 @@ namespace hal
 
         Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache)
         {
+            UNUSED(cache);
+            return get_subgraph_function(net, subgraph_gates);
+        }
+
+        Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates)
+        {
             if (net == nullptr)
             {
                 return ERR("could not get subgraph function: net is a 'nullptr'");
             }
 
-            if (auto res = SubgraphNetlistDecorator(*net->get_netlist()).get_subgraph_function(subgraph_gates, net, cache); res.is_ok())
+            if (auto res = SubgraphNetlistDecorator(*net->get_netlist()).get_subgraph_function(subgraph_gates, net); res.is_ok())
             {
                 return res;
             }
             else
             {
                 return ERR(res.get_error());
-            }
-        }
-
-        Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates)
-        {
-            std::map<std::pair<u32, const GatePin*>, BooleanFunction> cache;
-            if (auto res = get_subgraph_function(net, subgraph_gates, cache); res.is_error())
-            {
-                return ERR(res.get_error());
-            }
-            else
-            {
-                return res;
             }
         }
 

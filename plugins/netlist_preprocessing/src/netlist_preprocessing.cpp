@@ -1004,25 +1004,37 @@ namespace hal
             // const std::unordered_set<Gate*> all_comb_gates_set = {all_comb_gates_vec.begin(), all_comb_gates_vec.end()};
 
             std::map<TreeFingerprint, std::set<Net*>> fingerprint_to_nets;
-            for (const auto& g : all_comb_gates_vec)
+            if (!all_comb_gates_vec.empty())
             {
-                for (const auto& out_ep : g->get_fan_out_endpoints())
+                // the cache shares the inputs of the logic that the output nets have in common between them
+                const auto subgraph_dec = SubgraphNetlistDecorator(*nl);
+                auto cache_res          = subgraph_dec.make_subgraph_function_cache(all_comb_gates_vec);
+                if (cache_res.is_error())
                 {
-                    // const auto non_comb_destinations = out_ep->get_net()->get_destinations([](const auto& in_ep){ return !in_ep->get_gate()->get_type()->has_property(GateTypeProperty::combinational);});
-                    // if (!non_comb_destinations.empty())
-                    {
-                        const auto& out_net = out_ep->get_net();
-                        auto inputs_res     = SubgraphNetlistDecorator(*nl).get_subgraph_function_inputs(all_comb_gates_vec, out_net);
-                        if (inputs_res.is_error())
-                        {
-                            return ERR_APPEND(inputs_res.get_error(),
-                                              "Unable to remove redundant logic trees: failed to gather inputs for net " + out_net->get_name() + " with ID " + std::to_string(out_net->get_id()));
-                        }
-                        TreeFingerprint tf;
-                        tf.external_inputs = inputs_res.get();
-                        // tf.external_inputs = SubgraphNetlistDecorator(*nl).get_subgraph_function(all_comb_gates_vec, out_net).get().simplify().get_variable_names();
+                    return ERR_APPEND(cache_res.get_error(), "Unable to remove redundant logic trees: failed to create subgraph function cache");
+                }
+                auto cache = cache_res.get();
 
-                        fingerprint_to_nets[tf].insert(out_net);
+                for (const auto& g : all_comb_gates_vec)
+                {
+                    for (const auto& out_ep : g->get_fan_out_endpoints())
+                    {
+                        // const auto non_comb_destinations = out_ep->get_net()->get_destinations([](const auto& in_ep){ return !in_ep->get_gate()->get_type()->has_property(GateTypeProperty::combinational);});
+                        // if (!non_comb_destinations.empty())
+                        {
+                            const auto& out_net = out_ep->get_net();
+                            auto inputs_res     = subgraph_dec.get_subgraph_function_inputs(out_net, cache);
+                            if (inputs_res.is_error())
+                            {
+                                return ERR_APPEND(inputs_res.get_error(),
+                                                  "Unable to remove redundant logic trees: failed to gather inputs for net " + out_net->get_name() + " with ID " + std::to_string(out_net->get_id()));
+                            }
+                            TreeFingerprint tf;
+                            tf.external_inputs = inputs_res.get();
+                            // tf.external_inputs = SubgraphNetlistDecorator(*nl).get_subgraph_function(all_comb_gates_vec, out_net).get().simplify().get_variable_names();
+
+                            fingerprint_to_nets[tf].insert(out_net);
+                        }
                     }
                 }
             }
