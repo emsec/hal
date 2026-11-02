@@ -288,6 +288,26 @@ namespace hal
             :rtype: hal_py.BooleanFunction or None
         )");
 
+        py_gate.def("has_boolean_function", py::overload_cast<const std::string&>(&Gate::has_boolean_function, py::const_), py::arg("name"), R"(
+            Check whether the gate has a Boolean function with the given name, i.e., whether ``get_boolean_function`` finds one.
+            This name can for example be an output pin of the gate or any other user-defined function name.
+            Every LUT output pin has a Boolean function, even if the LUT is not configured.
+
+            :param str name: The name.
+            :returns: ``True`` if the gate has a Boolean function with that name, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_gate.def("has_boolean_function", py::overload_cast<const GatePin*>(&Gate::has_boolean_function, py::const_), py::arg("pin"), R"(
+            Check whether the gate has a Boolean function for the given output pin, i.e., whether ``get_boolean_function`` finds one.
+            If pin is ``None``, the first output pin is checked.
+            Every LUT output pin has a Boolean function, even if the LUT is not configured.
+
+            :param hal_py.GatePin pin: The pin.
+            :returns: ``True`` if the gate has a Boolean function for the pin, ``False`` otherwise.
+            :rtype: bool
+        )");
+
         py_gate.def_property_readonly("boolean_functions", [](Gate* g) { return g->get_boolean_functions(); }, R"(
             A dictionary from function name to raw Boolean function for all boolean functions associated with this gate.
 

@@ -905,7 +905,7 @@ namespace hal
     /**
      * Testing the access on boolean function
      *
-     * Functions: get_boolean_function, get_boolean_functions, add_boolean_function
+     * Functions: get_boolean_function, get_boolean_functions, add_boolean_function, has_boolean_function
      */
     TEST_F(GateTest, check_boolean_function_access)
     {
@@ -917,6 +917,7 @@ namespace hal
 
             std::unordered_map<std::string, BooleanFunction> functions = test_gate->get_boolean_functions();
             EXPECT_EQ(functions, (std::unordered_map<std::string, BooleanFunction>({{"O", BooleanFunction::from_string("!I").get()}})));
+            EXPECT_FALSE(test_gate->has_boolean_function("new_bf"));
 
             test_gate->add_boolean_function("new_bf", BooleanFunction::Var("I"));
 
@@ -929,6 +930,12 @@ namespace hal
 
             // should be function of first output pin
             EXPECT_EQ(test_gate->get_boolean_function(), ~BooleanFunction::Var("I"));
+
+            // a function of the gate type, a custom function, and the first output pin
+            EXPECT_TRUE(test_gate->has_boolean_function("O"));
+            EXPECT_TRUE(test_gate->has_boolean_function(test_gate->get_type()->get_pin_by_name("O")));
+            EXPECT_TRUE(test_gate->has_boolean_function("new_bf"));
+            EXPECT_TRUE(test_gate->has_boolean_function(static_cast<const GatePin*>(nullptr)));
         }
         {
             auto nl = test_utils::create_empty_netlist();
@@ -981,6 +988,8 @@ namespace hal
             Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "test_gate");
 
             EXPECT_TRUE(test_gate->get_boolean_function("unknown_name").is_empty());
+            EXPECT_FALSE(test_gate->has_boolean_function("unknown_name"));
+            EXPECT_FALSE(test_gate->has_boolean_function(test_gate->get_type()->get_pin_by_name("I")));
         }
         {
             // Call the get_boolean_function function with no parameter, for a Gate with no outputs
@@ -988,6 +997,7 @@ namespace hal
             Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("RAM"), "test_gate");
 
             EXPECT_TRUE(test_gate->get_boolean_function().is_empty());
+            EXPECT_FALSE(test_gate->has_boolean_function(static_cast<const GatePin*>(nullptr)));
         }
         {
             auto nl = test_utils::create_empty_netlist();
@@ -1332,10 +1342,20 @@ namespace hal
     /**
      * Testing the access on the lut function of a lut Gate.
      *
-     * Functions: get_boolean_function, get_boolean_functions, add_boolean_function
+     * Functions: get_boolean_function, get_boolean_functions, add_boolean_function, has_boolean_function
      */
     TEST_F(GateTest, check_lut_function) {
         TEST_START
+        {
+            // A LUT output pin has a function even before the LUT is configured, an input pin does not
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
+            Gate* lut_gate = nl->create_gate(lut_type, "lut");
+
+            EXPECT_TRUE(lut_gate->has_boolean_function("O"));
+            EXPECT_TRUE(lut_gate->has_boolean_function(lut_type->get_pin_by_name("O")));
+            EXPECT_FALSE(lut_gate->has_boolean_function("I0"));
+        }
         {
             // Get the boolean function of the lut in different ways
             // is not taken into account!

@@ -229,29 +229,11 @@ namespace hal
             return OK(std::move(gate_set));
         }
 
-        bool has_boolean_function(const Gate* gate, const GatePin* pin)
-        {
-            const GateType* type = gate->get_type();
-            if (pin->get_type() == PinType::lut && type->has_component_of_type(GateTypeComponent::ComponentType::lut))
-            {
-                return true;
-            }
-
-            const auto& type_functions = type->get_boolean_functions();
-            if (type_functions.find(pin->get_name()) != type_functions.end())
-            {
-                return true;
-            }
-
-            const auto custom_functions = gate->get_boolean_functions(true);
-            return custom_functions.find(pin->get_name()) != custom_functions.end();
-        }
-
         // Whether the walk composes the function of the gate at the given output pin into the subgraph function.
         // If it does not, the net driven by that pin becomes a variable of the subgraph function.
         bool is_composed(const Gate* gate, const GatePin* pin, const GateSet& subgraph_gates)
         {
-            return subgraph_gates.find(gate) != subgraph_gates.end() && gate->get_type()->has_property(GateTypeProperty::combinational) && has_boolean_function(gate, pin);
+            return subgraph_gates.find(gate) != subgraph_gates.end() && gate->get_type()->has_property(GateTypeProperty::combinational) && gate->has_boolean_function(pin);
         }
 
         // Checks the subgraph output net, returns `true` if it is a global input net and hence the only input of its own subgraph function.

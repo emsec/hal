@@ -251,6 +251,26 @@ namespace hal
         Result<BooleanFunction> get_boolean_function(const GatePin* pin, bool inlined, bool substitute_nets) const;
 
         /**
+         * Check whether the gate has a Boolean function with the given name, i.e., whether `get_boolean_function` finds one.
+         * This name can for example be an output pin of the gate or any other user-defined function name.
+         * Every LUT output pin has a Boolean function, even if the LUT is not configured.
+         *
+         * @param[in] name - The name.
+         * @returns `true` if the gate has a Boolean function with that name, `false` otherwise.
+         */
+        bool has_boolean_function(const std::string& name) const;
+
+        /**
+         * Check whether the gate has a Boolean function for the given output pin, i.e., whether `get_boolean_function` finds one.
+         * If `pin` is a `nullptr`, the first output pin is checked.
+         * Every LUT output pin has a Boolean function, even if the LUT is not configured.
+         *
+         * @param[in] pin - The pin.
+         * @returns `true` if the gate has a Boolean function for the pin, `false` otherwise.
+         */
+        bool has_boolean_function(const GatePin* pin) const;
+
+        /**
          * Get a map from function name to raw Boolean function for all boolean functions associated with this gate.
          * For full control over inlining and net substitution use the `Result`-returning overload.
          *
