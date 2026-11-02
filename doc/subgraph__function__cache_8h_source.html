@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-236-gacaa6651c</span>
+   &#160;<span id="projectnumber">v4.5.0-248-g3017ad637</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -119,19 +119,61 @@ $(document).ready(function(){initNavTree('subgraph__function__cache_8h_source.ht
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="boolean__function_8h.html">hal_core/netlist/boolean_function.h</a>&quot;</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;utility&gt;</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">class </span>GatePin;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="group__decorators.html#ga06f1939cb6102436443a866a6a64056d">   50</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="group__decorators.html#ga06f1939cb6102436443a866a6a64056d">SubgraphFunctionCache</a> = std::map&lt;std::pair&lt;u32, const GatePin*&gt;, <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&gt;;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;set&gt;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;unordered_set&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;utility&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">class </span><a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">Gate</a>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">class </span>GatePin;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">class </span><a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca">Net</a>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">class </span>Netlist;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classhal_1_1_subgraph_function_cache.html">   53</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="code" href="classhal_1_1_subgraph_function_cache.html">SubgraphFunctionCache</a></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    {</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classhal_1_1_subgraph_function_cache.html#ad3c3f2a8a23df79d415f965a1995e2af">   56</a></span>&#160;        <a class="code" href="classhal_1_1_subgraph_function_cache.html#ad3c3f2a8a23df79d415f965a1995e2af">SubgraphFunctionCache</a>(<a class="code" href="classhal_1_1_subgraph_function_cache.html">SubgraphFunctionCache</a>&amp;&amp;)                 = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classhal_1_1_subgraph_function_cache.html#a5bd4acceb2e3e0400c234c16aa7edf38">   57</a></span>&#160;        <a class="code" href="classhal_1_1_subgraph_function_cache.html">SubgraphFunctionCache</a>&amp; <a class="code" href="classhal_1_1_subgraph_function_cache.html#a5bd4acceb2e3e0400c234c16aa7edf38">operator=</a>(<a class="code" href="classhal_1_1_subgraph_function_cache.html">SubgraphFunctionCache</a>&amp;&amp;)      = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classhal_1_1_subgraph_function_cache.html#ae658ceae0340147b7ea129ad38204f8e">   58</a></span>&#160;        <a class="code" href="classhal_1_1_subgraph_function_cache.html#ae658ceae0340147b7ea129ad38204f8e">SubgraphFunctionCache</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_subgraph_function_cache.html">SubgraphFunctionCache</a>&amp;)            = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classhal_1_1_subgraph_function_cache.html#af975f70d96eeb43317ff3f25346e372d">   59</a></span>&#160;        <a class="code" href="classhal_1_1_subgraph_function_cache.html">SubgraphFunctionCache</a>&amp; <a class="code" href="classhal_1_1_subgraph_function_cache.html#af975f70d96eeb43317ff3f25346e372d">operator=</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_subgraph_function_cache.html">SubgraphFunctionCache</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classhal_1_1_subgraph_function_cache.html#abae09f811bb758bf15ec6028a8b4bcd4">   66</a></span>&#160;        <span class="keywordtype">size_t</span> <a class="code" href="classhal_1_1_subgraph_function_cache.html#abae09f811bb758bf15ec6028a8b4bcd4">size</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <span class="keywordflow">return</span> m_functions.size();</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classhal_1_1_subgraph_function_cache.html#a45d42a3f458539720ee5691c6043b8fc">   72</a></span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classhal_1_1_subgraph_netlist_decorator.html">SubgraphNetlistDecorator</a>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <a class="code" href="classhal_1_1_subgraph_function_cache.html">SubgraphFunctionCache</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* netlist, std::unordered_set&lt;const Gate*&gt; subgraph_gates, std::unordered_set&lt;const Net*&gt; global_inputs)</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            : m_netlist(netlist), m_subgraph_gates(<a class="code" href="namespacestd.html">std</a>::move(subgraph_gates)), m_global_inputs(<a class="code" href="namespacestd.html">std</a>::move(global_inputs))</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        }</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keyword">const</span> <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* m_netlist;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        std::unordered_set&lt;const Gate*&gt; m_subgraph_gates;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        std::unordered_set&lt;const Net*&gt; m_global_inputs;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        std::map&lt;std::pair&lt;u32, const GatePin*&gt;, <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&gt; m_functions;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        std::map&lt;std::pair&lt;u32, const GatePin*&gt;, std::set&lt;const Net*&gt;&gt; m_inputs;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    };</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="ttc" id="aarch__linux_8h_html_a3541b40303f35100314d8bb7efd18371"><div class="ttname"><a href="arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a></div><div class="ttdeci">#define NETLIST_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00030">arch_linux.h:30</a></div></div>
 <div class="ttc" id="aboolean__function_8h_html"><div class="ttname"><a href="boolean__function_8h.html">boolean_function.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html"><div class="ttname"><a href="classhal_1_1_boolean_function.html">hal::BooleanFunction</a></div><div class="ttdef"><b>Definition:</b> <a href="boolean__function_8h_source.html#l00054">boolean_function.h:55</a></div></div>
+<div class="ttc" id="aclasshal_1_1_netlist_html"><div class="ttname"><a href="classhal_1_1_netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2netlist_2netlist_8h_source.html#l00055">netlist.h:56</a></div></div>
+<div class="ttc" id="aclasshal_1_1_subgraph_function_cache_html"><div class="ttname"><a href="classhal_1_1_subgraph_function_cache.html">hal::SubgraphFunctionCache</a></div><div class="ttdef"><b>Definition:</b> <a href="subgraph__function__cache_8h_source.html#l00053">subgraph_function_cache.h:54</a></div></div>
+<div class="ttc" id="aclasshal_1_1_subgraph_function_cache_html_a5bd4acceb2e3e0400c234c16aa7edf38"><div class="ttname"><a href="classhal_1_1_subgraph_function_cache.html#a5bd4acceb2e3e0400c234c16aa7edf38">hal::SubgraphFunctionCache::operator=</a></div><div class="ttdeci">SubgraphFunctionCache &amp; operator=(SubgraphFunctionCache &amp;&amp;)=default</div></div>
+<div class="ttc" id="aclasshal_1_1_subgraph_function_cache_html_abae09f811bb758bf15ec6028a8b4bcd4"><div class="ttname"><a href="classhal_1_1_subgraph_function_cache.html#abae09f811bb758bf15ec6028a8b4bcd4">hal::SubgraphFunctionCache::size</a></div><div class="ttdeci">size_t size() const</div><div class="ttdef"><b>Definition:</b> <a href="subgraph__function__cache_8h_source.html#l00066">subgraph_function_cache.h:66</a></div></div>
+<div class="ttc" id="aclasshal_1_1_subgraph_function_cache_html_ad3c3f2a8a23df79d415f965a1995e2af"><div class="ttname"><a href="classhal_1_1_subgraph_function_cache.html#ad3c3f2a8a23df79d415f965a1995e2af">hal::SubgraphFunctionCache::SubgraphFunctionCache</a></div><div class="ttdeci">SubgraphFunctionCache(SubgraphFunctionCache &amp;&amp;)=default</div></div>
+<div class="ttc" id="aclasshal_1_1_subgraph_function_cache_html_ae658ceae0340147b7ea129ad38204f8e"><div class="ttname"><a href="classhal_1_1_subgraph_function_cache.html#ae658ceae0340147b7ea129ad38204f8e">hal::SubgraphFunctionCache::SubgraphFunctionCache</a></div><div class="ttdeci">SubgraphFunctionCache(const SubgraphFunctionCache &amp;)=delete</div></div>
+<div class="ttc" id="aclasshal_1_1_subgraph_function_cache_html_af975f70d96eeb43317ff3f25346e372d"><div class="ttname"><a href="classhal_1_1_subgraph_function_cache.html#af975f70d96eeb43317ff3f25346e372d">hal::SubgraphFunctionCache::operator=</a></div><div class="ttdeci">SubgraphFunctionCache &amp; operator=(const SubgraphFunctionCache &amp;)=delete</div></div>
+<div class="ttc" id="aclasshal_1_1_subgraph_netlist_decorator_html"><div class="ttname"><a href="classhal_1_1_subgraph_netlist_decorator.html">hal::SubgraphNetlistDecorator</a></div><div class="ttdef"><b>Definition:</b> <a href="subgraph__netlist__decorator_8h_source.html#l00041">subgraph_netlist_decorator.h:42</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
-<div class="ttc" id="agroup__decorators_html_ga06f1939cb6102436443a866a6a64056d"><div class="ttname"><a href="group__decorators.html#ga06f1939cb6102436443a866a6a64056d">hal::SubgraphFunctionCache</a></div><div class="ttdeci">std::map&lt; std::pair&lt; u32, const GatePin * &gt;, BooleanFunction &gt; SubgraphFunctionCache</div><div class="ttdef"><b>Definition:</b> <a href="subgraph__function__cache_8h_source.html#l00050">subgraph_function_cache.h:50</a></div></div>
+<div class="ttc" id="agroup__gui_html_ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca"><div class="ttname"><a href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca">hal::ItemType::Net</a></div><div class="ttdeci">@ Net</div></div>
+<div class="ttc" id="agroup__gui_html_ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16"><div class="ttname"><a href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ItemType::Gate</a></div><div class="ttdeci">@ Gate</div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
+<div class="ttc" id="anamespacestd_html"><div class="ttname"><a href="namespacestd.html">std</a></div><div class="ttdef"><b>Definition:</b> <a href="special__strings_8h_source.html#l00149">special_strings.h:150</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

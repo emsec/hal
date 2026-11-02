@@ -1,3 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhal_1_1_simulation_input.html" title=" " alt="" coords="5,5,159,32"/>
+<area shape="rect" id="node1" href="$classhal_1_1_simulation_engine_factory.html" title=" " alt="" coords="5,56,216,83"/>
+<area shape="rect" id="node2" href="$classhal_1_1_dummy_engine_factory.html" title=" " alt="" coords="269,5,462,32"/>
+<area shape="rect" id="node3" href="$classhal_1_1_netlist_simulator_factory.html" title=" " alt="" coords="264,56,467,83"/>
+<area shape="rect" id="node4" href="$classhal_1_1verilator_1_1_verilator_engine_factory.html" title=" " alt="" coords="281,107,449,149"/>
 </map>

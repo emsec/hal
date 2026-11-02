@@ -163,6 +163,11 @@ var namespacehal =
       [ "write", "namespacehal_1_1netlist__writer__manager.html#a1bb87c0a35221bb18a28e97611b71a12", null ]
     ] ],
     [ "plugin_manager", "namespacehal_1_1plugin__manager.html", "namespacehal_1_1plugin__manager" ],
+    [ "python_bindings_detail", "namespacehal_1_1python__bindings__detail.html", [
+      [ "existing_wrapper", "namespacehal_1_1python__bindings__detail.html#a51d4f9a1e3bd5730f626b41f1f2f18e7", null ],
+      [ "keep_owner_alive", "namespacehal_1_1python__bindings__detail.html#a87b5266ffcae4637294892c4e38f4cbd", null ],
+      [ "owner_of", "namespacehal_1_1python__bindings__detail.html#ac1e6aab1a379aadd0322f626d54ebe64", null ]
+    ] ],
     [ "QtCompat", "namespacehal_1_1_qt_compat.html", [
       [ "dateToLocaleString", "namespacehal_1_1_qt_compat.html#a2886a7a64ffbb6e3a4454f3ac67756c8", null ],
       [ "desktopAvailableGeometry", "namespacehal_1_1_qt_compat.html#a4d474b2fbbfee7f0e061ed198a0f1bcf", null ],
@@ -229,6 +234,7 @@ var namespacehal =
     [ "NetlistModificationDecorator", "classhal_1_1_netlist_modification_decorator.html", "classhal_1_1_netlist_modification_decorator" ],
     [ "TraversalCache", "classhal_1_1_traversal_cache.html", "classhal_1_1_traversal_cache" ],
     [ "NetlistTraversalDecorator", "classhal_1_1_netlist_traversal_decorator.html", "classhal_1_1_netlist_traversal_decorator" ],
+    [ "SubgraphFunctionCache", "classhal_1_1_subgraph_function_cache.html", "classhal_1_1_subgraph_function_cache" ],
     [ "SubgraphNetlistDecorator", "classhal_1_1_subgraph_netlist_decorator.html", "classhal_1_1_subgraph_netlist_decorator" ],
     [ "Endpoint", "classhal_1_1_endpoint.html", "classhal_1_1_endpoint" ],
     [ "NetlistEvent", "classhal_1_1_netlist_event.html", "classhal_1_1_netlist_event" ],
@@ -281,6 +287,7 @@ var namespacehal =
     [ "UIPluginInterface", "classhal_1_1_u_i_plugin_interface.html", "classhal_1_1_u_i_plugin_interface" ],
     [ "PluginParameter", "classhal_1_1_plugin_parameter.html", "classhal_1_1_plugin_parameter" ],
     [ "RuntimeLibrary", "classhal_1_1_runtime_library.html", "classhal_1_1_runtime_library" ],
+    [ "borrowed", "structhal_1_1borrowed.html", null ],
     [ "CallbackHook", "classhal_1_1_callback_hook.html", null ],
     [ "CallbackHook< R(ArgTypes...)>", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4" ],
     [ "EnumStrings", "structhal_1_1_enum_strings.html", "structhal_1_1_enum_strings" ],
@@ -875,7 +882,7 @@ var namespacehal =
     [ "handle_ptr_t", "namespacehal.html#a974188318f6c3613e6fa1993cea21a1e", null ],
     [ "instantiate_plugin_function", "namespacehal.html#af1388a5c4377a81f3215cac5d274fd60", null ],
     [ "lib_fn_ptr_t", "namespacehal.html#a618c6a05a78f79aa047ae4309ea75f3a", null ],
-    [ "SubgraphFunctionCache", "group__decorators.html#ga06f1939cb6102436443a866a6a64056d", null ],
+    [ "RawPtrWrapper", "group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c", null ],
     [ "AsyncSetResetBehavior", "namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83", [
       [ "L", "namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ad20caec3b48a1eef164cb4ca81ba2587", null ],
       [ "H", "namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ac1d9f50f86825a1a2302ec2449c17196", null ],

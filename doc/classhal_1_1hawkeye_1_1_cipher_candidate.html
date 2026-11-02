@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-236-gacaa6651c</span>
+   &#160;<span id="projectnumber">v4.5.0-248-g3017ad637</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -467,7 +467,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Creates one module holding the entire candidate, a submodule holding its state register, and one submodule per identified S-box holding its combinational gates. S-boxes that were not identified are skipped, as are identified S-boxes that overlap an S-box module already created, since a gate belongs to exactly one module. Every skipped S-box is reported to the log.</p>
 <dl class="section return"><dt>Returns</dt><dd>The module holding the candidate on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="cipher__candidate_8cpp_source.html#l01209">1209</a> of file <a class="el" href="cipher__candidate_8cpp_source.html">cipher_candidate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="cipher__candidate_8cpp_source.html#l01214">1214</a> of file <a class="el" href="cipher__candidate_8cpp_source.html">cipher_candidate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00589">hal::Netlist::create_module()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="cipher__candidate_8cpp_source.html#l00294">get_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00610">hal::Netlist::get_top_module()</a>, <a class="el" href="namespacehal_1_1hawkeye.html#abe2c580d4bc36a01b78d5f0bcb614aa1aa0d5c22a0385001fa00b5a112fcbb79e">hal::hawkeye::identified</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
@@ -585,7 +585,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="cipher__candidate_8cpp_source.html#l00294">294</a> of file <a class="el" href="cipher__candidate_8cpp_source.html">cipher_candidate.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="cipher__candidate_8cpp_source.html#l00662">build_round_function()</a>, <a class="el" href="cipher__candidate_8cpp_source.html#l01209">create_modules()</a>, <a class="el" href="cipher__candidate_8cpp_source.html#l00355">locate_sboxes()</a>, and <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00025">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="cipher__candidate_8cpp_source.html#l00662">build_round_function()</a>, <a class="el" href="cipher__candidate_8cpp_source.html#l01214">create_modules()</a>, <a class="el" href="cipher__candidate_8cpp_source.html#l00355">locate_sboxes()</a>, and <a class="el" href="plugins_2hawkeye_2python_2python__bindings_8cpp_source.html#l00025">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -990,7 +990,7 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The name of the S-box on success and an empty string if it is not contained in the database, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="cipher__candidate_8cpp_source.html#l01164">1164</a> of file <a class="el" href="cipher__candidate_8cpp_source.html">cipher_candidate.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="cipher__candidate_8cpp_source.html#l01169">1169</a> of file <a class="el" href="cipher__candidate_8cpp_source.html">cipher_candidate.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>.</p>
 

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-236-gacaa6651c</span>
+   &#160;<span id="projectnumber">v4.5.0-248-g3017ad637</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -131,7 +131,7 @@ $(document).ready(function(){initNavTree('deprecated.html',''); initResizable();
 <dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#a91bb261a58a12d895627aa4d55a67e8c">hal::netlist_utils::get_shortest_path</a>  (<a class="el" href="classhal_1_1_gate.html">Gate</a> *start_gate, <a class="el" href="classhal_1_1_gate.html">Gate</a> *end_gate, bool search_both_directions=false)</dt>
 <dd><a class="anchor" id="_deprecated000022"></a>This function is deprecated, use <code><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a48225221197ade6cf2bda52593c91392">NetlistTraversalDecorator::get_shortest_path</a></code> instead.  </dd>
 <dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#a2b896d1beaf904d43b220b7a80e6e7e3">hal::netlist_utils::get_subgraph_function</a>  (const <a class="el" href="classhal_1_1_net.html">Net</a> *net, const std::vector&lt; const Gate * &gt; &amp;subgraph_gates, std::map&lt; std::pair&lt; u32, const GatePin * &gt;, <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt; &amp;cache)</dt>
-<dd><a class="anchor" id="_deprecated000002"></a> Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net. The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]'). Utilizes a cache for speedup on consecutive calls. </dd>
+<dd><a class="anchor" id="_deprecated000002"></a> Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net. The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]'). The cache is neither read nor filled, as its entries do not record the subgraph they were computed for. Use <code><a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a7072850e628f72212706ae5b8bbb8a52">SubgraphNetlistDecorator::make_subgraph_function_cache</a></code> to share results across calls. </dd>
 <dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#a1ead75d8378f342e967ed7cd3a538bbc">hal::netlist_utils::get_subgraph_function</a>  (const <a class="el" href="classhal_1_1_net.html">Net</a> *net, const std::vector&lt; const Gate * &gt; &amp;subgraph_gates)</dt>
 <dd><a class="anchor" id="_deprecated000003"></a> Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net. The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]'). </dd>
 <dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#a4cf477c0c0dfc61a6187d79d38a3ef4d">hal::netlist_utils::remove_buffers</a>  (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist, bool analyze_inputs=false)</dt>

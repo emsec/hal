@@ -44,6 +44,8 @@ var classhal_1_1_gate =
     [ "get_type", "classhal_1_1_gate.html#a24e1a29c3fc812588acb673c214af128", null ],
     [ "get_unique_predecessors", "classhal_1_1_gate.html#a4f68f7de2370c93c085ecc0c9a3cba26", null ],
     [ "get_unique_successors", "classhal_1_1_gate.html#a1cc4bd8e5e6b50bcee142d503ce63b5a", null ],
+    [ "has_boolean_function", "classhal_1_1_gate.html#aae76d8e34a605a008b9c0f7d5ac5b5ac", null ],
+    [ "has_boolean_function", "classhal_1_1_gate.html#ab0869e6701b73fd56d65c592cced6b1c", null ],
     [ "has_location", "classhal_1_1_gate.html#a773848569c5f30d2a21b73ae23d60650", null ],
     [ "is_fan_in_net", "classhal_1_1_gate.html#a0d042c1370a4f2e9a414aa3f11333193", null ],
     [ "is_fan_out_net", "classhal_1_1_gate.html#a09c328d37b55b1f566048904599505e7", null ],

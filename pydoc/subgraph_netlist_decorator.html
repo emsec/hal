@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Subgraph Netlist Decorator &mdash; hal_py v4.5.0-236-gacaa6651c documentation</title>
+  <title>Subgraph Netlist Decorator &mdash; hal_py v4.5.0-248-g3017ad637 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-236-gacaa6651c
+                v4.5.0-248-g3017ad637
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -154,7 +154,7 @@
 <div><p>Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.Module subgraph_module</dt>
-<dd class="field-odd"><p>The module making up the subgraph that shall be copied from the netlist.</p>
+<dd class="field-odd"><p>The module making up the subgraph that shall be copied from the netlist, including the gates of all of its submodules.</p>
 </dd>
 <dt class="field-even">param bool all_global_io</dt>
 <dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to mark all nets as global input or output that lost at least one source or destination in the copied netlist, <code class="docutils literal notranslate"><span class="pre">False</span></code> to only mark them if all sources or destinations were removed. Global inputs and outputs of the parent netlist will always also be annotated as global inputs or outputs. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
@@ -176,34 +176,13 @@
 <span class="sig-name descname"><span class="pre">get_subgraph_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SubgraphNetlistDecorator.get_subgraph_function" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p>get_subgraph_function(self: hal_py.SubgraphNetlistDecorator, subgraph_gates: List[hal_py.Gate], subgraph_output: hal_py.Net, cache: hal_py.SubgraphFunctionCache) -&gt; Optional[hal_py.BooleanFunction]</p>
-<blockquote>
-<div><p>Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
-The variables of the resulting Boolean function are created from the subgraph input nets using ‘BooleanFunctionNetDecorator.get_boolean_variable’.
-Utilizes a cache for speedup on consecutive calls.</p>
-<dl class="field-list simple">
-<dt class="field-odd">param list[hal_py.Gate] subgraph_gates</dt>
-<dd class="field-odd"><p>The gates making up the subgraph to consider.</p>
-</dd>
-<dt class="field-even">param hal_py.Net subgraph_output</dt>
-<dd class="field-even"><p>The subgraph output net for which to generate the Boolean function.</p>
-</dd>
-<dt class="field-odd">param hal_py.SubgraphFunctionCache cache</dt>
-<dd class="field-odd"><p>Cache to speed up consecutive computations. The cache is filled by this function.</p>
-</dd>
-<dt class="field-even">returns</dt>
-<dd class="field-even"><p>The combined Boolean function of the subgraph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
-</dd>
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p>hal_py.BooleanFunction or None</p>
-</dd>
-</dl>
-</div></blockquote>
-</li>
 <li><p>get_subgraph_function(self: hal_py.SubgraphNetlistDecorator, subgraph_gates: List[hal_py.Gate], subgraph_output: hal_py.Net) -&gt; Optional[hal_py.BooleanFunction]</p>
 <blockquote>
-<div><p>Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
-The variables of the resulting Boolean function are created from the subgraph input nets using ‘BooleanFunctionNetDecorator.get_boolean_variable’.</p>
+<div><p>Get the combined Boolean function of a subgraph starting at the source of the provided subgraph output net.
+The function is composed backwards through the gates of the subgraph. A gate is composed into it only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without a source, and at a global input net, the walk stops and the net becomes a variable of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the <code class="docutils literal notranslate"><span class="pre">subgraph_gates</span></code>.
+If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
+The variables of the resulting Boolean function are created from the subgraph input nets using <code class="docutils literal notranslate"><span class="pre">BooleanFunctionNetDecorator.get_boolean_variable</span></code>.
+For repeated calls on the same subgraph, create a cache with <code class="docutils literal notranslate"><span class="pre">make_subgraph_function_cache</span></code> and pass it to <code class="docutils literal notranslate"><span class="pre">get_subgraph_function</span></code> instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[hal_py.Gate] subgraph_gates</dt>
 <dd class="field-odd"><p>The gates making up the subgraph to consider.</p>
@@ -220,38 +199,50 @@ The variables of the resulting Boolean function are created from the subgraph in
 </dl>
 </div></blockquote>
 </li>
-<li><p>get_subgraph_function(self: hal_py.SubgraphNetlistDecorator, subgraph_module: hal_py.Module, subgraph_output: hal_py.Net, cache: hal_py.SubgraphFunctionCache) -&gt; Optional[hal_py.BooleanFunction]</p>
+<li><p>get_subgraph_function(self: hal_py.SubgraphNetlistDecorator, subgraph_module: hal_py.Module, subgraph_output: hal_py.Net) -&gt; Optional[hal_py.BooleanFunction]</p>
 <blockquote>
-<div><p>Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
-The variables of the resulting Boolean function are created from the subgraph input nets using ‘BooleanFunctionNetDecorator.get_boolean_variable’.
-Utilizes a cache for speedup on consecutive calls.</p>
+<div><p>Get the combined Boolean function of a subgraph starting at the source of the provided subgraph output net.
+The function is composed backwards through the gates of the subgraph. A gate is composed into it only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without a source, and at a global input net, the walk stops and the net becomes a variable of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the <code class="docutils literal notranslate"><span class="pre">subgraph_module</span></code>.
+If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
+The variables of the resulting Boolean function are created from the subgraph input nets using <code class="docutils literal notranslate"><span class="pre">BooleanFunctionNetDecorator.get_boolean_variable</span></code>.
+For repeated calls on the same subgraph, create a cache with <code class="docutils literal notranslate"><span class="pre">make_subgraph_function_cache</span></code> and pass it to <code class="docutils literal notranslate"><span class="pre">get_subgraph_function</span></code> instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.Module subgraph_module</dt>
-<dd class="field-odd"><p>The module making up the subgraph to consider.</p>
+<dd class="field-odd"><p>The module making up the subgraph to consider, including the gates of all of its submodules.</p>
 </dd>
 <dt class="field-even">param hal_py.Net subgraph_output</dt>
 <dd class="field-even"><p>The subgraph output net for which to generate the Boolean function.</p>
 </dd>
-<dt class="field-odd">param hal_py.SubgraphFunctionCache cache</dt>
-<dd class="field-odd"><p>Cache to speed up consecutive computations. The cache is filled by this function.</p>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The combined Boolean function of the subgraph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
-<dt class="field-even">returns</dt>
-<dd class="field-even"><p>The combined Boolean function of the subgraph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
-</dd>
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p>hal_py.BooleanFunction or None</p>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>hal_py.BooleanFunction or None</p>
 </dd>
 </dl>
 </div></blockquote>
 </li>
-<li><p>get_subgraph_function(self: hal_py.SubgraphNetlistDecorator, subgraph_module: hal_py.Module, subgraph_output: hal_py.Net) -&gt; Optional[hal_py.BooleanFunction]</p>
+<li><p>get_subgraph_function(self: hal_py.SubgraphNetlistDecorator, subgraph_output: hal_py.Net, cache: hal_py.SubgraphFunctionCache) -&gt; Optional[hal_py.BooleanFunction]</p>
 <blockquote>
-<div><p>Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
-The variables of the resulting Boolean function are created from the subgraph input nets using ‘BooleanFunctionNetDecorator.get_boolean_variable’.</p>
-<p>:param hal_py.Module subgraph_module:The module making up the subgraph to consider.
-:param hal_py.Net subgraph_output: The subgraph output net for which to generate the Boolean function.
-:returns: The combined Boolean function of the subgraph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.
-:rtype: hal_py.BooleanFunction or None</p>
+<div><p>Get the combined Boolean function of the subgraph of the cache starting at the source of the provided subgraph output net.
+The function is composed backwards through the gates of the subgraph. A gate is composed into it only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without a source, and at a global input net, the walk stops and the net becomes a variable of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the subgraph of the <code class="docutils literal notranslate"><span class="pre">cache</span></code>.
+If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
+The variables of the resulting Boolean function are created from the subgraph input nets using <code class="docutils literal notranslate"><span class="pre">BooleanFunctionNetDecorator.get_boolean_variable</span></code>.
+The Boolean functions computed for the gate outputs of the subgraph are stored in the <code class="docutils literal notranslate"><span class="pre">cache</span></code>, and those stored by earlier calls are reused instead of being computed again. The <code class="docutils literal notranslate"><span class="pre">cache</span></code> must have been created for the netlist of this decorator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Net subgraph_output</dt>
+<dd class="field-odd"><p>The subgraph output net for which to generate the Boolean function.</p>
+</dd>
+<dt class="field-even">param hal_py.SubgraphFunctionCache cache</dt>
+<dd class="field-even"><p>The cache holding the subgraph and the Boolean functions computed for it.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The combined Boolean function of the subgraph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>hal_py.BooleanFunction or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 </ol>
@@ -264,14 +255,17 @@ The variables of the resulting Boolean function are created from the subgraph in
 <ol class="arabic">
 <li><p>get_subgraph_function_inputs(self: hal_py.SubgraphNetlistDecorator, subgraph_gates: List[hal_py.Gate], subgraph_output: hal_py.Net) -&gt; Optional[Set[hal_py.Net]]</p>
 <blockquote>
-<div><p>Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
-This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.</p>
+<div><p>Get the inputs of the combined Boolean function of a subgraph starting at the source of the provided subgraph output net.
+This does not actually build the Boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
+The subgraph is traversed backwards through its gates. A gate is traversed only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without a source, and at a global input net, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the <code class="docutils literal notranslate"><span class="pre">subgraph_gates</span></code>.
+If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
+For repeated calls on the same subgraph, create a cache with <code class="docutils literal notranslate"><span class="pre">make_subgraph_function_cache</span></code> and pass it to <code class="docutils literal notranslate"><span class="pre">get_subgraph_function_inputs</span></code> instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[hal_py.Gate] subgraph_gates</dt>
-<dd class="field-odd"><p>The subgraph gates making up the subgraph to consider.</p>
+<dd class="field-odd"><p>The gates making up the subgraph to consider.</p>
 </dd>
 <dt class="field-even">param hal_py.Net subgraph_output</dt>
-<dd class="field-even"><p>The subgraph output net from which to start the back propagation from.</p>
+<dd class="field-even"><p>The subgraph output net from which to start the back propagation.</p>
 </dd>
 <dt class="field-odd">returns</dt>
 <dd class="field-odd"><p>The input nets that would be the input for the subgraph function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
@@ -284,12 +278,92 @@ This does not actually build the boolean function but only determines the inputs
 </li>
 <li><p>get_subgraph_function_inputs(self: hal_py.SubgraphNetlistDecorator, subgraph_module: hal_py.Module, subgraph_output: hal_py.Net) -&gt; Optional[Set[hal_py.Net]]</p>
 <blockquote>
-<div><p>Get the inputs of the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
-This does not actually build the boolean function but only determines the inputs the subgraph function would have, which is a lot faster.</p>
-<p>:param hal_py.Module subgraph_module:The module making up the subgraph to consider.
-:param hal_py.Net subgraph_output: The subgraph output net from which to start the back propagation from.
-:returns: The input nets that would be the input for the subgraph function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.
-:rtype: set(hal_py.Net) or None</p>
+<div><p>Get the inputs of the combined Boolean function of a subgraph starting at the source of the provided subgraph output net.
+This does not actually build the Boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
+The subgraph is traversed backwards through its gates. A gate is traversed only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without a source, and at a global input net, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the <code class="docutils literal notranslate"><span class="pre">subgraph_module</span></code>.
+If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
+For repeated calls on the same subgraph, create a cache with <code class="docutils literal notranslate"><span class="pre">make_subgraph_function_cache</span></code> and pass it to <code class="docutils literal notranslate"><span class="pre">get_subgraph_function_inputs</span></code> instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Module subgraph_module</dt>
+<dd class="field-odd"><p>The module making up the subgraph to consider, including the gates of all of its submodules.</p>
+</dd>
+<dt class="field-even">param hal_py.Net subgraph_output</dt>
+<dd class="field-even"><p>The subgraph output net from which to start the back propagation.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The input nets that would be the input for the subgraph function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>set(hal_py.Net) or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>get_subgraph_function_inputs(self: hal_py.SubgraphNetlistDecorator, subgraph_output: hal_py.Net, cache: hal_py.SubgraphFunctionCache) -&gt; Optional[Set[hal_py.Net]]</p>
+<blockquote>
+<div><p>Get the inputs of the combined Boolean function of the subgraph of the cache starting at the source of the provided subgraph output net.
+This does not actually build the Boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
+The subgraph is traversed backwards through its gates. A gate is traversed only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without a source, and at a global input net, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the subgraph of the <code class="docutils literal notranslate"><span class="pre">cache</span></code>.
+If the Boolean function of a gate cannot be built in terms of nets, e.g., because one of its input pins has no net or a gate parameter it depends on has no value, a warning is logged and the walk stops at that gate as well.
+The inputs determined for the gate outputs of the subgraph are stored in the <code class="docutils literal notranslate"><span class="pre">cache</span></code>, and those stored by earlier calls are reused instead of being determined again. The <code class="docutils literal notranslate"><span class="pre">cache</span></code> must have been created for the netlist of this decorator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Net subgraph_output</dt>
+<dd class="field-odd"><p>The subgraph output net from which to start the back propagation.</p>
+</dd>
+<dt class="field-even">param hal_py.SubgraphFunctionCache cache</dt>
+<dd class="field-even"><p>The cache holding the subgraph and the inputs determined for it.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The input nets that would be the input for the subgraph function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>set(hal_py.Net) or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SubgraphNetlistDecorator.make_subgraph_function_cache">
+<span class="sig-name descname"><span class="pre">make_subgraph_function_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SubgraphNetlistDecorator.make_subgraph_function_cache" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p>make_subgraph_function_cache(self: hal_py.SubgraphNetlistDecorator, subgraph_gates: List[hal_py.Gate]) -&gt; object</p>
+<blockquote>
+<div><p>Create a cache for one specific subgraph, to be passed to <code class="docutils literal notranslate"><span class="pre">get_subgraph_function</span></code> or <code class="docutils literal notranslate"><span class="pre">get_subgraph_function_inputs</span></code> in place of the subgraph.
+The cache shares the Boolean functions and inputs computed for the gate outputs of the subgraph across calls, so that logic which several subgraph output nets have in common is traversed only once.
+The cache belongs to the netlist of this decorator and must be dropped when the netlist is modified. It keeps this decorator and its netlist alive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param list[hal_py.Gate] subgraph_gates</dt>
+<dd class="field-odd"><p>The gates making up the subgraph to consider.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The cache on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>hal_py.SubgraphFunctionCache or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>make_subgraph_function_cache(self: hal_py.SubgraphNetlistDecorator, subgraph_module: hal_py.Module) -&gt; object</p>
+<blockquote>
+<div><p>Create a cache for one specific subgraph, to be passed to <code class="docutils literal notranslate"><span class="pre">get_subgraph_function</span></code> or <code class="docutils literal notranslate"><span class="pre">get_subgraph_function_inputs</span></code> in place of the subgraph.
+The cache shares the Boolean functions and inputs computed for the gate outputs of the subgraph across calls, so that logic which several subgraph output nets have in common is traversed only once.
+The cache belongs to the netlist of this decorator and must be dropped when the netlist is modified. It keeps this decorator and its netlist alive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Module subgraph_module</dt>
+<dd class="field-odd"><p>The module making up the subgraph to consider, including the gates of all of its submodules.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The cache on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>hal_py.SubgraphFunctionCache or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 </ol>
@@ -300,15 +374,8 @@ This does not actually build the boolean function but only determines the inputs
 <dl class="py class">
 <dt class="sig sig-object py" id="hal_py.SubgraphFunctionCache">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hal_py.</span></span><span class="sig-name descname"><span class="pre">SubgraphFunctionCache</span></span><a class="headerlink" href="#hal_py.SubgraphFunctionCache" title="Permalink to this definition"></a></dt>
-<dd><p>Cache for the Boolean functions that <code class="docutils literal notranslate"><span class="pre">SubgraphNetlistDecorator.get_subgraph_function</span></code> computes for the output pins of gates.
-Passing the same cache to consecutive calls avoids recomputing logic that several subgraphs share.
-The cache is filled by these calls and must not be reused after the netlist has been modified.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="hal_py.SubgraphFunctionCache.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SubgraphFunctionCache" title="hal_py.SubgraphFunctionCache"><span class="pre">hal_py.SubgraphFunctionCache</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.SubgraphFunctionCache.__init__" title="Permalink to this definition"></a></dt>
-<dd><p>Construct a new, empty cache.</p>
-</dd></dl>
-
+<dd><p>A reusable store for the Boolean functions that <code class="docutils literal notranslate"><span class="pre">SubgraphNetlistDecorator.get_subgraph_function</span></code> computes and the inputs that <code class="docutils literal notranslate"><span class="pre">SubgraphNetlistDecorator.get_subgraph_function_inputs</span></code> determines for the output pins of the gates of one specific subgraph.</p>
+<p>The subgraph a cache belongs to is sealed in when it is created and the cache can only ever be used for exactly that subgraph. Create one with <code class="docutils literal notranslate"><span class="pre">SubgraphNetlistDecorator.make_subgraph_function_cache</span></code> and drop it when the netlist is modified.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.SubgraphFunctionCache.__len__">
 <span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SubgraphFunctionCache" title="hal_py.SubgraphFunctionCache"><span class="pre">hal_py.SubgraphFunctionCache</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#hal_py.SubgraphFunctionCache.__len__" title="Permalink to this definition"></a></dt>
@@ -321,12 +388,6 @@ The cache is filled by these calls and must not be reused after the netlist has 
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)">int</a></p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="hal_py.SubgraphFunctionCache.clear">
-<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SubgraphFunctionCache" title="hal_py.SubgraphFunctionCache"><span class="pre">hal_py.SubgraphFunctionCache</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.SubgraphFunctionCache.clear" title="Permalink to this definition"></a></dt>
-<dd><p>Remove all cached Boolean functions, e.g., after the netlist has been modified.</p>
 </dd></dl>
 
 </dd></dl>

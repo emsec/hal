@@ -53,22 +53,31 @@ var group__decorators =
       [ "get_shortest_path_distance", "classhal_1_1_netlist_traversal_decorator.html#ae9f881d3f790b23eecfb90d93e47c34f", null ],
       [ "make_traversal_cache", "classhal_1_1_netlist_traversal_decorator.html#a526c0d5acc7c19c0d47d6bafcd289b57", null ]
     ] ],
+    [ "SubgraphFunctionCache", "classhal_1_1_subgraph_function_cache.html", [
+      [ "SubgraphFunctionCache", "classhal_1_1_subgraph_function_cache.html#ad3c3f2a8a23df79d415f965a1995e2af", null ],
+      [ "SubgraphFunctionCache", "classhal_1_1_subgraph_function_cache.html#ae658ceae0340147b7ea129ad38204f8e", null ],
+      [ "operator=", "classhal_1_1_subgraph_function_cache.html#af975f70d96eeb43317ff3f25346e372d", null ],
+      [ "operator=", "classhal_1_1_subgraph_function_cache.html#a5bd4acceb2e3e0400c234c16aa7edf38", null ],
+      [ "size", "classhal_1_1_subgraph_function_cache.html#abae09f811bb758bf15ec6028a8b4bcd4", null ],
+      [ "SubgraphNetlistDecorator", "classhal_1_1_subgraph_function_cache.html#a45d42a3f458539720ee5691c6043b8fc", null ]
+    ] ],
     [ "SubgraphNetlistDecorator", "classhal_1_1_subgraph_netlist_decorator.html", [
       [ "SubgraphNetlistDecorator", "classhal_1_1_subgraph_netlist_decorator.html#a2569a146f9bb7b10b5e4ca9acf66c8c7", null ],
       [ "copy_subgraph_netlist", "classhal_1_1_subgraph_netlist_decorator.html#acdf8064079db10fba6a7fc75c99b4d81", null ],
       [ "copy_subgraph_netlist", "classhal_1_1_subgraph_netlist_decorator.html#adc37f1db145c1a0ba74641836423edcf", null ],
       [ "copy_subgraph_netlist", "classhal_1_1_subgraph_netlist_decorator.html#a2830d343291182e64407a1b393f01c76", null ],
       [ "get_subgraph_function", "classhal_1_1_subgraph_netlist_decorator.html#a1131ad88f3e2a50f7b0720e129f195ba", null ],
-      [ "get_subgraph_function", "classhal_1_1_subgraph_netlist_decorator.html#af6b643bfcd9e0499008be9988f7fd1af", null ],
+      [ "get_subgraph_function", "classhal_1_1_subgraph_netlist_decorator.html#a44bbaa2bb58ec8e1c61710a7b706b0b8", null ],
       [ "get_subgraph_function", "classhal_1_1_subgraph_netlist_decorator.html#a76765575526ecebfd05f18129578a7ed", null ],
-      [ "get_subgraph_function", "classhal_1_1_subgraph_netlist_decorator.html#ad55d58724133704b9ce81e1c00bf572f", null ],
       [ "get_subgraph_function", "classhal_1_1_subgraph_netlist_decorator.html#aa1874f9733e7608b5de773cc73f7460c", null ],
-      [ "get_subgraph_function", "classhal_1_1_subgraph_netlist_decorator.html#a7dad83c4967b73b60a9789fc7a6750d0", null ],
       [ "get_subgraph_function_inputs", "classhal_1_1_subgraph_netlist_decorator.html#a455e99786471a0d9293000f56b28be7a", null ],
+      [ "get_subgraph_function_inputs", "classhal_1_1_subgraph_netlist_decorator.html#a63c8611127042d088cbfcc2aab7fd7c4", null ],
       [ "get_subgraph_function_inputs", "classhal_1_1_subgraph_netlist_decorator.html#a602fe3be3c5979579024b42b8c4439eb", null ],
-      [ "get_subgraph_function_inputs", "classhal_1_1_subgraph_netlist_decorator.html#aabf7b9a86855378c51d9774d8980b57e", null ]
+      [ "get_subgraph_function_inputs", "classhal_1_1_subgraph_netlist_decorator.html#aabf7b9a86855378c51d9774d8980b57e", null ],
+      [ "make_subgraph_function_cache", "classhal_1_1_subgraph_netlist_decorator.html#a530643a2596a8855f072956e2145dc4e", null ],
+      [ "make_subgraph_function_cache", "classhal_1_1_subgraph_netlist_decorator.html#a7072850e628f72212706ae5b8bbb8a52", null ],
+      [ "make_subgraph_function_cache", "classhal_1_1_subgraph_netlist_decorator.html#a0b32c3a3441136b7273b7a9aca30dda5", null ]
     ] ],
-    [ "SubgraphFunctionCache", "group__decorators.html#ga06f1939cb6102436443a866a6a64056d", null ],
     [ "TraversalDirection", "group__decorators.html#gabf9ea95cf437527b2fd8929ae3d7489d", [
       [ "forward", "group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da965dbaac085fc891bfbbd4f9d145bbc8", null ],
       [ "backward", "group__decorators.html#ggabf9ea95cf437527b2fd8929ae3d7489da195fe59b6f103787a914aead0f3db502", null ],
