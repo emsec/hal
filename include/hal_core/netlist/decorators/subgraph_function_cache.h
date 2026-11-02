@@ -71,12 +71,14 @@ namespace hal
     private:
         friend class SubgraphNetlistDecorator;
 
-        SubgraphFunctionCache(const Netlist* netlist, std::unordered_set<const Gate*> subgraph_gates) : m_netlist(netlist), m_subgraph_gates(std::move(subgraph_gates))
+        SubgraphFunctionCache(const Netlist* netlist, std::unordered_set<const Gate*> subgraph_gates, std::unordered_set<const Net*> global_inputs)
+            : m_netlist(netlist), m_subgraph_gates(std::move(subgraph_gates)), m_global_inputs(std::move(global_inputs))
         {
         }
 
         const Netlist* m_netlist;
         std::unordered_set<const Gate*> m_subgraph_gates;
+        std::unordered_set<const Net*> m_global_inputs;
         std::map<std::pair<u32, const GatePin*>, BooleanFunction> m_functions;
         std::map<std::pair<u32, const GatePin*>, std::set<const Net*>> m_inputs;
     };

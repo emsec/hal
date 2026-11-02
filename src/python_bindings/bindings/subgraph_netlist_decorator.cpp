@@ -97,7 +97,7 @@ namespace hal
             py::arg("subgraph_output"),
             R"(
             Get the combined Boolean function of a subgraph starting at the source of the provided subgraph output net.
-            The function is composed backwards through the gates of the subgraph. A gate is composed into it only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, and at a net without a source, the walk stops and the net becomes a variable of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the ``subgraph_gates``.
+            The function is composed backwards through the gates of the subgraph. A gate is composed into it only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without a source, and at a global input net, the walk stops and the net becomes a variable of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the ``subgraph_gates``.
             The variables of the resulting Boolean function are created from the subgraph input nets using ``BooleanFunctionNetDecorator.get_boolean_variable``.
             For repeated calls on the same subgraph, create a cache with ``make_subgraph_function_cache`` and pass it to ``get_subgraph_function`` instead.
 
@@ -125,7 +125,7 @@ namespace hal
             py::arg("subgraph_output"),
             R"(
             Get the combined Boolean function of a subgraph starting at the source of the provided subgraph output net.
-            The function is composed backwards through the gates of the subgraph. A gate is composed into it only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, and at a net without a source, the walk stops and the net becomes a variable of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the ``subgraph_module``.
+            The function is composed backwards through the gates of the subgraph. A gate is composed into it only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without a source, and at a global input net, the walk stops and the net becomes a variable of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the ``subgraph_module``.
             The variables of the resulting Boolean function are created from the subgraph input nets using ``BooleanFunctionNetDecorator.get_boolean_variable``.
             For repeated calls on the same subgraph, create a cache with ``make_subgraph_function_cache`` and pass it to ``get_subgraph_function`` instead.
 
@@ -203,7 +203,7 @@ namespace hal
             py::arg("cache"),
             R"(
             Get the combined Boolean function of the subgraph of the cache starting at the source of the provided subgraph output net.
-            The function is composed backwards through the gates of the subgraph. A gate is composed into it only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, and at a net without a source, the walk stops and the net becomes a variable of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the subgraph of the ``cache``.
+            The function is composed backwards through the gates of the subgraph. A gate is composed into it only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without a source, and at a global input net, the walk stops and the net becomes a variable of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the subgraph of the ``cache``.
             The variables of the resulting Boolean function are created from the subgraph input nets using ``BooleanFunctionNetDecorator.get_boolean_variable``.
             The Boolean functions computed for the gate outputs of the subgraph are stored in the ``cache``, and those stored by earlier calls are reused instead of being computed again. The ``cache`` must have been created for the netlist of this decorator.
 
@@ -233,7 +233,7 @@ namespace hal
             R"(
             Get the inputs of the combined Boolean function of a subgraph starting at the source of the provided subgraph output net.
             This does not actually build the Boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
-            The subgraph is traversed backwards through its gates. A gate is traversed only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, and at a net without a source, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the ``subgraph_gates``.
+            The subgraph is traversed backwards through its gates. A gate is traversed only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without a source, and at a global input net, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the ``subgraph_gates``.
             For repeated calls on the same subgraph, create a cache with ``make_subgraph_function_cache`` and pass it to ``get_subgraph_function_inputs`` instead.
 
             :param list[hal_py.Gate] subgraph_gates: The gates making up the subgraph to consider.
@@ -262,7 +262,7 @@ namespace hal
             R"(
             Get the inputs of the combined Boolean function of a subgraph starting at the source of the provided subgraph output net.
             This does not actually build the Boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
-            The subgraph is traversed backwards through its gates. A gate is traversed only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, and at a net without a source, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the ``subgraph_module``.
+            The subgraph is traversed backwards through its gates. A gate is traversed only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without a source, and at a global input net, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the ``subgraph_module``.
             For repeated calls on the same subgraph, create a cache with ``make_subgraph_function_cache`` and pass it to ``get_subgraph_function_inputs`` instead.
 
             :param hal_py.Module subgraph_module: The module making up the subgraph to consider, including the gates of all of its submodules.
@@ -291,7 +291,7 @@ namespace hal
             R"(
             Get the inputs of the combined Boolean function of the subgraph of the cache starting at the source of the provided subgraph output net.
             This does not actually build the Boolean function but only determines the inputs the subgraph function would have, which is a lot faster.
-            The subgraph is traversed backwards through its gates. A gate is traversed only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, and at a net without a source, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the subgraph of the ``cache``.
+            The subgraph is traversed backwards through its gates. A gate is traversed only if its gate type is combinational and it has a Boolean function for the output pin that the walk reaches it through. At any other gate, at a gate outside of the subgraph, at a net without a source, and at a global input net, the walk stops and the net becomes an input of the function. Hence, flip-flops, memories, and gates without a Boolean function bound the subgraph function even if they are part of the subgraph of the ``cache``.
             The inputs determined for the gate outputs of the subgraph are stored in the ``cache``, and those stored by earlier calls are reused instead of being determined again. The ``cache`` must have been created for the netlist of this decorator.
 
             :param hal_py.Net subgraph_output: The subgraph output net from which to start the back propagation.

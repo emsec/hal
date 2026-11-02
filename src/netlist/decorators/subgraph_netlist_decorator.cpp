@@ -201,6 +201,7 @@ namespace hal
     namespace
     {
         using GateSet     = std::unordered_set<const Gate*>;
+        using NetSet      = std::unordered_set<const Net*>;
         using FunctionMap = std::map<std::pair<u32, const GatePin*>, BooleanFunction>;
         using InputsMap   = std::map<std::pair<u32, const GatePin*>, std::set<const Net*>>;
 
@@ -236,8 +237,8 @@ namespace hal
             return subgraph_gates.find(gate) != subgraph_gates.end() && gate->get_type()->has_property(GateTypeProperty::combinational) && gate->has_boolean_function(pin);
         }
 
-        // Checks the subgraph output net, returns `true` if it is a global input net and hence the only input of its own subgraph function.
-        Result<bool> check_subgraph_output(const Netlist& netlist, const Net* subgraph_output)
+        // Checks that the walk can start at the subgraph output net.
+        Result<std::monostate> check_subgraph_output(const Netlist& netlist, const Net* subgraph_output, const NetSet& global_inputs)
         {
             if (!netlist.is_net_in_netlist(subgraph_output))
             {
@@ -248,19 +249,15 @@ namespace hal
             {
                 return ERR("could not get subgraph function of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id()) + ": net has more than one source");
             }
-            else if (subgraph_output->is_global_input_net())
-            {
-                return OK(true);
-            }
-            else if (subgraph_output->get_num_of_sources() == 0)
+            else if (subgraph_output->get_num_of_sources() == 0 && global_inputs.find(subgraph_output) == global_inputs.end())
             {
                 return ERR("could not get subgraph function of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id()) + ": net has no sources");
             }
 
-            return OK(false);
+            return OK({});
         }
 
-        Result<BooleanFunction> subgraph_function_recursive(const Net* n, const GateSet& subgraph_gates, FunctionMap& gate_cache, std::unordered_set<const Net*>& on_stack)
+        Result<BooleanFunction> subgraph_function_recursive(const Net* n, const GateSet& subgraph_gates, const NetSet& global_inputs, FunctionMap& gate_cache, std::unordered_set<const Net*>& on_stack)
         {
             if (on_stack.find(n) != on_stack.end())
             {
@@ -276,8 +273,8 @@ namespace hal
                            + std::to_string(n->get_id()) + ".");
             }
 
-            // net has no source
-            if (sources.empty())
+            // net has no source or is a global input, which is a variable even if it has a source, e.g., the pad net of a bidirectional buffer
+            if (sources.empty() || global_inputs.find(n) != global_inputs.end())
             {
                 const auto net_dec = BooleanFunctionNetDecorator(*n);
                 return OK(net_dec.get_boolean_variable());
@@ -341,7 +338,7 @@ namespace hal
                                + std::to_string(src_gate->get_id()) + "!");
                 }
 
-                auto input_bf_res = subgraph_function_recursive(in_net, subgraph_gates, gate_cache, on_stack);
+                auto input_bf_res = subgraph_function_recursive(in_net, subgraph_gates, global_inputs, gate_cache, on_stack);
 
                 if (input_bf_res.is_error())
                 {
@@ -369,25 +366,21 @@ namespace hal
             return OK(bf);
         }
 
-        Result<BooleanFunction> subgraph_function(const Netlist& netlist, const Net* subgraph_output, const GateSet& subgraph_gates, FunctionMap& gate_cache)
+        Result<BooleanFunction> subgraph_function(const Netlist& netlist, const Net* subgraph_output, const GateSet& subgraph_gates, const NetSet& global_inputs, FunctionMap& gate_cache)
         {
-            const auto output_res = check_subgraph_output(netlist, subgraph_output);
+            const auto output_res = check_subgraph_output(netlist, subgraph_output, global_inputs);
             if (output_res.is_error())
             {
                 return ERR(output_res.get_error());
             }
-            else if (output_res.get())
-            {
-                const auto net_dec = BooleanFunctionNetDecorator(*subgraph_output);
-                return OK(net_dec.get_boolean_variable());
-            }
 
             std::unordered_set<const Net*> on_stack;
 
-            return subgraph_function_recursive(subgraph_output, subgraph_gates, gate_cache, on_stack);
+            return subgraph_function_recursive(subgraph_output, subgraph_gates, global_inputs, gate_cache, on_stack);
         }
 
-        Result<std::set<const Net*>> subgraph_function_inputs_recursive(const Net* n, const GateSet& subgraph_gates, InputsMap& gate_cache, std::unordered_set<const Net*>& on_stack)
+        Result<std::set<const Net*>>
+            subgraph_function_inputs_recursive(const Net* n, const GateSet& subgraph_gates, const NetSet& global_inputs, InputsMap& gate_cache, std::unordered_set<const Net*>& on_stack)
         {
             if (on_stack.find(n) != on_stack.end())
             {
@@ -403,8 +396,8 @@ namespace hal
                            + std::to_string(n->get_id()) + ".");
             }
 
-            // net has no source
-            if (sources.empty())
+            // net has no source or is a global input, which is an input even if it has a source, e.g., the pad net of a bidirectional buffer
+            if (sources.empty() || global_inputs.find(n) != global_inputs.end())
             {
                 return OK({n});
             }
@@ -465,7 +458,7 @@ namespace hal
                                + std::to_string(src_gate->get_id()) + "!");
                 }
 
-                auto new_nets_res = subgraph_function_inputs_recursive(in_net, subgraph_gates, gate_cache, on_stack);
+                auto new_nets_res = subgraph_function_inputs_recursive(in_net, subgraph_gates, global_inputs, gate_cache, on_stack);
                 if (new_nets_res.is_error())
                 {
                     return new_nets_res;
@@ -484,21 +477,17 @@ namespace hal
             return OK(inputs);
         }
 
-        Result<std::set<const Net*>> subgraph_function_inputs(const Netlist& netlist, const Net* subgraph_output, const GateSet& subgraph_gates, InputsMap& gate_cache)
+        Result<std::set<const Net*>> subgraph_function_inputs(const Netlist& netlist, const Net* subgraph_output, const GateSet& subgraph_gates, const NetSet& global_inputs, InputsMap& gate_cache)
         {
-            const auto output_res = check_subgraph_output(netlist, subgraph_output);
+            const auto output_res = check_subgraph_output(netlist, subgraph_output, global_inputs);
             if (output_res.is_error())
             {
                 return ERR(output_res.get_error());
             }
-            else if (output_res.get())
-            {
-                return OK({subgraph_output});
-            }
 
             std::unordered_set<const Net*> on_stack;
 
-            return subgraph_function_inputs_recursive(subgraph_output, subgraph_gates, gate_cache, on_stack);
+            return subgraph_function_inputs_recursive(subgraph_output, subgraph_gates, global_inputs, gate_cache, on_stack);
         }
 
     }    // namespace
@@ -544,7 +533,8 @@ namespace hal
             return ERR_APPEND(gates_res.get_error(), "could not create subgraph function cache");
         }
 
-        return OK(SubgraphFunctionCache(&m_netlist, gates_res.get()));
+        const auto& global_inputs = m_netlist.get_global_input_nets();
+        return OK(SubgraphFunctionCache(&m_netlist, gates_res.get(), NetSet(global_inputs.begin(), global_inputs.end())));
     }
 
     Result<SubgraphFunctionCache> SubgraphNetlistDecorator::make_subgraph_function_cache(const std::vector<Gate*>& subgraph_gates) const
@@ -576,7 +566,7 @@ namespace hal
                        + ": cache was created for a different netlist");
         }
 
-        return subgraph_function(m_netlist, subgraph_output, cache.m_subgraph_gates, cache.m_functions);
+        return subgraph_function(m_netlist, subgraph_output, cache.m_subgraph_gates, cache.m_global_inputs, cache.m_functions);
     }
 
     Result<std::set<const Net*>> SubgraphNetlistDecorator::get_subgraph_function_inputs(const std::vector<const Gate*>& subgraph_gates, const Net* subgraph_output) const
@@ -625,7 +615,7 @@ namespace hal
                        + ": cache was created for a different netlist");
         }
 
-        return subgraph_function_inputs(m_netlist, subgraph_output, cache.m_subgraph_gates, cache.m_inputs);
+        return subgraph_function_inputs(m_netlist, subgraph_output, cache.m_subgraph_gates, cache.m_global_inputs, cache.m_inputs);
     }
 
 }    // namespace hal

@@ -1689,6 +1689,58 @@ namespace hal {
     }
 
     /**
+     * Test that a global input net is a variable of the subgraph functions wherever the walk reaches it, even if it has a source.
+     *
+     * Functions: get_subgraph_function, get_subgraph_function_inputs
+     */
+    TEST_F(DecoratorTest, check_subgraph_netlist_decorator_global_inputs)
+    {
+        TEST_START
+        {
+            auto gl = create_subgraph_gate_library();
+            ASSERT_NE(gl, nullptr);
+            auto nl = std::make_unique<Netlist>(gl.get());
+
+            //  a, b --- g_and --- p --- g_xor --- o
+            //                     c ---'
+            // p has a source and is a global input as well, like the pad net of a bidirectional buffer
+            Gate* g_and = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g_and");
+            Gate* g_xor = nl->create_gate(gl->get_gate_type_by_name("XOR2"), "g_xor");
+            Net* a      = nl->create_net("a");
+            a->add_destination(g_and, "I0");
+            nl->mark_global_input_net(a);
+            Net* b = nl->create_net("b");
+            b->add_destination(g_and, "I1");
+            nl->mark_global_input_net(b);
+            Net* c = nl->create_net("c");
+            c->add_destination(g_xor, "I1");
+            nl->mark_global_input_net(c);
+            Net* p = test_utils::connect(nl.get(), g_and, "O", g_xor, "I0", "p");
+            nl->mark_global_input_net(p);
+            Net* o = nl->create_net("o");
+            o->add_source(g_xor, "O");
+
+            const SubgraphNetlistDecorator dec(*nl);
+            const std::vector<const Gate*> gates = {g_and, g_xor};
+
+            // the walk stops at p whether it starts there or reaches it on the way
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, p), var(p)));
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, o), var(p) + " ^ " + var(c)));
+
+            const auto inputs_p = dec.get_subgraph_function_inputs(gates, p);
+            ASSERT_TRUE(inputs_p.is_ok());
+            EXPECT_EQ(inputs_p.get(), std::set<const Net*>({p}));
+            const auto inputs_o = dec.get_subgraph_function_inputs(gates, o);
+            ASSERT_TRUE(inputs_o.is_ok());
+            EXPECT_EQ(inputs_o.get(), std::set<const Net*>({p, c}));
+
+            // a global input net without a source is a variable as well
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, a), var(a)));
+        }
+        TEST_END
+    }
+
+    /**
      * Test the subgraph function cache: it is bound to the subgraph and the netlist it was created for, and results shared through it
      * agree with uncached calls.
      *
