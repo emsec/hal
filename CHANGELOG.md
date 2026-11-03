@@ -312,6 +312,7 @@ All notable changes to this project will be documented in this file.
     * added [Ctrl+C] to the Python console to abort a running command or, when nothing is selected, to discard the line typed so far, as in a terminal
     * added automatic indentation to the Python console: a new line inside a multi-line statement keeps the indentation of the previous line and goes one level deeper after a line ending with `:`, [Backspace] removes one level of indentation at once
     * changed the Python console to indent with four spaces instead of a tab, also for code that is pasted or recalled from the history, so that indentation from different sources no longer clashes
+    * changed the Python console to accept several statements pasted at once, as an alternative to the Python editor for pasted snippets that do not need editing
     * fixed the Python console switching to the `...` prompt after a line with a syntax error instead of reporting the error right away
     * fixed the Python console not executing a multi-line statement when the final empty line still contained indentation
 * Build and dependencies

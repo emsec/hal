@@ -346,7 +346,7 @@ namespace hal
         }
         else if (!isCompound() && gPythonContext->checkCompleteStatement(input) != 0)
         {
-            bool threadStarted = gPythonContext->interpretBackground(this, input, false);
+            bool threadStarted = gPythonContext->interpretBackground(this, input, input.contains('\n'));
             mPromptType = Standard;
             mCurrentCompoundInput = "";
             if (threadStarted)
