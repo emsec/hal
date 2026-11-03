@@ -1,6 +1,5 @@
 #include "z3_utils/netlist_comparison.h"
 
-#include "hal_core/netlist/decorators/subgraph_function_cache.h"
 #include "hal_core/netlist/boolean_function/solver.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
@@ -20,12 +19,15 @@ namespace hal
         //      This allows us to generate distinct net variables for two different netlists by passing differend prefixes to the function (netlist_a_net_1 vs. netlist_b_net_1)
         namespace
         {
+            // the Boolean function of each gate output pin, keyed by gate ID and pin
+            using GateFunctionCache = std::map<std::pair<u32, const GatePin*>, BooleanFunction>;
+
             Result<z3::expr> get_prefixed_function_of_net(const std::vector<Gate*>& subgraph_gates,
                                                           const Net* net,
                                                           const std::string& variable_prefix,
                                                           z3::context& ctx,
                                                           std::map<u32, z3::expr>& net_cache,
-                                                          SubgraphFunctionCache& gate_cache)
+                                                          GateFunctionCache& gate_cache)
             {
                 if (const auto it = net_cache.find(net->get_id()); it != net_cache.end())
                 {
@@ -70,7 +72,7 @@ namespace hal
                 BooleanFunction bf;
                 if (const auto it = gate_cache.find({src->get_id(), src_ep->get_pin()}); it == gate_cache.end())
                 {
-                    const auto bf_res = src->get_resolved_boolean_function(src_ep->get_pin());
+                    const auto bf_res = src->get_boolean_function(src_ep->get_pin(), true, true);
                     if (bf_res.is_error())
                     {
                         return ERR_APPEND(bf_res.get_error(),
@@ -120,7 +122,7 @@ namespace hal
                                                                         const std::string& variable_prefix,
                                                                         z3::context& ctx,
                                                                         std::map<u32, z3::expr>& net_cache,
-                                                                        SubgraphFunctionCache& gate_cache)
+                                                                        GateFunctionCache& gate_cache)
             {
                 // check validity of subgraph_gates
                 if (subgraph_gates.empty())
@@ -146,7 +148,7 @@ namespace hal
             Result<z3::expr> get_prefixed_subgraph_z3_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, const std::string& variable_prefix, z3::context& ctx)
             {
                 std::map<u32, z3::expr> net_cache;
-                SubgraphFunctionCache gate_cache;
+                GateFunctionCache gate_cache;
 
                 return get_prefixed_subgraph_z3_function_internal(subgraph_gates, subgraph_output, variable_prefix, ctx, net_cache, gate_cache);
             }

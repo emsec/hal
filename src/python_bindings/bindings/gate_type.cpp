@@ -616,5 +616,72 @@ namespace hal
             :returns: The Boolean function on success, an empty Boolean function otherwise.
             :rtype: hal_py.BooleanFunction
         )");
+
+        py_gate_type.def(
+            "add_parameter",
+            [](GateType& self, const Parameter& param) -> bool {
+                auto res = self.add_parameter(param);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("param"),
+            R"(
+            Declare a typed parameter on this gate type.
+
+            :param hal_py.Parameter param: The parameter declaration.
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_gate_type.def_property_readonly("parameters", &GateType::get_parameters, R"(
+            All parameters declared on this gate type as a dict from 'name' to parameter declaration.
+
+            :type: dict[str,hal_py.Parameter]
+        )");
+
+        py_gate_type.def("get_parameters", &GateType::get_parameters, R"(
+            Get all parameters declared on this gate type as a dict from ``name`` to parameter declaration.
+
+            :returns: The parameter dict.
+            :rtype: dict[str,hal_py.Parameter]
+        )");
+
+        py_gate_type.def(
+            "get_parameter",
+            [](GateType& self, const std::string& name) -> std::optional<Parameter> {
+                auto res = self.get_parameter(name);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("name"),
+            R"(
+            Look up a parameter declaration by name.
+
+            :param str name: The parameter name.
+            :returns: The parameter on success, ``None`` otherwise.
+            :rtype: hal_py.Parameter or None
+        )");
+
+        py_gate_type.def("has_parameter", &GateType::has_parameter, py::arg("name"), R"(
+            Check whether a parameter with the given name is declared on this gate type.
+
+            :param str name: The parameter name.
+            :returns: ``True`` if the parameter exists, ``False`` otherwise.
+            :rtype: bool
+        )");
     }
 }    // namespace hal

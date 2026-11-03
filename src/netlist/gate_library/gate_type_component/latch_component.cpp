@@ -1,9 +1,16 @@
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 
+#include <memory>
+
 namespace hal
 {
     LatchComponent::LatchComponent(std::unique_ptr<GateTypeComponent> component) : m_component(std::move(component))
     {
+    }
+
+    std::unique_ptr<LatchComponent> LatchComponent::create(std::unique_ptr<GateTypeComponent> component)
+    {
+        return std::unique_ptr<LatchComponent>(new LatchComponent(std::move(component)));
     }
 
     LatchComponent::ComponentType LatchComponent::get_type() const

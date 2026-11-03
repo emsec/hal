@@ -120,9 +120,18 @@ namespace hal
             const u32 max_inputs                  = 130;
             bool found_oversized_boolean_function = false;
 
+            // the cache shares the inputs of the logic that the output nets have in common between them
+            const auto subgraph_dec = SubgraphNetlistDecorator(*nl);
+            auto cache_res          = subgraph_dec.make_subgraph_function_cache(sc->m_gates);
+            if (cache_res.is_error())
+            {
+                return ERR_APPEND(cache_res.get_error(), "cannot generate functional candidates for " + sc->m_gates.front()->get_name() + ": failed to create subgraph function cache");
+            }
+            auto cache = cache_res.get();
+
             for (const auto& o_net : output_nets)
             {
-                const auto input_nets_res = SubgraphNetlistDecorator(*nl).get_subgraph_function_inputs(sc->m_gates, o_net);
+                const auto input_nets_res = subgraph_dec.get_subgraph_function_inputs(o_net, cache);
                 if (input_nets_res.is_error())
                 {
                     return ERR_APPEND(input_nets_res.get_error(),

@@ -1,3 +1,4 @@
+#include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
@@ -79,24 +80,207 @@ namespace hal
             :rtype: bool
         )");
 
-        py_lut_component.def_property("init_ascending", &LUTComponent::is_init_ascending, &LUTComponent::set_init_ascending, R"(
-            The bit-order of the initialization string. 
-            ``True`` if ascending, ``False`` otherwise.
+        py::class_<LUTComponent::LUTOutputConfig>(py_lut_component, "LUTOutputConfig", R"(
+            Per-output-pin INIT configuration for a LUT component.
+        )")
+            .def(py::init<std::string, u32, u32, bool, std::vector<std::string>>(),
+                 py::arg("init_identifier"),
+                 py::arg("bit_offset"),
+                 py::arg("bit_count"),
+                 py::arg("is_ascending") = true,
+                 py::arg("input_pins"))
+            .def_readonly("init_identifier", &LUTComponent::LUTOutputConfig::init_identifier, R"(
+                The data identifier within the INIT category for this output pin.
 
-            :type: bool
+                :type: str
+            )")
+            .def_readonly("bit_offset", &LUTComponent::LUTOutputConfig::bit_offset, R"(
+                The first bit (LSB = 0) of the slice within the parsed INIT value.
+
+                :type: int
+            )")
+            .def_readonly("bit_count", &LUTComponent::LUTOutputConfig::bit_count, R"(
+                The number of bits in the slice. Must be a non-zero power of two.
+
+                :type: int
+            )")
+            .def_readonly("is_ascending", &LUTComponent::LUTOutputConfig::is_ascending, R"(
+                True if the INIT bits are stored in ascending order (LSB first), False for descending.
+
+                :type: bool
+            )")
+            .def_readonly("input_pins", &LUTComponent::LUTOutputConfig::input_pins, R"(
+                Ordered list of input pin names used by this output. Must be non-empty; size must equal log2(bit_count).
+
+                :type: list[str]
+            )");
+
+        py_lut_component.def(
+            "get_output_pin_config",
+            [](const LUTComponent& self, const std::string& pin_name) -> const LUTComponent::LUTOutputConfig* { return self.get_output_pin_config(pin_name); },
+            py::arg("pin_name"),
+            py::return_value_policy::reference_internal,
+            R"(
+            Get the output configuration for a specific pin, or None if none is set.
+
+            :param str pin_name: Name of the LUT output pin.
+            :returns: The output configuration or None.
+            :rtype: hal_py.LUTComponent.LUTOutputConfig or None
         )");
 
-        py_lut_component.def("is_init_ascending", &LUTComponent::is_init_ascending, R"(
-            Get the bit-order of the initialization string.
-         
-            :returns: ``True`` if ascending bit-order, ``False`` otherwise.
+        py_lut_component.def(
+            "get_output_pin_configs",
+            [](const LUTComponent& self) { return self.get_output_pin_configs(); },
+            R"(
+            Get all per-output-pin configurations.
+
+            :returns: Dict mapping pin name to LUTOutputConfig.
+            :rtype: dict[str, hal_py.LUTComponent.LUTOutputConfig]
+        )");
+
+        py_lut_component.def_static(
+            "extract_init_slice",
+            [](const std::string& full_hex, u32 bit_offset, u32 bit_count) -> std::optional<std::string> {
+                auto res = LUTComponent::extract_init_slice(full_hex, bit_offset, bit_count);
+                if (res.is_error())
+                {
+                    log_error("python_context", "{}.", res.get_error().get());
+                    return std::nullopt;
+                }
+                return res.get();
+            },
+            py::arg("full_hex"),
+            py::arg("bit_offset"),
+            py::arg("bit_count"),
+            R"(
+            Extract a bit slice from a full INIT hex string.
+            Returns the slice as an uppercase hex string padded to ``(bit_count+3)//4`` characters.
+
+            :param str full_hex: Full INIT value as a hex string; must not be empty and must contain at least ``(bit_offset+bit_count+3)//4`` hex chars.
+            :param int bit_offset: First bit (LSB = 0) of the slice.
+            :param int bit_count: Number of bits in the slice; must be non-zero.
+            :returns: The extracted hex string, or ``None`` if ``full_hex`` is empty, too short, or invalid.
+            :rtype: str or None
+        )");
+
+        py_lut_component.def_static(
+            "splice_init_slice",
+            [](const std::string& full_hex, const std::string& slice_hex, u32 bit_offset, u32 bit_count) -> std::optional<std::string> {
+                auto res = LUTComponent::splice_init_slice(full_hex, slice_hex, bit_offset, bit_count);
+                if (res.is_error())
+                {
+                    log_error("python_context", "{}.", res.get_error().get());
+                    return std::nullopt;
+                }
+                return res.get();
+            },
+            py::arg("full_hex"),
+            py::arg("slice_hex"),
+            py::arg("bit_offset"),
+            py::arg("bit_count"),
+            R"(
+            Splice a new slice value into a full INIT hex string at ``[bit_offset, bit_offset+bit_count)``.
+            The output preserves the digit width of ``full_hex``; if ``full_hex`` is empty the minimum width
+            needed to hold the splice is used.
+
+            :param str full_hex: Current full INIT value as a hex string (may be empty).
+            :param str slice_hex: New value for the bit slice.
+            :param int bit_offset: First bit (LSB = 0) of the slice.
+            :param int bit_count: Number of bits in the slice; must be non-zero.
+            :returns: The updated full hex string, or ``None`` on parse failure.
+            :rtype: str or None
+        )");
+
+        py_lut_component.def(
+            "get_init_string",
+            [](const LUTComponent& self, Gate* gate, const std::string& pin_name) -> std::optional<std::string> {
+                auto res = self.get_init_string(gate, pin_name);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                log_error("python_context", "error getting INIT string: {}", res.get_error().get());
+                return std::nullopt;
+            },
+            py::arg("gate"),
+            py::arg("pin_name"),
+            R"(
+            Get the INIT hex string for a specific LUT output pin on a gate instance.
+
+            :param hal_py.Gate gate: The gate instance.
+            :param str pin_name: The output pin name.
+            :returns: The hex INIT string (no prefix) on success, ``None`` otherwise.
+            :rtype: str or None
+        )");
+
+        py_lut_component.def(
+            "get_init_string",
+            [](const LUTComponent& self, Gate* gate, GatePin* pin) -> std::optional<std::string> {
+                auto res = self.get_init_string(gate, pin);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                log_error("python_context", "error getting INIT string: {}", res.get_error().get());
+                return std::nullopt;
+            },
+            py::arg("gate"),
+            py::arg("pin"),
+            R"(
+            Get the INIT hex string for a specific LUT output pin on a gate instance.
+
+            :param hal_py.Gate gate: The gate instance.
+            :param hal_py.GatePin pin: The output pin.
+            :returns: The hex INIT string (no prefix) on success, ``None`` otherwise.
+            :rtype: str or None
+        )");
+
+        py_lut_component.def(
+            "set_init_string",
+            [](const LUTComponent& self, Gate* gate, const std::string& pin_name, const std::string& hex) -> bool {
+                auto res = self.set_init_string(gate, pin_name, hex);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                log_error("python_context", "error setting INIT string: {}", res.get_error().get());
+                return false;
+            },
+            py::arg("gate"),
+            py::arg("pin_name"),
+            py::arg("hex"),
+            R"(
+            Set the INIT hex string for a specific LUT output pin on a gate instance.
+
+            :param hal_py.Gate gate: The gate instance.
+            :param str pin_name: The output pin name.
+            :param str hex: Hex string without prefix.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
-        py_lut_component.def("set_init_ascending", &LUTComponent::set_init_ascending, py::arg("init_ascending") = true, R"(
-            Set the bit-order of the initialization string.
-         
-            :param bool init_ascending: ``True`` if ascending bit-order, ``False`` otherwise.
+        py_lut_component.def(
+            "set_init_string",
+            [](const LUTComponent& self, Gate* gate, GatePin* pin, const std::string& hex) -> bool {
+                auto res = self.set_init_string(gate, pin, hex);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                log_error("python_context", "error setting INIT string: {}", res.get_error().get());
+                return false;
+            },
+            py::arg("gate"),
+            py::arg("pin"),
+            py::arg("hex"),
+            R"(
+            Set the INIT hex string for a specific LUT output pin on a gate instance.
+
+            :param hal_py.Gate gate: The gate instance.
+            :param hal_py.GatePin pin: The output pin.
+            :param str hex: Hex string without prefix.
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
         )");
 
         py::class_<FFComponent, GateTypeComponent, RawPtrWrapper<FFComponent>> py_ff_component(m, "FFComponent", R"(
@@ -324,6 +508,25 @@ namespace hal
             Set the size of the RAM in bits.
 
             :param int bit_size: The size of the RAM in bits.
+        )");
+
+        py_ram_component.def_property("init_identifiers", &RAMComponent::get_init_identifiers, &RAMComponent::set_init_identifiers, R"(
+            The parameter names used to find initialization data for this RAM.
+
+            :type: list[str]
+        )");
+
+        py_ram_component.def("get_init_identifiers", &RAMComponent::get_init_identifiers, R"(
+            Get the parameter names used to find initialization data for this RAM.
+
+            :returns: The list of init identifier strings.
+            :rtype: list[str]
+        )");
+
+        py_ram_component.def("set_init_identifiers", &RAMComponent::set_init_identifiers, py::arg("init_identifiers"), R"(
+            Set the parameter names used to find initialization data for this RAM.
+
+            :param list[str] init_identifiers: The list of init identifier strings.
         )");
 
         py::class_<MACComponent, GateTypeComponent, RawPtrWrapper<MACComponent>> py_mac_component(m, "MACComponent", R"(

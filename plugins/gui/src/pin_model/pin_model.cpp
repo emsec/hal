@@ -97,6 +97,7 @@ namespace hal
             PinType groupType                  = group->getPinType();
 
             //create group item
+            groupItem->setId(group->getId());
             groupItem->setName(group->getName());
             groupItem->setDirection(groupDirection);
             groupItem->setType(groupType);
@@ -393,20 +394,6 @@ namespace hal
             //rename PinItem
             pinItem->setName(newName);
 
-            //rename pin within pinGroup
-            auto pinGroup = static_cast<PinItem*>(pinItem->getParent());
-            for(auto group : getPinGroups()){
-                if(group->getName() == pinGroup->getName()){
-                    for(auto item : group->getChildren()){
-                        PinItem* pin = static_cast<PinItem*>(item);
-                        if(pin->getId() == pinItem->getId()){
-                            pin->setName(newName);
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
             return true;
         }
 
@@ -771,6 +758,21 @@ namespace hal
             }
         }
         return outputPins;
+    }
+
+    QList<PinItem*> PinModel::getInternalPins()
+    {
+        QList<PinItem*> internalPins;
+        for(BaseTreeItem* pinGroup : mRootItem->getChildren())
+        {
+            if (static_cast<PinItem*>(pinGroup)->getItemType() != PinItem::TreeItemType::PinGroup) continue;
+            for(BaseTreeItem* item : pinGroup->getChildren()){
+                PinItem* pin = static_cast<PinItem*>(item);
+                if (pin->getItemType() != PinItem::TreeItemType::Pin) continue;
+                if (pin->getDirection() == PinDirection::internal) internalPins.append(pin);
+            }
+        }
+        return internalPins;
     }
 
 }

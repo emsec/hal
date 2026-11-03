@@ -26,32 +26,55 @@
 #pragma once
 #include "gui/gatelibrary_management/gatelibrary_pages/generalinfo_wizardpage.h"
 
-
 #include <QWizardPage>
 #include <QGridLayout>
-#include <QTabWidget>
-#include <QLineEdit>
 #include <QCheckBox>
 #include <QLabel>
+#include <QTableWidget>
+#include <QPushButton>
+#include <QString>
+#include <QStringList>
+#include <QVector>
+
+#include "hal_core/defines.h"
 
 namespace hal {
     /**
      * The wizard page on which the LUT component of the gate type is configured.
      */
-    class LUTWizardPage:public QWizardPage{
+    class LUTWizardPage : public QWizardPage {
+        Q_OBJECT
         friend class GateLibraryWizard;
     public:
+        struct OutputPinEntry {
+            QString pinName;
+            QString initIdentifier;
+            u32     bitOffset;
+            u32     bitCount;
+        };
+
         LUTWizardPage(QWidget* parent = nullptr);
-        //void initializePage() override;
-        //int nextId() const override;
         void setData(GateType* gate);
+        void initializePage() override;
+        bool isComplete() const override;
+
+        QVector<OutputPinEntry> getOutputPinConfigs() const;
 
     private:
-        QGridLayout* mLayout;
+        void addTableRow(const QString& pinName, const QString& initId, u32 bitOffset, u32 bitCount, u32 maxBitCount);
+        QStringList getLutPinsFromWizard() const;
 
-        QCheckBox* mAscending;
-        //QLineEdit* mAscending;
+        QGridLayout*  mLayout;
+        QCheckBox*    mAscending;
+        QLabel*       mLabAscending;
+        QTableWidget* mPinConfigTable;
 
-        QLabel* mLabAscending;
+        struct SavedConfig {
+            std::string pinName;
+            std::string initIdentifier;
+            u32 bitOffset;
+            u32 bitCount;
+        };
+        std::vector<SavedConfig> mSavedConfigs;
     };
 }

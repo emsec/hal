@@ -5,6 +5,7 @@
 #include "gui/hal_qt_compat/hal_qt_compat.h"
 
 #include <QKeyEvent>
+#include <QMimeData>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -75,15 +76,27 @@ namespace hal
     void PythonConsole::keyPressEvent(QKeyEvent* e)
     {
         auto cursor = textCursor();
-        if (textCursor().hasSelection())
+
+        if (e->matches(QKeySequence::Copy))
         {
-            if (e->matches(QKeySequence::Copy))
+            if (textCursor().hasSelection())
             {
                 e->accept();
                 copy();
                 return;
             }
-            else if (e->matches(QKeySequence::Cut))
+            e->accept();
+            if (gPythonContext->isThreadRunning())
+                gPythonContext->abortThread();
+            else
+                // discards the current line only, [Esc] discards a multi-line statement
+                discardInput(false);
+            return;
+        }
+
+        if (textCursor().hasSelection())
+        {
+            if (e->matches(QKeySequence::Cut))
             {
                 // cut cutable stuff and copy rest
                 return;
@@ -126,14 +139,26 @@ namespace hal
                 }
                 else
                 {
-                    if (textCursor().selectionStart() > mPromptEndPosition)
-                    {
-                        break;
-                    }
-                    else
+                    if (textCursor().position() <= mPromptEndPosition)
                     {
                         return;
                     }
+
+                    int posInLine = textCursor().position() - mPromptEndPosition;
+                    if (posInLine >= 4 && posInLine % 4 == 0)
+                    {
+                        QString cmd = getCurrentCommand();
+                        QString before = cmd.left(posInLine);
+                        if (before.right(4) == "    ")
+                        {
+                            QTextCursor tc = textCursor();
+                            tc.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, 4);
+                            tc.removeSelectedText();
+                            return;
+                        }
+                    }
+
+                    break;
                 }
 
             case Qt::Key_Up:
@@ -198,11 +223,7 @@ namespace hal
                 // discard the compound statement entered so far
                 if (isCompound())
                 {
-                    moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
-                    textCursor().insertText("\n");
-                    mCurrentCompoundInput = "";
-                    mPromptType           = Standard;
-                    displayPrompt();
+                    discardInput(true);
                     return;
                 }
                 break;
@@ -314,43 +335,58 @@ namespace hal
         cursor.movePosition(QTextCursor::End);
         cursor.insertText("\n");
 
-        // an empty line outside of a compound statement has nothing to execute, just show a new prompt
-        if (!isCompound() && input.trimmed().isEmpty())
-        {
-            displayPrompt();
-            return;
-        }
-
         if (!input.trimmed().isEmpty())
         {
             //        gPythonContext->addHistory(input);
             mHistory->addHistory(input.toStdString());
         }
-        if ((!isCompound() && gPythonContext->checkCompleteStatement(input) != 0) || (isCompound() && input.isEmpty() && gPythonContext->checkCompleteStatement(input) != 0))
+        if (!isCompound() && input.trimmed().isEmpty())
         {
-            mCurrentCompoundInput += input;
-            bool threadStarted;
-            if (isCompound())
-            {
-                threadStarted = gPythonContext->interpretBackground(this, mCurrentCompoundInput, true);
-            }
-            else
-            {
-                threadStarted = gPythonContext->interpretBackground(this, input, input.contains('\n'));
-            }
-            mPromptType     = Standard;
+            displayPrompt();
+        }
+        else if (!isCompound() && gPythonContext->checkCompleteStatement(input) != 0)
+        {
+            bool threadStarted = gPythonContext->interpretBackground(this, input, input.contains('\n'));
+            mPromptType = Standard;
             mCurrentCompoundInput = "";
-            // without a thread there is no finished signal which would display the next prompt
             if (threadStarted)
                 mAbortThreadWidget->start();
             else
                 displayPrompt();
         }
-        else
+        else if (isCompound() && input.trimmed().isEmpty())
         {
-            mCurrentCompoundInput += input + "\n";
-            mPromptType     = Compound;
+            if (gPythonContext->checkCompleteStatement(mCurrentCompoundInput) != 0)
+            {
+                bool threadStarted = gPythonContext->interpretBackground(this, mCurrentCompoundInput, true);
+                mPromptType = Standard;
+                mCurrentCompoundInput = "";
+                if (threadStarted)
+                    mAbortThreadWidget->start();
+                else
+                    displayPrompt();
+            }
+            else
+            {
+                mPromptType = Compound;
+                displayPrompt();
+            }
+        }
+        else
+        {   
+            if (input.trimmed() != "") mCurrentCompoundInput += input + "\n";
+            
+            mPromptType = Compound;
             displayPrompt();
+            
+            // continue at the indentation of the previous line, one level deeper after a ':'
+            QString expanded = expandTabs(input);
+            int indent = 0;
+            while (indent < expanded.length() && expanded[indent] == ' ') indent++;
+
+            if (expanded.trimmed().endsWith(":")) insertPlainText(QString(indent + 4, ' '));
+            else if (indent > 0) insertPlainText(QString(indent, ' '));
+
         }
         mHistory->updateFromFile();
     }
@@ -373,7 +409,34 @@ namespace hal
         QTextCursor cursor = textCursor();
         cursor.setPosition(mPromptEndPosition);
         cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-        cursor.insertText(new_command);
+        // history entries of older versions are indented with tabs
+        cursor.insertText(expandTabs(new_command));
+    }
+
+    void PythonConsole::insertFromMimeData(const QMimeData* source)
+    {
+        if (source->hasText())
+            insertPlainText(expandTabs(source->text()));
+    }
+
+    void PythonConsole::discardInput(bool wholeStatement)
+    {
+        moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+        textCursor().insertText("\n");
+        if (wholeStatement)
+        {
+            mCurrentCompoundInput = "";
+            mPromptType           = Standard;
+        }
+        mCurrentHistoryIndex = -1;
+        mInCompletion        = false;
+        displayPrompt();
+    }
+
+    QString PythonConsole::expandTabs(const QString& text)
+    {
+        QString retval = text;
+        return retval.replace('\t', QString(4, ' '));
     }
 
     void PythonConsole::appendToCurrentCommand(const QString& appendix)
@@ -449,15 +512,15 @@ namespace hal
             mCurrentInput = getCurrentCommand();
             break;
         case Input:
-            mCurrentInput += "\t";
-            insertPlainText("\t");
+            mCurrentInput += "    ";
+            insertPlainText("    ");
             return;
         }
 
         QString current_line = getCurrentCommand();
-        if (current_line.isEmpty())
+        if (current_line.trimmed().isEmpty())
         {
-            insertPlainText("\t");
+            insertPlainText("    ");
         }
         else
         {

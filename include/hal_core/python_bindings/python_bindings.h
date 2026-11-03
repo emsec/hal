@@ -80,10 +80,6 @@
 
 #pragma GCC diagnostic pop
 
-// Passed to Python by reference instead of being converted to a dict, so that a cache filled by
-// SubgraphNetlistDecorator.get_subgraph_function is kept across calls (see subgraph_netlist_decorator.cpp).
-PYBIND11_MAKE_OPAQUE(hal::SubgraphFunctionCache)
-
 namespace hal
 {
     namespace py = pybind11;
@@ -294,6 +290,14 @@ namespace hal
      * @ingroup pybind
      * @{
      */
+
+    /**
+     * Initializes Python bindings for the shared Parameter::Type enum and Parameter struct.
+     * Must be called before any other binding that references these types (DataContainer, GateType).
+     *
+     * @param[in] m - the python module
+     */
+    void parameter_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL data container in a python module.

@@ -6,6 +6,7 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/project_directory.h"
@@ -283,7 +284,7 @@ namespace hal
             return;
         }
         gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,"."+QFileInfo(gatelib).suffix());
-        GateLibrary* glib = gate_library_manager::load(gatelib.toStdString());
+        GateLibrary* glib = loadGateLibrary(gatelib);
         if (!glib)
         {
             QMessageBox::warning(qApp->activeWindow(),"Aborted", "Cannot create project <" + projdir + ">, cannot load gate library <" + gatelib + ">");
@@ -473,6 +474,10 @@ namespace hal
         if (!glExtension.isEmpty() && gPluginRelay->mGuiPluginTable)
             gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,"." +glExtension);
 
+        // the project loads its gate library without asking, so an outdated one gets the chance to be upgraded beforehand
+        QString glPath = QDir(projPath).absoluteFilePath(projFile.gateLibraryFilename());
+        if (!projFile.gateLibraryFilename().isEmpty() && QFileInfo(glPath).isFile())
+            loadGateLibrary(glPath);
 
         if (!pm->open_project())
         {
@@ -564,6 +569,8 @@ namespace hal
             if (gPluginRelay->mGuiPluginTable)
                 gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,"."+glInfo.suffix());
 
+            // the netlist loads its gate library without asking, so an outdated one gets the chance to be upgraded beforehand
+            loadGateLibrary(gatelibraryPath);
             auto netlist = netlist_factory::load_netlist(filename.toStdString(), gatelibraryPath.toStdString());
 
             if (netlist)
@@ -761,6 +768,26 @@ namespace hal
             }
         }
         gGuiState->endArray();
+    }
+
+    GateLibrary* FileManager::loadGateLibrary(const QString& path)
+    {
+        std::filesystem::path glPath(path.toStdString());
+        GateLibrary* glib = gate_library_manager::load(glPath);
+        // the parse status is only meaningful if a parser was involved, which requires an existing file
+        QFileInfo glInfo(path);
+        if (glib || !glInfo.isFile() || GateLibraryParser::get_parse_status() != GateLibraryParser::ParseStatus::NeedsUpgrade)
+            return glib;
+
+        QString message = QString("The gate library <%1> uses an outdated file format.\n\n"
+                                  "Upgrade it now? The original file will be kept as <%2>. "
+                                  "Cells that cannot be upgraded automatically are listed in the log.")
+                              .arg(path, glInfo.completeBaseName() + ".json");
+        if (QMessageBox::question(qApp->activeWindow(), "Outdated gate library", message, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) != QMessageBox::Yes)
+            return nullptr;
+
+        GateLibraryParser::request_upgrade();
+        return gate_library_manager::load(glPath);
     }
 
     void FileManager::displayErrorMessage(QString error_message)

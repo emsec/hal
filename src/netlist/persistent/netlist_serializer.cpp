@@ -95,6 +95,112 @@ namespace hal
                 }
             }
 
+            // serialize parameters
+            rapidjson::Value serialize_parameters(const std::unordered_map<std::string, std::pair<Parameter, std::string>>& params, rapidjson::Document::AllocatorType& allocator)
+            {
+                rapidjson::Value out(rapidjson::kObjectType);
+                for (const auto& [pname, decl_and_value] : params)
+                {
+                    const auto& [decl, pvalue] = decl_and_value;
+                    rapidjson::Value entry(rapidjson::kObjectType);
+                    const std::string type_str = enum_to_string<Parameter::Type>(decl.get_type());
+                    entry.AddMember("type", JSON_STR_HELPER(type_str), allocator);
+                    entry.AddMember("size", static_cast<u32>(decl.get_size()), allocator);
+                    entry.AddMember("default", JSON_STR_HELPER(decl.get_default_value()), allocator);
+                    if (decl.get_type() == Parameter::Type::Enum)
+                    {
+                        rapidjson::Value enum_values(rapidjson::kArrayType);
+                        for (const auto& v : decl.get_enum_values())
+                        {
+                            enum_values.PushBack(JSON_STR_HELPER(v), allocator);
+                        }
+                        entry.AddMember("enum_values", enum_values, allocator);
+                    }
+                    entry.AddMember("value", JSON_STR_HELPER(pvalue), allocator);
+                    out.AddMember(JSON_STR_HELPER(pname), entry, allocator);
+                }
+                return out;
+            }
+
+            // Reconstruct a Parameter declaration from a serialized JSON entry.
+            // Returns OK with the declaration on success, an error describing what was wrong otherwise.
+            Result<Parameter> deserialize_parameter_decl(const std::string& name, const rapidjson::Value& entry)
+            {
+                if (!entry.HasMember("type") || !entry.HasMember("value"))
+                {
+                    return ERR("parameter '" + name + "' is missing 'type' or 'value'");
+                }
+                const std::string type_str = entry["type"].GetString();
+                if (!is_valid_enum<Parameter::Type>(type_str))
+                {
+                    return ERR("parameter '" + name + "' has unknown type '" + type_str + "'");
+                }
+                const Parameter::Type ptype     = enum_from_string<Parameter::Type>(type_str);
+                const std::string default_value = (entry.HasMember("default") && entry["default"].IsString()) ? entry["default"].GetString() : std::string{};
+                switch (ptype)
+                {
+                    case Parameter::Type::Boolean: {
+                        return Parameter::Boolean(name, default_value);
+                    }
+                    case Parameter::Type::BitVector: {
+                        const u16 size = (entry.HasMember("size") && entry["size"].IsUint()) ? static_cast<u16>(entry["size"].GetUint()) : 0;
+                        return Parameter::BitVector(name, size, default_value);
+                    }
+                    case Parameter::Type::LogicVector: {
+                        const u16 size = (entry.HasMember("size") && entry["size"].IsUint()) ? static_cast<u16>(entry["size"].GetUint()) : 0;
+                        return Parameter::LogicVector(name, size, default_value);
+                    }
+                    case Parameter::Type::Integer: {
+                        return Parameter::Integer(name, default_value);
+                    }
+                    case Parameter::Type::String: {
+                        return Parameter::String(name, default_value);
+                    }
+                    case Parameter::Type::Float: {
+                        return Parameter::Float(name, default_value);
+                    }
+                    case Parameter::Type::Time: {
+                        return Parameter::Time(name, default_value);
+                    }
+                    case Parameter::Type::Enum: {
+                        std::vector<std::string> values;
+                        if (entry.HasMember("enum_values") && entry["enum_values"].IsArray())
+                        {
+                            for (const auto& v : entry["enum_values"].GetArray())
+                            {
+                                if (!v.IsString())
+                                {
+                                    return ERR("parameter '" + name + "' has non-string entry in 'enum_values'");
+                                }
+                                values.emplace_back(v.GetString());
+                            }
+                        }
+                        return Parameter::Enum(name, values, default_value);
+                    }
+                }
+                return ERR("parameter '" + name + "' has unhandled type");
+            }
+
+            // Deserialize the contents of a "parameters" JSON object into a DataContainer.
+            // For each entry, reconstructs the declaration and stores the value via set_parameter.
+            Result<std::monostate> deserialize_parameters(DataContainer* c, const rapidjson::Value& val)
+            {
+                for (auto p_it = val.MemberBegin(); p_it != val.MemberEnd(); ++p_it)
+                {
+                    const std::string pname = p_it->name.GetString();
+                    auto decl_res           = deserialize_parameter_decl(pname, p_it->value);
+                    if (decl_res.is_error())
+                    {
+                        return ERR(decl_res.get_error().get());
+                    }
+                    if (auto res = c->set_parameter(decl_res.get(), p_it->value["value"].GetString()); res.is_error())
+                    {
+                        return ERR("failed to set parameter '" + pname + "': " + res.get_error().get());
+                    }
+                }
+                return OK({});
+            }
+
             // serialize endpoint
             rapidjson::Value serialize(const Endpoint* ep, rapidjson::Document::AllocatorType& allocator)
             {
@@ -252,6 +358,10 @@ namespace hal
                 {
                     val.AddMember("data", data, allocator);
                 }
+                if (const auto& params = gate->get_parameters(); !params.empty())
+                {
+                    val.AddMember("parameters", serialize_parameters(params, allocator), allocator);
+                }
                 {
                     rapidjson::Value functions(rapidjson::kObjectType);
                     for (const auto& [name, function] : gate->get_boolean_functions(true))
@@ -265,6 +375,137 @@ namespace hal
                     }
                 }
                 return val;
+            }
+
+            // Migrate "generic" data entries (old .hal format) to typed parameters.
+            // Old parsers stored values as: "bit_vector" → unprefixed uppercase hex ("CAFE"),
+            // "bit_value"/"std_logic" → single state char ("X", "0"). New format uses prefixes.
+            void migrate_generic_data_to_parameters(DataContainer* c, const GateType* gate_type = nullptr)
+            {
+                std::vector<std::pair<std::string, std::string>> to_delete;
+
+                for (const auto& [key_tuple, value_tuple] : c->get_data_map())
+                {
+                    if (std::get<0>(key_tuple) != "generic")
+                        continue;
+
+                    const std::string& name      = std::get<1>(key_tuple);
+                    const std::string& type_str  = std::get<0>(value_tuple);
+                    const std::string& raw_value = std::get<1>(value_tuple);
+
+                    std::string migrated_value     = raw_value;
+                    Result<Parameter> inferred_decl = ERR("unrecognized data type '" + type_str + "'");
+                    bool skip                       = false;
+
+                    if (type_str == "boolean")
+                    {
+                        inferred_decl = Parameter::Boolean(name, "");
+                    }
+                    else if (type_str == "integer")
+                    {
+                        inferred_decl = Parameter::Integer(name, "");
+                    }
+                    else if (type_str == "floating_point")
+                    {
+                        inferred_decl = Parameter::Float(name, "");
+                    }
+                    else if (type_str == "time")
+                    {
+                        inferred_decl = Parameter::Time(name, "");
+                    }
+                    else if (type_str == "string")
+                    {
+                        inferred_decl = Parameter::String(name, "");
+                    }
+                    else if (type_str == "bit_value" || type_str == "std_logic")
+                    {
+                        // Old format: single char ('0', '1', 'X', ...); new: "0b0", "0bX"
+                        const bool already_prefixed = raw_value.size() >= 3 && raw_value[0] == '0'
+                            && (raw_value[1] == 'b' || raw_value[1] == 'B');
+                        const char bit_char = already_prefixed ? raw_value[2]
+                            : (raw_value.empty() ? '\0' : raw_value[0]);
+                        if (bit_char == '\0')
+                        {
+                            log_warning("netlist_persistent", "skipping migration of generic data entry '{}': empty value", name);
+                            skip = true;
+                        }
+                        else
+                        {
+                            migrated_value = std::string("0b") + bit_char;
+                            inferred_decl  = (bit_char == '0' || bit_char == '1')
+                                ? Parameter::BitVector(name, 1, "")
+                                : Parameter::LogicVector(name, 1, "");
+                        }
+                    }
+                    else if (type_str == "bit_vector" || type_str == "std_logic_vector")
+                    {
+                        const bool has_prefix = raw_value.size() >= 3 && raw_value[0] == '0'
+                            && (raw_value[1] == 'b' || raw_value[1] == 'B'
+                            ||  raw_value[1] == 'o' || raw_value[1] == 'O'
+                            ||  raw_value[1] == 'x' || raw_value[1] == 'X');
+                        if (raw_value.empty())
+                        {
+                            log_warning("netlist_persistent", "skipping migration of generic data entry '{}': empty vector value", name);
+                            skip = true;
+                        }
+                        else if (has_prefix)
+                        {
+                            const char pfx = static_cast<char>(std::tolower(static_cast<unsigned char>(raw_value[1])));
+                            const auto n   = static_cast<u16>(raw_value.size() - 2);
+                            const u16 size = (pfx == 'b') ? n
+                                : (pfx == 'o') ? static_cast<u16>(n * 3)
+                                :                static_cast<u16>(n * 4);
+                            if (size == 0)
+                            {
+                                log_warning("netlist_persistent", "skipping migration of generic data entry '{}': zero-size vector", name);
+                                skip = true;
+                            }
+                            else
+                            {
+                                inferred_decl = (type_str == "std_logic_vector")
+                                    ? Parameter::LogicVector(name, size, "")
+                                    : Parameter::BitVector(name, size, "");
+                            }
+                        }
+                        else
+                        {
+                            // Old format: unprefixed uppercase hex (e.g. "CAFE")
+                            const u16 size = static_cast<u16>(raw_value.size() * 4);
+                            migrated_value = "0x" + raw_value;
+                            inferred_decl  = (type_str == "std_logic_vector")
+                                ? Parameter::LogicVector(name, size, "")
+                                : Parameter::BitVector(name, size, "");
+                        }
+                    }
+
+                    if (skip)
+                        continue;
+
+                    if (inferred_decl.is_error())
+                    {
+                        log_warning("netlist_persistent", "skipping migration of generic data entry '{}' (type '{}'): {}", name, type_str, inferred_decl.get_error().get());
+                        continue;
+                    }
+
+                    // Gate-type declaration takes precedence if available
+                    Result<Parameter> final_decl = inferred_decl;
+                    if (gate_type != nullptr)
+                    {
+                        if (auto gt_res = gate_type->get_parameter(name); gt_res.is_ok())
+                            final_decl = gt_res;
+                    }
+
+                    if (auto res = c->set_parameter(final_decl.get(), migrated_value); res.is_error())
+                    {
+                        log_warning("netlist_persistent", "skipping migration of generic data entry '{}': {}", name, res.get_error().get());
+                        continue;
+                    }
+
+                    to_delete.emplace_back(std::get<0>(key_tuple), name);
+                }
+
+                for (const auto& [cat, key] : to_delete)
+                    c->delete_data(cat, key);
             }
 
             bool deserialize_gate(Netlist* nl, const rapidjson::Value& val, const std::unordered_map<std::string, hal::GateType*>& gate_types)
@@ -291,6 +532,19 @@ namespace hal
                     if (val.HasMember("data"))
                     {
                         deserialize_data(gate, val["data"]);
+                    }
+
+                    if (val.HasMember("parameters"))
+                    {
+                        if (auto res = deserialize_parameters(gate, val["parameters"]); res.is_error())
+                        {
+                            log_error("netlist_persistent", "could not deserialize gate '" + gate_name + "' with ID " + std::to_string(gate_id) + ": {}", res.get_error().get());
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        migrate_generic_data_to_parameters(gate, it->second);
                     }
 
                     if (val.HasMember("custom_functions"))
@@ -359,6 +613,10 @@ namespace hal
                 {
                     val.AddMember("data", data, allocator);
                 }
+                if (const auto& params = net->get_parameters(); !params.empty())
+                {
+                    val.AddMember("parameters", serialize_parameters(params, allocator), allocator);
+                }
                 return val;
             }
 
@@ -400,6 +658,15 @@ namespace hal
                 if (val.HasMember("data"))
                 {
                     deserialize_data(net, val["data"]);
+                }
+
+                if (val.HasMember("parameters"))
+                {
+                    if (auto res = deserialize_parameters(net, val["parameters"]); res.is_error())
+                    {
+                        log_error("netlist_persistent", "could not deserialize net '" + net_name + "' with ID " + std::to_string(net_id) + ": {}", res.get_error().get());
+                        return false;
+                    }
                 }
 
                 return true;
@@ -470,6 +737,10 @@ namespace hal
                 {
                     val.AddMember("data", data, allocator);
                 }
+                if (const auto& params = module->get_parameters(); !params.empty())
+                {
+                    val.AddMember("parameters", serialize_parameters(params, allocator), allocator);
+                }
                 return val;
             }
 
@@ -520,6 +791,19 @@ namespace hal
                 if (val.HasMember("data"))
                 {
                     deserialize_data(sm, val["data"]);
+                }
+
+                if (val.HasMember("parameters"))
+                {
+                    if (auto res = deserialize_parameters(sm, val["parameters"]); res.is_error())
+                    {
+                        log_error("netlist_persistent", "could not deserialize module '" + module_name + "' with ID " + std::to_string(module_id) + ": {}", res.get_error().get());
+                        return false;
+                    }
+                }
+                else
+                {
+                    migrate_generic_data_to_parameters(sm);
                 }
 
                 if (val.HasMember("pin_groups"))
@@ -747,7 +1031,9 @@ namespace hal
                     {
                         ProjectManager* pm = ProjectManager::instance();
                         if (pm)
+                        {
                             glib_path = pm->get_project_directory() / glib_path;
+                        }
                     }
                     gatelib = gate_library_manager::get_gate_library(glib_path.string());
 
@@ -928,8 +1214,8 @@ namespace hal
                 return nl;
             }
 
-            std::unique_ptr<Netlist> deserialize_document(rapidjson::Document& document, GateLibrary* gatelib, std::string source,
-                                                          std::chrono::time_point<std::chrono::high_resolution_clock>& begin_time)
+            std::unique_ptr<Netlist>
+                deserialize_document(rapidjson::Document& document, GateLibrary* gatelib, std::string source, std::chrono::time_point<std::chrono::high_resolution_clock>& begin_time)
             {
                 if (document.HasParseError())
                 {
@@ -978,10 +1264,14 @@ namespace hal
 
             std::filesystem::path serialize_to_dir = hal_file.parent_path();
             if (serialize_to_dir.empty())
+            {
                 return false;
+            }
 
             if (serialize_to_dir.is_relative())
+            {
                 serialize_to_dir = ProjectManager::instance()->get_project_directory() / serialize_to_dir;
+            }
 
             // create directory if it got erased in the meantime
             if (!std::filesystem::exists(serialize_to_dir))
@@ -1055,7 +1345,7 @@ namespace hal
             // event_controls::enable_all(false);
 
             rapidjson::Document document;
-            document.Parse<0, rapidjson::UTF8<> >(hal_string.c_str());
+            document.Parse<0, rapidjson::UTF8<>>(hal_string.c_str());
 
             return deserialize_document(document, gatelib, "source string", begin_time);
         }

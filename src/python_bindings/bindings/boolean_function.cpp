@@ -1267,8 +1267,8 @@ namespace hal
 
         py_boolean_function.def_static(
             "from_string",
-            [](const std::string& expression) -> BooleanFunction {
-                auto res = BooleanFunction::from_string(expression);
+            [](const std::string& expression, const std::map<std::string, u16>& var_sizes) -> BooleanFunction {
+                auto res = BooleanFunction::from_string(expression, var_sizes);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1280,10 +1280,13 @@ namespace hal
                 }
             },
             py::arg("expression"),
+            py::arg("var_sizes") = std::map<std::string, u16>{},
             R"(
-            Parses a Boolean function from a string expression.
+            Parses a Boolean function from a string expression. Variables whose bit-width differs
+            from the default of one bit can be sized via the optional ``var_sizes`` dict.
 
             :param str expression: Boolean function string.
+            :param dict[str, int] var_sizes: Optional dict from variable name to bit-width.
             :returns: The Boolean function on success, an empty Boolean function otherwise.
             :rtype: hal_py.BooleanFunction
         )");

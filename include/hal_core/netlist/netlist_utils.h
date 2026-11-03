@@ -45,11 +45,11 @@ namespace hal
          * \deprecated
          * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net.
          * The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]').
-         * Utilizes a cache for speedup on consecutive calls.
+         * The cache is neither read nor filled, as its entries do not record the subgraph they were computed for. Use `SubgraphNetlistDecorator::make_subgraph_function_cache` to share results across calls.
          *
          * @param[in] net - The net for which to generate the Boolean function.
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
-         * @param[inout] cache - Cache to speed up computations. The cache is filled by this function.
+         * @param[inout] cache - Unused.
          * @returns The combined Boolean function of the subgraph on success, an error otherwise.
          */
         [[deprecated("Will be removed in a future version, use SubgraphNetlistDecorator::get_subgraph_function instead.")]] CORE_API Result<BooleanFunction>
