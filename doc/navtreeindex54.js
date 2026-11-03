@@ -1,6 +1,5 @@
 var NAVTREEINDEX54 =
 {
-"structhal_1_1_logger_settings.html#a03715354b95165e3722aee1ad1163eb1":[9,0,0,311,0],
 "structhal_1_1_logger_settings.html#a76a8a95a78a1fbb21599009ff602ec8f":[9,0,0,311,2],
 "structhal_1_1_logger_settings.html#ad404d40c16724bb47645801b2c877929":[9,0,0,311,1],
 "structhal_1_1_logger_settings.html#ae9fd30cfb0b3c20c5368b087d35dca2c":[9,0,0,311,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX54 =
 "structhal_1_1dataflow_1_1processing_1_1_pass_configuration.html#a49eb100bcd9c47f8363cf41bab6d862d":[9,0,0,4,1,2,1],
 "structhal_1_1dataflow_1_1processing_1_1_pass_configuration.html#a81ead0998457fbdd85e91d04376390fc":[9,0,0,4,1,2,3],
 "structhal_1_1dataflow_1_1processing_1_1_pass_configuration.html#a9a8523091834b9c69136df529d014cd2":[9,0,0,4,1,2,0],
-"structhal_1_1dataflow_1_1processing_1_1_result.html":[9,0,0,4,1,3]
+"structhal_1_1dataflow_1_1processing_1_1_result.html":[9,0,0,4,1,3],
+"structhal_1_1dataflow_1_1processing_1_1_result.html#a6fece67dd76d62170b3ce9a90034246a":[9,0,0,4,1,3,1]
 };

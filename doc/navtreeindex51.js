@@ -1,6 +1,5 @@
 var NAVTREEINDEX51 =
 {
-"settings__widget_8h.html":[10,0,1,8,0,0,45,1,0],
 "settings__widget_8h_source.html":[10,0,1,8,0,0,45,1,0],
 "settings__widget__checkbox_8cpp.html":[10,0,1,8,2,44,1,1],
 "settings__widget__checkbox_8cpp_source.html":[10,0,1,8,2,44,1,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX51 =
 "solver_8cpp_source.html":[10,0,2,0,0,5],
 "solver_8h.html":[10,0,0,0,1,0,2],
 "solver_8h_source.html":[10,0,0,0,1,0,2],
-"sort_8cpp.html":[10,0,1,8,2,25,4]
+"sort_8cpp.html":[10,0,1,8,2,25,4],
+"sort_8cpp.html#a1e95bade9096c47139daec1bd6600432":[10,0,1,8,2,25,4,4]
 };

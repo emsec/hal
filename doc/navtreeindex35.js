@@ -1,6 +1,5 @@
 var NAVTREEINDEX35 =
 {
-"group__python-editor.html":[7,1,1,0],
 "group__python.html":[7,1,1],
 "group__settings.html":[7,1,4],
 "group__unused.html":[7,1,8],
@@ -249,5 +248,6 @@ var NAVTREEINDEX35 =
 "json__write__document_8cpp_source.html":[10,0,2,3,0],
 "json__write__document_8h.html":[10,0,0,0,4,3],
 "json__write__document_8h.html#a2f2eef0ee4477f3fe5874703a66e997f":[10,0,0,0,4,3,5],
-"json__write__document_8h.html#a3ecb2730cb3c2ab166e6c5e24189a690":[10,0,0,0,4,3,7]
+"json__write__document_8h.html#a3ecb2730cb3c2ab166e6c5e24189a690":[10,0,0,0,4,3,7],
+"json__write__document_8h.html#a4af6e1ed81cc8166500d031c8b64199c":[10,0,0,0,4,3,6]
 };
