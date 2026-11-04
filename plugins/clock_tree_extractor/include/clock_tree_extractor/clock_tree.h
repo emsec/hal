@@ -44,6 +44,7 @@ namespace hal
     class Netlist;
     class Gate;
     class Net;
+    class Endpoint;
 
     namespace cte
     {
@@ -58,7 +59,9 @@ namespace hal
             unrouted_net,
             multi_driven_net,
             enqueued_net,
-            multi_input_gate
+            multi_input_gate,
+            combinational_clock_sink,
+            clock_on_non_clock_pin
         };
 
         struct Diagnostic
@@ -69,6 +72,9 @@ namespace hal
             const void *subject_ptr;
             u32 subject_id;
             std::string message;
+            // for diagnostics caused by a single connection: the endpoint through which the net reaches the
+            // subject gate, which also gives the pin. nullptr for all other diagnostics
+            const Endpoint *endpoint = nullptr;
         };
 
         // a root-to-sink path through the clock tree

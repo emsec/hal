@@ -134,6 +134,8 @@ namespace hal
         py::enum_<cte::Severity>( m, "Severity", R"(
             The severity of a diagnostic emitted during clock tree extraction.
         )" )
+            .value( "debug", cte::Severity::debug )
+            .value( "info", cte::Severity::info )
             .value( "warning", cte::Severity::warning )
             .value( "error", cte::Severity::error );
 
@@ -146,7 +148,9 @@ namespace hal
             .value( "unrouted_clock_net", cte::DiagnosticCode::unrouted_net )
             .value( "multi_driven_clock_net", cte::DiagnosticCode::multi_driven_net )
             .value( "enqueued_net", cte::DiagnosticCode::enqueued_net )
-            .value( "multi_input_gate", cte::DiagnosticCode::multi_input_gate );
+            .value( "multi_input_gate", cte::DiagnosticCode::multi_input_gate )
+            .value( "combinational_clock_sink", cte::DiagnosticCode::combinational_clock_sink )
+            .value( "clock_on_non_clock_pin", cte::DiagnosticCode::clock_on_non_clock_pin );
 
         py::class_<cte::Diagnostic>( m, "Diagnostic", R"(
             A problem encountered during clock tree extraction, e.g., a gate or net that had to be skipped.
@@ -194,6 +198,23 @@ namespace hal
                 The human-readable message.
 
                 :type: str
+            )" )
+            .def_property_readonly(
+                "endpoint",
+                []( const cte::Diagnostic &self ) -> py::object {
+                    if( self.endpoint == nullptr )
+                    {
+                        return py::none();
+                    }
+                    return py::cast( self.endpoint );
+                },
+                borrowed(),
+                R"(
+                For diagnostics caused by a single connection, the endpoint through which the net reaches the subject
+                gate, which also gives the pin. For example, a clock net that reaches the data pin of a flip-flop.
+                ``None`` for all other diagnostics.
+
+                :type: hal_py.Endpoint or None
             )" );
 
         py::class_<cte::ClockTree>( m, "ClockTree", R"(

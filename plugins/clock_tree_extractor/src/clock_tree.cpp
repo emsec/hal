@@ -134,7 +134,8 @@ namespace hal
                                                 PtrType type,
                                                 const void *ptr,
                                                 u32 id,
-                                                std::string message ) {
+                                                std::string message,
+                                                const Endpoint *endpoint = nullptr ) {
                 if( severity == Severity::error )
                 {
                     log_error( "clock_tree_extractor", "{}", message );
@@ -151,7 +152,7 @@ namespace hal
                 {
                     log_debug( "clock_tree_extractor", "{}", message );
                 }
-                diagnostics.push_back( { severity, code, type, ptr, id, std::move( message ) } );
+                diagnostics.push_back( { severity, code, type, ptr, id, std::move( message ), endpoint } );
             };
 
             // new
@@ -337,6 +338,11 @@ namespace hal
                 ptrs_to_type.emplace( source, ( source == net ) ? NET : GATE );
                 vertices.emplace( source );
 
+                // where the clock on this net comes from, for the diagnostics below
+                const std::string clock_driver = net->is_global_input_net()
+                    ? std::string( "global input" )
+                    : "gate '" + net->get_sources().front()->get_gate()->get_name() + "'";
+
                 for( const Endpoint *ep : net->get_destinations() )
                 {
                     const Gate *gate = ep->get_gate();
@@ -352,9 +358,34 @@ namespace hal
 
                         if( !drives_clock_net )
                         {
-                            // the combinational cell only works on the clock net, but doesn't distribute it
-                            // TODO: improve comment and add example
-                            // diagnostic interesting?
+                            // a gate that reads a clock net belongs to the tree only if it passes the clock on, i.e.,
+                            // if one of its outputs was itself deemed a clock net on the way back from a clock pin.
+                            // otherwise it only consumes the clock, and keeping it would add a leaf and a branch that
+                            // clock nothing.
+                            // example: a clock monitor that samples the clock as data, e.g., XOR(clk, d) feeding the D
+                            // pin of a flip-flop.
+                            // side effect: gates whose outputs were skipped for other reasons are dropped as well,
+                            // e.g., parallel buffers driving one multi-driven net, or the first of two clock gates in
+                            // series, since the walk currently stops at the second one.
+                            std::string output_names;
+                            for( const Net *output : outputs )
+                            {
+                                output_names += ( output_names.empty() ? "'" : ", '" ) + output->get_name() + "'";
+                            }
+
+                            report( Severity::info,
+                                    DiagnosticCode::combinational_clock_sink,
+                                    GATE,
+                                    gate,
+                                    gate->get_id(),
+                                    "combinational gate '" + gate->get_name() + "' with ID "
+                                        + std::to_string( gate->get_id() ) + " (" + gate->get_type()->get_name()
+                                        + ") reads clock net '" + net->get_name() + "' with ID "
+                                        + std::to_string( net->get_id() ) + " from " + clock_driver + " on pin '"
+                                        + ep->get_pin()->get_name() + "' but drives no clock net (outputs: "
+                                        + ( output_names.empty() ? std::string( "none" ) : output_names )
+                                        + "), so it is not added to the clock tree",
+                                    ep );
                             continue;
                         }
                     }
@@ -366,8 +397,38 @@ namespace hal
                     if( !clock_pins.empty()
                         && std::find( clock_pins.begin(), clock_pins.end(), ep->get_pin() ) == clock_pins.end() )
                     {
-                        // TODO: comment why and add example
-                        // TODO: add a diagnostic -> might be interesting for later analysis
+                        // a cell with clock pins is only clocked through them. if a clock net reaches one of its other
+                        // pins, the cell uses the clock as data or control there, and an edge would give the cell a
+                        // second parent and a branch that does not clock it.
+                        // examples: a divided clock that is also sampled on the D pin of a flip-flop in the fast
+                        // domain, e.g., to detect its edges, or a clock that drives an asynchronous reset pin.
+                        // cells without clock-typed pins are not filtered here: a latch whose enable pin is typed as
+                        // enable still gets an edge when it reads a clock net on its D pin.
+                        std::string clocked_by;
+                        bool same_clock = false;
+                        for( const GatePin *clock_pin : clock_pins )
+                        {
+                            const Net *clock_net = gate->get_fan_in_net( clock_pin );
+                            same_clock = same_clock || clock_net == net;
+
+                            clocked_by += ( clocked_by.empty() ? "pin '" : ", pin '" ) + clock_pin->get_name() + "' by "
+                                + ( clock_net == nullptr ? std::string( "nothing" )
+                                                         : "net '" + clock_net->get_name() + "' with ID "
+                                            + std::to_string( clock_net->get_id() ) );
+                        }
+
+                        report( Severity::info,
+                                DiagnosticCode::clock_on_non_clock_pin,
+                                GATE,
+                                gate,
+                                gate->get_id(),
+                                "clock net '" + net->get_name() + "' with ID " + std::to_string( net->get_id() )
+                                    + " from " + clock_driver + " reaches pin '" + ep->get_pin()->get_name() + "' ("
+                                    + enum_to_string( ep->get_pin()->get_type() ) + ") of gate '" + gate->get_name()
+                                    + "' with ID " + std::to_string( gate->get_id() ) + " ("
+                                    + gate->get_type()->get_name() + "), which is clocked on " + clocked_by
+                                    + ( same_clock ? ", i.e., by the same net" : "" ) + ", so no edge is added",
+                                ep );
                         continue;
                     }
 
