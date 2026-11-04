@@ -1,0 +1,118 @@
+name: hal
+title: HAL - Hardware Analyzer
+summary: Gate-level netlist reverse engineering and manipulation framework
+description: |
+  HAL is a comprehensive reverse engineering and manipulation framework for
+  gate-level netlists, with a Qt GUI, Python scripting, and a plugin system.
+license: MIT
+adopt-info: hal
+base: core24
+# First iteration: devmode skips confinement so we can test packaging in isolation.
+# Switch to "strict" once the app runs, then fix whatever the plugs below miss.
+confinement: devmode
+grade: devel
+platforms:
+  amd64:
+  arm64:
+
+apps:
+  hal:
+    command: usr/bin/hal
+    # GUI launcher. The desktop entry and icon are added once the basics work.
+    environment:
+      # HAL derives its base path from the binary location, but be explicit.
+      HAL_BASE_PATH: $SNAP/usr
+      LD_LIBRARY_PATH: $SNAP/usr/lib:$SNAP/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}:$SNAP/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/blas:$SNAP/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/lapack
+      QT_PLUGIN_PATH: $SNAP/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/qt6/plugins
+      PYTHONHOME: $SNAP/usr
+      PYTHONPATH: $SNAP/usr/lib/python3.12:$SNAP/usr/lib/python3.12/lib-dynload:$SNAP/usr/lib/python3/dist-packages
+    plugs:
+      - home
+      - removable-media
+      - desktop
+      - desktop-legacy
+      - wayland
+      - x11
+      - opengl
+      - network
+
+parts:
+  hal:
+    plugin: cmake
+    source: .
+    cmake-generator: Ninja
+    cmake-parameters:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      # Plain lib/ on every architecture: HAL's runtime lookup (src/utilities/utils.cpp)
+      # only knows lib/x86_64-linux-gnu, lib64 and lib, so aarch64-linux-gnu would be missed.
+      - -DCMAKE_INSTALL_LIBDIR=lib
+      - -DBUILD_ALL_PLUGINS=ON
+      - -DPL_GUI=ON
+      - -DBUILD_TESTS=OFF
+      - -DBUILD_DOCUMENTATION=OFF
+      - -DPACKAGE_DEB=OFF
+      # ldconfig cannot run inside the snap build; libraries are found via LD_LIBRARY_PATH.
+      - -DENABLE_INSTALL_LDCONFIG=OFF
+    override-pull: |
+      craftctl default
+      craftctl set version="$(git describe --tags --always | sed 's/^v//')"
+    override-build: |
+      craftctl default
+      # Ship the sample netlists with the snap only; CMake does not install them.
+      # The glob skips dotfiles such as .gitignore and .DS_Store.
+      install -d "$CRAFT_PART_INSTALL/usr/share/hal/examples"
+      cp -r "$CRAFT_PART_SRC"/examples/* "$CRAFT_PART_INSTALL/usr/share/hal/examples/"
+    build-packages:
+      # Mirrors install_dependencies.sh for Ubuntu 24.04, minus docs/coverage tooling.
+      - build-essential
+      - git
+      - pkgconf
+      - autoconf
+      - autotools-dev
+      - libboost-all-dev
+      - qt6-base-dev
+      - qt6-5compat-dev
+      - libqt6svg6-dev
+      - libpython3-dev
+      - python3-pybind11
+      - pybind11-dev
+      - rapidjson-dev
+      - libspdlog-dev
+      - libz3-dev
+      - libsodium-dev
+      - libreadline-dev
+      - libgraphviz-dev
+      - libxcb-xkb-dev
+      - libomp-dev
+      - libsuitesparse-dev
+    stage-packages:
+      - libqt6core6t64
+      - libqt6gui6t64
+      - libqt6widgets6t64
+      - libqt6concurrent6t64
+      - libqt6svg6
+      - libqt6core5compat6
+      - qt6-qpa-plugins
+      - qt6-wayland
+      - qt6-gtk-platformtheme
+      - libpython3.12t64
+      - libpython3.12-minimal
+      - libpython3.12-stdlib
+      - python3.12
+      - python3-jedi
+      - python3-dateutil
+      - libz3-4
+      - z3
+      - libsodium23
+      - libreadline8t64
+      - libgvc6
+      - libcgraph6
+      - libomp5-18
+      - libboost-filesystem1.83.0
+      - libboost-program-options1.83.0
+      - libspdlog1.12
+      - libsuitesparse-dev
+      - libgomp1
+      - graphviz
+      - fonts-dejavu-core
