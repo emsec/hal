@@ -103,7 +103,7 @@ namespace hal
                               std::unordered_map<igraph_int_t, const void *> &&vertices_to_ptrs,
                               std::unordered_map<const void *, PtrType> &&ptrs_to_types )
             : m_netlist( netlist )
-            , m_igraph( std::move( igraph ) )
+            , m_igraph( igraph )
             , m_roots( std::move( roots ) )
             , m_vertices_to_ptrs( std::move( vertices_to_ptrs ) )
             , m_ptrs_to_types( std::move( ptrs_to_types ) )
@@ -151,8 +151,8 @@ namespace hal
             std::unordered_map<const void *, PtrType> ptrs_to_type;
 
             std::queue<std::tuple<const Gate *, const Gate *, std::vector<const Gate *>>> queue;
-            NetlistTraversalDecorator ntd = NetlistTraversalDecorator( *netlist );
             std::unordered_set<std::pair<const Gate *, const Gate *>, VoidPtrHash> visited;
+            std::unordered_set<const Gate *> expanded;
 
             for( const Gate *ff : netlist->get_gates( is_ff ) )
             {
@@ -237,7 +237,7 @@ namespace hal
                 for( const Endpoint *source_ep : clk->get_sources() )
                 {
                     const Gate *gate = source_ep->get_gate();
-                    queue.push( { ff, gate, std::vector<const Gate *>{ ff } } );
+                    queue.emplace( ff, gate, std::vector<const Gate *>{ ff } );
                 }
             }
 
@@ -283,6 +283,13 @@ namespace hal
 
                     if( is_ff( source ) )
                     {
+                        continue;
+                    }
+
+                    // prevent runtime explosion
+                    if( !expanded.insert( source ).second )
+                    {
+                        // the path is merged now, and the fan-in of this gate has already been walked
                         continue;
                     }
 
@@ -341,7 +348,7 @@ namespace hal
                                 "unrouted clock net with ID " + std::to_string( net->get_id() ) + " ignored" );
                         continue;
                     }
-                    else if( net->get_num_of_sources() > 1 )
+                    if( net->get_num_of_sources() > 1 )
                     {
                         report( Severity::warning,
                                 DiagnosticCode::multi_driven_clock_net,
@@ -355,7 +362,7 @@ namespace hal
                     const Gate *new_source = net->get_sources().front()->get_gate();
                     if( visited.find( { reference, new_source } ) == visited.end() )
                     {
-                        queue.push( { reference, new_source, path } );
+                        queue.emplace( reference, new_source, path );
                     }
                 }
             }
@@ -446,7 +453,7 @@ namespace hal
 
                 const Gate *gate = (const Gate *) ptr;
 
-                std::string coords = "";
+                std::string coords;
 
                 // Workaround for negative coordinates
 
@@ -496,7 +503,7 @@ namespace hal
             std::queue<std::pair<igraph_int_t, std::string>> queue;
             for( const igraph_int_t &root : m_roots )
             {
-                queue.push( { root, "blue" } );
+                queue.emplace( root, "blue" );
             }
 
             igraph_error_t ierror;
@@ -767,7 +774,7 @@ namespace hal
             {
                 if( type == PtrType::GATE )
                 {
-                    result.push_back( (const Gate *) ptr );
+                    result.push_back( static_cast<const Gate*>(ptr) );
                 }
             }
 
@@ -782,7 +789,7 @@ namespace hal
             {
                 if( type == PtrType::NET )
                 {
-                    result.push_back( (const Net *) ptr );
+                    result.push_back( static_cast<const Net*>(ptr) );
                 }
             }
 
@@ -830,7 +837,7 @@ namespace hal
         }
 
         Result<std::vector<std::pair<const void *, PtrType>>>
-        ClockTree::get_neighbors( const void *ptr, igraph_neimode_t direction ) const
+        ClockTree::get_neighbors( const void *ptr, const igraph_neimode_t direction ) const
         {
             auto it = m_ptrs_to_vertices.find( ptr );
             if( it == m_ptrs_to_vertices.end() )
@@ -858,7 +865,7 @@ namespace hal
             for( igraph_int_t idx = 0; idx < igraph_vector_int_size( &neighbors ); idx++ )
             {
                 const void *n_ptr = m_vertices_to_ptrs.at( VECTOR( neighbors )[idx] );
-                result.push_back( std::make_pair( n_ptr, m_ptrs_to_types.at( n_ptr ) ) );
+                result.emplace_back( n_ptr, m_ptrs_to_types.at( n_ptr ) );
             }
 
             igraph_vector_int_destroy( &neighbors );
