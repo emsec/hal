@@ -58,6 +58,12 @@ namespace hal
                 {
                     for( const auto &child : children.get() )
                     {
+                        // prevent loop-caused runtime explosion (e.g., ring-oscillator)
+                        if ( std::find( branch.begin(), branch.end(), child ) != branch.end() )
+                        {
+                            continue;
+                        }
+
                         const auto res = recover_branches_for_root( clock_tree, child, branch, branches );
                         if( res.is_error() )
                         {
