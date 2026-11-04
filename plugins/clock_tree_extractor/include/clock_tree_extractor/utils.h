@@ -43,7 +43,7 @@ namespace hal
         bool is_mux( const Gate *gate );
         bool is_oscillator( const Gate *gate );
         bool is_pll( const Gate *gate );
-        bool is_control_pin( const PinType &pin_type );
+        bool is_control_pin( PinType pin_type );
         bool is_connected_to_control_pin( const Endpoint *endpoint );
     }  // namespace cte
 }  // namespace hal

@@ -75,7 +75,7 @@ namespace hal
             return gate->get_type()->has_property( GateTypeProperty::pll );
         }
 
-        bool is_control_pin( const PinType &pin_type )
+        bool is_control_pin( PinType pin_type )
         {
             return pin_type == PinType::clock || pin_type == PinType::enable || pin_type == PinType::select
                 || pin_type == PinType::set || pin_type == PinType::reset;

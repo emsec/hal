@@ -26,13 +26,13 @@
 
 #include "hal_core/python_bindings/python_bindings.h"
 
+#include "clock_tree_extractor/branches.h"
 #include "clock_tree_extractor/clock_tree.h"
 #include "clock_tree_extractor/plugin_clock_tree_extractor.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
 #include <igraph/igraph.h>
-#include <pybind11/detail/descr.h>
 #include <pybind11/pytypes.h>
 #include <set>
 #include <string>
@@ -145,8 +145,8 @@ namespace hal
             .value( "invalid_clock_pin_count", cte::DiagnosticCode::invalid_clock_pin_count )
             .value( "unconnected_clock_pin", cte::DiagnosticCode::unconnected_clock_pin )
             .value( "invalid_clock_net_sources", cte::DiagnosticCode::invalid_clock_net_sources )
-            .value( "unrouted_clock_net", cte::DiagnosticCode::unrouted_net )
-            .value( "multi_driven_clock_net", cte::DiagnosticCode::multi_driven_net )
+            .value( "unrouted_net", cte::DiagnosticCode::unrouted_net )
+            .value( "multi_driven_net", cte::DiagnosticCode::multi_driven_net )
             .value( "enqueued_net", cte::DiagnosticCode::enqueued_net )
             .value( "multi_input_gate", cte::DiagnosticCode::multi_input_gate )
             .value( "combinational_clock_sink", cte::DiagnosticCode::combinational_clock_sink )
@@ -524,7 +524,7 @@ namespace hal
             .def(
                 "get_branches",
                 []( const cte::ClockTree &self ) -> py::object {
-                    auto res = self.get_branches();
+                    auto res = cte::recover_branches( self );
                     if( res.is_error() )
                     {
                         log_error( "clock_tree_extractor", "{}", res.get_error().get() );
@@ -557,7 +557,7 @@ namespace hal
                 },
                 borrowed(),
                 R"(
-                Get all branches of the clock tree, i.e., all paths from a root to a sink. The branches are computed on the first call and cached.
+                Get all branches of the clock tree, i.e., all paths from a root to a sink. The branches are recomputed on every call.
 
                 :returns: The branches on success, ``None`` otherwise. Each branch is ordered from root to sink.
                 :rtype: list[list[hal_py.Gate or hal_py.Net]] or None

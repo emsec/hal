@@ -32,7 +32,6 @@
 
 #include <igraph/igraph.h>
 #include <memory>
-#include <optional>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -100,12 +99,6 @@ namespace hal
         class ClockTree
         {
           public:
-            ClockTree( const Netlist *netlist,
-                       igraph_t &&graph,
-                       std::unordered_set<igraph_int_t> &&roots,
-                       std::unordered_map<igraph_int_t, const void *> &&m_vertices_to_ptrs,
-                       std::unordered_map<const void *, PtrType> &&m_ptrs_to_types );
-
             ~ClockTree();
 
             static Result<std::unique_ptr<ClockTree>> from_netlist( const Netlist *netlist );
@@ -126,11 +119,11 @@ namespace hal
             Result<std::vector<std::pair<const void *, PtrType>>>
             get_ptrs_from_vertices( const std::vector<igraph_int_t> &vertices ) const;
 
-            const std::vector<const Gate *> get_gates() const;
+            std::vector<const Gate *> get_gates() const;
 
-            const std::vector<const Net *> get_nets() const;
+            std::vector<const Net *> get_nets() const;
 
-            const std::unordered_map<const void *, PtrType> get_all() const;
+            const std::unordered_map<const void *, PtrType> &get_all() const;
 
             const Netlist *get_netlist() const;
 
@@ -140,12 +133,13 @@ namespace hal
 
             const std::unordered_set<igraph_int_t> &get_roots() const;
 
-            Result<std::vector<Branch>> get_branches() const;
-
           private:
-            ClockTree() = delete;
-
-            ClockTree( const Netlist *netlist );
+            // takes ownership of graph, which must be initialized; only from_netlist and get_subtree create trees
+            ClockTree( const Netlist *netlist,
+                       igraph_t &&graph,
+                       std::unordered_set<igraph_int_t> &&roots,
+                       std::unordered_map<igraph_int_t, const void *> &&vertices_to_ptrs,
+                       std::unordered_map<const void *, PtrType> &&ptrs_to_types );
 
             const Netlist *m_netlist;
 
@@ -162,8 +156,6 @@ namespace hal
             std::unordered_map<const void *, PtrType> m_ptrs_to_types;
 
             std::vector<Diagnostic> m_diagnostics;
-
-            mutable std::optional<std::vector<Branch>> m_branches;
         };
     }  // namespace cte
 }  // namespace hal

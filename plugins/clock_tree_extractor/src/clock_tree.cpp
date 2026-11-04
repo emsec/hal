@@ -26,9 +26,7 @@
 
 #include "clock_tree_extractor/clock_tree.h"
 
-#include "clock_tree_extractor/branches.h"
 #include "clock_tree_extractor/utils.h"
-#include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
@@ -89,13 +87,50 @@ namespace hal
             {
                 return igraph_vector_int_push_back( (igraph_vector_int_t *) extra, vid );
             }
-        }  // namespace
 
-        ClockTree::ClockTree( const Netlist *netlist )
-            : m_netlist( netlist )
-            , m_igraph_ptr( &m_igraph )
-        {
-        }
+            /**
+             * Replaces igraph's default error handler, which aborts the whole process, with one that logs and returns,
+             * so that a failing igraph call hands its error code back to the caller and ends up in a Result instead.
+             * The previous handler is restored when the guard goes out of scope, so other plugins using igraph keep
+             * whatever handler they rely on. Guards nest, e.g., recover_branches calling get_neighbors.
+             *
+             * Put one at the start of every function that calls into igraph.
+             */
+            class ScopedIgraphErrorHandler
+            {
+              public:
+                ScopedIgraphErrorHandler()
+                    : m_previous( igraph_set_error_handler( &handle_error ) )
+                {
+                }
+
+                ~ScopedIgraphErrorHandler()
+                {
+                    igraph_set_error_handler( m_previous );
+                }
+
+                ScopedIgraphErrorHandler( const ScopedIgraphErrorHandler & ) = delete;
+                ScopedIgraphErrorHandler &operator=( const ScopedIgraphErrorHandler & ) = delete;
+
+              private:
+                static void handle_error( const char *reason, const char *file, int line, igraph_error_t igraph_errno )
+                {
+                    // igraph calls the handler once per level an error passes through, so this may log several times
+                    // per error. log first: IGRAPH_FINALLY_FREE may invalidate reason
+                    log_debug( "clock_tree_extractor",
+                               "igraph error at {}:{}: {} ({})",
+                               file,
+                               line,
+                               reason,
+                               igraph_strerror( igraph_errno ) );
+
+                    // required of every handler that does not abort: frees igraph's temporary allocations
+                    IGRAPH_FINALLY_FREE();
+                }
+
+                igraph_error_handler_t *m_previous;
+            };
+        }  // namespace
 
         ClockTree::ClockTree( const Netlist *netlist,
                               igraph_t &&igraph,
@@ -213,13 +248,11 @@ namespace hal
                 const Net *net = nqueue.front();
                 nqueue.pop();
 
-                if( nvisited.find( net ) != nvisited.end() )
+                if( !nvisited.insert( net ).second )
                 {
                     // prevent double processing of net
                     continue;
                 }
-
-                nvisited.insert( net );
 
                 if( net->is_global_input_net() )
                 {
@@ -279,6 +312,11 @@ namespace hal
                         for( const auto &pin : data_pins )
                         {
                             const Net *input = source->get_fan_in_net( pin );
+
+                            if( input == nullptr )
+                            {
+                                continue;
+                            }
 
                             // TODO: create own function to avoid duplicate code
                             if( input->is_gnd_net() || input->is_vcc_net() )
@@ -441,19 +479,21 @@ namespace hal
                 }
             }
 
-            auto clock_tree = std::unique_ptr<ClockTree>( new ClockTree( netlist ) );
-            clock_tree->m_diagnostics = std::move( diagnostics );
+            const ScopedIgraphErrorHandler igraph_error_handler;
+
+            // everything is built in locals first and only moved into a ClockTree once it all succeeded, so an
+            // early return never destroys a ClockTree whose graph was not initialized
+            std::unordered_map<igraph_int_t, const void *> vertices_to_ptrs;
+            std::unordered_map<const void *, igraph_int_t> ptrs_to_vertices;
 
             igraph_int_t idx = 0;
             for( const void *vertex : vertices )
             {
                 const igraph_int_t vertex_id = idx++;
 
-                clock_tree->m_vertices_to_ptrs[vertex_id] = vertex;
-                clock_tree->m_ptrs_to_vertices[vertex] = vertex_id;
+                vertices_to_ptrs[vertex_id] = vertex;
+                ptrs_to_vertices[vertex] = vertex_id;
             }
-
-            clock_tree->m_ptrs_to_types = ptrs_to_type;
 
             igraph_error_t ierror;
             igraph_vector_int_t iedges;
@@ -465,12 +505,12 @@ namespace hal
             idx = 0;
             for( const auto &[src, dst] : edges )
             {
-                VECTOR( iedges )[idx++] = clock_tree->m_ptrs_to_vertices.at( src );
-                VECTOR( iedges )[idx++] = clock_tree->m_ptrs_to_vertices.at( dst );
+                VECTOR( iedges )[idx++] = ptrs_to_vertices.at( src );
+                VECTOR( iedges )[idx++] = ptrs_to_vertices.at( dst );
             }
 
-            if( ( ierror = igraph_create( clock_tree->m_igraph_ptr, &iedges, vertices.size(), IGRAPH_DIRECTED ) )
-                != IGRAPH_SUCCESS )
+            igraph_t igraph;
+            if( ( ierror = igraph_create( &igraph, &iedges, vertices.size(), IGRAPH_DIRECTED ) ) != IGRAPH_SUCCESS )
             {
                 igraph_vector_int_destroy( &iedges );
                 return ERR( igraph_strerror( ierror ) );
@@ -481,33 +521,46 @@ namespace hal
             igraph_vector_int_t indegrees;
             if( ( ierror = igraph_vector_int_init( &indegrees, 0 ) ) != IGRAPH_SUCCESS )
             {
+                igraph_destroy( &igraph );
                 return ERR( igraph_strerror( ierror ) );
             }
 
-            if( ( ierror = igraph_degree(
-                      clock_tree->m_igraph_ptr, &indegrees, igraph_vss_all(), IGRAPH_IN, IGRAPH_NO_LOOPS ) )
+            if( ( ierror = igraph_degree( &igraph, &indegrees, igraph_vss_all(), IGRAPH_IN, IGRAPH_NO_LOOPS ) )
                 != IGRAPH_SUCCESS )
             {
+                igraph_destroy( &igraph );
                 igraph_vector_int_destroy( &indegrees );
                 return ERR( igraph_strerror( ierror ) );
             }
 
+            std::unordered_set<igraph_int_t> roots;
             for( idx = 0; idx < igraph_vector_int_size( &indegrees ); idx++ )
             {
                 if( VECTOR( indegrees )[idx] != 0 )
                 {
                     continue;
                 }
-                clock_tree->m_roots.insert( idx );
+                roots.insert( idx );
             }
 
             igraph_vector_int_destroy( &indegrees );
+
+            // the ClockTree takes ownership of igraph from here on and destroys it in its destructor.
+            // plain new instead of make_unique, since the constructor is private
+            auto clock_tree = std::unique_ptr<ClockTree>( new ClockTree( netlist,
+                                                                         std::move( igraph ),
+                                                                         std::move( roots ),
+                                                                         std::move( vertices_to_ptrs ),
+                                                                         std::move( ptrs_to_type ) ) );
+            clock_tree->m_diagnostics = std::move( diagnostics );
 
             return OK( std::move( clock_tree ) );
         }
 
         Result<std::monostate> ClockTree::export_dot( const std::string &pathname ) const
         {
+            const ScopedIgraphErrorHandler igraph_error_handler;
+
             std::ofstream dot_fd( pathname );
 
             if( !dot_fd )
@@ -646,6 +699,8 @@ namespace hal
 
         Result<std::unique_ptr<ClockTree>> ClockTree::get_subtree( const void *ptr, const bool parent ) const
         {
+            const ScopedIgraphErrorHandler igraph_error_handler;
+
             auto it = m_ptrs_to_vertices.find( ptr );
             if( it == m_ptrs_to_vertices.end() )
             {
@@ -712,6 +767,8 @@ namespace hal
             igraph_vector_int_t map;
             if( ( ierror = igraph_vector_int_init( &map, igraph_vcount( m_igraph_ptr ) ) ) != IGRAPH_SUCCESS )
             {
+                igraph_vs_destroy( &vs );
+                igraph_vector_int_destroy( &vertices );
                 return ERR( igraph_strerror( ierror ) );
             }
 
@@ -752,12 +809,14 @@ namespace hal
             igraph_vector_int_t indegrees;
             if( ( ierror = igraph_vector_int_init( &indegrees, igraph_vcount( &igraph ) ) ) != IGRAPH_SUCCESS )
             {
+                igraph_destroy( &igraph );
                 return ERR( igraph_strerror( ierror ) );
             }
 
             if( ( ierror = igraph_degree( &igraph, &indegrees, igraph_vss_all(), IGRAPH_IN, IGRAPH_NO_LOOPS ) )
                 != IGRAPH_SUCCESS )
             {
+                igraph_destroy( &igraph );
                 igraph_vector_int_destroy( &indegrees );
                 return ERR( igraph_strerror( ierror ) );
             }
@@ -773,11 +832,11 @@ namespace hal
 
             igraph_vector_int_destroy( &indegrees );
 
-            return OK( std::make_unique<ClockTree>( m_netlist,
-                                                    std::move( igraph ),
-                                                    std::move( roots ),
-                                                    std::move( vertices_to_ptrs ),
-                                                    std::move( ptrs_to_types ) ) );
+            return OK( std::unique_ptr<ClockTree>( new ClockTree( m_netlist,
+                                                                  std::move( igraph ),
+                                                                  std::move( roots ),
+                                                                  std::move( vertices_to_ptrs ),
+                                                                  std::move( ptrs_to_types ) ) ) );
         }
 
         Result<igraph_int_t> ClockTree::get_vertex_from_ptr( const void *ptr ) const
@@ -840,7 +899,7 @@ namespace hal
             return OK( result );
         }
 
-        const std::vector<const Gate *> ClockTree::get_gates() const
+        std::vector<const Gate *> ClockTree::get_gates() const
         {
             std::vector<const Gate *> result;
 
@@ -855,7 +914,7 @@ namespace hal
             return result;
         }
 
-        const std::vector<const Net *> ClockTree::get_nets() const
+        std::vector<const Net *> ClockTree::get_nets() const
         {
             std::vector<const Net *> result;
 
@@ -870,7 +929,7 @@ namespace hal
             return result;
         }
 
-        const std::unordered_map<const void *, PtrType> ClockTree::get_all() const
+        const std::unordered_map<const void *, PtrType> &ClockTree::get_all() const
         {
             return m_ptrs_to_types;
         }
@@ -890,21 +949,6 @@ namespace hal
             return m_roots;
         }
 
-        Result<std::vector<Branch>> ClockTree::get_branches() const
-        {
-            if( !m_branches.has_value() )
-            {
-                auto result = recover_branches( *this );
-                if( result.is_error() )
-                {
-                    return ERR( result.get_error().get() );
-                }
-                m_branches = result.get();
-            }
-
-            return OK( *m_branches );
-        }
-
         const igraph_t *ClockTree::get_igraph() const
         {
             return m_igraph_ptr;
@@ -913,6 +957,8 @@ namespace hal
         Result<std::vector<std::pair<const void *, PtrType>>>
         ClockTree::get_neighbors( const void *ptr, const igraph_neimode_t direction ) const
         {
+            const ScopedIgraphErrorHandler igraph_error_handler;
+
             auto it = m_ptrs_to_vertices.find( ptr );
             if( it == m_ptrs_to_vertices.end() )
             {
