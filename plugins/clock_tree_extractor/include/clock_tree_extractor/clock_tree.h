@@ -49,14 +49,16 @@ namespace hal
     {
         enum PtrType { UNKNOWN, GATE, NET };
 
-        enum class Severity { warning, error };
+        enum class Severity { debug, info, warning, error };
 
         enum class DiagnosticCode {
             invalid_clock_pin_count,
             unconnected_clock_pin,
             invalid_clock_net_sources,
-            unrouted_clock_net,
-            multi_driven_clock_net,
+            unrouted_net,
+            multi_driven_net,
+            enqueued_net,
+            multi_input_gate
         };
 
         struct Diagnostic

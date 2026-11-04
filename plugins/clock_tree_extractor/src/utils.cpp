@@ -60,6 +60,21 @@ namespace hal
             return gate->get_type()->has_property( GateTypeProperty::delay );
         }
 
+        bool is_mux( const Gate *gate )
+        {
+            return gate->get_type()->has_property( GateTypeProperty::c_mux );
+        }
+
+        bool is_oscillator( const Gate *gate )
+        {
+            return gate->get_type()->has_property( GateTypeProperty::oscillator );
+        }
+
+        bool is_pll( const Gate *gate )
+        {
+            return gate->get_type()->has_property( GateTypeProperty::pll );
+        }
+
         bool is_control_pin( const PinType &pin_type )
         {
             return pin_type == PinType::clock || pin_type == PinType::enable || pin_type == PinType::select

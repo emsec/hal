@@ -143,8 +143,10 @@ namespace hal
             .value( "invalid_clock_pin_count", cte::DiagnosticCode::invalid_clock_pin_count )
             .value( "unconnected_clock_pin", cte::DiagnosticCode::unconnected_clock_pin )
             .value( "invalid_clock_net_sources", cte::DiagnosticCode::invalid_clock_net_sources )
-            .value( "unrouted_clock_net", cte::DiagnosticCode::unrouted_clock_net )
-            .value( "multi_driven_clock_net", cte::DiagnosticCode::multi_driven_clock_net );
+            .value( "unrouted_clock_net", cte::DiagnosticCode::unrouted_net )
+            .value( "multi_driven_clock_net", cte::DiagnosticCode::multi_driven_net )
+            .value( "enqueued_net", cte::DiagnosticCode::enqueued_net )
+            .value( "multi_input_gate", cte::DiagnosticCode::multi_input_gate );
 
         py::class_<cte::Diagnostic>( m, "Diagnostic", R"(
             A problem encountered during clock tree extraction, e.g., a gate or net that had to be skipped.

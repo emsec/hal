@@ -40,6 +40,9 @@ namespace hal
         bool is_buffer( const Gate *gate );
         bool is_inverter( const Gate *gate );
         bool is_delay( const Gate *gate );
+        bool is_mux( const Gate *gate );
+        bool is_oscillator( const Gate *gate );
+        bool is_pll( const Gate *gate );
         bool is_control_pin( const PinType &pin_type );
         bool is_connected_to_control_pin( const Endpoint *endpoint );
     }  // namespace cte

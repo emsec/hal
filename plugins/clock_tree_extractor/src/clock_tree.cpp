@@ -25,9 +25,9 @@
 // SOFTWARE.
 
 #include "clock_tree_extractor/clock_tree.h"
+
 #include "clock_tree_extractor/branches.h"
 #include "clock_tree_extractor/utils.h"
-
 #include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
@@ -139,30 +139,33 @@ namespace hal
                 {
                     log_error( "clock_tree_extractor", "{}", message );
                 }
-                else
+                else if( severity == Severity::warning )
                 {
                     log_warning( "clock_tree_extractor", "{}", message );
+                }
+                else if( severity == Severity::info )
+                {
+                    log_info( "clock_tree_extractor", "{}", message );
+                }
+                else
+                {
+                    log_debug( "clock_tree_extractor", "{}", message );
                 }
                 diagnostics.push_back( { severity, code, type, ptr, id, std::move( message ) } );
             };
 
-            std::unordered_set<void *> vertices;
-            std::unordered_set<std::pair<void *, void *>, VoidPtrHash> edges;
-            std::unordered_map<const void *, PtrType> ptrs_to_type;
-
-            std::queue<std::tuple<const Gate *, const Gate *, std::vector<const Gate *>>> queue;
-            std::unordered_set<std::pair<const Gate *, const Gate *>, VoidPtrHash> visited;
-            std::unordered_set<const Gate *> expanded;
+            // new
+            std::queue<const Net *> nqueue;
+            std::unordered_set<const Net *> nvisited;
+            std::unordered_set<const Net *> deemed_clock_net;
 
             for( const Gate *ff : netlist->get_gates( is_ff ) )
             {
-                vertices.insert( (void *) ff );
-                ptrs_to_type[(void *) ff] = PtrType::GATE;
-
-                const std::vector<hal::GatePin *> clock_pins = ff->get_type()->get_pins( []( const auto &p ) {
+                const std::vector<GatePin *> clock_pins = ff->get_type()->get_pins( []( const auto &p ) {
                     return ( p->get_direction() == PinDirection::input ) && ( p->get_type() == PinType::clock );
                 } );
 
+                /*
                 if( clock_pins.size() != 1 )
                 {
                     report( Severity::error,
@@ -174,200 +177,210 @@ namespace hal
                                 + std::to_string( ff->get_id() ) );
                     continue;
                 }
+                */
 
-                const Net *clk = ff->get_fan_in_net( clock_pins.front() );
-                if( clk == nullptr )
+                for( const auto &pin : clock_pins )
                 {
-                    report( Severity::error,
-                            DiagnosticCode::unconnected_clock_pin,
-                            PtrType::GATE,
-                            ff,
-                            ff->get_id(),
-                            "no net connected to clock pin at gate '" + ff->get_name() + "' with ID "
-                                + std::to_string( ff->get_id() ) );
-                    continue;
-                }
+                    const Net *clk = ff->get_fan_in_net( pin );
 
-                if( clk->get_num_of_sources() > 1 )
-                {
-                    bool valid = true;
-                    for( const Endpoint *source_ep : clk->get_sources() )
-                    {
-                        const Gate *gate = source_ep->get_gate();
-                        if( !( is_buffer( gate ) || is_inverter( gate ) ) )
-                        {
-                            // In theory, it should be either all buffers or all inverters. But depending on
-                            // extraction results, e.g., it could happen that a buffer is split into two inverters.
-                            // So I just assume it is fine if all the sources are either a buffer or an inverter
-                            // without enforcing strict buffer only or inverter only.
-                            valid = false;
-                            break;
-                        }
-                    }
-                    if( !valid )
+                    if( clk == nullptr )
                     {
                         report( Severity::error,
-                                DiagnosticCode::invalid_clock_net_sources,
-                                PtrType::NET,
-                                clk,
-                                clk->get_id(),
-                                "invalid number of sources for clock net with ID " + std::to_string( clk->get_id() ) );
+                                DiagnosticCode::unconnected_clock_pin,
+                                GATE,
+                                ff,
+                                ff->get_id(),
+                                "no net connected to clock pin at gate '" + ff->get_name() + "' with ID "
+                                    + std::to_string( ff->get_id() ) );
                         continue;
                     }
-                }
-                else if( clk->is_global_input_net() )
-                {
-                    // the flip-flop is clocked straight from the outside: the net is the root and the flip-flop its only child
-                    vertices.insert( (void *) clk );
-                    ptrs_to_type[(void *) clk] = PtrType::NET;
-                    edges.insert( { (void *) clk, (void *) ff } );
-                    continue;
-                }
-                else if( clk->get_num_of_sources() == 0 )
-                {
-                    report( Severity::warning,
-                            DiagnosticCode::unrouted_clock_net,
-                            PtrType::NET,
+
+                    nqueue.emplace( clk );
+
+                    // improve (also log corresponding gate)
+                    report( Severity::debug,
+                            DiagnosticCode::enqueued_net,
+                            NET,
                             clk,
                             clk->get_id(),
-                            "unrouted clock net with ID " + std::to_string( clk->get_id() ) + " ignored" );
-                    continue;
-                }
-
-                for( const Endpoint *source_ep : clk->get_sources() )
-                {
-                    const Gate *gate = source_ep->get_gate();
-                    queue.emplace( ff, gate, std::vector<const Gate *>{ ff } );
+                            "enqueued net '" + clk->get_name() + "' with ID " + std::to_string( clk->get_id() ) );
                 }
             }
 
-            const std::unordered_set<const Gate *> toggle_ffs = get_toggle_ffs( netlist );
-
-            while( !queue.empty() )
+            while( !nqueue.empty() )
             {
-                const std::tuple<const Gate *, const Gate *, std::vector<const Gate *>> tuple = queue.front();
-                queue.pop();
+                const Net *net = nqueue.front();
+                nqueue.pop();
 
-                Gate *source = (Gate *) std::get<1>( tuple );
-                Gate *reference = (Gate *) std::get<0>( tuple );
-                std::vector<const Gate *> path = std::get<2>( tuple );
-
-                path.push_back( source );
-
-                if( is_latch( source ) )
+                if( nvisited.find( net ) != nvisited.end() )
                 {
-                    // Ignore latches
+                    // prevent double processing of net
                     continue;
                 }
-                else if( is_buffer( source ) || is_inverter( source ) || is_delay( source ) || is_ff( source ) )
+
+                nvisited.insert( net );
+
+                if( net->is_global_input_net() )
                 {
-                    if( is_ff( source ) && toggle_ffs.find( source ) == toggle_ffs.end() )
-                    {
-                        // Include only toggle flip-flops for now
-                        continue;
-                    }
+                    // no sources for global input
+                    // traversal is at end
+                    deemed_clock_net.emplace( net );
+                    continue;
+                }
 
-                    for( const Gate *gate : path )
-                    {
-                        vertices.insert( (void *) gate );
-                        ptrs_to_type[(void *) gate] = PtrType::GATE;
-                    }
+                if( net->get_num_of_sources() == 0 )
+                {
+                    report( Severity::warning,
+                            DiagnosticCode::unrouted_net,
+                            NET,
+                            net,
+                            net->get_id(),
+                            "unrouted net with ID " + std::to_string( net->get_id() ) + " ignored" );
+                    continue;
+                }
 
-                    for( u32 idx = 0; idx < path.size() - 1; idx++ )
-                    {
-                        edges.insert( { (void *) path[idx + 1], (void *) path[idx] } );
-                    }
+                if( net->get_num_of_sources() > 1 )
+                {
+                    // open question: how to support meshes?
+                    report( Severity::warning,
+                            DiagnosticCode::multi_driven_net,
+                            NET,
+                            net,
+                            net->get_id(),
+                            "multi-driven net with ID " + std::to_string( net->get_id() ) + " ignored" );
+                    continue;
+                }
 
-                    path.clear();
-                    path.push_back( source );
+                deemed_clock_net.emplace( net );
 
+                const Gate *source = net->get_sources().front()->get_gate();
+
+                if( source->get_fan_in_endpoints().size() > 1 )
+                {
                     if( is_ff( source ) )
                     {
+                        // usually, registers don't feed the clock
                         continue;
                     }
 
-                    // prevent runtime explosion
-                    if( !expanded.insert( source ).second )
+                    if( is_latch( source ) )
                     {
-                        // the path is merged now, and the fan-in of this gate has already been walked
+                        // idk yet how to include these
                         continue;
                     }
 
-                    reference = (Gate *) source;
+                    if( is_mux( source ) )
+                    {
+                        const std::vector<GatePin *> data_pins = source->get_type()->get_pins( []( const auto &p ) {
+                            return ( p->get_direction() == PinDirection::input ) && ( p->get_type() == PinType::data );
+                        } );
+
+                        for( const auto &pin : data_pins )
+                        {
+                            const Net *input = source->get_fan_in_net( pin );
+
+                            // TODO: create own function to avoid duplicate code
+                            if( input->is_gnd_net() || input->is_vcc_net() )
+                            {
+                                continue;
+                            }
+
+                            nqueue.emplace( input );
+                        }
+                        continue;
+                    }
+
+                    if( is_oscillator( source ) || is_pll( source ) )
+                    {
+                        // could be a valid clock source
+                        // nothing to do, since output is already deemed clock net
+                        continue;
+                    }
+
+                    // TODO: clock gating
+
+                    report( Severity::warning,
+                            DiagnosticCode::multi_input_gate,
+                            GATE,
+                            source,
+                            source->get_id(),
+                            "multi-input gate with ID " + std::to_string( source->get_id() ) + " ignored" );
+
+                    continue;
                 }
 
-                visited.insert( std::make_pair( reference, source ) );
-
+                // only one source means we still have to be on the clock path
                 for( const Endpoint *ep : source->get_fan_in_endpoints() )
                 {
-                    if( is_connected_to_control_pin( ep ) )
+                    // enqueue new candidates for clock tree interconnect if not power or ground
+                    if( ep->get_net()->is_gnd_net() || ep->get_net()->is_vcc_net() )
                     {
-                        // Don't traverse control signals of clock gates
                         continue;
                     }
 
-                    const Net *net = ep->get_net();
-                    if( net->get_name() == "'0'" || net->get_name() == "'1'" )
-                    {
-                        // Don't traverse power/ground signals
-                        continue;
-                    }
-
-                    if( net->is_global_input_net() )
-                    {
-                        for( const Gate *gate : path )
-                        {
-                            vertices.insert( (void *) gate );
-                            ptrs_to_type[(void *) gate] = PtrType::GATE;
-                        }
-
-                        for( u32 idx = 0; idx < path.size() - 1; idx++ )
-                        {
-                            edges.insert( { (void *) path[idx + 1], (void *) path[idx] } );
-                        }
-
-                        vertices.insert( (void *) net );
-
-                        ptrs_to_type[(void *) net] = PtrType::NET;
-
-                        edges.insert( { (void *) net, (void *) path.back() } );
-
-                        path.clear();
-                        path.push_back( source );
-
-                        continue;
-                    }
-
-                    if( net->get_num_of_sources() == 0 )
-                    {
-                        report( Severity::warning,
-                                DiagnosticCode::unrouted_clock_net,
-                                PtrType::NET,
-                                net,
-                                net->get_id(),
-                                "unrouted clock net with ID " + std::to_string( net->get_id() ) + " ignored" );
-                        continue;
-                    }
-                    if( net->get_num_of_sources() > 1 )
-                    {
-                        report( Severity::warning,
-                                DiagnosticCode::multi_driven_clock_net,
-                                PtrType::NET,
-                                net,
-                                net->get_id(),
-                                "multi-driven clock net with ID " + std::to_string( net->get_id() ) + " ignored" );
-                        continue;
-                    }
-
-                    const Gate *new_source = net->get_sources().front()->get_gate();
-                    if( visited.find( { reference, new_source } ) == visited.end() )
-                    {
-                        queue.emplace( reference, new_source, path );
-                    }
+                    nqueue.emplace( ep->get_net() );
                 }
             }
 
-            std::unique_ptr<ClockTree> clock_tree = std::unique_ptr<ClockTree>( new ClockTree( netlist ) );
+            std::unordered_set<const void *> vertices;
+            std::unordered_set<std::pair<const void *, const void *>, VoidPtrHash> edges;
+            std::unordered_map<const void *, PtrType> ptrs_to_type;
+
+            for( const Net *net : deemed_clock_net )
+            {
+                const void *source = net;
+                if( !net->is_global_input_net() )
+                {
+                    source = net->get_sources().front()->get_gate();
+                }
+
+                ptrs_to_type.emplace( source, ( source == net ) ? NET : GATE );
+                vertices.emplace( source );
+
+                for( const Endpoint *ep : net->get_destinations() )
+                {
+                    const Gate *gate = ep->get_gate();
+
+                    if( gate->get_type()->has_property( GateTypeProperty::combinational ) )
+                    {
+                        const std::vector<Net *> &outputs = gate->get_fan_out_nets();
+
+                        const bool drives_clock_net =
+                            std::any_of( outputs.begin(), outputs.end(), [&deemed_clock_net]( const Net *output ) {
+                                return deemed_clock_net.find( output ) != deemed_clock_net.end();
+                            } );
+
+                        if( !drives_clock_net )
+                        {
+                            // the combinational cell only works on the clock net, but doesn't distribute it
+                            // TODO: improve comment and add example
+                            // diagnostic interesting?
+                            continue;
+                        }
+                    }
+
+                    const std::vector<GatePin *> clock_pins = gate->get_type()->get_pins( []( const auto &p ) {
+                        return ( p->get_direction() == PinDirection::input ) && ( p->get_type() == PinType::clock );
+                    } );
+
+                    if( !clock_pins.empty()
+                        && std::find( clock_pins.begin(), clock_pins.end(), ep->get_pin() ) == clock_pins.end() )
+                    {
+                        // TODO: comment why and add example
+                        // TODO: add a diagnostic -> might be interesting for later analysis
+                        continue;
+                    }
+
+                    auto destination = static_cast<const void *>( gate );
+
+                    ptrs_to_type.emplace( destination, GATE );
+                    vertices.emplace( destination );
+
+                    edges.emplace( source, destination );
+                }
+            }
+
+            auto clock_tree = std::unique_ptr<ClockTree>( new ClockTree( netlist ) );
             clock_tree->m_diagnostics = std::move( diagnostics );
 
             igraph_int_t idx = 0;
@@ -774,7 +787,7 @@ namespace hal
             {
                 if( type == PtrType::GATE )
                 {
-                    result.push_back( static_cast<const Gate*>(ptr) );
+                    result.push_back( static_cast<const Gate *>( ptr ) );
                 }
             }
 
@@ -789,7 +802,7 @@ namespace hal
             {
                 if( type == PtrType::NET )
                 {
-                    result.push_back( static_cast<const Net*>(ptr) );
+                    result.push_back( static_cast<const Net *>( ptr ) );
                 }
             }
 

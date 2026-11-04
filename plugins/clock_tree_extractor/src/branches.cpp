@@ -59,7 +59,7 @@ namespace hal
                     for( const auto &child : children.get() )
                     {
                         // prevent loop-caused runtime explosion (e.g., ring-oscillator)
-                        if ( std::find( branch.begin(), branch.end(), child ) != branch.end() )
+                        if( std::find( branch.begin(), branch.end(), child ) != branch.end() )
                         {
                             continue;
                         }
