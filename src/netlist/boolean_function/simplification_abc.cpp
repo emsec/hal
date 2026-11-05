@@ -806,6 +806,13 @@ namespace hal
                 size_t len{};
 
                 auto stream = open_memstream(&rhs, &len);
+                if (stream == nullptr)
+                {
+                    Vec_VecFree(vLevels);
+                    Abc_NtkDelete(network);
+                    return ERR("could not translate Boolean function from ABC notation: open_memstream() failed");
+                }
+
                 Hop_ObjPrintVerilog(stream, (Hop_Obj_t*)node->pData, vLevels, 0, 0);
                 fflush(stream);
 
@@ -1014,7 +1021,7 @@ namespace hal
         }
 
         if (auto nodes = function.get_nodes(); std::any_of(
-                nodes.begin(), nodes.end(), [](auto node) { return (valid_abc_node_types.find(node.type) == valid_abc_node_types.end()) || (node.type = NodeType::Variable && node.size != 1); }))
+                nodes.begin(), nodes.end(), [](auto node) { return (valid_abc_node_types.find(node.type) == valid_abc_node_types.end()) || (node.type == NodeType::Variable && node.size != 1); }))
         {
             return OK(function.clone());
         }
