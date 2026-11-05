@@ -82,6 +82,7 @@ All notable changes to this project will be documented in this file.
     * sped up evaluation with constant inputs by about 3x by folding the values directly instead of building a Boolean function per operation
     * added constant folding for the `Sdiv`, `Udiv`, `Srem` and `Urem` operations
     * added simplification rules for the word level operations: extensions to the width the value already has, nested extensions and slices, slices that fall into one half of a concatenation or into either part of an extension, unsigned comparisons against zero and the maximum, equality of a value with its own negation, and single bit equalities and selections
+    * fixed deadlock and memory leak which could occur when `abc_simplification` failed
     * fixed the constant folding of `Add` and `Sub` masking the result to 32 bit before cutting it to the operand width, so for operands of 33 to 64 bit the upper bits of the result were always zero
     * fixed `Eq` reporting a definite inequality when an undefined bit could have made the two values equal, it now reports an undefined result like the other comparisons do
     * fixed `BooleanFunction::to_string` reading past the end of its digit table when a bit-vector that contains an `X` or `Z` is converted to an octal or hexadecimal string

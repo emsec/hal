@@ -650,6 +650,7 @@ namespace hal
                 auto status = slice_at(function, i);
                 if (status.is_error())
                 {
+                    Abc_NtkDelete(network);
                     return ERR_APPEND(status.get_error(),
                                       "could not translate Boolean function to ABC notation: unable to slice Boolean function'" + function.to_string() + "' at index " + std::to_string(i));
                 }
@@ -669,6 +670,7 @@ namespace hal
                     }
                     else
                     {
+                        Abc_NtkDelete(network);
                         return ERR(translation.get_error());
                     }
                 }
@@ -676,12 +678,13 @@ namespace hal
                 // (4) check that we have exactely one remaining entry on the stack
                 if (stack.size() != 1)
                 {
+                    Abc_NtkDelete(network);
                     return ERR("could not translate Boolean function to ABC notation: number of elements remaining on the stack is not 1");
                 }
 
                 // (5) define an output variable to the network
                 auto output = Abc_NtkCreateObj(network, ABC_OBJ_PO);
-                Abc_ObjAssignName(output, strdup(output_variables[i].data()), NULL);
+                Abc_ObjAssignName(output, const_cast<char*>(output_variables[i].c_str()), NULL);
                 Abc_ObjAddFanin(output, stack.back());
             }
 
@@ -782,6 +785,8 @@ namespace hal
                 }
                 if (node->fPersist)
                 {
+                    Vec_VecFree(vLevels);
+                    Abc_NtkDelete(network);
                     return ERR("could not translate Boolean function from ABC notation: 'node->fPersist' is set within ABC context");
                 }
 
@@ -801,6 +806,13 @@ namespace hal
                 size_t len{};
 
                 auto stream = open_memstream(&rhs, &len);
+                if (stream == nullptr)
+                {
+                    Vec_VecFree(vLevels);
+                    Abc_NtkDelete(network);
+                    return ERR("could not translate Boolean function from ABC notation: open_memstream() failed");
+                }
+
                 Hop_ObjPrintVerilog(stream, (Hop_Obj_t*)node->pData, vLevels, 0, 0);
                 fflush(stream);
 
@@ -808,8 +820,18 @@ namespace hal
                 ss << "assign " << lhs << " = " << rhs << ";" << std::endl;
 
                 fclose(stream);
+                free(rhs);
+
+                // (2.4) release the fan-in names, like Io_WriteVerilogObjects() does
+                for (int j = 0; j < node->vFanins.nSize; j++)
+                {
+                    auto var = Hop_IthVar((Hop_Man_t*)network->pManFunc, j);
+                    free(var->pData);
+                    var->pData = nullptr;
+                }
             }
             Vec_VecFree(vLevels);
+            Abc_NtkDelete(network);
 
             return OK(ss.str());
         }
@@ -999,7 +1021,7 @@ namespace hal
         }
 
         if (auto nodes = function.get_nodes(); std::any_of(
-                nodes.begin(), nodes.end(), [](auto node) { return (valid_abc_node_types.find(node.type) == valid_abc_node_types.end()) || (node.type = NodeType::Variable && node.size != 1); }))
+                nodes.begin(), nodes.end(), [](auto node) { return (valid_abc_node_types.find(node.type) == valid_abc_node_types.end()) || (node.type == NodeType::Variable && node.size != 1); }))
         {
             return OK(function.clone());
         }
@@ -1008,7 +1030,7 @@ namespace hal
         //     ABC global frame, we have to ensure an exclusive access in case
         //     Boolean function simplifications are executed in parallel
         static std::mutex mutex;
-        mutex.lock();
+        std::lock_guard<std::mutex> lock(mutex);
 
         auto status = translate_to_abc(function).map<std::monostate>([](const auto& network) { return simplify(network); });
 
@@ -1019,8 +1041,6 @@ namespace hal
 
         // (3) translate the ABC graph back into a Boolean function
         auto translated_function = translate_from_abc().map<BooleanFunction>([&function](const auto& verilog) { return translate_from_verilog(verilog, function); });
-
-        mutex.unlock();
 
         if (translated_function.is_ok())
         {
