@@ -1,5 +1,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
 
+#include <memory>
+
 namespace hal
 {
     RAMPortComponent::RAMPortComponent(std::unique_ptr<GateTypeComponent> component,
@@ -10,6 +12,16 @@ namespace hal
                                        bool is_write)
         : m_component(std::move(component)), m_data_group(data_group), m_addr_group(addr_group), m_clock_bf(clock_bf.clone()), m_enable_bf(enable_bf.clone()), m_is_write(is_write)
     {
+    }
+
+    std::unique_ptr<RAMPortComponent> RAMPortComponent::create(std::unique_ptr<GateTypeComponent> component,
+                                                               const std::string& data_group,
+                                                               const std::string& addr_group,
+                                                               const BooleanFunction& clock_bf,
+                                                               const BooleanFunction& enable_bf,
+                                                               bool is_write)
+    {
+        return std::unique_ptr<RAMPortComponent>(new RAMPortComponent(std::move(component), data_group, addr_group, clock_bf.clone(), enable_bf.clone(), is_write));
     }
 
     RAMPortComponent::ComponentType RAMPortComponent::get_type() const

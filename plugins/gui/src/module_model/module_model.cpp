@@ -41,6 +41,11 @@ namespace hal
         connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalOutput, this, &ModuleModel::handleNetGlobalStateChanged);
     }
 
+    ModuleModel::~ModuleModel()
+    {
+        delete mRootItem;
+    }
+
     QVariant ModuleModel::data(const QModelIndex& index, int role) const
     {
         if (!index.isValid())

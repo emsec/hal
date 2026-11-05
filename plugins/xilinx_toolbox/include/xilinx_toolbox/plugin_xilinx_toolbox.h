@@ -94,6 +94,9 @@ namespace hal
      */
     class PLUGIN_API GuiExtensionXilinxToolbox : public GuiExtensionInterface
     {
+        bool mSplitLuts           = false;
+        bool mSplitShiftRegisters = false;
+
     public:
         /**
          * @brief Default constructor for `GuiExtensionXilinxToolbox`.
@@ -101,6 +104,20 @@ namespace hal
         GuiExtensionXilinxToolbox() : GuiExtensionInterface("Xilinx Toolbox")
         {
         }
+
+        /**
+         * @brief Get the parameters shown in the plugin parameter dialog.
+         *
+         * @returns The parameters, i.e., which preprocessing steps to run on the entire netlist and the button to run them.
+         */
+        std::vector<PluginParameter> get_parameter() const override;
+
+        /**
+         * @brief Set the parameters chosen in the plugin parameter dialog.
+         *
+         * @param[in] params - The parameters as returned by `get_parameter`, holding the values chosen by the user.
+         */
+        void set_parameter(const std::vector<PluginParameter>& params) override;
 
         /**
          * @brief Get the context menu entries contributed for the given selection.

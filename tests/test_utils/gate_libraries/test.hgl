@@ -1,5 +1,5 @@
 {
-    "version": 3,
+    "version": 6,
     "library": "TESTING_GATE_LIBRARY",
     "gate_locations": {
         "data_category": "generic",
@@ -27,7 +27,8 @@
                             "type": "ground",
                             "function": "0b0"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -51,7 +52,8 @@
                             "type": "power",
                             "function": "0b1"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -74,7 +76,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -89,7 +92,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -112,7 +116,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -127,7 +132,8 @@
                             "type": "none",
                             "function": "(! I)"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -150,7 +156,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -164,7 +171,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -179,7 +187,8 @@
                             "type": "none",
                             "function": "(I0 & I1)"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -202,7 +211,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -216,7 +226,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -230,7 +241,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -245,7 +257,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & I2))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -268,7 +281,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -282,7 +296,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -296,7 +311,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I3",
@@ -310,7 +326,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -325,7 +342,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & I3)))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -348,7 +366,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -362,7 +381,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -377,7 +397,8 @@
                             "type": "none",
                             "function": "(I0 | I1)"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -400,7 +421,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -414,7 +436,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -428,7 +451,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -443,7 +467,8 @@
                             "type": "none",
                             "function": "(I0 | (I1 | I2))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -466,7 +491,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -480,7 +506,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -494,7 +521,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I3",
@@ -508,7 +536,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -523,7 +552,8 @@
                             "type": "none",
                             "function": "(I0 | (I1 | (I2 | I3)))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -546,7 +576,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -560,7 +591,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -575,7 +607,8 @@
                             "type": "none",
                             "function": "(I0 ^ I1)"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -598,7 +631,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -612,7 +646,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -626,7 +661,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -641,7 +677,8 @@
                             "type": "none",
                             "function": "(I0 ^ (I1 ^ I2))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -664,7 +701,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -678,7 +716,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -692,7 +731,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I3",
@@ -706,7 +746,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -721,7 +762,8 @@
                             "type": "none",
                             "function": "(I0 ^ (I1 ^ (I2 ^ I3)))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -732,9 +774,19 @@
                 "c_lut"
             ],
             "lut_config": {
-                "bit_order": "ascending",
-                "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_count": 4,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "I0",
+                            "I1"
+                        ],
+                        "bit_offset": 0
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -749,7 +801,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -763,7 +816,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -777,7 +831,8 @@
                             "direction": "output",
                             "type": "lut"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -788,9 +843,20 @@
                 "c_lut"
             ],
             "lut_config": {
-                "bit_order": "ascending",
-                "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_count": 8,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2"
+                        ],
+                        "bit_offset": 0
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -805,7 +871,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -819,7 +886,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -833,7 +901,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -847,7 +916,93 @@
                             "direction": "output",
                             "type": "lut"
                         }
-                    ]
+                    ],
+                    "ordered": false
+                }
+            ]
+        },
+        {
+            "name": "LUT3_desc",
+            "types": [
+                "combinational",
+                "c_lut"
+            ],
+            "lut_config": {
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_count": 8,
+                        "is_ascending": false,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2"
+                        ],
+                        "bit_offset": 0
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "I0",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I1",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I2",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -858,9 +1013,21 @@
                 "c_lut"
             ],
             "lut_config": {
-                "bit_order": "ascending",
-                "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_count": 16,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3"
+                        ],
+                        "bit_offset": 0
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -875,7 +1042,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -889,7 +1057,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -903,7 +1072,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I3",
@@ -917,7 +1087,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -931,7 +1102,8 @@
                             "direction": "output",
                             "type": "lut"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -942,9 +1114,22 @@
                 "c_lut"
             ],
             "lut_config": {
-                "bit_order": "ascending",
-                "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_count": 32,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4"
+                        ],
+                        "bit_offset": 0
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -959,7 +1144,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -973,7 +1159,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -987,7 +1174,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I3",
@@ -1001,7 +1189,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I4",
@@ -1015,7 +1204,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -1029,7 +1219,8 @@
                             "direction": "output",
                             "type": "lut"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -1040,9 +1231,23 @@
                 "c_lut"
             ],
             "lut_config": {
-                "bit_order": "ascending",
-                "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_count": 64,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4",
+                            "I5"
+                        ],
+                        "bit_offset": 0
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -1057,7 +1262,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -1071,7 +1277,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -1085,7 +1292,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I3",
@@ -1099,7 +1307,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I4",
@@ -1113,7 +1322,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I5",
@@ -1127,7 +1337,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -1141,7 +1352,479 @@
                             "direction": "output",
                             "type": "lut"
                         }
-                    ]
+                    ],
+                    "ordered": false
+                }
+            ]
+        },
+        {
+            "name": "LUT6_2a",
+            "types": [
+                "combinational",
+                "c_lut"
+            ],
+            "lut_config": {
+                "output_pins": [
+                    {
+                        "pin": "O0",
+                        "data_identifier": "INIT",
+                        "bit_count": 64,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4",
+                            "I5"
+                        ],
+                        "bit_offset": 0
+                    },
+                    {
+                        "pin": "O1",
+                        "data_identifier": "INIT",
+                        "bit_count": 32,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4"
+                        ],
+                        "bit_offset": 0
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "I0",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I1",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I2",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I3",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I4",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I5",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I5",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "O0",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O0",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "O1",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O1",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ],
+                    "ordered": false
+                }
+            ]
+        },
+        {
+            "name": "LUT6_2b",
+            "types": [
+                "combinational",
+                "c_lut"
+            ],
+            "lut_config": {
+                "output_pins": [
+                    {
+                        "pin": "O0",
+                        "data_identifier": "INIT1",
+                        "bit_count": 64,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4",
+                            "I5"
+                        ],
+                        "bit_offset": 0
+                    },
+                    {
+                        "pin": "O1",
+                        "data_identifier": "INIT2",
+                        "bit_count": 64,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4",
+                            "I5"
+                        ],
+                        "bit_offset": 0
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "I0",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I1",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I2",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I3",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I4",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I5",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I5",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "O0",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O0",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "O1",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O1",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ],
+                    "ordered": false
+                }
+            ]
+        },
+        {
+            "name": "LUT5_2c",
+            "types": [
+                "combinational",
+                "c_lut"
+            ],
+            "lut_config": {
+                "output_pins": [
+                    {
+                        "pin": "O0",
+                        "data_identifier": "INIT",
+                        "bit_count": 32,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4"
+                        ],
+                        "bit_offset": 0
+                    },
+                    {
+                        "pin": "O1",
+                        "data_identifier": "INIT",
+                        "bit_offset": 32,
+                        "bit_count": 32,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4"
+                        ]
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "I0",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I1",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I2",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I2",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I3",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I3",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I4",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I4",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "O0",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O0",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "O1",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O1",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -1164,7 +1847,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -1178,7 +1862,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "S",
@@ -1192,7 +1877,8 @@
                             "direction": "input",
                             "type": "select"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -1207,7 +1893,8 @@
                             "type": "none",
                             "function": "(((! S) & I0) | (S & I1))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -1230,7 +1917,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I0",
@@ -1244,7 +1932,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -1258,7 +1947,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "CO",
@@ -1273,7 +1963,8 @@
                             "type": "none",
                             "function": "((I0 & I1) | ((I0 | I1) & CI))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -1296,7 +1987,8 @@
                             "direction": "input",
                             "type": "carry"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "CYINIT",
@@ -1310,7 +2002,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "DI",
@@ -1339,7 +2032,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "S",
@@ -1368,7 +2062,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "CO",
@@ -1401,7 +2096,8 @@
                             "type": "carry",
                             "function": "((S(0) & (CI | CYINIT)) | ((! S(0)) & DI(0)))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -1434,7 +2130,8 @@
                             "type": "none",
                             "function": "(S(0) ^ (CI | CYINIT))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -1456,7 +2153,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O0",
@@ -1471,7 +2169,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O1",
@@ -1486,7 +2185,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -1508,7 +2208,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -1522,7 +2223,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -1537,7 +2239,8 @@
                             "type": "none",
                             "function": "(I0 & I1)"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -1559,7 +2262,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -1573,7 +2277,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O0",
@@ -1588,7 +2293,8 @@
                             "type": "none",
                             "function": "(I0 & I1)"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O1",
@@ -1603,7 +2309,8 @@
                             "type": "none",
                             "function": "(I0 & I1)"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -1625,7 +2332,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O0",
@@ -1640,7 +2348,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O1",
@@ -1655,7 +2364,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O2",
@@ -1670,7 +2380,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O3",
@@ -1685,7 +2396,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -1707,7 +2419,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -1721,7 +2434,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -1735,7 +2449,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I3",
@@ -1749,7 +2464,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -1764,7 +2480,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & I3)))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -1786,7 +2503,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -1800,7 +2518,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -1814,7 +2533,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I3",
@@ -1828,7 +2548,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O0",
@@ -1843,7 +2564,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & I3)))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O1",
@@ -1858,7 +2580,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & I3)))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O2",
@@ -1873,7 +2596,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & I3)))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O3",
@@ -1888,7 +2612,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & I3)))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -1910,7 +2635,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O0",
@@ -1925,7 +2651,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O1",
@@ -1940,7 +2667,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O2",
@@ -1955,7 +2683,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O3",
@@ -1970,7 +2699,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O4",
@@ -1985,7 +2715,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O5",
@@ -2000,7 +2731,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O6",
@@ -2015,7 +2747,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O7",
@@ -2030,7 +2763,8 @@
                             "type": "none",
                             "function": "I"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -2052,7 +2786,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -2066,7 +2801,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -2080,7 +2816,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I3",
@@ -2094,7 +2831,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I4",
@@ -2108,7 +2846,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I5",
@@ -2122,7 +2861,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I6",
@@ -2136,7 +2876,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I7",
@@ -2150,7 +2891,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O",
@@ -2165,7 +2907,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & (I3 & (I4 & (I5 & (I6 & I7)))))))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -2187,7 +2930,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I1",
@@ -2201,7 +2945,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I2",
@@ -2215,7 +2960,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I3",
@@ -2229,7 +2975,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I4",
@@ -2243,7 +2990,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I5",
@@ -2257,7 +3005,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I6",
@@ -2271,7 +3020,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "I7",
@@ -2285,7 +3035,8 @@
                             "direction": "input",
                             "type": "none"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O0",
@@ -2300,7 +3051,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & (I3 & (I4 & (I5 & (I6 & I7)))))))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O1",
@@ -2315,7 +3067,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & (I3 & (I4 & (I5 & (I6 & I7)))))))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O2",
@@ -2330,7 +3083,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & (I3 & (I4 & (I5 & (I6 & I7)))))))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O3",
@@ -2345,7 +3099,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & (I3 & (I4 & (I5 & (I6 & I7)))))))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O4",
@@ -2360,7 +3115,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & (I3 & (I4 & (I5 & (I6 & I7)))))))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O5",
@@ -2375,7 +3131,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & (I3 & (I4 & (I5 & (I6 & I7)))))))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O6",
@@ -2390,7 +3147,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & (I3 & (I4 & (I5 & (I6 & I7)))))))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "O7",
@@ -2405,7 +3163,8 @@
                             "type": "none",
                             "function": "(I0 & (I1 & (I2 & (I3 & (I4 & (I5 & (I6 & I7)))))))"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -2436,7 +3195,8 @@
                             "direction": "input",
                             "type": "clock"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "D",
@@ -2450,7 +3210,8 @@
                             "direction": "input",
                             "type": "data"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "Q",
@@ -2465,7 +3226,8 @@
                             "type": "state",
                             "function": "IQ"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "QN",
@@ -2480,7 +3242,8 @@
                             "type": "neg_state",
                             "function": "IQN"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -2511,7 +3274,8 @@
                             "direction": "input",
                             "type": "clock"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "D",
@@ -2525,7 +3289,8 @@
                             "direction": "input",
                             "type": "data"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "EN",
@@ -2539,7 +3304,8 @@
                             "direction": "input",
                             "type": "enable"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "Q",
@@ -2554,7 +3320,8 @@
                             "type": "state",
                             "function": "IQ"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "QN",
@@ -2569,7 +3336,8 @@
                             "type": "neg_state",
                             "function": "IQN"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -2601,7 +3369,8 @@
                             "direction": "input",
                             "type": "clock"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "D",
@@ -2615,7 +3384,8 @@
                             "direction": "input",
                             "type": "data"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "S",
@@ -2629,7 +3399,8 @@
                             "direction": "input",
                             "type": "set"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "Q",
@@ -2644,7 +3415,8 @@
                             "type": "state",
                             "function": "IQ"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "QN",
@@ -2659,7 +3431,8 @@
                             "type": "neg_state",
                             "function": "IQN"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -2691,7 +3464,8 @@
                             "direction": "input",
                             "type": "clock"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "D",
@@ -2705,7 +3479,8 @@
                             "direction": "input",
                             "type": "data"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "R",
@@ -2719,7 +3494,8 @@
                             "direction": "input",
                             "type": "reset"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "Q",
@@ -2734,7 +3510,8 @@
                             "type": "state",
                             "function": "IQ"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "QN",
@@ -2749,7 +3526,8 @@
                             "type": "neg_state",
                             "function": "IQN"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -2784,7 +3562,8 @@
                             "direction": "input",
                             "type": "clock"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "D",
@@ -2798,7 +3577,8 @@
                             "direction": "input",
                             "type": "data"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "R",
@@ -2812,7 +3592,8 @@
                             "direction": "input",
                             "type": "reset"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "S",
@@ -2826,7 +3607,8 @@
                             "direction": "input",
                             "type": "set"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "Q",
@@ -2841,7 +3623,8 @@
                             "type": "state",
                             "function": "IQ"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "QN",
@@ -2856,7 +3639,8 @@
                             "type": "neg_state",
                             "function": "IQN"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -2888,7 +3672,8 @@
                             "direction": "input",
                             "type": "clock"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "D",
@@ -2902,7 +3687,8 @@
                             "direction": "input",
                             "type": "data"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "S",
@@ -2916,7 +3702,8 @@
                             "direction": "input",
                             "type": "set"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "EN",
@@ -2930,7 +3717,8 @@
                             "direction": "input",
                             "type": "enable"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "Q",
@@ -2945,7 +3733,8 @@
                             "type": "state",
                             "function": "IQ"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "QN",
@@ -2960,7 +3749,8 @@
                             "type": "neg_state",
                             "function": "IQN"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -2992,7 +3782,8 @@
                             "direction": "input",
                             "type": "clock"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "D",
@@ -3006,7 +3797,8 @@
                             "direction": "input",
                             "type": "data"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "R",
@@ -3020,7 +3812,8 @@
                             "direction": "input",
                             "type": "reset"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "EN",
@@ -3034,7 +3827,8 @@
                             "direction": "input",
                             "type": "enable"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "Q",
@@ -3049,7 +3843,8 @@
                             "type": "state",
                             "function": "IQ"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "QN",
@@ -3064,7 +3859,8 @@
                             "type": "neg_state",
                             "function": "IQN"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -3099,7 +3895,8 @@
                             "direction": "input",
                             "type": "clock"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "D",
@@ -3113,7 +3910,8 @@
                             "direction": "input",
                             "type": "data"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "R",
@@ -3127,7 +3925,8 @@
                             "direction": "input",
                             "type": "reset"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "S",
@@ -3141,7 +3940,8 @@
                             "direction": "input",
                             "type": "set"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "EN",
@@ -3155,7 +3955,8 @@
                             "direction": "input",
                             "type": "enable"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "Q",
@@ -3170,7 +3971,8 @@
                             "type": "state",
                             "function": "IQ"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "QN",
@@ -3185,7 +3987,8 @@
                             "type": "neg_state",
                             "function": "IQN"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 }
             ]
         },
@@ -3208,7 +4011,8 @@
                             "direction": "input",
                             "type": "clock"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "EN",
@@ -3222,7 +4026,8 @@
                             "direction": "input",
                             "type": "enable"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "ADDR",
@@ -3251,7 +4056,8 @@
                             "direction": "input",
                             "type": "address"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "DATA_IN",
@@ -3280,7 +4086,8 @@
                             "direction": "input",
                             "type": "data"
                         }
-                    ]
+                    ],
+                    "ordered": false
                 },
                 {
                     "name": "DATA_OUT",
@@ -3309,7 +4116,79 @@
                             "direction": "output",
                             "type": "data"
                         }
-                    ]
+                    ],
+                    "ordered": false
+                }
+            ]
+        },
+        {
+            "name": "PARAM_TEST",
+            "types": [
+                "combinational"
+            ],
+            "parameters": [
+                {
+                    "name": "width",
+                    "type": "bit_vector",
+                    "size": 16,
+                    "default": "0xCAFE"
+                },
+                {
+                    "name": "mode",
+                    "type": "enum",
+                    "values": [
+                        "normal",
+                        "inverted"
+                    ],
+                    "default": "normal"
+                }
+            ],
+            "pin_groups": [
+                {
+                    "name": "I0",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "I1",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ],
+                    "ordered": false
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "((mode == 0b1) & (width == 0xCAFE)) ? !I0 : (I0 & I1)"
+                        }
+                    ],
+                    "ordered": false
                 }
             ]
         }

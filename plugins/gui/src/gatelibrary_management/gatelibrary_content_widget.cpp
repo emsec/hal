@@ -2,6 +2,7 @@
 #include "gui/gui_globals.h"
 #include "gui/gatelibrary_management/gatelibrary_table_model.h"
 #include "gui/plugin_relay/gui_plugin_manager.h"
+#include "gui/file_manager/file_manager.h"
 #include "gui/toolbar/toolbar.h"
 #include "gui/searchbar/searchbar.h"
 #include "gui/gui_utils/graphics.h"
@@ -101,7 +102,7 @@ namespace hal
                 if (gPluginRelay->mGuiPluginTable)
                     gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser);
 
-                auto gateLibrary = gate_library_manager::load(std::filesystem::path(fileName.toStdString()));
+                auto gateLibrary = FileManager::loadGateLibrary(fileName);
 
                 if(gateLibrary)
                     mGateLibrary = gateLibrary;

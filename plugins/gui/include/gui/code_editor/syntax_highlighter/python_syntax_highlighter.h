@@ -84,5 +84,6 @@ namespace hal
         QRegularExpression mMultiLineCommentDelimiter;
         QRegularExpression mTrippleSingleQuote;
         QRegularExpression mTrippleDoubleQuote;
+        QRegularExpression mSingleLineComment;
     };
 }

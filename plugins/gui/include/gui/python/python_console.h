@@ -80,10 +80,11 @@ namespace hal
     protected:
         /**
          * Overrides QTextEdit::keyPressEvent. It is used to handle the following (default) inputs: <br>
-         * @li Ctrl+C: Copy
+         * @li Ctrl+C: Copy the selection. Without a selection, abort the running command or discard the current line
          * @li Ctrl+X: Cut
+         * @li ESC: Discard the multi-line statement entered so far
          * @li ENTER/RETURN: Interpret the written python command
-         * @li BACKSPACE: Backspace
+         * @li BACKSPACE: Backspace, removes four spaces of indentation at once
          * @li KEY_UP: Get the previous command from the history
          * @li KEY_DOWN: Get the next command from the history
          * @li TAB: Indent or autofill
@@ -91,6 +92,14 @@ namespace hal
          * @param e - The key event.
          */
         void keyPressEvent(QKeyEvent* e) override;
+
+        /**
+         * Overrides QTextEdit::insertFromMimeData. Pasted text is inserted as plain text with tabs replaced by four
+         * spaces, so that it can be mixed with the indentation the console inserts itself.
+         *
+         * @param source - The pasted or dropped data.
+         */
+        void insertFromMimeData(const QMimeData* source) override;
 
         /**
          * Overrides QTextEdit::mouseEvent.
@@ -226,5 +235,17 @@ namespace hal
         bool isInputMode() const { return mPromptType == Input; }
 
         void keyPressEventInputMode(QKeyEvent* e);
+
+        /**
+         * Ends the current line without executing it and displays a new prompt.
+         *
+         * @param wholeStatement - `true` to also discard the multi-line statement entered so far, `false` to keep it
+         */
+        void discardInput(bool wholeStatement);
+
+        /**
+         * Replaces each tab by four spaces, the indentation used throughout the console.
+         */
+        static QString expandTabs(const QString& text);
     };
 }

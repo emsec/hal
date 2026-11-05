@@ -12,15 +12,19 @@ namespace hal
         // remove questionmark from title bar, it is not implemented and only confusing
         setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
         mLayout = new QVBoxLayout(this);
-        mLayout->addWidget(new QLabel(QString("hal %1.%2.%3 (%4)")
-                                      .arg(hal_version::major)
-                                      .arg(hal_version::minor)
-                                      .arg(hal_version::patch)
-                                      .arg(hal_version::version.c_str())
-                                      ,this));
-        mLayout->addWidget(new QLabel(QString("Compiled with Qt Version %1")
-                                      .arg(QT_VERSION_STR)
-                                      ,this));
+        QLabel* versionLabel = new QLabel(QString("hal %1.%2.%3 (%4)")
+                                              .arg(hal_version::major)
+                                              .arg(hal_version::minor)
+                                              .arg(hal_version::patch)
+                                              .arg(hal_version::version.c_str()),
+                                          this);
+        versionLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+        mLayout->addWidget(versionLabel);
+        QLabel* qtVersionLabel = new QLabel(QString("Compiled with Qt Version %1")
+                                                .arg(QT_VERSION_STR),
+                                          this);
+        qtVersionLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+        mLayout->addWidget(qtVersionLabel);
         mLayout->addWidget(new QLabel(QString("Last build configured at %1 %2").arg(hal_version::build_timestamp.c_str())));
         mLayout->addWidget(new QLabel(QString("Open Source licenses:"),this));
         mTextedit = new QPlainTextEdit(QString::fromStdString(utils::get_open_source_licenses()),this);

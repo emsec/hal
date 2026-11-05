@@ -1,4 +1,3 @@
-#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
 #include "netlist_simulator/netlist_simulator.h"
@@ -97,21 +96,36 @@ namespace hal
 
         if (from_netlist)
         {
-            const InitComponent* init_component = gate_type->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
-            if (init_component == nullptr)
+            const std::vector<std::string>& init_ids = ram_component->get_init_identifiers();
+
+            if (init_ids.empty())
             {
-                log_error("hal_simulator", "cannot find initialization data for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+                log_error("hal_simulator", "no initialization identifiers for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
                 return;
             }
 
-            const std::string& category = init_component->get_init_category();
-
-            for (const std::string& identifier : init_component->get_init_identifiers())
+            for (const std::string& identifier : init_ids)
             {
-                const std::string data = std::get<1>(m_gate->get_data(category, identifier));
+                auto param_res = m_gate->get_parameter_value(identifier);
+                if (param_res.is_error())
+                {
+                    log_error("hal_simulator",
+                              "could not read initialization parameter '{}' for RAM gate '{}' with ID {}: {}",
+                              identifier,
+                              m_gate->get_name(),
+                              m_gate->get_id(),
+                              param_res.get_error().get());
+                    return;
+                }
+                const std::string& pv   = param_res.get();
+                const std::string& data = (pv.size() >= 2 && pv[0] == '0' && pv[1] == 'x') ? pv.substr(2) : pv;
 
-                u32 data_len = data.size();
-                assert(data_len % 16 == 0);
+                u32 data_len = static_cast<u32>(data.size());
+                if (data_len == 0 || data_len % 16 != 0)
+                {
+                    log_error("hal_simulator", "initialization data for '{}' in RAM gate '{}' must be a multiple of 64 bits.", identifier, m_gate->get_name());
+                    return;
+                }
 
                 for (u32 i = 0; i < data_len; i += 16)
                 {

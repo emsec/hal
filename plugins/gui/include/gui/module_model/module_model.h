@@ -89,6 +89,11 @@ namespace hal
          */
         explicit ModuleModel(QObject* parent = nullptr);
 
+        /**
+         * Destructor.
+         */
+        ~ModuleModel();
+
         // === Pure Virtual ===
 
         /**

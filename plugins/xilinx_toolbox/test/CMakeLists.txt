@@ -1,7 +1,7 @@
 if(BUILD_TESTS)
     include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/plugins/xilinx_toolbox/include ${CMAKE_SOURCE_DIR}/plugins/hgl_parser/include)
 
-    add_executable(runTest-xilinx_toolbox xilinx_toolbox.cpp)
+    add_executable(runTest-xilinx_toolbox xilinx_preprocessing.cpp xilinx_toolbox.cpp)
 
     target_link_libraries(runTest-xilinx_toolbox xilinx_toolbox hgl_parser pthread gtest hal::core hal::netlist test_utils)
 
