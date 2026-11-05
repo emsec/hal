@@ -137,6 +137,8 @@ buttons.jsonc
 Doxyfile
 html/
 documentation/Doxyfile
+# generated from the compiled bindings by tools/hal_api.py
+documentation/python_api/
 
 HAL_DEPLOYMENT_KEY
 HAL_GPG_KEY
