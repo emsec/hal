@@ -215,7 +215,7 @@ namespace hal
 
     QString ModuleInfoTable::numberOfNets() const
     {
-        return QString::number(mModule->get_internal_nets().size());
+        return QString::number(mModule->get_nets().size());
     }
 
     QString ModuleInfoTable::numberOfPins() const

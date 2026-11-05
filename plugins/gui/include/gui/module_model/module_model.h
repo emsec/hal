@@ -167,6 +167,21 @@ namespace hal
         void populateFromGatelist(const std::vector<Gate*>& gates);
 
         /**
+         * Lists the nets that belong to no module as top-level items next to the modules passed to populateTree():
+         * the global inputs and outputs of the netlist and nets without any source or destination. The list follows
+         * changes of the netlist. Set it before populateTree(); the modules widget uses it so that every net of the
+         * netlist shows up somewhere in its tree.
+         *
+         * @param enable - `true` to list such nets, `false` to leave them out of the tree.
+         */
+        void setShowNetsOutsideModules(bool enable);
+
+        /**
+         * @returns `true` if nets that belong to no module are listed as top-level items, `false` otherwise.
+         */
+        bool showNetsOutsideModules() const;
+
+        /**
          * Add a module to the item model. For the specified module new ModuleItems are created and stored.
          *
          * @param id - The id of the module to add.
@@ -237,8 +252,8 @@ namespace hal
         /**
          * Updates the position of a net in the ModuleTree. 
          * The net will be placed under the deepest module, that contains all sources and destinations of the net.
-         * If no suitable parent could be found, then the net will instead be placed under the top module.
-         * If the net does not exist in the item model (e.g. it's a global net), then nothing is updated.
+         * If no suitable parent could be found (a global input or output, or a net without endpoints), the net is
+         * removed from the modules; with showNetsOutsideModules() it is listed as a top-level item instead.
          * 
          * @param net The net whose source or destination might have changed.
          * @param parentAssignment Optional precomputed map from net to parent item, used to avoid recomputing the
@@ -335,6 +350,15 @@ namespace hal
 
         void handleNetUpdated(Net* net, u32 data);
 
+        /**
+         * Moves a net that was marked or unmarked as a global input or output to its new place, since a global net
+         * belongs to no module.
+         *
+         * @param netlist - The netlist.
+         * @param netId - The ID of the net.
+         */
+        void handleNetGlobalStateChanged(Netlist* netlist, u32 netId);
+
     protected:
         /**
          * Factory method to append new tree items. Insert signals are sent to view. New items are put into hash table.
@@ -378,6 +402,14 @@ namespace hal
          */
         void findNetParentRecursion(BaseTreeItem* parent, QHash<const Net*,ModuleItem*>& parentAssignment, std::unordered_set<Net*>& assignedNets) const;
 
+        /**
+         * Adds or removes the top-level item of a net that belongs to no module, see setShowNetsOutsideModules().
+         *
+         * @param netId - The ID of the net.
+         * @param outside - `true` if the net belongs to no module and needs a top-level item, `false` otherwise.
+         */
+        void updateNetOutsideModules(u32 netId, bool outside);
+
         QMultiMap<u32, ModuleItem*> mModuleMap;
         QMultiMap<u32, ModuleItem*> mGateMap;
         QMultiMap<u32, ModuleItem*> mNetMap;
@@ -391,6 +423,9 @@ namespace hal
          * must not emit row signals of their own while it is set.
          */
         bool mResetInProgress;
+
+        /** See setShowNetsOutsideModules(). */
+        bool mShowNetsOutsideModules;
 
         TempGateAssignment mTempGateAssignment;
     };

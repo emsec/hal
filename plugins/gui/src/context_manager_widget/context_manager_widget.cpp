@@ -317,12 +317,10 @@ namespace hal
 
     void ContextManagerWidget::handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
     {
+        Q_UNUSED(selected);
         Q_UNUSED(deselected);
 
-        if(selected.indexes().isEmpty())
-            setToolbarButtonsEnabled(false);
-        else
-            setToolbarButtonsEnabled(true);
+        setToolbarButtonsEnabled(mContextTreeView->selectionModel()->hasSelection());
     }
 
     void ContextManagerWidget::handleContextMenuRequest(const QPoint& point)
@@ -367,6 +365,10 @@ namespace hal
     void ContextManagerWidget::handleDataChanged()
     {
         enableSearchbar(mContextTreeProxyModel->rowCount() > 0);
+
+        // the view may move the selection to a neighbouring row after a removal without
+        // a selectionChanged signal that reflects the final state
+        setToolbarButtonsEnabled(mContextTreeView->selectionModel()->hasSelection());
     }
 
     void ContextManagerWidget::updateSearchIcon()

@@ -106,7 +106,8 @@ namespace hal
         QString numberOfSubModules() const;
 
         /**
-         * Returns the number of nets contained in the module in a suitable mannfer for table and the clipboard.
+         * Returns the number of nets with at least one source or one destination within the module, i.e., its input,
+         * output and internal nets as well as nets driven inside the module that nothing reads.
          */
         QString numberOfNets() const;
 

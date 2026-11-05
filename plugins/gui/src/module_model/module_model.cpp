@@ -12,7 +12,7 @@
 
 namespace hal
 {
-    ModuleModel::ModuleModel(QObject* parent) : BaseTreeModel(parent), mIsModifying(false), mResetInProgress(false)
+    ModuleModel::ModuleModel(QObject* parent) : BaseTreeModel(parent), mIsModifying(false), mResetInProgress(false), mShowNetsOutsideModules(false)
     {
         // use root item to store header information
         setHeaderLabels(QStringList() << "Name" << "ID" << "Type");
@@ -35,6 +35,10 @@ namespace hal
         connect(gNetlistRelay, &NetlistRelay::netSourceRemoved,       this, &ModuleModel::handleNetUpdated);
         connect(gNetlistRelay, &NetlistRelay::netDestinationAdded,    this, &ModuleModel::handleNetUpdated);
         connect(gNetlistRelay, &NetlistRelay::netDestinationRemoved,  this, &ModuleModel::handleNetUpdated);
+        connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalInput,    this, &ModuleModel::handleNetGlobalStateChanged);
+        connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalOutput,   this, &ModuleModel::handleNetGlobalStateChanged);
+        connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalInput,  this, &ModuleModel::handleNetGlobalStateChanged);
+        connect(gNetlistRelay, &NetlistRelay::netlistUnmarkedGlobalOutput, this, &ModuleModel::handleNetGlobalStateChanged);
     }
 
     QVariant ModuleModel::data(const QModelIndex& index, int role) const
@@ -232,11 +236,31 @@ namespace hal
         for(u32 id : netIds)
             newRootList.append(new ModuleItem(id, ModuleItem::TreeItemType::Net, this));
 
+        if (mShowNetsOutsideModules)
+        {
+            // every net the modules did not take: the global inputs and outputs and nets without endpoints
+            for (const Net* net : gNetlist->get_nets())
+            {
+                if (!mNetMap.contains(net->get_id()))
+                    newRootList.append(new ModuleItem(net->get_id(), ModuleItem::TreeItemType::Net, this));
+            }
+        }
+
         for(auto item : newRootList)
             mRootItem->appendChild(item);
         mResetInProgress = false;
         setIsModifying(false);
         endResetModel();
+    }
+
+    void ModuleModel::setShowNetsOutsideModules(bool enable)
+    {
+        mShowNetsOutsideModules = enable;
+    }
+
+    bool ModuleModel::showNetsOutsideModules() const
+    {
+        return mShowNetsOutsideModules;
     }
 
     void ModuleModel::addModule(u32 id, u32 parentId)
@@ -484,6 +508,12 @@ namespace hal
 
     void ModuleModel::handleNetCreated(Net* net)
     {
+        if (mShowNetsOutsideModules)
+        {
+            // a new net has no endpoints yet and thus belongs to no module; it moves once it gets some
+            updateNetParent(net);
+            return;
+        }
         addNet(net->get_id(), gNetlist->get_top_module()->get_id());
     }
 
@@ -501,6 +531,13 @@ namespace hal
     {
         Q_UNUSED(data);
         updateNetParent(net);
+    }
+
+    void ModuleModel::handleNetGlobalStateChanged(Netlist* netlist, u32 netId)
+    {
+        Q_UNUSED(netlist);
+        if (const Net* net = gNetlist->get_net_by_id(netId); net != nullptr)
+            updateNetParent(net);
     }
 
     void ModuleModel::handleModuleParentChanged(const Module* mod)
@@ -709,6 +746,9 @@ namespace hal
         for (const QPair<ModuleItem*,ModuleItem*>& trash : trashcan)
             removeChildItem(trash.first, trash.second);
 
+        if (mShowNetsOutsideModules)
+            updateNetOutsideModules(netId, newParentId == 0);
+
         if (!newParentId) return;
         for (auto itMod = mModuleMap.lowerBound(newParentId); itMod != mModuleMap.upperBound(newParentId); ++itMod)
         {
@@ -716,6 +756,24 @@ namespace hal
             if (parentsHandled.contains(parentItem)) continue;
             createChildItem(net->get_id(), ModuleItem::TreeItemType::Net, parentItem);
         }
+    }
+
+    void ModuleModel::updateNetOutsideModules(u32 netId, bool outside)
+    {
+        ModuleItem* toplevelItem = nullptr;
+        for (auto it = mNetMap.lowerBound(netId); it != mNetMap.upperBound(netId); ++it)
+        {
+            if (it.value()->isToplevelItem())
+            {
+                toplevelItem = it.value();
+                break;
+            }
+        }
+
+        if (outside && !toplevelItem)
+            createChildItem(netId, ModuleItem::TreeItemType::Net, mRootItem);
+        else if (!outside && toplevelItem)
+            removeChildItem(toplevelItem, mRootItem);
     }
 
     void ModuleModel::updateModuleParent(const Module* module)
