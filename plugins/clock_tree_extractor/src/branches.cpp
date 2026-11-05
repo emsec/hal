@@ -31,73 +31,70 @@
 #include <utility>
 #include <variant>
 
-namespace hal
+namespace hal::cte
 {
-    namespace cte
+    namespace
     {
-        namespace
+        Result<std::monostate> recover_branches_for_root( const ClockTree &clock_tree,
+                                                          const std::pair<const void *, PtrType> node,
+                                                          Branch &branch,
+                                                          std::vector<Branch> &branches )
         {
-            Result<std::monostate> recover_branches_for_root( const ClockTree &clock_tree,
-                                                              const std::pair<const void *, PtrType> node,
-                                                              Branch &branch,
-                                                              std::vector<Branch> &branches )
+            branch.push_back( node );
+
+            const auto children = clock_tree.get_neighbors( node.first, IGRAPH_OUT );
+            if( children.is_error() )
             {
-                branch.push_back( node );
+                return ERR( children.get_error().get() );
+            }
 
-                const auto children = clock_tree.get_neighbors( node.first, IGRAPH_OUT );
-                if( children.is_error() )
+            if( children.get().empty() )
+            {
+                branches.push_back( branch );
+            }
+            else
+            {
+                for( const auto &child : children.get() )
                 {
-                    return ERR( children.get_error().get() );
-                }
-
-                if( children.get().empty() )
-                {
-                    branches.push_back( branch );
-                }
-                else
-                {
-                    for( const auto &child : children.get() )
+                    // prevent loop-caused runtime explosion (e.g., ring-oscillator)
+                    if( std::find( branch.begin(), branch.end(), child ) != branch.end() )
                     {
-                        // prevent loop-caused runtime explosion (e.g., ring-oscillator)
-                        if( std::find( branch.begin(), branch.end(), child ) != branch.end() )
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
 
-                        const auto res = recover_branches_for_root( clock_tree, child, branch, branches );
-                        if( res.is_error() )
-                        {
-                            return ERR( res.get_error().get() );
-                        }
+                    const auto res = recover_branches_for_root( clock_tree, child, branch, branches );
+                    if( res.is_error() )
+                    {
+                        return ERR( res.get_error().get() );
                     }
                 }
-
-                branch.pop_back();
-                return OK( {} );
-            }
-        }  // namespace
-
-        Result<std::vector<Branch>> recover_branches( const ClockTree &clock_tree )
-        {
-            Branch branch;
-            std::vector<Branch> branches;
-
-            for( const igraph_int_t root : clock_tree.get_roots() )
-            {
-                const auto root_ptr = clock_tree.get_ptr_from_vertex( root );
-                if( root_ptr.is_error() )
-                {
-                    return ERR( root_ptr.get_error().get() );
-                }
-
-                const auto result = recover_branches_for_root( clock_tree, root_ptr.get(), branch, branches );
-                if( result.is_error() )
-                {
-                    return ERR( result.get_error().get() );
-                }
             }
 
-            return OK( std::move( branches ) );
+            branch.pop_back();
+            return OK( {} );
         }
-    }  // namespace cte
-}  // namespace hal
+    }  // namespace
+
+    Result<std::vector<Branch>> recover_branches( const ClockTree &clock_tree )
+    {
+        Branch branch;
+        std::vector<Branch> branches;
+
+        for( const igraph_int_t root : clock_tree.get_roots() )
+        {
+            const auto root_ptr = clock_tree.get_ptr_from_vertex( root );
+            if( root_ptr.is_error() )
+            {
+                return ERR( root_ptr.get_error().get() );
+            }
+
+            const auto result = recover_branches_for_root( clock_tree, root_ptr.get(), branch, branches );
+            if( result.is_error() )
+            {
+                return ERR( result.get_error().get() );
+            }
+        }
+
+        return OK( std::move( branches ) );
+    }
+}  // namespace hal::cte

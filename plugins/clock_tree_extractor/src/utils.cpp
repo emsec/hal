@@ -31,59 +31,56 @@
 #include "hal_core/netlist/gate_library/enums/gate_type_property.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 
-namespace hal
+namespace hal::cte
 {
-    namespace cte
+    bool is_ff( const Gate *gate )
     {
-        bool is_ff( const Gate *gate )
-        {
-            return gate->get_type()->has_property( GateTypeProperty::ff );
-        }
+        return gate->get_type()->has_property( GateTypeProperty::ff );
+    }
 
-        bool is_latch( const Gate *gate )
-        {
-            return gate->get_type()->has_property( GateTypeProperty::latch );
-        }
+    bool is_latch( const Gate *gate )
+    {
+        return gate->get_type()->has_property( GateTypeProperty::latch );
+    }
 
-        bool is_buffer( const Gate *gate )
-        {
-            return gate->get_type()->has_property( GateTypeProperty::c_buffer );
-        }
+    bool is_buffer( const Gate *gate )
+    {
+        return gate->get_type()->has_property( GateTypeProperty::c_buffer );
+    }
 
-        bool is_inverter( const Gate *gate )
-        {
-            return gate->get_type()->has_property( GateTypeProperty::c_inverter );
-        }
+    bool is_inverter( const Gate *gate )
+    {
+        return gate->get_type()->has_property( GateTypeProperty::c_inverter );
+    }
 
-        bool is_delay( const Gate *gate )
-        {
-            return gate->get_type()->has_property( GateTypeProperty::delay );
-        }
+    bool is_delay( const Gate *gate )
+    {
+        return gate->get_type()->has_property( GateTypeProperty::delay );
+    }
 
-        bool is_mux( const Gate *gate )
-        {
-            return gate->get_type()->has_property( GateTypeProperty::c_mux );
-        }
+    bool is_mux( const Gate *gate )
+    {
+        return gate->get_type()->has_property( GateTypeProperty::c_mux );
+    }
 
-        bool is_oscillator( const Gate *gate )
-        {
-            return gate->get_type()->has_property( GateTypeProperty::oscillator );
-        }
+    bool is_oscillator( const Gate *gate )
+    {
+        return gate->get_type()->has_property( GateTypeProperty::oscillator );
+    }
 
-        bool is_pll( const Gate *gate )
-        {
-            return gate->get_type()->has_property( GateTypeProperty::pll );
-        }
+    bool is_pll( const Gate *gate )
+    {
+        return gate->get_type()->has_property( GateTypeProperty::pll );
+    }
 
-        bool is_control_pin( PinType pin_type )
-        {
-            return pin_type == PinType::clock || pin_type == PinType::enable || pin_type == PinType::select
-                || pin_type == PinType::set || pin_type == PinType::reset;
-        }
+    bool is_control_pin( PinType pin_type )
+    {
+        return pin_type == PinType::clock || pin_type == PinType::enable || pin_type == PinType::select
+            || pin_type == PinType::set || pin_type == PinType::reset;
+    }
 
-        bool is_connected_to_control_pin( const Endpoint *endpoint )
-        {
-            return is_control_pin( endpoint->get_pin()->get_type() );
-        }
-    }  // namespace cte
-}  // namespace hal
+    bool is_connected_to_control_pin( const Endpoint *endpoint )
+    {
+        return is_control_pin( endpoint->get_pin()->get_type() );
+    }
+}  // namespace hal::cte
