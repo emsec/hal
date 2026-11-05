@@ -1,5 +1,6 @@
 var NAVTREEINDEX38 =
 {
+"namespacehal_1_1_s_m_t_1_1_bitwuzla.html#affaadc7bc6d480d5a887c472d1f57960":[8,0,0,35,0,2],
 "namespacehal_1_1_s_m_t_1_1_boolector.html":[8,0,0,35,1],
 "namespacehal_1_1_s_m_t_1_1_boolector.html#a42bc00bce1a92a6c073892ee01add6fe":[8,0,0,35,1,0],
 "namespacehal_1_1_s_m_t_1_1_boolector.html#a56fe6b2a0d25341b2ef2b2062de3cacc":[8,0,0,35,1,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX38 =
 "namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddcace54b53f2690fd51765ab1b610304413":[8,0,0,20,12,13],
 "namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddcadc4d53aa0d117d8b189b36d161af4e96":[8,0,0,20,12,5],
 "namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddcae96712af70d9de6a497237a21a3a7271":[8,0,0,20,12,6],
-"namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddcae9cd7028f29a04ad654d85033433d9ee":[8,0,0,20,12,11],
-"namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddcaf9da11abbd3f0d984feaa8a6e3ac63b7":[8,0,0,20,12,7]
+"namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddcae9cd7028f29a04ad654d85033433d9ee":[8,0,0,20,12,11]
 };

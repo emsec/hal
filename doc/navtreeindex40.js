@@ -1,5 +1,6 @@
 var NAVTREEINDEX40 =
 {
+"namespacehal_1_1z3__utils.html#a1efc45e11a8dfd28b89ffc88e05651bd":[8,0,0,44,14],
 "namespacehal_1_1z3__utils.html#a1fefd987cf6c9cfe0a207ce4b89501f6":[8,0,0,44,8],
 "namespacehal_1_1z3__utils.html#a3491fe7ac389dab9abc5502a6215820f":[8,0,0,44,10],
 "namespacehal_1_1z3__utils.html#a385eabcc13410302fde3588418e993e9":[8,0,0,44,18],
@@ -248,6 +249,5 @@ var NAVTREEINDEX40 =
 "netlist__comparison_8cpp.html#a9df61ff56ecda1d228a281b0175177c5":[10,0,1,27,2,1,2],
 "netlist__comparison_8cpp_source.html":[10,0,1,27,2,1],
 "netlist__comparison_8h.html":[10,0,1,27,0,0,1],
-"netlist__comparison_8h.html#a0c76c575adbae7c629da5a3ec0a4e8f3":[10,0,1,27,0,0,1,0],
-"netlist__comparison_8h.html#a90da51b6cdbd7ea3c32a97729ac86593":[10,0,1,27,0,0,1,1]
+"netlist__comparison_8h.html#a0c76c575adbae7c629da5a3ec0a4e8f3":[10,0,1,27,0,0,1,0]
 };

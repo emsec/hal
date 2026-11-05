@@ -1,5 +1,6 @@
 var NAVTREEINDEX34 =
 {
+"graph__context__serializer_8h_source.html":[10,0,1,8,0,0,20,6],
 "graph__graphics__view_8cpp.html":[10,0,1,8,2,20,7],
 "graph__graphics__view_8cpp.html#a6f60f4bfa62d51227fa5fcc3e7d838a9":[10,0,1,8,2,20,7,0],
 "graph__graphics__view_8cpp.html#ac79d7240087e23efb58eecfe4c0a38fd":[10,0,1,8,2,20,7,1],
@@ -116,8 +117,8 @@ var NAVTREEINDEX34 =
 "group__by__successors__predecessors__iteratively_8h_source.html":[10,0,1,3,0,0,4,0,4],
 "group__core.html":[7,0],
 "group__decorators.html":[7,0,0,0],
-"group__decorators.html#ga10a0dbae61e1d4d1c8d2310ce40947c6":[7,0,0,0,8],
 "group__decorators.html#ga10a0dbae61e1d4d1c8d2310ce40947c6":[8,0,0,709],
+"group__decorators.html#ga10a0dbae61e1d4d1c8d2310ce40947c6":[7,0,0,0,8],
 "group__decorators.html#gabf9ea95cf437527b2fd8929ae3d7489d":[8,0,0,708],
 "group__decorators.html#gabf9ea95cf437527b2fd8929ae3d7489d":[7,0,0,0,7],
 "group__decorators.html#gga10a0dbae61e1d4d1c8d2310ce40947c6a17bfc0c4ea85d792afc1c24aedd566fa":[7,0,0,0,8,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX34 =
 "group__pybind.html#gae67f2029fac093c1e1990401edbcfd0a":[8,0,0,718],
 "group__pybind.html#gaf8d3775de7aff4ada2993c698332de33":[7,0,3,24],
 "group__pybind.html#gaf8d3775de7aff4ada2993c698332de33":[8,0,0,744],
-"group__python-console.html":[7,1,1,1],
-"group__python-editor.html":[7,1,1,0]
+"group__python-console.html":[7,1,1,1]
 };
