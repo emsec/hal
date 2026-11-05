@@ -32,6 +32,9 @@
 
 namespace hal
 {
+    /**
+     * The plugin that provides HAL's built-in simulation engine.
+     */
     class PLUGIN_API NetlistSimulatorPlugin : public BasePluginInterface
     {
         static std::string s_engine_name;

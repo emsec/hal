@@ -111,25 +111,24 @@ namespace hal
         const std::pair<std::string, std::string>& get_gate_location_data_identifiers() const;
 
         /**
-         * TODO pybind
          * Create a new gate type, add it to the gate library, and return it.
          * 
          * @param[in] name - The name of the gate type.
          * @param[in] properties - The properties of the gate type.
          * @param[in] component - A component adding additional functionality to the gate type.
-         * @returns The new gate type instance on success, a nullptr otherwise.
+         * @returns The new gate type instance on success, a `nullptr` otherwise.
          */
         GateType* create_gate_type(const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational}, std::unique_ptr<GateTypeComponent> component = nullptr);
 
+        // TODO pybind
         /**
-         * TODO pybind
          * Replace gate type with given ID, might change name, properties, component, and return it.
          *
          * @param[in] id - The ID of gate type
          * @param[in] name - The name of the gate type.
          * @param[in] properties - The properties of the gate type.
          * @param[in] component - A component adding additional functionality to the gate type.
-         * @returns The new gate type instance on success, a nullptr otherwise.
+         * @returns The new gate type instance on success, a `nullptr` otherwise.
          */
         GateType* replace_gate_type(u32 id, const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational}, std::unique_ptr<GateTypeComponent> component = nullptr);
 
@@ -137,7 +136,7 @@ namespace hal
          * Check whether the given gate type is contained in this library.
          *
          * @param[in] gate_type - The gate type.
-         * @returns True if the gate type is part of this library, false otherwise.
+         * @returns `true` if the gate type is part of this library, `false` otherwise.
          */
         bool contains_gate_type(GateType* gate_type) const;
 
@@ -145,15 +144,15 @@ namespace hal
          * Check by name whether the given gate type is contained in this library.
          *
          * @param[in] name - The name of the gate type.
-         * @returns True if the gate type is part of this library, false otherwise.
+         * @returns `true` if the gate type is part of this library, `false` otherwise.
          */
         bool contains_gate_type_by_name(const std::string& name) const;
 
         /**
-         * Get the gate type corresponding to the given name if contained within the library. In case there is no gate type with that name, a nullptr is returned.
+         * Get the gate type corresponding to the given name if contained within the library. In case there is no gate type with that name, a `nullptr` is returned.
          *
          * @param[in] name - The name of the gate type.
-         * @returns The gate type on success, a nullptr otherwise.
+         * @returns The gate type on success, a `nullptr` otherwise.
          */
         GateType* get_gate_type_by_name(const std::string& name) const;
 
@@ -170,7 +169,7 @@ namespace hal
          * Mark a gate type as a VCC gate type.
          *
          * @param[in] gate_type - The gate type.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool mark_vcc_gate_type(GateType* gate_type);
 
@@ -185,7 +184,7 @@ namespace hal
          * Mark a gate type as a GND gate type.
          *
          * @param[in] gate_type - The gate type.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool mark_gnd_gate_type(GateType* gate_type);
 
@@ -199,9 +198,9 @@ namespace hal
         /**
          * Add an include required for parsing a corresponding netlist, e.g., VHDL libraries.
          *
-         * @param[in] inc - The include to add.
+         * @param[in] include - The include to add.
          */
-        void add_include(const std::string& inc);
+        void add_include(const std::string& include);
 
         /**
          * Get a vector of includes required for parsing a corresponding netlist, e.g., VHDL libraries.

@@ -71,13 +71,13 @@ namespace hal {
 
         /**
          * Convenience method to check whether road direction is horizontal
-         * @return true if horizontal, false otherwise
+         * @return `true` if horizontal, `false` otherwise
          */
         bool isHorizontal() const { return hvIndex() == Horizontal; }
 
         /**
          * Convenience method to check whether road direction is vertical
-         * @return true if vertical, false otherwise
+         * @return `true` if vertical, `false` otherwise
          */
         bool isVertical() const { return hvIndex() == Vertical; }
 
@@ -116,35 +116,35 @@ namespace hal {
         /**
          * Check whether range instance would overlap with instance from other net
          * @param other Possibly conflicting range
-         * @return true if nets are different and share at least a common point, false otherwise
+         * @return `true` if nets are different and share at least a common point, `false` otherwise
          */
         bool conflict(const NetLayoutJunctionRange& other) const;
 
         /**
          * Checks whether position is within range including first and last grid point
          * @param pos Relevant coordinate from grid point to check
-         * @return true if in range according to condition above, false otherwise
+         * @return `true` if in range according to condition above, `false` otherwise
          */
         bool contains(int pos) const { return mFirst <= pos && pos <= mLast; }
 
         /**
          * Checks whether position is within range excluding first and last grid point
          * @param pos Relevant coordinate from grid point to check
-         * @return true if in range according to condition above, false otherwise
+         * @return `true` if in range according to condition above, `false` otherwise
          */
         bool innerPos(int pos) const { return mFirst < pos && pos < mLast; }
 
         /**
          * Checks whether ranges of same net can be joined to bigger range
          * @param other Range which might be joined
-         * @return true if range can be joined, false otherwise
+         * @return `true` if range can be joined, `false` otherwise
          */
         bool canJoin(const NetLayoutJunctionRange& other) const;
 
         /**
          * Checks whether range is entry from external net
          * @param iTestMax Test for MinInf if 0, MaxInf otherwise
-         * @return true if range is entry from external net
+         * @return `true` if range is entry from external net, `false` otherwise.
          */
         bool isEntry(int iTestMax) const;
 
@@ -249,7 +249,7 @@ namespace hal {
 
         /**
          * Checks whether wire is entry from external net
-         * @return true if wire is entry from external net, false otherwise
+         * @return `true` if wire is entry from external net, `false` otherwise
          */
         bool isEntry() const;
     };
@@ -288,7 +288,7 @@ namespace hal {
 
         /**
          * Returns whether a junction is trivial and can be omitted
-         * @return true if only one direction and inputs identical to outputs, false otherwise
+         * @return `true` if only one direction and inputs identical to outputs, `false` otherwise
          */
         bool isTrivial() const;
 
@@ -344,7 +344,7 @@ namespace hal {
         /**
          * Check whether search pattern is included in binary pattern
          * @param searchPattern Combination of Left (bit 0), Right (bit 1), Up (bit 2), Down (bit 3)
-         * @return true if search pattern is included in binary pattern, false otherwise
+         * @return `true` if search pattern is included in binary pattern, `false` otherwise
          */
         bool hasPattern(u32 searchPattern) const;
         int laneIndex(NetLayoutDirection dir) const { return mLaneIndex[dir.index()]; }
@@ -360,6 +360,8 @@ namespace hal {
     };
 
     /**
+      * The ranges of one lane of a junction that are already occupied by wires.
+      *
      * @ingroup graph-layouter
      */
      class NetLayoutJunctionOccupied : public QList<NetLayoutJunctionRange>
@@ -370,6 +372,8 @@ namespace hal {
     };
 
     /**
+     * A map from each lane of a junction to the ranges that are already occupied on it.
+     *
      * @ingroup graph-layouter
      */
     class NetLayoutJunctionOccupiedHash : public QHash<LaneIndex,NetLayoutJunctionOccupied>
@@ -378,7 +382,7 @@ namespace hal {
         /**
          * Result class for addOrMerge() function
          * If range was merged, old and new range will be returned
-         * otherwise these values are not set (nullptr)
+         * otherwise these values are not set (`nullptr`)
          */
         class AddOrMerge
         {
@@ -408,6 +412,8 @@ namespace hal {
     };
 
     /**
+     * Routes the wires of all nets that meet at one grid point so that they cross as little as possible.
+     *
      * @ingroup graph-layouter
      */
     class NetLayoutJunction
@@ -461,6 +467,9 @@ namespace hal {
         ErrorType mError;
     };
 
+    /**
+     * A map from each grid point to the junction that was computed for it.
+     */
     class NetLayoutJunctionHash : public QHash<NetLayoutPoint,NetLayoutJunction*>
     {
     public:

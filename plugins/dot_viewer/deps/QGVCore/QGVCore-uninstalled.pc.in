@@ -1,0 +1,10 @@
+libdir=@CMAKE_BINARY_DIR@/lib
+includedir=@CMAKE_CURRENT_SOURCE_DIR@
+
+Name: @TARGET_NAME@
+Description: @PROJECT_DESCRIPTION@
+Version: @PROJECT_VERSION@
+Requires: @PKGCONFIG_REQUIRES@
+Libs: -L${libdir} -l@TARGET_NAME@ @PKGCONFIG_LIBS@
+Cflags: -I${includedir} @PKGCONFIG_CFLAGS@
+

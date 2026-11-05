@@ -32,11 +32,13 @@
 #include <QMap>
 #include <QSplitter>
 #include <QFrame>
+#include <QPointer>
 
 #include <hal_core/defines.h>
 #include "waveform_viewer/wave_item.h"
 #include "waveform_viewer/wave_selection_dialog.h"
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
+#include "gui/module_model/module_item.h"
 
 namespace hal {
 
@@ -47,6 +49,9 @@ namespace hal {
 
 //    enum SimulationState { SimulationSelectGates, SimulationClockSet, SimulationInputGenerate, SimulationShowResults };
 
+    /**
+     * The widget that combines the waveform tree and the waveform canvas of one simulation.
+     */
     class WaveWidget : public QSplitter
     {
         Q_OBJECT
@@ -88,7 +93,7 @@ namespace hal {
         void resizeEvent(QResizeEvent *event) override;
 
     private:
-        NetlistSimulatorController* mController;
+        QPointer<NetlistSimulatorController> mController;
         std::unique_ptr<NetlistSimulatorController> mControllerOwner;
 
         u32 mControllerId;

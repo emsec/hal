@@ -45,6 +45,9 @@ namespace hal
     class BooleanFunction;
 
     /**
+     * Performs all netlist modifications on behalf of the netlist and its elements.
+     * It is an implementation detail that keeps the internal caches consistent and emits the corresponding events, and is not part of the public API.
+     *
      * @ingroup netlist
      */
     class NETLIST_API NetlistInternalManager

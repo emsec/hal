@@ -33,11 +33,32 @@
 
 #include <QWidget>
 #include <QTableWidget>
+#include <QDialog>
 #include "gui/selection_details_widget/data_table_model.h"
 #include "gui/user_action/user_action_object.h"
+#include "gui/user_action/action_set_object_data.h"
 
 namespace hal
 {
+    /**
+     * @brief Small dialog to edit or enter a DataContainer entry (see below)
+     */
+    class DataEntryDialog : public QDialog
+    {
+    Q_OBJECT
+        QLineEdit* mLineEdit[4];
+    public:
+        /**
+         * Constructor
+         *
+         * Old entry gets filled into line edit fields if not null
+         */
+        DataEntryDialog(const DataTableEntry* entry = nullptr, QWidget* parent = nullptr);
+
+        DataTableEntry getEntry() const;
+    };
+
+
     /**
      * @ingroup utility_widgets-selection_details
      *
@@ -102,7 +123,8 @@ namespace hal
 
     private:
         void adjustTableSizes();
-        void changePropertyRequested(DataTableModel::propertyType prop);
+
+        void contextAction(ActionSetObjectData::ActionType actionType);
 
         DataTableModel* mDataTableModel;
         DataContainer* mCurrentContainer;

@@ -77,10 +77,10 @@ namespace hal
         void setFilename(const QString& name);
 
         /**
-         * If called with <b>true</b>:
+         * If called with `true`:
          * Mark that the file, the editor works with, was modified from outside (e.g. by editing it in another program)
          * and the user has to be informed.
-         * If called with <b>false</b>:
+         * If called with `false`:
          * The user has been informed and has already selected further actions (like reload the editor or ignore the changes).
          * Therefore the file can be assumed to be in sync with the editor again.
          *
@@ -89,10 +89,10 @@ namespace hal
         void setBaseFileModified(bool base_file_modified);
 
         /**
-         * If <b>true</b>:
+         * If `true`:
          * The file, the editor works with, was modified from outside (e.g. by editing it in another program)
          * and the user has to be informed.
-         * If <b>false</b>:
+         * If `false`:
          * The base file is assumed to be in sync with the editor.
          */
         bool isBaseFileModified();
@@ -164,21 +164,21 @@ namespace hal
         void handleRedoRequested();
 
         /**
-         * If <b>true</b>: <br>
+         * If `true`: <br>
          * Indent the currently selected lines with one tab. <br>
-         * If <b>false</b>: <br>
+         * If `false`: <br>
          * Remove existing indentations in the currently selected lines (one tab per line). <br> <br>
          *
          * It initializes auto completion instead, if the cursor is not at the beginning of the (written) line.
          *
-         * @param indentUnindent - True to indent. False to unindent.
+         * @param indentUnindent - `true` to indent. `false` to unindent.
          */
         void indentSelection(bool indentUnindent);
 
         /**
          * Helper function to decide how many characters has to be added (deleted) for the next indentation (unindentation).
          *
-         * @param indentUnindent - True to compute for indentation. False to compute for unindentation.
+         * @param indentUnindent - `true` to compute for indentation. `false` to compute for unindentation.
          * @param current_indent - The current indentation (amount of ' ' characters)
          * @returns the number of spaces that has to be added/deleted for the next indentation/unindentation
          */

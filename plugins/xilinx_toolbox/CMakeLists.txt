@@ -12,4 +12,6 @@ if(PL_XILINX_TOOLBOX OR BUILD_ALL_PLUGINS)
                    SOURCES ${XILINX_TOOLBOX_SRC} ${XILINX_TOOLBOX_PYTHON_SRC}
                    PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/xilinx_toolbox.rst
                 )
+
+    add_subdirectory(test)
 endif()

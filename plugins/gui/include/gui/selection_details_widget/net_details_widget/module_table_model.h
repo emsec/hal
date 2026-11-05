@@ -47,6 +47,9 @@ class ModuleTableModel : public QAbstractTableModel
     Q_OBJECT
 
 private:
+    /**
+     * One row of the module table, i.e., a module that the selected net enters or leaves.
+     */
     struct Entry
     {
         QString name;

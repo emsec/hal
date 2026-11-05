@@ -69,13 +69,13 @@ namespace hal
 
         /**
          * Toggles whether or not nets are accepted by the filter.
-         * @returns <b>true</b> if nets are filtered out now. <b>false</b> if not. 
+         * @returns `true` if nets are filtered out now. `false` if not, `false` otherwise.
          */
         bool toggleFilterNets();
 
         /**
          * Toggles whether or not gates are accepted by the filter.
-         * @returns <b>true</b> if gates are filtered out now. <b>false</b> if not. 
+         * @returns `true` if gates are filtered out now. `false` if not, `false` otherwise.
          */
         bool toggleFilterGates();
 
@@ -84,12 +84,12 @@ namespace hal
          * Overrides QSortFilterProxyModel::filterAcceptsRow to implement the filter logic. The first layer
          * checks whether gates and/or nets should be excluded from view. The second layer is provided by
          * base class based on search string and search options.<br>
-         * Returns <b>true</b> if the item in the row indicated by <i>sourceRow</i> and <i>sourceParent</i>
+         * Returns `true` if the item in the row indicated by <i>sourceRow</i> and <i>sourceParent</i>
          * should be included in the model.
          *
          * @param sourceRow - The row in the source model
          * @param sourceParent - the source parent
-         * @returns <b>true</b> if the row should be included in the model.
+         * @returns `true` if the row should be included in the model, `false` otherwise.
          */
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
@@ -99,7 +99,7 @@ namespace hal
          *
          * @param source_left - The model index of the left element
          * @param source_right - The model index of the right element
-         * @returns <b>true</b> if the element at source_left is considered less than the element at source_right
+         * @returns `true` if the element at source_left is considered less than the element at source_right, `false` otherwise.
          */
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
         bool checkRowRecursion(int sourceRow, const QModelIndex& sourceParent, int startIndex, int endIndex, int offset = 0) const override;

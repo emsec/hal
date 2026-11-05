@@ -1,4 +1,5 @@
 #include "module_identification/architectures/lattice_ice40.h"
+#include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
@@ -43,7 +44,7 @@ namespace hal
                         const GateType* carry_type = current_gate->get_type();
 
                         // get carry chains by defining appropriate filter function
-                        auto chain_res = netlist_utils::get_gate_chain(current_gate, {carry_type->get_pin_by_name("CI")}, {carry_type->get_pin_by_name("CO")});
+                        auto chain_res = NetlistTraversalDecorator(*nl).get_gate_chain(current_gate, {carry_type->get_pin_by_name("CI")}, {carry_type->get_pin_by_name("CO")});
                         if (chain_res.is_error())
                         {
                             return std::vector<std::unique_ptr<BaseCandidate>>();

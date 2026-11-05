@@ -35,6 +35,9 @@
 
 namespace hal {
 
+    /**
+     * A simulation engine that does not simulate anything and merely serves as an example and for testing.
+     */
     class DummyEngine : public SimulationEngineScripted
     {
     public:
@@ -46,6 +49,9 @@ namespace hal {
         bool finalize();
     };
 
+    /**
+     * Creates instances of the dummy simulation engine.
+     */
     class DummyEngineFactory : SimulationEngineFactory
     {
         static DummyEngineFactory* sDumFac;

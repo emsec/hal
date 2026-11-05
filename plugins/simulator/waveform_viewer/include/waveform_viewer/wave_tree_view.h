@@ -35,6 +35,9 @@
 namespace hal {
     class WaveDataList;
 
+    /**
+     * Renders the value column of the waveform tree.
+     */
     class WaveValueDelegate : public QStyledItemDelegate
     {
         Q_OBJECT
@@ -45,10 +48,14 @@ namespace hal {
                       const QModelIndex &index) const override;
     };
 
+    /**
+     * The tree view that lists the waveforms and their groups next to the waveform canvas.
+     */
     class WaveTreeView : public QTreeView
     {
         Q_OBJECT
         QList<QModelIndex> mItemOrder;
+        QSet<u32> mExpandedGroups;
         QModelIndexList mContextIndexList;
         WaveDataList* mWaveDataList;
         WaveItemHash* mWaveItemHash;
@@ -68,11 +75,12 @@ namespace hal {
     Q_SIGNALS:
         void viewportHeightChanged(int height);
         void sizeChanged(int viewportHeight, int scrollbarMax, int scrollbarPos);
-        void numberVisibleChanged(int nVisible, int scrollbarMax, int scrollbarPos);
+//        void numberVisibleChanged(int nVisible, int scrollbarMax, int scrollbarPos);  // unused
         void triggerUpdateWaveItems();
 
     private Q_SLOTS:
-        void handleExpandCollapse(const QModelIndex& index);
+        void handleExpand(const QModelIndex& index);
+        void handleCollapse(const QModelIndex& index);
         void handleContextMenuRequested(const QPoint& pos);
         void handleRemoveItem();
         void handleRenameItem();

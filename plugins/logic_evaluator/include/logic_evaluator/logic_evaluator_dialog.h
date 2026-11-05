@@ -46,10 +46,16 @@ namespace hal {
 
     class LogicEvaluatorTruthtableModel;
 
+    /**
+     * The main dialog of the logic evaluator, which shows the inputs and outputs of the selected gates and evaluates them on demand.
+     */
     class LogicEvaluatorDialog : public QDialog
     {
         Q_OBJECT
 
+        /**
+         * Handle to the shared library that the selected gates were compiled into, together with the entry points that it exports.
+         */
         struct SharedLibHandle
         {
             QString fnSharedLib;

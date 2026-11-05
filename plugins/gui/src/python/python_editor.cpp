@@ -586,7 +586,7 @@ namespace hal
         {
             tab->document()->setModified(false);
             tab->setFilename(fileName);
-            mTabWidget->setTabText(mTabWidget->indexOf(tab), info.completeBaseName() + "." + info.completeSuffix());
+            mTabWidget->setTabText(mTabWidget->indexOf(tab), info.fileName());
             mNewFileCounter--;
 
             mPathEditorMap.insert(fileName, tab);
@@ -724,7 +724,7 @@ namespace hal
                 mTabWidget->setTabText(index, unnamedTabName);
             }
             else
-                mTabWidget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
+                mTabWidget->setTabText(index, info.fileName());
         }
 
         return true;
@@ -1009,7 +1009,7 @@ namespace hal
             return;
         }
 
-        QDesktopServices::openUrl(QUrl(info.absolutePath(), QUrl::TolerantMode));
+        QDesktopServices::openUrl(QUrl::fromLocalFile(info.absolutePath()));
     }
 
     void PythonEditor::handleTabFileChanged(QString path)
@@ -1204,7 +1204,7 @@ namespace hal
         for (QString snapshot_file_name : snapshot_files)
         {
             QString snapshot_file_path                        = snapshot_dir.absoluteFilePath(snapshot_file_name);
-            QPair<QString, QString> original_path_and_content = this->readSnapshotFile(snapshot_file_path);
+            QPair<QString, QString> original_path_and_content = this->readSnapshotFile(QFileInfo(snapshot_file_path));
             QString original_path                             = original_path_and_content.first;
             if (original_path.isEmpty() || (!QFileInfo(original_path).exists()))
             {
@@ -1299,7 +1299,7 @@ namespace hal
             if (editor->document()->isModified())
             {
                 // The snapshot is only created if there are modifications
-                this->writeSnapshotFile(snapshot_file_path, editor->getAbsFilename(), editor->toPlainText());
+                this->writeSnapshotFile(QFileInfo(snapshot_file_path), editor->getAbsFilename(), editor->toPlainText());
             }
         }
     }

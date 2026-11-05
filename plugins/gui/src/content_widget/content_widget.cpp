@@ -11,7 +11,8 @@
 namespace hal
 {
     ContentWidget::ContentWidget(QString name, QWidget* parent) : Widget(parent), mName(name), mContentLayout(new QVBoxLayout()),
-        mSearchAction(new QAction(this)), mSearchShortcut(new QShortcut(this)), mSearchKeysequence(tr("Ctrl+F"))
+        mSearchAction(new QAction(this)), mSearchShortcut(new QShortcut(this)), mSearchKeysequence(tr("Ctrl+F")),
+          mDetachedFrame(nullptr)
     {
         mContentLayout->setContentsMargins(0, 0, 0, 0);
         mContentLayout->setSpacing(0);
@@ -39,7 +40,8 @@ namespace hal
     {
         if (mAnchor)
         {
-            mAnchor->detach(this);
+            ContentFrame* cf = mAnchor->detach(this);
+            mDetachedFrame = cf;
             Q_EMIT detached();
         }
     }
@@ -48,6 +50,7 @@ namespace hal
     {
         if (mAnchor)
         {
+            mDetachedFrame = nullptr;
             mAnchor->reattach(this);
             Q_EMIT reattached();
         }
@@ -66,6 +69,7 @@ namespace hal
     {
         if (mAnchor)
         {
+            mDetachedFrame = nullptr;
             mAnchor->close(this);
             Q_EMIT closed();
         }
@@ -73,14 +77,24 @@ namespace hal
 
     void ContentWidget::closeEvent(QCloseEvent* event){Q_UNUSED(event)}
 
-    QString ContentWidget::name()
+    QString ContentWidget::name() const
     {
         return mName;
     }
 
-    QIcon ContentWidget::icon()
+    QIcon ContentWidget::icon() const
     {
         return mIcon;
+    }
+
+    ContentFrame* ContentWidget::detachedFrame() const
+    {
+        return mDetachedFrame;
+    }
+
+    void ContentWidget::setDetachedFrame(ContentFrame* df)
+    {
+        mDetachedFrame = df;
     }
 
     void ContentWidget::setAnchor(ContentAnchor* anchor)

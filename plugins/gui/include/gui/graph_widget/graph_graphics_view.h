@@ -42,11 +42,17 @@ namespace hal
     class GraphWidget;
     class DragController;
 
+    /**
+     * The constants that control how the graph view renders, e.g., the level-of-detail thresholds and the grid sizes.
+     */
     namespace graph_widget_constants
     {
         enum class grid_type;
     }
 
+    /**
+     * Receives the gate that the user picked from the graph and adds its neighborhood to the current view.
+     */
     class GraphGraphicsViewNeighborSelector : public GateSelectReceiver
     {
         Q_OBJECT
@@ -122,12 +128,13 @@ namespace hal
 
     public Q_SLOTS:
         /**
-         * highlight shortest path between source gate and target node by putting the items on path into a new group
+         * highlight shortest path between source gate and target node by putting the items on path into a new grouping
          *
          * @param idFrom - id of gate where path starts
-         * @param idTo - id of gate where path ends
+         * @param nodeTo - node where path ends
+         * @param forwardDirection - `true` to search along the fan-out of the start gate, `false` to search along its fan-in
          */
-        void handleShortestPath(u32 idFrom, Node nodeTo);
+        void handleShortestPathToGrouping(u32 idFrom, Node nodeTo, bool forwardDirection);
 
         /**
          * remove selected nodes from view
@@ -146,7 +153,6 @@ namespace hal
         void handleUnfoldAllAction();
 
         void handleShortestPathToView();
-        void handleShortestModulePathToView();
         void handleQueryShortestPathGate();
         void handleQueryShortestPathModule();
         void handleSelectOutputs();
@@ -185,11 +191,9 @@ namespace hal
 
     private:
 
-        enum SearchAction {PredecessorGate, SuccessorGate, SuccessorModule};
+        enum SearchAction {PredecessorGate, SuccessorGate, PredecessorModule, SuccessorModule};
         void mousePressEventNotItemDrag(QMouseEvent* event);
         void showContextMenu(const QPoint& pos);
-
-        void updateMatrix(const int delta);
 
         void toggleAntialiasing();
 
@@ -205,6 +209,9 @@ namespace hal
         QSet<u32> getSelectableGates();
         QSet<u32> getNotSelectableModules();
 
+        /**
+         * One grid coordinate of the layouter together with its position in scene coordinates.
+         */
         struct LayouterPoint
         {
             int mIndex;

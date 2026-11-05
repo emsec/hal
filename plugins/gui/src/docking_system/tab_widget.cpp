@@ -1,19 +1,21 @@
+#include "gui/docking_system/content_drag_relay.h"
 #include "gui/docking_system/tab_widget.h"
 #include "gui/content_frame/content_frame.h"
 #include "gui/content_widget/content_widget.h"
-#include "gui/docking_system/content_drag_relay.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include <QApplication>
 #include <QDebug>
-#include <QDesktopWidget>
 #include <QShortcut>
 #include <QStyle>
 
 namespace hal
 {
     TabWidget::TabWidget(QWidget* parent)
-        : Widget(parent), mVerticalLayout(new QVBoxLayout()), mHorizontalLayout(new QHBoxLayout()), mDockBar(new DockBar(Qt::Horizontal, button_orientation::horizontal, this)),
+        : Widget(parent), mVerticalLayout(new QVBoxLayout()), mHorizontalLayout(new QHBoxLayout()),
           mLeftToolbar(new Toolbar()), mRightToolbar(new Toolbar()), mCurrentWidget(nullptr), mActionDetach(new QAction(this))
     {
+        mDockBar = new DockBar(Qt::Horizontal, button_orientation::horizontal, this);
+        mAnchorPosition = ContentLayout::Position::Center;
         connect(mActionDetach, &QAction::triggered, this, &TabWidget::detachCurrentWidget);
         connect(ContentDragRelay::instance(), &ContentDragRelay::dragStart, this, &TabWidget::handleDragStart);
         connect(ContentDragRelay::instance(), &ContentDragRelay::dragEnd, this, &TabWidget::handleDragEnd);
@@ -82,15 +84,14 @@ namespace hal
         }
     }
 
-    void TabWidget::detach(ContentWidget* widget)
+    ContentFrame* TabWidget::detach(ContentWidget* widget)
     {
         int index = mDockBar->index(widget);
         if (index != -1)
         {
             mDockBar->detachButton(widget);
             ContentFrame* frame = new ContentFrame(widget, false, nullptr);
-            mDetachedFrames.append(frame);
-            frame->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, frame->size(), qApp->desktop()->availableGeometry()));
+            frame->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, frame->size(), QtCompat::desktopAvailableGeometry()));
             frame->show();
 
             if (widget == mCurrentWidget)
@@ -98,7 +99,10 @@ namespace hal
                 mCurrentWidget = nullptr;
                 handleNoCurrentWidget(index);
             }
+            widget->setDetachedFrame(frame);
+            return frame;
         }
+        return nullptr;
     }
 
     void TabWidget::reattach(ContentWidget* widget)
@@ -106,16 +110,11 @@ namespace hal
         int index = mDockBar->index(widget);
         if (index != -1)
         {
+            widget->setDetachedFrame(nullptr);
             if (mCurrentWidget == nullptr)
                 open(widget);
             mDockBar->reattachButton(widget);
             show();
-
-            for (ContentFrame* frame : mDetachedFrames)
-            {
-                if (frame->content() == widget)
-                    mDetachedFrames.removeOne(frame);
-            }
         }
     }
 
@@ -156,8 +155,7 @@ namespace hal
 
     void TabWidget::close(ContentWidget* widget)
     {
-        Q_UNUSED(widget)
-
+        widget->setDetachedFrame(nullptr);
         mDockBar->checkButton(mCurrentWidget);
     }
 
@@ -200,10 +198,5 @@ namespace hal
     {
         if (mDockBar->unused())
             hide();
-    }
-
-    int TabWidget::count() const
-    {
-        return mDockBar->count();
     }
 }

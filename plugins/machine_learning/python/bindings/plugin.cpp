@@ -97,6 +97,7 @@ Maps word pairs to corresponding gates.
 
                 py_multibitinformation.def_readwrite("gate_to_words",
                                                      &machine_learning::MultiBitInformation::gate_to_words,
+                                                     borrowed(),
                                                      R"(
 Maps gates to associated word pairs.
 
@@ -127,15 +128,19 @@ Prefer gate-name encoding (PinDirection::none, distance 0) if ambiguous; otherwi
 
                 py::class_<machine_learning::Context> py_context(m, "Context", R"()");
 
-                py_context.def(py::init<const Netlist*, const netlist_preprocessing::NetlistFlavor, const u32>(),
+                // NetlistFlavor is bound by the netlist_preprocessing module, which need not be imported when this one is,
+                // so the default cannot be a NetlistFlavor value: pybind11 converts default arguments when the binding is defined.
+                py_context.def(py::init([](const Netlist* netlist, const std::optional<netlist_preprocessing::NetlistFlavor>& flavor, const u32 num_threads) {
+                                   return std::make_unique<machine_learning::Context>(netlist, flavor.value_or(netlist_preprocessing::NetlistFlavor::Default), num_threads);
+                               }),
                                py::arg("netlist"),
-                               py::arg("flavor")       = netlist_preprocessing::NetlistFlavor::Default,
+                               py::arg("flavor")       = py::none(),
                                py::arg("_num_threads") = 1,
                                R"(
 Construct a Context object with the given netlist, netlist flavor, and number of threads.
 
 :param hal_py.Netlist netlist: The netlist.
-:param hal_py.netlist_preprocessing.NetlistFlavor flavor: Netlist flavor (affects multi-bit processing policy).
+:param hal_plugins.netlist_preprocessing.NetlistFlavor flavor: Netlist flavor (affects multi-bit processing policy). Defaults to ``NetlistFlavor.Default``.
 :param int _num_threads: The number of threads. Defaults to 1.
 )");
 
@@ -251,6 +256,7 @@ Get the multi-bit information.
                 // get_gates returns const std::vector<Gate*>&
                 py_context.def("get_gates",
                                &machine_learning::Context::get_gates,
+                               borrowed(),
                                R"(
 Get the gates of the context.
 

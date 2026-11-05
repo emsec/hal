@@ -68,8 +68,8 @@ namespace hal
         /**
          * Substitute all Boolean function variables that are either 1) output or 2) input nets to one of the passed module with a BooleanFunction of the form Extract(Var(<module_name>_<pin_group_name>), index, index).
          * This allows a simplification in case multiple pins of the same pin group are concatenated.
-         * 
-         * @param[in] nl - The netlist to operate on.
+         *
+         * @param[in] modules - The modules whose input and output nets shall be substituted.
          * @return The resulting Boolean function on success, an error otherwise.
          */
         Result<BooleanFunction> substitute_module_pins(const std::vector<Module*>& modules) const;
@@ -81,9 +81,10 @@ namespace hal
          * @param[in] functions - The Boolean functions to concatenate. 
          * @param[in] extend_to_size - The size to which to extend the Boolean function. Set to 0 to prevent extension. Defaults to 0.
          * @param[in] sign_extend - Set `true` to sign extend, `false` to zero extend. Defaults to `false`.
+         * @param[in] ascending - Set `true` to concatenate in ascending order (from `0` to `n-1`), `false` for descending order (from `n-1` to `0`). Defaults to `true`. 
          * @return The resulting Boolean function on success, an error otherwise.
          */
-        static Result<BooleanFunction> get_boolean_function_from(const std::vector<BooleanFunction>& functions, u32 extend_to_size = 0, bool sign_extend = false);
+        static Result<BooleanFunction> get_boolean_function_from(const std::vector<BooleanFunction>& functions, u32 extend_to_size = 0, bool sign_extend = false, bool ascending = true);
 
         /**
          * Get the Boolean function that is the concatenation of variable names corresponding to nets of a netlist.
@@ -92,9 +93,10 @@ namespace hal
          * @param[in] nets - The nets to concatenate. 
          * @param[in] extend_to_size - The size to which to extend the Boolean function. Set to 0 to prevent extension. Defaults to 0.
          * @param[in] sign_extend - Set `true` to sign extend, `false` to zero extend. Defaults to `false`.
+         * @param[in] ascending - Set `true` to concatenate in ascending order (from `0` to `n-1`), `false` for descending order (from `n-1` to `0`). Defaults to `true`. 
          * @return The resulting Boolean function on success, an error otherwise.
          */
-        static Result<BooleanFunction> get_boolean_function_from(const std::vector<Net*>& nets, u32 extend_to_size = 0, bool sign_extend = false);
+        static Result<BooleanFunction> get_boolean_function_from(const std::vector<Net*>& nets, u32 extend_to_size = 0, bool sign_extend = false, bool ascending = true);
 
         /**
          * Get the Boolean function that is the concatenation of variable names corresponding to the nets connected to the pins of the given pin group.

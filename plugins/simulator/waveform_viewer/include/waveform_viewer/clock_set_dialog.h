@@ -37,6 +37,9 @@ namespace hal {
 
     class Net;
 
+    /**
+     * The dialog in which the user picks the clock net and its period.
+     */
     class ClockSetDialog : public QDialog
     {
         Q_OBJECT

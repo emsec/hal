@@ -20,14 +20,11 @@
 #include <QItemSelectionModel>
 #include <QMenu>
 #include <QModelIndex>
-#include <QRegExp>
 #include <QScrollBar>
 #include <QSet>
 #include <QShortcut>
 #include <QTreeView>
 #include <QVBoxLayout>
-#include <QInputDialog>
-#include <QClipboard>
 
 namespace hal
 {
@@ -72,6 +69,8 @@ namespace hal
         mTreeView->setFrameStyle(QFrame::NoFrame);
         //mTreeView->header()->close();
         mTreeView->setExpandsOnDoubleClick(false);
+        // all rows are plain single line text, so the view must not measure each of them separately
+        mTreeView->setUniformRowHeights(true);
         mTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
         mTreeView->setSelectionMode(QAbstractItemView::SingleSelection);
         mContentLayout->addWidget(mTreeView);
@@ -112,6 +111,7 @@ namespace hal
         connect(mToggleExpandTreeAction, &QAction::triggered, this, &ModuleWidget::handleToggleExpandTreeClicked);
         connect(mRenameAction, &QAction::triggered, this, &ModuleWidget::handleRenameClicked);
 
+        mModuleModel->setShowNetsOutsideModules(true);    // so that the global inputs and outputs show up as well
         mModuleModel->populateTree({gNetlist->get_top_module()->get_id()});
         mTreeView->expandAllModules();
     }

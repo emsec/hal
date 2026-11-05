@@ -38,7 +38,7 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            if (xmlIn.name() == "type")
+            if (xmlIn.name() == QString("type"))
                 mObjectType = xmlIn.readElementText();
         }
     }

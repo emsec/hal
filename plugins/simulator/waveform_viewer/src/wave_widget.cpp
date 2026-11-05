@@ -26,7 +26,6 @@
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
-#include "gui/module_model/module_item.h"
 #include "gui/gui_globals.h"
 
 namespace hal {
@@ -175,7 +174,8 @@ namespace hal {
 
     void WaveWidget::createEngine(const QString &engineFactoryName)
     {
-        mController->create_simulation_engine(engineFactoryName.toStdString());
+        if (mController)
+            mController->create_simulation_engine(engineFactoryName.toStdString());
     }
 
     void WaveWidget::setVisualizeNetState(bool state, bool activeTab)

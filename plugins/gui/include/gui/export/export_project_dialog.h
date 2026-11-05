@@ -29,6 +29,9 @@
 
 namespace hal
 {
+    /**
+     * The dialog in which the user picks the file that the current project is exported to.
+     */
     class ExportProjectDialog : public QFileDialog
     {
         Q_OBJECT

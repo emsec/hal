@@ -9,21 +9,20 @@ config_scc.min_register_size = 10
 min_state_size = 40
 gate_ids = []
 
-res = hawkeye.detect_candidates(
+res = hawkeye.CipherCandidate.detect(
     netlist,
     [config_scc],
     min_state_size,
     [netlist.get_gate_by_id(gid) for gid in gate_ids],
 )
 
-print(f"found {len(res)} candidates: {[len(c.get_output_reg()) for c in res]}")
+print(f"found {len(res)} candidates: {[c.get_size() for c in res]}")
 
-for rc in res:
-    print(len(rc.get_output_reg()), list(rc.get_output_reg())[0].name)
+for candidate in res:
+    print(candidate.get_size(), candidate.get_output_reg()[0].name)
 
-    sc = hawkeye.StateCandidate.from_register_candidate(rc)
-    if sc == None:
-        print("skipped register candidate")
+    if not candidate.build_round_function():
+        print("skipped candidate")
         continue
 
     # do something

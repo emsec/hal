@@ -36,7 +36,7 @@ namespace hal
 {
     /**
      * @ingroup file_management
-     * @brief Holds information about the state (e.g. saved/unsaved) of all laded files (i.e. .hal/.python files).
+     * @brief Holds information about the state (e.g. saved/unsaved) of all loaded files (i.e. `.hal` or `.python` files).
      *
      * The FileStatusManager class is the central point to store the status of any file
      * (or element) that can be modified, such as the modifications to the current netlist
@@ -46,7 +46,8 @@ namespace hal
     {
         Q_OBJECT
     Q_SIGNALS:
-        void status_changed(bool gateLibrary, bool isDirty);
+        void status_changed(bool gateLibraryAffected, bool isDirty);
+        void open_changed(bool gateLibraryAffected, bool isOpen);
 
     public:
         /**
@@ -65,7 +66,7 @@ namespace hal
          * Checks if either the netlist is modified (in the case a netlist is opened) or
          * any files are registered to this manager.
          *
-         * @return True if registered files are present. False otherwise.
+         * @return `true` if registered files are present. `false` otherwise.
          */
         bool modifiedFilesExisting() const;
 
@@ -86,29 +87,44 @@ namespace hal
         void fileSaved(const QUuid uuid);
 
         /**
-         * Sets the netlist-modified flag that affects the modifiedFilesExisting() method.
+         * Sets the netlist-state flag to Clean.
+         */
+        void netlistOpened();
+
+        /**
+         * Sets the netlist-state flag to Dirty.
          */
         void netlistChanged();
 
         /**
-         * Unsets the netlist-modified flag that affects the modifiedFilesExisting() method.
+         * Sets the netlist-state flag back to Clean.
          */
         void netlistSaved();
 
         /**
-         * Resets the netlist-modified flag that affects the modifiedFilesExisting() method.
+         * Sets the netlist-state flag back to NotOpen.
          */
         void netlistClosed();
 
         /**
-         * Sets the gate-library-modified flag that can be queried by isGatelibModified() method.
+         * Sets the gatelib-state flag to Clean.
+         */
+        void gatelibOpened();
+
+        /**
+         * Sets the gatelib-state flag to Dirty.
          */
         void gatelibChanged();
 
         /**
-         * Unsets the gate-library-modified flag that can be queried by isGatelibModified() method.
+         * Sets the gatelib-state flag to Clean.
          */
         void gatelibSaved();
+
+        /**
+         * Sets the gatelib-state flag back to NotOpen.
+         */
+        void gatelibClosed();
 
         /**
          * Query method whether GateLibraryManager has unsaved changes.
@@ -124,10 +140,12 @@ namespace hal
         QList<QString> getUnsavedChangeDescriptors() const;
 
     private:
+        enum CurrentState { NotOpen, Clean, Dirty };
+
         QSet<QUuid> mModifiedFilesUuid;
         QMap<QUuid, QString> mModifiedFilesDescriptors;
 
-        bool mNetlistModified;
-        bool mGatelibModified;
+        CurrentState mNetlistState;
+        CurrentState mGatelibState;
     };
 }

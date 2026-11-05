@@ -40,10 +40,16 @@
 #include <QSortFilterProxyModel>
 
 namespace hal {
+    /**
+     * The item model behind the two lists of gate type properties, i.e., the selected and the available ones.
+     */
     class ListPropertyModel : public QAbstractTableModel
     {
         Q_OBJECT
     public:
+        /**
+         * One gate type property together with whether it is currently selected.
+         */
         struct ListPropertyEntry
         {
             GateTypeProperty property;
@@ -61,6 +67,9 @@ namespace hal {
         void setSelected(GateTypeProperty gtp, bool select);
     };
 
+    /**
+     * Filters the property model so that it shows either the selected or the available properties.
+     */
     class ListPropertyProxy : public QSortFilterProxyModel
     {
         Q_OBJECT
@@ -71,6 +80,9 @@ namespace hal {
     };
 
     class GateLibraryWizard;
+    /**
+     * The wizard page on which the name and the properties of the gate type are entered.
+     */
     class GeneralInfoWizardPage:public QWizardPage{
         Q_OBJECT
 

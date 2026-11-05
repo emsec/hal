@@ -30,6 +30,7 @@
 
 #pragma once
 
+#include "hal_core/plugin_system/gui_extension_interface.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 
 namespace hal
@@ -45,10 +46,10 @@ namespace hal
     class PLUGIN_API XilinxToolboxPlugin : public BasePluginInterface
     {
     public:
-        /** 
-         * @brief Default constructor for `XilinxToolboxPlugin`.
+        /**
+         * @brief Constructor for `XilinxToolboxPlugin` that registers the GUI extension.
          */
-        XilinxToolboxPlugin() = default;
+        XilinxToolboxPlugin();
 
         /** 
          * @brief Default destructor for `XilinxToolboxPlugin`.
@@ -82,5 +83,65 @@ namespace hal
          * @returns A set of plugin names that this plugin depends on.
          */
         std::set<std::string> get_dependencies() const override;
+    };
+
+    /**
+     * @class GuiExtensionXilinxToolbox
+     * @brief GUI extension interface for the Xilinx toolbox plugin.
+     *
+     * Contributes the preprocessing steps for Xilinx primitives to the context menus of the GUI, so that they can be
+     * applied to the current selection or to the entire netlist without writing a script.
+     */
+    class PLUGIN_API GuiExtensionXilinxToolbox : public GuiExtensionInterface
+    {
+        bool mSplitLuts           = false;
+        bool mSplitShiftRegisters = false;
+
+    public:
+        /**
+         * @brief Default constructor for `GuiExtensionXilinxToolbox`.
+         */
+        GuiExtensionXilinxToolbox() : GuiExtensionInterface("Xilinx Toolbox")
+        {
+        }
+
+        /**
+         * @brief Get the parameters shown in the plugin parameter dialog.
+         *
+         * @returns The parameters, i.e., which preprocessing steps to run on the entire netlist and the button to run them.
+         */
+        std::vector<PluginParameter> get_parameter() const override;
+
+        /**
+         * @brief Set the parameters chosen in the plugin parameter dialog.
+         *
+         * @param[in] params - The parameters as returned by `get_parameter`, holding the values chosen by the user.
+         */
+        void set_parameter(const std::vector<PluginParameter>& params) override;
+
+        /**
+         * @brief Get the context menu entries contributed for the given selection.
+         *
+         * If modules or gates are selected, only the entries operating on that selection are contributed. The entries
+         * operating on the entire netlist are contributed when nothing is selected.
+         *
+         * @param[in] nl - The netlist that is currently open.
+         * @param[in] mods - The IDs of the currently selected modules.
+         * @param[in] gats - The IDs of the currently selected gates.
+         * @param[in] nets - The IDs of the currently selected nets.
+         * @returns The contributed context menu entries.
+         */
+        std::vector<ContextMenuContribution> get_context_contribution(const Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
+
+        /**
+         * @brief Execute the context menu entry identified by the given tag.
+         *
+         * @param[in] tag - The tag of the entry to execute.
+         * @param[in] nl - The netlist that is currently open.
+         * @param[in] mods - The IDs of the currently selected modules.
+         * @param[in] gats - The IDs of the currently selected gates.
+         * @param[in] nets - The IDs of the currently selected nets.
+         */
+        void execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
     };
 }    // namespace hal

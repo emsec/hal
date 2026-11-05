@@ -31,6 +31,9 @@
 
 namespace hal
 {
+    /**
+     * Builds the python snippets that the GUI offers for copying, e.g., the expression that retrieves the selected gate.
+     */
     class PyCodeProvider
     {
 
@@ -52,6 +55,7 @@ namespace hal
         static QString pyCodeGateAsyncSetResetBehavior(u32 gateId);
         static QString pyCodeGateData(u32 gateId, QString category, QString key);
         static QString pyCodeGateDataMap(u32 gateId);
+        static QString pyCodeGateParameterValue(u32 gateId, QString name);
 
         static QString pyCodeStateComp(u32 gateId);
         static QString pyCodeStateCompPosState(u32 gateId);

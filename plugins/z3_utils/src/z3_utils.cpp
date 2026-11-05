@@ -12,24 +12,24 @@ namespace hal
 {
     namespace z3_utils
     {
-        z3::expr from_bf(const BooleanFunction& bf, z3::context& context, const std::map<std::string, z3::expr>& var2expr)
+        z3::expr from_bf(const BooleanFunction& bf, z3::context& ctx, const std::map<std::string, z3::expr>& var2expr)
         {
-            /// Helper function to reduce a abstract syntax subtree to z3 expressions
-            ///
-            /// @param[in] node - Boolean function node.
-            /// @param[in] p - Boolean function node parameters.
-            /// @returns (1) status (true on success, false otherwise),
-            ///          (2) SMT-LIB string representation of node and operands.
-            auto reduce_to_z3 = [&context, &var2expr](const auto& node, auto&& p) -> std::tuple<bool, z3::expr> {
+            // Helper function to reduce a abstract syntax subtree to z3 expressions
+            //
+            // node - Boolean function node.
+            // p    - Boolean function node parameters.
+            // returns (1) status (true on success, false otherwise),
+            //         (2) SMT-LIB string representation of node and operands.
+            auto reduce_to_z3 = [&ctx, &var2expr](const auto& node, auto&& p) -> std::tuple<bool, z3::expr> {
                 if (node.get_arity() != p.size())
                 {
-                    return {false, z3::expr(context)};
+                    return {false, z3::expr(ctx)};
                 }
 
                 switch (node.type)
                 {
                     case BooleanFunction::NodeType::Index:
-                        return {true, context.bv_val(node.index, node.size)};
+                        return {true, ctx.bv_val(node.index, node.size)};
                     case BooleanFunction::NodeType::Constant: {
                         std::vector<u8> bits;
                         for (u32 i = 0; i < node.constant.size(); i++)
@@ -44,18 +44,18 @@ namespace hal
                             }
                             else
                             {
-                                return {false, z3::expr(context)};
+                                return {false, z3::expr(ctx)};
                             }
                         }
 
-                        return {true, context.bv_val(bits.size(), reinterpret_cast<bool*>(bits.data()))};
+                        return {true, ctx.bv_val(bits.size(), reinterpret_cast<bool*>(bits.data()))};
                     }
                     case BooleanFunction::NodeType::Variable: {
                         if (auto it = var2expr.find(node.variable); it != var2expr.end())
                         {
                             return {true, it->second};
                         }
-                        return {true, context.bv_const(node.variable.c_str(), node.size)};
+                        return {true, ctx.bv_const(node.variable.c_str(), node.size)};
                     }
 
                     case BooleanFunction::NodeType::And:
@@ -112,7 +112,7 @@ namespace hal
                         return {true, z3::ite(p[0], p[1], p[2])};
                     default:
                         log_error("netlist", "Not implemented reached for nodetype {} in z3 conversion", node.type);
-                        return {false, z3::expr(context)};
+                        return {false, z3::expr(ctx)};
                 }
             };
 
@@ -129,7 +129,7 @@ namespace hal
                 }
                 else
                 {
-                    return z3::expr(context);
+                    return z3::expr(ctx);
                 }
             }
 
@@ -138,11 +138,11 @@ namespace hal
                 case 1:
                     return stack.back();
                 default:
-                    return z3::expr(context);
+                    return z3::expr(ctx);
             }
         }
 
-        Result<z3::expr> value_from_binary_string(z3::context& context, const std::string& bit_string)
+        Result<z3::expr> value_from_binary_string(z3::context& ctx, const std::string& bit_string)
         {
             std::vector<u8> bits;
             for (u32 i = 0; i < bit_string.length(); i++)
@@ -161,7 +161,7 @@ namespace hal
                 }
             }
 
-            return OK(context.bv_val(bits.size(), reinterpret_cast<bool*>(bits.data())));
+            return OK(ctx.bv_val(bits.size(), reinterpret_cast<bool*>(bits.data())));
         }
 
         namespace

@@ -7,7 +7,7 @@ namespace hal
 {
     FileStatusManager::FileStatusManager(QObject* parent) : QObject(parent),
         mModifiedFilesUuid(QSet<QUuid>()), mModifiedFilesDescriptors(QMap<QUuid, QString>()),
-        mNetlistModified(false), mGatelibModified(false)
+        mNetlistState(NotOpen), mGatelibState(NotOpen)
     {;}
 
     FileStatusManager::~FileStatusManager()
@@ -36,13 +36,19 @@ namespace hal
         if (!FileManager::get_instance()->fileOpen())
             return false;
 
-        return !mModifiedFilesUuid.empty() || mNetlistModified;
+        return !mModifiedFilesUuid.empty() || mNetlistState == Dirty;
+    }
+
+    void FileStatusManager::netlistOpened()
+    {
+        mNetlistState = Clean;
+        Q_EMIT open_changed(false, true);
     }
 
     void FileStatusManager::netlistChanged()
     {
         bool before = modifiedFilesExisting();
-        mNetlistModified = true;
+        mNetlistState = Dirty;
         if (before != modifiedFilesExisting())
             Q_EMIT status_changed(false, true);
     }
@@ -50,41 +56,54 @@ namespace hal
     void FileStatusManager::netlistSaved()
     {
         bool before = modifiedFilesExisting();
-        mNetlistModified = false;
+        mNetlistState = Clean;
         if (before != modifiedFilesExisting())
             Q_EMIT status_changed(false, false);
     }
 
     void FileStatusManager::netlistClosed()
     {
-        mNetlistModified = false;
+        mNetlistState = NotOpen;
         mModifiedFilesUuid.clear();
         mModifiedFilesDescriptors.clear();
         Q_EMIT status_changed(false, false);
+        Q_EMIT open_changed(false, false);
+    }
+
+    void FileStatusManager::gatelibOpened()
+    {
+        mGatelibState = Clean;
+        Q_EMIT open_changed(true, true);
     }
 
     void FileStatusManager::gatelibChanged()
     {
-        mGatelibModified = true;
+        mGatelibState = Dirty;
         Q_EMIT status_changed(true, true);
     }
 
     void FileStatusManager::gatelibSaved()
     {
-        mGatelibModified = false;
+        mGatelibState = Clean;
         Q_EMIT status_changed(true, false);
     }
 
     bool FileStatusManager::isGatelibModified() const
     {
-        return mGatelibModified;
+        return mGatelibState == Dirty;
+    }
+
+    void FileStatusManager::gatelibClosed()
+    {
+        mGatelibState = NotOpen;
+        Q_EMIT open_changed(true, false);
     }
 
     QList<QString> FileStatusManager::getUnsavedChangeDescriptors() const
     {
         QList<QString> unsaved_changes_descriptors;
 
-        if(mNetlistModified)
+        if(mNetlistState==Dirty)
         {
             unsaved_changes_descriptors.append("Netlist modifications");
         }

@@ -307,13 +307,14 @@ endif(Z3_FOUND)
 # ####   igraph
 # ###############################
 if(USE_VENDORED_IGRAPH)
-    set(IGRAPH_SUBDIR "${CMAKE_SOURCE_DIR}/deps/igraph-0.10.x")
+    set(IGRAPH_SUBDIR "${CMAKE_SOURCE_DIR}/deps/igraph-1.0.x")
     add_subdirectory(${IGRAPH_SUBDIR})
     get_directory_property(igraph_INCLUDES DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_INCLUDES)
     get_directory_property(igraph_LIBRARIES      DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_LIB)
     message(STATUS "Using igraph from ${IGRAPH_SUBDIR}")
 else()
-    find_package(igraph REQUIRED)
+    # HAL uses the igraph 1.0 API, which is not source-compatible with igraph 0.10 and earlier.
+    find_package(igraph 1.0 REQUIRED)
     get_target_property(igraph_LIBRARIES igraph::igraph IMPORTED_LOCATION_RELEASE)
     get_target_property(igraph_INCLUDES igraph::igraph INTERFACE_INCLUDE_DIRECTORIES)
     message(STATUS "Using system's igraph from ${igraph_LIBRARIES}")

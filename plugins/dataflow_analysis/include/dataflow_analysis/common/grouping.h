@@ -192,11 +192,22 @@ namespace hal
             /* caches */
             mutable struct
             {
+                /** Guards all caches, which may be filled from several worker threads at once. */
                 std::shared_mutex mutex;
+
+                /** A map from each group to the groups that succeed it. */
                 std::unordered_map<u32, std::unordered_set<u32>> suc_cache;
+
+                /** A map from each group to the groups that precede it. */
                 std::unordered_map<u32, std::unordered_set<u32>> pred_cache;
+
+                /** A map from each group to the previously known groups that succeed it. */
                 std::unordered_map<u32, std::unordered_set<u32>> suc_known_group_cache;
+
+                /** A map from each group to the previously known groups that precede it. */
                 std::unordered_map<u32, std::unordered_set<u32>> pred_known_group_cache;
+
+                /** The sets of groups that have already been compared against each other. */
                 std::set<std::set<u32>> comparison_cache;
             } cache;
 

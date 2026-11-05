@@ -1,15 +1,14 @@
 #include "gui/graph_widget/layouters/graph_layouter.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
-#include "gui/graph_widget/graphics_factory.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nets/arrow_separated_net.h"
-#include "gui/graph_widget/items/nets/circle_separated_net.h"
 #include "gui/graph_widget/items/nets/labeled_separated_net.h"
 #include "gui/graph_widget/items/nets/standard_arrow_net.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/comment_system/comment_entry.h"
@@ -21,6 +20,7 @@
 #include <QDebug>
 #include <QApplication>
 #include <QElapsedTimer>
+#include <QIODevice>
 #include <qmath.h>
 
 namespace hal
@@ -555,7 +555,8 @@ namespace hal
                 case EndpointList::SourceAndDestination:
                 case EndpointList::HasGlobalEndpoint:
                 {
-                    NetLayoutConnectionFactory nlcf(srcPoints.toList(), dstPoints.toList());
+                    NetLayoutConnectionFactory nlcf(QtCompat::setToList<NetLayoutPoint>(srcPoints),
+                                                    QtCompat::setToList<NetLayoutPoint>(dstPoints));
                     // nlcf.dump(QString("wire %1").arg(id));
                     mConnectionMetric.insert(NetLayoutMetric(id, nlcf.connection), nlcf.connection);
                 }

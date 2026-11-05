@@ -95,7 +95,7 @@ namespace hal
         auto font = property("font").value<QFont>();
         //, QFont::PreferAntialias);
         QFontMetrics fm(font);
-        int textwidth    = fm.width(text());
+        int textwidth    = fm.horizontalAdvance(text());
         mRelativeWidth = mIconSize + textwidth + mWidthPadding;
 
         if (mOrientation == button_orientation::horizontal)

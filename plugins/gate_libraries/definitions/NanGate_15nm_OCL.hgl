@@ -1,5 +1,5 @@
 {
-    "version": 4,
+    "version": 6,
     "library": "NanGate_15nm_OCL",
     "gate_locations": {
         "data_category": "generic",

@@ -70,6 +70,7 @@ namespace hal
                 }
             },
             py::arg("gate"),
+            borrowed(),
             R"(
             Gets the predecessors of a gate within the abstraction.
 
@@ -93,6 +94,7 @@ namespace hal
                 }
             },
             py::arg("endpoint"),
+            borrowed(),
             R"(
             Gets the predecessors of an endpoint within the abstraction.
 
@@ -117,6 +119,7 @@ namespace hal
                 }
             },
             py::arg("gate"),
+            borrowed(),
             R"(
             Gets the unique predecessor gates of a gate within the abstraction.
 
@@ -140,6 +143,7 @@ namespace hal
                 }
             },
             py::arg("endpoint"),
+            borrowed(),
             R"(
             Gets the unique predecessor gates of an endpoint within the abstraction.
 
@@ -164,6 +168,7 @@ namespace hal
                 }
             },
             py::arg("gate"),
+            borrowed(),
             R"(
             Gets the successors of a gate within the abstraction.
 
@@ -187,6 +192,7 @@ namespace hal
                 }
             },
             py::arg("endpoint"),
+            borrowed(),
             R"(
             Gets the successors of an endpoint within the abstraction.
 
@@ -211,6 +217,7 @@ namespace hal
                 }
             },
             py::arg("gate"),
+            borrowed(),
             R"(
             Gets the unique successor gates of a gate within the abstraction.
 
@@ -234,6 +241,7 @@ namespace hal
                 }
             },
             py::arg("endpoint"),
+            borrowed(),
             R"(
             Gets the unique successor gates of an endpoint within the abstraction.
 
@@ -258,6 +266,7 @@ namespace hal
                 }
             },
             py::arg("endpoint"),
+            borrowed(),
             R"(
             Gets the global input nets that are predecessors of an endpoint.
 
@@ -282,6 +291,7 @@ namespace hal
                 }
             },
             py::arg("endpoint"),
+            borrowed(),
             R"(
             Gets the global output nets that are successors of an endpoint.
 
@@ -458,6 +468,7 @@ namespace hal
             py::arg("continue_on_match")     = false,
             py::arg("exit_endpoint_filter")  = nullptr,
             py::arg("entry_endpoint_filter") = nullptr,
+            borrowed(),
             R"(
                 Starting from the given endpoint, traverse the netlist abstraction and return the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
                 Traverse over gates that do not meet the `target_gate_filter` condition.
@@ -506,6 +517,7 @@ namespace hal
             py::arg("continue_on_match")     = false,
             py::arg("exit_endpoint_filter")  = nullptr,
             py::arg("entry_endpoint_filter") = nullptr,
+            borrowed(),
             R"(
                 Starting from the given gate, traverse the netlist abstraction and return the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
                 Traverse over gates that do not meet the `target_gate_filter` condition.
@@ -638,6 +650,7 @@ namespace hal
             py::arg("continue_on_mismatch")  = false,
             py::arg("exit_endpoint_filter")  = nullptr,
             py::arg("entry_endpoint_filter") = nullptr,
+            borrowed(),
             R"(
                 Starting from the given endpoint, traverse the netlist abstraction and return the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
                 Continue traversal regardless of whether `target_gate_filter` evaluates to `true` or `false`.
@@ -686,6 +699,7 @@ namespace hal
             py::arg("continue_on_mismatch")  = false,
             py::arg("exit_endpoint_filter")  = nullptr,
             py::arg("entry_endpoint_filter") = nullptr,
+            borrowed(),
             R"(
                 Starting from the given gate, traverse the netlist abstraction and return the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
                 Continue traversal regardless of whether `target_gate_filter` evaluates to `true` or `false`.

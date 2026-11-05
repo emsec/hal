@@ -46,6 +46,9 @@ namespace hal
 {
     class GatelibraryGraphicsView;
 
+    /**
+     * The main widget of the gate library manager, which lists the gate types of a library and shows the details of the selected one.
+     */
     class GateLibraryManager : public QFrame
     {
         Q_OBJECT
@@ -122,14 +125,16 @@ namespace hal
         GateLibraryTabTruthTable* mBooleanFunctionTab;
         GateLibraryTabPin* mPinTab;
 
-        GateLibrary* mGateLibrary;
+//        GateLibrary* mGateLibrary;    avoid redundancy : member of GatelibraryContentWidget class
+//        std::filesystem::path mPath;
+//        bool mReadOnly = false;
+
         std::unique_ptr<Netlist> mDemoNetlist;
-        std::filesystem::path mPath;
         QString mProjectName;
 
-        bool mReadOnly = false;
         bool mCreationMode = false;
 
         GateType* getSelectedGate();
+        void emitClose();
     };
 }

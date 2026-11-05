@@ -15,6 +15,9 @@ namespace hal
     {
         namespace
         {
+            // the Boolean function of each gate output pin, keyed by gate ID and pin
+            using GateFunctionCache = std::map<std::pair<u32, const GatePin*>, BooleanFunction>;
+
             Result<z3::expr> get_subgraph_z3_function_recursive(const std::function<bool(const Gate*)> subgraph_filter, const Net* net, z3::context& ctx, std::vector<z3::expr>& net_cache)
             {
                 if (const z3::expr e = net_cache.at(net->get_id()); e)
@@ -55,7 +58,7 @@ namespace hal
                     return OK(ret);
                 }
 
-                const auto bf_res = src->get_resolved_boolean_function(src_ep->get_pin());
+                const auto bf_res = src->get_boolean_function(src_ep->get_pin(), true, true);
                 if (bf_res.is_error())
                 {
                     return ERR_APPEND(bf_res.get_error(),
@@ -139,7 +142,7 @@ namespace hal
                 BooleanFunction bf;
                 if (const auto it = gate_cache.find({src->get_id(), src_ep->get_pin()}); it == gate_cache.end())
                 {
-                    const auto bf_res = src->get_resolved_boolean_function(src_ep->get_pin());
+                    const auto bf_res = src->get_boolean_function(src_ep->get_pin(), true, true);
                     if (bf_res.is_error())
                     {
                         return ERR_APPEND(bf_res.get_error(),
@@ -257,7 +260,7 @@ namespace hal
         Result<z3::expr> get_subgraph_z3_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, z3::context& ctx)
         {
             std::map<u32, z3::expr> net_cache;
-            std::map<std::pair<u32, const GatePin*>, BooleanFunction> gate_cache;
+            GateFunctionCache gate_cache;
 
             const std::function<bool(const Gate*)> subgraph_filter = [&subgraph_gates](const Gate* g) { return std::find(subgraph_gates.begin(), subgraph_gates.end(), g) != subgraph_gates.end(); };
 
@@ -267,7 +270,7 @@ namespace hal
         Result<z3::expr> get_subgraph_z3_function(const GateTypeProperty subgraph_property, const Net* subgraph_output, z3::context& ctx)
         {
             std::map<u32, z3::expr> net_cache;
-            std::map<std::pair<u32, const GatePin*>, BooleanFunction> gate_cache;
+            GateFunctionCache gate_cache;
 
             const std::function<bool(const Gate*)> subgraph_filter = [&subgraph_property](const Gate* g) { return g->get_type()->has_property(subgraph_property); };
 

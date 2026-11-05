@@ -36,6 +36,9 @@
 
 namespace hal {
     class GateLibraryWizard;
+    /**
+     * The wizard page on which the flip-flop component of the gate type is configured.
+     */
     class FlipFlopWizardPage:public QWizardPage{
         Q_OBJECT
         friend class GateLibraryWizard;

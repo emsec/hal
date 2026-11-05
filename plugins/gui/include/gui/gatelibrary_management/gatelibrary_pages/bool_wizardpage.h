@@ -38,8 +38,14 @@
 namespace hal {
     class GateLibraryWizard;
 
+    /**
+     * The wizard page on which the Boolean functions of the gate type are entered.
+     */
     class BoolWizardPage;
 
+    /**
+     * A line edit that validates the Boolean function the user types and rejects malformed input.
+     */
     class BooleanFunctionEdit : public QLineEdit
     {
         Q_OBJECT
@@ -71,6 +77,9 @@ namespace hal {
         bool isValid() const { return mState == STATE_VALID; }
     };
 
+    /**
+     * The wizard page on which the Boolean functions of the gate type are entered.
+     */
     class BoolWizardPage:public QWizardPage
     {
         Q_OBJECT

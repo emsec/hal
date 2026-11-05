@@ -39,7 +39,7 @@ namespace hal
 
     /**
      * @class BitorderPropagationPlugin
-     * @brief Plugin interface for bit order propoagation.
+     * @brief Plugin interface for the BitorderPropagationPlugin.
      * 
      * This class provides an interface to integrate the bit-order propagation as a plugin within the HAL framework.
      */

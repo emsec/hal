@@ -30,6 +30,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser.h"
+#include "hal_core/netlist/parameter.h"
 #include "hal_core/utilities/special_strings.h"
 #include "hal_core/utilities/token_stream.h"
 
@@ -43,6 +44,8 @@ namespace hal
 {
 
     /**
+     * A netlist parser for gate-level Verilog.
+     *
      * @ingroup netlist_parser
      */
     class NETLIST_API VerilogParser : public NetlistParser
@@ -55,7 +58,7 @@ namespace hal
          * Parse a Verilog netlist into an internal intermediate format.
          *
          * @param[in] file_path - Path to the Verilog netlist file.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         Result<std::monostate> parse(const std::filesystem::path& file_path) override;
 
@@ -74,13 +77,20 @@ namespace hal
         using empty_t             = std::monostate;
         using assignment_t        = std::variant<identifier_t, ranged_identifier_t, numeral_t, empty_t>;
 
+        /**
+         * A named value with an associated type, used for the attributes, parameters, and generics of a Verilog design.
+         */
         struct VerilogDataEntry
         {
             std::string m_name;
             std::string m_type  = "unknown";
             std::string m_value = "";
+            std::optional<Parameter> m_parameter;   // populated by parse_parameter_value; empty for attributes
         };
 
+        /**
+         * The intermediate representation of a Verilog signal, i.e., a wire or a port, including its bit ranges.
+         */
         struct VerilogSignal
         {
             std::string m_name;
@@ -89,27 +99,43 @@ namespace hal
             std::vector<std::string> m_expanded_names;
         };
 
+        /**
+         * The intermediate representation of a port of a Verilog module.
+         */
         struct VerilogPort
         {
             std::string m_identifier;
-            std::string m_expression;
+            /**
+             * What the port stands for inside the module: the identifier itself for a plain port, another signal for a
+             * port written as `.name(signal)`, and several signals or slices for one written as `.name({a, b[1:0]})`.
+             */
+            std::vector<assignment_t> m_expression_parts;
             PinDirection m_direction;
             std::vector<std::vector<u32>> m_ranges;
             std::vector<std::string> m_expanded_identifiers;
         };
 
+        /**
+         * The signals that are assigned to a single port of a Verilog instance.
+         */
         struct VerilogPortAssignment
         {
             std::optional<std::string> m_port_name;
             std::vector<assignment_t> m_assignment;
         };
 
+        /**
+         * A continuous assignment between two sets of Verilog signals.
+         */
         struct VerilogAssignment
         {
             std::vector<assignment_t> m_variable;
             std::vector<assignment_t> m_assignment;
         };
 
+        /**
+         * The intermediate representation of an instantiation of a Verilog module or a gate type.
+         */
         struct VerilogInstance
         {
             std::string m_name;
@@ -121,6 +147,9 @@ namespace hal
             std::vector<std::pair<std::string, std::string>> m_expanded_port_assignments;
         };
 
+        /**
+         * The intermediate representation of a Verilog module, i.e., its ports, signals, assignments, and instances.
+         */
         struct VerilogModule
         {
         public:
@@ -131,7 +160,7 @@ namespace hal
              * Check whether an module is considered smaller than another module.
              *
              * @param[in] other - The module to compare against.
-             * @returns True if the module is smaller than 'other', false otherwise.
+             * @returns `true` if the module is smaller than 'other', `false` otherwise.
              */
             bool operator<(const VerilogModule& other) const
             {
@@ -201,7 +230,7 @@ namespace hal
         void tokenize();
         Result<std::monostate> parse_tokens();
         Result<std::monostate> parse_module(std::vector<VerilogDataEntry>& attributes);
-        void parse_port_list(VerilogModule* module);
+        Result<std::monostate> parse_port_list(VerilogModule* module);
         Result<std::monostate> parse_port_declaration_list(VerilogModule* module);
         Result<std::monostate> parse_port_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
         Result<std::monostate> parse_signal_definition(VerilogModule* module, std::vector<VerilogDataEntry>& attributes);
@@ -224,7 +253,7 @@ namespace hal
         std::vector<std::string> expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const;
         Result<std::vector<BooleanFunction::Value>> get_binary_vector(std::string value) const;
         Result<std::string> get_hex_from_literal(const Token<std::string>& value_token) const;
-        Result<std::pair<std::string, std::string>> parse_parameter_value(const Token<std::string>& value_token) const;
+        Result<std::pair<Parameter, std::string>> parse_parameter_value(const std::string& name, const Token<std::string>& value_token) const;
         Result<std::vector<VerilogParser::assignment_t>> parse_assignment_expression(TokenStream<std::string>&& stream) const;
         std::vector<std::string> expand_assignment_expression(VerilogModule* verilog_module, const std::vector<assignment_t>& vars) const;
     };

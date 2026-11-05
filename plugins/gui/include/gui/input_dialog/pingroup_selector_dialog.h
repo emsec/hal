@@ -31,6 +31,9 @@
 
 namespace hal
 {
+    /**
+     * The dialog in which the user picks the pin group that a pin is moved to.
+     */
     class PingroupSelectorDialog : public ComboboxDialog
     {
     public:

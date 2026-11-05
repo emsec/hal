@@ -30,12 +30,18 @@
 
 namespace hal
 {
+    /**
+     * Registers the GEXF netlist writer with HAL's netlist writer manager.
+     */
     class GexfWriterExtension : public FacExtensionInterface
     {
     public:
         GexfWriterExtension();
     };
 
+    /**
+     * The plugin that provides the GEXF netlist writer.
+     */
     class PLUGIN_API GexfWriterPlugin : public BasePluginInterface
     {
         GexfWriterExtension* m_extension;

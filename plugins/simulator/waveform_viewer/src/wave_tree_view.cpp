@@ -14,6 +14,7 @@
 #include <QInputDialog>
 #include <QMimeData>
 #include <QPainter>
+#include "gui/gui_globals.h"
 
 namespace hal {
     WaveTreeView::WaveTreeView(WaveDataList* wdList, WaveItemHash *wHash, QWidget* parent)
@@ -33,8 +34,8 @@ namespace hal {
         setAcceptDrops(true);
         setContextMenuPolicy(Qt::CustomContextMenu);
         setItemDelegateForColumn(2,new WaveValueDelegate);
-        connect(this,&QTreeView::expanded,this,&WaveTreeView::handleExpandCollapse);
-        connect(this,&QTreeView::collapsed,this,&WaveTreeView::handleExpandCollapse);
+        connect(this,&QTreeView::expanded,this,&WaveTreeView::handleExpand);
+        connect(this,&QTreeView::collapsed,this,&WaveTreeView::handleCollapse);
         connect(this,&QTreeView::customContextMenuRequested,this,&WaveTreeView::handleContextMenuRequested);
     }
 
@@ -387,9 +388,20 @@ namespace hal {
         QAbstractItemView::startDrag(supportedActions);
     }
 
-    void WaveTreeView::handleExpandCollapse(const QModelIndex& index)
+    void WaveTreeView::handleExpand(const QModelIndex& index)
     {
-        Q_UNUSED(index);
+        const WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        int grpId = wtm->groupId(index);
+        if (grpId >= 0) mExpandedGroups.insert(grpId);
+
+        reorder();
+    }
+
+    void WaveTreeView::handleCollapse(const QModelIndex& index)
+    {
+        const WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        int grpId = wtm->groupId(index);
+        if (grpId >= 0) mExpandedGroups.remove(grpId);
 
         reorder();
     }
@@ -416,10 +428,13 @@ namespace hal {
         if (nVisible != mWaveItemHash->visibleEntries())
         {
             mWaveItemHash->setVisibleEntries(nVisible);
+
+            /*   // signal not connected
             if (verticalScrollBar()->isVisible())
                 Q_EMIT numberVisibleChanged(nVisible, verticalScrollBar()->maximum(), verticalScrollBar()->value());
             else
                 Q_EMIT numberVisibleChanged(nVisible, -1, -1);
+            */
         }
         for (int i=0; i<nVisible; i++)
         {
@@ -477,6 +492,16 @@ namespace hal {
                 auto it = notPlaced.find(wii);
                 if (it != notPlaced.end()) notPlaced.erase(it);
             }
+
+            // restore expanded or collapsed group state
+            int grpId = wtm->groupId(currentIndex);
+            if (grpId >= 0)
+            {
+                if (mExpandedGroups.contains(grpId))
+                    expand(currentIndex);
+                else
+                    collapse(currentIndex);
+            }
         }
 
         for (WaveItem* wi : notPlaced.values())
@@ -493,6 +518,8 @@ namespace hal {
         mWaveItemHash->setSelected();
         for (WaveItem* wi : mWaveItemHash->values())
             wi->setWaveSelected(false);
+
+        std::vector<u32> netIds;
         for (const QModelIndex& inx : sortedSelection())
         {
             WaveItemIndex wii = wtm->hashIndex(inx);
@@ -503,7 +530,13 @@ namespace hal {
                 if (!mWaveItemHash->firstSelected())
                     mWaveItemHash->setSelected(wi);
             }
+            const WaveData* wd = wi->wavedata();
+            if (wd)
+            {
+                netIds.push_back(wd->id());
+            }
         }
+        if (!netIds.empty()) gGuiApi->selectNet(netIds,true,false);
     }
 
     void WaveTreeView::orderRecursion(const QModelIndex &parent)

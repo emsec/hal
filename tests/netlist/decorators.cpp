@@ -8,6 +8,12 @@
 #include "hal_core/netlist/decorators/boolean_function_decorator.h"
 #include "hal_core/netlist/decorators/netlist_modification_decorator.h"
 #include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
+#include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
+#include "hal_core/netlist/module.h"
 #include "netlist_test_utils.h"
 
 
@@ -791,114 +797,109 @@ namespace hal {
 
                 // successors
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff0, true, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff0, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff4, dff5}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff2, true, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff2, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff5, dff6, dff7, dff3}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff4, true, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff4, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff8}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff8, true, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff8, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>());
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(sff0, true, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(sff0, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({sff1, dff0, dff1, dff2, dff3, dff4, dff5, dff6, dff7, dff8, dff9, dff10, dff11}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(sff0, true, {PinType::enable, PinType::reset}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(sff0, true, {PinType::enable, PinType::reset});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({sff1}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(sff1, true, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(sff1, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1, dff2, dff3, dff4, dff5, dff6, dff7, dff8, dff9, dff10, dff11}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(sff1, true, {PinType::enable, PinType::reset}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(sff1, true, {PinType::enable, PinType::reset});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_sequential_gates(dff1, true, {}, &cache);
+                    const auto res1 = trav_dec.get_next_sequential_gates(dff1, true, {});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({dff4, dff5, dff6, dff0}));
 
-                    const auto res2 = trav_dec.get_next_sequential_gates(dff2, true, {}, &cache);
+                    const auto res2 = trav_dec.get_next_sequential_gates(dff2, true, {});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({dff5, dff6, dff7, dff3}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_sequential_gates(dff3, true, {}, &cache);
+                    const auto res1 = trav_dec.get_next_sequential_gates(dff3, true, {});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({dff6, dff7, dff3}));
 
-                    const auto res2 = trav_dec.get_next_sequential_gates(dff2, true, {}, &cache);
+                    const auto res2 = trav_dec.get_next_sequential_gates(dff2, true, {});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({dff5, dff6, dff7, dff3}));
                 }
 
                 // predecessors
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff4, false, {}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff4, false, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1, sff0, sff1}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff4, false, {PinType::enable, PinType::reset, PinType::clock}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff4, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff5, false, {PinType::enable, PinType::reset, PinType::clock}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff5, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1, dff2}));
                 }
                 {
-                    const auto res = trav_dec.get_next_sequential_gates(dff0, false, {PinType::enable, PinType::reset, PinType::clock}, nullptr);
+                    const auto res = trav_dec.get_next_sequential_gates(dff0, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_sequential_gates(dff5, false, {}, &cache);
+                    const auto res1 = trav_dec.get_next_sequential_gates(dff5, false, {});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({dff0, dff1, dff2, sff0, sff1}));
 
-                    const auto res2 = trav_dec.get_next_sequential_gates(dff6, false, {}, &cache);
+                    const auto res2 = trav_dec.get_next_sequential_gates(dff6, false, {});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({dff1, dff2, dff3, sff0, sff1}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_sequential_gates(dff5, false, {PinType::enable, PinType::reset, PinType::clock}, &cache);
+                    const auto res1 = trav_dec.get_next_sequential_gates(dff5, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({dff0, dff1, dff2}));
 
-                    const auto res2 = trav_dec.get_next_sequential_gates(dff6, false, {PinType::enable, PinType::reset, PinType::clock}, &cache);
+                    const auto res2 = trav_dec.get_next_sequential_gates(dff6, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({dff1, dff2, dff3}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_sequential_gates(dff6, false, {PinType::enable, PinType::reset, PinType::clock}, &cache);
+                    const auto res1 = trav_dec.get_next_sequential_gates(dff6, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({dff1, dff2, dff3}));
 
-                    const auto res2 = trav_dec.get_next_sequential_gates(dff7, false, {PinType::enable, PinType::reset, PinType::clock}, &cache);
+                    const auto res2 = trav_dec.get_next_sequential_gates(dff7, false, {PinType::enable, PinType::reset, PinType::clock});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({dff2, dff3}));
                 }
@@ -996,59 +997,57 @@ namespace hal {
                 }
             }
             {
-                // test NetlistModificationDecorator::get_next_combinational_gates
+                // test NetlistModificationDecorator::get_combinational_cone
                 const auto trav_dec = NetlistTraversalDecorator(*(nl.get()));
 
                 // successors
                 {
-                    const auto res = trav_dec.get_next_combinational_gates(dff4, true, {}, nullptr);
+                    const auto res = trav_dec.get_combinational_cone(dff4, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({inv2}));
                 }
                 {
-                    const auto res = trav_dec.get_next_combinational_gates(dff0, true, {}, nullptr);
+                    const auto res = trav_dec.get_combinational_cone(dff0, true, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({inv0, and0, or2, or3, or0}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_combinational_gates(dff1, true, {}, &cache);
+                    const auto res1 = trav_dec.get_combinational_cone(dff1, true, {});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({and0, or2, or3, and1, or4, or0}));
 
-                    const auto res2 = trav_dec.get_next_combinational_gates(dff2, true, {}, &cache);
+                    const auto res2 = trav_dec.get_combinational_cone(dff2, true, {});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({and1, or3, or4, and2, or5, or1}));
                 }
 
                 // predecessors
                 {
-                    const auto res = trav_dec.get_next_combinational_gates(dff4, false, {}, nullptr);
+                    const auto res = trav_dec.get_combinational_cone(dff4, false, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({inv0, and0, or2, inv6}));
                 }
                 {
-                    const auto res = trav_dec.get_next_combinational_gates(dff4, false, {PinType::enable, PinType::reset, PinType::clock, PinType::set}, nullptr);
+                    const auto res = trav_dec.get_combinational_cone(dff4, false, {PinType::enable, PinType::reset, PinType::clock, PinType::set});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({inv0, and0, or2}));
                 }
                 {
-                    const auto res = trav_dec.get_next_combinational_gates(dff4, false, {PinType::none}, nullptr);
+                    const auto res = trav_dec.get_combinational_cone(dff4, false, {PinType::none});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({}));
                 }
                 {
-                    const auto res = trav_dec.get_next_combinational_gates(dff0, false, {}, nullptr);
+                    const auto res = trav_dec.get_combinational_cone(dff0, false, {});
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({inv0, and0, or2, or0, inv6}));
                 }
                 {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_combinational_gates(dff5, false, {}, &cache);
+                    const auto res1 = trav_dec.get_combinational_cone(dff5, false, {});
                     EXPECT_TRUE(res1.is_ok());
                     EXPECT_EQ(res1.get(), std::set<Gate*>({or3, and0, and1, inv6}));
 
-                    const auto res2 = trav_dec.get_next_combinational_gates(dff6, false, {}, &cache);
+                    const auto res2 = trav_dec.get_combinational_cone(dff6, false, {});
                     EXPECT_TRUE(res2.is_ok());
                     EXPECT_EQ(res2.get(), std::set<Gate*>({or4, and1, and2, inv6}));
                 }
@@ -1056,4 +1055,948 @@ namespace hal {
         }
         TEST_END
     }
+
+    /**
+     * Test the shortest path searches of the traversal decorator.
+     *
+     * These had no test at all, which is why they are written before the decorator is restructured:
+     * they describe what the searches do today so that a rewrite can be shown not to change it.
+     *
+     * Functions: get_shortest_path, get_shortest_path_distance
+     */
+    TEST_F(DecoratorTest, check_netlist_traversal_decorator_shortest_path)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            Netlist* nl_raw       = nl.get();
+            const GateLibrary* gl = nl_raw->get_gate_library();
+
+            // A long way round and a short one between the same two gates:
+            //   start -> a -> b -> finish     (four gates)
+            //   start -> c -> finish          (three gates)
+            Gate* start  = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "start");
+            Gate* a      = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "a");
+            Gate* b      = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "b");
+            Gate* c      = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "c");
+            Gate* finish = nl_raw->create_gate(gl->get_gate_type_by_name("OR2"), "finish");
+
+            // one net out of start feeding both branches, as an output pin drives a single net
+            Net* fan = nl_raw->create_net("fan");
+            fan->add_source(start, "O");
+            fan->add_destination(a, "I");
+            fan->add_destination(c, "I");
+
+            test_utils::connect(nl_raw, a, "O", b, "I", "a_to_b");
+            test_utils::connect(nl_raw, b, "O", finish, "I0", "b_to_finish");
+            test_utils::connect(nl_raw, c, "O", finish, "I1", "c_to_finish");
+
+            NetlistTraversalDecorator dec(*nl_raw);
+
+            {
+                // the short branch wins, and the path runs from start to finish
+                auto res = dec.get_shortest_path(start, finish, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                ASSERT_TRUE(res.get().has_value());
+                const auto path = res.get().value();
+                ASSERT_EQ(path.size(), 3);
+                EXPECT_EQ(path.front(), start);
+                EXPECT_EQ(path.at(1), c);
+                EXPECT_EQ(path.back(), finish);
+            }
+            {
+                auto res = dec.get_shortest_path_distance(start, finish, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                ASSERT_TRUE(res.get().has_value());
+                EXPECT_EQ(res.get().value(), 2);
+            }
+            {
+                // nothing leads backwards from start to finish
+                auto res = dec.get_shortest_path(start, finish, PinDirection::input);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_FALSE(res.get().has_value());
+            }
+            {
+                // searching both ways finds it regardless of which end it is asked from
+                auto res = dec.get_shortest_path(finish, start, PinDirection::inout);
+                ASSERT_TRUE(res.is_ok());
+                ASSERT_TRUE(res.get().has_value());
+                EXPECT_EQ(res.get().value().size(), 3);
+            }
+            {
+                // an endpoint filter that rejects everything leaves nothing to find
+                auto res = dec.get_shortest_path(start, finish, PinDirection::output, [](const Endpoint*, u32) { return false; });
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_FALSE(res.get().has_value());
+            }
+            {
+                // a gate that is not connected at all
+                Gate* island = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "island");
+                auto res     = dec.get_shortest_path(start, island, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_FALSE(res.get().has_value());
+            }
+        }
+        TEST_END
+    }
+
+    /**
+     * Test the shortest path searches that end at a module rather than at a gate.
+     *
+     * Functions: get_shortest_path
+     */
+    TEST_F(DecoratorTest, check_netlist_traversal_decorator_shortest_path_to_module)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            Netlist* nl_raw       = nl.get();
+            const GateLibrary* gl = nl_raw->get_gate_library();
+
+            // chain of five buffers, the first two in module A, the last two in module B
+            std::vector<Gate*> g;
+            for (u32 i = 0; i < 5; i++)
+            {
+                g.push_back(nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "g" + std::to_string(i)));
+            }
+            for (u32 i = 0; i + 1 < g.size(); i++)
+            {
+                test_utils::connect(nl_raw, g.at(i), "O", g.at(i + 1), "I", "n" + std::to_string(i));
+            }
+
+            Module* mod_a = nl_raw->create_module("A", nl_raw->get_top_module(), {g.at(0), g.at(1)});
+            Module* mod_b = nl_raw->create_module("B", nl_raw->get_top_module(), {g.at(3), g.at(4)});
+
+            NetlistTraversalDecorator dec(*nl_raw);
+
+            {
+                // from the first gate to the far module, stopping at the first gate that belongs to it
+                auto res = dec.get_shortest_path(g.at(0), mod_b, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                ASSERT_TRUE(res.get().has_value());
+                const auto path = res.get().value();
+                ASSERT_EQ(path.size(), 4);
+                EXPECT_EQ(path.front(), g.at(0));
+                EXPECT_EQ(path.back(), g.at(3));
+            }
+            {
+                // a gate that is already inside the module has arrived, so the path is that gate alone
+                auto res = dec.get_shortest_path(g.at(3), mod_b, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                ASSERT_TRUE(res.get().has_value());
+                ASSERT_EQ(res.get().value().size(), 1);
+                EXPECT_EQ(res.get().value().front(), g.at(3));
+            }
+            {
+                // between the two modules, from the last gate of A to the first of B
+                auto res = dec.get_shortest_path(mod_a, mod_b, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                const auto paths = res.get();
+                ASSERT_EQ(paths.size(), 1);
+                EXPECT_EQ(paths.front().front(), g.at(1));
+                EXPECT_EQ(paths.front().back(), g.at(3));
+            }
+            {
+                // the other way round there is no connection
+                auto res = dec.get_shortest_path(mod_b, mod_a, PinDirection::output);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_TRUE(res.get().empty());
+            }
+        }
+        TEST_END
+    }
+
+
+    /**
+     * Test the traversal that the other traversals of the decorator are written in terms of.
+     *
+     * Each case states the same question twice, once through a named traversal and once through the
+     * core one, so that the claim that they are the same traversal is checked rather than asserted.
+     *
+     * Functions: get_gates
+     */
+    TEST_F(DecoratorTest, check_netlist_traversal_decorator_core)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            Netlist* nl_raw       = nl.get();
+            const GateLibrary* gl = nl_raw->get_gate_library();
+
+            // ff0 -> inv0 -> inv1 -> ff1, with a second branch inv0 -> inv2 -> ff2
+            Gate* ff0  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff0");
+            Gate* ff1  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff1");
+            Gate* ff2  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff2");
+            Gate* inv0 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "inv0");
+            Gate* inv1 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "inv1");
+            Gate* inv2 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "inv2");
+
+            test_utils::connect(nl_raw, ff0, "Q", inv0, "I", "n0");
+            Net* fan = nl_raw->create_net("fan");
+            fan->add_source(inv0, "O");
+            fan->add_destination(inv1, "I");
+            fan->add_destination(inv2, "I");
+            test_utils::connect(nl_raw, inv1, "O", ff1, "D", "n1");
+            test_utils::connect(nl_raw, inv2, "O", ff2, "D", "n2");
+
+            NetlistTraversalDecorator dec(*nl_raw);
+            const auto is_seq  = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); };
+            const auto is_comb = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); };
+            const auto always  = [](const Gate*) { return true; };
+
+            {
+                // stopping at a match gives the boundary: the flip-flops behind the logic, and not the logic
+                auto res = dec.get_gates(ff0, TraversalDirection::forward, is_seq, TraversalStop::at_match);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), (std::set<Gate*>({ff1, ff2})));
+
+                auto named = dec.get_next_sequential_gates(ff0, true, {});
+                ASSERT_TRUE(named.is_ok());
+                EXPECT_EQ(res.get(), named.get());
+            }
+            {
+                // stopping at a mismatch gives the region: the logic itself, and not the flip-flops
+                auto res = dec.get_gates(ff0, TraversalDirection::forward, is_comb, TraversalStop::at_mismatch);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), (std::set<Gate*>({inv0, inv1, inv2})));
+
+                auto named = dec.get_combinational_cone(ff0, true, {});
+                ASSERT_TRUE(named.is_ok());
+                EXPECT_EQ(res.get(), named.get());
+            }
+            {
+                // never stopping walks everything reachable, so both the logic and the flip-flops
+                auto res = dec.get_gates(ff0, TraversalDirection::forward, always, TraversalStop::never);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), (std::set<Gate*>({inv0, inv1, inv2, ff1, ff2})));
+            }
+            {
+                // a depth of one reaches the direct neighbour only
+                auto res = dec.get_gates(ff0, TraversalDirection::forward, always, TraversalStop::never, 1);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), (std::set<Gate*>({inv0})));
+            }
+            {
+                // backwards from a flip-flop at the far end reaches back through the same logic
+                auto res = dec.get_gates(ff1, TraversalDirection::backward, is_seq, TraversalStop::at_match);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), (std::set<Gate*>({ff0})));
+            }
+            {
+                // both directions at once is the union of the two
+                auto res = dec.get_gates(inv0, TraversalDirection::both, is_seq, TraversalStop::at_match);
+                ASSERT_TRUE(res.is_ok());
+                EXPECT_EQ(res.get(), (std::set<Gate*>({ff0, ff1, ff2})));
+            }
+            {
+                // a match condition is required, as a traversal that collects nothing says nothing
+                auto res = dec.get_gates(ff0, TraversalDirection::forward, nullptr, TraversalStop::at_match);
+                EXPECT_TRUE(res.is_error());
+            }
+        }
+        TEST_END
+    }
+
+
+    /**
+     * Test that traversing in both directions returns the union of the two single directions.
+     *
+     * The regression this guards: walking both directions from each *adjacent net* also walks forward
+     * from a fan-in net, which runs into the cones of sibling gates sharing that input -- gates that
+     * are neither ancestors nor descendants of the start gate.
+     *
+     * Functions: get_gates
+     */
+    TEST_F(DecoratorTest, check_netlist_traversal_decorator_both_is_the_union)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            Netlist* nl_raw       = nl.get();
+            const GateLibrary* gl = nl_raw->get_gate_library();
+
+            // ff_a drives both the gate under test and a sibling inverter with a flip-flop of its own
+            Gate* ff_a = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_a");
+            Gate* ff_b = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_b");
+            Gate* ff_o = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_o");
+            Gate* ff_s = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_sibling");
+            Gate* g    = nl_raw->create_gate(gl->get_gate_type_by_name("AND2"), "g");
+            Gate* g_s  = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "g_sibling");
+
+            Net* na = nl_raw->create_net("na");
+            na->add_source(ff_a, "Q");
+            na->add_destination(g, "I0");
+            na->add_destination(g_s, "I");
+            test_utils::connect(nl_raw, ff_b, "Q", g, "I1", "nb");
+            test_utils::connect(nl_raw, g, "O", ff_o, "D", "no");
+            test_utils::connect(nl_raw, g_s, "O", ff_s, "D", "ns");
+
+            NetlistTraversalDecorator dec(*nl_raw);
+            const auto is_seq = [](const Gate* gate) { return gate->get_type()->has_property(GateTypeProperty::sequential); };
+
+            auto res_forward  = dec.get_gates(g, TraversalDirection::forward, is_seq, TraversalStop::at_match);
+            auto res_backward = dec.get_gates(g, TraversalDirection::backward, is_seq, TraversalStop::at_match);
+            auto res_both     = dec.get_gates(g, TraversalDirection::both, is_seq, TraversalStop::at_match);
+            ASSERT_TRUE(res_forward.is_ok());
+            ASSERT_TRUE(res_backward.is_ok());
+            ASSERT_TRUE(res_both.is_ok());
+
+            EXPECT_EQ(res_forward.get(), (std::set<Gate*>({ff_o})));
+            EXPECT_EQ(res_backward.get(), (std::set<Gate*>({ff_a, ff_b})));
+
+            std::set<Gate*> expected = res_forward.get();
+            expected.merge(res_backward.get());
+            EXPECT_EQ(res_both.get(), expected);
+
+            // the sibling flip-flop belongs to neither direction
+            EXPECT_EQ(res_both.get().find(ff_s), res_both.get().end());
+        }
+        TEST_END
+    }
+
+
+    /**
+     * Test that the cached traversals give the same answer as the fresh ones on a netlist with a
+     * combinational cycle.
+     *
+     * The regression this guards: cache entries used to be written while a net was still being
+     * explored, and a cycle that led the walk back to such a net baked the partial answer into the
+     * entries of the nets being explored at the time. A later call that reached one of those nets
+     * through a side path then returned a result with gates missing, which is how the Boolean
+     * influence plugin produced a wrong dependency matrix on netlists with combinational cycles.
+     *
+     * Functions: get_next_sequential_gates, get_combinational_cone, get_next_sequential_gates_map, make_traversal_cache, get_gates
+     */
+    TEST_F(DecoratorTest, check_netlist_traversal_decorator_cache_survives_cycles)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            Netlist* nl_raw       = nl.get();
+            const GateLibrary* gl = nl_raw->get_gate_library();
+
+            Gate* ff_first  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_first");
+            Gate* ff_second = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_second");
+            Gate* ff_a      = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_a");
+            Gate* ff_b      = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_b");
+            Gate* ff_x      = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff_x");
+            Gate* ga        = nl_raw->create_gate(gl->get_gate_type_by_name("OR2"), "ga");
+            Gate* g_p       = nl_raw->create_gate(gl->get_gate_type_by_name("OR2"), "g_p");
+            Gate* g_c       = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "g_c");
+            Gate* g_d       = nl_raw->create_gate(gl->get_gate_type_by_name("BUF"), "g_d");
+            Gate* g_side    = nl_raw->create_gate(gl->get_gate_type_by_name("OR2"), "g_side");
+
+            // the combinational cycle: w0 -> g_d -> f1 -> g_c -> e2 -> g_p -> p -> ga -> w0,
+            // with a side exit from inside the cycle through g_side into ff_second
+            Net* w0 = nl_raw->create_net("w0");
+            w0->add_source(ga, "O");
+            w0->add_destination(ff_first, "D");
+            w0->add_destination(g_d, "I");
+            Net* p = test_utils::connect(nl_raw, g_p, "O", ga, "I0", "p");
+            Net* e3 = test_utils::connect(nl_raw, ff_a, "Q", ga, "I1", "e3");
+            Net* e1 = test_utils::connect(nl_raw, ff_b, "Q", g_p, "I0", "e1");
+            Net* e2 = nl_raw->create_net("e2");
+            e2->add_source(g_c, "O");
+            e2->add_destination(g_p, "I1");
+            e2->add_destination(g_side, "I1");
+            Net* f1 = test_utils::connect(nl_raw, g_d, "O", g_c, "I", "f1");
+            Net* x  = test_utils::connect(nl_raw, ff_x, "Q", g_side, "I0", "x");
+            Net* y  = test_utils::connect(nl_raw, g_side, "O", ff_second, "D", "y");
+
+            NetlistTraversalDecorator dec(*nl_raw);
+
+            const auto is_seq_gate  = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); };
+            const auto is_comb_gate = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); };
+
+            {
+                // one cache shared across two calls, the way the Boolean influence plugin shares one
+                // across the flip-flops of a netlist
+                auto cache = dec.make_traversal_cache(TraversalDirection::backward, is_seq_gate, TraversalStop::at_match);
+                auto first_cached = dec.get_gates(ff_first, cache);
+                auto second_cached = dec.get_gates(ff_second, cache);
+                auto first_fresh  = dec.get_next_sequential_gates(ff_first, false, {});
+                auto second_fresh = dec.get_next_sequential_gates(ff_second, false, {});
+                ASSERT_TRUE(first_cached.is_ok());
+                ASSERT_TRUE(second_cached.is_ok());
+                ASSERT_TRUE(first_fresh.is_ok());
+                ASSERT_TRUE(second_fresh.is_ok());
+
+                EXPECT_EQ(first_fresh.get(), (std::set<Gate*>({ff_a, ff_b})));
+                EXPECT_EQ(second_fresh.get(), (std::set<Gate*>({ff_a, ff_b, ff_x})));
+                EXPECT_EQ(first_cached.get(), first_fresh.get());
+                EXPECT_EQ(second_cached.get(), second_fresh.get());
+            }
+            {
+                // the combinational region seen through a shared cache covers the whole cycle as well
+                auto cache = dec.make_traversal_cache(TraversalDirection::backward, is_comb_gate, TraversalStop::at_mismatch);
+                auto first_cached  = dec.get_gates(ff_first, cache);
+                auto second_cached = dec.get_gates(ff_second, cache);
+                auto second_fresh  = dec.get_combinational_cone(ff_second, false, {});
+                ASSERT_TRUE(first_cached.is_ok());
+                ASSERT_TRUE(second_cached.is_ok());
+                ASSERT_TRUE(second_fresh.is_ok());
+                EXPECT_EQ(second_cached.get(), second_fresh.get());
+                EXPECT_EQ(second_cached.get(), (std::set<Gate*>({ga, g_p, g_c, g_d, g_side})));
+            }
+            {
+                // the netlist-wide map shares one cache internally and has to agree with fresh calls
+                auto map_res = dec.get_next_sequential_gates_map(false, {});
+                ASSERT_TRUE(map_res.is_ok());
+                for (const auto& [gate, expected] : map_res.get())
+                {
+                    auto fresh = dec.get_next_sequential_gates(gate, false, {});
+                    ASSERT_TRUE(fresh.is_ok());
+                    EXPECT_EQ(expected, fresh.get()) << "map disagrees with the fresh walk for " << gate->get_name();
+                }
+            }
+        }
+        TEST_END
+    }
+
+
+    /**
+     * Test the sealed traversal cache: results shared across calls agree with the uncached walk,
+     * and a cache refuses what would make it unsound.
+     *
+     * Functions: make_traversal_cache, get_gates
+     */
+    TEST_F(DecoratorTest, check_netlist_traversal_decorator_traversal_cache)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            Netlist* nl_raw       = nl.get();
+            const GateLibrary* gl = nl_raw->get_gate_library();
+
+            // ff0 -> inv0 -> {inv1 -> ff1, inv2 -> ff2}, shared logic between the flip-flops
+            Gate* ff0  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff0");
+            Gate* ff1  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff1");
+            Gate* ff2  = nl_raw->create_gate(gl->get_gate_type_by_name("DFF"), "ff2");
+            Gate* inv0 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "inv0");
+            Gate* inv1 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "inv1");
+            Gate* inv2 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "inv2");
+
+            test_utils::connect(nl_raw, ff0, "Q", inv0, "I", "n0");
+            Net* fan = nl_raw->create_net("fan");
+            fan->add_source(inv0, "O");
+            fan->add_destination(inv1, "I");
+            fan->add_destination(inv2, "I");
+            test_utils::connect(nl_raw, inv1, "O", ff1, "D", "n1");
+            test_utils::connect(nl_raw, inv2, "O", ff2, "D", "n2");
+
+            NetlistTraversalDecorator dec(*nl_raw);
+            const auto is_seq = [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); };
+
+            {
+                // one cache, several starts: every answer equals the uncached walk
+                auto cache = dec.make_traversal_cache(TraversalDirection::forward, is_seq, TraversalStop::at_match);
+                for (Gate* start : {ff0, inv0, inv1})
+                {
+                    auto cached   = dec.get_gates(start, cache);
+                    auto uncached = dec.get_gates(start, TraversalDirection::forward, is_seq, TraversalStop::at_match);
+                    ASSERT_TRUE(cached.is_ok());
+                    ASSERT_TRUE(uncached.is_ok());
+                    EXPECT_EQ(cached.get(), uncached.get()) << "cached and uncached disagree from " << start->get_name();
+                }
+            }
+            {
+                // a cache seals one direction; both is refused rather than silently mixed
+                auto cache = dec.make_traversal_cache(TraversalDirection::both, is_seq, TraversalStop::at_match);
+                EXPECT_TRUE(dec.get_gates(ff0, cache).is_error());
+            }
+            {
+                // a cache belongs to its netlist
+                std::unique_ptr<Netlist> other = test_utils::create_empty_netlist(1);
+                ASSERT_NE(other, nullptr);
+                auto cache = NetlistTraversalDecorator(*other).make_traversal_cache(TraversalDirection::forward, is_seq, TraversalStop::at_match);
+                EXPECT_TRUE(dec.get_gates(ff0, cache).is_error());
+            }
+        }
+        TEST_END
+    }
+
+    namespace
+    {
+        // Adds a gate type with the given pins to the library. An output pin with an empty function string gets no Boolean function.
+        GateType* add_gate_type(GateLibrary* gl,
+                                const std::string& name,
+                                const std::set<GateTypeProperty>& properties,
+                                const std::vector<std::string>& inputs,
+                                const std::vector<std::pair<std::string, std::string>>& outputs,
+                                std::unique_ptr<GateTypeComponent> component = nullptr)
+        {
+            GateType* gt = gl->create_gate_type(name, properties, std::move(component));
+            for (const auto& pin : inputs)
+            {
+                if (gt->create_pin(pin, PinDirection::input).is_error())
+                {
+                    return nullptr;
+                }
+            }
+            for (const auto& [pin, function] : outputs)
+            {
+                if (gt->create_pin(pin, PinDirection::output).is_error())
+                {
+                    return nullptr;
+                }
+                if (!function.empty())
+                {
+                    gt->add_boolean_function(pin, BooleanFunction::from_string(function).get());
+                }
+            }
+            return gt;
+        }
+
+        // A gate library with the gate types a subgraph walk has to tell apart: combinational gates with Boolean functions, a combinational
+        // buffer without one (like the clock and I/O buffers of many vendor libraries), and a flip-flop whose output function is its internal state.
+        std::unique_ptr<GateLibrary> create_subgraph_gate_library()
+        {
+            auto gl = std::make_unique<GateLibrary>("imaginary_path", "subgraph_gl");
+            if (add_gate_type(gl.get(), "AND2", {GateTypeProperty::combinational, GateTypeProperty::c_and}, {"I0", "I1"}, {{"O", "I0 & I1"}}) == nullptr
+                || add_gate_type(gl.get(), "XOR2", {GateTypeProperty::combinational, GateTypeProperty::c_xor}, {"I0", "I1"}, {{"O", "I0 ^ I1"}}) == nullptr
+                || add_gate_type(gl.get(), "OPAQUE_BUF", {GateTypeProperty::combinational, GateTypeProperty::c_buffer}, {"I"}, {{"O", ""}}) == nullptr
+                || add_gate_type(gl.get(),
+                                 "DFF",
+                                 {GateTypeProperty::sequential, GateTypeProperty::ff},
+                                 {"CLK", "D"},
+                                 {{"Q", "IQ"}},
+                                 FFComponent::create(StateComponent::create(InitComponent::create("generic", {"INIT"}), "IQ", "IQN"),
+                                                     BooleanFunction::from_string("D").get(),
+                                                     BooleanFunction::from_string("CLK").get()))
+                       == nullptr)
+            {
+                return nullptr;
+            }
+            return gl;
+        }
+
+        std::string var(const Net* net)
+        {
+            return BooleanFunctionNetDecorator(*net).get_boolean_variable_name();
+        }
+
+        // Whether both functions read the same variables and agree on every assignment of them.
+        bool is_equivalent(const BooleanFunction& a, const BooleanFunction& b)
+        {
+            const auto variables = a.get_variable_names();
+            if (variables != b.get_variable_names())
+            {
+                return false;
+            }
+            const std::vector<std::string> ordered(variables.begin(), variables.end());
+            const auto table_a = a.compute_truth_table(ordered);
+            const auto table_b = b.compute_truth_table(ordered);
+            return table_a.is_ok() && table_b.is_ok() && table_a.get() == table_b.get();
+        }
+
+        bool is_equivalent(const Result<BooleanFunction>& res, const std::string& expected)
+        {
+            return res.is_ok() && is_equivalent(res.get(), BooleanFunction::from_string(expected).get());
+        }
+    }    // namespace
+
+    /**
+     * Test the gates at which the walk of the subgraph functions stops: gates outside of the subgraph, sequential gates, and combinational
+     * gates without a Boolean function for the reached output pin, the latter two even if they are part of the subgraph.
+     *
+     * Functions: get_subgraph_function, get_subgraph_function_inputs, copy_subgraph_netlist
+     */
+    TEST_F(DecoratorTest, check_subgraph_netlist_decorator_boundary)
+    {
+        TEST_START
+        {
+            auto gl = create_subgraph_gate_library();
+            ASSERT_NE(gl, nullptr);
+            auto nl = std::make_unique<Netlist>(gl.get());
+
+            //  a ------------------ g_and --- n_and --- g_xor --- d ---.
+            //  q ---------------'                  .---'               |
+            //  b --- g_opaque --- n_opaque --------'                   |
+            //  '--- ff (Q) <-------------------------------------------'   (q is driven by ff, which reads d)
+            Gate* g_and    = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g_and");
+            Gate* g_xor    = nl->create_gate(gl->get_gate_type_by_name("XOR2"), "g_xor");
+            Gate* g_opaque = nl->create_gate(gl->get_gate_type_by_name("OPAQUE_BUF"), "g_opaque");
+            Gate* ff       = nl->create_gate(gl->get_gate_type_by_name("DFF"), "ff");
+
+            Net* a = nl->create_net("a");
+            a->add_destination(g_and, "I0");
+            nl->mark_global_input_net(a);
+            Net* b = nl->create_net("b");
+            b->add_destination(g_opaque, "I");
+            nl->mark_global_input_net(b);
+            Net* clk = nl->create_net("clk");
+            clk->add_destination(ff, "CLK");
+            nl->mark_global_input_net(clk);
+            Net* q        = test_utils::connect(nl.get(), ff, "Q", g_and, "I1", "q");
+            Net* n_and    = test_utils::connect(nl.get(), g_and, "O", g_xor, "I0", "n_and");
+            Net* n_opaque = test_utils::connect(nl.get(), g_opaque, "O", g_xor, "I1", "n_opaque");
+            Net* d        = test_utils::connect(nl.get(), g_xor, "O", ff, "D", "d");
+
+            const SubgraphNetlistDecorator dec(*nl);
+            const std::vector<const Gate*> all_gates   = {g_and, g_xor, g_opaque, ff};
+            const std::vector<const Gate*> composable  = {g_and, g_xor};
+            const std::string expected                 = "(" + var(a) + " & " + var(q) + ") ^ " + var(n_opaque);
+            const std::set<const Net*> expected_inputs = {a, q, n_opaque};
+
+            {
+                // the flip-flop and the buffer without a function bound the function although they are part of the subgraph
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(all_gates, d), expected));
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(composable, d), expected));
+
+                const auto inputs_all = dec.get_subgraph_function_inputs(all_gates, d);
+                ASSERT_TRUE(inputs_all.is_ok());
+                EXPECT_EQ(inputs_all.get(), expected_inputs);
+                const auto inputs_composable = dec.get_subgraph_function_inputs(composable, d);
+                ASSERT_TRUE(inputs_composable.is_ok());
+                EXPECT_EQ(inputs_composable.get(), expected_inputs);
+            }
+            {
+                // a module holding the flip-flop as well, with the AND gate in a submodule that belongs to the subgraph too
+                Module* mod = nl->create_module("mod", nl->get_top_module(), {g_xor, g_opaque, ff});
+                ASSERT_NE(mod, nullptr);
+                Module* sub_mod = nl->create_module("sub_mod", mod, {g_and});
+                ASSERT_NE(sub_mod, nullptr);
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(mod, d), expected));
+                const auto inputs = dec.get_subgraph_function_inputs(mod, d);
+                ASSERT_TRUE(inputs.is_ok());
+                EXPECT_EQ(inputs.get(), expected_inputs);
+
+                const auto copy_res = dec.copy_subgraph_netlist(mod);
+                ASSERT_TRUE(copy_res.is_ok());
+                EXPECT_EQ(copy_res.get()->get_gates().size(), 4);
+                EXPECT_NE(copy_res.get()->get_gate_by_id(g_and->get_id()), nullptr);
+            }
+            {
+                // a net driven by a gate that is not composed is the only input of its own function
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(all_gates, q), var(q)));
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(all_gates, n_opaque), var(n_opaque)));
+                const auto inputs = dec.get_subgraph_function_inputs(all_gates, q);
+                ASSERT_TRUE(inputs.is_ok());
+                EXPECT_EQ(inputs.get(), std::set<const Net*>({q}));
+            }
+            {
+                // gates outside of the subgraph still bound it
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(std::vector<const Gate*>({g_xor}), d), var(n_and) + " ^ " + var(n_opaque)));
+            }
+        }
+        TEST_END
+    }
+
+    /**
+     * Test that a global input net is a variable of the subgraph functions wherever the walk reaches it, even if it has a source.
+     *
+     * Functions: get_subgraph_function, get_subgraph_function_inputs
+     */
+    TEST_F(DecoratorTest, check_subgraph_netlist_decorator_global_inputs)
+    {
+        TEST_START
+        {
+            auto gl = create_subgraph_gate_library();
+            ASSERT_NE(gl, nullptr);
+            auto nl = std::make_unique<Netlist>(gl.get());
+
+            //  a, b --- g_and --- p --- g_xor --- o
+            //                     c ---'
+            // p has a source and is a global input as well, like the pad net of a bidirectional buffer
+            Gate* g_and = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g_and");
+            Gate* g_xor = nl->create_gate(gl->get_gate_type_by_name("XOR2"), "g_xor");
+            Net* a      = nl->create_net("a");
+            a->add_destination(g_and, "I0");
+            nl->mark_global_input_net(a);
+            Net* b = nl->create_net("b");
+            b->add_destination(g_and, "I1");
+            nl->mark_global_input_net(b);
+            Net* c = nl->create_net("c");
+            c->add_destination(g_xor, "I1");
+            nl->mark_global_input_net(c);
+            Net* p = test_utils::connect(nl.get(), g_and, "O", g_xor, "I0", "p");
+            nl->mark_global_input_net(p);
+            Net* o = nl->create_net("o");
+            o->add_source(g_xor, "O");
+
+            const SubgraphNetlistDecorator dec(*nl);
+            const std::vector<const Gate*> gates = {g_and, g_xor};
+
+            // the walk stops at p whether it starts there or reaches it on the way
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, p), var(p)));
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, o), var(p) + " ^ " + var(c)));
+
+            const auto inputs_p = dec.get_subgraph_function_inputs(gates, p);
+            ASSERT_TRUE(inputs_p.is_ok());
+            EXPECT_EQ(inputs_p.get(), std::set<const Net*>({p}));
+            const auto inputs_o = dec.get_subgraph_function_inputs(gates, o);
+            ASSERT_TRUE(inputs_o.is_ok());
+            EXPECT_EQ(inputs_o.get(), std::set<const Net*>({p, c}));
+
+            // a global input net without a source is a variable as well
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, a), var(a)));
+        }
+        TEST_END
+    }
+
+    /**
+     * Test that a gate of the subgraph whose Boolean function cannot be built in terms of nets bounds the subgraph functions instead of failing them,
+     * be it because of an input pin without a net or a gate parameter without a value.
+     *
+     * Functions: get_subgraph_function, get_subgraph_function_inputs
+     */
+    TEST_F(DecoratorTest, check_subgraph_netlist_decorator_unbuildable_function)
+    {
+        TEST_START
+        {
+            NO_COUT_TEST_BLOCK;
+            auto gl = create_subgraph_gate_library();
+            ASSERT_NE(gl, nullptr);
+            auto nl = std::make_unique<Netlist>(gl.get());
+
+            //  a --- g_and --- n_and --- g_xor --- o
+            //  (I1 has no net)  c ------'
+            Gate* g_and = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g_and");
+            Gate* g_xor = nl->create_gate(gl->get_gate_type_by_name("XOR2"), "g_xor");
+            Net* a      = nl->create_net("a");
+            a->add_destination(g_and, "I0");
+            nl->mark_global_input_net(a);
+            Net* c = nl->create_net("c");
+            c->add_destination(g_xor, "I1");
+            nl->mark_global_input_net(c);
+            Net* n_and = test_utils::connect(nl.get(), g_and, "O", g_xor, "I0", "n_and");
+            Net* o     = nl->create_net("o");
+            o->add_source(g_xor, "O");
+
+            const SubgraphNetlistDecorator dec(*nl);
+            const std::vector<const Gate*> gates = {g_and, g_xor};
+
+            // the net driven by the AND gate becomes a variable
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, o), var(n_and) + " ^ " + var(c)));
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, n_and), var(n_and)));
+
+            const auto inputs = dec.get_subgraph_function_inputs(gates, o);
+            ASSERT_TRUE(inputs.is_ok());
+            EXPECT_EQ(inputs.get(), std::set<const Net*>({n_and, c}));
+
+            // the cache remembers the variable along with the function it is part of
+            auto cache_res = dec.make_subgraph_function_cache(gates);
+            ASSERT_TRUE(cache_res.is_ok());
+            auto cache = cache_res.get();
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(o, cache), var(n_and) + " ^ " + var(c)));
+            EXPECT_EQ(cache.size(), 2);
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(n_and, cache), var(n_and)));
+            EXPECT_EQ(cache.size(), 2);
+        }
+        {
+            NO_COUT_TEST_BLOCK;
+            auto gl = std::make_unique<GateLibrary>("imaginary_path", "parameter_gl");
+            ASSERT_NE(add_gate_type(gl.get(), "XOR2", {GateTypeProperty::combinational, GateTypeProperty::c_xor}, {"I0", "I1"}, {{"O", "I0 ^ I1"}}), nullptr);
+            GateType* mux_type = add_gate_type(gl.get(), "MUX_P", {GateTypeProperty::combinational, GateTypeProperty::c_mux}, {"I0", "I1"}, {{"O", "(SEL & I0) | (!SEL & I1)"}});
+            ASSERT_NE(mux_type, nullptr);
+            const auto sel = Parameter::Boolean("SEL", "false");
+            ASSERT_TRUE(sel.is_ok());
+            ASSERT_TRUE(mux_type->add_parameter(sel.get()).is_ok());
+            auto nl = std::make_unique<Netlist>(gl.get());
+
+            //  a, b --- g_mux (parameter SEL) --- n_mux --- g_xor --- o
+            //                                      c ------'
+            Gate* g_mux = nl->create_gate(mux_type, "g_mux");
+            Gate* g_xor = nl->create_gate(gl->get_gate_type_by_name("XOR2"), "g_xor");
+            Net* a      = nl->create_net("a");
+            a->add_destination(g_mux, "I0");
+            nl->mark_global_input_net(a);
+            Net* b = nl->create_net("b");
+            b->add_destination(g_mux, "I1");
+            nl->mark_global_input_net(b);
+            Net* c = nl->create_net("c");
+            c->add_destination(g_xor, "I1");
+            nl->mark_global_input_net(c);
+            Net* n_mux = test_utils::connect(nl.get(), g_mux, "O", g_xor, "I0", "n_mux");
+            Net* o     = nl->create_net("o");
+            o->add_source(g_xor, "O");
+
+            const SubgraphNetlistDecorator dec(*nl);
+            const std::vector<const Gate*> gates = {g_mux, g_xor};
+
+            // without a value for the parameter, the net driven by the multiplexer becomes a variable
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, o), var(n_mux) + " ^ " + var(c)));
+            const auto inputs = dec.get_subgraph_function_inputs(gates, o);
+            ASSERT_TRUE(inputs.is_ok());
+            EXPECT_EQ(inputs.get(), std::set<const Net*>({n_mux, c}));
+
+            // with a value, the multiplexer is composed
+            ASSERT_TRUE(g_mux->set_parameter(sel.get(), "true").is_ok());
+            EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(gates, o), var(a) + " ^ " + var(c)));
+            const auto inputs_with_value = dec.get_subgraph_function_inputs(gates, o);
+            ASSERT_TRUE(inputs_with_value.is_ok());
+            EXPECT_EQ(inputs_with_value.get(), std::set<const Net*>({a, c}));
+        }
+        TEST_END
+    }
+
+    /**
+     * Test the subgraph function cache: it is bound to the subgraph and the netlist it was created for, and results shared through it
+     * agree with uncached calls.
+     *
+     * Functions: make_subgraph_function_cache, get_subgraph_function, get_subgraph_function_inputs
+     */
+    TEST_F(DecoratorTest, check_subgraph_netlist_decorator_cache)
+    {
+        TEST_START
+        {
+            auto gl = create_subgraph_gate_library();
+            ASSERT_NE(gl, nullptr);
+            auto nl = std::make_unique<Netlist>(gl.get());
+
+            //  a, b --- inner --- m --- outer --- o
+            //                     c ---'
+            Gate* inner = nl->create_gate(gl->get_gate_type_by_name("AND2"), "inner");
+            Gate* outer = nl->create_gate(gl->get_gate_type_by_name("XOR2"), "outer");
+            Net* a      = nl->create_net("a");
+            a->add_destination(inner, "I0");
+            nl->mark_global_input_net(a);
+            Net* b = nl->create_net("b");
+            b->add_destination(inner, "I1");
+            nl->mark_global_input_net(b);
+            Net* c = nl->create_net("c");
+            c->add_destination(outer, "I1");
+            nl->mark_global_input_net(c);
+            Net* m = test_utils::connect(nl.get(), inner, "O", outer, "I0", "m");
+            Net* o = nl->create_net("o");
+            o->add_source(outer, "O");
+            nl->mark_global_output_net(o);
+
+            const SubgraphNetlistDecorator dec(*nl);
+
+            {
+                // a cache for both gates composes both
+                auto cache_res = dec.make_subgraph_function_cache(std::vector<const Gate*>({inner, outer}));
+                ASSERT_TRUE(cache_res.is_ok());
+                auto cache = cache_res.get();
+                EXPECT_EQ(cache.size(), 0);
+
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(o, cache), "(" + var(a) + " & " + var(b) + ") ^ " + var(c)));
+                EXPECT_EQ(cache.size(), 2);
+
+                // the function of m was composed on the way and is answered from the cache
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(m, cache), var(a) + " & " + var(b)));
+                EXPECT_EQ(cache.size(), 2);
+
+                // a cache for a smaller subgraph does not see what the first cache composed
+                auto outer_cache_res = dec.make_subgraph_function_cache(std::vector<const Gate*>({outer}));
+                ASSERT_TRUE(outer_cache_res.is_ok());
+                auto outer_cache = outer_cache_res.get();
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(o, outer_cache), var(m) + " ^ " + var(c)));
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(std::vector<const Gate*>({outer}), o), var(m) + " ^ " + var(c)));
+
+                // the inputs are shared through the same caches and agree with uncached calls
+                const auto inputs_o = dec.get_subgraph_function_inputs(o, cache);
+                ASSERT_TRUE(inputs_o.is_ok());
+                EXPECT_EQ(inputs_o.get(), std::set<const Net*>({a, b, c}));
+                const auto inputs_m = dec.get_subgraph_function_inputs(m, cache);
+                ASSERT_TRUE(inputs_m.is_ok());
+                EXPECT_EQ(inputs_m.get(), std::set<const Net*>({a, b}));
+                const auto outer_inputs_o = dec.get_subgraph_function_inputs(o, outer_cache);
+                ASSERT_TRUE(outer_inputs_o.is_ok());
+                EXPECT_EQ(outer_inputs_o.get(), std::set<const Net*>({m, c}));
+                const auto uncached_inputs_o = dec.get_subgraph_function_inputs(std::vector<const Gate*>({outer}), o);
+                ASSERT_TRUE(uncached_inputs_o.is_ok());
+                EXPECT_EQ(uncached_inputs_o.get(), outer_inputs_o.get());
+
+                // the functions are unaffected by the inputs stored alongside them
+                EXPECT_EQ(cache.size(), 2);
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(o, cache), "(" + var(a) + " & " + var(b) + ") ^ " + var(c)));
+            }
+            {
+                // a cache created for a module, with the inner gate in a submodule
+                Module* mod = nl->create_module("mod", nl->get_top_module(), {outer});
+                ASSERT_NE(mod, nullptr);
+                Module* sub_mod = nl->create_module("sub_mod", mod, {inner});
+                ASSERT_NE(sub_mod, nullptr);
+                auto cache_res = dec.make_subgraph_function_cache(mod);
+                ASSERT_TRUE(cache_res.is_ok());
+                auto cache = cache_res.get();
+                EXPECT_TRUE(is_equivalent(dec.get_subgraph_function(o, cache), "(" + var(a) + " & " + var(b) + ") ^ " + var(c)));
+            }
+            // NEGATIVE
+            {
+                // a cache for no gates, a 'nullptr' gate, or a 'nullptr' module
+                EXPECT_TRUE(dec.make_subgraph_function_cache(std::vector<const Gate*>()).is_error());
+                EXPECT_TRUE(dec.make_subgraph_function_cache(std::vector<const Gate*>({inner, nullptr})).is_error());
+                EXPECT_TRUE(dec.make_subgraph_function_cache(static_cast<const Module*>(nullptr)).is_error());
+            }
+            {
+                // a 'nullptr' net
+                auto cache_res = dec.make_subgraph_function_cache(std::vector<const Gate*>({inner, outer}));
+                ASSERT_TRUE(cache_res.is_ok());
+                auto cache = cache_res.get();
+                EXPECT_TRUE(dec.get_subgraph_function(nullptr, cache).is_error());
+                EXPECT_TRUE(dec.get_subgraph_function_inputs(nullptr, cache).is_error());
+            }
+            {
+                // a cache created for another netlist, and a cache for gates of another netlist
+                auto other_nl = std::make_unique<Netlist>(gl.get());
+                Gate* other_gate = other_nl->create_gate(gl->get_gate_type_by_name("AND2"), "other_gate");
+                const SubgraphNetlistDecorator other_dec(*other_nl);
+
+                auto other_cache_res = other_dec.make_subgraph_function_cache(std::vector<const Gate*>({other_gate}));
+                ASSERT_TRUE(other_cache_res.is_ok());
+                auto other_cache = other_cache_res.get();
+                EXPECT_TRUE(dec.get_subgraph_function(o, other_cache).is_error());
+                EXPECT_TRUE(dec.get_subgraph_function_inputs(o, other_cache).is_error());
+
+                EXPECT_TRUE(dec.make_subgraph_function_cache(std::vector<const Gate*>({inner, other_gate})).is_error());
+                EXPECT_TRUE(dec.get_subgraph_function(std::vector<const Gate*>({inner, other_gate}), o).is_error());
+            }
+        }
+        TEST_END
+    }
+
+    /**
+     * Test that invalid arguments to the subgraph functions are reported as errors, in particular without dereferencing a 'nullptr'.
+     *
+     * Functions: get_subgraph_function, get_subgraph_function_inputs
+     */
+    TEST_F(DecoratorTest, check_subgraph_netlist_decorator_invalid_arguments)
+    {
+        TEST_START
+        {
+            auto gl = create_subgraph_gate_library();
+            ASSERT_NE(gl, nullptr);
+            auto nl = std::make_unique<Netlist>(gl.get());
+
+            Gate* g_and = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g_and");
+            Net* o      = nl->create_net("o");
+            o->add_source(g_and, "O");
+
+            const SubgraphNetlistDecorator dec(*nl);
+
+            // no gates or a 'nullptr' gate, together with a 'nullptr' net
+            EXPECT_TRUE(dec.get_subgraph_function(std::vector<const Gate*>(), nullptr).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function(std::vector<const Gate*>({nullptr}), nullptr).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function_inputs(std::vector<const Gate*>(), nullptr).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function_inputs(std::vector<const Gate*>({nullptr}), nullptr).is_error());
+
+            // no gates or a 'nullptr' gate
+            EXPECT_TRUE(dec.get_subgraph_function(std::vector<const Gate*>(), o).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function(std::vector<const Gate*>({g_and, nullptr}), o).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function_inputs(std::vector<const Gate*>(), o).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function_inputs(std::vector<const Gate*>({g_and, nullptr}), o).is_error());
+
+            // a 'nullptr' module
+            EXPECT_TRUE(dec.get_subgraph_function(static_cast<const Module*>(nullptr), o).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function_inputs(static_cast<const Module*>(nullptr), o).is_error());
+            EXPECT_TRUE(dec.copy_subgraph_netlist(static_cast<const Module*>(nullptr)).is_error());
+
+            // a net of another netlist
+            auto other_nl  = std::make_unique<Netlist>(gl.get());
+            Net* other_net = other_nl->create_net("other_net");
+            EXPECT_TRUE(dec.get_subgraph_function(std::vector<const Gate*>({g_and}), other_net).is_error());
+            EXPECT_TRUE(dec.get_subgraph_function_inputs(std::vector<const Gate*>({g_and}), other_net).is_error());
+        }
+        TEST_END
+    }
+
 }

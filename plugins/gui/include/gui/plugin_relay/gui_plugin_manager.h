@@ -48,6 +48,9 @@ class QPushButton;
 namespace hal {
     class GuiExtensionInterface;
 
+    /**
+     * One plugin as it is listed by the plugin manager, i.e., its name, state, and metadata.
+     */
     class GuiPluginEntry
     {
     public:
@@ -82,8 +85,14 @@ namespace hal {
         GuiExtensionState enforceGuiExtensionState(GuiExtensionInterface* geif) const;
     };
 
+    /**
+     * The widget in which the user loads and unloads plugins and inspects the features they contribute.
+     */
     class GuiPluginManager;
 
+    /**
+     * Renders the load and unload buttons in the plugin table.
+     */
     class GuiPluginDelegate : public QItemDelegate
     {
         Q_OBJECT
@@ -108,6 +117,9 @@ namespace hal {
         void updateQss(GuiPluginManager* gpm);
     };
 
+    /**
+     * The file formats that the loaded plugins can parse or write, used to build the file dialog filters.
+     */
     class SupportedFileFormats : public QMap<QString,QString>
     {
         FacExtensionInterface::Feature mFeature;
@@ -116,6 +128,9 @@ namespace hal {
         QString toFileDialog(bool addHalFormat) const;
     };
 
+    /**
+     * The item model behind the plugin manager, which lists all known plugins.
+     */
     class GuiPluginTable : public QAbstractTableModel
     {
         Q_OBJECT
@@ -160,6 +175,9 @@ namespace hal {
         void removeEntry(int irow);
    };
 
+    /**
+     * The table view that lists the plugins of the plugin manager.
+     */
     class GuiPluginView : public QTableView
     {
         Q_OBJECT
@@ -167,6 +185,9 @@ namespace hal {
         GuiPluginView(QWidget* parent = nullptr);
     };
 
+    /**
+     * The widget in which the user loads and unloads plugins and inspects the features they contribute.
+     */
     class GuiPluginManager : public QWidget
     {
         Q_OBJECT

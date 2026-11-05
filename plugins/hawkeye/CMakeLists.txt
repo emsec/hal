@@ -14,5 +14,15 @@ if(PL_HAWKEYE OR BUILD_ALL_PLUGINS)
                     LINK_LIBRARIES graph_algorithm
                     COMPILE_OPTIONS "-march=native"
                 )
-		 
+
+    # Copy the S-box database into the build directory so that it can be found
+    # at runtime, analogous to how the gate library definitions are handled.
+    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/)
+    add_custom_target(update_sbox_database ALL
+                      BYPRODUCTS ${CMAKE_BINARY_DIR}/share/hal/sbox-database.json
+                      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sbox-database.json ${CMAKE_BINARY_DIR}/share/hal/
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/sbox-database.json
+                      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                      COMMENT "Update S-box database")
+
 endif()

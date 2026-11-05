@@ -35,7 +35,7 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            if (xmlIn.name() == "color")
+            if (xmlIn.name() == QString("color"))
                 mColor = QColor(xmlIn.readElementText());
         }
     }

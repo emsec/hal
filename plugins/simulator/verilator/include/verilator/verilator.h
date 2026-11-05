@@ -41,6 +41,9 @@ namespace hal
 
     namespace verilator
     {
+        /**
+         * Translates a HAL netlist and its gate library into the Verilog sources that Verilator compiles.
+         */
         namespace converter
         {
             /**
@@ -49,7 +52,7 @@ namespace hal
              * @param[in] nl - Netlist for which the models shall be created
              * @param[in] verilator_sim_path - Path where the verilator simulation files are going to be stored.
              * @param[in] model_path - Path where the provided models are located.
-             * @returns True if the model gerneration was successful, false otherwise.
+             * @returns `true` if the model gerneration was successful, `false` otherwise.
              */
             bool convert_gate_library_to_verilog(const Netlist* nl, const std::filesystem::path verilator_sim_path, const std::filesystem::path model_path = "");
 
@@ -58,7 +61,7 @@ namespace hal
              * The function also copies the provided models to the simulation folder.
              * 
              * @param[in] model_path - Path where the provided models are located.
-             * @param[in] verilator_sim_path - Path where the models shall be copied to.
+             * @param[in] gate_definition_path - Path where the models shall be copied to.
              * @returns Set of provided gate types.
              */
             std::set<std::string> get_provided_models(const std::filesystem::path model_path, const std::filesystem::path gate_definition_path);
@@ -152,6 +155,9 @@ namespace hal
             std::string get_epilogue_for_gate_type();
         }    // namespace converter
 
+        /**
+         * A simulation engine that translates the netlist into Verilog and simulates it using Verilator.
+         */
         class VerilatorEngine : public SimulationEngineScripted
         {
             // path to VCD file with results when simulation done is SimulationEngine::mResultFilename
@@ -176,6 +182,9 @@ namespace hal
             std::string m_compiler;
         };
 
+        /**
+         * Creates instances of the Verilator simulation engine.
+         */
         class VerilatorEngineFactory : public SimulationEngineFactory
         {
         public:

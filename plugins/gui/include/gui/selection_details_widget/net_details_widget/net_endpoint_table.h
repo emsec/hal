@@ -34,6 +34,9 @@ namespace hal
     class Net;
     class BaseTreeItem;
 
+    /**
+     * Lists the sources or the destinations of the selected net.
+     */
     class NetEndpointTable : public QTableView
     {
         Q_OBJECT

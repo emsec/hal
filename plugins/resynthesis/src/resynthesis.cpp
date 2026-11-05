@@ -1,18 +1,23 @@
-#include "resynthesis/resynthesis.h"
-
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/netlist_modification_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/utilities/log.h"
+#include "resynthesis/resynthesis.h"
 
+#include <array>
+#include <cstdlib>    // std::getenv
+#include <filesystem>
 #include <fstream>
+#include <string>
+#include <string_view>
 
 namespace hal
 {
@@ -182,18 +187,53 @@ namespace hal
 
         Result<std::string> query_binary_path()
         {
-            static const std::vector<std::string> yosys_binary_paths = {"/usr/bin/yosys", "/usr/local/bin/yosys", "/opt/homebrew/bin/yosys", "/opt/yosys/yosys"};
+            namespace fs = std::filesystem;
 
-            for (const auto& path : yosys_binary_paths)
+            /* 1.  Well-known locations ─ quick exit for the common cases. */
+            static constexpr std::array<const char*, 4> kKnown = {"/usr/bin/yosys",
+                                                                  "/usr/local/bin/yosys",
+                                                                  "/opt/homebrew/bin/yosys",    // Apple-silicon Homebrew
+                                                                  "/opt/yosys/yosys"};
+
+            for (const char* p : kKnown)
             {
-                if (std::filesystem::exists(path))
+                if (fs::exists(p))
                 {
-                    return OK(path);
+                    return OK(std::string{p});
                 }
             }
 
-            return ERR("could not query binary path: no binary found for yosys logic synthesis tool");
+            /* 2.  Search every directory in $PATH. */
+            const char* raw = std::getenv("PATH");
+            if (raw == nullptr || *raw == '\0')
+            {
+                return ERR("could not query binary path: PATH is empty");
+            }
+
+            std::string_view path{raw};
+            while (!path.empty())
+            {
+                std::size_t sep      = path.find(':');
+                std::string_view dir = path.substr(0, sep);
+                if (!dir.empty())
+                {
+                    fs::path candidate = fs::path(dir) / "yosys";
+                    std::error_code ec;    // avoids exceptions
+                    if (fs::exists(candidate, ec) && !ec)
+                    {
+                        return OK(candidate.string());
+                    }
+                }
+                if (sep == std::string_view::npos)
+                {
+                    break;
+                }
+                path.remove_prefix(sep + 1);    // skip the ':'
+            }
+
+            return ERR("could not query binary path: yosys not found in PATH or default locations");
         }
+
     }    // namespace yosys
 
     namespace
@@ -655,7 +695,7 @@ namespace hal
             std::unordered_map<std::string, BooleanFunction> output_pin_name_to_bf;
             for (const auto pin : g->get_type()->get_output_pins())
             {
-                const auto bf_res = g->get_resolved_boolean_function(pin, true);
+                const auto bf_res = g->get_boolean_function(pin, true, false);
                 if (bf_res.is_error())
                 {
                     return ERR_APPEND(bf_res.get_error(),
@@ -689,7 +729,7 @@ namespace hal
             std::vector<std::pair<std::string, BooleanFunction>> output_pin_name_to_bf;
             for (const auto pin : g->get_type()->get_output_pins())
             {
-                const auto bf_res = g->get_resolved_boolean_function(pin, true);
+                const auto bf_res = g->get_boolean_function(pin, true, false);
                 if (bf_res.is_error())
                 {
                     return ERR_APPEND(bf_res.get_error(),
@@ -741,20 +781,46 @@ namespace hal
 
                     if (gt->has_property(GateTypeProperty::c_lut))
                     {
-                        const auto init_res = g->get_init_data();
-                        if (init_res.is_error())
+                        const LUTComponent* lc = gt->get_component_as<LUTComponent>(
+                            [](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::lut; });
+                        if (lc == nullptr)
                         {
-                            return ERR_APPEND(init_res.get_error(),
-                                              "unable to decompose gates of type: failed to get INIT string from gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
-                        }
-                        const auto init_vec = init_res.get();
-                        if (init_vec.size() != 1)
-                        {
-                            return ERR("unable tor decompose gates of type: got " + std::to_string(init_vec.size()) + " INIT strings for gate '" + g->get_name() + "' with ID "
-                                       + std::to_string(g->get_id()));
+                            return ERR("unable to decompose gates of type: gate type '" + gt->get_name() + "' has no LUT component");
                         }
 
-                        init_data = init_vec;
+                        // Collect unique INIT strings in sorted identifier order (preserves former get_init_data behaviour)
+                        std::vector<std::string> ids;
+                        for (const auto& [_, cfg] : lc->get_output_pin_configs())
+                        {
+                            if (std::find(ids.begin(), ids.end(), cfg.init_identifier) == ids.end())
+                                ids.push_back(cfg.init_identifier);
+                        }
+                        std::sort(ids.begin(), ids.end());
+
+                        for (const auto& id : ids)
+                        {
+                            for (const auto& [pin_name, cfg] : lc->get_output_pin_configs())
+                            {
+                                if (cfg.init_identifier == id)
+                                {
+                                    auto res = lc->get_init_string(g, pin_name);
+                                    if (res.is_error())
+                                    {
+                                        return ERR_APPEND(res.get_error(),
+                                                          "unable to decompose gates of type: failed to get INIT string from gate '" + g->get_name() + "' with ID "
+                                                              + std::to_string(g->get_id()));
+                                    }
+                                    init_data.push_back(res.get());
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (init_data.size() != 1)
+                        {
+                            return ERR("unable to decompose gates of type: got " + std::to_string(init_data.size()) + " INIT strings for gate '" + g->get_name() + "' with ID "
+                                       + std::to_string(g->get_id()));
+                        }
                     }
 
                     // get resynth netlist from cache or create it
@@ -770,7 +836,7 @@ namespace hal
                         std::vector<std::pair<std::string, BooleanFunction>> output_pin_name_to_bf;
                         for (const auto pin : g->get_type()->get_output_pins())
                         {
-                            const auto bf_res = g->get_resolved_boolean_function(pin, true);
+                            const auto bf_res = g->get_boolean_function(pin, true, false);
                             if (bf_res.is_error())
                             {
                                 return ERR_APPEND(bf_res.get_error(),
@@ -902,20 +968,46 @@ namespace hal
 
                 if (gt->has_property(GateTypeProperty::c_lut))
                 {
-                    const auto init_res = g->get_init_data();
-                    if (init_res.is_error())
+                    const LUTComponent* lc = gt->get_component_as<LUTComponent>(
+                        [](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::lut; });
+                    if (lc == nullptr)
                     {
-                        return ERR_APPEND(init_res.get_error(),
-                                          "unable to re-synthesize gates of type: failed to get INIT string from gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
-                    }
-                    const auto init_vec = init_res.get();
-                    if (init_vec.size() != 1)
-                    {
-                        return ERR("unable tor re-synthesize gates of type: got " + std::to_string(init_vec.size()) + " INIT strings for gate '" + g->get_name() + "' with ID "
-                                   + std::to_string(g->get_id()));
+                        return ERR("unable to re-synthesize gates of type: gate type '" + gt->get_name() + "' has no LUT component");
                     }
 
-                    init_data = init_vec;
+                    // Collect unique INIT strings in sorted identifier order (preserves former get_init_data behaviour)
+                    std::vector<std::string> ids;
+                    for (const auto& [_, cfg] : lc->get_output_pin_configs())
+                    {
+                        if (std::find(ids.begin(), ids.end(), cfg.init_identifier) == ids.end())
+                            ids.push_back(cfg.init_identifier);
+                    }
+                    std::sort(ids.begin(), ids.end());
+
+                    for (const auto& id : ids)
+                    {
+                        for (const auto& [pin_name, cfg] : lc->get_output_pin_configs())
+                        {
+                            if (cfg.init_identifier == id)
+                            {
+                                auto res = lc->get_init_string(g, pin_name);
+                                if (res.is_error())
+                                {
+                                    return ERR_APPEND(res.get_error(),
+                                                      "unable to re-synthesize gates of type: failed to get INIT string from gate '" + g->get_name() + "' with ID "
+                                                          + std::to_string(g->get_id()));
+                                }
+                                init_data.push_back(res.get());
+                                break;
+                            }
+                        }
+                    }
+
+                    if (init_data.size() != 1)
+                    {
+                        return ERR("unable to re-synthesize gates of type: got " + std::to_string(init_data.size()) + " INIT strings for gate '" + g->get_name() + "' with ID "
+                                   + std::to_string(g->get_id()));
+                    }
                 }
 
                 // get resynth netlist from cache or create it

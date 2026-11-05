@@ -63,12 +63,12 @@ namespace hal
         virtual ~UserAction();
 
         /**
-        * Executes user interaction and returns true on success.
+        * Executes user interaction and returns `true` on success.
         * Note: Each implementation of exec() must include a call to the exec()
         * method of base class to store the UserAction object in history and
         * to transfer its ownership.
         *
-        * @return True on success, False otherwise.
+        * @return `true` on success, `false` otherwise.
         */
         virtual bool exec();
 
@@ -145,7 +145,7 @@ namespace hal
         virtual void addToHash(QCryptographicHash& cryptoHash) const;
 
         /**
-         * Get the action to reverse last action (nullptr if action cant be undone).
+         * Get the action to reverse last action (`nullptr` if action cant be undone).
          *
          * @return The reverse action.
          */
@@ -174,7 +174,7 @@ namespace hal
 
         /**
          * Executing this action will modify the project thus a warning pops up when leaving hal without saving.
-         * @return True if executing the action will modify the project, false otherwise.
+         * @return `true` if executing the action will modify the project, `false` otherwise.
          */
         bool hasProjectModified() const { return mProjectModified; }
 

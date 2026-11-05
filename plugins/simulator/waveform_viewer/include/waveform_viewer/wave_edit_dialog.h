@@ -34,6 +34,9 @@
 
 namespace hal {
 
+    /**
+     * The item model behind the waveform editor, i.e., the list of time stamps and values of a single waveform.
+     */
     class WaveEditTable : public QAbstractTableModel
     {
         friend class WaveEditDialog;
@@ -54,6 +57,9 @@ namespace hal {
         void removeRow(int irow);
     };
 
+    /**
+     * Renders the delete button that removes a single transition from the edited waveform.
+     */
     class WaveDeleteDelegate : public QStyledItemDelegate
     {
         Q_OBJECT
@@ -75,6 +81,9 @@ namespace hal {
             void deleteClicked();
     };
 
+    /**
+     * The dialog in which the transitions of an input waveform are edited by hand.
+     */
     class WaveEditDialog : public QDialog
     {
         Q_OBJECT

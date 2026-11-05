@@ -35,6 +35,7 @@ class QFileSystemWatcher;
 
 namespace hal
 {
+    class GateLibrary;
     class SettingsItemCheckbox;
     class SettingsItemSpinbox;
    /**
@@ -66,7 +67,7 @@ namespace hal
         /**
          * Get the status if a file is currently open or not.
          *
-         * @return True when a file is open.
+         * @return `true` when a file is open, `false` otherwise.
          */
         bool fileOpen() const;
 
@@ -106,6 +107,14 @@ namespace hal
          * @return Text for status message or message box.
          */
         static QString directoryStatusText(DirectoryStatus stat);
+
+        /**
+         * Loads a gate library. If the file format is outdated, the user is asked whether the file should be upgraded,
+         * in which case the original file is kept with extension .json and the upgraded file gets loaded.
+         * @param path - the path of the gate library file
+         * @return The gate library or nullptr if it could not be loaded.
+         */
+        static GateLibrary* loadGateLibrary(const QString& path);
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted when a file is successfully opened.
@@ -162,7 +171,7 @@ namespace hal
          * Opens the given filename. It handles the initialization and deserialization process of the netlists as well
          * as the shadowfile logic in an automated fashion.
          *
-         * @param fileName - The file to be opened.
+         * @param filename - The file to be opened.
          * @param gatelibraryPath - Path to gate library, auto detection if empty
          */
         bool deprecatedOpenFile(QString filename, QString gatelibraryPath);

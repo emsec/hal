@@ -32,6 +32,9 @@
 
 namespace hal
 {
+    /**
+     * A line edit with an attached browse button that lets the user pick a file or directory.
+     */
     class FileSelectWidget : public QFrame
     {
         Q_OBJECT
@@ -52,6 +55,9 @@ namespace hal
        QString selection() const { return mEditor->text(); }
     };
 
+    /**
+     * The dialog in which the user picks the project archive to import and the directory to extract it to.
+     */
     class ImportProjectDialog : public QDialog
     {
         Q_OBJECT

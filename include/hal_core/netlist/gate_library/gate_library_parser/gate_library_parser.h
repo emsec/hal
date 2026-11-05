@@ -42,8 +42,25 @@ namespace hal
     class NETLIST_API GateLibraryParser
     {
     public:
-        GateLibraryParser()          = default;
-        virtual ~GateLibraryParser() = default;
+        /**
+         * The outcome of the most recent parse as reported by the parser.
+         */
+        enum class ParseStatus
+        {
+            NoError,         ///< The gate library was parsed successfully.
+            NeedsUpgrade,    ///< The file format is outdated, it gets upgraded by parsing it again after `request_upgrade`.
+            UnknownError     ///< Parsing failed for any other reason, or the parser does not report its status.
+        };
+
+        /**
+         * Sets the parse status to `UnknownError` until the parser reports otherwise.
+         */
+        GateLibraryParser();
+
+        /**
+         * Withdraws a pending upgrade request, so that it applies to a single parse only.
+         */
+        virtual ~GateLibraryParser();
 
         /**
          * Parses the gate library definition file.
@@ -52,5 +69,38 @@ namespace hal
          * @returns The gate library on success, an error otherwise.
          */
         virtual Result<std::unique_ptr<GateLibrary>> parse(const std::filesystem::path& file_path) = 0;
+
+        /**
+         * Get the outcome of the most recent parse, e.g., to find out why loading a gate library failed.
+         *
+         * If loading fails before any parser is involved, e.g., because the file does not exist, the status still refers
+         * to an earlier parse.
+         *
+         * @returns The parse status.
+         */
+        static ParseStatus get_parse_status();
+
+        /**
+         * Allow the next parse to upgrade a gate library file in an outdated format.
+         *
+         * The upgrade replaces the file, so it must only be requested with the consent of the user. The request applies
+         * to the next parse only and is withdrawn once that parse is done.
+         */
+        static void request_upgrade();
+
+    protected:
+        /**
+         * Report the outcome of the current parse.
+         *
+         * @param[in] status - The parse status.
+         */
+        static void set_parse_status(ParseStatus status);
+
+        /**
+         * Check whether the current parse may upgrade a gate library file in an outdated format.
+         *
+         * @returns `true` if an upgrade was requested, `false` otherwise.
+         */
+        static bool is_upgrade_requested();
     };
 }    // namespace hal

@@ -25,7 +25,6 @@
 
 #pragma once
 
-#include "hal_core/defines.h"
 
 #include <QAction>
 #include <QFrame>
@@ -33,7 +32,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include "gui/pin_model/pin_proxy_model.h"
-#include "hgl_writer/include/hgl_writer/hgl_writer.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
 
 namespace hal
 {
@@ -42,6 +41,9 @@ namespace hal
     class Toolbar;
     class Searchbar;
 
+    /**
+     * The left-hand side of the gate library manager, which lists the gate types and lets the user filter them.
+     */
     class GatelibraryContentWidget : public QFrame
     {
         Q_OBJECT
@@ -155,5 +157,7 @@ namespace hal
         std::filesystem::path mPath;
         QString mTitle;
         bool mCreationMode;
+
+        bool initialize(GateLibrary* gateLibrary, bool readOnly); // only callable from friend
     };
 }

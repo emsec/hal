@@ -41,7 +41,7 @@ namespace hal
             if (lines[iline].isEmpty()) continue;
             QFontMetricsF fmf(sTextFont[iline]);
             mNodeText[iline] = lines[iline];
-            qreal textWidth = fmf.width(mNodeText[iline]);
+            qreal textWidth = fmf.horizontalAdvance(mNodeText[iline]);
             if (init)
             {
                 if (textWidth > mMaxTextWidth)
@@ -55,7 +55,7 @@ namespace hal
                     while (!mNodeText[iline].isEmpty() && textWidth > mMaxTextWidth)
                     {
                         shorter.chop(1);
-                        textWidth = fmf.width(shorter + "…");
+                        textWidth = fmf.horizontalAdvance(shorter + "…");
                     }
                     mNodeText[iline] = shorter + "…";
                 }
@@ -69,7 +69,7 @@ namespace hal
         for (int iline=0; iline<3; iline++)
         {
             QFontMetricsF fmf(sTextFont[iline]);
-            qreal textWidth = fmf.width(mNodeText[iline]);
+            qreal textWidth = fmf.horizontalAdvance(mNodeText[iline]);
             y0 += sTextFontHeight[iline];
             mTextPosition[iline].setX(mWidth / 2 - textWidth / 2);
             mTextPosition[iline].setY(y0);

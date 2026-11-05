@@ -43,6 +43,9 @@ namespace hal {
     class WaveTransform;
     class WaveDataProvider;
 
+    /**
+     * A time interval given by its center and its duration.
+     */
     class TimeInterval
     {
     public:
@@ -52,6 +55,9 @@ namespace hal {
         bool operator<(const TimeInterval& other) const;
     };
 
+    /**
+     * The list of drawing primitives that make up one rendered waveform, together with the zoom level they are valid for.
+     */
     class WaveFormPainted
     {
         QList<WaveFormPrimitive*> mPrimitives;

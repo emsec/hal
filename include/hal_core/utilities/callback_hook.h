@@ -36,10 +36,18 @@
 
 namespace hal
 {
+    /**
+     * Manages a set of callback functions that are all invoked with the same arguments.
+     *
+     * @ingroup utilities
+     */
     template<class>
     class CallbackHook;
 
     /**
+     * Manages a set of callback functions that are all invoked with the same arguments.
+     * Each callback is identified by an ID or a name so that it can be removed again later on.
+     *
      * @ingroup utilities
      */
     template<class R, class... ArgTypes>
@@ -178,7 +186,7 @@ namespace hal
          * Check whether a callback function is registered for a given id.
          *
          * @param[in] id - The id of the callback function.
-         * @returns True, if the callback function is registered.
+         * @returns `true`, if the callback function is registered, `false` otherwise.
          */
         bool is_callback_registered(const u64 id)
         {
@@ -189,7 +197,7 @@ namespace hal
          * Check whether a callback function is registered for a given string identifier.
          *
          * @param[in] name - The identifier of the callback function.
-         * @returns True, if the callback function is registered.
+         * @returns `true`, if the callback function is registered, `false` otherwise.
          */
         bool is_callback_registered(const std::string& name)
         {

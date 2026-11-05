@@ -54,7 +54,7 @@ namespace hal
          * @param source_row - The index's row.
          * @param source_parent - The index's parent.
          *
-         * @return True if it should be displayed, False otherwise.
+         * @return `true` if it should be displayed, `false` otherwise.
          */
         bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 
@@ -64,8 +64,8 @@ namespace hal
          * Sets the proxy model's filter to the given string
          * and sets the searchOptions.
          *
-         * @param filter_text - The new filter string.
-         * @param SearchOptions_bitmask - SearchOptions.
+         * @param text - The new filter string.
+         * @param options - The search options as a bitmask.
          */
         void startSearch(QString text, int options) override;
 

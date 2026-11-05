@@ -72,6 +72,7 @@ namespace hal
          * Emits the signal contextCreated.
          *
          * @param name - The name of the new context. Names don't have to be unique.
+         * @param parentId - The id of the directory the context is created in. Defaults to `0`, i.e., the root directory.
          * @returns the created GraphContext
          */
         GraphContext* createNewContext(const QString& name, u32 parentId = 0);
@@ -83,14 +84,14 @@ namespace hal
          * and opens it.
          *
          * @param moduleId - The module to open.
-         * @param unfold - True to unfold the module upon opening.
+         * @param unfold - `true` to unfold the module upon opening.
          */
         void openModuleInView(u32 moduleId, bool unfold);
 
         /**
          * Creates and opens a new view that contains the given gate.
          *
-         * @param netId - The gate to open.
+         * @param gateId - The gate to open.
          */
         void openGateInView(u32 gateId);
 
@@ -105,7 +106,7 @@ namespace hal
          * Renames a GraphContext. <br>
          * Emits the signal contextRenamed.
          *
-         * @param ctx - The graph context to rename. Must not be a <i>nullptr</i>.
+         * @param ctx - The graph context to rename. Must not be a `nullptr`.
          * @param newName - The new name of the context
          */
         void renameGraphContextAction(GraphContext* ctx, const QString& newName);
@@ -114,14 +115,14 @@ namespace hal
          * Renames a contextDirectory. <br>
          * Emits the signal directoryRenamed.
          *
-         * @param ctxDir - The contextDirectory to rename. Must not be a <i>nullptr</i>.
+         * @param ctxDir - The contextDirectory to rename. Must not be a `nullptr`.
          * @param newName - The new name of the directory
          */
         void renameContextDirectoryAction(ContextDirectory* ctxDir, const QString& newName);
 
 
         /**
-         * Removes and deletes the given GraphContext. The passed pointer will be a <i>nullptr</i> afterwards.<br>
+         * Removes and deletes the given GraphContext. The passed pointer will be a `nullptr` afterwards.<br>
          * Emits deletingContext before the deletion.
          *
          * @param ctx - The graph context to delete.
@@ -129,7 +130,7 @@ namespace hal
         void deleteGraphContext(GraphContext* ctx);
 
         /**
-         * Removes and deletes the given ContextDiretory. The passed pointer will be a <i>nullptr</i> afterwards.<br>
+         * Removes and deletes the given ContextDiretory. The passed pointer will be a `nullptr` afterwards.<br>
          *
          * @param ctxDir - The ContextDirectory to delete.
          */
@@ -154,7 +155,7 @@ namespace hal
         /**
          * Gets the context which is exclusively showing the module with the id module_id.
          *
-         * @returns a context exclusively showing the module with id module_id or <i>nullptr</i>.%s.
+         * @returns a context exclusively showing the module with id module_id or `nullptr`.%s.
          */
         GraphContext* getContextByExclusiveModuleId(u32 module_id) const;
 
@@ -162,7 +163,7 @@ namespace hal
          * Checks if a context with the given name exists.
          *
          * @param name - The context name
-         * @returns <b>true</b> if a context with the name exists
+         * @returns `true` if a context with the name exists, `false` otherwise.
          */
         bool contextWithNameExists(const QString& name) const;
 
@@ -182,7 +183,7 @@ namespace hal
 
         /**
          * Handler to be called after a module has been removed. Used to apply the changes in the affected contexts.<br>
-         * The module is already removed from the netlist at this point. However the module isn't deleted yet (not <i>nullptr</i>).
+         * The module is already removed from the netlist at this point. However the module isn't deleted yet (not `nullptr`).
          *
          * @param m - The module that has been removed
          */
@@ -250,6 +251,8 @@ namespace hal
          * Used to apply the changes in the affected contexts.
          *
          * @param m - The module with the changed port
+         * @param pev - The pin event that describes the change
+         * @param pgid - The id of the affected pin group
          */
         void handleModulePortsChanged(Module* m, PinEvent pev, u32 pgid);
 
@@ -403,9 +406,9 @@ namespace hal
         bool handleSaveTriggered(const QString& filename);
 
         /**
-         * Restores all persisted context from .json file and returns selected one.
-         * @param filename The .json file with persisted context data.
-         * @return Selected restored context or nullptr if restore failed.
+         * Restores all persisted context from `.json` file and returns selected one.
+         * @param filename The `.json` file with persisted context data.
+         * @return Selected restored context or `nullptr` if restore failed.
          */
         GraphContext* restoreFromFile(const QString &filename);
 

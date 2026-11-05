@@ -12,6 +12,7 @@
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/prettywriter.h"
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 
@@ -104,6 +105,58 @@ namespace hal
 
             cell.AddMember("types", bts, allocator);
 
+            // parameters: declared at the gate-type level. Variables in Boolean functions whose
+            // names match a parameter are sized according to the declaration when re-parsed.
+            const auto& parameters = gt->get_parameters();
+            if (!parameters.empty())
+            {
+                rapidjson::Value params_array(rapidjson::kArrayType);
+                for (const auto& [pname, p] : parameters)
+                {
+                    rapidjson::Value entry(rapidjson::kObjectType);
+                    entry.AddMember("name", rapidjson::Value{}.SetString(pname.c_str(), pname.length(), allocator), allocator);
+                    switch (p.get_type())
+                    {
+                        case Parameter::Type::Boolean:
+                            entry.AddMember("type", "boolean", allocator);
+                            break;
+                        case Parameter::Type::BitVector:
+                            entry.AddMember("type", "bit_vector", allocator);
+                            entry.AddMember("size", static_cast<u32>(p.get_size()), allocator);
+                            break;
+                        case Parameter::Type::LogicVector:
+                            entry.AddMember("type", "logic_vector", allocator);
+                            entry.AddMember("size", static_cast<u32>(p.get_size()), allocator);
+                            break;
+                        case Parameter::Type::Integer:
+                            entry.AddMember("type", "integer", allocator);
+                            break;
+                        case Parameter::Type::String:
+                            entry.AddMember("type", "string", allocator);
+                            break;
+                        case Parameter::Type::Float:
+                            entry.AddMember("type", "float", allocator);
+                            break;
+                        case Parameter::Type::Time:
+                            entry.AddMember("type", "time", allocator);
+                            break;
+                        case Parameter::Type::Enum: {
+                            entry.AddMember("type", "enum", allocator);
+                            rapidjson::Value values_array(rapidjson::kArrayType);
+                            for (const auto& v : p.get_enum_values())
+                            {
+                                values_array.PushBack(rapidjson::Value{}.SetString(v.c_str(), v.length(), allocator), allocator);
+                            }
+                            entry.AddMember("values", values_array, allocator);
+                            break;
+                        }
+                    }
+                    entry.AddMember("default", rapidjson::Value{}.SetString(p.get_default_value().c_str(), p.get_default_value().length(), allocator), allocator);
+                    params_array.PushBack(entry, allocator);
+                }
+                cell.AddMember("parameters", params_array, allocator);
+            }
+
             std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
 
             // lut_config, ff_config, latch_config, ram_config
@@ -111,27 +164,33 @@ namespace hal
             {
                 rapidjson::Value lut_config(rapidjson::kObjectType);
 
-                InitComponent* init_component = lut_component->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
-                if (init_component == nullptr)
+                rapidjson::Value output_pins(rapidjson::kArrayType);
+                const auto& pin_configs = lut_component->get_output_pin_configs();
+                for (const GatePin* pin : gt->get_pins([](const GatePin* p) { return p->get_type() == PinType::lut; }))
                 {
-                    log_error("hgl_writer", "missing InitComponent for LUT initialization data of gate type '{}'.", gt->get_name());
-                    return false;
+                    const std::string& pin_name = pin->get_name();
+                    rapidjson::Value entry(rapidjson::kObjectType);
+                    entry.AddMember("pin", rapidjson::Value{}.SetString(pin_name.c_str(), pin_name.length(), allocator), allocator);
+                    const auto it = pin_configs.find(pin_name);
+                    if (it == pin_configs.end())
+                    {
+                        log_error("hgl_writer", "LUT gate type '{}': output pin '{}' has no INIT config — skipping.", gt->get_name(), pin_name);
+                        continue;
+                    }
+                    const auto& cfg = it->second;
+                    entry.AddMember("data_identifier", rapidjson::Value{}.SetString(cfg.init_identifier.c_str(), cfg.init_identifier.length(), allocator), allocator);
+                    entry.AddMember("bit_offset", cfg.bit_offset, allocator);
+                    entry.AddMember("bit_count", cfg.bit_count, allocator);
+                    entry.AddMember("is_ascending", cfg.is_ascending, allocator);
+                    rapidjson::Value input_pins_arr(rapidjson::kArrayType);
+                    for (const auto& ip : cfg.input_pins)
+                    {
+                        input_pins_arr.PushBack(rapidjson::Value{}.SetString(ip.c_str(), ip.length(), allocator), allocator);
+                    }
+                    entry.AddMember("input_pins", input_pins_arr, allocator);
+                    output_pins.PushBack(entry, allocator);
                 }
-
-                // bit_order
-                if (lut_component->is_init_ascending())
-                {
-                    lut_config.AddMember("bit_order", "ascending", allocator);
-                }
-                else
-                {
-                    lut_config.AddMember("bit_order", "descending", allocator);
-                }
-
-                // data_category and data_identifier
-                lut_config.AddMember("data_category", init_component->get_init_category(), allocator);
-                lut_config.AddMember("data_identifier", init_component->get_init_identifiers().front(), allocator);
-
+                lut_config.AddMember("output_pins", output_pins, allocator);
                 cell.AddMember("lut_config", lut_config, allocator);
             }
             else if (FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* c) { return FFComponent::is_class_of(c); }); ff_component != nullptr)
@@ -228,17 +287,8 @@ namespace hal
             {
                 rapidjson::Value ram_config(rapidjson::kObjectType);
 
-                InitComponent* init_component = ram_component->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
-                if (init_component == nullptr)
-                {
-                    return false;
-                }
-
-                // data_category, data_identifier
-                ram_config.AddMember("data_category", init_component->get_init_category(), allocator);
-
                 rapidjson::Value identifiers(rapidjson::kArrayType);
-                for (const std::string& identifier : init_component->get_init_identifiers())
+                for (const std::string& identifier : ram_component->get_init_identifiers())
                 {
                     identifiers.PushBack(rapidjson::Value{}.SetString(identifier.c_str(), identifier.length(), allocator), allocator);
                 }

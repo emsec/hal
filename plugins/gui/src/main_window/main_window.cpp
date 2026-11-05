@@ -41,13 +41,12 @@
 
 #include <QApplication>
 #include <QCloseEvent>
-#include <QDesktopWidget>
 #include <QDir>
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QShortcut>
 #include <QStringList>
 #include <QtConcurrent>
@@ -216,10 +215,11 @@ namespace hal
             if (it.second.empty()) continue; // no extensions registered
 
             QString label = QString::fromStdString(it.first);
-            QRegExp re("Default (.*) Writer", Qt::CaseInsensitive);
-            QString txt = (re.indexIn(label) < 0)
-                    ? label.remove(QChar(':'))
-                    : QString("Export as ") + re.cap(1);
+            QRegularExpression re("Default (.*) Writer", QRegularExpression::CaseInsensitiveOption);
+            QRegularExpressionMatch match = re.match(label);
+            QString txt = (match.hasMatch())
+                    ? QString("Export as ") + match.captured(1)
+                    : label.remove(QChar(':'));
 
             QStringList extensions;
             extensions.append(txt);
@@ -500,7 +500,7 @@ namespace hal
         mDisabledIconStyle = style;
     }
 
-    void MainWindow::addContent(ContentWidget* widget, int index, content_anchor anchor)
+    void MainWindow::addContent(ContentWidget* widget, int index, ContentLayout::Position anchor)
     {
         mLayoutArea->addContent(widget, index, anchor);
     }
@@ -777,6 +777,23 @@ namespace hal
 
     void MainWindow::handleExportProjectTriggered()
     {
+        ProjectManager* pm = ProjectManager::instance();
+        if (pm->get_project_status() == ProjectManager::ProjectStatus::NONE) return;
+        if (gFileStatusManager->modifiedFilesExisting())
+        {
+            switch (QMessageBox::warning(this, "Unsaved Changes", "The HAL project have been modified.\n"
+                                         "You might want to save the changes\n"
+                                         "before exporting the project.",
+                                         "Save",
+                                         "Export without save",
+                                         "Cancel", 0, 2)) {
+                case 2: // Escape
+                    return;
+                case 0:
+                    handleSaveTriggered();
+                    break;
+            }
+        }
         ExportProjectDialog epd(this);
         if (epd.exec() == QDialog::Accepted)
         {
@@ -1029,5 +1046,8 @@ namespace hal
         SettingsManager::instance()->mainWindowSaveGeometry(pos(), size());
     }
 
-
+    ContentLayoutArea* MainWindow::layoutArea() const
+    {
+        return mLayoutArea;
+    }
 }    // namespace hal

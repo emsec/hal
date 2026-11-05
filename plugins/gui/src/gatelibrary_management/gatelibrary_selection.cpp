@@ -77,6 +77,8 @@ namespace hal {
         Q_UNUSED(inx);
         mWarningMsg->clear();
         mWarningMsg->hide();
+        // "(Auto detect)" has no path, so there is no single gate library file that could be copied
+        Q_EMIT gatelibSelected(!gateLibraryPath().isEmpty());
     }
 
     void GateLibrarySelection::handleInvokeFileDialog()

@@ -8,7 +8,6 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <vector>
-#include <map>
 #include <QDialogButtonBox>
 #include <QTableView>
 #include <QDialogButtonBox>
@@ -28,6 +27,9 @@
 
 namespace hal {
 
+    /**
+     * The wizard that guides the user through setting up and running a simulation.
+     */
     class Wizard : public QWizard {
         Q_OBJECT
 
@@ -41,6 +43,9 @@ namespace hal {
         SimulationSettings *mSettings;
     };
 
+    /**
+     * The wizard page on which the simulated gates are selected.
+     */
     class PageSelectGates : public QWizardPage {
         Q_OBJECT
 
@@ -67,6 +72,9 @@ namespace hal {
         void handleCurrentGuiSelection();
     };
 
+    /**
+     * The wizard page on which the clock net and its period are configured.
+     */
     class PageClock : public QWizardPage {
         Q_OBJECT
 
@@ -95,6 +103,9 @@ namespace hal {
         bool dontUseClock() const { return mDontUseClock->isChecked(); }
     };
 
+    /**
+     * The wizard page on which the simulation engine is chosen.
+     */
     class PageEngine : public QWizardPage {
         Q_OBJECT
 
@@ -112,6 +123,9 @@ namespace hal {
         Wizard* m_wizard;
     };
 
+    /**
+     * The wizard page on which the properties of the chosen simulation engine are set.
+     */
     class PageEngineProperties : public QWizardPage {
         Q_OBJECT
 
@@ -131,6 +145,9 @@ namespace hal {
         QStringList mAllItems;
     };
 
+    /**
+     * The wizard page on which the input stimuli are entered or imported.
+     */
     class PageInputData : public QWizardPage {
         Q_OBJECT
 
@@ -143,18 +160,27 @@ namespace hal {
     private Q_SLOTS:
         void handleRadioToggled(bool checked);
         void openFileBrowser();
+        void handleFileImport();
         void updateSubtitle();
 
     private:
         NetlistSimulatorController* mController;
+        QFrame* mFrameFile;
+        QFrame* mFrameTable;
         QLineEdit* mEditFilename;
+        QCheckBox* mDisplayHexValues;
         QPushButton* mButFiledialog;
+        QPushButton* mButFileimport;
         QRadioButton* mRadFile;
         QRadioButton* mRadEditor;
         WavedataTableEditor* mTableEditor;
         bool mDisableToggleHandler;
+        static bool canFileImport(const QString& filename);
     };
 
+    /**
+     * Collects the log output of the running simulation so that the wizard can display it.
+     */
     class SimulationProcessOutput : public SimulationLogReceiver
     {
         Q_OBJECT
@@ -167,6 +193,9 @@ namespace hal {
         QTextEdit* mTextEdit;
     };
 
+    /**
+     * The wizard page that runs the simulation and shows its progress.
+     */
     class PageRunSimulation : public QWizardPage {
         Q_OBJECT
 
@@ -192,6 +221,9 @@ namespace hal {
         QByteArray mLogText;
     };
 
+    /**
+     * The wizard page on which the simulation results are loaded into the waveform viewer.
+     */
     class PageLoadResults : public QWizardPage {
         Q_OBJECT
 

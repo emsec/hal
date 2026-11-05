@@ -6,27 +6,39 @@
 #include "gui/docking_system/tab_widget.h"
 #include "gui/splitter/splitter.h"
 #include "gui/docking_system/content_drag_relay.h"
+#include "gui/settings/settings_manager.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-
 namespace hal
 {
     ContentLayoutArea::ContentLayoutArea(QWidget* parent)
-        : QWidget(parent), mTopLevelLayout(new QVBoxLayout()), mSecondLevelLayout(new QHBoxLayout()), mThirdLevelLayout(new QVBoxLayout()), mFourthLevelLayout(new QHBoxLayout()),
-          mSplitterLayout(new QVBoxLayout()), mCentralLayout(new QHBoxLayout()), mSpacerLayout(new QHBoxLayout()),
+        : QWidget(parent),
+          mTopLevelLayout(new QVBoxLayout()),
+          mSecondLevelLayout(new QHBoxLayout()),
+          mThirdLevelLayout(new QVBoxLayout()),
+          mFourthLevelLayout(new QHBoxLayout()),
+          mSplitterLayout(new QVBoxLayout()),
+          mCentralLayout(new QHBoxLayout()),
+          mSpacerLayout(new QHBoxLayout()),
 
-          mVerticalSplitter(new Splitter(Qt::Vertical, this)), mHorizontalSplitter(new Splitter(Qt::Horizontal, this)), mLeftSplitter(new Splitter(Qt::Vertical, this)),
-          mRightSplitter(new Splitter(Qt::Vertical, this)), mBottomSplitter(new Splitter(Qt::Horizontal, this)),
+          mVerticalSplitter(new Splitter(Qt::Vertical, this)),
+          mHorizontalSplitter(new Splitter(Qt::Horizontal, this)),
+          mLeftSplitter(new Splitter(Qt::Vertical, this)),
+          mRightSplitter(new Splitter(Qt::Vertical, this)),
+          mBottomSplitter(new Splitter(Qt::Horizontal, this)),
 
-          mLeftDock(new DockBar(Qt::Vertical, button_orientation::vertical_up, this)), mRightDock(new DockBar(Qt::Vertical, button_orientation::vertical_down, this)),
+          mLeftDock(new DockBar(Qt::Vertical, button_orientation::vertical_up, this)),
+          mRightDock(new DockBar(Qt::Vertical, button_orientation::vertical_down, this)),
           mBottomDock(new DockBar(Qt::Horizontal, button_orientation::horizontal, this)),
 
-          mBottomContainer(new QWidget(this)), mLeftSpacer(new QFrame(this)), mRightSpacer(new QFrame(this)),
+          mBottomContainer(new QWidget(this)), mLeftSpacer(new QFrame(this)),
+          mRightSpacer(new QFrame(this)),
 
-          mLeftAnchor(new SplitterAnchor(mLeftDock, mLeftSplitter, this)), mRightAnchor(new SplitterAnchor(mRightDock, mRightSplitter, this)),
-          mBottomAnchor(new SplitterAnchor(mBottomDock, mBottomSplitter, this)),
+          mLeftAnchor(new SplitterAnchor(ContentLayout::Position::Left, mLeftDock, mLeftSplitter, this)),
+          mRightAnchor(new SplitterAnchor(ContentLayout::Position::Right, mRightDock, mRightSplitter, this)),
+          mBottomAnchor(new SplitterAnchor(ContentLayout::Position::Bottom, mBottomDock, mBottomSplitter, this)),
 
           mTabWidget(new TabWidget(this))
     {
@@ -108,21 +120,21 @@ namespace hal
         mHorizontalSplitter->addWidget(mRightSplitter);
     }
 
-    void ContentLayoutArea::addContent(ContentWidget* widget, int index, content_anchor anchor)
+    void ContentLayoutArea::addContent(ContentWidget* widget, int index, ContentLayout::Position anchor)
     {
         int maxIndex = 0;
         switch (anchor)
         {
-            case content_anchor::center:
+            case ContentLayout::Position::Center:
                 maxIndex = mTabWidget->count();
                 break;
-            case content_anchor::left:
+            case ContentLayout::Position::Left:
                 maxIndex = mLeftAnchor->count();
                 break;
-            case content_anchor::right:
+            case ContentLayout::Position::Right:
                 maxIndex = mRightAnchor->count();
                 break;
-            case content_anchor::bottom:
+            case ContentLayout::Position::Bottom:
                 maxIndex = mBottomAnchor->count();
                 break;
         }
@@ -136,16 +148,16 @@ namespace hal
 
         switch (anchor)
         {
-            case content_anchor::center:
+            case ContentLayout::Position::Center:
                 mTabWidget->add(widget, index);
                 break;
-            case content_anchor::left:
+            case ContentLayout::Position::Left:
                 mLeftAnchor->add(widget, index);
                 break;
-            case content_anchor::right:
+            case ContentLayout::Position::Right:
                 mRightAnchor->add(widget, index);
                 break;
-            case content_anchor::bottom:
+            case ContentLayout::Position::Bottom:
                 mBottomAnchor->add(widget, index);
                 break;
         }
@@ -158,6 +170,7 @@ namespace hal
 
     void ContentLayoutArea::clear()
     {
+        saveState();
         mTabWidget->clear();
         mLeftAnchor->clear();
         mRightAnchor->clear();
@@ -226,5 +239,27 @@ namespace hal
     {
         if(mWasBottomContainerHidden && mBottomDock->count() == 0)
             mBottomContainer->hide();
+    }
+
+    void ContentLayoutArea::saveState() const
+    {
+        mLeftAnchor->saveState();
+        mRightAnchor->saveState();
+        mBottomAnchor->saveState();
+        mTabWidget->saveState();
+        SettingsManager::instance()->saveSplitterState("vertical",   mVerticalSplitter);
+        SettingsManager::instance()->saveSplitterState("horizontal", mHorizontalSplitter);
+        SettingsManager::instance()->saveSplitterState("left",       mLeftSplitter);
+        SettingsManager::instance()->saveSplitterState("right",      mRightSplitter);
+        SettingsManager::instance()->saveSplitterState("bottom",     mBottomSplitter);
+    }
+
+    void ContentLayoutArea::restoreSplitter()
+    {
+        SettingsManager::instance()->restoreSplitterState("vertical",   mVerticalSplitter);
+        SettingsManager::instance()->restoreSplitterState("horizontal", mHorizontalSplitter);
+        SettingsManager::instance()->restoreSplitterState("left",       mLeftSplitter);
+        SettingsManager::instance()->restoreSplitterState("right",      mRightSplitter);
+        SettingsManager::instance()->restoreSplitterState("bottom",     mBottomSplitter);
     }
 }

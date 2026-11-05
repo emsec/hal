@@ -26,7 +26,7 @@
 #pragma once
 #include "gui/action/action.h"
 #include <QString>
-
+#include <QWidget>
 
 namespace hal {
     class MainWindow;
@@ -34,6 +34,9 @@ namespace hal {
     class GuiPluginManager;
     class SettingsItemKeybind;
 
+    /**
+     * The file-related actions of the main window, e.g., open, save, and close, together with their enabled state.
+     */
     class FileActions : public QWidget
     {
         Q_OBJECT
@@ -74,7 +77,8 @@ namespace hal {
         SettingsItemKeybind* mSettingSaveFile;
 
     public Q_SLOTS:
-        void handleFileStatusChanged(bool gateLibrary, bool isDirty);
+        void handleFileStatusChanged(bool gateLibraryAffected, bool isDirty);
+        void handleFileOpenChanged(bool gateLibraryAffected, bool isOpen);
 
     public:
         FileActions(QWidget* parent = nullptr);

@@ -14,9 +14,9 @@ namespace hal
     {
         namespace
         {
-            std::map<std::filesystem::path, std::unique_ptr<GateLibrary>> m_gate_libraries;
+            std::map<std::filesystem::path, std::shared_ptr<GateLibrary>> m_gate_libraries;
 
-            Result<std::monostate> prepare_library(const std::unique_ptr<GateLibrary>& lib)
+            Result<std::monostate> prepare_library(const std::shared_ptr<GateLibrary>& lib)
             {
                 auto gate_types = lib->get_gate_types();
 
@@ -94,7 +94,7 @@ namespace hal
                 }
             }
 
-            std::unique_ptr<GateLibrary> gate_lib = gate_library_parser_manager::parse(file_path);
+            std::shared_ptr<GateLibrary> gate_lib = gate_library_parser_manager::parse(file_path);
             if (gate_lib == nullptr)
             {
                 return nullptr;
@@ -165,6 +165,24 @@ namespace hal
             }
 
             return gate_library_writer_manager::write(gate_lib, file_path);
+        }
+
+        std::shared_ptr<GateLibrary> get_owning(const GateLibrary* gate_lib)
+        {
+            // A reload replaces the entry of a library in the map, which destroys the library that was
+            // there before. Anything still using it - a loaded netlist above all - has to keep it alive,
+            // so hand out the owning pointer rather than the raw one.
+            for (const auto& [path, lib] : m_gate_libraries)
+            {
+                UNUSED(path);
+                if (lib.get() == gate_lib)
+                {
+                    return lib;
+                }
+            }
+
+            // not managed here, for instance a library a test built itself: refer to it without owning it
+            return std::shared_ptr<GateLibrary>(const_cast<GateLibrary*>(gate_lib), [](GateLibrary*) {});
         }
 
         void remove(std::filesystem::path file_path)

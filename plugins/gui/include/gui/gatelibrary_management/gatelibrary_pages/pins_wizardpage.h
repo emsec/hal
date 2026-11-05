@@ -36,6 +36,9 @@
 
 namespace hal {
     class GateLibraryWizard;
+    /**
+     * The wizard page on which the pins and pin groups of the gate type are defined.
+     */
     class PinsWizardPage:public QWizardPage{
         Q_OBJECT
     public:

@@ -37,6 +37,7 @@
 #include <memory>
 #include <set>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace hal
@@ -62,7 +63,7 @@ namespace hal
          * Does not check for connected nets or containing module.
          *
          * @param[in] other - The gate to compare against.
-         * @returns True if both gates are equal, false otherwise.
+         * @returns `true` if both gates are equal, `false` otherwise.
          */
         bool operator==(const Gate& other) const;
 
@@ -71,7 +72,7 @@ namespace hal
          * Does not check for connected nets or containing module.
          *
          * @param[in] other - The gate to compare against.
-         * @returns True if both gates are unequal, false otherwise.
+         * @returns `true` if both gates are unequal, `false` otherwise.
          */
         bool operator!=(const Gate& other) const;
 
@@ -120,7 +121,7 @@ namespace hal
         /**
          * Check whether the gate's location in the layout is available.
          *
-         * @returns True if valid location data is available, false otherwise.
+         * @returns `true` if valid location data is available, `false` otherwise.
          */
         bool has_location() const;
 
@@ -182,7 +183,7 @@ namespace hal
 
         /**
          * Get all modules that contain this gate, either directly or as parent of another module.
-         * If `recursive` is set to true, indirect parent modules are also included. Otherwise, only the module containing the gate directly is returned.<br>
+         * If `recursive` is set to `true`, indirect parent modules are also included. Otherwise, only the module containing the gate directly is returned.<br>
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
          * @param[in] filter - An optional filter.
@@ -193,32 +194,85 @@ namespace hal
 
         /**
          * Gets the grouping in which this gate is contained.<br>
-         * If no grouping contains this gate, a nullptr is returned.
+         * If no grouping contains this gate, a `nullptr` is returned.
          *
          * @returns The grouping.
          */
         Grouping* get_grouping() const;
 
         /**
-         * Get the Boolean function specified by the given name.
-         * This name can for example be an output pin of the gate or any other user-defined function name.
+         * Get the raw Boolean function specified by the given name without inlining or net substitution.
+         * This name can for example be an `output` pin of the gate or any other user-defined function name.
+         * For full control over inlining and net substitution use the `Result`-returning overload.
          *
-         * @param[in] name - The name.
+         * @param[in] name - The name. If empty, the first output pin is used.
          * @returns The Boolean function on success, an empty Boolean function otherwise.
          */
         BooleanFunction get_boolean_function(const std::string& name) const;
 
         /**
-          * Get the Boolean function corresponding to the given output pin.
-          * If `pin` is a `nullptr`, the Boolean function of the first output pin is returned.
-          *
-          * @param[in] pin - The pin.
-          * @returns The Boolean function on success, an empty Boolean function otherwise.
+         * Get the Boolean function specified by the given name, with full error reporting.
+         * When `inlined` is `true`, `internal` and `output` pin variables are recursively substituted with
+         * their definitions, and any gate-instance parameter values are reduced.
+         * When `substitute_nets` is `true`, the remaining input pin variables are additionally substituted
+         * with variable names derived from the fan-in nets using `BooleanFunctionNetDecorator`.
+         * `substitute_nets` requires `inlined` to be `true`; passing `substitute_nets=true` with `inlined=false` returns an error.
+         *
+         * @param[in] name - The name. Must not be empty.
+         * @param[in] inlined - Set `true` to inline `internal` and `output` pins and reduce parameter-conditional expressions.
+         * @param[in] substitute_nets - Set `true` to substitute input pin variables with fan-in net variables. Requires `inlined=true` and every input pin to have a connected net.
+         * @returns The Boolean function on success, an error otherwise.
+         */
+        Result<BooleanFunction> get_boolean_function(const std::string& name, bool inlined, bool substitute_nets) const;
+
+        /**
+         * Get the raw Boolean function corresponding to the given `output` pin without inlining or net substitution.
+         * If `pin` is a `nullptr`, the Boolean function of the first `output` pin is returned.
+         * For full control over inlining and net substitution use the `Result`-returning overload.
+         *
+         * @param[in] pin - The pin.
+         * @returns The Boolean function on success, an empty Boolean function otherwise.
          */
         BooleanFunction get_boolean_function(const GatePin* pin = nullptr) const;
 
         /**
-         * Get a map from function name to Boolean function for all boolean functions associated with this gate.
+         * Get the Boolean function corresponding to the given `output` pin, with full error reporting.
+         * When `inlined` is `true`, `internal` and `output` pin variables are recursively substituted with
+         * their definitions, and any gate-instance parameter values are reduced.
+         * When `substitute_nets` is `true`, the remaining input pin variables are additionally substituted
+         * with variable names derived from the fan-in nets using `BooleanFunctionNetDecorator`.
+         * `substitute_nets` requires `inlined` to be `true`; passing `substitute_nets=true` with `inlined=false` returns an error. Returns an error if `pin` is `nullptr`.
+         *
+         * @param[in] pin - The output pin.
+         * @param[in] inlined - Set `true` to inline `internal` and `output` pins and reduce parameter-conditional expressions.
+         * @param[in] substitute_nets - Set `true` to substitute input pin variables with fan-in net variables. Requires every input pin to have a connected net.
+         * @returns The Boolean function on success, an error otherwise.
+         */
+        Result<BooleanFunction> get_boolean_function(const GatePin* pin, bool inlined, bool substitute_nets) const;
+
+        /**
+         * Check whether the gate has a Boolean function with the given name, i.e., whether `get_boolean_function` finds one.
+         * This name can for example be an output pin of the gate or any other user-defined function name.
+         * Every LUT output pin has a Boolean function, even if the LUT is not configured.
+         *
+         * @param[in] name - The name.
+         * @returns `true` if the gate has a Boolean function with that name, `false` otherwise.
+         */
+        bool has_boolean_function(const std::string& name) const;
+
+        /**
+         * Check whether the gate has a Boolean function for the given output pin, i.e., whether `get_boolean_function` finds one.
+         * If `pin` is a `nullptr`, the first output pin is checked.
+         * Every LUT output pin has a Boolean function, even if the LUT is not configured.
+         *
+         * @param[in] pin - The pin.
+         * @returns `true` if the gate has a Boolean function for the pin, `false` otherwise.
+         */
+        bool has_boolean_function(const GatePin* pin) const;
+
+        /**
+         * Get a map from function name to raw Boolean function for all boolean functions associated with this gate.
+         * For full control over inlining and net substitution use the `Result`-returning overload.
          *
          * @param[in] only_custom_functions - Set `true` to get only Boolean functions that are local to the gate, `false` otherwise.
          * @returns A map from function name to function on success, an empty map otherwise.
@@ -226,14 +280,19 @@ namespace hal
         std::unordered_map<std::string, BooleanFunction> get_boolean_functions(bool only_custom_functions = false) const;
 
         /**
-          * Get the resolved Boolean function corresponding to the given output pin, i.e., a Boolean function that only depends on input pins (or nets) and no internal or output pins.
-          * If fan-in nets are used to derive variable names, the variable names are generated using the `BooleanFunctionNetDecorator`.
-          *
-          * @param[in] pin - The output pin.
-          * @param[in] use_net_variables - Set `true` to use variable names derived from fan-in nets of the gate, `false` to use input pin names instead. Defaults to `false`.
-          * @returns The Boolean function on success, an error otherwise.
-          */
-        Result<BooleanFunction> get_resolved_boolean_function(const GatePin* pin, const bool use_net_variables = false) const;
+         * Get a map from function name to Boolean function for all boolean functions associated with this gate, with full error reporting.
+         * When `inlined` is `true`, `internal` and `output` pin variables are recursively substituted with their definitions and
+         * gate-instance parameter values are reduced.
+         * When `substitute_nets` is `true`, the remaining input pin variables are additionally substituted with variable names derived
+         * from the fan-in nets using `BooleanFunctionNetDecorator`. `substitute_nets` requires `inlined` to be `true`.
+         * Aborts and returns an error on the first failure.
+         *
+         * @param[in] only_custom_functions - Set `true` to get only Boolean functions that are local to the gate, `false` otherwise.
+         * @param[in] inlined - Set `true` to inline `internal` and `output` pins and reduce parameter-conditional expressions.
+         * @param[in] substitute_nets - Set `true` to substitute input pin variables with fan-in net variables. Requires `inlined=true` and every input pin to have a connected net.
+         * @returns A map from function name to function on success, an error otherwise.
+         */
+        Result<std::unordered_map<std::string, BooleanFunction>> get_boolean_functions(bool only_custom_functions, bool inlined, bool substitute_nets) const;
 
         /**
          * Add a Boolean function with the given name to the gate.
@@ -246,42 +305,42 @@ namespace hal
         /**
          * Mark this gate as a global vcc gate.
          *
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool mark_vcc_gate();
 
         /**
          * Mark this gate as a global gnd gate.
          *
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool mark_gnd_gate();
 
         /**
          * Unmark this gate as a global vcc gate.
          *
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool unmark_vcc_gate();
 
         /**
          * Unmark this gate as a global gnd gate.
          *
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool unmark_gnd_gate();
 
         /**
          * Checks whether this gate is a global vcc gate.
          *
-         * @returns True if the gate is a global vcc gate.
+         * @returns `true` if the gate is a global vcc gate, `false` otherwise.
          */
         bool is_vcc_gate() const;
 
         /**
          * Checks whether this gate is a global gnd gate.
          *
-         * @returns True if the gate is a global gnd gate.
+         * @returns `true` if the gate is a global gnd gate, `false` otherwise.
          */
         bool is_gnd_gate() const;
 
@@ -317,7 +376,7 @@ namespace hal
          * Get the fan-in net corresponding to the specified input pin.
          *
          * @param[in] pin - The input pin.
-         * @returns The fan-in net on success, a nullptr otherwise.
+         * @returns The fan-in net on success, a `nullptr` otherwise.
          */
         Net* get_fan_in_net(const GatePin* pin) const;
 
@@ -397,7 +456,7 @@ namespace hal
          * Get the fan-out net corresponding to the specified output pin.
          *
          * @param[in] pin - The output pin.
-         * @returns The fan-out net on success, a nullptr otherwise.
+         * @returns The fan-out net on success, a `nullptr` otherwise.
          */
         Net* get_fan_out_net(const GatePin* pin) const;
 
@@ -434,7 +493,7 @@ namespace hal
         Endpoint* get_fan_out_endpoint(const std::string& pin_name) const;
 
         /**
-         * Get the fan-out endpoint corresponding to the specified input pin.
+         * Get the fan-out endpoint corresponding to the specified output pin.
          *
          * @param[in] pin - The output pin.
          * @returns The endpoint on success, a `nullptr` otherwise.
@@ -521,23 +580,6 @@ namespace hal
          */
         Endpoint* get_successor(const GatePin* pin) const;
 
-        /**
-         * Get the INIT data of the gate, if available. 
-         * An error is returned in case the gate does not hold any INIT data.
-         * 
-         * @return The INIT data as a vector on success, an error message otherwise.
-         */
-        Result<std::vector<std::string>> get_init_data() const;
-
-        /**
-         * Set the INIT data of the gate, if available. 
-         * An error is returned in case the gate does not hold any INIT data.
-         * 
-         * @param[in] init_data - The INIT data as a vector.
-         * @returns Ok on success, an error message otherwise.
-         */
-        Result<std::monostate> set_init_data(const std::vector<std::string>& init_data);
-
     private:
         friend class NetlistInternalManager;
         Gate(NetlistInternalManager* mgr, EventHandler* event_handler, u32 id, GateType* gt, const std::string& name, i32 x, i32 y);
@@ -548,6 +590,8 @@ namespace hal
         Gate& operator=(Gate&&)      = delete;
 
         BooleanFunction get_lut_function(const GatePin* pin) const;
+
+        Result<BooleanFunction> get_inlined_boolean_function(BooleanFunction bf, std::unordered_set<std::string>& on_stack) const;
 
         /* pointer to corresponding netlist parent */
         NetlistInternalManager* m_internal_manager;

@@ -10,6 +10,7 @@
 
 #include <fstream>
 #include <iomanip>
+#include <numeric>
 #include <queue>
 
 namespace hal
@@ -41,6 +42,25 @@ namespace hal
                 }
             }
             return true;
+        }
+
+        // Strict double parse: must consume the full string (no trailing junk).
+        bool is_double_strict(const std::string& s)
+        {
+            if (s.empty())
+            {
+                return false;
+            }
+            try
+            {
+                size_t idx;
+                std::stod(s, &idx);
+                return idx == s.size();
+            }
+            catch (...)
+            {
+                return false;
+            }
         }
     }    // namespace
 
@@ -95,35 +115,44 @@ namespace hal
             // expand port identifiers
             for (const auto& port : verilog_module->m_ports)
             {
-                if (port->m_expression == port->m_identifier)
+                const bool stands_for_one_signal = port->m_expression_parts.size() == 1 && std::holds_alternative<identifier_t>(port->m_expression_parts.front());
+                if (!stands_for_one_signal)
                 {
-                    if (!port->m_ranges.empty())
+                    // the width of the port is the width of its expression, whose signals are declared by now
+                    const std::vector<std::string> expanded_expression = expand_assignment_expression(verilog_module, port->m_expression_parts);
+                    if (expanded_expression.empty())
                     {
-                        port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
+                        return ERR("could not parse Verilog file '" + m_path.string() + "': unable to expand the expression of port '" + port->m_identifier + "' of module '" + verilog_module->m_name + "'");
+                    }
+                    if (expanded_expression.size() == 1)
+                    {
+                        port->m_expanded_identifiers = {port->m_identifier};
                     }
                     else
                     {
-                        port->m_expanded_identifiers = {port->m_identifier};
+                        std::vector<u32> range(expanded_expression.size());
+                        std::iota(range.begin(), range.end(), 0);
+                        port->m_ranges               = {range};
+                        port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
+                    }
+                    for (u32 i = 0; i < expanded_expression.size(); i++)
+                    {
+                        verilog_module->m_expanded_port_identifiers_to_expressions[port->m_expanded_identifiers.at(i)] = expanded_expression.at(i);
+                    }
+                }
+                else if (const identifier_t& signal = std::get<identifier_t>(port->m_expression_parts.front()); signal != port->m_identifier)
+                {
+                    // the port stands for one whole signal of another name, bit for bit
+                    port->m_expanded_identifiers = port->m_ranges.empty() ? std::vector<std::string>{port->m_identifier} : expand_ranges(port->m_identifier, port->m_ranges);
+                    const std::vector<std::string> expanded_expression = port->m_ranges.empty() ? std::vector<std::string>{signal} : expand_ranges(signal, port->m_ranges);
+                    for (u32 i = 0; i < expanded_expression.size(); i++)
+                    {
+                        verilog_module->m_expanded_port_identifiers_to_expressions[port->m_expanded_identifiers.at(i)] = expanded_expression.at(i);
                     }
                 }
                 else
                 {
-                    if (!port->m_ranges.empty())
-                    {
-                        port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
-                        auto expanded_expression     = expand_ranges(port->m_expression, port->m_ranges);
-
-                        std::transform(port->m_expanded_identifiers.begin(),
-                                       port->m_expanded_identifiers.end(),
-                                       expanded_expression.begin(),
-                                       std::inserter(verilog_module->m_expanded_port_identifiers_to_expressions, verilog_module->m_expanded_port_identifiers_to_expressions.end()),
-                                       std::make_pair<const std::string&, const std::string&>);
-                    }
-                    else
-                    {
-                        port->m_expanded_identifiers                                                   = {port->m_identifier};
-                        verilog_module->m_expanded_port_identifiers_to_expressions[port->m_identifier] = port->m_expression;
-                    }
+                    port->m_expanded_identifiers = port->m_ranges.empty() ? std::vector<std::string>{port->m_identifier} : expand_ranges(port->m_identifier, port->m_ranges);
                 }
             }
 
@@ -311,7 +340,25 @@ namespace hal
         }
         m_net_by_name[m_one_net->get_name()] = m_one_net;
 
-        // TODO: This tries to find the topmodule by searching for a module that is not referenced by any other module. This fails when there are multiple of those modules (for example with unused modules). There is also a top=1 flag that is set bz yosys for example that we could check first, before using this approach.
+        // a module marked (* top = 1 *), as Yosys does, is the top module; otherwise it is the one module nobody instantiates
+        std::vector<std::string> marked_top_modules;
+        for (const auto& [name, module] : m_modules_by_name)
+        {
+            for (const VerilogDataEntry& attribute : module->m_attributes)
+            {
+                if (attribute.m_name == "top" && utils::trim(attribute.m_value) == "1")
+                {
+                    marked_top_modules.push_back(name);
+                    break;
+                }
+            }
+        }
+        if (marked_top_modules.size() > 1)
+        {
+            return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': several modules carry the top attribute: "
+                       + utils::join(", ", marked_top_modules));
+        }
+
         std::map<std::string, u32> module_name_to_refereneces;
         for (const auto& [_name, module] : m_modules_by_name)
         {
@@ -324,12 +371,15 @@ namespace hal
             }
         }
 
-        std::vector<std::string> top_module_candidates;
-        for (const auto& [name, module] : m_modules_by_name)
+        std::vector<std::string> top_module_candidates = marked_top_modules;
+        if (top_module_candidates.empty())
         {
-            if (module_name_to_refereneces.find(name) == module_name_to_refereneces.end())
+            for (const auto& [name, module] : m_modules_by_name)
             {
-                top_module_candidates.push_back(name);
+                if (module_name_to_refereneces.find(name) == module_name_to_refereneces.end())
+                {
+                    top_module_candidates.push_back(name);
+                }
             }
         }
 
@@ -340,7 +390,8 @@ namespace hal
 
         if (top_module_candidates.size() > 1)
         {
-            return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': found multiple modules as candidates for the top module");
+            return ERR("could not instantiate Verilog netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name()
+                       + "': found multiple modules as candidates for the top module, none of them marked (* top = 1 *): " + utils::join(", ", top_module_candidates));
         }
 
         // construct the netlist with the the top module
@@ -571,7 +622,10 @@ namespace hal
         }
         else
         {
-            parse_port_list(verilog_module_raw);
+            if (auto res = parse_port_list(verilog_module_raw); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "could not parse module '" + module_name + "' (line " + std::to_string(line_number) + "): unable to parse port list");
+            }
         }
 
         m_token_stream.consume(";", true);
@@ -646,7 +700,7 @@ namespace hal
         return OK({});
     }
 
-    void VerilogParser::parse_port_list(VerilogModule* verilog_module)
+    Result<std::monostate> VerilogParser::parse_port_list(VerilogModule* verilog_module)
     {
         TokenStream<std::string> ports_stream = m_token_stream.extract_until(")");
         m_token_stream.consume(")", true);
@@ -660,21 +714,44 @@ namespace hal
             {
                 port->m_identifier = ports_stream.consume().string;
                 ports_stream.consume("(", true);
-                port->m_expression = ports_stream.consume().string;
+                TokenStream<std::string> expression_stream = ports_stream.extract_until(")");
                 ports_stream.consume(")", true);
+
+                // a port expression is anything a right-hand side may be: a signal, a slice of one, or a concatenation
+                // of those, which Vivado writes for a port that is partly constant, e.g. .sum({\<const0> ,\^sum [1:0]})
+                auto parts_res = parse_assignment_expression(std::move(expression_stream));
+                if (parts_res.is_error())
+                {
+                    return ERR_APPEND(parts_res.get_error(), "could not parse port list: invalid expression of port '" + port->m_identifier + "' (line " + std::to_string(next_token.number) + ")");
+                }
+                port->m_expression_parts = parts_res.get();
             }
             else
             {
-                port->m_identifier = next_token.string;
-                port->m_expression = next_token.string;
+                port->m_identifier       = next_token.string;
+                port->m_expression_parts = {identifier_t(next_token.string)};
+            }
+
+            // the body declares direction and width on the signals the port stands for, so each of them has to find the port
+            for (const auto& part : port->m_expression_parts)
+            {
+                if (const identifier_t* identifier = std::get_if<identifier_t>(&part); identifier != nullptr)
+                {
+                    verilog_module->m_ports_by_expression[*identifier] = port.get();
+                }
+                else if (const ranged_identifier_t* ranged = std::get_if<ranged_identifier_t>(&part); ranged != nullptr)
+                {
+                    verilog_module->m_ports_by_expression[ranged->first] = port.get();
+                }
             }
 
             verilog_module->m_ports_by_identifier[port->m_identifier] = port.get();
-            verilog_module->m_ports_by_expression[port->m_expression] = port.get();
             verilog_module->m_ports.push_back(std::move(port));
 
             ports_stream.consume(",", ports_stream.remaining() > 0);
         }
+
+        return OK({});
     }
 
     Result<std::monostate> VerilogParser::parse_port_declaration_list(VerilogModule* verilog_module)
@@ -715,7 +792,7 @@ namespace hal
                 auto port                          = std::make_unique<VerilogPort>();
                 const std::string& port_expression = next_token.string;
                 port->m_identifier                 = port_expression;
-                port->m_expression                 = port_expression;
+                port->m_expression_parts           = {identifier_t(port_expression)};
                 port->m_direction                  = direction;
                 if (!ranges.empty())
                 {
@@ -781,7 +858,9 @@ namespace hal
             }
 
             port->m_direction = direction;
-            if (!ranges.empty())
+            // the ranges of a concatenation's signals belong to those signals, the port's width follows from the expression
+            const bool stands_for_one_signal = port->m_expression_parts.size() == 1 && std::holds_alternative<identifier_t>(port->m_expression_parts.front());
+            if (!ranges.empty() && stands_for_one_signal)
             {
                 port->m_ranges = ranges;
             }
@@ -945,12 +1024,12 @@ namespace hal
             param.m_name = m_token_stream.consume().string;
             m_token_stream.consume("=", true);
 
-            if (const auto res = parse_parameter_value(m_token_stream.consume()); res.is_ok())
+            if (const auto res = parse_parameter_value(param.m_name, m_token_stream.consume()); res.is_ok())
             {
-                const auto value = res.get();
-                param.m_type     = value.first;
-                param.m_value    = value.second;
-                inst_it->second->m_parameters.push_back(param);
+                const auto& [parsed_param, value_str] = res.get();
+                param.m_value                         = value_str;
+                param.m_parameter                     = parsed_param;
+                inst_it->second->m_parameters.push_back(std::move(param));
             }
             else
             {
@@ -1104,10 +1183,14 @@ namespace hal
                 const Token<std::string> rhs = m_token_stream.join_until(")", "");
                 m_token_stream.consume(")", true);
 
-                if (const auto res = parse_parameter_value(rhs); res.is_ok())
+                if (const auto res = parse_parameter_value(lhs.string, rhs); res.is_ok())
                 {
-                    const auto value = res.get();
-                    generics.push_back(VerilogDataEntry({lhs.string, value.first, value.second}));
+                    const auto& [param, value_str] = res.get();
+                    VerilogDataEntry entry;
+                    entry.m_name      = lhs.string;
+                    entry.m_value     = value_str;
+                    entry.m_parameter = param;
+                    generics.push_back(std::move(entry));
                 }
                 else
                 {
@@ -1890,20 +1973,41 @@ namespace hal
                 }
             }
 
-            // process generics
+            // For gate instances, prefer the gate type's own parameter declaration over
+            // the parser-inferred one — this is the only way Enum parameters can be set.
+            const GateType* gt = nullptr;
+            if (const Gate* g = dynamic_cast<const Gate*>(container))
+            {
+                gt = g->get_type();
+            }
+
             for (const auto& parameter : instance->m_parameters)
             {
-                if (!container->set_data("generic", parameter.m_name, parameter.m_type, parameter.m_value))
+                if (!parameter.m_parameter.has_value())
+                {
+                    log_warning(
+                        "verilog_parser", "could not set generic '{}' for instance '{}' of type '{}': no typed parameter declaration available.", parameter.m_name, instance->m_name, instance->m_type);
+                    continue;
+                }
+                Parameter effective_param = parameter.m_parameter.value();
+                if (gt != nullptr)
+                {
+                    if (auto decl = gt->get_parameter(parameter.m_name); decl.is_ok())
+                    {
+                        effective_param = decl.get();
+                    }
+                }
+                if (auto res = container->set_parameter(effective_param, parameter.m_value); res.is_error())
                 {
                     log_warning("verilog_parser",
-                                "could not set generic '{} = {}' of type '{}' for instance '{}' of type '{}' within instance '{}' of type '{}'.",
+                                "could not set parameter '{} = {}' for instance '{}' of type '{}' within instance '{}' of type '{}': {}",
                                 parameter.m_name,
                                 parameter.m_value,
-                                parameter.m_type,
                                 instance->m_name,
                                 instance->m_type,
                                 instance_identifier,
-                                instance_type);
+                                instance_type,
+                                res.get_error().get());
                 }
             }
         }
@@ -2257,52 +2361,222 @@ namespace hal
         return OK(ss.str());
     }
 
-    Result<std::pair<std::string, std::string>> VerilogParser::parse_parameter_value(const Token<std::string>& value_token) const
+    Result<std::pair<Parameter, std::string>> VerilogParser::parse_parameter_value(const std::string& name, const Token<std::string>& value_token) const
     {
-        std::pair<std::string, std::string> value;
+        const std::string& raw    = value_token.string;
+        const u32 line_number     = value_token.number;
+        const std::string loc_str = " (line " + std::to_string(line_number) + ")";
 
-        if (utils::is_integer(value_token.string))
+        // integer (plain decimal, no Verilog base prefix)
+        if (utils::is_integer(raw))
         {
-            value.first  = "integer";
-            value.second = value_token.string;
-        }
-        else if (utils::is_floating_point(value_token.string))
-        {
-            value.first  = "floating_point";
-            value.second = value_token.string;
-        }
-        else if (value_token.string[0] == '\"' && value_token.string.back() == '\"')
-        {
-            value.first  = "string";
-            value.second = value_token.string.substr(1, value_token.string.size() - 2);
-        }
-        else if (is_verilog_number_literal(value_token.string))
-        {
-            if (const auto res = get_hex_from_literal(value_token); res.is_error())
+            auto param_res = Parameter::Integer(name, "");
+            if (param_res.is_error())
             {
-                return ERR_APPEND(res.get_error(),
-                                  "could not parse parameter value: failed to convert '" + value_token.string + "' to hexadecimal value (line " + std::to_string(value_token.number) + ")");
+                return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
             }
-            else
-            {
-                value.second = res.get();
-            }
-
-            if (value.second == "0" || value.second == "1")
-            {
-                value.first = "bit_value";
-            }
-            else
-            {
-                value.first = "bit_vector";
-            }
-        }
-        else
-        {
-            return ERR("could not parse parameter value: failed to identify data type of parameter '" + value_token.string + "' (line " + std::to_string(value_token.number) + ")");
+            return OK(std::make_pair(param_res.get(), raw));
         }
 
-        return OK(value);
+        // floating-point (double precision, full-consume)
+        if (is_double_strict(raw))
+        {
+            auto param_res = Parameter::Float(name, "");
+            if (param_res.is_error())
+            {
+                return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
+            }
+            return OK(std::make_pair(param_res.get(), raw));
+        }
+
+        // boolean: case-insensitive 'true' / 'false'
+        {
+            const std::string lower = utils::to_lower(raw);
+            if (lower == "true" || lower == "false")
+            {
+                auto param_res = Parameter::Boolean(name, "");
+                if (param_res.is_error())
+                {
+                    return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
+                }
+                return OK(std::make_pair(param_res.get(), lower));
+            }
+        }
+
+        // time literal: <number><unit> with unit in {min, fs, ps, ns, us, ms, s, h}
+        // longest units listed first to avoid partial suffix matches
+        {
+            static const std::vector<std::string> time_units = {"min", "fs", "ps", "ns", "us", "ms", "s", "h"};
+            for (const auto& unit : time_units)
+            {
+                if (raw.size() <= unit.size() || !utils::ends_with(raw, unit))
+                {
+                    continue;
+                }
+                const std::string num_part = raw.substr(0, raw.size() - unit.size());
+                if (!utils::is_integer(num_part) && !is_double_strict(num_part))
+                {
+                    continue;
+                }
+                auto param_res = Parameter::Time(name, "");
+                if (param_res.is_error())
+                {
+                    return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
+                }
+                return OK(std::make_pair(param_res.get(), raw));
+            }
+        }
+
+        // string literal: strip outer quotes, no escape processing
+        if (raw.size() >= 2 && raw.front() == '"' && raw.back() == '"')
+        {
+            auto param_res = Parameter::String(name, "");
+            if (param_res.is_error())
+            {
+                return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
+            }
+            return OK(std::make_pair(param_res.get(), raw.substr(1, raw.size() - 2)));
+        }
+
+        // bit/logic vector literal: [N]'[b|o|h|d][digits]
+        if (!raw.empty() && (isdigit(static_cast<unsigned char>(raw[0])) || raw[0] == '\''))
+        {
+            const size_t tick_pos = raw.find('\'');
+            if (tick_pos == std::string::npos)
+            {
+                return ERR("could not parse parameter value: no base prefix in literal '" + raw + "'" + loc_str);
+            }
+
+            // optional explicit width before the tick
+            u16 explicit_width = 0;
+            bool has_width     = false;
+            if (tick_pos > 0)
+            {
+                try
+                {
+                    explicit_width = static_cast<u16>(std::stoul(raw.substr(0, tick_pos)));
+                }
+                catch (...)
+                {
+                    return ERR("could not parse parameter value: invalid width in literal '" + raw + "'" + loc_str);
+                }
+                has_width = true;
+            }
+
+            if (tick_pos + 1 >= raw.size())
+            {
+                return ERR("could not parse parameter value: missing base char in literal '" + raw + "'" + loc_str);
+            }
+            const char base_upper = static_cast<char>(std::toupper(static_cast<unsigned char>(raw[tick_pos + 1])));
+
+            // resolve all base properties in one place; bits_per_digit == 0 flags decimal (needs conversion)
+            std::string numeric_set;
+            std::string out_prefix;
+            int bits_per_digit = 0;
+            bool allow_state   = true;
+            switch (base_upper)
+            {
+                case 'B':
+                    numeric_set    = "01";
+                    out_prefix     = "0b";
+                    bits_per_digit = 1;
+                    break;
+                case 'O':
+                    numeric_set    = "01234567";
+                    out_prefix     = "0o";
+                    bits_per_digit = 3;
+                    break;
+                case 'H':
+                    numeric_set    = "0123456789abcdef";
+                    out_prefix     = "0x";
+                    bits_per_digit = 4;
+                    break;
+                case 'D':
+                    numeric_set    = "0123456789";
+                    out_prefix     = "0x";
+                    bits_per_digit = 0;
+                    allow_state    = false;
+                    break;
+                default:
+                    return ERR("could not parse parameter value: unsupported base '" + std::string(1, base_upper) + "' in literal '" + raw + "'" + loc_str);
+            }
+
+            // single pass: strip underscores, map '?' to '-', validate, detect state chars
+            std::string digits;
+            digits.reserve(raw.size());
+            bool has_state = false;
+            for (size_t i = tick_pos + 2; i < raw.size(); ++i)
+            {
+                const char c = raw[i];
+                if (c == '_')
+                {
+                    continue;
+                }
+                const char mapped   = (c == '?') ? '-' : c;
+                const char l        = (mapped == '-') ? '-' : static_cast<char>(std::tolower(static_cast<unsigned char>(mapped)));
+                const bool is_num   = numeric_set.find(l) != std::string::npos;
+                const bool is_state = (l == 'x' || l == 'z' || l == '-');
+                if (!is_num && (!allow_state || !is_state))
+                {
+                    return ERR("could not parse parameter value: literal '" + raw + "' contains invalid digit '" + std::string(1, c) + "'" + loc_str);
+                }
+                if (is_state)
+                {
+                    has_state = true;
+                }
+                digits += mapped;
+            }
+
+            if (digits.empty())
+            {
+                return ERR("could not parse parameter value: no digits in literal '" + raw + "'" + loc_str);
+            }
+
+            // helper: build the right Parameter type and return
+            const auto make_param = [&](u16 size, const std::string& value) -> Result<std::pair<Parameter, std::string>> {
+                if (has_state)
+                {
+                    auto param_res = Parameter::LogicVector(name, size, "");
+                    if (param_res.is_error())
+                    {
+                        return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
+                    }
+                    return OK(std::make_pair(param_res.get(), value));
+                }
+                else
+                {
+                    auto param_res = Parameter::BitVector(name, size, "");
+                    if (param_res.is_error())
+                    {
+                        return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
+                    }
+                    return OK(std::make_pair(param_res.get(), value));
+                }
+            };
+
+            // decimal needs a stoull to hex conversion; all other bases use digits directly
+            if (bits_per_digit == 0)
+            {
+                u64 num = 0;
+                try
+                {
+                    num = std::stoull(digits);
+                }
+                catch (...)
+                {
+                    return ERR("could not parse parameter value: decimal literal '" + raw + "' overflows" + loc_str);
+                }
+                std::stringstream ss;
+                ss << std::hex << num;
+                const std::string hex_digits = ss.str();
+                const u16 size               = has_width ? explicit_width : static_cast<u16>(hex_digits.size() * 4);
+                return make_param(size, out_prefix + hex_digits);
+            }
+            const u16 size = (has_width && !has_state) ? explicit_width : static_cast<u16>(digits.size() * bits_per_digit);
+            return make_param(size, out_prefix + digits);
+        }
+
+        return ERR("could not parse parameter value: failed to identify data type of '" + raw + "'" + loc_str);
     }
 
     Result<std::vector<VerilogParser::assignment_t>> VerilogParser::parse_assignment_expression(TokenStream<std::string>&& stream) const

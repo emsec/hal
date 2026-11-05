@@ -31,6 +31,9 @@
 class QPainter;
 
 namespace hal {
+    /**
+     * The base class for the drawing primitives that a rendered waveform is composed of.
+     */
     class WaveFormPrimitive
     {
     protected:
@@ -46,6 +49,9 @@ namespace hal {
         virtual int value() const { return SaleaeDataTuple::sReadError; }
     };
 
+    /**
+     * A horizontal line, i.e., a stretch during which the value does not change.
+     */
     class WaveFormPrimitiveHline : public WaveFormPrimitive
     {
         int mValue;
@@ -55,6 +61,9 @@ namespace hal {
         int value() const { return mValue; }
     };
 
+    /**
+     * A vertical line that marks a change of the value.
+     */
     class WaveFormPrimitiveTransition : public WaveFormPrimitive
     {
     public:
@@ -62,6 +71,9 @@ namespace hal {
         void paint(int y0, QPainter& painter);
     };
 
+    /**
+     * A marker that highlights a point in time at which a trigger fired.
+     */
     class WaveFormPrimitiveTrigger : public WaveFormPrimitive
     {
     public:
@@ -69,6 +81,9 @@ namespace hal {
         void paint(int y0, QPainter& painter);
     };
 
+    /**
+     * A hatched area, i.e., a stretch during which the value is undefined.
+     */
     class WaveFormPrimitiveUndefined : public WaveFormPrimitive
     {
     public:
@@ -77,6 +92,9 @@ namespace hal {
         int value() const { return -1; }
     };
 
+    /**
+     * A filled area that summarizes a stretch containing more transitions than can be drawn individually.
+     */
     class WaveFormPrimitiveFilled : public WaveFormPrimitive
     {
         double mAccumTime[2];
@@ -87,6 +105,9 @@ namespace hal {
         int value() const { return WaveGroupValue::sTooManyTransitions; }
     };
 
+    /**
+     * A box that shows the numeric value of a multi-bit waveform for the duration it is stable.
+     */
     class WaveFormPrimitiveValue : public WaveFormPrimitive
     {
     private:

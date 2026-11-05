@@ -61,8 +61,9 @@ namespace hal
          * When no styling is necessary, an empty string can be passed.
          * The result is then converted into an icon and returned.
          *
-         * @param from_to_colors - The format string in the form "from -> to" (e.g.: "all -> #E4E4E4").
+         * @param from_to_colors_enabled - The format string for the enabled icon in the form "from -> to" (e.g.: "all -> #E4E4E4").
          * @param svg_path - The path to the svg file.
+         * @param from_to_colors_disabled - The format string for the disabled icon. Defaults to an empty string, i.e., no separate disabled icon.
          * @return The (perhabs styled) icon.
          */
         extern QIcon getStyledSvgIcon(const QString& from_to_colors_enabled, const QString& svg_path, QString from_to_colors_disabled = QString());

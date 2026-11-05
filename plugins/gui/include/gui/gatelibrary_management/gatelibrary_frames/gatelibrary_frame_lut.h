@@ -32,6 +32,9 @@
 
 namespace hal
 {
+    /**
+     * Displays the LUT component of the selected gate type.
+     */
     class GatelibraryFrameLut : public GatelibraryComponentFrame
     {
         Q_OBJECT
@@ -41,8 +44,6 @@ namespace hal
 
         void update(GateType* gt) override;
 
-    private:
-        QLabel* mAscending;
     };
 
 }

@@ -27,15 +27,22 @@
 
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
+#include <memory>
+
 namespace hal
 {
+    /**
+     * A gate type component that marks a gate type as a multiply-accumulate unit.
+     */
     class MACComponent : public GateTypeComponent
     {
     public:
         /**
-         * Construct a new MACComponent.
+         * Create a new MACComponent.
+         *
+         * @returns The MACComponent.
          */
-        MACComponent() = default;
+        static std::unique_ptr<MACComponent> create();
 
         /**
          * Get the type of the gate type component.
@@ -48,7 +55,7 @@ namespace hal
          * Check whether a component is a MACComponent.
          * 
          * @param[in] component - The component to check.
-         * @returns True if component is a MACComponent, false otherwise.
+         * @returns `true` if component is a MACComponent, `false` otherwise.
          */
         static bool is_class_of(const GateTypeComponent* component);
 
@@ -62,6 +69,8 @@ namespace hal
         std::vector<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
     private:
+        MACComponent() = default;
+
         static constexpr ComponentType m_type = ComponentType::mac;
     };
 }    // namespace hal

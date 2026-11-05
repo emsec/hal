@@ -1,10 +1,17 @@
 #include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
 
+#include <memory>
+
 namespace hal
 {
     FFComponent::FFComponent(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf)
         : m_component(std::move(component)), m_next_state_bf(next_state_bf.clone()), m_clock_bf(clock_bf.clone())
     {
+    }
+
+    std::unique_ptr<FFComponent> FFComponent::create(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf)
+    {
+        return std::unique_ptr<FFComponent>(new FFComponent(std::move(component), next_state_bf.clone(), clock_bf.clone()));
     }
 
     FFComponent::ComponentType FFComponent::get_type() const

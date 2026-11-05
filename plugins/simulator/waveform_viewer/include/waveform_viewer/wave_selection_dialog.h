@@ -36,6 +36,9 @@
 class QSortFilterProxyModel;
 
 namespace hal {
+    /**
+     * One selectable net of the waveform selection dialog, i.e., its ID, name, and number of transitions.
+     */
     class WaveSelectionEntry
     {
         u32 mId;
@@ -52,6 +55,9 @@ namespace hal {
 
     uint qHash(const WaveSelectionEntry& wse);
 
+    /**
+     * The item model behind the waveform selection dialog.
+     */
     class WaveSelectionTable : public QAbstractTableModel
     {
         Q_OBJECT
@@ -68,6 +74,9 @@ namespace hal {
     };
 
 
+    /**
+     * The dialog in which the user picks the waveforms that are added to the viewer.
+     */
     class WaveSelectionDialog : public QDialog
     {
         Q_OBJECT

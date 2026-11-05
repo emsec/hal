@@ -36,7 +36,7 @@ namespace hal
         if (ipos >= 0)
             mText = mText.mid(ipos+1);
         QFontMetricsF fm(sFont);
-        mTextWidth = fm.width(mText);
+        mTextWidth = fm.horizontalAdvance(mText);
     }
 
     void LabeledSeparatedNet::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)

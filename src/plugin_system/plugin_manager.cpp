@@ -27,8 +27,43 @@ namespace hal
     {
         namespace
         {
+            /**
+             * A loaded plugin and the library it was loaded from.
+             *
+             * Exists so that the library can be kept open when the map is torn down at exit, which a
+             * std::tuple of the two gives no way to express. See the destructor.
+             */
+            struct LoadedPlugin
+            {
+                std::unique_ptr<BasePluginInterface> instance;
+                std::unique_ptr<RuntimeLibrary> library;
+
+                /**
+                 * Lets go of the library rather than unloading it.
+                 *
+                 * This only does anything while the process is exiting: unload() moves both pointers out
+                 * before it erases an entry, so on that path there is nothing left here to destroy.
+                 *
+                 * Unloading at exit is not merely pointless but wrong. The netlist parser and writer
+                 * registries hold a std::function per plugin that provides one, those registries live in
+                 * libhal_netlist and are destroyed after this map is, and closing the libraries here left
+                 * every one of those functions pointing into memory that had just been unmapped, which
+                 * segfaulted on the way out.
+                 */
+                ~LoadedPlugin()
+                {
+                    (void)library.release();
+                }
+
+                LoadedPlugin()                               = default;
+                LoadedPlugin(LoadedPlugin&&)                 = default;
+                LoadedPlugin& operator=(LoadedPlugin&&)      = default;
+                LoadedPlugin(const LoadedPlugin&)            = delete;
+                LoadedPlugin& operator=(const LoadedPlugin&) = delete;
+            };
+
             // stores library and factory identified by plugin name)
-            std::unordered_map<std::string, std::tuple<std::unique_ptr<BasePluginInterface>, std::unique_ptr<RuntimeLibrary>>> m_loaded_plugins;
+            std::unordered_map<std::string, LoadedPlugin> m_loaded_plugins;
 
             // stores special features offered by plugin
             std::unordered_map<std::string, std::vector<PluginFeature>> m_plugin_features;
@@ -315,7 +350,7 @@ namespace hal
             }
             m_current_loading.clear();
 
-            m_loaded_plugins[plugin_name] = std::make_tuple(std::move(instance), std::move(lib));
+            m_loaded_plugins[plugin_name] = LoadedPlugin{std::move(instance), std::move(lib)};
 
             /* notify callback that a plugin was loaded*/
             m_hook(true, plugin_name, file_path.string());
@@ -355,8 +390,8 @@ namespace hal
             log_info("core", "unloading plugin '{}'...", plugin_name);
 
 
-            auto rt_library  = std::move(std::get<1>(loaded_it->second));
-            auto plugin_inst = std::move(std::get<0>(loaded_it->second));
+            auto rt_library  = std::move(loaded_it->second.library);
+            auto plugin_inst = std::move(loaded_it->second.instance);
 
             {
                 auto iplugType = dynamic_cast<UIPluginInterface*>(plugin_inst.get()) ? 1 : 0;
@@ -428,12 +463,24 @@ namespace hal
                 return nullptr;
             }
 
-            auto instance = std::get<0>(it->second).get();
+            auto instance = it->second.instance.get();
             if (instance != nullptr && initialize)
             {
                 instance->initialize();
             }
             return instance;
+        }
+
+        UIPluginInterface* get_ui_plugin()
+        {
+            for (const auto& [_, plugin] : m_loaded_plugins)
+            {
+                if (auto* ui_plugin = dynamic_cast<UIPluginInterface*>(plugin.instance.get()); ui_plugin != nullptr)
+                {
+                    return ui_plugin;
+                }
+            }
+            return nullptr;
         }
 
         u64 add_model_changed_callback(std::function<void(bool, std::string const&, std::string const&)> callback)

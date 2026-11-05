@@ -2,13 +2,13 @@ option(PL_NETLIST_SIMULATOR_CONTROLLER "PL_NETLIST_SIMULATOR_CONTROLLER" OFF)
 
 if(PL_NETLIST_SIMULATOR_CONTROLLER OR PL_SIMULATOR OR PL_LOGIC_EVALUATOR OR BUILD_ALL_PLUGINS)
 
-    find_package(Qt5 COMPONENTS Core REQUIRED)
+    find_package(Qt6 COMPONENTS Core REQUIRED)
 
-    if(Qt5Core_FOUND)
-        message(VERBOSE "Qt5Core_INCLUDE_DIRS: ${Qt5Core_INCLUDE_DIRS}")
-    elseif(NOT Qt5Core_FOUND)
-        message(STATUS "Qt5Core not found for netlist_simulator_controller")
-    endif(Qt5Core_FOUND)
+    if(Qt6Core_FOUND)
+        message(VERBOSE "Qt6Core_INCLUDE_DIRS: ${Qt6Core_INCLUDE_DIRS}")
+    elseif(NOT Qt6Core_FOUND)
+        message(STATUS "Qt6Core not found for netlist_simulator_controller")
+    endif(Qt6Core_FOUND)
 
     enable_cxx_compile_option_if_supported("-O1" "Perf" "PUBLIC")
     enable_cxx_compile_option_if_supported("-g" "Perf" "PUBLIC")
@@ -22,8 +22,8 @@ if(PL_NETLIST_SIMULATOR_CONTROLLER OR PL_SIMULATOR OR PL_LOGIC_EVALUATOR OR BUIL
     file(GLOB_RECURSE NETLIST_SIMULATOR_CONTROLLER_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
     file(GLOB_RECURSE NETLIST_SIMULATOR_CONTROLLER_QRC ${CMAKE_CURRENT_SOURCE_DIR}/resources/*.qrc)
 
-    qt5_wrap_cpp(MOC_HDR ${NETLIST_SIMULATOR_CONTROLLER_INC})
-    qt5_add_resources(MOC_QRC ${NETLIST_SIMULATOR_CONTROLLER_QRC})
+    qt6_wrap_cpp(MOC_HDR ${NETLIST_SIMULATOR_CONTROLLER_INC})
+    qt6_add_resources(MOC_QRC ${NETLIST_SIMULATOR_CONTROLLER_QRC})
 
     hal_add_plugin(netlist_simulator_controller
                    SHARED
@@ -31,7 +31,7 @@ if(PL_NETLIST_SIMULATOR_CONTROLLER OR PL_SIMULATOR OR PL_LOGIC_EVALUATOR OR BUIL
                    HEADER ${NETLIST_SIMULATOR_CONTROLLER_INC}
                    SOURCES ${NETLIST_SIMULATOR_CONTROLLER_SRC} ${NETLIST_SIMULATOR_CONTROLLER_PYTHON_SRC} ${MOC_HDR} ${MOC_QRC}
                    PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/netlist_simulator_controller.rst
-                   LINK_LIBRARIES PUBLIC Qt5::Core)
+                   LINK_LIBRARIES PUBLIC Qt6::Core)
 
     add_subdirectory(test)
     add_subdirectory(saleae_cli)

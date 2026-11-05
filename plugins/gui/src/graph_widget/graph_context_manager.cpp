@@ -400,7 +400,8 @@ namespace hal
         for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->isShowingFoldedTopModule()) continue;
-            if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}) && !context->isShowingModule(added_module, {}, {}, {}, {}))
+            // only views bound to a module follow its content, isolated views keep their nodes
+            if (context->getExclusiveModuleId() && context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}) && !context->isShowingModule(added_module, {}, {}, {}, {}))
                 context->add({added_module}, {});
             else
                 context->testIfAffected(m->get_id(), &added_module, nullptr);
@@ -435,8 +436,9 @@ namespace hal
         for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->isShowingFoldedTopModule()) continue;
+            // only views bound to a module follow its content, isolated views keep their nodes
             if (context->isScheduledRemove(Node(removed_module,Node::Module)) ||
-                    context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}))
+                    (context->getExclusiveModuleId() && context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {})))
                 context->remove({removed_module}, {});
             else
                 context->testIfAffected(m->get_id(), &removed_module, nullptr);
@@ -462,7 +464,8 @@ namespace hal
         for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->isShowingFoldedTopModule()) continue;
-            if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
+            // only views bound to a module follow its content, isolated views keep their nodes
+            if (context->getExclusiveModuleId() && context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
                 context->add({}, {inserted_gate});
             else
                 context->testIfAffected(m->get_id(), nullptr, &inserted_gate);
@@ -487,8 +490,9 @@ namespace hal
         for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->isShowingFoldedTopModule()) continue;
+            // only views bound to a module follow its content, isolated views keep their nodes
             if (context->isScheduledRemove(Node(removed_gate,Node::Gate)) ||
-                    context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}))
+                    (context->getExclusiveModuleId() && context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate})))
             {
                 context->remove({}, {removed_gate});
                 if (context->empty() || context->willBeEmptied())

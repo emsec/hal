@@ -1,5 +1,6 @@
 #include "gui/comment_system/comment_entry.h"
 #include <QTextStream>
+#include <QIODevice>
 
 namespace hal
 {

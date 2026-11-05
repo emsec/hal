@@ -25,6 +25,11 @@ sys.path.insert(0, os.path.abspath('@CMAKE_BINARY_DIR@/lib/hal_plugins'))
 
 os.environ['HAL_BASE_PATH'] = '@CMAKE_BINARY_DIR@'
 
+# Import hal_py before autodoc touches any plugin module. The plugin modules bind classes
+# that derive from hal::BasePluginInterface, and pybind11 only knows that base type once
+# hal_py has been imported -- otherwise autodoc fails with "referenced unknown base type".
+import hal_py  # noqa: E402,F401
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -74,7 +79,7 @@ release = '@HAL_VERSION_RETURN@'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -183,4 +188,5 @@ epub_copyright = copyright
 epub_exclude_files = ['search.html']
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
+

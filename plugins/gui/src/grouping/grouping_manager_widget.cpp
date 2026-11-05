@@ -7,6 +7,7 @@
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include "gui/input_dialog/input_dialog.h"
 #include "gui/searchbar/searchbar.h"
 #include "gui/toolbar/toolbar.h"
@@ -324,7 +325,7 @@ namespace hal
         QVector<Net*> todoNet;
         QSet<Node> handledBox;
         QSet<Net*> handledNet;
-        todoNet.append(QVector<Net*>::fromStdVector(succ ? tbn.outputNets() : tbn.inputNets()));
+        todoNet.append(QtCompat::stdVectorToVector<Net*>(succ ? tbn.outputNets() : tbn.inputNets()));
         handledBox.insert(tbn.mNode);
         for (int loop = 0; !maxDepth || loop < maxDepth; loop++)
         {
@@ -354,7 +355,7 @@ namespace hal
                         default:
                             continue;
                     }
-                    nextRound.append(QVector<Net*>::fromStdVector(succ ? nextNode.outputNets() : nextNode.inputNets()));
+                    nextRound.append(QtCompat::stdVectorToVector<Net*>(succ ? nextNode.outputNets() : nextNode.inputNets()));
                 }
             }
             todoNet = nextRound;
@@ -387,7 +388,7 @@ namespace hal
         QVector<Net*> nextDst;
         QSet<Node> handledNode;
         QSet<Net*> handledNet;
-        nextDst.append(QVector<Net*>::fromStdVector(succ ? tbn.outputNets() : tbn.inputNets()));
+        nextDst.append(QtCompat::stdVectorToVector<Net*>(succ ? tbn.outputNets() : tbn.inputNets()));
         handledNode.insert(tbn.mNode);
         for (int iround = 1; iround <= maxDepth; iround++)
         {
@@ -419,7 +420,7 @@ namespace hal
                         default:
                             continue;
                     }
-                    nextDst.append(QVector<Net*>::fromStdVector(succ ? nextNode.outputNets() : nextNode.inputNets()));
+                    nextDst.append(QtCompat::stdVectorToVector<Net*>(succ ? nextNode.outputNets() : nextNode.inputNets()));
                 }
             }
             if (!mods.isEmpty() || !nets.isEmpty() || !gats.isEmpty())

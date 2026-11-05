@@ -44,6 +44,9 @@ namespace hal
     class GateLibraryFrameRAM;
     class GateLibraryFrameRAMPort;
 
+    /**
+     * Displays the name, the ID, and the properties of the selected gate type.
+     */
     class GatelibraryFrameGeneral : public GatelibraryComponentFrame
     {
         Q_OBJECT
@@ -57,6 +60,9 @@ namespace hal
         GateLibraryLabel* mPropertiesLabel;
     };
 
+    /**
+     * Displays the Boolean functions of the selected gate type.
+     */
     class GatelibraryFrameBoolean : public GatelibraryComponentFrame
     {
         Q_OBJECT

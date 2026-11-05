@@ -146,7 +146,7 @@ namespace hal
         return OK(tmp_bf);
     }
 
-    Result<BooleanFunction> BooleanFunctionDecorator::get_boolean_function_from(const std::vector<BooleanFunction>& functions, u32 extend_to_size, bool sign_extend)
+    Result<BooleanFunction> BooleanFunctionDecorator::get_boolean_function_from(const std::vector<BooleanFunction>& functions, u32 extend_to_size, bool sign_extend, bool ascending)
     {
         if (functions.empty())
         {
@@ -159,15 +159,32 @@ namespace hal
         for (u32 i = 1; i < functions.size(); i++)
         {
             size += functions.at(i).size();
-            if (auto res = BooleanFunction::Concat(var.clone(), functions.at(i).clone(), size); res.is_ok())
+
+            if (ascending)
             {
-                var = res.get();
+                if (auto res = BooleanFunction::Concat(var.clone(), functions.at(i).clone(), size); res.is_ok())
+                {
+                    var = res.get();
+                }
+                else
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not concatenate nets: unable to concatenate Boolean function '" + functions.at(i).to_string() + " at position " + std::to_string(i)
+                                          + " of the provided functions to function.");
+                }
             }
             else
             {
-                return ERR_APPEND(res.get_error(),
-                                  "could not concatenate nets: unable to concatenate Boolean function '" + functions.at(i).to_string() + " at position " + std::to_string(i)
-                                      + " of the provided functions to function.");
+                if (auto res = BooleanFunction::Concat(functions.at(i).clone(), var.clone(), size); res.is_ok())
+                {
+                    var = res.get();
+                }
+                else
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not concatenate nets: unable to concatenate Boolean function '" + functions.at(i).to_string() + " at position " + std::to_string(i)
+                                          + " of the provided functions to function.");
+                }
             }
         }
 
@@ -202,7 +219,7 @@ namespace hal
         return OK(var);
     }
 
-    Result<BooleanFunction> BooleanFunctionDecorator::get_boolean_function_from(const std::vector<Net*>& nets, u32 extend_to_size, bool sign_extend)
+    Result<BooleanFunction> BooleanFunctionDecorator::get_boolean_function_from(const std::vector<Net*>& nets, u32 extend_to_size, bool sign_extend, bool ascending)
     {
         if (nets.empty())
         {
@@ -213,6 +230,7 @@ namespace hal
         {
             return ERR("could not concatenate nets: nets contain a 'nullptr'.");
         }
+
         auto var = BooleanFunction::Var(BooleanFunctionNetDecorator(*(nets.front())).get_boolean_variable_name(), 1);
 
         for (u32 i = 1; i < nets.size(); i++)
@@ -221,16 +239,31 @@ namespace hal
             {
                 return ERR("could not concatenate nets: nets contain a 'nullptr'.");
             }
-
-            if (auto res = BooleanFunction::Concat(var.clone(), BooleanFunction::Var(BooleanFunctionNetDecorator(*(nets.at(i))).get_boolean_variable_name(), 1), i + 1); res.is_ok())
+            if (ascending)
             {
-                var = res.get();
+                if (auto res = BooleanFunction::Concat(var.clone(), BooleanFunction::Var(BooleanFunctionNetDecorator(*(nets.at(i))).get_boolean_variable_name(), 1), i + 1); res.is_ok())
+                {
+                    var = res.get();
+                }
+                else
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not concatenate nets: unable to concatenate net '" + nets.at(i)->get_name() + "' with ID " + std::to_string(nets.at(i)->get_id()) + " at position "
+                                          + std::to_string(i) + " of the provided nets to function.");
+                }
             }
             else
             {
-                return ERR_APPEND(res.get_error(),
-                                  "could not concatenate nets: unable to concatenate net '" + nets.at(i)->get_name() + "' with ID " + std::to_string(nets.at(i)->get_id()) + " at position "
-                                      + std::to_string(i) + " of the provided nets to function.");
+                if (auto res = BooleanFunction::Concat(BooleanFunction::Var(BooleanFunctionNetDecorator(*(nets.at(i))).get_boolean_variable_name(), 1), var.clone(), i + 1); res.is_ok())
+                {
+                    var = res.get();
+                }
+                else
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not concatenate nets: unable to concatenate net '" + nets.at(i)->get_name() + "' with ID " + std::to_string(nets.at(i)->get_id()) + " at position "
+                                          + std::to_string(i) + " of the provided nets to function.");
+                }
             }
         }
 
@@ -269,7 +302,7 @@ namespace hal
     {
         const auto pins = pin_group->get_pins();
         std::vector<BooleanFunction> functions;
-        std::transform(pins.rbegin(), pins.rend(), std::back_inserter(functions), [](const ModulePin* pin) {
+        std::transform(pins.begin(), pins.end(), std::back_inserter(functions), [](const ModulePin* pin) {
             return BooleanFunction::Var(BooleanFunctionNetDecorator(*(pin->get_net())).get_boolean_variable_name(), 1);
         });
 

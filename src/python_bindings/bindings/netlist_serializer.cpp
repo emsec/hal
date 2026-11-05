@@ -39,9 +39,9 @@ namespace hal
             py::arg("gate_lib") = nullptr,
             R"(
                 Deserializes a string which contains a netlist in HAL-(JSON)-format using the provided gate library.
-                If no gate library is provided, a gate library path must be specified within the ``.hal`` file.
+                If no gate library is provided, a gate library path must be specified within the string.
 
-                :param pathlib.Path hal_file: The string containing the netlist in HAL-(JSON)-format.
+                :param str hal_string: The string containing the netlist in HAL-(JSON)-format.
                 :param hal_py.GateLibrary gate_lib: The gate library. Defaults to ``None``.
                 :returns: The deserialized netlist on success, ``None`` otherwise.
                 :rtype: hal_py.Netlist or None

@@ -446,6 +446,8 @@ namespace hal {
                     continue;
                 }
 
+                std::set<std::string> pluginsBeforeLoad = plugin_manager::get_plugin_names();
+
                 // plugin updated or not known yet, try dummy load to retrieve information
                 bpif = load(pluginName, info.absoluteFilePath());
                 if (!bpif)
@@ -464,6 +466,31 @@ namespace hal {
                 {
                     log_info("gui", "GuiPluginManager: '{}' loaded to retrieve information about plugin features.", pluginName.toStdString());
                     gpe->updateFromLoaded(bpif, false, info.lastModified());    // load success
+                    plugin_manager::unload(gpe->mName.toStdString());           // unload since plugin was neither requested nor dependency
+                    gpe->mLoadState = GuiPluginEntry::NotLoaded;
+                                                                                // clean up dependecies
+                    std::set<std::string> pluginStateRestored = plugin_manager::get_plugin_names();
+                    for (int i=0; i<1000; i++)
+                    {
+                        auto it = pluginStateRestored.begin();
+                        while (it != pluginStateRestored.end())
+                        {
+                            auto jt = pluginsBeforeLoad.find(*it);
+                            if (jt != pluginsBeforeLoad.end())                  // was loaded before, ignore
+                                it = pluginStateRestored.erase(it);
+                            else if (plugin_manager::unload(*it))
+                                it = pluginStateRestored.erase(it);             // could unload, consider it done
+                            else
+                                ++it;                                           // deal with next round
+                        }
+                        if (pluginStateRestored.empty()) break;
+                    }
+                    for (QString dep : gpe->mDependencies)
+                    {
+                        // unload dependencies unless they are required from other side
+                        if (pluginEntries.contains(dep) && pluginEntries.value(dep)->mLoadState > GuiPluginEntry::NotLoaded) continue;
+                        plugin_manager::unload(dep.toStdString());
+                    }
                 }
             }
         }
@@ -631,7 +658,7 @@ namespace hal {
             reStr = "Default (.*) Parser";
         else if (mFeature == FacExtensionInterface::FacGatelibWriter || mFeature == FacExtensionInterface::FacNetlistWriter)
             reStr = "Default (.*) Writer";
-        QRegExp re(reStr, Qt::CaseInsensitive);
+        QRegularExpression reFileType(reStr, QRegularExpression::CaseInsensitiveOption);
 
         QString retval;
 
@@ -649,9 +676,10 @@ namespace hal {
         for (auto it = pluginMap.constBegin(); it != pluginMap.constEnd(); ++it)
         {
             QString label = it.value();
-            QString fileFmt = (re.indexIn(label) < 0)
-                    ? label.remove(QChar(':'))
-                    : re.cap(1) + QString(" files ");
+            QRegularExpressionMatch reFileTypeMatch = reFileType.match(label);
+            QString fileFmt = (reFileTypeMatch.hasMatch())
+                      ? reFileTypeMatch.captured(1) + QString(" files ")
+                      : label.remove(QChar(':'));
             if (formatMap.contains(fileFmt))
                 formatMap[fileFmt] += " *" + it.key();
             else

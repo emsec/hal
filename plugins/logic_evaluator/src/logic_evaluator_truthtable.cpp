@@ -138,9 +138,9 @@ namespace hal {
             if (i) layout->addStretch();
             layout->addWidget(new QLabel(QString("%1%2 sort key").arg(i+1).arg(i<3?ordinal[i]:ordinal[2]),this));
             mSortKey[i] = new QComboBox(this);
-            mSortKey[i]->addItem("--not used--", (const void*) nullptr);
+            mSortKey[i]->addItem("--not used--", QVariant::fromValue(nullptr));
             for (const Net* n : mNets)
-                mSortKey[i]->addItem(QString::fromStdString(n->get_name()),(const void*)n);
+                mSortKey[i]->addItem(QString::fromStdString(n->get_name()),QVariant::fromValue((const void*)n));
             layout->addWidget(mSortKey[i]);
         }
         QDialogButtonBox* bbox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);

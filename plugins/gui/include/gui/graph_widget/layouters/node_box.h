@@ -175,7 +175,7 @@ namespace hal {
         /**
          * @brief boxForGate find NodeBox by Gate pointer.
          * @param g pointer to netlist Gate
-         * @return pointer to NodeBox or nullptr if none found
+         * @return pointer to NodeBox or `nullptr` if none found
          *
          * A NodeBox is returned if the box either represents the given gate or
          * if the gate is part of a module rendered as box. The method ist mostly
@@ -186,14 +186,14 @@ namespace hal {
         /**
          * @brief boxForPoint find NodeBox by grid position
          * @param p integer grid position
-         * @return pointer to NodeBox or nullptr if none found
+         * @return pointer to NodeBox or `nullptr` if none found
          */
         NodeBox* boxForPoint(const QPoint& p) const { return mPointHash.value(p); }
 
         /**
          * @brief boxForNode find NodeBox by node
          * @param n the node
-         * @return pointer to NodeBox or nullptr if none found
+         * @return pointer to NodeBox or `nullptr` if none found
          *
          * Used to search gates or modules by ID.
          */
@@ -202,7 +202,7 @@ namespace hal {
         /**
          * @brief boxForItem find NodeBox by graphics item
          * @param item pointer to graphics item
-         * @return pointer to NodeBox or nullptr if none found
+         * @return pointer to NodeBox or `nullptr` if none found
          *
          * Mostly used to find NodeBox selected in QGraphicsView engine, e.g. by mouse position
          */

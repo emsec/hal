@@ -40,6 +40,9 @@
 
         class Searchbar;
 
+        /**
+         * An entry of the gate selection tree that can additionally be checked by the user.
+         */
         class SelectGateItem : public ModuleItem
         {
             Qt::CheckState mState;
@@ -55,6 +58,9 @@
 
         class LogicEvaluatorSelectGates;
 
+        /**
+         * The item model behind the gate selection tree of the logic evaluator.
+         */
         class SelectGateModel : public ModuleModel
         {
             Q_OBJECT
@@ -76,7 +82,10 @@
             const std::vector<Gate*>& selectedGates() const {return mSelectedGates; }
         };
 
-        class LogicEvaluatorSelectGates : public QDialog
+        /**
+     * The dialog in which the user selects the gates that the logic evaluator operates on.
+     */
+    class LogicEvaluatorSelectGates : public QDialog
         {
             Q_OBJECT
 

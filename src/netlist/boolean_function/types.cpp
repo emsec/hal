@@ -140,6 +140,13 @@ namespace hal
             return out;
         }
 
+        std::string QueryConfig::to_string() const
+        {
+            std::stringstream ss;
+            ss << *this;
+            return ss.str();
+        }
+
         Constraint::Constraint(BooleanFunction&& _constraint) : constraint(std::move(_constraint))
         {
         }
@@ -210,11 +217,18 @@ namespace hal
         std::ostream& operator<<(std::ostream& out, const Model& model)
         {
             auto s = std::accumulate(model.model.begin(), model.model.end(), std::string(), [](auto accumulator, auto entry) -> std::string {
-                return accumulator + ", " + std::get<0>(entry) + ":" + std::to_string(std::get<0>(std::get<1>(entry)));
+                return accumulator + (accumulator.empty() ? "" : ", ") + std::get<0>(entry) + ":" + std::to_string(std::get<0>(std::get<1>(entry)));
             });
 
             out << "{" << s << "}";
             return out;
+        }
+
+        std::string Model::to_string() const
+        {
+            std::stringstream ss;
+            ss << *this;
+            return ss.str();
         }
 
         Result<Model> Model::parse(const std::string& s, const SolverType& type)
@@ -346,6 +360,13 @@ namespace hal
             }
             out << "}";
             return out;
+        }
+
+        std::string SolverResult::to_string() const
+        {
+            std::stringstream ss;
+            ss << *this;
+            return ss.str();
         }
     }    // namespace SMT
 

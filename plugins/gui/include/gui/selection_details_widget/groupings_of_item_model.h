@@ -105,7 +105,7 @@ namespace hal
          * @param index - The model index
          * @param value - The value to set
          * @param role - The access role
-         * @returns <b>true</b> on success
+         * @returns `true` on success, `false` otherwise.
          */
         bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
@@ -153,7 +153,8 @@ namespace hal
          * @param row - The first row to remove. Row index must be valid.
          * @param count - The amount of rows to remove. Must be greater than 0. 
          *                All indices (row, ..., row+count-1) must be valid.
-         * @returns true if the specified rows are removed successfully. Returns false for invalid parameters.
+         * @param parent - The parent index of the rows to remove. The model is flat, so this must be an invalid index.
+         * @returns `true` if the specified rows are removed successfully. Returns `false` for invalid parameters, `false` otherwise.
          */
         bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 

@@ -1,0 +1,35 @@
+library (TEST_GATE_LIBRARY) {
+    define(cell);
+    type (BUS4) {
+        base_type : array;
+        data_type : bit;
+        bit_width : 4;
+        bit_from : 3;
+        bit_to : 0;
+        downto : true;
+    }
+    type (BUS2) {
+        base_type : array;
+        data_type : bit;
+        bit_width : 2;
+        bit_from : 0;
+        bit_to : 1;
+        downto : false;
+    }
+    cell(TEST_GATE_TYPE) {
+        bus(A) {
+            bus_type : BUS4;
+            direction : input;
+            pin(A[3:0]) {
+                direction : input;
+            }
+        }
+        bus(O) {
+            bus_type : BUS2;
+            direction : output;
+            pin(O[0:1]) {
+                direction : output;
+            }
+        }
+    }
+}

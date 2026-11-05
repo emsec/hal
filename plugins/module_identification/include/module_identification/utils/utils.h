@@ -24,7 +24,7 @@
 // SOFTWARE.
 
 /**
- * @file module_identification_helpers.h
+ * @file utils.h
  * @brief This file contains helper functions for module identification in the HAL framework.
  */
 
@@ -91,7 +91,7 @@ namespace hal
          * By default, only nets with external destinations are considered.
          *
          * @param[in] gates - A vector of gates to analyze.
-         * @param[in] only_external_destinations - Boolean flag indicating whether to consider only external destinations (default is true).
+         * @param[in] only_external_destinations - Boolean flag indicating whether to consider only external destinations (default is `true`).
          * @returns A vector of nets representing the outputs from the specified gates.
          */
         std::vector<Net*> get_output_nets(const std::vector<Gate*>& gates, bool only_external_destinations = true);

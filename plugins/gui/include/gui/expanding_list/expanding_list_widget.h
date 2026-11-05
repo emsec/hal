@@ -120,10 +120,10 @@ namespace hal
         void repolish();
 
         /**
-         * Returns <b>true</b> iff this ExpandingListWidget has a ExpandingListGroup with the specified name.
+         * Returns `true` iff this ExpandingListWidget has a ExpandingListGroup with the specified name.
          *
          * @param groupName - The name of the ExpandingListGroup to search for
-         * @returns <b>true</b> iff the the group exists
+         * @returns `true` iff the the group exists, `false` otherwise.
          */
         bool hasGroup(const QString& groupName) const;
 

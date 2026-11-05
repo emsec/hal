@@ -27,18 +27,24 @@
 
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
+#include <memory>
+
 namespace hal
 {
+    /**
+     * A gate type component that describes where the initialization data of a gate is stored within its data container.
+     */
     class InitComponent : public GateTypeComponent
     {
     public:
         /**
-         * Construct a new InitComponent with given child component, the category and a vector of identifiers pointing to the initialization data.
-         * 
+         * Create a new InitComponent with the category and a vector of identifiers pointing to the initialization data.
+         *
          * @param[in] init_category - The data category.
          * @param[in] init_identifiers - The data identifiers.
+         * @returns The InitComponent.
          */
-        InitComponent(const std::string& init_category, const std::vector<std::string>& init_identifiers);
+        static std::unique_ptr<InitComponent> create(const std::string& init_category, const std::vector<std::string>& init_identifiers);
 
         /**
          * Get the type of the gate type component.
@@ -51,7 +57,7 @@ namespace hal
          * Check whether a component is an InitComponent.
          * 
          * @param[in] component - The component to check.
-         * @returns True if component is an InitComponent, false otherwise.
+         * @returns `true` if component is an InitComponent, `false` otherwise.
          */
         static bool is_class_of(const GateTypeComponent* component);
 
@@ -93,6 +99,8 @@ namespace hal
         void set_init_identifiers(const std::vector<std::string>& init_identifiers);
 
     private:
+        InitComponent(const std::string& init_category, const std::vector<std::string>& init_identifiers);
+
         static constexpr ComponentType m_type = ComponentType::init;
 
         std::string m_init_category                 = "";

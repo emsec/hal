@@ -4,6 +4,7 @@
 #include "hal_core/netlist/boolean_function/solver.h"
 #include "hal_core/netlist/boolean_function/types.h"
 
+#include <functional>
 #include <iostream>
 #include <type_traits>
 #include <variant>
@@ -238,6 +239,446 @@ namespace hal {
             auto function = BooleanFunction::from_string(s);
             ASSERT_TRUE(function.is_ok());
             ASSERT_EQ(function.get(), expected);
+        }
+    }
+
+    TEST(BooleanFunction, ParserTernaryAndEq) {
+        // Single ternary
+        {
+            auto fn = BooleanFunction::from_string("a ? b : c");
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Ite(BooleanFunction::Var("a"), BooleanFunction::Var("b"), BooleanFunction::Var("c"), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Equality with constants
+        {
+            auto fn = BooleanFunction::from_string("a == 1");
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Eq(BooleanFunction::Var("a"), BooleanFunction::Const(1, 1), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Ternary whose condition is a comparison
+        {
+            auto fn = BooleanFunction::from_string("(p == 1) ? a : b");
+            ASSERT_TRUE(fn.is_ok());
+            auto cond = BooleanFunction::Eq(BooleanFunction::Var("p"), BooleanFunction::Const(1, 1), 1);
+            ASSERT_TRUE(cond.is_ok());
+            auto expected = BooleanFunction::Ite(cond.get(), BooleanFunction::Var("a"), BooleanFunction::Var("b"), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Nested ternary with explicit parens — outer cond is `a`, then-branch is the inner ternary
+        {
+            auto fn = BooleanFunction::from_string("a ? (b ? c : d) : e");
+            ASSERT_TRUE(fn.is_ok());
+            auto inner = BooleanFunction::Ite(BooleanFunction::Var("b"), BooleanFunction::Var("c"), BooleanFunction::Var("d"), 1);
+            ASSERT_TRUE(inner.is_ok());
+            auto expected = BooleanFunction::Ite(BooleanFunction::Var("a"), inner.get(), BooleanFunction::Var("e"), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Multi-bit binary constant
+        {
+            auto fn = BooleanFunction::from_string("0b101");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Const(5, 3));
+        }
+        // Multi-bit hex constant (each digit = 4 bits)
+        {
+            auto fn = BooleanFunction::from_string("0xA");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Const(10, 4));
+        }
+        {
+            auto fn = BooleanFunction::from_string("0xff");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Const(0xff, 8));
+        }
+        // Multi-bit octal constant (each digit = 3 bits)
+        {
+            auto fn = BooleanFunction::from_string("0o7");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Const(7, 3));
+        }
+        {
+            auto fn = BooleanFunction::from_string("0o17");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Const(0017, 6));
+        }
+        // Unparenthesized nested ternary parses with right-associativity:
+        // `a ? b : c ? d : e` == `a ? b : (c ? d : e)`
+        {
+            auto fn = BooleanFunction::from_string("a ? b : c ? d : e");
+            ASSERT_TRUE(fn.is_ok());
+            auto inner = BooleanFunction::Ite(BooleanFunction::Var("c"), BooleanFunction::Var("d"), BooleanFunction::Var("e"), 1);
+            ASSERT_TRUE(inner.is_ok());
+            auto expected = BooleanFunction::Ite(BooleanFunction::Var("a"), BooleanFunction::Var("b"), inner.get(), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Equality with multi-bit constants
+        {
+            auto fn = BooleanFunction::from_string("0b101 == 0b101");
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Eq(BooleanFunction::Const(5, 3), BooleanFunction::Const(5, 3), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        {
+            auto fn = BooleanFunction::from_string("0xA == 0xA");
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Eq(BooleanFunction::Const(10, 4), BooleanFunction::Const(10, 4), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+    }
+
+    TEST(BooleanFunction, ParserTernarySimplify) {
+        // `1 ? a : b` reduces to `a`
+        {
+            auto fn = BooleanFunction::from_string("1 ? a : b");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Var("a"));
+        }
+        // `0 ? a : b` reduces to `b`
+        {
+            auto fn = BooleanFunction::from_string("0 ? a : b");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Var("b"));
+        }
+        // `(1 == 1) ? a : b` reduces to `a`
+        {
+            auto fn = BooleanFunction::from_string("(1 == 1) ? a : b");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Var("a"));
+        }
+        // `(1 == 0) ? a : b` reduces to `b`
+        {
+            auto fn = BooleanFunction::from_string("(1 == 0) ? a : b");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Var("b"));
+        }
+        // Substitute a parameter, then simplify reduces the ternary to one branch.
+        {
+            auto fn = BooleanFunction::from_string("(p == 1) ? a : b");
+            ASSERT_TRUE(fn.is_ok());
+            auto subst = fn.get().substitute("p", BooleanFunction::Const(1, 1));
+            ASSERT_TRUE(subst.is_ok());
+            EXPECT_EQ(subst.get().simplify(), BooleanFunction::Var("a"));
+        }
+        // `cond ? x : x` simplifies to `x` regardless of cond.
+        {
+            auto fn = BooleanFunction::from_string("cond ? x : x");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Var("x"));
+        }
+        // Simplification of equality between matching multi-bit constants.
+        {
+            auto fn = BooleanFunction::from_string("0b101 == 0b101");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Const(1, 1));
+        }
+        // Simplification of equality between non-matching multi-bit constants.
+        {
+            auto fn = BooleanFunction::from_string("0xA == 0xB");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Const(0, 1));
+        }
+    }
+
+    TEST(BooleanFunction, ParserWithVariableSizes) {
+        // Without a size map, A == 0xA produces a malformed BF (sizes mismatch).
+        // With the map, A is parsed as 4-bit and the comparison is well-formed.
+        {
+            std::map<std::string, u16> sizes = {{"A", 4}};
+            auto fn = BooleanFunction::from_string("A == 0xA", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Eq(BooleanFunction::Var("A", 4), BooleanFunction::Const(10, 4), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Substituting A with a matching constant + simplifying reduces fully.
+        {
+            std::map<std::string, u16> sizes = {{"mode", 2}};
+            auto fn = BooleanFunction::from_string("(mode == 0b10) ? a : b", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto subst = fn.get().substitute("mode", BooleanFunction::Const(2, 2));
+            ASSERT_TRUE(subst.is_ok());
+            EXPECT_EQ(subst.get().simplify(), BooleanFunction::Var("a"));
+        }
+        // Variables not in the map default to 1 bit (preserves existing behavior).
+        {
+            std::map<std::string, u16> sizes = {{"A", 4}};
+            auto fn = BooleanFunction::from_string("(A == 0xA) & b", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto eq = BooleanFunction::Eq(BooleanFunction::Var("A", 4), BooleanFunction::Const(10, 4), 1);
+            ASSERT_TRUE(eq.is_ok());
+            auto expected = eq.get() & BooleanFunction::Var("b");
+            EXPECT_EQ(fn.get(), expected);
+        }
+    }
+
+    TEST(BooleanFunction, ParserMultiBitOps) {
+        const std::map<std::string, u16> sizes = {{"A", 4}, {"B", 4}};
+
+        // AND with multi-bit variables
+        {
+            auto fn = BooleanFunction::from_string("A & B", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Var("A", 4) & BooleanFunction::Var("B", 4));
+            EXPECT_EQ(fn.get().size(), 4);
+        }
+        // OR with multi-bit variables
+        {
+            auto fn = BooleanFunction::from_string("A | B", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Var("A", 4) | BooleanFunction::Var("B", 4));
+            EXPECT_EQ(fn.get().size(), 4);
+        }
+        // XOR with multi-bit variables
+        {
+            auto fn = BooleanFunction::from_string("A ^ B", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Var("A", 4) ^ BooleanFunction::Var("B", 4));
+            EXPECT_EQ(fn.get().size(), 4);
+        }
+        // NOT with a multi-bit variable
+        {
+            auto fn = BooleanFunction::from_string("!A", {{"A", 4}});
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), ~BooleanFunction::Var("A", 4));
+            EXPECT_EQ(fn.get().size(), 4);
+        }
+        // Compound: combination of multi-bit ops
+        {
+            auto fn = BooleanFunction::from_string("(A & B) ^ !A", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            const auto a = BooleanFunction::Var("A", 4);
+            const auto b = BooleanFunction::Var("B", 4);
+            EXPECT_EQ(fn.get(), (a.clone() & b) ^ ~a);
+        }
+        // AND of two multi-bit constants (no map needed)
+        {
+            auto fn = BooleanFunction::from_string("0xA & 0xF");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Const(0xA, 4) & BooleanFunction::Const(0xF, 4));
+        }
+    }
+
+    TEST(BooleanFunction, ParserSizeMismatchFailures) {
+        // Variable defaults to 1 bit but constant is 4 bit -> Eq operands differ.
+        {
+            auto fn = BooleanFunction::from_string("A == 0xA");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // 1-bit variable AND'd with 4-bit constant.
+        {
+            auto fn = BooleanFunction::from_string("A & 0xF");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // A is 4-bit, B defaults to 1-bit; bit-widths don't match in AND.
+        {
+            std::map<std::string, u16> sizes = {{"A", 4}};
+            auto fn = BooleanFunction::from_string("A & B", sizes);
+            EXPECT_TRUE(fn.is_error());
+        }
+        // Octal (3-bit) compared to binary 4-bit constant.
+        {
+            auto fn = BooleanFunction::from_string("0o7 == 0b1111");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // Mixed sizes inside a ternary: condition is 4-bit, but Ite requires 1-bit cond.
+        {
+            std::map<std::string, u16> sizes = {{"A", 4}};
+            auto fn = BooleanFunction::from_string("A ? a : b", sizes);
+            EXPECT_TRUE(fn.is_error());
+        }
+    }
+
+    TEST(BooleanFunction, ParserArithmeticOps) {
+        const std::map<std::string, u16> sizes = {{"a", 4}, {"b", 4}, {"c", 4}};
+
+        // Addition with multi-bit variables.
+        {
+            auto fn = BooleanFunction::from_string("a + b", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Add(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+            EXPECT_EQ(fn.get().size(), 4);
+        }
+        // Subtraction with multi-bit variables.
+        {
+            auto fn = BooleanFunction::from_string("a - b", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Sub(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Multiplication with multi-bit variables.
+        {
+            auto fn = BooleanFunction::from_string("a * b", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Mul(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Mul has higher precedence than Add: `a + b * c` == `a + (b * c)`.
+        {
+            auto fn = BooleanFunction::from_string("a + b * c", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto bc = BooleanFunction::Mul(BooleanFunction::Var("b", 4), BooleanFunction::Var("c", 4), 4);
+            ASSERT_TRUE(bc.is_ok());
+            auto expected = BooleanFunction::Add(BooleanFunction::Var("a", 4), bc.get(), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Mul on the left of Add: `a * b + c` == `(a * b) + c`.
+        {
+            auto fn = BooleanFunction::from_string("a * b + c", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto ab = BooleanFunction::Mul(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(ab.is_ok());
+            auto expected = BooleanFunction::Add(ab.get(), BooleanFunction::Var("c", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Mul interleaved with Sub on both sides: `a - b * c - d` == `(a - (b * c)) - d`.
+        {
+            std::map<std::string, u16> sizes_d = {{"a", 4}, {"b", 4}, {"c", 4}, {"d", 4}};
+            auto fn = BooleanFunction::from_string("a - b * c - d", sizes_d);
+            ASSERT_TRUE(fn.is_ok());
+            auto bc = BooleanFunction::Mul(BooleanFunction::Var("b", 4), BooleanFunction::Var("c", 4), 4);
+            ASSERT_TRUE(bc.is_ok());
+            auto a_bc = BooleanFunction::Sub(BooleanFunction::Var("a", 4), bc.get(), 4);
+            ASSERT_TRUE(a_bc.is_ok());
+            auto expected = BooleanFunction::Sub(a_bc.get(), BooleanFunction::Var("d", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Mul is left-associative: `a * b * c` == `(a * b) * c`.
+        {
+            auto fn = BooleanFunction::from_string("a * b * c", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto ab = BooleanFunction::Mul(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(ab.is_ok());
+            auto expected = BooleanFunction::Mul(ab.get(), BooleanFunction::Var("c", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Mul has higher precedence than the bitwise And: `a & b * c` == `a & (b * c)`.
+        {
+            auto fn = BooleanFunction::from_string("a & b * c", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto bc = BooleanFunction::Mul(BooleanFunction::Var("b", 4), BooleanFunction::Var("c", 4), 4);
+            ASSERT_TRUE(bc.is_ok());
+            auto expected = BooleanFunction::Var("a", 4) & bc.get();
+            EXPECT_EQ(fn.get(), expected);
+        }
+        // Subtraction is left-associative: `a - b - c` == `(a - b) - c`.
+        {
+            auto fn = BooleanFunction::from_string("a - b - c", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto ab = BooleanFunction::Sub(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(ab.is_ok());
+            auto expected = BooleanFunction::Sub(ab.get(), BooleanFunction::Var("c", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Addition has higher precedence than equality: `a + b == c` parses
+        // as `(a + b) == c` (Eq result is 1-bit, operands share the 4-bit width).
+        {
+            auto fn = BooleanFunction::from_string("a + b == c", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto ab = BooleanFunction::Add(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(ab.is_ok());
+            auto expected = BooleanFunction::Eq(ab.get(), BooleanFunction::Var("c", 4), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Constants only — exercises that the parser/validator accept multi-bit constant arithmetic.
+        {
+            auto fn = BooleanFunction::from_string("0b01 + 0b10");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().size(), 2);
+            // simplify reduces to the concrete sum.
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Const(3, 2));
+        }
+        {
+            auto fn = BooleanFunction::from_string("0b11 * 0b10");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Const(6, 2));
+        }
+        {
+            auto fn = BooleanFunction::from_string("0b11 - 0b01");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Const(2, 2));
+        }
+    }
+
+    TEST(BooleanFunction, ParserArithmeticSizeMismatch) {
+        // Notes on cross-parser behavior: from_string tries Standard, then Liberty, then
+        // LibertyNoSpace. The cases here are picked so that all three parsers fail —
+        // Standard by operand-size validation, Liberty by either rejecting the operator
+        // ('-') or by ending up with the same mismatched-size structure ('+' => Or,
+        // '*' => And).
+        {
+            // 4-bit + 1-bit default in Standard (Add) and Liberty (Or).
+            std::map<std::string, u16> sizes = {{"a", 4}};
+            auto fn = BooleanFunction::from_string("a + b", sizes);
+            EXPECT_TRUE(fn.is_error());
+        }
+        {
+            // 4-bit - 1-bit default; Liberty has no '-' operator so it cannot tokenize.
+            std::map<std::string, u16> sizes = {{"a", 4}};
+            auto fn = BooleanFunction::from_string("a - b", sizes);
+            EXPECT_TRUE(fn.is_error());
+        }
+        {
+            // 4-bit * 1-bit default in Standard (Mul) and Liberty (And).
+            std::map<std::string, u16> sizes = {{"a", 4}};
+            auto fn = BooleanFunction::from_string("a * b", sizes);
+            EXPECT_TRUE(fn.is_error());
+        }
+    }
+
+    TEST(BooleanFunction, ParserMalformedTernary) {
+        // `?` without matching `:`
+        {
+            auto fn = BooleanFunction::from_string("a ? b");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // `:` without preceding `?`
+        {
+            auto fn = BooleanFunction::from_string("a : b");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // `?` in isolation at the start
+        {
+            auto fn = BooleanFunction::from_string("? a");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // `:` in isolation at the start
+        {
+            auto fn = BooleanFunction::from_string(": a");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // Wrong order: `:` appears before its `?`
+        {
+            auto fn = BooleanFunction::from_string("a : b ? c");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // Trailing `?` with nothing after
+        {
+            auto fn = BooleanFunction::from_string("a ?");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // Missing then-branch: `?:` with no operand between them
+        {
+            auto fn = BooleanFunction::from_string("a ? : b");
+            EXPECT_TRUE(fn.is_error());
         }
     }
 
@@ -1173,6 +1614,513 @@ namespace hal {
         for (const auto& [function, input, expected]: data) {
             auto value = function.evaluate(input);
             EXPECT_EQ(expected, value.get());
+        }
+    }
+
+    namespace {
+        /**
+         * Translates an integer into the little endian vector of values that BooleanFunction::evaluate() takes
+         * and returns, so that the expectations below can be written as plain bit patterns.
+         */
+        std::vector<BooleanFunction::Value> bits(u64 value, u16 size) {
+            std::vector<BooleanFunction::Value> res;
+            res.reserve(size);
+            for (u16 i = 0; i < size; i++) {
+                res.push_back(((value >> i) & 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
+            }
+            return res;
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateShiftsAndRotates) {
+        const auto a  = BooleanFunction::Var("A", 4);
+        const auto i0 = BooleanFunction::Index(0, 4),
+                   i1 = BooleanFunction::Index(1, 4),
+                   i3 = BooleanFunction::Index(3, 4),
+                   i4 = BooleanFunction::Index(4, 4),
+                   i5 = BooleanFunction::Index(5, 4);
+
+        // description, function, value of A, expected result
+        const std::vector<std::tuple<std::string, BooleanFunction, u64, u64>> data = {
+            {"Shl 0b1011 by 0",  BooleanFunction::Shl(a.clone(), i0.clone(), 4).get(),  0b1011, 0b1011},
+            {"Shl 0b1011 by 1",  BooleanFunction::Shl(a.clone(), i1.clone(), 4).get(),  0b1011, 0b0110},
+            {"Shl 0b1011 by 3",  BooleanFunction::Shl(a.clone(), i3.clone(), 4).get(),  0b1011, 0b1000},
+
+            {"Lshr 0b1011 by 1", BooleanFunction::Lshr(a.clone(), i1.clone(), 4).get(), 0b1011, 0b0101},
+            {"Lshr 0b1011 by 3", BooleanFunction::Lshr(a.clone(), i3.clone(), 4).get(), 0b1011, 0b0001},
+
+            // arithmetic shift right replicates the sign bit, in contrast to the logical one
+            {"Ashr 0b1011 by 1", BooleanFunction::Ashr(a.clone(), i1.clone(), 4).get(), 0b1011, 0b1101},
+            {"Ashr 0b1011 by 3", BooleanFunction::Ashr(a.clone(), i3.clone(), 4).get(), 0b1011, 0b1111},
+            {"Ashr 0b0110 by 1", BooleanFunction::Ashr(a.clone(), i1.clone(), 4).get(), 0b0110, 0b0011},
+
+            {"Rol 0b1011 by 1",  BooleanFunction::Rol(a.clone(), i1.clone(), 4).get(),  0b1011, 0b0111},
+            {"Rol 0b1011 by 3",  BooleanFunction::Rol(a.clone(), i3.clone(), 4).get(),  0b1011, 0b1101},
+            {"Ror 0b1011 by 1",  BooleanFunction::Ror(a.clone(), i1.clone(), 4).get(),  0b1011, 0b1101},
+            {"Ror 0b1011 by 3",  BooleanFunction::Ror(a.clone(), i3.clone(), 4).get(),  0b1011, 0b0111},
+
+            // shifting by at least the bit width leaves nothing of the original value behind, while a
+            // rotation wraps around and is the identity for a full turn
+            {"Shl 0b1011 by 4",  BooleanFunction::Shl(a.clone(), i4.clone(), 4).get(),  0b1011, 0b0000},
+            {"Shl 0b1011 by 5",  BooleanFunction::Shl(a.clone(), i5.clone(), 4).get(),  0b1011, 0b0000},
+            {"Lshr 0b1011 by 4", BooleanFunction::Lshr(a.clone(), i4.clone(), 4).get(), 0b1011, 0b0000},
+            {"Ashr 0b1011 by 4", BooleanFunction::Ashr(a.clone(), i4.clone(), 4).get(), 0b1011, 0b1111},
+            {"Ashr 0b0110 by 4", BooleanFunction::Ashr(a.clone(), i4.clone(), 4).get(), 0b0110, 0b0000},
+            {"Rol 0b1011 by 4",  BooleanFunction::Rol(a.clone(), i4.clone(), 4).get(),  0b1011, 0b1011},
+            {"Rol 0b1011 by 5",  BooleanFunction::Rol(a.clone(), i5.clone(), 4).get(),  0b1011, 0b0111},
+            {"Ror 0b1011 by 4",  BooleanFunction::Ror(a.clone(), i4.clone(), 4).get(),  0b1011, 0b1011},
+            {"Ror 0b1011 by 5",  BooleanFunction::Ror(a.clone(), i5.clone(), 4).get(),  0b1011, 0b1101},
+        };
+
+        for (const auto& [description, function, input, expected] : data) {
+            const auto value = function.evaluate({{"A", bits(input, 4)}});
+            ASSERT_TRUE(value.is_ok()) << description;
+            EXPECT_EQ(bits(expected, 4), value.get()) << description;
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateSliceConcatAndExtend) {
+        const auto a2 = BooleanFunction::Var("A", 2),
+                   b2 = BooleanFunction::Var("B", 2),
+                   a4 = BooleanFunction::Var("A", 4);
+
+        {
+            // slice keeps the bits from index p1 up to and including index p2
+            const std::vector<std::tuple<std::string, BooleanFunction, u64, u16, u64>> data = {
+                {"Slice 0b1010 [1:1]", BooleanFunction::Slice(a4.clone(), BooleanFunction::Index(1, 4), BooleanFunction::Index(1, 4), 1).get(), 0b1010, 1, 0b1},
+                {"Slice 0b1010 [2:2]", BooleanFunction::Slice(a4.clone(), BooleanFunction::Index(2, 4), BooleanFunction::Index(2, 4), 1).get(), 0b1010, 1, 0b0},
+                {"Slice 0b1010 [1:2]", BooleanFunction::Slice(a4.clone(), BooleanFunction::Index(1, 4), BooleanFunction::Index(2, 4), 2).get(), 0b1010, 2, 0b01},
+                {"Slice 0b1010 [0:3]", BooleanFunction::Slice(a4.clone(), BooleanFunction::Index(0, 4), BooleanFunction::Index(3, 4), 4).get(), 0b1010, 4, 0b1010},
+            };
+
+            for (const auto& [description, function, input, size, expected] : data) {
+                const auto value = function.evaluate({{"A", bits(input, 4)}});
+                ASSERT_TRUE(value.is_ok()) << description;
+                EXPECT_EQ(bits(expected, size), value.get()) << description;
+            }
+        }
+
+        {
+            // the first parameter of a concatenation holds the most significant bits
+            const auto function = BooleanFunction::Concat(a2.clone(), b2.clone(), 4).get();
+            const auto value    = function.evaluate({{"A", bits(0b10, 2)}, {"B", bits(0b01, 2)}});
+            ASSERT_TRUE(value.is_ok());
+            EXPECT_EQ(bits(0b1001, 4), value.get());
+        }
+
+        {
+            const auto zext = BooleanFunction::Zext(a2.clone(), BooleanFunction::Index(4, 4), 4).get();
+            const auto sext = BooleanFunction::Sext(a2.clone(), BooleanFunction::Index(4, 4), 4).get();
+
+            // zero extension always pads with zeroes, sign extension replicates the most significant bit
+            const std::vector<std::tuple<std::string, BooleanFunction, u64, u64>> data = {
+                {"Zext 0b01 to 4", zext.clone(), 0b01, 0b0001},
+                {"Zext 0b11 to 4", zext.clone(), 0b11, 0b0011},
+                {"Sext 0b01 to 4", sext.clone(), 0b01, 0b0001},
+                {"Sext 0b11 to 4", sext.clone(), 0b11, 0b1111},
+            };
+
+            for (const auto& [description, function, input, expected] : data) {
+                const auto value = function.evaluate({{"A", bits(input, 2)}});
+                ASSERT_TRUE(value.is_ok()) << description;
+                EXPECT_EQ(bits(expected, 4), value.get()) << description;
+            }
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateComparisons) {
+        const auto a = BooleanFunction::Var("A", 4),
+                   b = BooleanFunction::Var("B", 4);
+
+        const auto eq  = BooleanFunction::Eq(a.clone(), b.clone(), 1).get(),
+                   ule = BooleanFunction::Ule(a.clone(), b.clone(), 1).get(),
+                   ult = BooleanFunction::Ult(a.clone(), b.clone(), 1).get(),
+                   sle = BooleanFunction::Sle(a.clone(), b.clone(), 1).get(),
+                   slt = BooleanFunction::Slt(a.clone(), b.clone(), 1).get();
+
+        // description, function, A, B, expected. 0b1111 is 15 unsigned but -1 signed, 0b1000 is 8 but -8.
+        const std::vector<std::tuple<std::string, BooleanFunction, u64, u64, u64>> data = {
+            {"0b1010 == 0b1010", eq.clone(),  0b1010, 0b1010, 1},
+            {"0b1010 == 0b0101", eq.clone(),  0b1010, 0b0101, 0},
+
+            {"1 <=u 15", ule.clone(), 0b0001, 0b1111, 1},
+            {"15 <=u 15", ule.clone(), 0b1111, 0b1111, 1},
+            {"15 <=u 1", ule.clone(), 0b1111, 0b0001, 0},
+            {"1 <u 15", ult.clone(), 0b0001, 0b1111, 1},
+            {"15 <u 15", ult.clone(), 0b1111, 0b1111, 0},
+            {"15 <u 1", ult.clone(), 0b1111, 0b0001, 0},
+
+            // the same bit patterns compare the other way round once they are read as signed
+            {"-1 <=s 1", sle.clone(), 0b1111, 0b0001, 1},
+            {"1 <=s -1", sle.clone(), 0b0001, 0b1111, 0},
+            {"-8 <=s -8", sle.clone(), 0b1000, 0b1000, 1},
+            {"-1 <s 1", slt.clone(), 0b1111, 0b0001, 1},
+            {"1 <s -1", slt.clone(), 0b0001, 0b1111, 0},
+            {"-8 <s 7", slt.clone(), 0b1000, 0b0111, 1},
+            {"-8 <s -8", slt.clone(), 0b1000, 0b1000, 0},
+        };
+
+        for (const auto& [description, function, lhs, rhs, expected] : data) {
+            const auto value = function.evaluate({{"A", bits(lhs, 4)}, {"B", bits(rhs, 4)}});
+            ASSERT_TRUE(value.is_ok()) << description;
+            EXPECT_EQ(bits(expected, 1), value.get()) << description;
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateIte) {
+        const auto c = BooleanFunction::Var("C", 1),
+                   a = BooleanFunction::Var("A", 4),
+                   b = BooleanFunction::Var("B", 4);
+
+        const auto function = BooleanFunction::Ite(c.clone(), a.clone(), b.clone(), 4).get();
+
+        {
+            const auto value = function.evaluate({{"C", bits(1, 1)}, {"A", bits(0b1010, 4)}, {"B", bits(0b0101, 4)}});
+            ASSERT_TRUE(value.is_ok());
+            EXPECT_EQ(bits(0b1010, 4), value.get());
+        }
+        {
+            const auto value = function.evaluate({{"C", bits(0, 1)}, {"A", bits(0b1010, 4)}, {"B", bits(0b0101, 4)}});
+            ASSERT_TRUE(value.is_ok());
+            EXPECT_EQ(bits(0b0101, 4), value.get());
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateUndefinedPropagation) {
+        using Value = BooleanFunction::Value;
+
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B");
+
+        // an undefined input only stays undefined where the other operand does not already determine the result
+        const std::vector<std::tuple<std::string, BooleanFunction, Value, Value, Value>> data = {
+            {"0 & X", a & b, Value::ZERO, Value::X, Value::ZERO},
+            {"1 & X", a & b, Value::ONE, Value::X, Value::X},
+            {"X & X", a & b, Value::X, Value::X, Value::X},
+
+            {"1 | X", a | b, Value::ONE, Value::X, Value::ONE},
+            {"0 | X", a | b, Value::ZERO, Value::X, Value::X},
+            {"X | X", a | b, Value::X, Value::X, Value::X},
+
+            {"0 ^ X", a ^ b, Value::ZERO, Value::X, Value::X},
+            {"1 ^ X", a ^ b, Value::ONE, Value::X, Value::X},
+        };
+
+        for (const auto& [description, function, lhs, rhs, expected] : data) {
+            const std::unordered_map<std::string, std::vector<Value>> input = {{"A", {lhs}}, {"B", {rhs}}};
+            const auto value = function.evaluate(input);
+            ASSERT_TRUE(value.is_ok()) << description;
+            EXPECT_EQ(std::vector<Value>({expected}), value.get()) << description;
+        }
+
+        {
+            const std::unordered_map<std::string, std::vector<Value>> input = {{"A", {Value::X}}};
+            const auto value = (~a).evaluate(input);
+            ASSERT_TRUE(value.is_ok());
+            EXPECT_EQ(std::vector<Value>({Value::X}), value.get()) << "~X";
+        }
+
+        {
+            const auto a4 = BooleanFunction::Var("A", 4),
+                       b4 = BooleanFunction::Var("B", 4);
+
+            // 0b00X1 and 0b0001
+            const std::unordered_map<std::string, std::vector<Value>> input = {
+                {"A", {Value::ONE, Value::X, Value::ZERO, Value::ZERO}},
+                {"B", {Value::ONE, Value::ZERO, Value::ZERO, Value::ZERO}}};
+
+            const auto undefined = std::vector<Value>(4, Value::X);
+
+            // a single undefined bit makes the whole arithmetic result undefined, while the bitwise
+            // operations stay per bit
+            EXPECT_EQ(undefined, (a4 + b4).evaluate(input).get()) << "0b00X1 + 0b0001";
+            EXPECT_EQ(undefined, (a4 - b4).evaluate(input).get()) << "0b00X1 - 0b0001";
+            EXPECT_EQ(undefined, (a4 * b4).evaluate(input).get()) << "0b00X1 * 0b0001";
+            EXPECT_EQ(bits(0b0001, 4), (a4 & b4).evaluate(input).get()) << "0b00X1 & 0b0001";
+
+            EXPECT_EQ(std::vector<Value>({Value::X}), BooleanFunction::Ult(a4.clone(), b4.clone(), 1).get().evaluate(input).get()) << "0b00X1 <u 0b0001";
+
+            // an undefined bit hides whether the two are equal, just as it does for the other comparisons
+            EXPECT_EQ(std::vector<Value>({Value::X}), BooleanFunction::Eq(a4.clone(), b4.clone(), 1).get().evaluate(input).get()) << "0b00X1 == 0b0001";
+
+            // unless another bit already tells them apart
+            const std::unordered_map<std::string, std::vector<Value>> distinguishable = {
+                {"A", {Value::ONE, Value::X, Value::ZERO, Value::ZERO}},
+                {"B", {Value::ZERO, Value::ZERO, Value::ZERO, Value::ZERO}}};
+            EXPECT_EQ(bits(0, 1), BooleanFunction::Eq(a4.clone(), b4.clone(), 1).get().evaluate(distinguishable).get()) << "0b00X1 == 0b0000";
+        }
+    }
+
+    namespace {
+        /**
+         * Checks that simplifying a function does not change the value it computes for any input, by
+         * enumerating every assignment of its variables.
+         */
+        void expect_simplification_preserves_value(const BooleanFunction& function, const std::string& description) {
+            const auto simplified = function.simplify();
+
+            std::vector<std::pair<std::string, u16>> variables;
+            u32 total_bits = 0;
+            for (const auto& name : function.get_variable_names()) {
+                u16 size = 0;
+                for (const auto& node : function.get_nodes()) {
+                    if (node.is_variable() && (node.variable == name)) {
+                        size = node.size;
+                    }
+                }
+                variables.emplace_back(name, size);
+                total_bits += size;
+            }
+            ASSERT_LE(total_bits, 16u) << description << ": too many bits to enumerate";
+
+            for (u64 assignment = 0; assignment < (1ull << total_bits); assignment++) {
+                std::unordered_map<std::string, std::vector<BooleanFunction::Value>> input;
+                u32 offset = 0;
+                for (const auto& [name, size] : variables) {
+                    input[name] = bits(assignment >> offset, size);
+                    offset += size;
+                }
+
+                const auto before = function.evaluate(input);
+                const auto after  = simplified.evaluate(input);
+                ASSERT_TRUE(before.is_ok()) << description;
+                ASSERT_TRUE(after.is_ok()) << description;
+                ASSERT_EQ(before.get(), after.get()) << description << ", assignment " << assignment << ", simplified to " << simplified.to_string();
+            }
+        }
+    }
+
+    TEST(BooleanFunction, SimplificationOfWordLevelOperations) {
+        const auto a1 = BooleanFunction::Var("A", 1),
+                   a4 = BooleanFunction::Var("A", 4),
+                   b4 = BooleanFunction::Var("B", 4);
+
+        const auto i = [](u16 value, u16 size) { return BooleanFunction::Index(value, size); };
+
+        const std::vector<std::pair<std::string, BooleanFunction>> cases = {
+            // an extension to the width the value already has changes nothing
+            {"ZEXT(A, 4)", BooleanFunction::Zext(a4.clone(), i(4, 4), 4).get()},
+            {"SEXT(A, 4)", BooleanFunction::Sext(a4.clone(), i(4, 4), 4).get()},
+
+            // two extensions of the same kind collapse into the wider one
+            {"ZEXT(ZEXT(A, 8), 16)", BooleanFunction::Zext(BooleanFunction::Zext(a4.clone(), i(8, 8), 8).get(), i(16, 16), 16).get()},
+            {"SEXT(SEXT(A, 8), 16)", BooleanFunction::Sext(BooleanFunction::Sext(a4.clone(), i(8, 8), 8).get(), i(16, 16), 16).get()},
+
+            // a slice of a slice is a single slice of the original
+            {"SLICE(SLICE(A, 1, 3), 0, 1)", BooleanFunction::Slice(BooleanFunction::Slice(a4.clone(), i(1, 4), i(3, 4), 3).get(), i(0, 3), i(1, 3), 2).get()},
+            {"SLICE(SLICE(A, 1, 3), 1, 2)", BooleanFunction::Slice(BooleanFunction::Slice(a4.clone(), i(1, 4), i(3, 4), 3).get(), i(1, 3), i(2, 3), 2).get()},
+
+            // a slice that falls into one half of a concatenation only needs that half
+            {"SLICE(CONCAT(A, B), 0, 3)", BooleanFunction::Slice(BooleanFunction::Concat(a4.clone(), b4.clone(), 8).get(), i(0, 8), i(3, 8), 4).get()},
+            {"SLICE(CONCAT(A, B), 4, 7)", BooleanFunction::Slice(BooleanFunction::Concat(a4.clone(), b4.clone(), 8).get(), i(4, 8), i(7, 8), 4).get()},
+            {"SLICE(CONCAT(A, B), 1, 2)", BooleanFunction::Slice(BooleanFunction::Concat(a4.clone(), b4.clone(), 8).get(), i(1, 8), i(2, 8), 2).get()},
+            {"SLICE(CONCAT(A, B), 5, 6)", BooleanFunction::Slice(BooleanFunction::Concat(a4.clone(), b4.clone(), 8).get(), i(5, 8), i(6, 8), 2).get()},
+
+            // a slice of an extension sees either only the padding or only the original value
+            {"SLICE(ZEXT(A, 8), 4, 7)", BooleanFunction::Slice(BooleanFunction::Zext(a4.clone(), i(8, 8), 8).get(), i(4, 8), i(7, 8), 4).get()},
+            {"SLICE(ZEXT(A, 8), 5, 6)", BooleanFunction::Slice(BooleanFunction::Zext(a4.clone(), i(8, 8), 8).get(), i(5, 8), i(6, 8), 2).get()},
+            {"SLICE(ZEXT(A, 8), 0, 3)", BooleanFunction::Slice(BooleanFunction::Zext(a4.clone(), i(8, 8), 8).get(), i(0, 8), i(3, 8), 4).get()},
+            {"SLICE(ZEXT(A, 8), 1, 2)", BooleanFunction::Slice(BooleanFunction::Zext(a4.clone(), i(8, 8), 8).get(), i(1, 8), i(2, 8), 2).get()},
+            {"SLICE(SEXT(A, 8), 0, 3)", BooleanFunction::Slice(BooleanFunction::Sext(a4.clone(), i(8, 8), 8).get(), i(0, 8), i(3, 8), 4).get()},
+            {"SLICE(SEXT(A, 8), 1, 2)", BooleanFunction::Slice(BooleanFunction::Sext(a4.clone(), i(8, 8), 8).get(), i(1, 8), i(2, 8), 2).get()},
+
+            // comparisons against the extremes of the unsigned range
+            {"0 <=u A", BooleanFunction::Ule(BooleanFunction::Const(0, 4), a4.clone(), 1).get()},
+            {"A <=u 15", BooleanFunction::Ule(a4.clone(), BooleanFunction::Const(15, 4), 1).get()},
+            {"15 <u A", BooleanFunction::Ult(BooleanFunction::Const(15, 4), a4.clone(), 1).get()},
+
+            // equality of a value with its own negation, and of a single bit with a constant
+            {"A == ~A", BooleanFunction::Eq(a4.clone(), (~a4.clone()), 1).get()},
+            {"A == 1", BooleanFunction::Eq(a1.clone(), BooleanFunction::Const(1, 1), 1).get()},
+            {"A == 0", BooleanFunction::Eq(a1.clone(), BooleanFunction::Const(0, 1), 1).get()},
+
+            // a single bit choice between the two constants is the condition itself
+            {"ITE(A, 1, 0)", BooleanFunction::Ite(a1.clone(), BooleanFunction::Const(1, 1), BooleanFunction::Const(0, 1), 1).get()},
+            {"ITE(A, 0, 1)", BooleanFunction::Ite(a1.clone(), BooleanFunction::Const(0, 1), BooleanFunction::Const(1, 1), 1).get()},
+        };
+
+        for (const auto& [description, function] : cases) {
+            expect_simplification_preserves_value(function, description);
+            EXPECT_LT(function.simplify().get_nodes().size(), function.get_nodes().size()) << description << " was not simplified at all";
+        }
+    }
+
+    TEST(BooleanFunction, DivisionFactories) {
+        const auto a = BooleanFunction::Var("A", 4),
+                   b = BooleanFunction::Var("B", 4),
+                   c = BooleanFunction::Var("C", 8);
+
+        struct Factory
+        {
+            std::string name;
+            std::function<Result<BooleanFunction>(BooleanFunction&&, BooleanFunction&&, u16)> create;
+            u16 node_type;
+            std::string symbol;
+        };
+
+        const std::vector<Factory> factories = {
+            {"Sdiv", &BooleanFunction::Sdiv, BooleanFunction::NodeType::Sdiv, "/s"},
+            {"Udiv", &BooleanFunction::Udiv, BooleanFunction::NodeType::Udiv, "/"},
+            {"Srem", &BooleanFunction::Srem, BooleanFunction::NodeType::Srem, "%s"},
+            {"Urem", &BooleanFunction::Urem, BooleanFunction::NodeType::Urem, "%"},
+        };
+
+        for (const auto& factory : factories)
+        {
+            {
+                // operands and result of equal size are accepted
+                auto res = factory.create(a.clone(), b.clone(), 4);
+                ASSERT_TRUE(res.is_ok()) << factory.name;
+
+                const auto function = res.get();
+                EXPECT_EQ(4, function.size()) << factory.name;
+                EXPECT_EQ(factory.node_type, function.get_top_level_node().type) << factory.name;
+                EXPECT_EQ(std::set<std::string>({"A", "B"}), function.get_variable_names()) << factory.name;
+                EXPECT_NE(std::string::npos, function.to_string().find(factory.symbol)) << factory.name << " prints as " << function.to_string();
+            }
+
+            // operands of different size are rejected
+            EXPECT_TRUE(factory.create(a.clone(), c.clone(), 4).is_error()) << factory.name << " with mismatched operands";
+            EXPECT_TRUE(factory.create(c.clone(), a.clone(), 4).is_error()) << factory.name << " with mismatched operands";
+
+            // a result size that differs from the operands is rejected
+            EXPECT_TRUE(factory.create(a.clone(), b.clone(), 8).is_error()) << factory.name << " with mismatched result size";
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateWideArithmetic) {
+        // Addition and subtraction used to mask their result to 32 bit before truncating it to the width of
+        // the operands, so anything wider than that silently lost its upper bits.
+        for (const u16 size : std::vector<u16>{16, 32, 33, 40, 64}) {
+            const auto a = BooleanFunction::Var("A", size),
+                       b = BooleanFunction::Var("B", size);
+
+            const u64 mask    = (size >= 64) ? ~0ull : ((1ull << size) - 1);
+            const u64 operand = 1ull << (size - 2);
+
+            {
+                // the sum carries into the most significant bit
+                const std::unordered_map<std::string, std::vector<BooleanFunction::Value>> input = {{"A", bits(operand, size)}, {"B", bits(operand, size)}};
+                const auto value = (a + b).evaluate(input);
+                ASSERT_TRUE(value.is_ok()) << "addition of " << size << " bit operands";
+                EXPECT_EQ(bits((operand + operand) & mask, size), value.get()) << "addition of " << size << " bit operands";
+            }
+            {
+                // the difference underflows and wraps around over the full width
+                const std::unordered_map<std::string, std::vector<BooleanFunction::Value>> input = {{"A", bits(0, size)}, {"B", bits(1, size)}};
+                const auto value = (a - b).evaluate(input);
+                ASSERT_TRUE(value.is_ok()) << "subtraction of " << size << " bit operands";
+                EXPECT_EQ(bits(mask, size), value.get()) << "subtraction of " << size << " bit operands";
+            }
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateDivisionAndRemainder) {
+        // The division operations are translated to bvudiv, bvurem, bvsdiv and bvsrem when handed to an SMT
+        // solver, so constant folding has to agree with the SMT-LIB definitions of those. Reference
+        // implementations of exactly those definitions, against which the folding is checked exhaustively.
+        const auto mask = [](u16 size) -> u64 { return (size >= 64) ? ~0ull : ((1ull << size) - 1); };
+        const auto negate = [&](u64 value, u16 size) -> u64 { return (~value + 1) & mask(size); };
+        const auto is_negative = [](u64 value, u16 size) { return ((value >> (size - 1)) & 1) == 1; };
+
+        const auto ref_udiv = [&](u64 s, u64 t, u16 size) -> u64 { return (t == 0) ? mask(size) : (s / t); };
+        const auto ref_urem = [&](u64 s, u64 t, u16 size) -> u64 { (void)size; return (t == 0) ? s : (s % t); };
+
+        const auto ref_sdiv = [&](u64 s, u64 t, u16 size) -> u64 {
+            const auto ms = is_negative(s, size), mt = is_negative(t, size);
+            if (!ms && !mt) return ref_udiv(s, t, size);
+            if (ms && !mt) return negate(ref_udiv(negate(s, size), t, size), size);
+            if (!ms && mt) return negate(ref_udiv(s, negate(t, size), size), size);
+            return ref_udiv(negate(s, size), negate(t, size), size);
+        };
+        const auto ref_srem = [&](u64 s, u64 t, u16 size) -> u64 {
+            const auto ms = is_negative(s, size), mt = is_negative(t, size);
+            if (!ms && !mt) return ref_urem(s, t, size);
+            if (ms && !mt) return negate(ref_urem(negate(s, size), t, size), size);
+            if (!ms && mt) return ref_urem(s, negate(t, size), size);
+            return negate(ref_urem(negate(s, size), negate(t, size), size), size);
+        };
+
+        constexpr u16 size = 4;
+        const auto a = BooleanFunction::Var("A", size),
+                   b = BooleanFunction::Var("B", size);
+
+        const auto udiv = BooleanFunction::Udiv(a.clone(), b.clone(), size).get(),
+                   urem = BooleanFunction::Urem(a.clone(), b.clone(), size).get(),
+                   sdiv = BooleanFunction::Sdiv(a.clone(), b.clone(), size).get(),
+                   srem = BooleanFunction::Srem(a.clone(), b.clone(), size).get();
+
+        // every pair of 4 bit operands, including every division by zero
+        for (u64 lhs = 0; lhs < 16; lhs++) {
+            for (u64 rhs = 0; rhs < 16; rhs++) {
+                const std::unordered_map<std::string, std::vector<BooleanFunction::Value>> input = {{"A", bits(lhs, size)}, {"B", bits(rhs, size)}};
+
+                const auto quotient_unsigned = udiv.evaluate(input);
+                ASSERT_TRUE(quotient_unsigned.is_ok()) << lhs << " udiv " << rhs;
+                EXPECT_EQ(bits(ref_udiv(lhs, rhs, size) & mask(size), size), quotient_unsigned.get()) << lhs << " udiv " << rhs;
+
+                const auto remainder_unsigned = urem.evaluate(input);
+                ASSERT_TRUE(remainder_unsigned.is_ok()) << lhs << " urem " << rhs;
+                EXPECT_EQ(bits(ref_urem(lhs, rhs, size) & mask(size), size), remainder_unsigned.get()) << lhs << " urem " << rhs;
+
+                const auto quotient_signed = sdiv.evaluate(input);
+                ASSERT_TRUE(quotient_signed.is_ok()) << lhs << " sdiv " << rhs;
+                EXPECT_EQ(bits(ref_sdiv(lhs, rhs, size) & mask(size), size), quotient_signed.get()) << lhs << " sdiv " << rhs;
+
+                const auto remainder_signed = srem.evaluate(input);
+                ASSERT_TRUE(remainder_signed.is_ok()) << lhs << " srem " << rhs;
+                EXPECT_EQ(bits(ref_srem(lhs, rhs, size) & mask(size), size), remainder_signed.get()) << lhs << " srem " << rhs;
+            }
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateDivisionEdgeCases) {
+        using Value = BooleanFunction::Value;
+
+        {
+            // an undefined bit in either operand makes the whole result undefined, as it does for the other
+            // arithmetic operations
+            const auto a = BooleanFunction::Var("A", 4),
+                       b = BooleanFunction::Var("B", 4);
+            const std::unordered_map<std::string, std::vector<Value>> input = {
+                {"A", {Value::ONE, Value::X, Value::ZERO, Value::ZERO}},
+                {"B", bits(0b0010, 4)}};
+
+            const auto undefined = std::vector<Value>(4, Value::X);
+            EXPECT_EQ(undefined, BooleanFunction::Udiv(a.clone(), b.clone(), 4).get().evaluate(input).get());
+            EXPECT_EQ(undefined, BooleanFunction::Urem(a.clone(), b.clone(), 4).get().evaluate(input).get());
+            EXPECT_EQ(undefined, BooleanFunction::Sdiv(a.clone(), b.clone(), 4).get().evaluate(input).get());
+            EXPECT_EQ(undefined, BooleanFunction::Srem(a.clone(), b.clone(), 4).get().evaluate(input).get());
+        }
+
+        {
+            // wider than 64 bit, where the operands no longer fit into an integer
+            constexpr u16 size = 80;
+            const auto a = BooleanFunction::Var("A", size),
+                       b = BooleanFunction::Var("B", size);
+
+            auto dividend = std::vector<Value>(size, Value::ZERO);
+            auto divisor  = std::vector<Value>(size, Value::ZERO);
+            auto expected = std::vector<Value>(size, Value::ZERO);
+            dividend[70]  = Value::ONE;    // 2^70
+            divisor[35]   = Value::ONE;    // 2^35
+            expected[35]  = Value::ONE;    // 2^35
+
+            const std::unordered_map<std::string, std::vector<Value>> input = {{"A", dividend}, {"B", divisor}};
+
+            EXPECT_EQ(expected, BooleanFunction::Udiv(a.clone(), b.clone(), size).get().evaluate(input).get()) << "2^70 udiv 2^35";
+            EXPECT_EQ(std::vector<Value>(size, Value::ZERO), BooleanFunction::Urem(a.clone(), b.clone(), size).get().evaluate(input).get()) << "2^70 urem 2^35";
+        }
+
+        {
+            // a division by zero yields all ones for the quotient and the dividend for the remainder, which
+            // is what bvudiv and bvurem are defined to do
+            const auto a = BooleanFunction::Var("A", 4),
+                       b = BooleanFunction::Var("B", 4);
+            const std::unordered_map<std::string, std::vector<Value>> input = {{"A", bits(0b0101, 4)}, {"B", bits(0, 4)}};
+
+            EXPECT_EQ(bits(0b1111, 4), BooleanFunction::Udiv(a.clone(), b.clone(), 4).get().evaluate(input).get()) << "5 udiv 0";
+            EXPECT_EQ(bits(0b0101, 4), BooleanFunction::Urem(a.clone(), b.clone(), 4).get().evaluate(input).get()) << "5 urem 0";
         }
     }
 

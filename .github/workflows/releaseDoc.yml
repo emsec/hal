@@ -1,0 +1,145 @@
+name: Build Documentation
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+#  create:
+#    tags:
+#      - v*
+
+# Cancel a run that has been superseded by a newer push to the same branch. Runs on master are
+# never cancelled so that the documentation deployment always completes.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  release-doc:
+    name: Build and release documentation
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # cmake/hal_cmake_tools.cmake derives the HAL version through 'git describe --tags',
+          # so the full history including tags is required
+          fetch-depth: 0
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Prepare ccache timestamp
+        id: ccache_cache_timestamp
+        shell: bash
+        run: echo "timestamp=$(date -u +'%Y-%m-%d-%H-%M-%S')" >> "$GITHUB_OUTPUT"
+
+      - name: ccache cache files
+        uses: actions/cache@v4
+        with:
+          path: ${{runner.workspace}}/.ccache
+          key: ${{ runner.OS }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+          restore-keys: |
+            ${{ runner.OS }}-ccache-
+
+      - name: Install Dependencies
+        run: ./install_dependencies.sh
+
+      - name: Create Build Environment
+        # Some projects don't allow in-source building, so create a separate build directory
+        # We'll use this as our working directory for all subsequent commands
+        run: cmake -E make_directory ${{runner.workspace}}/build
+
+      - name: Configure CMake
+        # Use a bash shell so we can use the same syntax for environment variable
+        # access regardless of the host operating system
+        shell: bash
+        # Note the current convention is to use the -S and -B options here to specify source
+        # and build directories, but this is only available with CMake 3.13 and higher.
+        # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
+        run: |
+          mkdir -p build/doc
+          cd build
+          echo "==> Disk usage before clean"
+          df -h .
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/hostedtoolcache
+          echo "==> Disk usage after clean"
+          df -h .
+          export BUILD_TYPE=Debug
+          cp -v $GITHUB_WORKSPACE/documentation/index.html doc/
+          cp -v $GITHUB_WORKSPACE/documentation/hal_screenshot.* doc/
+          ls -l doc
+          $GITHUB_WORKSPACE/tools/genversion.py $GITHUB_WORKSPACE
+          cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
+          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+
+      - name: Build
+        shell: bash
+        # Execute the build.  You can specify a specific target with "--target <NAME>"
+        run: |
+          cd build
+          ninja
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
+          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+
+      - name: Build Doxygen
+        shell: bash
+        # Execute the build.  You can specify a specific target with "--target <NAME>"
+        run: |
+          cd build
+          export BUILD_TYPE=Debug
+          mkdir -p doc/doc
+          cmake --build . --target doc --config $BUILD_TYPE
+          cp -R documentation/cpp-doc/html/* doc/doc/
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
+          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+
+      - name: Build Sphinx
+        shell: bash
+        # Execute the build.  You can specify a specific target with "--target <NAME>"
+        run: |
+          cd build
+          export BUILD_TYPE=Debug
+          mkdir -p doc/pydoc
+          cmake --build . --target pydoc --config $BUILD_TYPE
+          cp -R documentation/python-doc/html/* doc/pydoc/
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
+          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+
+
+      - name: Deploy Doc
+        if: github.ref == 'refs/heads/master'
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          BRANCH: gh-pages
+          ACCESS_TOKEN: ${{ secrets.GH_PAGES_TOKEN}}
+          FOLDER: build/doc
+          GIT_CONFIG_NAME: 'github-actions[bot]'
+          GIT_CONFIG_EMAIL: 'github-actions[bot]@users.noreply.github.com'

@@ -84,8 +84,8 @@ namespace hal {
          * @return selected items as formatted string
          */
         QString selectionToString() const;
-        QSet<u32> modules() const { return QSet<u32>::fromList(mModules); }
-        QSet<u32> gates()   const { return QSet<u32>::fromList(mGates);   }
+        QSet<u32> modules() const;
+        QSet<u32> gates()   const;
     };
 
     /**
@@ -101,7 +101,6 @@ namespace hal {
     public:
         /**
          * @brief ModuleSelectModel constructor
-         * @param history if true a list of modules previously selected gets generated
          * @param parent the parent object
          */
         ModuleSelectModel(QObject* parent=nullptr);
@@ -143,6 +142,9 @@ namespace hal {
         gui_utility::mSortMechanism mSortMechanism;
     };
 
+    /**
+     * The base class for the objects that are notified once the user has picked a module.
+     */
     class ModuleSelectReceiver : public QObject
     {
         Q_OBJECT
@@ -200,8 +202,9 @@ namespace hal {
     public:
         /**
          * @brief ModuleSelectView constructor
-         * @param history if true a list of modules previously selected gets generated
+         * @param history if `true` a list of modules previously selected gets generated
          * @param sbar the filter-string editor to connect with
+         * @param exclude_ids the ids of the modules that must not be selectable, may be `nullptr`
          * @param parent the parent widget
          */
         ModuleSelectView(bool history, Searchbar* sbar, QSet<u32>* exclude_ids,

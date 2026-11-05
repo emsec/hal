@@ -34,6 +34,9 @@ class QFontMetrics;
 
 namespace hal {
 
+    /**
+     * A label that highlights the parts of its text which match the current search string.
+     */
     class SearchableLabel : public QLabel
     {
         Q_OBJECT

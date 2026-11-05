@@ -34,6 +34,9 @@ class QPushButton;
 class QTableView;
 namespace hal {
 
+    /**
+     * The dialog in which the user selects the gates that take part in the simulation.
+     */
     class GateSelectionDialog : public QDialog
     {
         Q_OBJECT

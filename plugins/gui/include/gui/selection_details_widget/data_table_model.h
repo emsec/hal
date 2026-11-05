@@ -30,11 +30,7 @@
 #include <QFont>
 #include <QColor>
 
-#include "hal_core/defines.h"
-#include "hal_core/netlist/data_container.h"
-#include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/net.h"
-#include "hal_core/netlist/module.h"
+#include "gui/selection_details_widget/data_table_entry.h"
 
 namespace hal {
 
@@ -48,26 +44,6 @@ namespace hal {
     {
         Q_OBJECT
     public:
-
-        /**
-         * Helper enum that can be used to access the value of a data entry.
-         */
-        enum propertyType{category = 0, key = 1, type = 2, value = 3};
-        /**
-         * Used to store one data entry (i.e. the data in one data field).
-         */
-        struct DataEntry
-        {
-            QString category; /// The data's category
-            QString key; /// The data's key
-            QString dataType; // The data type
-            QString value; // The value of the data 
-            QString getPropertyValueByPropType(propertyType prop)//helper function to generically access a property value
-            {
-                QString val =  (prop == 0) ? category : ( (prop == 1) ? key : ( (prop == 2) ? dataType : value ) );
-                return val;
-            }
-        };
 
         /**
          * Constructor.
@@ -119,7 +95,7 @@ namespace hal {
          * @param index - The model index
          * @param value - The value to set
          * @param role - The access role
-         * @returns <b>true</b> on success
+         * @returns `true` on success, `false` otherwise.
          */
         bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
@@ -129,7 +105,7 @@ namespace hal {
          * @param row - The specified row
          * @returns the DataEntry at the specified row
          */
-        DataEntry getEntryAtRow(int row) const;
+        DataTableEntry getEntryAtRow(int row) const;
 
         /**
          * Fills the table with the given data in the form of key-value pairs.
@@ -139,6 +115,9 @@ namespace hal {
         void updateData(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& dc);
 
     private:
+        /**
+         * The colors and the font that one row of the data table is rendered with.
+         */
         struct RowStyle
         {
             QFont keyFont;
@@ -148,10 +127,10 @@ namespace hal {
             QString valueToolTip;
         };
 
-        RowStyle getRowStyleByEntry(const DataEntry& entry, int rowIdx) const;
+        RowStyle getRowStyleByEntry(const DataTableEntry& entry, int rowIdx) const;
 
         // Map: [category, key] -> row style of the respective entry
         QMap<QPair<QString, QString>, RowStyle> mEntryToRowStyle;
-        QList<DataEntry> mDataEntries;
+        QList<DataTableEntry> mDataEntries;
     };
 }

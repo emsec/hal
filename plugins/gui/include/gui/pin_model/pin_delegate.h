@@ -33,7 +33,11 @@
 
 namespace hal
 {
+    class PinItem;
 
+    /**
+     * Renders and edits the cells of the pin tree, e.g., the direction and type drop-downs.
+     */
     class PinDelegate : public QStyledItemDelegate
     {
         Q_OBJECT
@@ -46,5 +50,11 @@ namespace hal
         void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
         void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 
+    private:
+        // Whether the item or, in case of a pin group, one of its pins is of type PinType::lut.
+        static bool containsLutType(const PinItem* item);
+
+        // Whether the item or, in case of a pin group, one of its pins has direction PinDirection::input.
+        static bool containsInputDirection(const PinItem* item);
     };
 }   // namespace hal

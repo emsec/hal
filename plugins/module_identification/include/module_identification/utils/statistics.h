@@ -17,6 +17,9 @@ namespace hal
 
     namespace module_identification
     {
+        /**
+         * Thread-safe collection of the statistics that are gathered while candidates are verified.
+         */
         struct Statistics
         {
             std::map<const BaseCandidate*, std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, u64>>>>> m_data;

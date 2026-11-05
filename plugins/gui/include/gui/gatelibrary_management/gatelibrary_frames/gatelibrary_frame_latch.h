@@ -32,6 +32,9 @@
 
 namespace hal
 {
+    /**
+     * Displays the latch component of the selected gate type.
+     */
     class GateLibraryFrameLatch : public GatelibraryComponentFrame
     {
         Q_OBJECT

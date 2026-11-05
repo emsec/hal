@@ -58,15 +58,15 @@ namespace hal
 
     void ActionSetSelectionFocus::readFromXml(QXmlStreamReader& xmlIn)
     {
-        QStringRef sfocAttribute = xmlIn.attributes().value("subfocus");
+        auto sfocAttribute = xmlIn.attributes().value("subfocus");   // Qt5: QStringRef    Qt6: QStringView
         if (!sfocAttribute.isNull() && !sfocAttribute.isEmpty())
         {
-            if (sfocAttribute == "Left")
+            if (sfocAttribute == QString("Left"))
             {
                 mSubfocus = SelectionRelay::Subfocus::Left;
                 mSubfocusIndex = xmlIn.attributes().value("subfocusIndex").toInt();
             }
-            else if (sfocAttribute == "Right")
+            else if (sfocAttribute == QString("Right"))
             {
                 mSubfocus = SelectionRelay::Subfocus::Right;
                 mSubfocusIndex = xmlIn.attributes().value("subfocusIndex").toInt();
@@ -75,11 +75,11 @@ namespace hal
 
         while (xmlIn.readNextStartElement())
         {
-            if (xmlIn.name()=="modules")
+            if (xmlIn.name()==QString("modules"))
                 mModules = setFromText(xmlIn.readElementText());
-            else if (xmlIn.name()=="gates")
+            else if (xmlIn.name()==QString("gates"))
                 mGates = setFromText(xmlIn.readElementText());
-            else if (xmlIn.name()=="nets")
+            else if (xmlIn.name()==QString("nets"))
                 mNets = setFromText(xmlIn.readElementText());
         }
     }

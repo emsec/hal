@@ -15,7 +15,7 @@ if(PL_GRAPH_ALGORITHM OR BUILD_ALL_PLUGINS)
     )
 
 if(USE_VENDORED_IGRAPH)
-    add_dependencies(graph_algorithm igraph_0_10)
+    add_dependencies(graph_algorithm igraph_1_0)
 endif()
 
 endif()

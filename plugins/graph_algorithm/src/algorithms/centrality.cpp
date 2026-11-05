@@ -218,7 +218,7 @@ namespace hal
                 return ERR(igraph_strerror(res));
             }
 
-            if (auto res = igraph_betweenness_cutoff(graph->get_graph(), &scores, v_sel, i_directed, nullptr, i_cutoff); res != IGRAPH_SUCCESS)
+            if (auto res = igraph_betweenness_cutoff(graph->get_graph(), nullptr, &scores, v_sel, i_directed, false, i_cutoff); res != IGRAPH_SUCCESS)
             {
                 igraph_vector_destroy(&scores);
                 igraph_vs_destroy(&v_sel);

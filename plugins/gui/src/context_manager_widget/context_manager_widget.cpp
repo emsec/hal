@@ -263,8 +263,18 @@ namespace hal
 
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
+
+        // TODO: check whether name + " (Copy)" is already in use
         act->addAction(new ActionCreateObject(UserActionObjectType::ContextView,clicked_context->name() + " (Copy)"));
-        act->addAction(new ActionAddItemsToObject(clicked_context->modules(),clicked_context->gates()));
+
+        ActionAddItemsToObject* actAddItems = new ActionAddItemsToObject(clicked_context->modules(),clicked_context->gates());
+        GridPlacement plc;
+        QMap<Node, QPoint> contextNodeMap = clicked_context->getLayouter()->nodeToPositionMap();
+        for (auto it = contextNodeMap.begin(); it != contextNodeMap.end(); it++)
+                        plc.insert(it.key(), it.value());
+                    actAddItems->setPlacementHint(plc);
+        act->addAction(actAddItems);
+
         act->exec();
     }
 
@@ -307,12 +317,10 @@ namespace hal
 
     void ContextManagerWidget::handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
     {
+        Q_UNUSED(selected);
         Q_UNUSED(deselected);
 
-        if(selected.indexes().isEmpty())
-            setToolbarButtonsEnabled(false);
-        else
-            setToolbarButtonsEnabled(true);
+        setToolbarButtonsEnabled(mContextTreeView->selectionModel()->hasSelection());
     }
 
     void ContextManagerWidget::handleContextMenuRequest(const QPoint& point)
@@ -357,6 +365,10 @@ namespace hal
     void ContextManagerWidget::handleDataChanged()
     {
         enableSearchbar(mContextTreeProxyModel->rowCount() > 0);
+
+        // the view may move the selection to a neighbouring row after a removal without
+        // a selectionChanged signal that reflects the final state
+        setToolbarButtonsEnabled(mContextTreeView->selectionModel()->hasSelection());
     }
 
     void ContextManagerWidget::updateSearchIcon()

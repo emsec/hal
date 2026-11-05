@@ -33,6 +33,9 @@
 namespace hal {
     class Net;
 
+    /**
+     * A single column of the truth table, i.e., the values that one net assumes for all input combinations.
+     */
     class LogicEvaluatorTruthtableColumn
     {
         int mRows;
@@ -44,6 +47,9 @@ namespace hal {
         bool lessThan(const LogicEvaluatorTruthtableColumn& other, const QList<int>& sortRows) const;
     };
 
+    /**
+     * The item model behind the truth table view, which also controls how the logic values are displayed.
+     */
     class LogicEvaluatorTruthtableModel : public QAbstractTableModel
     {
         Q_OBJECT
@@ -73,6 +79,9 @@ namespace hal {
         int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     };
 
+    /**
+     * The dialog in which the user picks the input nets that the truth table is sorted by.
+     */
     class LogicEvaluatorTruthtableSort : public QDialog
     {
         Q_OBJECT
@@ -83,6 +92,9 @@ namespace hal {
         QList<int> sortOrder() const;
     };
 
+    /**
+     * The dialog that shows the complete truth table of the evaluated gates.
+     */
     class LogicEvaluatorTruthtable : public QDialog
     {
         Q_OBJECT

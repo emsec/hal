@@ -32,6 +32,9 @@
 
 namespace hal
 {
+    /**
+     * Helper functions that the simulation engines use to convert between logic values and integers and to evaluate sequential behavior.
+     */
     namespace simulation_utils
     {
         BooleanFunction::Value toggle(BooleanFunction::Value v);

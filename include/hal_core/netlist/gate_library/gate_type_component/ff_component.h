@@ -29,19 +29,25 @@
 #include "hal_core/netlist/gate_library/enums/async_set_reset_behavior.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
+#include <memory>
+
 namespace hal
 {
+    /**
+     * A gate type component that describes a flip-flop, i.e., its next state, clock, and asynchronous set and reset behavior.
+     */
     class FFComponent : public GateTypeComponent
     {
     public:
         /**
-         * Construct a new FFComponent with given child component and the Boolean functions describing the next state and the clock signal.
-         * 
+         * Create a new FFComponent with given child component and the Boolean functions describing the next state and the clock signal.
+         *
          * @param[in] component - Another component to be added as a child component.
          * @param[in] next_state_bf - The function describing the internal state.
          * @param[in] clock_bf - The function describing the clock input.
+         * @returns The FFComponent.
          */
-        FFComponent(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf);
+        static std::unique_ptr<FFComponent> create(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf);
 
         /**
          * Get the type of the gate type component.
@@ -54,7 +60,7 @@ namespace hal
          * Check whether a component is a FFComponent.
          * 
          * @param[in] component - The component to check.
-         * @returns True if component is a FFComponent, false otherwise.
+         * @returns `true` if component is a FFComponent, `false` otherwise.
          */
         static bool is_class_of(const GateTypeComponent* component);
 
@@ -141,6 +147,8 @@ namespace hal
         void set_async_set_reset_behavior(const AsyncSetResetBehavior behav_state, const AsyncSetResetBehavior behav_neg_state);
 
     private:
+        FFComponent(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf);
+
         static constexpr ComponentType m_type          = ComponentType::ff;
         std::unique_ptr<GateTypeComponent> m_component = nullptr;
 

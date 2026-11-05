@@ -35,6 +35,9 @@ namespace hal
 
     class Netlist;
 
+    /**
+     * The plugin that provides the Verilator simulation engine.
+     */
     class PLUGIN_API VerilatorSimulatorPlugin : public BasePluginInterface
     {
         static std::string s_engine_name;

@@ -32,7 +32,7 @@ namespace hal
 {
     /**
      * The HexadecimalValidator class checks if a string is in a valid hexadecimal format (uses symbols
-     * 0-9, a-f). Its validate function returns true if that is the case.
+     * 0-9, a-f). Its validate function returns `true` if that is the case.
      */
     class HexadecimalValidator : public Validator
     {
@@ -41,11 +41,11 @@ namespace hal
             HexadecimalValidator();
 
             /**
-             * Given any string this function returns <b>true</b> if the string is in the
+             * Given any string this function returns `true` if the string is in the
              * hexadecimal format (0-9, a-f). The matches are case insensitive.
              *
              * @param input - The input string
-             * @returns <b>true</b> if the string is considered valid.
+             * @returns `true` if the string is considered valid, `false` otherwise.
              */
             bool validate(const QString &input);
 

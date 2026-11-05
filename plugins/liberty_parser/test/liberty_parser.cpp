@@ -293,6 +293,66 @@ namespace hal {
     }
 
     /**
+     * Testing the parsing of buses, including the 'bit_to' attribute of a type group in both
+     * descending and ascending order.
+     *
+     * Functions: parse
+     */
+    TEST_F(LibertyParserTest, check_bus) {
+        TEST_START
+            {
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/test6.lib";
+                LibertyParser liberty_parser;
+                auto gl_res = liberty_parser.parse(path_lib);
+                ASSERT_TRUE(gl_res.is_ok());
+                std::unique_ptr<GateLibrary> gl = gl_res.get();
+
+                ASSERT_NE(gl, nullptr);
+
+                auto gate_types = gl->get_gate_types();
+                ASSERT_EQ(gate_types.size(), 1);
+                auto gt_it = gate_types.find("TEST_GATE_TYPE");
+                ASSERT_TRUE(gt_it != gate_types.end());
+                GateType* gt = gt_it->second;
+
+                // Check that all pins of both buses were created
+                const auto pins = gt->get_pins();
+                ASSERT_EQ(pins.size(), 6);
+
+                // 'A' is declared 'downto', so it starts at its highest index
+                const std::vector<std::string> expected_names = {"A(3)", "A(2)", "A(1)", "A(0)", "O(0)", "O(1)"};
+                const std::vector<PinDirection> expected_directions = {
+                    PinDirection::input, PinDirection::input, PinDirection::input, PinDirection::input, PinDirection::output, PinDirection::output};
+                for (u32 i = 0; i < pins.size(); i++)
+                {
+                    EXPECT_EQ(pins.at(i)->get_name(), expected_names.at(i));
+                    EXPECT_EQ(pins.at(i)->get_direction(), expected_directions.at(i));
+                }
+
+                // Check that both pin groups were created with the index order given by the type groups
+                const auto pin_groups = gt->get_pin_groups();
+                ASSERT_EQ(pin_groups.size(), 2);
+                {
+                    const auto* a_group = pin_groups.at(0);
+                    EXPECT_EQ(a_group->get_name(), "A");
+                    EXPECT_EQ(a_group->get_direction(), PinDirection::input);
+                    EXPECT_FALSE(a_group->is_ascending());
+                    EXPECT_EQ(a_group->get_start_index(), 3);
+                    EXPECT_EQ(a_group->size(), 4);
+                }
+                {
+                    const auto* o_group = pin_groups.at(1);
+                    EXPECT_EQ(o_group->get_name(), "O");
+                    EXPECT_EQ(o_group->get_direction(), PinDirection::output);
+                    EXPECT_TRUE(o_group->is_ascending());
+                    EXPECT_EQ(o_group->get_start_index(), 0);
+                    EXPECT_EQ(o_group->size(), 2);
+                }
+            }
+        TEST_END
+    }
+
+    /**
      * Testing the usage of multiline comments (via '/ *' and '* /'  (without space))
      *
      * Functions: parse

@@ -73,9 +73,9 @@ namespace hal
         mId = newId;
     }
 
-    void PinItem::setDataAtIndex(int index, QVariant &data)
+    void PinItem::setDataAtColumn(int column, QVariant &data)
     {
-
+        // TODO : implement ?!
     }
 
     QString PinItem::getName() const

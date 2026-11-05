@@ -28,6 +28,7 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/enums/gate_type_property.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
+#include "hal_core/netlist/parameter.h"
 #include "hal_core/netlist/pins/gate_pin.h"
 #include "hal_core/netlist/pins/pin_group.h"
 #include "hal_core/utilities/enums.h"
@@ -41,7 +42,6 @@
 namespace hal
 {
     class GateLibrary;
-
 
     /**
      * A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
@@ -69,21 +69,21 @@ namespace hal
 
         /**
          * Get a single component matching the filter condition (if provided).
-         * Returns a nullptr if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
+         * Returns a `nullptr` if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
          * 
          * @param[in] filter - The filter applied to all candidate components.
-         * @returns The component or a nullptr.
+         * @returns The component or a `nullptr`.
          */
         GateTypeComponent* get_component(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const;
 
         /**
          * Get a single component and convert it to a component of the type specified by the template parameter.
          * A user-defined filter may be applied to the result set, but is disabled by default.
-         * If more no or than one components match the filter condition, a nullptr is returned.
-         * A check is performed to determine whether the conversion is legal and a nullptr is returned in case it is not.
+         * If more no or than one components match the filter condition, a `nullptr` is returned.
+         * A check is performed to determine whether the conversion is legal and a `nullptr` is returned in case it is not.
          * 
          * @param[in] filter - The user-defined filter function applied to all candidate components.
-         * @returns The component converted to the target type or a nullptr.
+         * @returns The component converted to the target type or a `nullptr`.
          */
         template<typename T>
         T* get_component_as(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const
@@ -101,7 +101,7 @@ namespace hal
          * Check if the gate type contains a component of the specified type.
          * 
          * @param[in] type - The component type to check for.
-         * @returns True if the gate type contains a component of the speciifed type, false otherwise.
+         * @returns `true` if the gate type contains a component of the speciifed type, `false` otherwise.
          */
         bool has_component_of_type(const GateTypeComponent::ComponentType type) const;
 
@@ -145,7 +145,7 @@ namespace hal
          * Check whether the gate type has the specified property.
          *
          * @param[in] property - The property to check for.
-         * @returns True if the gate type has the specified property, false otherwise.
+         * @returns `true` if the gate type has the specified property, `false` otherwise.
          */
         bool has_property(GateTypeProperty property) const;
 
@@ -176,7 +176,7 @@ namespace hal
          * Check whether two gate types are equal.
          *
          * @param[in] other - The gate type to compare against.
-         * @returns True if both gate types are equal, false otherwise.
+         * @returns `true` if both gate types are equal, `false` otherwise.
          */
         bool operator==(const GateType& other) const;
 
@@ -184,7 +184,7 @@ namespace hal
          * Check whether two gate types are unequal.
          *
          * @param[in] other - The gate type object to compare to.
-         * @returns True if both gate types are unequal, false otherwise.
+         * @returns `true` if both gate types are unequal, `false` otherwise.
          */
         bool operator!=(const GateType& other) const;
 
@@ -223,7 +223,7 @@ namespace hal
          * @param[in] name - The name of the pin.
          * @param[in] direction - The direction of the pin.
          * @param[in] type - The type of the pin. Defaults to `PinType::none`.
-         * @param[in] create_group - Set `true` to create a pin group for the pin, `false` otherwise. Defaulrs to `false`. 
+         * @param[in] create_group - Set `true` to automatically assign the pin to a new pin group, `false` otherwise. Defaults to `true`. 
          * @returns The gate pin on success, an error message otherwise.
          */
         Result<GatePin*> create_pin(const std::string& name, PinDirection direction, PinType type = PinType::none, bool create_group = true);
@@ -362,7 +362,7 @@ namespace hal
          * Delete the given pin group.
          * 
          * @param[in] pin_group - The pin group to be deleted.
-         * @returns true on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool delete_pin_group(PinGroup<GatePin>* pin_group);
 
@@ -372,7 +372,7 @@ namespace hal
          * @param[in] pin_group - The new pin group.
          * @param[in] pin - The pin to be added.
          * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pin has been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
-         * @returns Ok on success, an error message otherwise.
+         * @returns Ok() on success, an error message otherwise.
          */
         Result<std::monostate> assign_pin_to_group(PinGroup<GatePin>* pin_group, GatePin* pin, bool delete_empty_groups = true);
 
@@ -443,6 +443,37 @@ namespace hal
          */
         BooleanFunction get_boolean_function(const GatePin* pin = nullptr) const;
 
+        /**
+         * Declare a typed parameter on this gate type.
+         *
+         * @param[in] param - The parameter declaration.
+         * @returns OK() on success, an error otherwise.
+         */
+        Result<std::monostate> add_parameter(const Parameter& param);
+
+        /**
+         * Get all parameters declared on this gate type as a map from `name` to parameter declaration.
+         *
+         * @returns The parameter map.
+         */
+        const std::unordered_map<std::string, Parameter>& get_parameters() const;
+
+        /**
+         * Look up a parameter declaration by name.
+         *
+         * @param[in] name - The parameter name.
+         * @returns Ok() and the parameter on success, an error otherwise.
+         */
+        Result<Parameter> get_parameter(const std::string& name) const;
+
+        /**
+         * Check whether a parameter with the given name is declared on this gate type.
+         *
+         * @param[in] name - The parameter name.
+         * @returns `true` if the parameter exists, `false` otherwise.
+         */
+        bool has_parameter(const std::string& name) const;
+
     private:
         friend class GateLibrary;
 
@@ -470,6 +501,9 @@ namespace hal
 
         // Boolean functions
         std::unordered_map<std::string, BooleanFunction> m_functions;
+
+        // Typed parameters
+        std::unordered_map<std::string, Parameter> m_parameters;
 
         GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component = nullptr);
 

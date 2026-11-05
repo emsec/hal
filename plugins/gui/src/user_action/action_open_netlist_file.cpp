@@ -62,9 +62,9 @@ namespace hal
         mMethod = Undefined;
         while (xmlIn.readNextStartElement())
         {
-            if (xmlIn.name() == "filename")
+            if (xmlIn.name() == QString("filename"))
                 mFilename = xmlIn.readElementText();
-            if (xmlIn.name() == "method")
+            if (xmlIn.name() == QString("method"))
             {
                 QString meth = xmlIn.readElementText();
                 for (int i=0; sOpenMethodsPersist[i]; i++)

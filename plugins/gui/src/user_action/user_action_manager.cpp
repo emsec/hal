@@ -9,6 +9,7 @@
 #include "gui/user_action/action_open_netlist_file.h"
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/settings/settings_items/settings_item_checkbox.h"
+#include "gui/python/python_thread.h"
 #include "hal_core/utilities/log.h"
 #include <QTextCursor>
 #include <QMessageBox>
@@ -39,10 +40,15 @@ namespace hal
     void UserActionManager::executeActionBlockThread(UserAction *act)
     {
         if (!act) return;
-        mMutex.lock();
-        mThreadedAction = act;
-        Q_EMIT triggerExecute();
-        mMutex.unlock();
+        if (dynamic_cast<PythonThread*>(QThread::currentThread()))
+        {
+            mMutex.lock();
+            mThreadedAction = act;
+            Q_EMIT triggerExecute();
+            mMutex.unlock();
+        }
+        else
+            act->exec();
     }
 
     void UserActionManager::handleTriggerExecute()
@@ -155,7 +161,7 @@ namespace hal
             {
                 if (xmlIn.isStartElement())
                 {
-                    if (xmlIn.name() == "actions")
+                    if (xmlIn.name() == QString("actions"))
                         parseActions = true;
                     else if (parseActions)
                     {
@@ -165,7 +171,7 @@ namespace hal
                 }
                 else if (xmlIn.isEndElement())
                 {
-                    if (xmlIn.name() == "actions")
+                    if (xmlIn.name() == QString("actions"))
                         parseActions = false;
                 }
              }
@@ -202,7 +208,7 @@ namespace hal
         UserAction* retval = fac->newAction();
         if (retval)
         {
-            QStringRef compound = xmlIn.attributes().value("compound");
+            auto compound = xmlIn.attributes().value("compound");   // Qt5: QStringRef    Qt6: QStringView
             if (!compound.isNull() && !compound.isEmpty())
                 retval->setCompoundOrder(compound.toInt());
             UserActionObject actObj;

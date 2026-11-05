@@ -32,6 +32,9 @@
 
 namespace hal
 {
+    /**
+     * Displays the state component of the selected gate type.
+     */
     class GatelibraryFrameState : public GatelibraryComponentFrame
     {
         Q_OBJECT

@@ -40,16 +40,16 @@ namespace hal
     namespace z3_utils
     {
         /**
-         * @brief Compare two nets from two different netlist. 
+         * @brief Compare two nets from two different netlists. 
          * 
-         * This is done on a functional level by buidling the subgraph function of each net considering all combinational gates of the netlist.
-         * In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+         * This is done on a functional level by building the subgraph function of each net considering all combinational gates of the netlist.
+         * In order for this to work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
          * 
          * @param[in] netlist_a - The first netlist.
          * @param[in] netlist_b - The second netlist.
          * @param[in] net_a - First net, from netlist_a.
          * @param[in] net_b - Second net, from netlist_b.
-         * @param[in] fail_on_unknown - Determines whether the function returns false or true incase the SAT solver returns unknown.
+         * @param[in] fail_on_unknown - Determines whether the function returns `false` or `true` in case the SAT solver returns unknown.
          * @param[in] solver_timeout - The timeout for the SAT solver query in seconds.
          * @returns Ok and a Boolean indicating whether the two nets are functionally equivalent, an error otherwise.
          */
@@ -58,28 +58,28 @@ namespace hal
         /**
          * @brief Compare pairs of nets from two different netlist. 
          * 
-         * This is done on a functional level by buidling the subgraph function of each net considering all combinational gates of the netlist.
-         * In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+         * This is done on a functional level by building the subgraph function of each net considering all combinational gates of the netlist.
+         * In order for this to work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
          * 
          * @param[in] netlist_a - The first netlist.
          * @param[in] netlist_b - The second netlist.
          * @param[in] nets - The pairs of nets to compare against each other.
-         * @param[in] fail_on_unknown - Determines whether the function returns false or true incase the SAT solver returns unknown.
+         * @param[in] fail_on_unknown - Determines whether the function returns `false` or `true` in case the SAT solver returns unknown.
          * @param[in] solver_timeout - The timeout for each SAT solver query in seconds.
          * @returns Ok and a Boolean indicating whether the two nets are functionally equivalent, an error otherwise.
          */
         Result<bool> compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const std::vector<std::pair<Net*, Net*>>& nets, const bool fail_on_unknown = true, const u32 solver_timeout = 10);
 
         /**
-         * @brief Compares two netlist on a functional level.
+         * @brief Compares two netlists on a functional level.
          * 
          * This is done by finding a corresponding partner for each sequential gate in the netlist and checking whether they are identical.
-         * This is done on a functional level by buidling the subgraph function of all their input nets considering all combinational gates of the netlist.
-         * In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+         * This is done on a functional level by building the subgraph function of all their input nets considering all combinational gates of the netlist.
+         * In order for this to work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
          * 
          * @param[in] netlist_a - The first netlist.
          * @param[in] netlist_b - The second netlist.
-         * @param[in] fail_on_unknown - Determines whether the function returns false or true incase the SAT solver returns unknown.
+         * @param[in] fail_on_unknown - Determines whether the function returns `false` or `true` in case the SAT solver returns unknown.
          * @param[in] solver_timeout - The timeout for each SAT solver query in seconds.
          * 
          * @returns Ok and a Boolean indicating whether the two netlists are functionally equivalent, an error otherwise.

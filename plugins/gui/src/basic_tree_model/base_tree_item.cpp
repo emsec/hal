@@ -45,6 +45,10 @@ namespace hal
     void BaseTreeItem::insertChild(int index, BaseTreeItem *child)
     {
         child->setParent(this);
+        if (index > mChildren.size())
+        {
+            index = mChildren.size();
+        }
         mChildren.insert(index, child);
     }
 
@@ -114,11 +118,11 @@ namespace hal
         }
     }
 
-    void RootTreeItem::setDataAtIndex(int index, QVariant &data)
+    void RootTreeItem::setDataAtColumn(int column, QVariant &data)
     {
-        while (index >= mHeaderLabels.size())
+        while (column >= mHeaderLabels.size())
             mHeaderLabels << QString();
-        mHeaderLabels[index] = data.toString();
+        mHeaderLabels[column] = data.toString();
     }
 
     void RootTreeItem::appendData(QVariant data)

@@ -43,6 +43,9 @@ namespace hal
     class Module;
     class GateType;
 
+    /**
+     * Groups the flip-flops of a netlist into registers by analyzing how data flows between them.
+     */
     namespace dataflow
     {
         /**
@@ -150,9 +153,9 @@ namespace hal
              * 
              * @param[in] out_path - The output path.
              * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
-             * @returns Ok() on success, an error otherwise.
+             * @returns The output path on success (e.g. extension might have been modified), an error otherwise.
              */
-            hal::Result<std::monostate> write_dot(const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {}) const;
+            hal::Result<std::filesystem::path> write_dot(const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {}) const;
 
             /**
              * @brief Write the groups resulting from dataflow analysis to a `.txt` file.

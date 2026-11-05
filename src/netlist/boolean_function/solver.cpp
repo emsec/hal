@@ -45,7 +45,7 @@ namespace hal
 			 * @param[in] input - SMT-LIB input.
 			 * @param[in] config - SMT query configuration.
 			 * @returns Ok() and status with 
-             *      (0) was_killed (true in case process was killed), and 
+             *      (0) was_killed (`true` in case process was killed), and 
              *      (1) stdout Stdout of Z3 process on success, 
              *      Err() otherwise
 			 */
@@ -90,7 +90,7 @@ namespace hal
 			 * @param[in] input - SMT-LIB input.
 			 * @param[in] config - SMT query configuration.
 			 * @returns Ok() and status with 
-             *      (0) was_killed (true in case process was killed), and 
+             *      (0) was_killed (`true` in case process was killed), and 
              *      (1) stdout Stdout of Z3 process on success, 
              *      Err() otherwise
 			 */
@@ -132,7 +132,7 @@ namespace hal
 			 * @param[in] input - SMT-LIB input.
 			 * @param[in] config - SMT query configuration.
 			 * @returns Ok() and status with 
-             *      (0) was_killed (true in case process was killed), and 
+             *      (0) was_killed (`true` in case process was killed), and 
              *      (1) stdout Stdout of Boolector process on success, 
              *      Err() otherwise
 			 */
@@ -180,7 +180,7 @@ namespace hal
 			 * @param[in] input - SMT-LIB input.
 			 * @param[in] config - SMT query configuration.
 			 * @returns Ok() and status with 
-             *      (0) was_killed (true in case process was killed), and 
+             *      (0) was_killed (`true` in case process was killed), and 
              *      (1) stdout Stdout of Boolector process on success, 
              *      Err() otherwise
 			 */
@@ -226,7 +226,7 @@ namespace hal
 			 * @param[in] input - SMT-LIB input.
 			 * @param[in] config - SMT query configuration.
 			 * @returns Ok() and status with 
-             *      (0) was_killed (true in case process was killed), and 
+             *      (0) was_killed (`true` in case process was killed), and 
              *      (1) stdout Stdout of Bitwuzla process on success, 
              *      Err() otherwise
 			 */
@@ -329,7 +329,7 @@ namespace hal
 			 * @param[in] input - SMT-LIB input.
 			 * @param[in] config - SMT query configuration.
 			 * @returns Ok() and status with 
-             *      (0) was_killed (true in case process was killed), and 
+             *      (0) was_killed (`true` in case process was killed), and 
              *      (1) stdout Stdout of Bitwuzla process on success, 
              *      Err() otherwise
 			 */
@@ -424,23 +424,13 @@ namespace hal
         {
             if (call == SolverCall::Binary)
             {
-                switch (auto it = type2query_binary.find(type); it != type2query_binary.end())
-                {
-                    case true:
-                        return it->second().is_ok();
-                    default:
-                        return false;
-                }
+                const auto it = type2query_binary.find(type);
+                return (it != type2query_binary.end()) && it->second().is_ok();
             }
-            else if (call == SolverCall::Binary)
+            else if (call == SolverCall::Library)
             {
-                switch (auto it = type2link_status.find(type); it != type2link_status.end())
-                {
-                    case true:
-                        return it->second;
-                    default:
-                        return false;
-                }
+                const auto it = type2link_status.find(type);
+                return (it != type2link_status.end()) && it->second;
             }
 
             return false;

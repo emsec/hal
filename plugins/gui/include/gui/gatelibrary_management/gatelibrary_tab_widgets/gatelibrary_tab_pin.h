@@ -26,8 +26,6 @@
 #pragma once
 
 #include "gatelibrary_tab_interface.h"
-#include "gui/selection_details_widget/gate_details_widget/pin_tree_model.h"
-#include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 
 #include <QGridLayout>
@@ -37,6 +35,9 @@
 
 namespace hal
 {
+    /**
+     * The tree view that lists the pins and pin groups of the selected gate type.
+     */
     class PinTreeView : public QTreeView
     {
         Q_OBJECT

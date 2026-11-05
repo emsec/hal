@@ -3,6 +3,7 @@
 #include "gui/comment_system/comment_entry.h"
 #include "gui/comment_system/widgets/comment_item.h"
 #include "gui/comment_system/widgets/comment_dialog.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include <QDebug>
 #include <QVBoxLayout>
 #include <QScrollArea>
@@ -27,7 +28,7 @@ namespace hal
 
         //mTopLayout = new QVBoxLayout(this);
         mTopLayout = new QGridLayout(this);
-        mTopLayout->setMargin(0);
+        QtCompat::setMarginWidth(mTopLayout,0);
         mTopLayout->setSpacing(0);
         mSearchbar = new Searchbar();
         mSearchbar->setEmitTextWithFlags(false);
@@ -55,7 +56,7 @@ namespace hal
         // comment part
         mCommentsLayout = new QVBoxLayout();
         mCommentsLayout->setSpacing(0);
-        mCommentsLayout->setMargin(0);
+        QtCompat::setMarginWidth(mCommentsLayout,0);
         mScrollArea = new QScrollArea();
         mScrollArea->setWidgetResizable(true);//important as it seems so that the child widget will expandd if possible
         mCommentsContainer = new QWidget();
@@ -102,7 +103,7 @@ namespace hal
         QWidget* container = new QWidget();
         QVBoxLayout* containerLayout = new QVBoxLayout(container);
         containerLayout->setSpacing(0);
-        containerLayout->setMargin(0);
+        QtCompat::setMarginWidth(containerLayout,0);
 
         auto commentList = gCommentManager->getEntriesForNode(nd);
 

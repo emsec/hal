@@ -35,6 +35,9 @@
 
 namespace hal
 {
+    /**
+     * Provides the icons that the GUI uses for gates, nets, and modules, styled to match the current theme.
+     */
     class SelectionDetailsIconProvider : public QObject
     {
         Q_OBJECT
@@ -69,6 +72,14 @@ namespace hal
          * @return The icon for the specified netlist element.
          */
         const QIcon *getIcon(IconCategory catg, u32 itemId);
+
+        /**
+         * Since module icons get cached the appropriate icon
+         * needs to be removed when the module gets removed
+         *
+         * @param moduleId - The id of the module removed
+         */
+        void handleModuleRemoved(u32 moduleId);
 
         /**
          * Get the singleton instance of the SettingsManager.

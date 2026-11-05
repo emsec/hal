@@ -118,7 +118,7 @@ namespace hal
 
     void UserAction::readParentObjectFromXml(QXmlStreamReader &xmlIn)
     {
-        if(xmlIn.name() == "parentObj")
+        if(xmlIn.name() == QString("parentObj"))
         {
             mParentObject.readFromXml(xmlIn);
             xmlIn.readNext();//to read the corresponding EndElement

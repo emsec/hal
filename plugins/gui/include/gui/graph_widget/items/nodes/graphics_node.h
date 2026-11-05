@@ -107,8 +107,8 @@ namespace hal
          * (Pins are positioned from top (idx=0) to bottom (idx=maxIdx))
          *
          * @param index - The index of the pin
-         * @param isInput - <b>true</b> if the pin is an input pin <br>
-         *                - <b>false</b> if the pin is an output pin
+         * @param isInput - `true` if the pin is an input pin <br>
+         *                - `false` if the pin is an output pin
          * @returns the position of the endpoint in the scene
          */
         virtual QPointF endpointPositionByIndex(int index, bool isInput) const = 0;

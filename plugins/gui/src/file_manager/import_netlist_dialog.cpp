@@ -73,6 +73,8 @@ namespace hal
         layout->addWidget(mCheckMoveNetlist, irow++, 0, Qt::AlignLeft);
         mCheckCopyGatelib = new QCheckBox("Copy gate library into project directory");
         layout->addWidget(mCheckCopyGatelib, irow++, 0, Qt::AlignLeft);
+        connect(mGatelibSelection, &GateLibrarySelection::gatelibSelected, this, &ImportNetlistDialog::handleGatelibSelected);
+        handleGatelibSelected(!mGatelibSelection->gateLibraryPath().isEmpty());
         layout->addItem(new QSpacerItem(30, 30), irow++, 0);
         layout->setRowStretch(irow - 1, 100);
         QDialogButtonBox* dbb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);

@@ -11,14 +11,14 @@ namespace hal
         py_module_pin_group.def(py::self == py::self, R"(
             Check whether two module pin groups are equal.
 
-            :returns: True if both module pin groups are equal, False otherwise.
+            :returns: ``True`` if both module pin groups are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_module_pin_group.def(py::self != py::self, R"(
             Check whether two module pin groups are unequal.
 
-            :returns: True if both module pin groups are unequal, False otherwise.
+            :returns: ``True`` if both module pin groups are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -38,7 +38,7 @@ namespace hal
         py_module_pin_group.def("get_id", &PinGroup<ModulePin>::get_id, R"(
             Get the ID of the module pin group. The ID is unique within a module.
 
-            :returns: The ID of the pin.
+            :returns: The ID of the pin group.
             :rtype: int
         )");
 
@@ -64,7 +64,7 @@ namespace hal
         py_module_pin_group.def("get_direction", &PinGroup<ModulePin>::get_direction, R"(
             Get the direction of the pin group.
 
-            :returns: The direction of the pin.
+            :returns: The direction of the pin group.
             :rtype: hal_py.PinDirection
         )");
 
@@ -77,21 +77,21 @@ namespace hal
         py_module_pin_group.def("get_type", &PinGroup<ModulePin>::get_type, R"(
             Get the type of the pin group.
 
-            :returns: The type of the pin.
+            :returns: The type of the pin group.
             :rtype: hal_py.PinType
         )");
 
-        py_module_pin_group.def_property_readonly("pins", [](const PinGroup<ModulePin>& self) -> std::vector<ModulePin*> { return self.get_pins(nullptr); }, R"(
+        py_module_pin_group.def_property_readonly("pins", py::cpp_function([](const PinGroup<ModulePin>& self) -> std::vector<ModulePin*> { return self.get_pins(nullptr); }, py::is_method(py_module_pin_group), borrowed()), R"(
             The (ordered) pins of the pin groups.
 
             :type: list[hal_py.ModulePin]
         )");
 
-        py_module_pin_group.def("get_pins", &PinGroup<ModulePin>::get_pins, py::arg("filter") = nullptr, R"(
+        py_module_pin_group.def("get_pins", &PinGroup<ModulePin>::get_pins, py::arg("filter") = nullptr, borrowed(), R"(
             Get the (ordered) pins of the pin groups.
-            The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter function to be evaluated on each pin.
+            :param lambda filter: An optional filter.
             :returns: The ordered pins.
             :rtype: list[hal_py.ModulePin]
         )");
@@ -111,11 +111,11 @@ namespace hal
                 }
             },
             py::arg("index"),
-            R"(
+            borrowed(), R"(
             Get the pin specified by the given index.
 
             :param int index: The index of the pin within the pin group.
-            :returns: The pin on success, None otherwise.
+            :returns: The pin on success, ``None`` otherwise.
             :rtype: hal_py.ModulePin or None
         )");
 
@@ -143,38 +143,77 @@ namespace hal
         )");
 
         py_module_pin_group.def("contains_pin", &PinGroup<ModulePin>::contains_pin, py::arg("pin"), R"(
-            Check whether the pin group contaisn the given pin.
+            Check whether the pin group contains the given pin.
 
             :param hal_py.ModulePin pin: The pin to check.
-            :returns: True if the pin group contains the pin, True otherwise.
+            :returns: ``True`` if the pin group contains the pin, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_module_pin_group.def_property_readonly("ascending", &PinGroup<ModulePin>::is_ascending, R"(
-            True if the pin order of a pin group comprising n pins is ascending (from 0 to n-1), False if it is descending (from n-1 to 0).
+            ``True`` if the pin order of a pin group comprising n pins is ascending, e.g., from index ``0`` to ``n-1``, ``False`` otherwise.
 
             :type: bool
         )");
 
         py_module_pin_group.def("is_ascending", &PinGroup<ModulePin>::is_ascending, R"(
-            Check whether the pin order of a pin group comprising n pins is ascending (from 0 to n-1) or descending (from n-1 to 0).
+            Check whether the pin order of a pin group comprising n pins is ascending, e.g., from index ``0`` to ``n-1``.
 
-            :returns: True for ascending bit order, False otherwise.
+            :returns: ``True`` for ascending bit order, ``False`` otherwise.
             :rtype: bool
+        )");
+
+        py_module_pin_group.def_property_readonly("descending", &PinGroup<ModulePin>::is_descending, R"(
+            ``True`` if the pin order of a pin group comprising n pins is descending, e.g., from index ``n-1`` to ``0``, ``False`` otherwise.
+
+            :type: bool
+        )");
+
+        py_module_pin_group.def("is_descending", &PinGroup<ModulePin>::is_descending, R"(
+            Check whether the pin order of a pin group comprising n pins is descending, e.g., from index ``n-1`` to ``0``.
+
+            :returns: ``True`` for descending bit order, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_module_pin_group.def_property_readonly("lowest_index", &PinGroup<ModulePin>::get_lowest_index, R"(
+            The numerically lowest index of the pin group.
+
+            :type: int
+        )");
+
+        py_module_pin_group.def("get_lowest_index", &PinGroup<ModulePin>::get_lowest_index, R"(
+            Get the numerically lowest index of the pin group.
+
+            :returns: The lowest index. 
+            :rtype: int
+        )");
+
+        py_module_pin_group.def_property_readonly("highest_index", &PinGroup<ModulePin>::get_highest_index, R"(
+            The numerically highest index of the pin group.
+
+            :type: int
+        )");
+
+        py_module_pin_group.def("get_highest_index", &PinGroup<ModulePin>::get_highest_index, R"(
+            Get the numerically highest index of the pin group.
+
+            :returns: The highest index. 
+            :rtype: int
         )");
 
         py_module_pin_group.def_property_readonly("start_index", &PinGroup<ModulePin>::get_start_index, R"(
             The start index of the pin group.
-            Commonly, pin groups start at index 0, but this may not always be the case.
-            Note that the start index for a pin group comprising n pins is 0 independent of whether it is ascending or descending.
+            For ascending pin groups, this index equals the lowest index of the pin group.
+            For descending pin groups, it is equal to the highest index of the pin group.
 
             :type: int
         )");
 
         py_module_pin_group.def("get_start_index", &PinGroup<ModulePin>::get_start_index, R"(
             Get the start index of the pin group.
-            Commonly, pin groups start at index 0, but this may not always be the case.
-            Note that the start index for a pin group comprising n pins is 0 independent of whether it is ascending or descending.
+            For ascending pin groups, this index equals the lowest index of the pin group.
+            For descending pin groups, it is equal to the highest index of the pin group.
 
             :returns: The start index. 
             :rtype: int
@@ -202,7 +241,7 @@ namespace hal
         py_module_pin_group.def("empty", &PinGroup<ModulePin>::empty, R"(
             Check whether the pin group is empty, i.e., contains no pins.
 
-            :returns: True if the pin group is empty, False otherwise.
+            :returns: ``True`` if the pin group is empty, ``False`` otherwise.
             :rtype: bool
         )");
 

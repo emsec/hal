@@ -44,6 +44,9 @@ class EndpointTableModel : public QAbstractTableModel
     Q_OBJECT
 
 private:
+    /**
+     * One row of the endpoint table, i.e., the gate, pin, and type of a single endpoint of the selected net.
+     */
     struct Entry
     {
         QString name;
@@ -62,6 +65,7 @@ public:
     /**
      * The constructor.
      *
+     * @param type - Whether the model lists the sources or the destinations of a net.
      * @param parent - The model's parent.
      */
     EndpointTableModel(Type type, QObject* parent = nullptr);

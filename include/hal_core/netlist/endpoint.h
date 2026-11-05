@@ -46,7 +46,7 @@ namespace hal
          * Check whether two endpoints are equal.
          *
          * @param[in] other - The endpoint to compare against.
-         * @returns True if both endpoints are equal, false otherwise.
+         * @returns `true` if both endpoints are equal, `false` otherwise.
          */
         bool operator==(const Endpoint& other) const;
 
@@ -54,7 +54,7 @@ namespace hal
          * Check whether two endpoints are unequal.
          *
          * @param[in] other - The endpoint to compare against.
-         * @returns True if both endpoints are unequal, false otherwise.
+         * @returns `true` if both endpoints are unequal, `false` otherwise.
          */
         bool operator!=(const Endpoint& other) const;
 
@@ -82,14 +82,14 @@ namespace hal
         /**
          * Checks whether the pin of the endpoint is a source (output) pin.
          *
-         * @returns True if the endpoint is an source (output) pin, false otherwise.
+         * @returns `true` if the endpoint is an source (output) pin, `false` otherwise.
          */
         bool is_source_pin() const;
 
         /**
          * Checks whether the pin of the endpoint is a destination (input) pin.
          *
-         * @returns True if the endpoint is an destination (input) pin, false otherwise.
+         * @returns `true` if the endpoint is an destination (input) pin, `false` otherwise.
          */
         bool is_destination_pin() const;
 

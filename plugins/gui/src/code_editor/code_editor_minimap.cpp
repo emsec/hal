@@ -2,6 +2,7 @@
 
 #include "gui/code_editor/code_editor.h"
 #include "gui/code_editor/minimap_scrollbar.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -93,7 +94,7 @@ namespace hal
         Q_UNUSED(event)
 
         QStyleOption opt;
-        opt.init(this);
+        QtCompat::styleOptionInit(opt,this);
         QPainter painter(this);
         style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
 

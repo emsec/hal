@@ -2,11 +2,33 @@
 
 #include "hal_core/utilities/log.h"
 
+#include <cctype>
+
 namespace hal
 {
+    namespace
+    {
+        std::string normalize_bv_value(Parameter::Type type, const std::string& value)
+        {
+            if (type != Parameter::Type::BitVector && type != Parameter::Type::LogicVector)
+                return value;
+            if (value.size() < 2 || value[0] != '0')
+                return value;
+            const char pfx = static_cast<char>(std::tolower(static_cast<unsigned char>(value[1])));
+            if (pfx != 'b' && pfx != 'o' && pfx != 'x')
+                return value;
+            std::string result;
+            result.reserve(value.size());
+            result += '0';
+            result += pfx;
+            for (std::size_t i = 2; i < value.size(); ++i)
+                result += static_cast<char>(std::toupper(static_cast<unsigned char>(value[i])));
+            return result;
+        }
+    }    // namespace
     bool DataContainer::operator==(const DataContainer& other) const
     {
-        return m_data == other.get_data_map();
+        return m_data == other.get_data_map() && m_parameters == other.get_parameters();
     }
 
     bool DataContainer::operator!=(const DataContainer& other) const
@@ -109,6 +131,76 @@ namespace hal
             return std::make_tuple("", "");
         }
         return it->second;
+    }
+
+    Result<std::monostate> DataContainer::set_parameter(const Parameter& param, const std::string& value)
+    {
+        if (!param.validate(value))
+        {
+            return ERR("invalid parameter value");
+        }
+
+        const std::string normalized = normalize_bv_value(param.get_type(), value);
+        m_parameters.insert_or_assign(param.get_name(), std::make_pair(param, normalized));
+
+        return OK({});
+    }
+
+    Result<std::string> DataContainer::get_parameter_value(const std::string& name) const
+    {
+        if (auto it = m_parameters.find(name); it != m_parameters.end())
+        {
+            return OK(it->second.second);
+        }
+
+        return ERR("no parameter named '" + name + "'");
+    }
+
+    Result<std::string> DataContainer::get_parameter_value(const Parameter& param) const
+    {
+        auto it = m_parameters.find(param.get_name());
+        if (it == m_parameters.end())
+        {
+            return ERR("no parameter named '" + param.get_name() + "'");
+        }
+
+        if (it->second.first != param)
+        {
+            return ERR("parameter with name '" + param.get_name() + "' exists, but does not match provided parameter declaration");
+        }
+
+        return OK(it->second.second);
+    }
+
+    Result<Parameter> DataContainer::get_parameter_declaration(const std::string& name) const
+    {
+        if (auto it = m_parameters.find(name); it != m_parameters.end())
+        {
+            return OK(it->second.first);
+        }
+
+        return ERR("no parameter named '" + name + "'");
+    }
+
+    bool DataContainer::has_parameter(const std::string& name) const
+    {
+        return m_parameters.find(name) != m_parameters.end();
+    }
+
+    bool DataContainer::has_parameter(const Parameter& param) const
+    {
+        const auto it = m_parameters.find(param.get_name());
+        return it != m_parameters.end() && it->second.first == param;
+    }
+
+    bool DataContainer::delete_parameter(const std::string& name)
+    {
+        return m_parameters.erase(name) > 0;
+    }
+
+    const std::unordered_map<std::string, std::pair<Parameter, std::string>>& DataContainer::get_parameters() const
+    {
+        return m_parameters;
     }
 
 }    // namespace hal

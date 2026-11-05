@@ -43,6 +43,8 @@ namespace hal
 
     /**
      * \namespace netlist_factory
+     * Contains the functions that create a netlist, either empty or by parsing a netlist file.
+     *
      * @ingroup netlist
      */
     namespace netlist_factory

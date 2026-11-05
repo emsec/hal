@@ -621,6 +621,9 @@ namespace hal {
             place(LaneIndex(iMain?LaneIndex::Vertical:LaneIndex::Horizontal,iroadIn),rng);
             return;
         }
+        LaneIndex riMainIn(iMain?LaneIndex::Vertical:LaneIndex::Horizontal,iroadIn);
+        LaneIndex riMainOut(iMain?LaneIndex::Vertical:LaneIndex::Horizontal,iroadOut);
+
         int iroadLo = iroadIn;
         int iroadHi = iroadOut;
         int iroadJump = -1;
@@ -632,6 +635,24 @@ namespace hal {
             iroadJump = maxRoad[iJump];
             isearchIncr = 1;
         }
+
+        // check whether the incoming lane is occupied at some point
+        //    in this case we must jump to outgoing lane before this point
+        auto itMightBeOccupied = mOccupied.find(riMainIn);
+        if (itMightBeOccupied != mOccupied.constEnd())
+        {
+            int iOccupiedFromHere = NetLayoutJunctionRange::MaxInf;
+            for (const NetLayoutJunctionRange& nljr : (*itMightBeOccupied))
+            {
+                isearchIncr = -1;
+                if (nljr.first() < iOccupiedFromHere)
+                {
+                    iOccupiedFromHere = nljr.first();
+                    iroadJump = iOccupiedFromHere - 1;
+                }
+            }
+        }
+
         for (;;iroadJump+=isearchIncr)
         {
             if (iroadJump <= NetLayoutJunctionRange::MinInf ||
@@ -650,8 +671,6 @@ namespace hal {
                                                   NetLayoutJunctionRange::MaxInf);
 
             LaneIndex riJump(iJump?LaneIndex::Vertical:LaneIndex::Horizontal,iroadJump);
-            LaneIndex riMainIn(iMain?LaneIndex::Vertical:LaneIndex::Horizontal,iroadIn);
-            LaneIndex riMainOut(iMain?LaneIndex::Vertical:LaneIndex::Horizontal,iroadOut);
             if (!conflict(riJump,rngJump) &&
                     !conflict(riMainOut,rngOut) &&
                     !conflict(riMainIn,rngIn))

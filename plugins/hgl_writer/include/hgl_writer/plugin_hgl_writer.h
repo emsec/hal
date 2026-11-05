@@ -30,12 +30,18 @@
 
 namespace hal
 {
+    /**
+     * Registers the HGL gate library writer with HAL's gate library writer manager.
+     */
     class HGLWriterExtension : public FacExtensionInterface
     {
     public:
         HGLWriterExtension();
     };
 
+    /**
+     * The plugin that provides the HGL gate library writer.
+     */
     class PLUGIN_API HGLWriterPlugin : public BasePluginInterface
     {
         HGLWriterExtension* m_extension;

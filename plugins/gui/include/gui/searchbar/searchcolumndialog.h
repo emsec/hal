@@ -33,6 +33,9 @@
 
 namespace hal {
 
+    /**
+     * The dialog in which the user picks the columns that the search is applied to.
+     */
     class SearchColumnDialog : public QDialog
     {
         Q_OBJECT

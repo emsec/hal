@@ -1184,7 +1184,7 @@ namespace hal {
             }
             int ibit = it.value();
             int v = wdArray[ibit]->data().value(t0);
-            int mask = (1 << ibit);
+            int mask = (1 << (nChildren - ibit - 1));
             if (v<0)
                 undef |= mask;
             else
@@ -1204,14 +1204,14 @@ namespace hal {
 
     int WaveDataGroup::intValue(double t) const
     {
-        u32 mask = 1;
+        u32 mask = 1 << (mGroupList.size()-1);
         int retval = 0;
         for (const WaveData* wd : mGroupList)
         {
             int childVal = wd->intValue(t);
             if (childVal < 0) return childVal;
             if (childVal) retval |= mask;
-            mask <<= 1;
+            mask >>= 1;
         }
         return retval;
     }
@@ -1725,8 +1725,11 @@ namespace hal {
     QSet<u32> WaveDataList::toSet() const
     {
         QList<u32> keyList = mIds.keys();
-        return keyList.toSet();
-        // return QSet<u32>(keyList.begin(),keyList.end());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        return QSet<u32>(keyList.constBegin(),keyList.constEnd());
+#else
+        return QSet<u32>::fromList(keyList);
+#endif
     }
 
     void WaveDataList::remove(u32 id)

@@ -28,6 +28,9 @@
 
 namespace hal {
 
+    /**
+     * The combined value of a group of waveforms at one point in time, including which of its bits are undefined.
+     */
     class WaveGroupValue
     {
         u32 mHasTransition;

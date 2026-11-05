@@ -39,10 +39,13 @@
 #include <QInputDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QThread>
 #include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
+
+#include <atomic>
 
 namespace hal
 {
@@ -148,7 +151,10 @@ namespace hal
         if (!text.isEmpty())
             mProgressBar->setText(text);
         mProgressBar->setValue(percent);
-        qApp->processEvents();
+		if (QThread::currentThread() == qApp->thread())
+        {
+            qApp->processEvents();
+        }
     }
 
     void GraphWidget::showComments(const Node &nd)
@@ -917,7 +923,9 @@ namespace hal
 
         for (auto id : gSelectionRelay->selectedGatesList())
         {
-            auto rect = mContext->scene()->getGateItem(id)->sceneBoundingRect();
+            const GraphicsGate* gg = mContext->scene()->getGateItem(id);
+            if (!gg) continue;
+            auto rect = gg->sceneBoundingRect();
 
             min_x = std::min(min_x, static_cast<int>(rect.left()));
             max_x = std::max(max_x, static_cast<int>(rect.right()));
@@ -927,7 +935,9 @@ namespace hal
 
         for (auto id : gSelectionRelay->selectedNetsList())
         {
-            auto rect = mContext->scene()->getNetItem(id)->sceneBoundingRect();
+            const GraphicsNet* gn = mContext->scene()->getNetItem(id);
+            if (!gn) continue;
+            auto rect = gn->sceneBoundingRect();
 
             min_x = std::min(min_x, static_cast<int>(rect.left()));
             max_x = std::max(max_x, static_cast<int>(rect.right()));
@@ -937,12 +947,23 @@ namespace hal
 
         for (auto id : gSelectionRelay->selectedModulesList())
         {
-            auto rect = mContext->scene()->getModuleItem(id)->sceneBoundingRect();
+            const GraphicsModule* gm = mContext->scene()->getModuleItem(id);
+            if (!gm) continue;
+            auto rect = gm->sceneBoundingRect();
 
             min_x = std::min(min_x, static_cast<int>(rect.left()));
             max_x = std::max(max_x, static_cast<int>(rect.right()));
             min_y = std::min(min_y, static_cast<int>(rect.top()));
             max_y = std::max(max_y, static_cast<int>(rect.bottom()));
+        }
+
+        if (min_x == INT_MAX ||
+            min_y == INT_MAX ||
+            max_x == INT_MIN ||
+            max_y == INT_MIN )
+        {
+            log_warning("gui", "Attempt to zoom in on graphics item before layout was rendered.");
+            return;
         }
 
         auto targetRect = QRectF(min_x, min_y, max_x - min_x, max_y - min_y).marginsAdded(QMarginsF(20, 20, 20, 20));
@@ -1051,12 +1072,37 @@ namespace hal
 
     void GraphWidget::pluginProgressIndicator(int percent, const std::string& msg)
     {
-        // qDebug() << "progress" << hex << (quintptr) QThread::currentThread() << (quintptr) gPythonContext->currentThread() << (quintptr) dynamic_cast<PythonThread*>(QThread::currentThread());
-        if (!sInstance || gPythonContext->pythonThread()) return;
-        if (percent==100)
-            sInstance->handleSceneAvailable();
+        // Qt widgets must only be touched on the GUI thread. If we're already on it,
+        // call showBusy / handleSceneAvailable directly; otherwise post the update to
+        // the main event queue.
+        // Updates coming from a worker thread are posted to the event queue while updates from the GUI
+        // thread are applied at once, so an update issued earlier by a worker can be delivered after the
+        // final one and show the overlay again. Each update carries a ticket, and one that lost the race
+        // to a newer update is dropped instead of being applied on top of it.
+        static std::atomic<u64> issuedTicket(0);
+        static u64 appliedTicket = 0;
+
+        const u64 ticket = ++issuedTicket;
+
+        QString qmsg = QString::fromStdString(msg);
+        auto apply = [percent, qmsg, ticket]() {
+            if (!sInstance) return;
+            if (ticket < appliedTicket)
+                return;
+            appliedTicket = ticket;
+            if (percent == 100)
+                sInstance->handleSceneAvailable();
+            else
+                sInstance->showBusy(percent, qmsg);
+        };
+        if (QThread::currentThread() == qApp->thread())
+        {
+            apply();
+            qApp->processEvents();
+        }
+
         else
-            sInstance->showBusy(percent, QString::fromStdString(msg));
+            QMetaObject::invokeMethod(qApp, apply, Qt::QueuedConnection);
     }
 
 }    // namespace hal

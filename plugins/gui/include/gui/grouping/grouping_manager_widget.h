@@ -182,7 +182,7 @@ namespace hal
          * Creates a new grouping for successors or predecessors of item.
          *
          * @param maxDepth - maximum recursion depth in view
-         * @param succ - if true successors are highlighted, predecessors otherwise
+         * @param succ - if `true` successors are highlighted, predecessors otherwise
          * @param item - the item to start from. If null recursion starts from first selected item.
          */
         void newGroupingSuccOrPred(int maxDepth, bool succ, const GraphicsItem* item);
@@ -191,7 +191,7 @@ namespace hal
          * Creates groupings dependend on distance to start item.
          *
          * @param maxDepth - maximum recursion depth in view
-         * @param succ - if true successors are highlighted, predecessors otherwise
+         * @param succ - if `true` successors are highlighted, predecessors otherwise
          * @param item - the item to start from. If null recursion starts from first selected item.
          */
         void newGroupingByDistance(int maxDepth, bool succ, const GraphicsItem* item);
@@ -338,6 +338,9 @@ namespace hal
         void handleDeleteShortcutOnFocusChanged(QWidget *oldWidget, QWidget *newWidget);
 
     private:
+        /**
+         * A map that counts how often each module occurs among the currently selected gates.
+         */
         class ToolboxModuleHash
         {
         public:
@@ -345,6 +348,9 @@ namespace hal
             ToolboxModuleHash(const Node& nd);
         };
 
+        /**
+         * One entry of the grouping toolbox, i.e., a node that the current selection can be turned into a grouping from.
+         */
         class ToolboxNode
         {
         public:

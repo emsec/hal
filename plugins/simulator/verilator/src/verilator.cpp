@@ -301,7 +301,7 @@ namespace hal
 
         bool VerilatorEngine::finalize()
         {
-            mResultFilename = std::string(m_simulator_dir / "waveform.vcd");
+            mResultFilename = "waveform.vcd";
             mState          = Done;
             return true;
         }

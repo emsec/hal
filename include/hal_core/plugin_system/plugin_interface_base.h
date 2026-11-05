@@ -51,6 +51,8 @@ namespace hal
 #endif
 
     /**
+     * The base class for all HAL plugins. Every plugin has to derive from this class and implement at least `get_name` and `get_version`.
+     *
      * @ingroup plugins
      */
     class CORE_API BasePluginInterface
@@ -132,7 +134,7 @@ namespace hal
 
         /**
          * Get first extension of given type T.
-         * @return pointer to first extension of type T or nullptr if no such extension exists.
+         * @return pointer to first extension of type T or `nullptr` if no such extension exists.
          */
         template<typename T>
         T* get_first_extension() const

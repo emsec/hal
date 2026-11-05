@@ -38,6 +38,9 @@ namespace hal
     class WaveformViewer;
     class NetlistSimulator;
 
+    /**
+     * The plugin that provides the waveform viewer of the GUI.
+     */
     class PLUGIN_API WaveformViewerPlugin : public BasePluginInterface
     {
     public:

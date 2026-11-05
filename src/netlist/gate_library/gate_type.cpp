@@ -401,7 +401,7 @@ namespace hal
             {
                 if (auto res = assign_pin_to_group(pin_group, *it, delete_empty_groups); res.is_error())
                 {
-                    assert(delete_pin_group(pin_group));
+                    delete_pin_group(pin_group);
                     return ERR(res.get_error());
                 }
             }
@@ -412,7 +412,7 @@ namespace hal
             {
                 if (auto res = assign_pin_to_group(pin_group, *it, delete_empty_groups); res.is_error())
                 {
-                    assert(delete_pin_group(pin_group));
+                    delete_pin_group(pin_group);
                     return ERR(res.get_error());
                 }
             }
@@ -745,5 +745,36 @@ namespace hal
     const std::unordered_map<std::string, BooleanFunction>& GateType::get_boolean_functions() const
     {
         return m_functions;
+    }
+
+    Result<std::monostate> GateType::add_parameter(const Parameter& param)
+    {
+        if (m_parameters.find(param.get_name()) != m_parameters.end())
+        {
+            return ERR("could not add parameter '" + param.get_name() + "' to gate type '" + m_name + "': a parameter with that name already exists");
+        }
+
+        m_parameters[param.get_name()] = param;
+        return OK({});
+    }
+
+    const std::unordered_map<std::string, Parameter>& GateType::get_parameters() const
+    {
+        return m_parameters;
+    }
+
+    Result<Parameter> GateType::get_parameter(const std::string& name) const
+    {
+        if (auto it = m_parameters.find(name); it != m_parameters.end())
+        {
+            return OK(it->second);
+        }
+
+        return ERR("no parameter named '" + name + "'");
+    }
+
+    bool GateType::has_parameter(const std::string& name) const
+    {
+        return m_parameters.find(name) != m_parameters.end();
     }
 }    // namespace hal

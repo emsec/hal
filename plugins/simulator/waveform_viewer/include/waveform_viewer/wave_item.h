@@ -39,6 +39,9 @@ namespace hal {
 
     class WaveItemHash;
 
+    /**
+     * The key under which a rendered waveform is cached, i.e., its kind together with its ID.
+     */
     class WaveItemIndex
     {
     public:
@@ -61,6 +64,9 @@ namespace hal {
 
     uint qHash(const WaveItemIndex &wii);
 
+    /**
+     * One waveform as it is managed by the viewer, i.e., its data, its loading state, and its painted representation.
+     */
     class WaveItem : public QObject
     {
         Q_OBJECT
@@ -141,6 +147,9 @@ namespace hal {
         int cursorValue(double tCursor, int xpos);
     };
 
+    /**
+     * The cache of all waveform items that the viewer currently holds.
+     */
     class WaveItemHash : public QHash<WaveItemIndex,WaveItem*>
     {
         int mVisibleEntries;

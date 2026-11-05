@@ -27,7 +27,7 @@ namespace hal
 
     Result<std::unique_ptr<Netlist>> NetlistInternalManager::copy_netlist(const Netlist* nl) const
     {
-        std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->m_gate_library);
+        std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->m_gate_library.get());
         if (c_netlist == nullptr)
         {
             return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create netlist");
@@ -321,10 +321,10 @@ namespace hal
 
         m_netlist->m_gates_map[id] = std::move(new_gate);
         m_netlist->m_gates_set.insert(raw);
-        m_netlist->m_gates.push_back(raw);
+        utils::indexed_vector_push_back(m_netlist->m_gates, m_netlist->m_gate_positions, raw);
 
         m_netlist->m_top_module->m_gates_map[id] = raw;
-        m_netlist->m_top_module->m_gates.push_back(raw);
+        utils::indexed_vector_push_back(m_netlist->m_top_module->m_gates, m_netlist->m_top_module->m_gate_positions, raw);
 
         // notify
         m_event_handler->notify(ModuleEvent::event::gate_assigned, m_netlist->m_top_module, id);
@@ -368,13 +368,13 @@ namespace hal
 
         // remove gate from modules
         gate->m_module->m_gates_map.erase(gate->m_module->m_gates_map.find(gate->get_id()));
-        utils::unordered_vector_erase(gate->m_module->m_gates, gate);
+        utils::indexed_vector_erase(gate->m_module->m_gates, gate->m_module->m_gate_positions, gate);
 
         auto it  = m_netlist->m_gates_map.find(gate->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_gates_map.erase(it);
         m_netlist->m_gates_set.erase(gate);
-        utils::unordered_vector_erase(m_netlist->m_gates, gate);
+        utils::indexed_vector_erase(m_netlist->m_gates, m_netlist->m_gate_positions, gate);
 
         // free ids
         m_netlist->m_free_gate_ids.insert(gate->get_id());
@@ -427,7 +427,7 @@ namespace hal
         auto raw                  = new_net.get();
         m_netlist->m_nets_map[id] = std::move(new_net);
         m_netlist->m_nets_set.insert(raw);
-        m_netlist->m_nets.push_back(raw);
+        utils::indexed_vector_push_back(m_netlist->m_nets, m_netlist->m_net_positions, raw);
 
         // notify
         m_event_handler->notify(NetEvent::event::created, raw);
@@ -475,7 +475,7 @@ namespace hal
         auto ptr = std::move(it->second);
         m_netlist->m_nets_map.erase(it);
         m_netlist->m_nets_set.erase(net);
-        utils::unordered_vector_erase(m_netlist->m_nets, net);
+        utils::indexed_vector_erase(m_netlist->m_nets, m_netlist->m_net_positions, net);
 
         m_netlist->m_free_net_ids.insert(net->get_id());
         m_netlist->m_used_net_ids.erase(net->get_id());
@@ -804,12 +804,12 @@ namespace hal
         auto raw                     = m.get();
         m_netlist->m_modules_map[id] = std::move(m);
         m_netlist->m_modules_set.insert(raw);
-        m_netlist->m_modules.push_back(raw);
+        utils::indexed_vector_push_back(m_netlist->m_modules, m_netlist->m_module_positions, raw);
 
         if (parent != nullptr)
         {
             parent->m_submodules_map[id] = raw;
-            parent->m_submodules.push_back(raw);
+            utils::indexed_vector_push_back(parent->m_submodules, parent->m_submodule_positions, raw);
         }
 
         m_event_handler->notify(ModuleEvent::event::created, raw);
@@ -850,7 +850,7 @@ namespace hal
         for (auto sm : to_remove->m_submodules)
         {
             to_remove->m_parent->m_submodules_map[sm->get_id()] = sm;
-            to_remove->m_parent->m_submodules.push_back(sm);
+            utils::indexed_vector_push_back(to_remove->m_parent->m_submodules, to_remove->m_parent->m_submodule_positions, sm);
 
             m_event_handler->notify(ModuleEvent::event::submodule_removed, sm->get_parent_module(), sm->get_id());
 
@@ -862,17 +862,20 @@ namespace hal
 
         // remove module from parent
         to_remove->m_parent->m_submodules_map.erase(to_remove->get_id());
-        utils::unordered_vector_erase(to_remove->m_parent->m_submodules, to_remove);
+        utils::indexed_vector_erase(to_remove->m_parent->m_submodules, to_remove->m_parent->m_submodule_positions, to_remove);
         m_event_handler->notify(ModuleEvent::event::submodule_removed, to_remove->m_parent, to_remove->get_id());
 
         auto it  = m_netlist->m_modules_map.find(to_remove->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_modules_map.erase(it);
         m_netlist->m_modules_set.erase(to_remove);
-        utils::unordered_vector_erase(m_netlist->m_modules, to_remove);
+        utils::indexed_vector_erase(m_netlist->m_modules, m_netlist->m_module_positions, to_remove);
 
         m_netlist->m_free_module_ids.insert(to_remove->get_id());
         m_netlist->m_used_module_ids.erase(to_remove->get_id());
+
+        // no pin event must survive the module it refers to
+        PinChangedEvent::discard(to_remove);
 
         m_event_handler->notify(ModuleEvent::event::removed, to_remove);
         return true;
@@ -943,11 +946,11 @@ namespace hal
             assert(it != prev_mod->m_gates_map.end());
             prev_mod->m_gates_map.erase(it);
 
-            utils::unordered_vector_erase(prev_mod->m_gates, g);
+            utils::indexed_vector_erase(prev_mod->m_gates, prev_mod->m_gate_positions, g);
 
             // move gate to new module
             module->m_gates_map[g->get_id()] = g;
-            module->m_gates.push_back(g);
+            utils::indexed_vector_push_back(module->m_gates, module->m_gate_positions, g);
             g->m_module = module;
 
             // collect affected nets
@@ -973,6 +976,10 @@ namespace hal
 
         if (m_net_checks_enabled)
         {
+            // a bulk assignment changes the pins of the affected modules wholesale, so the individual pin events
+            // are collapsed into a single PinEvent::PinsReload per module instead of several events per pin
+            PinChangedBulkScope pin_scope;
+
             for (const auto& [affected_module, nets] : nets_to_check)
             {
                 for (Net* net : nets)

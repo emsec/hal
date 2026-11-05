@@ -72,6 +72,18 @@ namespace hal
              */
             Result<BooleanFunction> evaluate(const BooleanFunction& function) const;
 
+          private:
+            /**
+             * Evaluates a Boolean function whose variables are all bound to constants within the symbolic
+             * state, by folding the values directly instead of building a Boolean function per node.
+             *
+             * @param[in] function - The Boolean function to evaluate.
+             * @returns The resulting value, or std::nullopt if the function cannot be folded to a constant.
+             */
+            std::optional<std::vector<BooleanFunction::Value>> evaluate_constant(const BooleanFunction& function) const;
+
+          public:
+
             /**
              * Evaluates an equality constraint and applies it to the symbolic state of the symbolic execution.
              * 

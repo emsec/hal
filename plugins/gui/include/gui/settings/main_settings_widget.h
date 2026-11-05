@@ -128,7 +128,7 @@ namespace hal
         /**
          * Checks all SettingWidget%s if they are in an unsaved modified state.
          *
-         * @return True if any SettingWidget is in a modified state. False otherwise.
+         * @return `true` if any SettingWidget is in a modified state. `false` otherwise.
          */
         bool handleAboutToClose();
 

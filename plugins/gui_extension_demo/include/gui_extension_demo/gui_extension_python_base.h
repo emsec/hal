@@ -31,6 +31,9 @@
 #include "hal_core/plugin_system/plugin_parameter.h"
 
 namespace hal {
+    /**
+     * Demonstrates how a plugin can expose its GUI contribution to python.
+     */
     class GuiExtensionPythonBase
     {
         std::string m_tagname;

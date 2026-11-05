@@ -6,8 +6,6 @@
 
 #include "gui/searchbar/searchoptions.h"
 
-#include "gui/gui_globals.h"
-
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QTextBlock>
@@ -71,7 +69,7 @@ namespace hal
             QWheelEvent* wheel = static_cast<QWheelEvent*>(event);
             if (wheel->modifiers() == Qt::ControlModifier)
             {
-                if (wheel->delta() > 0)
+                if (wheel->angleDelta().y() > 0)
                     zoomIn(2);
                 else
                     zoomOut(2);
@@ -122,7 +120,7 @@ namespace hal
     {
         // WARNING FUNCTION ONLY RETURNS CORRECT VALUES FOR MONOSPACE FONTS !
         QFontMetrics fm(mLineNumberFont);
-        return mLineNumberArea->leftOffset() + fm.width(QString::number(blockCount())) + mLineNumberArea->rightOffset();
+        return mLineNumberArea->leftOffset() + fm.horizontalAdvance(QString::number(blockCount())) + mLineNumberArea->rightOffset();
     }
 
     int CodeEditor::minimapWidth()
@@ -206,6 +204,11 @@ namespace hal
 
     void CodeEditor::search(const QString& string, SearchOptions searchOpts)
     {
+        if (string.isEmpty())
+        {
+            setExtraSelections({});
+            return;
+        }
         QList<QTextEdit::ExtraSelection> extraSelections;
 
         moveCursor(QTextCursor::Start);
@@ -225,10 +228,18 @@ namespace hal
 #endif
             while (find(regExp, options))
             {
+                QTextCursor cur = textCursor();
+                if (cur.anchor() == cur.position()) // zero-length match
+                {
+                    if (!cur.movePosition(QTextCursor::NextCharacter))
+                        break; // end of document reached
+                    setTextCursor(cur);
+                    continue;
+                }
                 QTextEdit::ExtraSelection extra;
                 extra.format.setForeground(QBrush(color));
                 extra.format.setBackground(mBackgroundColor);
-                extra.cursor = textCursor();
+                extra.cursor = cur;
                 extraSelections.append(extra);
             }
         }

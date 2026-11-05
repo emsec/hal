@@ -42,6 +42,9 @@ namespace hal
     class GateType;
     class GateLibrary;
 
+    /**
+     * Re-implements parts of a netlist with a different gate library by resynthesizing their Boolean functions.
+     */
     namespace resynthesis
     {
         /**

@@ -68,14 +68,6 @@ namespace hal
          */
         void reset_labels();
 
-        /**
-         * Searches the given string in the label of this widget's underlying SettingsItem.
-         *
-         * @param needle - The string to search for.
-         * @return True if the string was found. False otherwise.
-         */
-        bool matchLabel(const QString& needle);
-
         /** @name Q_PROPERTY READ Function
           */
         ///@{
@@ -90,7 +82,7 @@ namespace hal
 
         /**
          * Loads the value of its SettingsItem and adjusts the visuals accordingly
-         * and sets its dirty state to false.
+         * and sets its dirty state to `false`.
          */
         void prepare();
 
@@ -164,7 +156,7 @@ namespace hal
         /**
          * Q_SIGNAL that is emitted whenever the mouse enters or leaves the widget.
          *
-         * @param item - The widget's SettingItem when entering or nullptr when leaving the widget.
+         * @param item - The widget's SettingItem when entering or `nullptr` when leaving the widget.
          */
         void triggerDescriptionUpdate(SettingsItem* item);
 
