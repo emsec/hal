@@ -266,12 +266,12 @@ namespace hal
                 py::arg( "y_key" ) = py::none(),
                 R"(
                 Write the clock tree to a DOT file. Gates get the coordinates of their location in the layout, unless the
-                data keys of both coordinates are given: then they are read from the gate data in category ``generic``,
-                e.g., from Verilog instance parameters, which unlike a location can be negative.
+                keys of both coordinates are given: then they are read from the gate parameters of these names, e.g.,
+                from Verilog instance parameters, which unlike a location can be negative.
 
                 :param str pathname: The path of the file to write.
-                :param str x_key: The data key of the x-coordinate, or ``None`` to use the location.
-                :param str y_key: The data key of the y-coordinate, or ``None`` to use the location.
+                :param str x_key: The name of the parameter that holds the x-coordinate, or ``None`` to use the location.
+                :param str y_key: The name of the parameter that holds the y-coordinate, or ``None`` to use the location.
                 :returns: ``True`` on success, ``False`` otherwise.
                 :rtype: bool
             )" )

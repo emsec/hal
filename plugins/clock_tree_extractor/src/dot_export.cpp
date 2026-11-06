@@ -37,7 +37,6 @@
 #include <charconv>
 #include <fstream>
 #include <igraph/igraph.h>
-#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -47,7 +46,7 @@ namespace hal::cte
     {
         const char *shape_of( const Gate *gate )
         {
-            if( is_ff( gate ) || is_latch( gate ) )
+            if( is_ff( gate ) )
             {
                 return "box";
             }
@@ -59,10 +58,6 @@ namespace hal::cte
             if( is_mux( gate ) )
             {
                 return "diamond";
-            }
-            if( is_latch( gate ) )
-            {
-                return "box";
             }
             if( is_oscillator( gate ) || is_pll( gate ) )
             {
@@ -86,15 +81,12 @@ namespace hal::cte
             return result + "\"";
         }
 
-        std::optional<i32> parse_coordinate( const std::string &text )
+        // the shortest text that reads back as the same number, e.g., 100 or 12.5, independent of the locale
+        std::string number( const double value )
         {
-            i32 coordinate;
-            const auto [end, error] = std::from_chars( text.data(), text.data() + text.size(), coordinate );
-            if( error != std::errc() || end != text.data() + text.size() )
-            {
-                return std::nullopt;
-            }
-            return coordinate;
+            char text[32];
+            const auto [end, error] = std::to_chars( text, text + sizeof( text ), value );
+            return { text, end };
         }
     }  // namespace
 
@@ -159,14 +151,13 @@ namespace hal::cte
                 dot_file << " label=\"Δ " << node_ids[vertex] << "\"";
             }
 
-            // coordinates from the gate data can be negative, a location in HAL can't
-            std::optional<i32> x;
-            std::optional<i32> y;
+            // coordinates from gate parameters can be negative, a location in HAL can't
+            std::optional<double> x;
+            std::optional<double> y;
             if( x_key.has_value() )
             {
-                // the Verilog parser stores instance parameters in category "generic"
-                x = parse_coordinate( std::get<1>( gate->get_data( "generic", *x_key ) ) );
-                y = parse_coordinate( std::get<1>( gate->get_data( "generic", *y_key ) ) );
+                x = read_parameter_coordinate( gate, *x_key );
+                y = read_parameter_coordinate( gate, *y_key );
             }
             else if( gate->has_location() )
             {
@@ -176,7 +167,7 @@ namespace hal::cte
 
             if( x.has_value() && y.has_value() )
             {
-                dot_file << " x=" << *x << " y=" << *y;
+                dot_file << " x=" << number( *x ) << " y=" << number( *y );
             }
             else
             {
@@ -206,7 +197,7 @@ namespace hal::cte
         if( x_key.has_value() && gates_without_coordinates > 0 )
         {
             log_warning( "clock_tree_extractor",
-                         "no valid coordinates under keys '{}' and '{}' for {} gate(s)",
+                         "no valid coordinates in parameters '{}' and '{}' for {} gate(s)",
                          *x_key,
                          *y_key,
                          gates_without_coordinates );

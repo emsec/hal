@@ -39,14 +39,14 @@ namespace hal::cte
     /**
      * Write a clock tree to a DOT file.
      *
-     * Gates get the coordinates of their location in the layout, unless the data keys of both coordinates are
-     * given: then they are read from the gate data in category "generic", e.g., from Verilog instance parameters,
-     * which unlike a location can be negative.
+     * Gates get the coordinates of their location in the layout, unless the keys of both coordinates are given: then
+     * they are read from the gate parameters of these names, e.g., from Verilog instance parameters, which unlike a
+     * location can be negative.
      *
      * @param[in] clock_tree - The clock tree.
      * @param[in] pathname - The path of the file to write.
-     * @param[in] x_key - The data key of the x-coordinate, or std::nullopt to use the location.
-     * @param[in] y_key - The data key of the y-coordinate, or std::nullopt to use the location.
+     * @param[in] x_key - The name of the parameter that holds the x-coordinate, or std::nullopt to use the location.
+     * @param[in] y_key - The name of the parameter that holds the y-coordinate, or std::nullopt to use the location.
      * @returns OK() on success, an error otherwise.
      */
     Result<std::monostate> export_dot( const ClockTree &clock_tree,

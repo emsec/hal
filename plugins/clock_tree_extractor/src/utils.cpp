@@ -26,10 +26,17 @@
 
 #include "clock_tree_extractor/utils.h"
 
+#include "hal_core/defines.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/enums/gate_type_property.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/utilities/result.h"
+
+#include <charconv>
+#include <cmath>
+#include <locale>
+#include <sstream>
 
 namespace hal::cte
 {
@@ -82,5 +89,48 @@ namespace hal::cte
     bool is_connected_to_control_pin( const Endpoint *endpoint )
     {
         return is_control_pin( endpoint->get_pin()->get_type() );
+    }
+
+    std::optional<double> read_parameter_coordinate( const Gate *gate, const std::string &name )
+    {
+        const Result<std::string> parameter = gate->get_parameter_value( name );
+        if( parameter.is_error() )
+        {
+            return std::nullopt;
+        }
+
+        const std::string &value = parameter.get();
+        const std::size_t first = value.find_first_not_of( " \t\r\n" );
+        if( first == std::string::npos )
+        {
+            return std::nullopt;
+        }
+        const std::string text = value.substr( first, value.find_last_not_of( " \t\r\n" ) - first + 1 );
+
+        // bit vectors are stored in hexadecimal, which not every standard library reads as a double
+        if( text.rfind( "0x", 0 ) == 0 )
+        {
+            u64 coordinate = 0;
+            if( const auto [end, error] = std::from_chars( text.data() + 2, text.data() + text.size(), coordinate, 16 );
+                error != std::errc() || end != text.data() + text.size() )
+            {
+                return std::nullopt;
+            }
+            return static_cast<double>( coordinate );
+        }
+
+        // read with the classic locale, so a coordinate has a decimal point no matter where the program runs
+        std::istringstream stream( text );
+        stream.imbue( std::locale::classic() );
+
+        double coordinate = 0.0;
+        stream >> coordinate;
+
+        // the whole value must be the number, "12 um" is not a coordinate
+        if( stream.fail() || !stream.eof() || !std::isfinite( coordinate ) )
+        {
+            return std::nullopt;
+        }
+        return coordinate;
     }
 }  // namespace hal::cte
