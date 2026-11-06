@@ -432,6 +432,7 @@ namespace hal {
                  R"( ["generic","VZ", "std_logic",        "Z"    ],)"
                  R"( ["generic","BV", "bit_vector",       "ABCD" ],)"
                  R"( ["generic","BP", "bit_vector",       "0x12" ],)"
+                 R"( ["generic","BH", "bit_vector",       "0B5B" ],)"
                  R"( ["generic","LV", "std_logic_vector", "0bXX01"],)"
                  R"( ["other",  "O",  "string",           "skip" ]])");
 
@@ -483,6 +484,11 @@ namespace hal {
              EXPECT_EQ(top->get_parameter_declaration("BP").get().get_size(), 8u);
              EXPECT_EQ(top->get_parameter_value("BP").get(), "0x12");
 
+             // "bit_vector" unprefixed hex that starts like a binary literal "0B5B" → BitVector(16), value "0x0B5B"
+             EXPECT_EQ(top->get_parameter_declaration("BH").get().get_type(), Parameter::Type::BitVector);
+             EXPECT_EQ(top->get_parameter_declaration("BH").get().get_size(), 16u);
+             EXPECT_EQ(top->get_parameter_value("BH").get(), "0x0B5B");
+
              // "std_logic_vector" prefixed "0bXX01" → LogicVector(4), value "0bXX01"
              EXPECT_EQ(top->get_parameter_declaration("LV").get().get_type(), Parameter::Type::LogicVector);
              EXPECT_EQ(top->get_parameter_declaration("LV").get().get_size(), 4u);
@@ -493,7 +499,7 @@ namespace hal {
              EXPECT_TRUE(top->has_data("other", "O"));
 
              // migrated entries removed from data map
-             for (const auto& key : {"B", "I", "F", "T", "S", "V0", "V1", "VX", "VZ", "BV", "BP", "LV"})
+             for (const auto& key : {"B", "I", "F", "T", "S", "V0", "V1", "VX", "VZ", "BV", "BP", "BH", "LV"})
                  EXPECT_FALSE(top->has_data("generic", key));
          }
          {

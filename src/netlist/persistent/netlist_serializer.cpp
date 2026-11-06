@@ -439,10 +439,10 @@ namespace hal
                     }
                     else if (type_str == "bit_vector" || type_str == "std_logic_vector")
                     {
+                        // Only a lowercase base prefix counts: the old format is uppercase hex,
+                        // in which "0B5B" is a 16-bit value and not the binary literal "5B".
                         const bool has_prefix = raw_value.size() >= 3 && raw_value[0] == '0'
-                            && (raw_value[1] == 'b' || raw_value[1] == 'B'
-                            ||  raw_value[1] == 'o' || raw_value[1] == 'O'
-                            ||  raw_value[1] == 'x' || raw_value[1] == 'X');
+                            && (raw_value[1] == 'b' || raw_value[1] == 'o' || raw_value[1] == 'x');
                         if (raw_value.empty())
                         {
                             log_warning("netlist_persistent", "skipping migration of generic data entry '{}': empty vector value", name);
