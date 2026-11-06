@@ -3,11 +3,13 @@ option(PL_CLOCK_TREE_VIEWER "PL_CLOCK_TREE_VIEWER" OFF)
 if(PL_CLOCK_TREE_VIEWER OR BUILD_ALL_PLUGINS)
 
     # This plugin plots clock trees extracted by the clock_tree_extractor plugin and links against it.
-    # Plugin directories are added in alphabetical order, so clock_tree_extractor has already been
-    # added at this point (if it is enabled).
+    # Plugin directories are added in alphabetical order, so the clock_tree_extractor target exists at
+    # this point if that plugin is enabled. Without it, the viewer is skipped instead of failing the
+    # whole configuration.
     if(NOT TARGET clock_tree_extractor)
-        message(FATAL_ERROR "The clock_tree_viewer plugin needs the clock_tree_extractor plugin,
-                             set PL_CLOCK_TREE_EXTRACTOR=ON")
+        message(WARNING "The clock_tree_viewer plugin needs the clock_tree_extractor plugin and is not built, "
+                        "set PL_CLOCK_TREE_EXTRACTOR=ON to build it.")
+        return()
     endif()
 
     find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
@@ -15,8 +17,6 @@ if(PL_CLOCK_TREE_VIEWER OR BUILD_ALL_PLUGINS)
     file(GLOB_RECURSE CLOCK_TREE_VIEWER_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
     file(GLOB_RECURSE CLOCK_TREE_VIEWER_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
     file(GLOB_RECURSE CLOCK_TREE_VIEWER_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
-
-    message(INFO ${CLOCK_TREE_VIEWER_SRC})
 
     qt6_wrap_cpp(MOC_HDR ${CLOCK_TREE_VIEWER_INC})
 
