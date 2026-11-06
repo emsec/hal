@@ -34,11 +34,7 @@
 
 namespace hal
 {
-    class Netlist;
     class ClockTreeViewerFactory;
-
-    /** The netlist that is currently loaded in the GUI. */
-    extern Netlist *gNetlist;
 
     /**
      * A plugin to interactively view clock trees extracted by the clock_tree_extractor plugin.

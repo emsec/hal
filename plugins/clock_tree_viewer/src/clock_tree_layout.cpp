@@ -62,10 +62,8 @@ namespace hal::ctv
 
         Bounds bounds_of( const Layout &layout )
         {
-            Bounds bounds = { .min_x = layout.nodes.front().x,
-                              .max_x = layout.nodes.front().x,
-                              .min_y = layout.nodes.front().y,
-                              .max_y = layout.nodes.front().y };
+            const Node &first = layout.nodes.front();
+            Bounds bounds = { first.x, first.x, first.y, first.y };
 
             for( const Node &node : layout.nodes )
             {
@@ -232,20 +230,10 @@ namespace hal::ctv
         style.edge_width = overrides.edge_width.value_or( EDGE_WIDTH_RATIO * length );
         style.picture_margin = overrides.picture_margin.value_or( PICTURE_MARGIN_RATIO * length );
 
-        if( overrides.pixels_per_unit.has_value() )
-        {
-            style.pixels_per_unit = *overrides.pixels_per_unit;
-        }
-        else
-        {
-            // A typical connection gets the same number of pixels in every picture, unless that would make the
-            // picture larger than allowed.
-            const Bounds bounds = bounds_of( layout );
-            const double side = std::max( bounds.max_x - bounds.min_x, bounds.max_y - bounds.min_y )
-                + 2.0 * ( style.picture_margin + style.node_radius );
-
-            style.pixels_per_unit = std::min( EDGE_PICTURE_PIXELS / length, MAX_PICTURE_SIDE_PIXELS / side );
-        }
+        // A typical connection gets the same number of pixels in every picture. The scene lowers this for a picture that
+        // would be larger than allowed, which only it can tell.
+        style.pixels_per_unit = overrides.pixels_per_unit.value_or( EDGE_PICTURE_PIXELS / length );
+        style.pixels_per_unit_is_fixed = overrides.pixels_per_unit.has_value();
 
         return OK( style );
     }

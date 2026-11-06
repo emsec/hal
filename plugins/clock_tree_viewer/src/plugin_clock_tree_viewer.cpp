@@ -54,7 +54,8 @@ namespace hal
     std::string ClockTreeViewerPlugin::get_description() const
     {
         return { "Interactive viewer for clock trees extracted by the clock_tree_extractor plugin. "
-                 "Nodes are placed at their physical layout positions and can be inspected, zoomed, and selected." };
+                 "Gates are drawn at their physical coordinates and can be zoomed into, and the gates selected in "
+                 "HAL are highlighted." };
     }
 
     std::set<std::string> ClockTreeViewerPlugin::get_dependencies() const

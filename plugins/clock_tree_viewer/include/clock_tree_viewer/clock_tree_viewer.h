@@ -31,8 +31,11 @@
 #include "hal_core/utilities/result.h"
 
 #include <QHash>
+#include <QPointer>
 #include <QSet>
 #include <QString>
+#include <QThread>
+#include <QVector>
 #include <cstddef>
 #include <optional>
 #include <string>
@@ -88,6 +91,11 @@ namespace hal
         explicit ClockTreeViewer( QWidget *parent = nullptr );
 
         /**
+         * Destroy the viewer. An extraction that is still running is waited for, since it reads the netlist.
+         */
+        ~ClockTreeViewer() override;
+
+        /**
          * Get the clock tree viewer that is currently open.
          *
          * @returns The viewer, a `nullptr` if none is open.
@@ -106,7 +114,11 @@ namespace hal
          *
          * The gates are drawn at their coordinates, see `ctv::build_layout`, the sizes of the drawing follow from them
          * unless provided. If no gate has coordinates, nothing is drawn and the error is shown instead. If only some have
-         * none, those are left out and a warning is shown.
+         * none, those are left out and a warning is shown. A clock tree of another netlist than the one that is open is
+         * not drawn either, since its gates cannot be matched to those HAL colors and selects.
+         *
+         * The sizes and coordinate keys of the clock tree that is drawn are kept: extracting a clock tree with the button
+         * in the toolbar uses them again.
          *
          * @param[in] tree - The clock tree.
          * @param[in] overrides - The sizes of the drawing. Whatever is not provided is derived from the coordinates.
@@ -150,9 +162,15 @@ namespace hal
 
       private Q_SLOTS:
         /**
-         * Extract the clock tree of the loaded netlist and plot it.
+         * Extract the clock tree of the loaded netlist in a thread of its own and plot it when that is done. Until then,
+         * a modal progress dialog keeps the netlist from being changed through the GUI.
          */
         void handleExtractClicked();
+
+        /**
+         * Wait for an extraction that is still running, before the netlist it reads is closed.
+         */
+        void handleFileAboutToClose();
 
         /**
          * Zoom so that the whole tree is visible.
@@ -199,9 +217,23 @@ namespace hal
 
       private:
         /**
-         * Show a clock tree that was laid out already. Must be called from the GUI thread.
+         * Show a clock tree that was laid out already, and keep the sizes and coordinate keys it was drawn with. Must be
+         * called from the GUI thread.
          */
-        bool display( const Result<ctv::Layout> &layout, const ctv::StyleOverrides &overrides );
+        bool display( const Result<ctv::Layout> &layout,
+                      const ctv::StyleOverrides &overrides,
+                      const std::optional<std::string> &x_key,
+                      const std::optional<std::string> &y_key );
+
+        /**
+         * Color the labels by the theme: the warning and the error in the colors the log uses for them.
+         */
+        void applyThemeColors() const;
+
+        /**
+         * Get the gates that are highlighted, as indices into `mLayout.nodes`.
+         */
+        [[nodiscard]] QVector<int> highlightedNodes() const;
 
         /**
          * Show an error instead of a drawing and log it. Must be called from the GUI thread.
@@ -275,6 +307,15 @@ namespace hal
         /** The gates that are highlighted, all of them are plotted. */
         QSet<u32> mHighlightedGates;
 
+        /** The sizes and coordinate keys of the clock tree that is drawn, which an extraction uses again. */
         ctv::StyleOverrides mOverrides;
+        std::optional<std::string> mXKey;
+        std::optional<std::string> mYKey;
+
+        /** Whether the message in place of the drawing is an error, which is colored as one. */
+        bool mShowsError = false;
+
+        /** The extraction that is running, a `nullptr` if none is. */
+        QPointer<QThread> mExtraction;
     };
 }  // namespace hal

@@ -62,22 +62,22 @@ namespace hal
 
     ClockTreeScene::ClockTreeScene( QObject *parent )
         : QGraphicsScene( parent )
-        , mStyle{ 0.0, 0.0, 0.0, 0.0 }
+        , mStyle{ 0.0, 0.0, 0.0, 0.0, false }
         , mHasLayout( false )
     {
     }
 
     QPointF ClockTreeScene::fromChip( double x, double y )
     {
-        return QPointF( x, -y );
+        return { x, -y };
     }
 
     QPointF ClockTreeScene::toChip( const QPointF &scenePosition )
     {
-        return QPointF( scenePosition.x(), -scenePosition.y() );
+        return { scenePosition.x(), -scenePosition.y() };
     }
 
-    QColor ClockTreeScene::colorOfNode( const ClockTreeColors &colors, int index ) const
+    QColor ClockTreeScene::colorOfNode( const ClockTreeColors &colors, int index )
     {
         const QColor color = colors.nodes.value( index );
         return color.isValid() ? color : edge_color_of( colors );
@@ -212,7 +212,7 @@ namespace hal
         mRingItems.reserve( wanted.size() );
         for( const int node : wanted )
         {
-            QGraphicsEllipseItem *ring = new QGraphicsEllipseItem(
+            auto *ring = new QGraphicsEllipseItem(
                 -RING_RADIUS_PIXELS, -RING_RADIUS_PIXELS, 2.0 * RING_RADIUS_PIXELS, 2.0 * RING_RADIUS_PIXELS );
             ring->setFlag( QGraphicsItem::ItemIgnoresTransformations );
             ring->setPos( mNodeCenters[node] );
@@ -231,7 +231,7 @@ namespace hal
     {
         if( mHighlighted.isEmpty() )
         {
-            return QRectF();
+            return {};
         }
 
         // Not QRectF::united, which leaves out a rectangle without an area, such as a single point.
@@ -248,7 +248,7 @@ namespace hal
             bottom = std::max( bottom, mNodeCenters[node].y() );
         }
 
-        return QRectF( QPointF( left, top ), QPointF( right, bottom ) );
+        return { QPointF( left, top ), QPointF( right, bottom ) };
     }
 
     void ClockTreeScene::clearLayout()
@@ -270,6 +270,11 @@ namespace hal
         mHasLayout = false;
     }
 
+    const ctv::Style &ClockTreeScene::style() const
+    {
+        return mStyle;
+    }
+
     Result<QImage> ClockTreeScene::renderPicture( const QColor &background )
     {
         if( !mHasLayout )
@@ -280,8 +285,25 @@ namespace hal
         const double margin = mStyle.picture_margin;
         const QRectF source = mContentRect.adjusted( -margin, -margin, margin, margin );
 
-        const double width = std::ceil( source.width() * mStyle.pixels_per_unit );
-        const double height = std::ceil( source.height() * mStyle.pixels_per_unit );
+        // The source is the drawing as it is, lines and dots with the width of their pens, so it is the one to fit to the
+        // limit. A resolution the user chose is kept, and too large a picture is an error then.
+        double pixels_per_unit = mStyle.pixels_per_unit;
+        const double longest_side = std::max( source.width(), source.height() );
+        const bool shrink =
+            !mStyle.pixels_per_unit_is_fixed && longest_side * pixels_per_unit > ctv::MAX_PICTURE_SIDE_PIXELS;
+        if( shrink )
+        {
+            pixels_per_unit = ctv::MAX_PICTURE_SIDE_PIXELS / longest_side;
+        }
+
+        double width = std::ceil( source.width() * pixels_per_unit );
+        double height = std::ceil( source.height() * pixels_per_unit );
+        if( shrink )
+        {
+            // Rounding must not push a side that was fitted to the limit over it.
+            width = std::min( width, ctv::MAX_PICTURE_SIDE_PIXELS );
+            height = std::min( height, ctv::MAX_PICTURE_SIDE_PIXELS );
+        }
 
         if( width > ctv::MAX_PICTURE_SIDE_PIXELS || height > ctv::MAX_PICTURE_SIDE_PIXELS )
         {

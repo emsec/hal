@@ -29,12 +29,14 @@
 #include "clock_tree_extractor/clock_tree.h"
 #include "clock_tree_viewer/clock_tree_graphics_view.h"
 #include "clock_tree_viewer/clock_tree_scene.h"
+#include "gui/file_manager/file_manager.h"
 #include "gui/graph_widget/graphics_qss_adapter.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
+#include "gui/logger/logger_qss_adapter.h"
 #include "gui/main_window/main_window.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/toolbar/toolbar.h"
@@ -53,14 +55,18 @@
 #include <QMessageBox>
 #include <QMetaObject>
 #include <QPalette>
+#include <QProgressDialog>
 #include <QRegularExpression>
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QStringList>
+#include <QStyle>
 #include <QThread>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <algorithm>
+#include <cmath>
+#include <exception>
 #include <memory>
 
 namespace hal
@@ -70,9 +76,59 @@ namespace hal
         // How many of the gates that cannot be drawn are named in the log.
         constexpr std::size_t MAX_LISTED_GATES = 20;
 
-        // The color of a selected item in the graph view, which is not available to other plugins.
-        // It is GraphicsItem::sSelectionColor.
+        // The color of a selected item in the graph view. It is GraphicsItem::sSelectionColor, which is protected, so this
+        // is the one place it is repeated: everything in the viewer that shows a highlight takes it from here.
         constexpr QColor HAL_SELECTION_COLOR( 240, 173, 0 );
+
+        // For a theme that does not define the colors of warnings and errors in the log.
+        constexpr QColor FALLBACK_WARNING_COLOR( 217, 164, 65 );
+        constexpr QColor FALLBACK_ERROR_COLOR( 217, 83, 79 );
+
+        QString text_color_style( const QColor &color, const QColor &fallback )
+        {
+            return QString( "color: %1;" ).arg( ( color.isValid() ? color : fallback ).name() );
+        }
+
+        /**
+         * Lay out a clock tree, but only one of the netlist that is open: the viewer colors and highlights the gates by
+         * their IDs in that netlist.
+         */
+        Result<ctv::Layout> layout_of( const cte::ClockTree &tree,
+                                       const Netlist *open_netlist,
+                                       const std::optional<std::string> &x_key,
+                                       const std::optional<std::string> &y_key )
+        {
+            if( open_netlist != nullptr && tree.get_netlist() != open_netlist )
+            {
+                return ERR( "the clock tree was extracted from another netlist than the one that is open, so its gates "
+                            "cannot be matched to the gates in HAL" );
+            }
+
+            return ctv::build_layout( tree, x_key, y_key );
+        }
+
+        /**
+         * Extract the clock tree of a netlist and lay it out. Runs in a thread of its own, so it must not touch a widget.
+         */
+        Result<ctv::Layout> extract_layout( const Netlist *netlist,
+                                            const std::optional<std::string> &x_key,
+                                            const std::optional<std::string> &y_key )
+        {
+            // An exception escaping the thread would end the program.
+            try
+            {
+                const Result<std::unique_ptr<cte::ClockTree>> tree = cte::ClockTree::from_netlist( netlist );
+                if( tree.is_error() )
+                {
+                    return ERR( tree.get_error().get() );
+                }
+
+                return layout_of( *tree.get(), netlist, x_key, y_key );
+            } catch( const std::exception &e )
+            {
+                return ERR( std::string( "the extraction failed: " ) + e.what() );
+            }
+        }
 
         constexpr auto IDLE_TEXT = "No clock tree to show.\n\n"
                                    "Extract the clock tree of the loaded netlist with the button in the toolbar,\n"
@@ -110,7 +166,8 @@ namespace hal
 
         mZoomToHighlightAction = new QAction( this );
         mZoomToHighlightAction->setToolTip( "Zoom to the highlighted gates" );
-        mZoomToHighlightAction->setIcon( gui_utility::getStyledSvgIcon( "all->#F0AD00", ":/icons/to_selection" ) );
+        mZoomToHighlightAction->setIcon( gui_utility::getStyledSvgIcon(
+            QString( "all->%1" ).arg( QColor( HAL_SELECTION_COLOR ).name() ), ":/icons/to_selection" ) );
         connect( mZoomToHighlightAction, &QAction::triggered, this, &ClockTreeViewer::handleZoomToHighlightClicked );
 
         mSavePictureAction = new QAction( this );
@@ -135,12 +192,12 @@ namespace hal
 
         mCoordinateLabel = new QLabel( "  x: 0, y: 0", this );
         mWarningLabel = new QLabel( this );
-        mWarningLabel->setStyleSheet( "color: #d9a441;" );
         mWarningLabel->hide();
 
         mHighlightLabel = new QLabel( this );
-        mHighlightLabel->setStyleSheet( "color: #F0AD00;" );
         mHighlightLabel->hide();
+
+        applyThemeColors();
 
         mStatusBar = new QStatusBar( this );
         mStatusBar->addWidget( mCoordinateLabel );
@@ -182,7 +239,23 @@ namespace hal
                 gSelectionRelay, &SelectionRelay::selectionChanged, this, &ClockTreeViewer::handleSelectionChanged );
         }
 
+        // Emitted while the netlist still exists, so a running extraction can be waited for before it is deleted.
+        connect( FileManager::get_instance(),
+                 &FileManager::fileAboutToClose,
+                 this,
+                 &ClockTreeViewer::handleFileAboutToClose );
+
         updateActions();
+    }
+
+    ClockTreeViewer::~ClockTreeViewer()
+    {
+        if( mExtraction != nullptr )
+        {
+            // The thread deletes itself once it has finished, see handleExtractClicked.
+            mExtraction->wait();
+            QGuiApplication::restoreOverrideCursor();
+        }
     }
 
     ClockTreeViewer *ClockTreeViewer::instance()
@@ -206,20 +279,23 @@ namespace hal
     {
         // Laying out only reads the clock tree and its gates and touches no widget, so it happens right here. Only
         // showing the result has to happen in the GUI thread.
-        const Result<ctv::Layout> layout = ctv::build_layout( tree, x_key, y_key );
+        const Result<ctv::Layout> layout = layout_of( tree, gNetlist, x_key, y_key );
 
         if( QThread::currentThread() == thread() )
         {
-            return display( layout, overrides );
+            return display( layout, overrides, x_key, y_key );
         }
 
         bool shown = false;
         QMetaObject::invokeMethod(
-            this, [&]() { shown = display( layout, overrides ); }, Qt::BlockingQueuedConnection );
+            this, [&]() { shown = display( layout, overrides, x_key, y_key ); }, Qt::BlockingQueuedConnection );
         return shown;
     }
 
-    bool ClockTreeViewer::display( const Result<ctv::Layout> &layout, const ctv::StyleOverrides &overrides )
+    bool ClockTreeViewer::display( const Result<ctv::Layout> &layout,
+                                   const ctv::StyleOverrides &overrides,
+                                   const std::optional<std::string> &x_key,
+                                   const std::optional<std::string> &y_key )
     {
         if( layout.is_error() )
         {
@@ -233,6 +309,8 @@ namespace hal
         }
 
         mOverrides = overrides;
+        mXKey = x_key;
+        mYKey = y_key;
         mLayout = layout.get();
 
         mNodeOfGate.clear();
@@ -241,37 +319,40 @@ namespace hal
             mNodeOfGate.insert( mLayout.nodes[idx].gate_id, static_cast<int>( idx ) );
         }
 
-        // Whatever is selected in HAL when the plot appears is highlighted right away.
+        // Whatever is selected in HAL when the plot appears is highlighted right away. The highlight is part of the colors,
+        // so they are only worked out after it.
         highlightFromSelection();
 
         mScene->setLayout( mLayout, style.get(), currentColors() );
+        mScene->setHighlight( highlightedNodes() );
+        mShowsError = false;
         mStack->setCurrentWidget( mView );
         mView->fitToScene();
-        recolor();
+        updateActions();
 
-        const ctv::Layout &drawn = layout.get();
-        log_info( "clock_tree_viewer", "Showing {} gates and {} connections.", drawn.nodes.size(), drawn.edges.size() );
+        log_info(
+            "clock_tree_viewer", "Showing {} gates and {} connections.", mLayout.nodes.size(), mLayout.edges.size() );
 
-        if( drawn.gates_without_coordinates.empty() )
+        if( mLayout.gates_without_coordinates.empty() )
         {
             showWarning( QString() );
         }
         else
         {
-            const std::size_t total = drawn.nodes.size() + drawn.gates_without_coordinates.size();
+            const std::size_t total = mLayout.nodes.size() + mLayout.gates_without_coordinates.size();
 
             log_warning(
                 "clock_tree_viewer",
                 "{} of {} gates have no coordinates and are not shown, {} connections are left out. Gate IDs: {}",
-                drawn.gates_without_coordinates.size(),
+                mLayout.gates_without_coordinates.size(),
                 total,
-                drawn.omitted_edges,
-                list_gate_ids( drawn.gates_without_coordinates ).toStdString() );
+                mLayout.omitted_edges,
+                list_gate_ids( mLayout.gates_without_coordinates ).toStdString() );
 
             showWarning( QString( "%1 of %2 gates have no coordinates and are not shown (%3 connections left out)" )
-                             .arg( drawn.gates_without_coordinates.size() )
+                             .arg( mLayout.gates_without_coordinates.size() )
                              .arg( total )
-                             .arg( drawn.omitted_edges ) );
+                             .arg( mLayout.omitted_edges ) );
         }
 
         return true;
@@ -291,7 +372,8 @@ namespace hal
         mLayout = ctv::Layout();
         mNodeOfGate.clear();
         mHighlightedGates.clear();
-        mMessageLabel->setStyleSheet( "color: #d9534f;" );
+        mShowsError = true;
+        applyThemeColors();
         mMessageLabel->setText( "The clock tree cannot be shown:\n\n" + text.trimmed() );
         mStack->setCurrentWidget( mMessageLabel );
         showWarning( QString() );
@@ -304,6 +386,27 @@ namespace hal
     {
         mWarningLabel->setText( message );
         mWarningLabel->setVisible( !message.isEmpty() );
+    }
+
+    void ClockTreeViewer::applyThemeColors() const
+    {
+        const LoggerQssAdapter *theme = LoggerQssAdapter::instance();
+
+        mWarningLabel->setStyleSheet( text_color_style( theme->warningColor(), FALLBACK_WARNING_COLOR ) );
+        mHighlightLabel->setStyleSheet( text_color_style( HAL_SELECTION_COLOR, HAL_SELECTION_COLOR ) );
+        mMessageLabel->setStyleSheet( mShowsError ? text_color_style( theme->errorColor(), FALLBACK_ERROR_COLOR )
+                                                  : QString() );
+    }
+
+    QVector<int> ClockTreeViewer::highlightedNodes() const
+    {
+        QVector<int> nodes;
+        nodes.reserve( mHighlightedGates.size() );
+        for( const u32 gateId : mHighlightedGates )
+        {
+            nodes.push_back( mNodeOfGate.value( gateId, -1 ) );
+        }
+        return nodes;
     }
 
     void ClockTreeViewer::updateActions() const
@@ -379,8 +482,15 @@ namespace hal
 
     void ClockTreeViewer::handleStyleChanged()
     {
-        // The theme is a stylesheet that has been applied to the application by now, the adapter reads its colors from it.
+        // The theme is a stylesheet that has been applied to the application by now, the adapters read their colors from
+        // it once they are polished again.
         GraphicsQssAdapter::instance()->repolish();
+
+        LoggerQssAdapter *logTheme = LoggerQssAdapter::instance();
+        logTheme->style()->unpolish( logTheme );
+        logTheme->style()->polish( logTheme );
+
+        applyThemeColors();
         scheduleRecolor();
     }
 
@@ -395,14 +505,7 @@ namespace hal
     void ClockTreeViewer::recolor()
     {
         mScene->setColors( currentColors() );
-
-        QVector<int> nodes;
-        nodes.reserve( mHighlightedGates.size() );
-        for( const u32 gateId : mHighlightedGates )
-        {
-            nodes.push_back( mNodeOfGate.value( gateId, -1 ) );
-        }
-        mScene->setHighlight( nodes );
+        mScene->setHighlight( highlightedNodes() );
 
         updateActions();
     }
@@ -517,19 +620,61 @@ namespace hal
             return;
         }
 
-        QGuiApplication::setOverrideCursor( Qt::WaitCursor );
-
-        const Result<std::unique_ptr<cte::ClockTree>> tree = cte::ClockTree::from_netlist( gNetlist );
-        if( tree.is_ok() )
+        if( mExtraction != nullptr )
         {
-            setClockTree( *tree.get(), mOverrides );
-        }
-        else
-        {
-            showError( QString::fromStdString( tree.get_error().get() ) );
+            return;
         }
 
-        QGuiApplication::restoreOverrideCursor();
+        // Everything the thread needs is copied now, it must not read the members of the viewer.
+        const Netlist *netlist = gNetlist;
+        const ctv::StyleOverrides overrides = mOverrides;
+        const std::optional<std::string> x_key = mXKey;
+        const std::optional<std::string> y_key = mYKey;
+
+        // Result has no empty state, so the thread fills an optional that both sides share.
+        const auto result = std::make_shared<std::optional<Result<ctv::Layout>>>();
+
+        mExtraction = QThread::create(
+            [netlist, x_key, y_key, result]() { result->emplace( extract_layout( netlist, x_key, y_key ) ); } );
+
+        // The extraction reads the netlist while it runs, so the dialog is modal and shown right away: a modal dialog only
+        // blocks input once it is visible, and until the extraction is done nothing in the GUI may change the netlist.
+        // The extraction cannot be interrupted, so there is no cancel button.
+        auto *progress = new QProgressDialog( "Extracting the clock tree ...", QString(), 0, 0, this );
+        progress->setWindowTitle( "Clock tree viewer" );
+        progress->setWindowModality( Qt::ApplicationModal );
+        progress->setCancelButton( nullptr );
+        progress->show();
+
+        // Connected first, so it runs before the thread deletes itself.
+        connect( mExtraction, &QThread::finished, this, [this, result, overrides, x_key, y_key, progress]() {
+            delete progress;
+            QGuiApplication::restoreOverrideCursor();
+            mExtraction = nullptr;
+            mExtractAction->setEnabled( true );
+
+            if( result->has_value() )
+            {
+                display( **result, overrides, x_key, y_key );
+            }
+            else
+            {
+                showError( "The extraction ended without a result." );
+            }
+        } );
+        connect( mExtraction, &QThread::finished, mExtraction, &QObject::deleteLater );
+
+        QGuiApplication::setOverrideCursor( Qt::BusyCursor );
+        mExtractAction->setEnabled( false );
+        mExtraction->start();
+    }
+
+    void ClockTreeViewer::handleFileAboutToClose()
+    {
+        if( mExtraction != nullptr )
+        {
+            mExtraction->wait();
+        }
     }
 
     void ClockTreeViewer::handleFitClicked() const
@@ -561,8 +706,15 @@ namespace hal
 
     void ClockTreeViewer::handleCoordinatesChanged( double x, double y )
     {
+        // As many decimals as a pixel resolves at the current zoom: none while a pixel covers a unit or more, one more
+        // with every tenfold zoom beyond that.
+        const double pixelsPerUnit = mView->transform().m11();
+        const int decimals =
+            pixelsPerUnit > 1.0 ? std::min( 6, static_cast<int>( std::ceil( std::log10( pixelsPerUnit ) ) ) ) : 0;
+
         const QLocale english( QLocale::English );
         mCoordinateLabel->setText(
-            QString( "  x: %1, y: %2" ).arg( english.toString( x, 'f', 0 ), english.toString( y, 'f', 0 ) ) );
+            QString( "  x: %1, y: %2" )
+                .arg( english.toString( x, 'f', decimals ), english.toString( y, 'f', decimals ) ) );
     }
 }  // namespace hal
