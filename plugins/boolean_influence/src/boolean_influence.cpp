@@ -89,7 +89,8 @@ namespace hal
                     return OK(influences);
                 }
 
-                if (num_evaluations == 0)
+                // the deterministic evaluation enumerates all assignments and takes no number of evaluations
+                if (!deterministic && num_evaluations == 0)
                 {
                     return ERR("Cannot calculate boolean influence with 0 evaluations");
                 }
