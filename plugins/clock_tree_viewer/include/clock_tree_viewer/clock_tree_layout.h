@@ -31,6 +31,7 @@
 
 #include <cstddef>
 #include <optional>
+#include <string>
 #include <vector>
 
 namespace hal
@@ -46,11 +47,6 @@ namespace hal
      */
     namespace ctv
     {
-        /** The gate data that holds the coordinates of a gate, the entries `ClockTree::export_dot` writes to the DOT file. */
-        constexpr const char *COORDINATE_CATEGORY = "generic";
-        constexpr const char *COORDINATE_KEY_X = "X";
-        constexpr const char *COORDINATE_KEY_Y = "Y";
-
         /** The longest side a picture of the clock tree may have in pixels, which keeps its memory in check. */
         constexpr double MAX_PICTURE_SIDE_PIXELS = 10000.0;
 
@@ -116,14 +112,20 @@ namespace hal
         /**
          * Place the gates of a clock tree at their coordinates.
          *
-         * A gate has coordinates if the gate data ('generic', 'X') and ('generic', 'Y') both hold a number. Nets have no
-         * coordinates; the only nets in a clock tree are the global inputs at its roots, which are not drawn.
+         * The coordinates of a gate are its location in the layout, unless the keys of both coordinates are given: then
+         * they are read from the gate parameters of these names, e.g., from Verilog instance parameters, which unlike a
+         * location can be negative. Nets have no coordinates; the only nets in a clock tree are the global inputs at its
+         * roots, which are not drawn.
          *
          * @param[in] tree - The clock tree.
-         * @returns The layout on success. An error if the clock tree has no gates or none of them has coordinates. Gates
-         *          that are only missing some of the coordinates are listed in the layout instead.
+         * @param[in] x_key - The name of the parameter that holds the x-coordinate, or std::nullopt to use the location.
+         * @param[in] y_key - The name of the parameter that holds the y-coordinate, or std::nullopt to use the location.
+         * @returns The layout on success. An error if only one key is given, the clock tree has no gates or none of them
+         *          has coordinates. Gates that are only missing some of the coordinates are listed in the layout instead.
          */
-        Result<Layout> build_layout( const cte::ClockTree &tree );
+        Result<Layout> build_layout( const cte::ClockTree &tree,
+                                     const std::optional<std::string> &x_key = std::nullopt,
+                                     const std::optional<std::string> &y_key = std::nullopt );
 
         /**
          * Settle the sizes of the drawing.

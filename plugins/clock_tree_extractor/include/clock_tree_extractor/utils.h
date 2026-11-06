@@ -28,6 +28,9 @@
 
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
 
+#include <optional>
+#include <string>
+
 namespace hal
 {
     class Endpoint;
@@ -45,5 +48,17 @@ namespace hal
         bool is_pll( const Gate *gate );
         bool is_control_pin( PinType pin_type );
         bool is_connected_to_control_pin( const Endpoint *endpoint );
+
+        /**
+         * Read a coordinate from a gate parameter, e.g., a Verilog instance parameter.
+         *
+         * The parameter must hold a finite number and nothing else apart from surrounding white space, e.g., "-600",
+         * "12.5" or "0x10", which is how HAL stores bit vectors.
+         *
+         * @param[in] gate - The gate.
+         * @param[in] name - The name of the parameter.
+         * @returns The coordinate, or std::nullopt if the parameter is missing or holds no number.
+         */
+        std::optional<double> read_parameter_coordinate( const Gate *gate, const std::string &name );
     }  // namespace cte
 }  // namespace hal

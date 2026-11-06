@@ -72,12 +72,11 @@ namespace hal
 
         // The color of a selected item in the graph view, which is not available to other plugins.
         // It is GraphicsItem::sSelectionColor.
-        const QColor HAL_SELECTION_COLOR( 240, 173, 0 );
+        constexpr QColor HAL_SELECTION_COLOR( 240, 173, 0 );
 
-        constexpr const char *IDLE_TEXT =
-            "No clock tree to show.\n\n"
-            "Extract the clock tree of the loaded netlist with the button in the toolbar,\n"
-            "or pass a clock tree to clock_tree_viewer.show_clock_tree() in Python.";
+        constexpr auto IDLE_TEXT = "No clock tree to show.\n\n"
+                                   "Extract the clock tree of the loaded netlist with the button in the toolbar,\n"
+                                   "or pass a clock tree to clock_tree_viewer.show_clock_tree() in Python.";
 
         QString list_gate_ids( const std::vector<u32> &ids )
         {
@@ -200,11 +199,14 @@ namespace hal
         toolbar->addAction( mSavePictureAction );
     }
 
-    bool ClockTreeViewer::setClockTree( const cte::ClockTree &tree, const ctv::StyleOverrides &overrides )
+    bool ClockTreeViewer::setClockTree( const cte::ClockTree &tree,
+                                        const ctv::StyleOverrides &overrides,
+                                        const std::optional<std::string> &x_key,
+                                        const std::optional<std::string> &y_key )
     {
         // Laying out only reads the clock tree and its gates and touches no widget, so it happens right here. Only
         // showing the result has to happen in the GUI thread.
-        const Result<ctv::Layout> layout = ctv::build_layout( tree );
+        const Result<ctv::Layout> layout = ctv::build_layout( tree, x_key, y_key );
 
         if( QThread::currentThread() == thread() )
         {
@@ -298,13 +300,13 @@ namespace hal
         return false;
     }
 
-    void ClockTreeViewer::showWarning( const QString &message )
+    void ClockTreeViewer::showWarning( const QString &message ) const
     {
         mWarningLabel->setText( message );
         mWarningLabel->setVisible( !message.isEmpty() );
     }
 
-    void ClockTreeViewer::updateActions()
+    void ClockTreeViewer::updateActions() const
     {
         mFitAction->setEnabled( mScene->hasLayout() );
         mSavePictureAction->setEnabled( mScene->hasLayout() );
@@ -344,8 +346,7 @@ namespace hal
             }
         }
 
-        const Module *module = gate->get_module();
-        if( module != nullptr && gNetlistRelay != nullptr )
+        if( const Module *module = gate->get_module(); module != nullptr && gNetlistRelay != nullptr )
         {
             return gNetlistRelay->getModuleColor( module->get_id() );
         }

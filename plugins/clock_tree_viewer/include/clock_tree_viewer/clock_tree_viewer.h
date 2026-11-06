@@ -34,6 +34,8 @@
 #include <QSet>
 #include <QString>
 #include <cstddef>
+#include <optional>
+#include <string>
 #include <vector>
 
 class QAction;
@@ -102,15 +104,20 @@ namespace hal
         /**
          * Plot a clock tree.
          *
-         * The gates are drawn at their coordinates, the sizes of the drawing follow from them unless provided. If no gate
-         * has coordinates, nothing is drawn and the error is shown instead. If only some have none, those are left out
-         * and a warning is shown.
+         * The gates are drawn at their coordinates, see `ctv::build_layout`, the sizes of the drawing follow from them
+         * unless provided. If no gate has coordinates, nothing is drawn and the error is shown instead. If only some have
+         * none, those are left out and a warning is shown.
          *
          * @param[in] tree - The clock tree.
          * @param[in] overrides - The sizes of the drawing. Whatever is not provided is derived from the coordinates.
+         * @param[in] x_key - The name of the parameter that holds the x-coordinate, or std::nullopt to use the location.
+         * @param[in] y_key - The name of the parameter that holds the y-coordinate, or std::nullopt to use the location.
          * @returns `true` if the clock tree is drawn, `false` otherwise.
          */
-        bool setClockTree( const cte::ClockTree &tree, const ctv::StyleOverrides &overrides = ctv::StyleOverrides() );
+        bool setClockTree( const cte::ClockTree &tree,
+                           const ctv::StyleOverrides &overrides = ctv::StyleOverrides(),
+                           const std::optional<std::string> &x_key = std::nullopt,
+                           const std::optional<std::string> &y_key = std::nullopt );
 
         /**
          * Save a picture of the whole clock tree that is displayed, independent of the zoom and the size of the window.
@@ -206,12 +213,12 @@ namespace hal
         /**
          * Show a warning below the drawing. An empty message hides the warning.
          */
-        void showWarning( const QString &message );
+        void showWarning( const QString &message ) const;
 
         /**
          * Enable the actions that need a drawing only if there is one.
          */
-        void updateActions();
+        void updateActions() const;
 
         /**
          * Highlight the gates of the plot that are selected in HAL, without painting yet.

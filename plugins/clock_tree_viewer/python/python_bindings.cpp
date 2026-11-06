@@ -118,10 +118,12 @@ namespace hal
         m.def(
             "show_clock_tree",
             []( const cte::ClockTree &clock_tree,
-                std::optional<double> node_radius,
-                std::optional<double> edge_width,
-                std::optional<double> picture_margin,
-                std::optional<double> pixels_per_unit ) -> bool {
+                const std::optional<double> node_radius,
+                const std::optional<double> edge_width,
+                const std::optional<double> picture_margin,
+                const std::optional<double> pixels_per_unit,
+                const std::optional<std::string> &x_key,
+                const std::optional<std::string> &y_key ) -> bool {
                 // The viewer hands the work to the GUI thread and waits for it, which must not hold up a GUI thread that
                 // waits for the interpreter.
                 py::gil_scoped_release release;
@@ -134,17 +136,22 @@ namespace hal
                 }
 
                 return viewer->setClockTree(
-                    clock_tree, ctv::StyleOverrides{ node_radius, edge_width, picture_margin, pixels_per_unit } );
+                    clock_tree,
+                    ctv::StyleOverrides{ node_radius, edge_width, picture_margin, pixels_per_unit },
+                    x_key,
+                    y_key );
             },
             py::arg( "clock_tree" ),
             py::arg( "node_radius" ) = py::none(),
             py::arg( "edge_width" ) = py::none(),
             py::arg( "picture_margin" ) = py::none(),
             py::arg( "pixels_per_unit" ) = py::none(),
+            py::arg( "x_key" ) = py::none(),
+            py::arg( "y_key" ) = py::none(),
             R"(
             Plot a clock tree in the clock tree viewer of the GUI.
 
-            The gates are drawn at the coordinates stored in their gate data, ``('generic', 'X')`` and ``('generic', 'Y')``, the same that ``ClockTree.export`` writes to the DOT file. If no gate has coordinates, nothing is drawn and an error is shown. If only some gates have none, those are left out of the plot and a warning is shown.
+            The gates are drawn at their location in the layout, unless the keys of both coordinates are given: then the coordinates are read from the gate parameters of these names, e.g., from Verilog instance parameters, the same as ``ClockTree.export`` does. If no gate has coordinates, nothing is drawn and an error is shown. If only some gates have none, those are left out of the plot and a warning is shown.
 
             The plot is in the colors of HAL's graph view. The background and the connections follow the theme. A gate has the color of the module it belongs to, the color of its grouping if it is in one, or the orange of a selected item if it is selected, and the plot follows all of them when they change.
 
@@ -155,6 +162,8 @@ namespace hal
             :param float edge_width: The width of the lines that represent connections. Defaults to ``None``, which derives it from the coordinates.
             :param float picture_margin: The empty border around the tree in a saved picture. Defaults to ``None``, which derives it from the coordinates.
             :param float pixels_per_unit: The resolution of a saved picture. Defaults to ``None``, which derives it from the coordinates.
+            :param str x_key: The name of the parameter that holds the x-coordinate. Defaults to ``None``, which uses the location.
+            :param str y_key: The name of the parameter that holds the y-coordinate. Defaults to ``None``, which uses the location.
             :returns: ``True`` if the clock tree is plotted, ``False`` otherwise.
             :rtype: bool
         )" );
