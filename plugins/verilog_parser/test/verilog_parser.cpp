@@ -3262,6 +3262,65 @@ namespace hal {
     }
 
     /**
+     * Testing that the signedness of ports and wires, which yosys writes for signed RTL signals, is accepted and does not
+     * change the netlist.
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_signed_declarations) {
+
+        TEST_START
+            const std::string gates("AND2 gate_0 ("
+                                    "  .I0 (net_vec[0] ),"
+                                    "  .I1 (net_vec[1] ),"
+                                    "  .O (global_out )"
+                                    " ) ;"
+                                    "BUF gate_1 ("
+                                    "  .I (global_in[0] ),"
+                                    "  .O (net_vec[0] )"
+                                    ") ;"
+                                    "BUF gate_2 ("
+                                    "  .I (global_in[1] ),"
+                                    "  .O (net_vec[1] )"
+                                    ") ;"
+                                    "endmodule");
+            // signed ports in the port declaration list, signed ports in the module body
+            for (const std::string& header : {std::string("module top ("
+                                                          "  input signed [1:0] global_in,"
+                                                          "  output signed global_out"
+                                                          " ) ;"),
+                                              std::string("module top ("
+                                                          "  global_in,"
+                                                          "  global_out"
+                                                          " ) ;"
+                                                          "  input signed [1:0] global_in ;"
+                                                          "  output signed global_out ;")})
+            {
+                const std::string netlist_input = header + "  wire signed [1:0] net_vec ;" + gates;
+                const GateLibrary* gate_lib = test_utils::get_gate_library();
+                auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+                VerilogParser verilog_parser;
+                auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+                if(nl_res.is_error()) {
+                    std::cout << nl_res.get_error().get() << std::endl;
+                }
+                ASSERT_TRUE(nl_res.is_ok());
+                std::unique_ptr<Netlist> nl = nl_res.get();
+
+                ASSERT_NE(nl, nullptr);
+                EXPECT_EQ(nl->get_nets().size(), 5);    // 2 of global_in + 2 of net_vec + global_out
+                ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("global_in(0)")).size(), 1);
+                ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("global_in(1)")).size(), 1);
+                ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_vec(0)")).size(), 1);
+                ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_vec(1)")).size(), 1);
+                ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("global_out")).size(), 1);
+                EXPECT_EQ(nl->get_global_input_nets().size(), 2);
+                EXPECT_EQ(nl->get_global_output_nets().size(), 1);
+            }
+        TEST_END
+    }
+
+    /**
      * Testing the port declaration within the list of ports.
      *
      * Functions: parse

@@ -769,6 +769,9 @@ namespace hal
                 return ERR("could not parse port declaration list: invalid direction '" + direction_token.string + "' (line " + std::to_string(direction_token.number) + ")");
             }
 
+            // signedness, which a netlist does not need
+            ports_stream.consume("signed");
+
             // ranges
             std::vector<std::vector<u32>> ranges;
             while (ports_stream.consume("["))
@@ -829,6 +832,9 @@ namespace hal
         {
             return ERR("could not parse port definition: invalid direction '" + direction_token.string + "' (line " + std::to_string(direction_token.number) + ")");
         }
+
+        // signedness, which a netlist does not need
+        m_token_stream.consume("signed");
 
         // ranges
         std::vector<std::vector<u32>> ranges;
@@ -898,6 +904,9 @@ namespace hal
 
         TokenStream<std::string> signal_stream = m_token_stream.extract_until(";");
         m_token_stream.consume(";", true);
+
+        // signedness, which a netlist does not need
+        signal_stream.consume("signed");
 
         // extract bounds
         std::vector<std::vector<u32>> ranges;
