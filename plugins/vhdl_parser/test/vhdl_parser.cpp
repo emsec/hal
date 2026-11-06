@@ -2196,6 +2196,13 @@ namespace hal {
                           std::make_tuple("string", "slave_1_attr"));
                 EXPECT_EQ(net_master->get_data("attribute", "slave_2_attr"),
                           std::make_tuple("string", "slave_2_attr"));
+
+                // The names of the merged nets are annotated as JSON strings (reconstruct_indexed_ff_identifiers parses them)
+                ASSERT_TRUE(net_master->has_data("parser_annotation", "merged_nets"));
+                const std::string merged_nets = std::get<1>(net_master->get_data("parser_annotation", "merged_nets"));
+                EXPECT_NE(merged_nets.find("\"net_slave_0\""), std::string::npos) << merged_nets;
+                EXPECT_NE(merged_nets.find("\"net_slave_1\""), std::string::npos) << merged_nets;
+                EXPECT_NE(merged_nets.find("\"net_slave_2\""), std::string::npos) << merged_nets;
             }
             {
                 // Create a cyclic master-slave Net hierarchy (first master net should survive)

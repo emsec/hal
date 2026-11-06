@@ -1855,11 +1855,20 @@ namespace hal
                     {
                         has_merged_nets = true;
                     }
-                    // const auto s = utils::join(", ", vec, [](const auto e) { return '"' + e + '"'; });
-                    ci_string s = vec.empty() ? "" : vec.front();
-                    for (u32 idx = 1; idx < vec.size(); idx++)
+                    // JSON strings, like the Verilog parser writes them: reconstruct_indexed_ff_identifiers parses this annotation
+                    ci_string s = "";
+                    for (u32 idx = 0; idx < vec.size(); idx++)
                     {
-                        s += ci_string(", ") + vec.at(idx);
+                        s += (idx == 0) ? "\"" : ", \"";
+                        for (const char c : vec.at(idx))
+                        {
+                            if (c == '"' || c == '\\')
+                            {
+                                s += '\\';
+                            }
+                            s += c;
+                        }
+                        s += "\"";
                     }
 
                     merged_str += "[" + s + "], ";
