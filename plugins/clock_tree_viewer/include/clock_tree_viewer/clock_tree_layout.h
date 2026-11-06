@@ -105,8 +105,14 @@ namespace hal
             /** The empty border around the tree in a picture. */
             double picture_margin;
 
-            /** The resolution of a picture. */
+            /**
+             * The resolution of a picture. Unless the user chose it, a picture that would exceed
+             * `MAX_PICTURE_SIDE_PIXELS` gets a lower one, see `ClockTreeScene::renderPicture`.
+             */
             double pixels_per_unit;
+
+            /** Whether the user chose `pixels_per_unit`, which is then never lowered. */
+            bool pixels_per_unit_is_fixed;
         };
 
         /**
@@ -134,6 +140,9 @@ namespace hal
          * connections of the layout: with a typical connection of 25 units, a node has a radius of 1 unit, a line is 0.5
          * units wide, a picture has a margin of 20 units and 2 pixels per unit. For a layout without connections, a tenth
          * of its extent takes the place of the typical connection.
+         *
+         * The resolution is not limited here: only the scene knows how large the drawing really is, including the width
+         * of its lines, so it lowers a derived resolution itself when a picture would be too large.
          *
          * @param[in] layout - The layout that is drawn.
          * @param[in] overrides - The sizes provided by the user.

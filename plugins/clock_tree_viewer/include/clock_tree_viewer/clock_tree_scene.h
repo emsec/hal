@@ -136,10 +136,7 @@ namespace hal
          *
          * @returns The sizes, meaningless without a drawing.
          */
-        [[nodiscard]] const ctv::Style &style() const
-        {
-            return mStyle;
-        }
+        [[nodiscard]] const ctv::Style &style() const;
 
         /**
          * Get the color the lines are painted in.
@@ -178,14 +175,18 @@ namespace hal
          * @returns The smallest rectangle in the scene that holds the centers of all of them. It has no size if there is only
          *          one gate, and it is a null rectangle if there is none: check `highlightedNodes` to tell them apart.
          */
-        QRectF highlightedRect() const;
+        [[nodiscard]] QRectF highlightedRect() const;
 
         /**
          * Render the whole drawing and its margin into a picture, independent of any view and its zoom. Highlights are part
          * of the picture.
          *
+         * A picture that would be larger than `ctv::MAX_PICTURE_SIDE_PIXELS` on a side gets a lower resolution than the
+         * style asks for, unless the user chose that resolution.
+         *
          * @param[in] background - The color of the background, which the scene does not paint.
-         * @returns The picture on success, an error if there is no drawing or the picture would be too large.
+         * @returns The picture on success, an error if there is no drawing or the picture would be too large at a
+         *          resolution the user chose.
          */
         Result<QImage> renderPicture( const QColor &background );
 
@@ -193,7 +194,7 @@ namespace hal
         /**
          * Get the color a dot gets: the one it is given, or that of the lines.
          */
-        QColor colorOfNode( const ClockTreeColors &colors, int index ) const;
+        [[nodiscard]] static QColor colorOfNode( const ClockTreeColors &colors, int index );
 
         ctv::Style mStyle;
 

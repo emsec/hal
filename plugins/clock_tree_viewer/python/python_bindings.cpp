@@ -30,6 +30,7 @@
 #include "clock_tree_viewer/clock_tree_layout.h"
 #include "clock_tree_viewer/clock_tree_viewer.h"
 #include "clock_tree_viewer/plugin_clock_tree_viewer.h"
+#include "gui/gui_globals.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 
 #include <pybind11/detail/internals.h>
@@ -151,7 +152,9 @@ namespace hal
             R"(
             Plot a clock tree in the clock tree viewer of the GUI.
 
-            The gates are drawn at their location in the layout, unless the keys of both coordinates are given: then the coordinates are read from the gate parameters of these names, e.g., from Verilog instance parameters, the same as ``ClockTree.export`` does. If no gate has coordinates, nothing is drawn and an error is shown. If only some gates have none, those are left out of the plot and a warning is shown.
+            The gates are drawn at their location in the layout, unless the keys of both coordinates are given: then the coordinates are read from the gate parameters of these names, e.g., from Verilog instance parameters, the same as ``ClockTree.export`` does. If no gate has coordinates, nothing is drawn and an error is shown. If only some gates have none, those are left out of the plot and a warning is shown. A clock tree of another netlist than the one that is open in the GUI is not drawn either, since its gates cannot be matched to the gates in HAL.
+
+            The sizes and coordinate keys are kept: extracting a clock tree with the button in the toolbar of the viewer uses them again.
 
             The plot is in the colors of HAL's graph view. The background and the connections follow the theme. A gate has the color of the module it belongs to, the color of its grouping if it is in one, or the orange of a selected item if it is selected, and the plot follows all of them when they change.
 
@@ -161,7 +164,7 @@ namespace hal
             :param float node_radius: The radius of the dot that represents a gate. Defaults to ``None``, which derives it from the coordinates.
             :param float edge_width: The width of the lines that represent connections. Defaults to ``None``, which derives it from the coordinates.
             :param float picture_margin: The empty border around the tree in a saved picture. Defaults to ``None``, which derives it from the coordinates.
-            :param float pixels_per_unit: The resolution of a saved picture. Defaults to ``None``, which derives it from the coordinates.
+            :param float pixels_per_unit: The resolution of a saved picture. Defaults to ``None``, which derives it from the coordinates and lowers it for a large tree, so that a picture stays within 10000 pixels per side. A resolution given here is kept, and a picture that would exceed the limit is not saved.
             :param str x_key: The name of the parameter that holds the x-coordinate. Defaults to ``None``, which uses the location.
             :param str y_key: The name of the parameter that holds the y-coordinate. Defaults to ``None``, which uses the location.
             :returns: ``True`` if the clock tree is plotted, ``False`` otherwise.
