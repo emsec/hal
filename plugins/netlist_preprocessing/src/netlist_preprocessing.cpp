@@ -3053,7 +3053,9 @@ namespace hal
 
             u32 ctr = 0;
 
-            const std::vector<Gate*>& gates = ffs.empty() ? nl->get_gates() : ffs;
+            // A copy: get_gates() returns the netlist's own gate vector, to which create_gate below appends. Once that
+            // vector reallocates, a loop over the reference reads freed memory (a crash on trivium_64_80_1, DC).
+            const std::vector<Gate*> gates = ffs.empty() ? nl->get_gates() : ffs;
 
             for (auto* ff : gates)
             {

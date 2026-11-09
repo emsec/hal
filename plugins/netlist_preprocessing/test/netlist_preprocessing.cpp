@@ -1095,6 +1095,60 @@ namespace hal {
     }
 
     /**
+     * Test unifying every flip-flop of a netlist, without a list of flip-flops. The inverters created on the way grow
+     * the gate vector of the netlist far beyond its capacity, which must not disturb the loop over the flip-flops.
+     *
+     * Functions: unify_ff_outputs
+     */
+    TEST_F(NetlistPreprocessingTest, check_unify_ff_outputs_netlist)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
+
+            Net* clk = nl->create_net("clk");
+            clk->mark_global_input_net();
+            Net* d = nl->create_net("d");
+            d->mark_global_input_net();
+
+            const u32 num_ffs = 1000;
+            std::vector<Gate*> ffs;
+            for (u32 i = 0; i < num_ffs; i++)
+            {
+                Gate* ff = nl->create_gate(gl->get_gate_type_by_name("DFF"), "ff_" + std::to_string(i));
+                clk->add_destination(ff, "CLK");
+                d->add_destination(ff, "D");
+                Net* qn = nl->create_net("qn_" + std::to_string(i));
+                qn->add_source(ff, "QN");
+                qn->mark_global_output_net();
+                ffs.push_back(ff);
+            }
+
+            auto res = netlist_preprocessing::unify_ff_outputs(nl.get());
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get(), num_ffs);
+            EXPECT_EQ(nl->get_gates().size(), 2 * num_ffs);
+
+            for (Gate* ff : ffs)
+            {
+                // QN is unconnected, and an inverter of Q drives its net instead
+                EXPECT_EQ(ff->get_fan_out_net("QN"), nullptr);
+                Net* q = ff->get_fan_out_net("Q");
+                ASSERT_NE(q, nullptr);
+                ASSERT_EQ(q->get_destinations().size(), 1);
+                Gate* inv = q->get_destinations().front()->get_gate();
+                EXPECT_TRUE(inv->get_type()->has_property(GateTypeProperty::c_inverter));
+                ASSERT_EQ(inv->get_fan_out_nets().size(), 1);
+                EXPECT_TRUE(inv->get_fan_out_nets().front()->is_global_output_net());
+            }
+        }
+        TEST_END
+    }
+
+    /**
      * Test the context menu entries contributed to the GUI.
      *
      * Functions: GuiExtensionNetlistPreprocessing::get_context_contribution, GuiExtensionNetlistPreprocessing::execute_function
