@@ -605,7 +605,11 @@ namespace hal
         {
             u32 num_gates = 0;
 
-            for (const auto& gate : netlist->get_gates())
+            // A copy: the loop deletes gates, and delete_gate moves the last gate of the netlist's own vector into the
+            // place of the deleted one and shrinks the vector. A loop over that vector then reaches the moved gates
+            // only through the slots behind its new end, which is undefined behaviour even where it happens to work.
+            const std::vector<Gate*> gates = netlist->get_gates();
+            for (Gate* gate : gates)
             {
                 std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
 

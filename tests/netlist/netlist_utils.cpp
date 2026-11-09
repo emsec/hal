@@ -494,6 +494,39 @@ namespace hal
 
             EXPECT_EQ(g0->get_successor("O")->get_gate(), g2);
         }
+        {
+            // a chain of buffers: every buffer is deleted while the loop walks over the gates of the netlist
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
+
+            Gate* sink = nl->create_gate(gl->get_gate_type_by_name("AND2"), "sink");
+            Net* n_other = nl->create_net("other");
+            n_other->add_destination(sink, "I1");
+            n_other->mark_global_input_net();
+
+            Net* n_in = nl->create_net("in");
+            n_in->mark_global_input_net();
+
+            const u32 num_buffers = 500;
+            Net* prev             = n_in;
+            for (u32 i = 0; i < num_buffers; i++)
+            {
+                Gate* buf = nl->create_gate(gl->get_gate_type_by_name("BUF"), "buf_" + std::to_string(i));
+                prev->add_destination(buf, "I");
+                prev = nl->create_net("n_" + std::to_string(i));
+                prev->add_source(buf, "O");
+            }
+            prev->add_destination(sink, "I0");
+
+            auto res = netlist_utils::remove_buffers(nl.get());
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get(), num_buffers);
+
+            ASSERT_EQ(nl->get_gates().size(), 1);
+            EXPECT_EQ(sink->get_fan_in_net("I0"), n_in);
+        }
 
         TEST_END
     }
