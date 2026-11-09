@@ -1,10 +1,15 @@
 #include "netlist_preprocessing/netlist_preprocessing.h"
+#include "hal_core/netlist/decorators/boolean_function_decorator.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
+#include "hal_core/netlist/netlist_factory.h"
 
 #include "netlist_preprocessing/plugin_netlist_preprocessing.h"
 
 #include "netlist_test_utils.h"
 #include "gate_library_test_utils.h"
+
+#include <random>
 
 namespace hal {
 
@@ -794,6 +799,220 @@ namespace hal {
             auto l0_init = lc->get_init_string(l0, "O");
             ASSERT_TRUE(l0_init.is_ok());
             EXPECT_EQ(l0_init.get(), "8");
+        }
+        TEST_END
+    }
+
+    /**
+     * Test the INIT strings written for LUTs the test library does not have: a LUT1, whose two-entry truth table is
+     * shorter than one hex digit, in both bit orders, and a LUT2 that reads its INIT with its input pins in reverse.
+     *
+     * Functions: simplify_lut_inits
+     */
+    TEST_F(NetlistPreprocessingTest, check_simplify_lut_inits_lut1_and_pin_order)
+    {
+        TEST_START
+        {
+            auto gl = std::make_unique<GateLibrary>("imaginary_path", "lut_library");
+
+            GateType* gnd = gl->create_gate_type("GND", {GateTypeProperty::combinational, GateTypeProperty::ground});
+            ASSERT_TRUE(gnd->create_pin("O", PinDirection::output, PinType::ground).is_ok());
+            gnd->add_boolean_function("O", BooleanFunction::Const(BooleanFunction::Value::ZERO));
+            ASSERT_TRUE(gl->mark_gnd_gate_type(gnd));
+
+            GateType* vcc = gl->create_gate_type("VCC", {GateTypeProperty::combinational, GateTypeProperty::power});
+            ASSERT_TRUE(vcc->create_pin("O", PinDirection::output, PinType::power).is_ok());
+            vcc->add_boolean_function("O", BooleanFunction::Const(BooleanFunction::Value::ONE));
+            ASSERT_TRUE(gl->mark_vcc_gate_type(vcc));
+
+            // the input pins are created as I0, I1, whatever order the INIT configuration reads them in
+            auto create_lut = [&gl](const std::string& name, u32 bit_count, bool is_ascending, const std::vector<std::string>& init_pins) -> GateType* {
+                GateType* gt = gl->create_gate_type(name,
+                                                    {GateTypeProperty::combinational, GateTypeProperty::c_lut},
+                                                    LUTComponent::create({{"O", LUTComponent::LUTOutputConfig("INIT", 0, bit_count, is_ascending, init_pins)}}));
+                for (const std::string pin : {"I0", "I1"})
+                {
+                    if (std::find(init_pins.begin(), init_pins.end(), pin) != init_pins.end() && gt->create_pin(pin, PinDirection::input).is_error())
+                    {
+                        return nullptr;
+                    }
+                }
+                if (gt->create_pin("O", PinDirection::output, PinType::lut).is_error())
+                {
+                    return nullptr;
+                }
+                return gt;
+            };
+            GateType* lut1_desc = create_lut("LUT1_desc", 2, false, {"I0"});
+            GateType* lut1_asc  = create_lut("LUT1_asc", 2, true, {"I0"});
+            GateType* lut2_rev  = create_lut("LUT2_rev", 4, false, {"I1", "I0"});
+            ASSERT_NE(lut1_desc, nullptr);
+            ASSERT_NE(lut1_asc, nullptr);
+            ASSERT_NE(lut2_rev, nullptr);
+
+            std::unique_ptr<Netlist> nl = netlist_factory::create_netlist(gl.get());
+            ASSERT_NE(nl, nullptr);
+
+            Gate* gnd_gate = nl->create_gate(gnd, "gnd");
+            nl->mark_gnd_gate(gnd_gate);
+            Net* gnd_net = nl->create_net("gnd");
+            gnd_net->add_source(gnd_gate, "O");
+            Gate* vcc_gate = nl->create_gate(vcc, "vcc");
+            nl->mark_vcc_gate(vcc_gate);
+            Net* vcc_net = nl->create_net("vcc");
+            vcc_net->add_source(vcc_gate, "O");
+
+            struct Case
+            {
+                GateType* type;
+                std::string init;
+                std::vector<std::pair<std::string, Net*>> inputs;    // a nullptr is a fresh global input
+                std::string expected_init;
+            };
+            const std::vector<Case> cases = {
+                // descending: entry r is bit r
+                {lut1_desc, "2", {{"I0", gnd_net}}, "0"},    // buffer of GND: constant 0
+                {lut1_desc, "1", {{"I0", gnd_net}}, "3"},    // inverter of GND: constant 1
+                {lut1_desc, "2", {{"I0", vcc_net}}, "3"},    // buffer of VCC: constant 1
+                // ascending: entry 0 is the most significant bit
+                {lut1_asc, "1", {{"I0", gnd_net}}, "0"},    // buffer of GND
+                {lut1_asc, "2", {{"I0", gnd_net}}, "3"},    // inverter of GND
+                // INIT pin order (I1, I0): entry r sets I1 to bit 0 and I0 to bit 1 of r. "4" is I0 & !I1, which
+                // is I0 with I1 tied to GND: entries 2 and 3.
+                {lut2_rev, "4", {{"I0", nullptr}, {"I1", gnd_net}}, "C"},
+            };
+
+            std::vector<Gate*> luts;
+            for (u32 i = 0; i < cases.size(); i++)
+            {
+                const auto& c = cases.at(i);
+                Gate* g       = nl->create_gate(c.type, "lut_" + std::to_string(i));
+                const auto* lc = c.type->get_component_as<LUTComponent>([](const GateTypeComponent* comp) { return LUTComponent::is_class_of(comp); });
+                ASSERT_NE(lc, nullptr);
+                ASSERT_TRUE(lc->set_init_string(g, "O", c.init).is_ok());
+                for (const auto& [pin, net] : c.inputs)
+                {
+                    Net* in = net;
+                    if (in == nullptr)
+                    {
+                        in = nl->create_net(g->get_name() + "_" + pin);
+                        in->mark_global_input_net();
+                    }
+                    in->add_destination(g, pin);
+                }
+                Net* out = nl->create_net(g->get_name() + "_O");
+                out->add_source(g, "O");
+                out->mark_global_output_net();
+                luts.push_back(g);
+            }
+
+            auto res = netlist_preprocessing::simplify_lut_inits(nl.get());
+            ASSERT_TRUE(res.is_ok()) << res.get_error().get();
+            EXPECT_EQ(res.get(), cases.size());
+
+            for (u32 i = 0; i < cases.size(); i++)
+            {
+                Gate* g        = luts.at(i);
+                const auto* lc = g->get_type()->get_component_as<LUTComponent>([](const GateTypeComponent* comp) { return LUTComponent::is_class_of(comp); });
+                auto init      = lc->get_init_string(g, "O");
+                ASSERT_TRUE(init.is_ok());
+                EXPECT_EQ(init.get(), cases.at(i).expected_init) << g->get_name();
+            }
+        }
+        TEST_END
+    }
+
+    /**
+     * Test that simplifying the INIT strings keeps the function of each LUT, given the constants at its inputs, for
+     * every LUT type of the test library: LUT2 to LUT6 with ascending INIT strings and LUT3_desc with a descending one.
+     *
+     * Functions: simplify_lut_inits
+     */
+    TEST_F(NetlistPreprocessingTest, check_simplify_lut_inits_keeps_function)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
+
+            Gate* gnd_gate = nl->create_gate(gl->get_gate_type_by_name("GND"), "gnd");
+            nl->mark_gnd_gate(gnd_gate);
+            Net* gnd_net = nl->create_net("gnd");
+            gnd_net->add_source(gnd_gate, "O");
+            Gate* vcc_gate = nl->create_gate(gl->get_gate_type_by_name("VCC"), "vcc");
+            nl->mark_vcc_gate(vcc_gate);
+            Net* vcc_net = nl->create_net("vcc");
+            vcc_net->add_source(vcc_gate, "O");
+
+            std::mt19937 rng(20261109);
+            std::vector<std::pair<Gate*, BooleanFunction>> luts;
+            for (const std::string type_name : {"LUT2", "LUT3", "LUT3_desc", "LUT4", "LUT5", "LUT6"})
+            {
+                GateType* gt = gl->get_gate_type_by_name(type_name);
+                ASSERT_NE(gt, nullptr) << type_name;
+                const auto* lc = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+                ASSERT_NE(lc, nullptr);
+                const auto* cfg = lc->get_output_pin_config("O");
+                ASSERT_NE(cfg, nullptr);
+
+                for (u32 k = 0; k < 16; k++)
+                {
+                    Gate* g = nl->create_gate(gt, type_name + "_" + std::to_string(k));
+                    std::string init;
+                    for (u32 c = 0; c < cfg->bit_count / 4; c++)
+                    {
+                        init += "0123456789abcdef"[rng() % 16];
+                    }
+                    ASSERT_TRUE(lc->set_init_string(g, "O", init).is_ok());
+
+                    // every input goes to GND, VCC or a global input; the first one always to a constant
+                    for (u32 i = 0; i < cfg->input_pins.size(); i++)
+                    {
+                        const std::string& pin = cfg->input_pins.at(i);
+                        const u32 choice       = (i == 0) ? rng() % 2 : rng() % 3;
+                        if (choice == 0)
+                        {
+                            gnd_net->add_destination(g, pin);
+                        }
+                        else if (choice == 1)
+                        {
+                            vcc_net->add_destination(g, pin);
+                        }
+                        else
+                        {
+                            Net* in = nl->create_net(g->get_name() + "_" + pin);
+                            in->add_destination(g, pin);
+                            in->mark_global_input_net();
+                        }
+                    }
+                    Net* out = nl->create_net(g->get_name() + "_O");
+                    out->add_source(g, "O");
+                    out->mark_global_output_net();
+
+                    auto expected = BooleanFunctionDecorator(g->get_boolean_function("O")).substitute_power_ground_pins(g);
+                    ASSERT_TRUE(expected.is_ok());
+                    luts.emplace_back(g, expected.get());
+                }
+            }
+
+            auto res = netlist_preprocessing::simplify_lut_inits(nl.get());
+            ASSERT_TRUE(res.is_ok()) << res.get_error().get();
+            EXPECT_GT(res.get(), 0);
+
+            for (const auto& [g, expected] : luts)
+            {
+                const auto* lc  = g->get_type()->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+                const auto& pins = lc->get_output_pin_config("O")->input_pins;
+                auto actual      = BooleanFunctionDecorator(g->get_boolean_function("O")).substitute_power_ground_pins(g);
+                ASSERT_TRUE(actual.is_ok());
+                auto tt_actual   = actual.get().compute_truth_table(pins);
+                auto tt_expected = expected.compute_truth_table(pins);
+                ASSERT_TRUE(tt_actual.is_ok());
+                ASSERT_TRUE(tt_expected.is_ok());
+                EXPECT_TRUE(tt_actual.get() == tt_expected.get()) << g->get_name() << ": " << g->get_boolean_function("O").to_string() << " instead of " << expected.to_string();
+            }
         }
         TEST_END
     }

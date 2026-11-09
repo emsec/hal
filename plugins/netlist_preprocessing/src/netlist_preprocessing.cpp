@@ -2243,6 +2243,8 @@ namespace hal
 
         namespace
         {
+            // The hex string of a truth table whose entry i is bit i of the value. Every hex digit holds four
+            // entries, the most significant one what is left over: a LUT1 has two entries and still gets its digit.
             std::string generate_hex_truth_table_string(const std::vector<BooleanFunction::Value>& tt)
             {
                 std::string tt_str = "";
@@ -2256,7 +2258,7 @@ namespace hal
                         acc += (1 << (i % 4));
                     }
 
-                    if ((i % 4) == 3)
+                    if ((i % 4) == 3 || i + 1 == tt.size())
                     {
                         std::stringstream stream;
                         stream << std::hex << acc;
@@ -2334,23 +2336,36 @@ namespace hal
                     continue;
                 }
 
-                auto bf_extended = bf_simplified.clone();
-                for (const auto& in_pin : g->get_type()->get_input_pin_names())
+                // The new INIT has to be read back the way Gate::get_lut_function reads it: entry r of the truth table
+                // sets the k-th input pin of the LUT's configuration to bit k of r, and an ascending INIT holds entry 0
+                // in its most significant bit. An input the simplified function no longer reads is a don't care.
+                const LUTComponent::LUTOutputConfig* cfg = lc_simp->get_output_pin_config(out_pin->get_name());
+                if (cfg == nullptr || cfg->input_pins.empty())
                 {
-                    if (new_vars.find(in_pin) == new_vars.end())
-                    {
-                        auto bf_filler = BooleanFunction::Var(in_pin) | (~BooleanFunction::Var(in_pin));
-                        bf_extended    = BooleanFunction::And(std::move(bf_extended), std::move(bf_filler), 1).get();
-                    }
+                    return ERR("cannot simplify LUT inits: output pin " + out_pin->get_name() + " of gate " + g->get_name() + " with ID " + std::to_string(g->get_id())
+                               + " has no INIT configuration with input pins");
                 }
 
-                const auto tt              = bf_extended.compute_truth_table().get();
-                const auto new_init_string = generate_hex_truth_table_string(tt.front());
+                const auto tt_res = bf_simplified.compute_truth_table(cfg->input_pins);
+                if (tt_res.is_error())
+                {
+                    return ERR_APPEND(tt_res.get_error(), "cannot simplify LUT inits: failed to compute the truth table for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                }
+                auto tt = tt_res.get().front();
+                if (cfg->is_ascending)
+                {
+                    std::reverse(tt.begin(), tt.end());
+                }
+                const auto new_init_string = generate_hex_truth_table_string(tt);
 
                 // std::cout << "Org Init: " << g->get_init_data().get().front() << std::endl;
                 // std::cout << "New Init: " << new_init_string << std::endl;
 
-                lc_simp->set_init_string(g, out_pin, new_init_string).get();
+                if (const auto set_res = lc_simp->set_init_string(g, out_pin, new_init_string); set_res.is_error())
+                {
+                    return ERR_APPEND(set_res.get_error(),
+                                      "cannot simplify LUT inits: failed to set INIT string '" + new_init_string + "' for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                }
                 g->set_data("preprocessing_information", "original_init", "string", original_init);
 
                 // const auto bf_test = g->get_boolean_function(out_ep->get_pin());
@@ -2359,7 +2374,6 @@ namespace hal
                 // std::cout << "Rep: " << bf_replaced << std::endl;
                 // std::cout << "Simp: " << bf_simplified << std::endl;
                 // std::cout << "Test: " << bf_test << std::endl;
-                // std::cout << "Ext: " << bf_extended << std::endl;
 
                 num_inits++;
             }
