@@ -242,6 +242,8 @@ All notable changes to this project will be documented in this file.
     * updated `XILINX_UNISIM.hgl` and `XILINX_UNISIM_hal.hgl` with multi-output LUT type definitions for all `LUT6_2` variants
     * updated `ice40ultra.hgl`, `ice40ultra_hal.hgl`, and `example_library.hgl` with multi-output LUT support
     * bumped the HGL format version to 6 for all shipped libraries
+    * fixed flip-flop and latch pins of `lsi_10k.hgl` that had no pin type: the synchronous clear `CR` of `FDS2*` is now of type `reset` and the load enable `LD` of `FDS2L*` of type `enable`, and the latches `LD1`–`LD4`, `LSR2`, and `RAM1` type their data inputs as `data`, their gates and write and read enables as `enable`, and their asynchronous clear and preset inputs as `reset` and `set`
+    * fixed wrong pin types of the `lsi_10k.hgl` flip-flops: the asynchronous preset `SD` is now of type `set` instead of `reset`, the `K` input of the JK flip-flops of type `data` instead of `reset`, the scan enable `TE`, which selects between `D` and `TI`, of type `select` instead of `enable`, and the tristate output enable `RD` of `FD2TS*` of type `enable` instead of `data`
   * HGL parser and writer
     * bumped the format version from 4 to 6; added serialization for typed parameter declarations and multi-output LUT configurations
   * Verilog writer
