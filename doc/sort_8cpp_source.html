@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-254-g8f9f6a423</span>
+   &#160;<span id="projectnumber">v4.5.0-255-g8271db4e6</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -133,7 +133,7 @@ $(document).ready(function(){initNavTree('sort_8cpp_source.html',''); initResiza
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qchar.html">QChar</a>* b_it = b.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#constBegin">constBegin</a>();</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> a_num, b_num;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordtype">bool</span> number_mode = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            <span class="keywordflow">while</span> (!a_it-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qchar.html#isNull">isNull</a>() &amp;&amp; !b_it-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qchar.html#isNull">isNull</a>())</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            <span class="keywordflow">while</span> (a_it != a.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#constEnd">constEnd</a>() &amp;&amp; b_it != b.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#constEnd">constEnd</a>())</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            {</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                <span class="comment">// read the entire number of each string since we want to be safe</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                <span class="comment">// against leading zeros: 1 &lt; 0002</span></div>
@@ -180,7 +180,7 @@ $(document).ready(function(){initNavTree('sort_8cpp_source.html',''); initResiza
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            }</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="comment">// if strings have equal length and end with numbers, compare the</span></div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            <span class="comment">// numbers</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="keywordflow">if</span> (a_it-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qchar.html#isNull">isNull</a>() &amp;&amp; b_it-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qchar.html#isNull">isNull</a>() &amp;&amp; number_mode)</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="keywordflow">if</span> (a_it == a.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#constEnd">constEnd</a>() &amp;&amp; b_it == b.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#constEnd">constEnd</a>() &amp;&amp; number_mode)</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            {</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                <span class="keywordtype">int</span> diff = <a class="code" href="namespacehal_1_1gui__utility.html#a1e95bade9096c47139daec1bd6600432">numericStringCompare</a>(a_num, b_num);</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                <span class="keywordflow">if</span> (diff) <span class="comment">// keep looking if both numbers are equal</span></div>
@@ -188,7 +188,7 @@ $(document).ready(function(){initNavTree('sort_8cpp_source.html',''); initResiza
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                    <span class="keywordflow">return</span> diff &lt; 0;</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                }</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            }</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="keywordflow">return</span> a_it-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qchar.html#isNull">isNull</a>(); <span class="comment">// is a shorter than b?</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="keywordflow">return</span> (a_it == a.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#constEnd">constEnd</a>()); <span class="comment">// is a shorter than b?</span></div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        }</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
 <div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="namespacehal_1_1gui__utility.html#a6b35891fb34a786fd160ec0db4833c12">  104</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="namespacehal_1_1gui__utility.html#a6b35891fb34a786fd160ec0db4833c12">numeratedOrderCompare</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; a, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; b)</div>
@@ -275,7 +275,6 @@ $(document).ready(function(){initNavTree('sort_8cpp_source.html',''); initResiza
 <div class="ttc" id="anamespacehal_1_1gui__utility_html_aeacb51281299c97ba69b4152275bc686"><div class="ttname"><a href="namespacehal_1_1gui__utility.html#aeacb51281299c97ba69b4152275bc686">hal::gui_utility::lexicalOrderCompare</a></div><div class="ttdeci">bool lexicalOrderCompare(const QString &amp;a, const QString &amp;b)</div><div class="ttdef"><b>Definition:</b> <a href="sort_8cpp_source.html#l00130">sort.cpp:130</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="aqchar_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qchar.html">QChar</a></div></div>
-<div class="ttc" id="aqchar_html_isNull"><div class="ttname"><a href="https://doc.qt.io/qt-5/qchar.html#isNull">QChar::isNull</a></div><div class="ttdeci">bool isNull() const const</div></div>
 <div class="ttc" id="aqchar_html_isNumber"><div class="ttname"><a href="https://doc.qt.io/qt-5/qchar.html#isNumber">QChar::isNumber</a></div><div class="ttdeci">bool isNumber() const const</div></div>
 <div class="ttc" id="aqlist_html_append"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#append">QList::append</a></div><div class="ttdeci">void append(const T &amp;value)</div></div>
 <div class="ttc" id="aqlist_html_at"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#at">QList::at</a></div><div class="ttdeci">const T &amp; at(int i) const const</div></div>
@@ -284,6 +283,7 @@ $(document).ready(function(){initNavTree('sort_8cpp_source.html',''); initResiza
 <div class="ttc" id="aqstring_html_clear"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html#clear">QString::clear</a></div><div class="ttdeci">void clear()</div></div>
 <div class="ttc" id="aqstring_html_compare-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html#compare-1">QString::compare</a></div><div class="ttdeci">int compare(const QString &amp;other, Qt::CaseSensitivity cs) const const</div></div>
 <div class="ttc" id="aqstring_html_constBegin"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html#constBegin">QString::constBegin</a></div><div class="ttdeci">QString::const_iterator constBegin() const const</div></div>
+<div class="ttc" id="aqstring_html_constEnd"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html#constEnd">QString::constEnd</a></div><div class="ttdeci">QString::const_iterator constEnd() const const</div></div>
 <div class="ttc" id="aqstring_html_rightJustified"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html#rightJustified">QString::rightJustified</a></div><div class="ttdeci">QString rightJustified(int width, QChar fill, bool truncate) const const</div></div>
 <div class="ttc" id="aqstring_html_size"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html#size">QString::size</a></div><div class="ttdeci">int size() const const</div></div>
 <div class="ttc" id="asort_8h_html"><div class="ttname"><a href="sort_8h.html">sort.h</a></div></div>
