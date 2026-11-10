@@ -299,6 +299,7 @@ All notable changes to this project will be documented in this file.
     * fixed `GuiApi.selectGate`, `selectNet` and `selectModule` with `clear_current_selection` set, which is the default, keeping the previous selection
     * fixed `GuiApi.getSelectedModules` and `getSelectedItems` not tying the returned modules to the netlist
     * fixed tooltip `dragTest` being shown whenever dragging gates in the graph view
+    * fixed use of iterator in comparison algorithm so that sort does not crash upon empty strings
     * fixed sorting the groupings table, which compared all columns as text, sorting colors by their hex code; IDs are now compared as numbers and colors by hue, saturation, and value
     * removed a leftover debug output that printed every search string of the log widget to stdout
     * fixed the option to copy the gate library into the project directory in the netlist import dialog staying enabled when the gate library is detected automatically, in which case there is no file to copy and the option had no effect

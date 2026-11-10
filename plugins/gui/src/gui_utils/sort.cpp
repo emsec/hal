@@ -43,7 +43,7 @@ namespace hal
             const QChar* b_it = b.constBegin();
             QString a_num, b_num;
             bool number_mode = false;
-            while (!a_it->isNull() && !b_it->isNull())
+            while (a_it != a.constEnd() && b_it != b.constEnd())
             {
                 // read the entire number of each string since we want to be safe
                 // against leading zeros: 1 < 0002
@@ -90,7 +90,7 @@ namespace hal
             }
             // if strings have equal length and end with numbers, compare the
             // numbers
-            if (a_it->isNull() && b_it->isNull() && number_mode)
+            if (a_it == a.constEnd() && b_it == b.constEnd() && number_mode)
             {
                 int diff = numericStringCompare(a_num, b_num);
                 if (diff) // keep looking if both numbers are equal
@@ -98,7 +98,7 @@ namespace hal
                     return diff < 0;
                 }
             }
-            return a_it->isNull(); // is a shorter than b?
+            return (a_it == a.constEnd()); // is a shorter than b?
         }
 
         bool numeratedOrderCompare(const QString& a, const QString& b)
