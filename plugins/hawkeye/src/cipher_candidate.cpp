@@ -51,6 +51,12 @@ namespace hal
             constexpr u32 MAX_SBOX_BITS = 8;
 
             /**
+             * An S-box reads at least 3 bits. Fewer make for no useful S-box, and synthesis often starts an S-box with
+             * 2-to-4 predecoders on pairs of its input bits, which would otherwise pass for many small S-boxes.
+             */
+            constexpr u32 MIN_SBOX_BITS = 3;
+
+            /**
              * The most control inputs an S-box may read for identification to try every assignment of them. The
              * assignment loop is exponential in this, so every additional bit doubles what an S-box that matches
              * nothing in the database costs before that is known.
@@ -425,7 +431,7 @@ namespace hal
                 const std::vector<Gate*> component = sorted_by_id(component_gates);
                 const u32 number_input_ffs         = component_input_ffs.size();
 
-                if (number_input_ffs < 3)
+                if (number_input_ffs < MIN_SBOX_BITS)
                 {
                     // too small for an S-box
                     continue;
@@ -529,8 +535,8 @@ namespace hal
                     }
 
                     // the S-boxes of a round function are alike, so only accept a split into more than one group of
-                    // equal size, each reading more than one flip-flop
-                    if (group_sizes.size() == 1 && input_groups.size() > 1 && input_groups.front().size() > 1)
+                    // equal size, each large enough for an S-box
+                    if (group_sizes.size() == 1 && input_groups.size() > 1 && input_groups.front().size() >= MIN_SBOX_BITS)
                     {
                         input_groupings.push_back(std::move(input_groups));
                     }
