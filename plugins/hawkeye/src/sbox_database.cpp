@@ -337,6 +337,13 @@ namespace hal
                 auto lin_rep = compute_linear_representative_bounded(sbox_alpha, budget);
                 if (budget == 0)
                 {
+                    if (sbox_alpha.front() == 0)
+                    {
+                        // A table that maps 0 to 0 takes a search of its own, which can exhaust the budget for this
+                        // one alpha only, e.g., for AES and alpha = 0x63 (inversion in GF(2^8)). Leave the entry out:
+                        // lookup skips the corresponding beta as well and finds such an S-box through the others.
+                        continue;
+                    }
                     // storing a representative from a truncated search would silently break every lookup against this
                     // entry, and a real S-box is never degenerate enough to exhaust the search in the first place
                     return ERR("cannot add S-box '" + name + "' to the database: the canonical form search was abandoned, the S-box is too close to linear");
@@ -498,8 +505,15 @@ namespace hal
                 auto lin_rep = compute_linear_representative_bounded(sbox_beta, budget);
                 if (budget == 0)
                 {
-                    // XORing a constant onto the outputs does not change how close to linear the table is, so if the
-                    // search degenerates for one beta it degenerates for all of them, and no real S-box ever does
+                    if (sbox_beta.front() == 0)
+                    {
+                        // A table that maps 0 to 0 takes a search of its own (see compute_linear_representative_bounded),
+                        // which can exhaust the budget for this one beta only, e.g., for AES XORed with 0x63, which is
+                        // linearly equivalent to inversion in GF(2^8). The other betas still find such an S-box.
+                        continue;
+                    }
+                    // apart from that, XORing a constant onto the outputs does not change how close to linear the
+                    // table is, so if the search degenerates for one beta it degenerates for all of them
                     log_info("hawkeye", "giving up the S-box lookup, as the table is too close to linear to be a real S-box.");
                     break;
                 }

@@ -72,8 +72,8 @@ namespace hal
              * the S-box that it describes and look that up in the database.
              *
              * Yields an empty name if the rows do not describe a usable S-box at all, that is, if there are more
-             * outputs than inputs and they cannot be reduced to as many linearly independent ones as there are
-             * inputs, or if the S-box is not bijective. Neither is an error: it only means that this guess at the
+             * outputs than inputs and they cannot be reduced to as many ones that are independent up to constants as
+             * there are inputs, or if the S-box is not bijective. Neither is an error: it only means that this guess at the
              * outputs of an S-box was a wrong one.
              */
             Result<std::string> lookup_sbox(const std::vector<std::vector<BooleanFunction::Value>>& rows, const u32 num_inputs, const SBoxDatabase& db)
@@ -102,44 +102,54 @@ namespace hal
                     values.push_back(u64_res.get());
                 }
 
-                // More outputs than inputs means that some of them are linear combinations of the others, so reduce
-                // to a linearly independent set by Gaussian elimination over GF(2) and keep only those outputs. Every
-                // output is one vector over the rows of the table, which is why the elimination runs over the rows.
+                // More outputs than inputs means that some of them depend on the others, so keep only an independent
+                // subset of them. Every output is one vector over the rows of the table. An output may also be the
+                // complement of a combination of others, e.g., an XNOR, an inverter, or a key addition whose key bit
+                // identify_sbox holds at 0, so the outputs have to be independent modulo the constant function, not
+                // just linearly: the constant goes into the basis first. The database does not care about a constant
+                // XORed onto the outputs, so the outputs that are kept stay as they are.
                 if (num_outputs != num_inputs)
                 {
-                    std::vector<std::bitset<MAX_SBOX_ROWS>> mat(num_outputs);
-                    for (u32 out = 0; out < num_outputs; out++)
-                    {
+                    // The basis is kept in echelon form: no basis vector has a bit set at the pivot row of an earlier
+                    // one, so a single pass over the basis reduces a vector completely.
+                    std::vector<std::bitset<MAX_SBOX_ROWS>> basis;
+                    std::vector<u32> pivots;
+                    const auto add_if_independent = [&basis, &pivots, num_rows](std::bitset<MAX_SBOX_ROWS> vec) {
+                        for (u32 i = 0; i < basis.size(); i++)
+                        {
+                            if (vec[pivots[i]])
+                            {
+                                vec ^= basis[i];
+                            }
+                        }
                         for (u32 row = 0; row < num_rows; row++)
                         {
-                            mat[out][row] = (values[row] >> out) & 1;
+                            if (vec[row])
+                            {
+                                basis.push_back(vec);
+                                pivots.push_back(row);
+                                return true;
+                            }
                         }
-                    }
+                        return false;
+                    };
 
+                    std::bitset<MAX_SBOX_ROWS> constant;
                     for (u32 row = 0; row < num_rows; row++)
                     {
-                        u32 pivot = 0;
-                        for (u32 out = 0; out < num_outputs; out++)
-                        {
-                            if (mat[out][row])
-                            {
-                                pivot = out;
-                                break;
-                            }
-                        }
-                        for (u32 out = pivot + 1; out < num_outputs; out++)
-                        {
-                            if (mat[out][row])
-                            {
-                                mat[out] ^= mat[pivot];
-                            }
-                        }
+                        constant[row] = 1;
                     }
+                    add_if_independent(constant);
 
                     std::vector<u32> independent;
                     for (u32 out = 0; out < num_outputs; out++)
                     {
-                        if (mat[out].any())
+                        std::bitset<MAX_SBOX_ROWS> vec;
+                        for (u32 row = 0; row < num_rows; row++)
+                        {
+                            vec[row] = (values[row] >> out) & 1;
+                        }
+                        if (add_if_independent(vec))
                         {
                             independent.push_back(out);
                         }
