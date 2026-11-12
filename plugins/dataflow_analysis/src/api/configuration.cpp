@@ -287,6 +287,28 @@ namespace hal
             return *this;
         }
 
+        Configuration& Configuration::with_gates(const std::vector<Gate*>& gates, bool overwrite)
+        {
+            if (overwrite)
+            {
+                this->gates.clear();
+            }
+            this->gates.insert(gates.begin(), gates.end());
+
+            return *this;
+        }
+
+        Configuration& Configuration::with_excluded_gates(const std::vector<Gate*>& gates, bool overwrite)
+        {
+            if (overwrite)
+            {
+                this->excluded_gates.clear();
+            }
+            this->excluded_gates.insert(gates.begin(), gates.end());
+
+            return *this;
+        }
+
         Configuration& Configuration::with_control_pin_types(const std::set<PinType>& types, bool overwrite)
         {
             if (overwrite)

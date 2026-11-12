@@ -97,6 +97,22 @@ namespace hal
             std::set<const GateType*> gate_types = {};
 
             /**
+             * @brief A selection among the gates of the target gate types: only these are grouped. Defaults to an empty set, i.e., all gates of the target gate types are grouped.
+             * 
+             * A gate of a target gate type that is not selected is left out like an excluded gate, see `excluded_gates`.
+             */
+            std::unordered_set<const Gate*> gates = {};
+
+            /**
+             * @brief Gates of the target gate types that are not grouped. Defaults to an empty set.
+             * 
+             * The dataflow ends at a left-out gate as it ends at a grouped one: the analysis neither passes through it as if it were combinational logic, nor records it as a successor.
+             * Two grouped gates connected only through left-out gates are therefore not connected in the analysis. 
+             * This leaves a part of the netlist out of the analysis, e.g., a memory built from flip-flops.
+             */
+            std::unordered_set<const Gate*> excluded_gates = {};
+
+            /**
              * @brief The pin types of the pins to be considered control pins. Defaults to an empty set.
              */
             std::set<PinType> control_pin_types = {};
@@ -281,6 +297,24 @@ namespace hal
              * @returns The updated dataflow analysis configuration.
              */
             Configuration& with_gate_types(const std::set<GateTypeProperty>& type_properties, bool overwrite = false);
+
+            /**
+             * @brief Select the gates to be grouped among the gates of the target gate types; the others are left out of the analysis (see `excluded_gates`).
+             * 
+             * @param[in] gates - The gates to group. Gates that are not of a target gate type are ignored.
+             * @param[in] overwrite - Set `true` to overwrite the existing selection, `false` to add to it. Defaults to `false`.
+             * @returns The updated dataflow analysis configuration.
+             */
+            Configuration& with_gates(const std::vector<Gate*>& gates, bool overwrite = false);
+
+            /**
+             * @brief Leave gates of the target gate types out of the analysis: they are not grouped, and the dataflow ends at them without passing through.
+             * 
+             * @param[in] gates - The gates to leave out.
+             * @param[in] overwrite - Set `true` to overwrite the existing set of excluded gates, `false` to add to it. Defaults to `false`.
+             * @returns The updated dataflow analysis configuration.
+             */
+            Configuration& with_excluded_gates(const std::vector<Gate*>& gates, bool overwrite = false);
 
             /**
              * @brief Set the pin types of the pins to be considered control pins by dataflow analysis.

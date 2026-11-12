@@ -100,6 +100,22 @@ namespace hal
             :type: set[hal_py.GateType]
         )");
 
+        py_dataflow_configuration.def_readwrite("gates", &dataflow::Configuration::gates, R"(
+            A selection among the gates of the target gate types: only these are grouped. Defaults to an empty set, i.e., all gates of the target gate types are grouped.
+            A gate of a target gate type that is not selected is left out like an excluded gate, see ``excluded_gates``.
+
+            :type: set[hal_py.Gate]
+        )");
+
+        py_dataflow_configuration.def_readwrite("excluded_gates", &dataflow::Configuration::excluded_gates, R"(
+            Gates of the target gate types that are not grouped. Defaults to an empty set.
+            The dataflow ends at a left-out gate as it ends at a grouped one: the analysis neither passes through it as if it were combinational logic, nor records it as a successor.
+            Two grouped gates connected only through left-out gates are therefore not connected in the analysis.
+            This leaves a part of the netlist out of the analysis, e.g., a memory built from flip-flops.
+
+            :type: set[hal_py.Gate]
+        )");
+
         py_dataflow_configuration.def_readwrite("control_pin_types", &dataflow::Configuration::control_pin_types, R"(
             The pin types of the pins to be considered control pins. Defaults to an empty set.
 
@@ -303,6 +319,26 @@ namespace hal
 
             :param set[hal_py.GateTypeProperty] type_properties: A set of gate type properties.
             :param bool overwrite: Set ``True`` to overwrite existing set of gate types, ``False`` otherwise. Defaults to ``False``.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def("with_gates", &dataflow::Configuration::with_gates, py::arg("gates"), py::arg("overwrite") = false, R"(
+            Select the gates to be grouped among the gates of the target gate types; the others are left out of the analysis (see ``excluded_gates``).
+            Overwrite the existing selection by setting the optional ``overwrite`` flag to ``True``.
+
+            :param list[hal_py.Gate] gates: The gates to group. Gates that are not of a target gate type are ignored.
+            :param bool overwrite: Set ``True`` to overwrite the existing selection, ``False`` to add to it. Defaults to ``False``.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def("with_excluded_gates", &dataflow::Configuration::with_excluded_gates, py::arg("gates"), py::arg("overwrite") = false, R"(
+            Leave gates of the target gate types out of the analysis: they are not grouped, and the dataflow ends at them without passing through.
+            Overwrite the existing set of excluded gates by setting the optional ``overwrite`` flag to ``True``.
+
+            :param list[hal_py.Gate] gates: The gates to leave out.
+            :param bool overwrite: Set ``True`` to overwrite the existing set of excluded gates, ``False`` to add to it. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
             :rtype: dataflow.Dataflow.Configuration
         )");

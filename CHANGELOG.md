@@ -191,6 +191,7 @@ All notable changes to this project will be documented in this file.
     * `Result::write_dot` now returns the path it wrote to, as it replaces a wrong extension
     * changed the plugin dialog to no longer open the written `.dot` graph in the DOT viewer unprompted
     * fixed `dataflow.Configuration` leaking every instance created from Python
+    * added `Configuration::gates` / `with_gates` to group only a selection of the gates of the target gate types, and `Configuration::excluded_gates` / `with_excluded_gates` to leave gates out; the dataflow ends at a left-out gate without passing through it, so a part of the netlist such as a memory built from flip-flops is left out of the analysis
   * graph algorithm
     * added `NetlistGraph::from_gates` that builds a graph from a subset of the gates of a netlist, optionally representing a gate by a primary and a shadow vertex so that feedback through it does not close a cycle
     * fixed `NetlistGraph` destroying an igraph graph that was never created when `from_netlist` or `copy` fail before creating it

@@ -12,5 +12,7 @@ if(PL_DATAFLOW OR BUILD_ALL_PLUGINS)
                    SOURCES ${DATAFLOW_SRC} ${DATAFLOW_PYTHON_SRC}
                    PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/dataflow.rst
                    )
+
+    add_subdirectory(test)
 		 
 endif()

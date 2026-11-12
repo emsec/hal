@@ -3,8 +3,11 @@
 #include "dataflow_analysis/evaluation/evaluation.h"
 #include "dataflow_analysis/pre_processing/pre_processing.h"
 #include "dataflow_analysis/processing/processing.h"
+#include "hal_core/netlist/gate.h"
 #include "hal_core/plugin_system/user_feedback.h"
 #include "hal_core/utilities/log.h"
+
+#include <algorithm>
 
 namespace hal
 {
@@ -25,6 +28,26 @@ namespace hal
             if (config.control_pin_types.empty())
             {
                 return ERR("no control pin types specified");
+            }
+
+            for (const auto* gates : {&config.gates, &config.excluded_gates})
+            {
+                for (const auto* g : *gates)
+                {
+                    if (g == nullptr || g->get_netlist() != config.netlist)
+                    {
+                        return ERR("the gate selection or exclusion contains a gate that is not part of the netlist");
+                    }
+                }
+            }
+
+            if (!config.gates.empty())
+            {
+                const auto not_target_type = std::count_if(config.gates.begin(), config.gates.end(), [&config](const Gate* g) { return config.gate_types.find(g->get_type()) == config.gate_types.end(); });
+                if (not_target_type > 0)
+                {
+                    log_warning("dataflow", "{} gates of the gate selection are not of a target gate type and are ignored", not_target_type);
+                }
             }
 
             // the analysis reports its progress to the GUI from here on, so it also has to dismiss the progress
@@ -54,6 +77,10 @@ namespace hal
 
             std::shared_ptr<dataflow::Grouping> initial_grouping = nullptr;
             auto netlist_abstr                                   = dataflow::pre_processing::run(config, initial_grouping);
+            if (netlist_abstr.target_gates.empty() && (!config.gates.empty() || !config.excluded_gates.empty()))
+            {
+                return ERR("no gate is left to group after applying the gate selection and exclusion");
+            }
             std::shared_ptr<dataflow::Grouping> final_grouping   = nullptr;
 
             u32 iteration = 0;

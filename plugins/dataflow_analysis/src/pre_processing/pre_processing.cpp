@@ -27,13 +27,35 @@ namespace hal
         {
             namespace
             {
+                bool is_target_type(const dataflow::Configuration& config, const Gate* g)
+                {
+                    return config.gate_types.find(g->get_type()) != config.gate_types.end();
+                }
+
+                /* the gates to group: those of the target gate types, narrowed down to the selection and without the excluded ones */
                 void identify_all_target_gates(const dataflow::Configuration& config, NetlistAbstraction& netlist_abstr)
                 {
                     log_info("dataflow", "identifying target gates");
-                    netlist_abstr.target_gates = netlist_abstr.nl->get_gates([config](auto g) { return config.gate_types.find(g->get_type()) != config.gate_types.end(); });
+                    u32 left_out               = 0;
+                    netlist_abstr.target_gates = netlist_abstr.nl->get_gates([&config, &left_out](const Gate* g) {
+                        if (!is_target_type(config, g))
+                        {
+                            return false;
+                        }
+                        if ((!config.gates.empty() && config.gates.find(g) == config.gates.end()) || config.excluded_gates.find(g) != config.excluded_gates.end())
+                        {
+                            left_out++;
+                            return false;
+                        }
+                        return true;
+                    });
                     std::sort(netlist_abstr.target_gates.begin(), netlist_abstr.target_gates.end(), [](const Gate* g1, const Gate* g2) { return g1->get_id() < g2->get_id(); });
                     log_info("dataflow", "  #gates: {}", netlist_abstr.nl->get_gates().size());
                     log_info("dataflow", "  #target gates: {}", netlist_abstr.target_gates.size());
+                    if (left_out > 0)
+                    {
+                        log_info("dataflow", "  #gates of the target gate types left out by the gate selection or exclusion: {}", left_out);
+                    }
                 }
 
                 void identify_all_control_signals(const dataflow::Configuration& config, NetlistAbstraction& netlist_abstr)
@@ -103,6 +125,9 @@ namespace hal
                             net_to_group_index[net] = i;
                         }
                     }
+
+                    // a gate of a target gate type ends a path; it is recorded as a successor only if it is grouped (not left out by the selection or the exclusion)
+                    const std::unordered_set<const Gate*> grouped(netlist_abstr.target_gates.cbegin(), netlist_abstr.target_gates.cend());
 
                     // find successors
                     std::unordered_map<const Net*, std::pair<std::unordered_set<Gate*>, std::unordered_set<u32>>> suc_cache;
@@ -183,14 +208,17 @@ namespace hal
                                 for (const auto* ep : current->get_destinations())
                                 {
                                     auto* g = ep->get_gate();
-                                    if (config.gate_types.find(g->get_type()) != config.gate_types.end())
+                                    if (is_target_type(config, g))
                                     {
-                                        // if target gate found, add to suc_cache of all nets along the predecessor path
-                                        auto& suc_cache_current = suc_cache[current];
-                                        std::get<0>(suc_cache_current).insert(g);
-                                        for (const auto* n : previous)
+                                        // if target gate found, add to suc_cache of all nets along the predecessor path; a left-out gate ends the path without being added
+                                        if (grouped.find(g) != grouped.end())
                                         {
-                                            std::get<0>(suc_cache[n]).insert(g);
+                                            auto& suc_cache_current = suc_cache[current];
+                                            std::get<0>(suc_cache_current).insert(g);
+                                            for (const auto* n : previous)
+                                            {
+                                                std::get<0>(suc_cache[n]).insert(g);
+                                            }
                                         }
                                     }
                                     else
@@ -269,9 +297,9 @@ namespace hal
                                 for (const auto* ep : current->get_sources())
                                 {
                                     auto* g = ep->get_gate();
-                                    if (config.gate_types.find(g->get_type()) == config.gate_types.end())
+                                    if (!is_target_type(config, g))
                                     {
-                                        // propagate further by adding predecessors to stack
+                                        // propagate further by adding predecessors to stack (a gate of a target gate type ends the path, whether it is grouped or left out)
                                         for (const auto* n : g->get_fan_in_nets())
                                         {
                                             if (visited.find(n) == visited.end())
