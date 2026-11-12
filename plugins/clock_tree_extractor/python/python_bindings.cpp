@@ -26,13 +26,15 @@
 
 #include "hal_core/python_bindings/python_bindings.h"
 
+#include "clock_tree_extractor/branches.h"
 #include "clock_tree_extractor/clock_tree.h"
+#include "clock_tree_extractor/dot_export.h"
 #include "clock_tree_extractor/plugin_clock_tree_extractor.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
 #include <igraph/igraph.h>
-#include <pybind11/detail/descr.h>
+#include <optional>
 #include <pybind11/pytypes.h>
 #include <set>
 #include <string>
@@ -223,8 +225,11 @@ namespace hal
             )" )
             .def(
                 "export",
-                []( const cte::ClockTree &self, const std::string &pathname ) -> bool {
-                    auto result = self.export_dot( pathname );
+                []( const cte::ClockTree &self,
+                    const std::string &pathname,
+                    const std::optional<std::string> &x_key,
+                    const std::optional<std::string> &y_key ) -> bool {
+                    auto result = cte::export_dot( self, pathname, x_key, y_key );
                     if( result.is_ok() )
                     {
                         return true;
@@ -234,10 +239,16 @@ namespace hal
                     return false;
                 },
                 py::arg( "pathname" ),
+                py::arg( "x_key" ) = py::none(),
+                py::arg( "y_key" ) = py::none(),
                 R"(
-                Write the clock tree to a DOT file.
+                Write the clock tree to a DOT file. Gates get the coordinates of their location in the layout, unless the
+                data keys of both coordinates are given: then they are read from the gate data in category ``generic``,
+                e.g., from Verilog instance parameters, which unlike a location can be negative.
 
                 :param str pathname: The path of the file to write.
+                :param str x_key: The data key of the x-coordinate, or ``None`` to use the location.
+                :param str y_key: The data key of the y-coordinate, or ``None`` to use the location.
                 :returns: ``True`` on success, ``False`` otherwise.
                 :rtype: bool
             )" )
@@ -501,7 +512,7 @@ namespace hal
             .def(
                 "get_branches",
                 []( const cte::ClockTree &self ) -> py::object {
-                    auto res = self.get_branches();
+                    auto res = cte::recover_branches( self );
                     if( res.is_error() )
                     {
                         log_error( "clock_tree_extractor", "{}", res.get_error().get() );
@@ -534,7 +545,7 @@ namespace hal
                 },
                 borrowed(),
                 R"(
-                Get all branches of the clock tree, i.e., all paths from a root to a sink. The branches are computed on the first call and cached.
+                Get all branches of the clock tree, i.e., all paths from a root to a sink. The branches are recomputed on every call.
 
                 :returns: The branches on success, ``None`` otherwise. Each branch is ordered from root to sink.
                 :rtype: list[list[hal_py.Gate or hal_py.Net]] or None

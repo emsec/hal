@@ -45,7 +45,7 @@ namespace hal
 
     std::string ClockTreeExtractorPlugin::get_description() const
     {
-        return {"Prototype plugin for extracting and visualizing the clock tree of a digital gate-level netlist."};
+        return { "Prototype plugin for extracting and visualizing the clock tree of a digital gate-level netlist." };
     }
 
     void ClockTreeExtractorPlugin::on_load()

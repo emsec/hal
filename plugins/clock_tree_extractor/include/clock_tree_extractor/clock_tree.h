@@ -32,11 +32,9 @@
 
 #include <igraph/igraph.h>
 #include <memory>
-#include <optional>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <variant>
 #include <vector>
 
 namespace hal
@@ -92,52 +90,46 @@ namespace hal
         class ClockTree
         {
           public:
-            ClockTree( const Netlist *netlist,
-                       igraph_t &&graph,
-                       std::unordered_set<igraph_int_t> &&roots,
-                       std::unordered_map<igraph_int_t, const void *> &&m_vertices_to_ptrs,
-                       std::unordered_map<const void *, PtrType> &&m_ptrs_to_types );
-
             ~ClockTree();
 
             static Result<std::unique_ptr<ClockTree>> from_netlist( const Netlist *netlist );
 
-            Result<std::monostate> export_dot( const std::string &pathname ) const;
-
             Result<std::vector<std::pair<const void *, PtrType>>> get_neighbors( const void *ptr,
                                                                                  igraph_neimode_t direction ) const;
 
-            Result<std::unique_ptr<ClockTree>> get_subtree( const void *ptr, const bool parent ) const;
+            Result<std::unique_ptr<ClockTree>> get_subtree( const void *ptr, bool parent ) const;
 
             Result<igraph_int_t> get_vertex_from_ptr( const void *ptr ) const;
 
-            Result<std::pair<const void *, PtrType>> get_ptr_from_vertex( const igraph_int_t vertex ) const;
+            [[nodiscard]] Result<std::pair<const void *, PtrType>> get_ptr_from_vertex( igraph_int_t vertex ) const;
 
-            Result<std::vector<igraph_int_t>> get_vertices_from_ptrs( const std::vector<const void *> &ptrs ) const;
+            [[nodiscard]] Result<std::vector<igraph_int_t>>
+            get_vertices_from_ptrs( const std::vector<const void *> &ptrs ) const;
 
-            Result<std::vector<std::pair<const void *, PtrType>>>
+            [[nodiscard]] Result<std::vector<std::pair<const void *, PtrType>>>
             get_ptrs_from_vertices( const std::vector<igraph_int_t> &vertices ) const;
 
-            const std::vector<const Gate *> get_gates() const;
+            [[nodiscard]] std::vector<const Gate *> get_gates() const;
 
-            const std::vector<const Net *> get_nets() const;
+            [[nodiscard]] std::vector<const Net *> get_nets() const;
 
-            const std::unordered_map<const void *, PtrType> get_all() const;
+            [[nodiscard]] const std::unordered_map<const void *, PtrType> &get_all() const;
 
-            const Netlist *get_netlist() const;
+            [[nodiscard]] const Netlist *get_netlist() const;
 
-            const igraph_t *get_igraph() const;
+            [[nodiscard]] const igraph_t *get_igraph() const;
 
-            const std::vector<Diagnostic> &get_diagnostics() const;
+            [[nodiscard]] const std::vector<Diagnostic> &get_diagnostics() const;
 
-            const std::unordered_set<igraph_int_t> &get_roots() const;
-
-            Result<std::vector<Branch>> get_branches() const;
+            [[nodiscard]] const std::unordered_set<igraph_int_t> &get_roots() const;
 
           private:
-            ClockTree() = delete;
-
-            ClockTree( const Netlist *netlist );
+            // takes ownership of graph, which must be initialized; only from_netlist and get_subtree create trees
+            ClockTree( const Netlist *netlist,
+                       igraph_t &&graph,
+                       std::unordered_set<igraph_int_t> &&roots,
+                       std::unordered_map<igraph_int_t, const void *> &&vertices_to_ptrs,
+                       std::unordered_map<const void *, PtrType> &&ptrs_to_types );
 
             const Netlist *m_netlist;
 
@@ -154,8 +146,6 @@ namespace hal
             std::unordered_map<const void *, PtrType> m_ptrs_to_types;
 
             std::vector<Diagnostic> m_diagnostics;
-
-            mutable std::optional<std::vector<Branch>> m_branches;
         };
     }  // namespace cte
 }  // namespace hal

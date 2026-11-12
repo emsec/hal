@@ -31,19 +31,16 @@
 
 #include <vector>
 
-namespace hal
+namespace hal::cte
 {
-    namespace cte
-    {
-        /**
-         * Recover all branches of a clock tree.
-         *
-         * Runs a depth-first search from every root and collects each root-to-sink path. A sink is a vertex without
-         * successors. Vertices reachable over several paths show up in several branches.
-         *
-         * @param[in] clock_tree - The clock tree.
-         * @returns The branches, each ordered from root to sink, or an error.
-         */
-        Result<std::vector<Branch>> recover_branches( const ClockTree &clock_tree );
-    }  // namespace cte
-}  // namespace hal
+    /**
+     * Recover all branches of a clock tree.
+     *
+     * Runs a depth-first search from every root and collects each root-to-sink path. A sink is a vertex without
+     * successors. Vertices reachable over several paths show up in several branches.
+     *
+     * @param[in] clock_tree - The clock tree.
+     * @returns The branches, each ordered from root to sink, or an error.
+     */
+    Result<std::vector<Branch>> recover_branches( const ClockTree &clock_tree );
+}  // namespace hal::cte
