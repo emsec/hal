@@ -182,10 +182,14 @@ namespace hal
              * @param[in] configs - The configurations of the detection approaches to be executed one after another on each start flip-flop.
              * @param[in] min_state_size - The minimum size of a candidate to be considered a cryptographic state register. Defaults to `40`.
              * @param[in] start_ffs - The flip-flops to analyze. Defaults to an empty vector, i.e., all flip-flops of the netlist are analyzed.
+             * @param[in] excluded_ffs - Flip-flops left out of the analysis, e.g., those of a memory built from flip-flops. They are not part of the abstraction, and a connection through combinational logic ends at them without passing through, so two flip-flops connected only through excluded ones are not connected. Defaults to an empty vector.
              * @returns The candidates on success, an error otherwise.
              */
-            static Result<std::vector<CipherCandidate>>
-                detect(Netlist* nl, const std::vector<DetectionConfiguration>& configs, u32 min_state_size = 40, const std::vector<Gate*>& start_ffs = {});
+            static Result<std::vector<CipherCandidate>> detect(Netlist* nl,
+                                                               const std::vector<DetectionConfiguration>& configs,
+                                                               u32 min_state_size                     = 40,
+                                                               const std::vector<Gate*>& start_ffs    = {},
+                                                               const std::vector<Gate*>& excluded_ffs = {});
 
             /**
              * @brief Determine the round function of the candidate, i.e., the combinational logic computing the next state.

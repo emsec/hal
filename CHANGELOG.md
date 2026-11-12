@@ -157,6 +157,7 @@ All notable changes to this project will be documented in this file.
       * added `CipherCandidate::create_modules` that writes a candidate back into the netlist as a module hierarchy of the candidate, its state register, and one submodule per identified S-box
       * added the HAWKEYE S-box database to the build directory so that it is found at runtime
     * improved speed of HAWKEYE candidate search and identification
+    * added the `excluded_ffs` parameter to `CipherCandidate::detect`, which leaves flip-flops out of the candidate search, e.g., a memory built from flip-flops; a connection ends at an excluded flip-flop without passing through it
       * fixed the round function of HAWKEYE walking every path from each flip-flop of the register rather than every gate, which is exponential in a cone of logic that reconverges
       * sped up the S-box identification of HAWKEYE by tabulating each output over the state and the control inputs together and reading the assignment of the control inputs out of that one table, instead of substituting the control values and tabulating anew for each of up to 256 assignments
       * changed the round function of a HAWKEYE candidate to determine which flip-flops each of its gates depends on only when the S-box search asks for it

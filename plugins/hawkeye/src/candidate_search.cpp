@@ -10,6 +10,7 @@
 #include "hawkeye/cipher_candidate.h"
 
 #include <algorithm>
+#include <unordered_set>
 
 namespace hal
 {
@@ -314,11 +315,24 @@ namespace hal
             }
         }    // namespace
 
-        Result<std::vector<CipherCandidate>> CipherCandidate::detect(Netlist* nl, const std::vector<DetectionConfiguration>& configs, u32 min_state_size, const std::vector<Gate*>& start_ffs)
+        Result<std::vector<CipherCandidate>> CipherCandidate::detect(Netlist* nl,
+                                                                     const std::vector<DetectionConfiguration>& configs,
+                                                                     u32 min_state_size,
+                                                                     const std::vector<Gate*>& start_ffs,
+                                                                     const std::vector<Gate*>& excluded_ffs)
         {
             if (nl == nullptr)
             {
                 return ERR("netlist is a nullptr");
+            }
+
+            const std::unordered_set<const Gate*> excluded(excluded_ffs.begin(), excluded_ffs.end());
+            for (const auto* g : excluded)
+            {
+                if (g == nullptr || g->get_netlist() != nl)
+                {
+                    return ERR("the excluded flip-flops contain a gate that is not part of the netlist");
+                }
             }
 
             log_info("hawkeye", "start detecting state register candidates...");
@@ -329,14 +343,24 @@ namespace hal
             const auto nl_dec = NetlistTraversalDecorator(*nl);
             std::map<Gate*, std::set<Gate*>> ff_map;
             std::unordered_map<const Net*, std::set<Gate*>> cache = {};
-            const auto start_gates                                = nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); });
+            const auto start_gates                                = nl->get_gates([&excluded](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff) && excluded.find(g) == excluded.end(); });
+            if (!excluded.empty())
+            {
+                log_info("hawkeye", "{} flip-flops are excluded from the analysis", excluded.size());
+            }
             for (auto* sg : start_gates)
             {
-                if (const auto res = nl_dec.get_next_matching_gates(
+                // the search ends at every flip-flop; an excluded one is not recorded as a successor, so the connection ends there
+                if (auto res = nl_dec.get_next_matching_gates(
                         sg, true, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); }, false, continue_through_exit_ep, continue_through_entry_ep);
                     res.is_ok())
                 {
-                    ff_map[sg] = res.get();
+                    auto successors = res.get();
+                    for (auto it = successors.begin(); !excluded.empty() && it != successors.end();)
+                    {
+                        it = (excluded.find(*it) != excluded.end()) ? successors.erase(it) : std::next(it);
+                    }
+                    ff_map[sg] = std::move(successors);
                 }
                 else
                 {
@@ -351,7 +375,19 @@ namespace hal
             }
             auto base_graph = res.get();
 
-            const auto start_vertices_res = base_graph->get_vertices_from_gates(start_ffs.empty() ? start_gates : start_ffs);
+            std::vector<Gate*> selected_starts;
+            for (auto* g : start_ffs)
+            {
+                if (excluded.find(g) == excluded.end())
+                {
+                    selected_starts.push_back(g);
+                }
+            }
+            if (!start_ffs.empty() && selected_starts.empty())
+            {
+                return ERR("all start flip-flops are excluded");
+            }
+            const auto start_vertices_res = base_graph->get_vertices_from_gates(start_ffs.empty() ? start_gates : selected_starts);
             if (start_vertices_res.is_error())
             {
                 return ERR(start_vertices_res.get_error());

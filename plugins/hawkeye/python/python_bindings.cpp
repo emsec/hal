@@ -401,9 +401,9 @@ namespace hal
 
         py_hawkeye_cipher_candidate.def_static(
             "detect",
-            [](Netlist* nl, const std::vector<hawkeye::DetectionConfiguration>& configs, u32 min_state_size = 40, const std::vector<Gate*>& start_ffs = {})
+            [](Netlist* nl, const std::vector<hawkeye::DetectionConfiguration>& configs, u32 min_state_size, const std::vector<Gate*>& start_ffs, const std::vector<Gate*>& excluded_ffs)
                 -> std::optional<std::vector<hawkeye::CipherCandidate>> {
-                auto res = hawkeye::CipherCandidate::detect(nl, configs, min_state_size, start_ffs);
+                auto res = hawkeye::CipherCandidate::detect(nl, configs, min_state_size, start_ffs, excluded_ffs);
                 if (res.is_ok())
                 {
                     return std::move(res.get());
@@ -418,6 +418,7 @@ namespace hal
             py::arg("configs"),
             py::arg("min_state_size") = 40,
             py::arg("start_ffs")      = std::vector<Gate*>(),
+            py::arg("excluded_ffs")   = std::vector<Gate*>(),
             R"(
             Attempt to locate candidates for symmetric cryptographic SPN, Feistel, and ARX implementations within a gate-level netlist.
 
@@ -432,6 +433,7 @@ namespace hal
             :param list[hawkeye.DetectionConfiguration] configs: The configurations of the detection approaches to be executed one after another on each start flip-flop.
             :param int min_state_size: The minimum size of a candidate to be considered a cryptographic state register. Defaults to ``40``.
             :param list[hal_py.Gate] start_ffs: The flip-flops to analyze. Defaults to an empty list, i.e., all flip-flops of the netlist are analyzed.
+            :param list[hal_py.Gate] excluded_ffs: Flip-flops left out of the analysis, e.g., those of a memory built from flip-flops. They are not part of the abstraction, and a connection through combinational logic ends at them without passing through, so two flip-flops connected only through excluded ones are not connected. Defaults to an empty list.
             :returns: A list of candidates on success, ``None`` otherwise.
             :rtype: list[hawkeye.CipherCandidate] or None
         )");
