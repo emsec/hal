@@ -187,6 +187,7 @@ namespace hal {
         void restoreIndex();
         void updateMaxTime();
         void setMaxTime(u64 tmax);
+        void appendWave(WaveData* wd);
 
         using QList<WaveData*>::append;
         using QList<WaveData*>::insert;

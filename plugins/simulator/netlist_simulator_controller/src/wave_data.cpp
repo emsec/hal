@@ -1441,13 +1441,16 @@ namespace hal {
             setMaxTime(tmax);
     }
 
-    void WaveDataList::add(WaveData* wd, bool updateSaleae)
+    void WaveDataList::appendWave(WaveData* wd)
     {
-        int n = size();
-
-        mIds[wd->id()] = n;
+        mIds[wd->id()] = size();
         append(wd);
         wd->setWaveDataList(this);
+    }
+
+    void WaveDataList::add(WaveData* wd, bool updateSaleae)
+    {
+        appendWave(wd);
         updateMaxTime();
         if (updateSaleae) wd->saveSaleae();
 //        if (!silent) Q_EMIT waveAdded(n);
@@ -1615,9 +1618,16 @@ namespace hal {
             saleaeWaves.erase(it);
         }
 
+        // add() checks the whole list after each wave, which is quadratic in the number of waves read back
+        // (47 s for 22,000 nets); the checks run once after the last one instead.
         for (auto it=saleaeWaves.begin(); it!=saleaeWaves.end(); ++it)
         {
-            add(it.value(),false);
+            appendWave(it.value());
+        }
+        if (!saleaeWaves.isEmpty())
+        {
+            updateMaxTime();
+            testDoubleCount();
         }
         setMaxTime(mSaleaeDirectory.get_max_time());
 
