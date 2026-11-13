@@ -619,6 +619,9 @@ namespace hal
         qApp->processEvents();
         persist();
 
+        // Tell the engine which waveforms will be kept, so that it can leave the rest unrecorded.
+        mSimulationInput->set_probe_net_ids(std::unordered_set<u32>(mSimulateOnlyProbes.begin(), mSimulateOnlyProbes.end()));
+
         if (!mSimulationEngine->setSimulationInput(mSimulationInput))
         {
             log_warning(get_name(), "simulation engine error during setup.");

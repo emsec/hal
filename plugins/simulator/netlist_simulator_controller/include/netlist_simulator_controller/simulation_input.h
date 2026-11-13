@@ -217,5 +217,21 @@ namespace hal {
          * @return Vector of groups.
          */
         const std::vector<NetGroup>& get_net_groups() const { return m_netgroups; }
+
+        /**
+         * Set the nets whose waveforms are wanted (the probes), by net ID. An engine that writes a trace may
+         * record only these; an empty set means every net of the partial netlist.
+         * @param[in] net_ids - The IDs of the probed nets.
+         */
+        void set_probe_net_ids(const std::unordered_set<u32>& net_ids) { m_probe_net_ids = net_ids; }
+
+        /**
+         * Get the nets whose waveforms are wanted, by net ID. Empty means every net of the partial netlist.
+         * @return The IDs of the probed nets.
+         */
+        const std::unordered_set<u32>& get_probe_net_ids() const { return m_probe_net_ids; }
+
+    private:
+        std::unordered_set<u32> m_probe_net_ids;
     };
 }

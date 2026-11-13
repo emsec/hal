@@ -6,6 +6,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
+#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_utils.h"
@@ -17,6 +18,9 @@
 #include "verilator/templates.h"
 
 #include <algorithm>
+#include <cctype>
+#include <cstring>
+#include <unordered_set>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
@@ -115,6 +119,84 @@ namespace hal
             ofstr.close();
         }
 
+        // A name as the Verilog writer spells it: escaped unless it is a plain identifier (see VerilogWriter::escape).
+        std::string verilog_identifier(const std::string& s)
+        {
+            if (s.empty())
+            {
+                return s;
+            }
+            const auto plain_char = [](const char c) { return std::isalnum(static_cast<unsigned char>(c)) || c == '_' || c == '$'; };
+            const char first      = s.at(0);
+            if ((std::isalpha(static_cast<unsigned char>(first)) || first == '_') && std::all_of(s.begin(), s.end(), plain_char))
+            {
+                return s;
+            }
+            return "\\" + s;    // the writer appends a space, which is stripped from both sides of the comparison
+        }
+
+        // Record only the probed nets: tracing off for the whole netlist module, on around each probed net's declaration.
+        // Verilator's configuration files can name signals too, but every name is matched against every signal, which
+        // took minutes for a few thousand names; comments in the source cost nothing per name.
+        bool restrict_tracing(const Netlist* nl, const std::filesystem::path& netlist_verilog, const std::unordered_set<u32>& probe_ids)
+        {
+            std::unordered_set<std::string> wanted;
+            for (u32 id : probe_ids)
+            {
+                if (const Net* net = nl->get_net_by_id(id); net != nullptr)
+                {
+                    wanted.insert(verilog_identifier(net->get_name()));
+                }
+            }
+            for (const ModulePin* pin : nl->get_top_module()->get_pins())
+            {
+                if (probe_ids.find(pin->get_net()->get_id()) != probe_ids.end())
+                {
+                    wanted.insert(verilog_identifier(pin->get_name()));
+                }
+            }
+
+            std::ifstream ifstr(netlist_verilog);
+            if (!ifstr)
+            {
+                return false;
+            }
+            std::string buffer = "/*verilator tracing_off*/\n";
+            std::string line;
+            u32 found = 0;
+            while (std::getline(ifstr, line))
+            {
+                std::string declared;
+                const size_t start = line.find_first_not_of(' ');
+                for (const char* keyword : {"wire ", "input ", "output ", "inout "})
+                {
+                    if (start != std::string::npos && line.compare(start, strlen(keyword), keyword) == 0)
+                    {
+                        declared = line.substr(start + strlen(keyword));
+                        break;
+                    }
+                }
+                if (!declared.empty() && declared.back() == ';')
+                {
+                    declared.pop_back();
+                    declared.erase(declared.find_last_not_of(' ') + 1);
+                    if (wanted.find(declared) != wanted.end())
+                    {
+                        buffer += "/*verilator tracing_on*/\n" + line + "\n/*verilator tracing_off*/\n";
+                        ++found;
+                        continue;
+                    }
+                }
+                buffer += line + "\n";
+            }
+            ifstr.close();
+            std::ofstream ofstr(netlist_verilog, std::ofstream::trunc);
+            ofstr << buffer;
+            ofstr.close();
+            log_info("verilator", "recording {} declaration(s) of {} probed net(s), nothing else.", found, probe_ids.size());
+            return true;
+        }
+
         const int VerilatorEngine::s_command_lines = 3;
 
         bool VerilatorEngine::setSimulationInput(SimulationInput* simInput)
@@ -135,10 +217,12 @@ namespace hal
             if (m_design_name.empty())
             {
                 m_design_name = "dummy";
-                log_warning("verilator", "no design name for partial metlist, set to '{}'.", m_design_name);
+                // The writer names the module after the design and the build looks for <design>.v: both need the name.
+                m_partial_netlist->set_design_name(m_design_name);
+                log_warning("verilator", "no design name for partial netlist, set to '{}'.", m_design_name);
             }
 
-            std::filesystem::path netlist_verilog = m_simulator_dir / std::string(m_partial_netlist->get_design_name() + ".v");
+            std::filesystem::path netlist_verilog = m_simulator_dir / std::string(m_design_name + ".v");
 
             // check for provided models and set path
             std::filesystem::path provided_models = get_engine_property("provided_models");
@@ -152,6 +236,21 @@ namespace hal
             {
                 m_num_of_threads = std::stoi(get_engine_property("num_of_threads"));
             }
+
+            m_optimization = get_engine_property("optimization");
+            if (m_optimization.empty())
+            {
+                m_optimization = "0";
+            }
+            static const std::set<std::string> optimization_levels = {"0", "1", "2", "3", "s", "z", "g", "fast", "none"};
+            if (optimization_levels.find(m_optimization) == optimization_levels.end())
+            {
+                log_error("verilator", "the property 'optimization' is '{}', expected one of 0, 1, 2, 3, s, z, g, fast or none.", m_optimization);
+                return false;
+            }
+
+            const std::string trace_cells = utils::to_lower(get_engine_property("trace_cells"));
+            m_trace_cells                 = (trace_cells == "1" || trace_cells == "true" || trace_cells == "yes");
 
             // prepare folder
             if (!write_testbench_files(simInput))
@@ -168,6 +267,12 @@ namespace hal
             netlist_writer_manager::write(m_partial_netlist.get(), netlist_verilog);
 
             cleanup_gate_type_names(m_partial_netlist.get(), netlist_verilog);
+
+            if (!simInput->get_probe_net_ids().empty() && !restrict_tracing(m_partial_netlist.get(), netlist_verilog, simInput->get_probe_net_ids()))
+            {
+                log_error("verilator", "could not restrict the trace to the probed nets in '{}'.", netlist_verilog.string());
+                return false;
+            }
 
             return true;    // everything ok
         }
@@ -228,12 +333,19 @@ namespace hal
             switch (lineIndex)
             {
                 case 0: {
+                    // The C++ compiler's optimization level (property `optimization`). The flags given with
+                    // -CFLAGS come after Verilator's own (-Os) on the compiler's command line, so they win;
+                    // with `none` there are none and Verilator's defaults apply.
+                    std::string cflags = (m_optimization == "none") ? std::string() : "-O" + m_optimization;
+                    if (strlen(path_to_rapidjson_includedir))
+                    {
+                        cflags += std::string(cflags.empty() ? "" : " ") + "-I" + path_to_rapidjson_includedir;
+                    }
+
                     std::vector<std::string> retval = {"verilator",             // 0
                                                        "-I.",                   // 1
                                                        "-Wall",                 // 2
                                                        "-Wno-fatal",            // 3
-                                                       "-CFLAGS",               // 4
-                                                       "-O3",                   // 5
                                                        "--MMD",
                                                        "-trace",
                                                        //    "--trace-threads",
@@ -249,8 +361,9 @@ namespace hal
                                                        "--exe",
                                                        "-cc",
                                                        "-DSIM_VERILATOR",
+                                                       // 1: the nets of the netlist module; 2: also those inside each cell model
                                                        "--trace-depth",
-                                                       "2",
+                                                       m_trace_cells ? "2" : "1",
                                                        "--trace-underscore",
                                                        "--coverage-underscore",
                                                        "testbench.cpp",
@@ -266,9 +379,9 @@ namespace hal
                     }
 #endif
 
-                    if (strlen(path_to_rapidjson_includedir))
+                    if (!cflags.empty())
                     {
-                        retval[5] = retval[5] + " -I" + path_to_rapidjson_includedir;
+                        retval.insert(retval.begin() + 4, {"-CFLAGS", cflags});
                     }
 
                     if (!m_compiler.empty())

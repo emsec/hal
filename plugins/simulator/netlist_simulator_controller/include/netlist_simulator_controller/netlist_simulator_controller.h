@@ -498,7 +498,8 @@ public:
     bool can_import_data() const;
 
     /**
-     * Discard all results except listed probes
+     * Discard all results except listed probes. Engines that write a trace (Verilator) record only these nets,
+     * which shortens building, running and reading back the results. Probes add up over calls.
      * @param probes List of nets which will be simulated (aka probes)
      */
     void simulate_only_probes(const std::vector<const Net*>& probes);

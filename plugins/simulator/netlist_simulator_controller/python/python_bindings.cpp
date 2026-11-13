@@ -293,6 +293,14 @@ namespace hal
                 :rtype: bool
              )")
 
+            .def("simulate_only_probes", py::overload_cast<const std::vector<const Net*>&>(&NetlistSimulatorController::simulate_only_probes), py::arg("probes"), R"(
+                Keep the results of the given nets only. Engines that write a trace (Verilator) also record
+                only these nets, which shortens building, running and reading back the results. Call before
+                run_simulation(); probes add up over calls.
+
+                :param list[hal_py.Net] probes: The nets whose waveforms are wanted.
+             )")
+
             .def("create_simulation_engine", &NetlistSimulatorController::create_simulation_engine, py::arg("name"), R"(
                   Select and set the engine for simulation. The list of available engines is provided by function get_engine_names().
 

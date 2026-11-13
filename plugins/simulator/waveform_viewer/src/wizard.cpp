@@ -339,7 +339,7 @@ namespace hal {
         mTableWidget->setRowCount(engProp.size()+3);
         mTableWidget->setHorizontalHeaderLabels(QStringList() << "Property" << "Value");
 
-        mAllItems << "" << "provided_models" << "num_of_threads" << "compiler" << "ssh_server";
+        mAllItems << "" << "provided_models" << "num_of_threads" << "optimization" << "trace_cells" << "compiler" << "ssh_server";
 
         for (int irow = 0; irow < mTableWidget->rowCount(); ++irow)
         {

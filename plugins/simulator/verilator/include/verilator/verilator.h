@@ -180,6 +180,22 @@ namespace hal
             bool write_testbench_files(SimulationInput* simInput);
             int m_num_of_threads = 4;
             std::string m_compiler;
+
+            /**
+             * The C++ compiler's optimization level for the model, from the engine property `optimization`:
+             * `0` (the default), `1`, `2`, `3`, `s`, `z`, `g` or `fast` become `-O<level>`; `none` passes no
+             * level, which leaves Verilator's makefile defaults (`-Os` for the code evaluated every cycle).
+             * Building takes far longer the higher the level: `3` paid off only for runs of about a million
+             * cycles or more on a netlist of 20,000 gates.
+             */
+            std::string m_optimization = "0";
+
+            /**
+             * Whether the trace also records the signals inside the cell models, from the engine property `trace_cells`
+             * (`1` or `true`). Off by default: those signals are never read back, and recording them multiplied the size
+             * of the trace by about seven, the build time by up to three and the run time by up to fifty.
+             */
+            bool m_trace_cells = false;
         };
 
         /**
