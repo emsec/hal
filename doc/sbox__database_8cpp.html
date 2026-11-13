@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-257-ge24279b4e</span>
+   &#160;<span id="projectnumber">v4.5.0-258-gf372a0264</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -98,6 +98,7 @@ $(document).ready(function(){initNavTree('sbox__database_8cpp.html',''); initRes
 <code>#include &quot;rapidjson/filereadstream.h&quot;</code><br />
 <code>#include &quot;rapidjson/stringbuffer.h&quot;</code><br />
 <code>#include &quot;rapidjson/writer.h&quot;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;cmath&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
@@ -107,32 +108,33 @@ Include dependency graph for sbox_database.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="sbox__database_8cpp__incl.png" border="0" usemap="#aplugins_2hawkeye_2src_2sbox__database_8cpp" alt=""/></div>
 <map name="aplugins_2hawkeye_2src_2sbox__database_8cpp" id="aplugins_2hawkeye_2src_2sbox__database_8cpp">
-<area shape="rect" title=" " alt="" coords="1587,5,1742,47"/>
-<area shape="rect" href="sbox__database_8h.html" title="This file contains the S&#45;box database class that holds and manages known cryptographic S&#45;boxes up to ..." alt="" coords="1227,191,1422,218"/>
-<area shape="rect" title=" " alt="" coords="1155,281,1217,307"/>
-<area shape="rect" href="log_8h.html" title=" " alt="" coords="526,95,657,136"/>
-<area shape="rect" title=" " alt="" coords="1278,102,1441,129"/>
-<area shape="rect" title=" " alt="" coords="1465,102,1659,129"/>
-<area shape="rect" title=" " alt="" coords="1683,102,1855,129"/>
-<area shape="rect" title=" " alt="" coords="1879,102,2013,129"/>
-<area shape="rect" title=" " alt="" coords="2037,102,2100,129"/>
-<area shape="rect" title=" " alt="" coords="2124,102,2197,129"/>
-<area shape="rect" title=" " alt="" coords="2222,102,2302,129"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="500,363,640,389"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="1343,273,1474,315"/>
-<area shape="rect" title=" " alt="" coords="346,281,397,307"/>
-<area shape="rect" title=" " alt="" coords="1416,363,1503,389"/>
-<area shape="rect" href="callback__hook_8h.html" title=" " alt="" coords="526,184,657,225"/>
-<area shape="rect" title=" " alt="" coords="471,281,514,307"/>
-<area shape="rect" title=" " alt="" coords="658,281,717,307"/>
-<area shape="rect" href="program__arguments_8h.html" title=" " alt="" coords="57,184,227,225"/>
-<area shape="rect" title=" " alt="" coords="66,281,143,307"/>
-<area shape="rect" title=" " alt="" coords="219,281,273,307"/>
-<area shape="rect" href="program__options_8h.html" title=" " alt="" coords="303,184,451,225"/>
-<area shape="rect" href="include_2hal__core_2utilities_2utils_8h.html" title=" " alt="" coords="1446,184,1577,225"/>
-<area shape="rect" title=" " alt="" coords="681,191,745,218"/>
-<area shape="rect" title=" " alt="" coords="769,191,953,218"/>
-<area shape="rect" title=" " alt="" coords="977,191,1101,218"/>
+<area shape="rect" title=" " alt="" coords="1942,5,2097,47"/>
+<area shape="rect" href="sbox__database_8h.html" title="This file contains the S&#45;box database class that holds and manages known cryptographic S&#45;boxes up to ..." alt="" coords="458,191,653,218"/>
+<area shape="rect" title=" " alt="" coords="330,281,392,307"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="1021,95,1152,136"/>
+<area shape="rect" title=" " alt="" coords="1685,281,1770,307"/>
+<area shape="rect" title=" " alt="" coords="1736,102,1898,129"/>
+<area shape="rect" title=" " alt="" coords="1923,102,2116,129"/>
+<area shape="rect" title=" " alt="" coords="2140,102,2312,129"/>
+<area shape="rect" title=" " alt="" coords="2336,102,2471,129"/>
+<area shape="rect" title=" " alt="" coords="2495,102,2558,129"/>
+<area shape="rect" title=" " alt="" coords="2582,102,2655,129"/>
+<area shape="rect" title=" " alt="" coords="2680,102,2760,129"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="1020,363,1160,389"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="1328,273,1458,315"/>
+<area shape="rect" title=" " alt="" coords="593,281,644,307"/>
+<area shape="rect" title=" " alt="" coords="1503,363,1590,389"/>
+<area shape="rect" href="callback__hook_8h.html" title=" " alt="" coords="1274,184,1405,225"/>
+<area shape="rect" title=" " alt="" coords="1128,281,1170,307"/>
+<area shape="rect" title=" " alt="" coords="1245,281,1304,307"/>
+<area shape="rect" href="program__arguments_8h.html" title=" " alt="" coords="90,184,261,225"/>
+<area shape="rect" title=" " alt="" coords="228,281,305,307"/>
+<area shape="rect" title=" " alt="" coords="148,281,203,307"/>
+<area shape="rect" href="program__options_8h.html" title=" " alt="" coords="286,184,434,225"/>
+<area shape="rect" href="include_2hal__core_2utilities_2utils_8h.html" title=" " alt="" coords="1480,184,1610,225"/>
+<area shape="rect" title=" " alt="" coords="728,191,792,218"/>
+<area shape="rect" title=" " alt="" coords="816,191,1000,218"/>
+<area shape="rect" title=" " alt="" coords="1024,191,1148,218"/>
 </map>
 </div>
 </div>
@@ -168,9 +170,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l00027">27</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l00028">28</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="sbox__database_8cpp_source.html#l00237">smallset_t::dump()</a>, <a class="el" href="sbox__database_8cpp_source.html#l00186">smallset_t::is_set()</a>, and <a class="el" href="sbox__database_8cpp_source.html#l00181">smallset_t::set()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="sbox__database_8cpp_source.html#l00238">smallset_t::dump()</a>, <a class="el" href="sbox__database_8cpp_source.html#l00187">smallset_t::is_set()</a>, and <a class="el" href="sbox__database_8cpp_source.html#l00182">smallset_t::set()</a>.</p>
 
 </div>
 </div>
@@ -186,7 +188,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l00977">977</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l01027">1027</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
 
 </div>
 </div>
@@ -202,7 +204,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l00978">978</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l01028">1028</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
 
 </div>
 </div>
@@ -218,7 +220,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l00982">982</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l01032">1032</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
 
 </div>
 </div>
@@ -234,7 +236,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l00983">983</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l01033">1033</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
 
 </div>
 </div>
@@ -250,7 +252,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l00980">980</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l01030">1030</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
 
 </div>
 </div>
@@ -266,7 +268,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l00981">981</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l01031">1031</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
 
 </div>
 </div>
@@ -282,7 +284,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l00984">984</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l01034">1034</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
 
 </div>
 </div>
@@ -298,7 +300,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l00985">985</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l01035">1035</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
 
 </div>
 </div>
@@ -314,7 +316,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l00979">979</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l01029">1029</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
 
 </div>
 </div>
@@ -330,7 +332,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l00986">986</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l01036">1036</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
 
 </div>
 </div>
@@ -346,7 +348,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l00987">987</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sbox__database_8cpp_source.html#l01037">1037</a> of file <a class="el" href="sbox__database_8cpp_source.html">sbox_database.cpp</a>.</p>
 
 </div>
 </div>
