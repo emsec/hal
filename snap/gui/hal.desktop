@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=HAL
+GenericName=Hardware Analyzer
+Comment=Gate-level netlist reverse engineering and manipulation framework
+Exec=hal -g
+Icon=${SNAP}/meta/gui/icon.svg
+Terminal=false
+Categories=Development;Electronics;Engineering;
+Keywords=netlist;reverse engineering;hardware;gate-level;

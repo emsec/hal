@@ -5,6 +5,8 @@ description: |
   HAL is a comprehensive reverse engineering and manipulation framework for
   gate-level netlists, with a Qt GUI, Python scripting, and a plugin system.
 license: MIT
+# HAL's own window icon (the GUI loads it as :/icons/hal); snapcraft copies it to meta/gui/icon.svg.
+icon: plugins/gui/resources/icons/HAL9000.svg
 adopt-info: hal
 base: core24
 # First iteration: devmode skips confinement so we can test packaging in isolation.
@@ -18,7 +20,7 @@ platforms:
 apps:
   hal:
     command: usr/bin/hal
-    # GUI launcher. The desktop entry and icon are added once the basics work.
+    # Desktop launcher: snap/gui/hal.desktop (runs `hal -g`); icon from the top-level icon key.
     environment:
       # HAL derives its base path from the binary location, but be explicit.
       HAL_BASE_PATH: $SNAP/usr
@@ -26,6 +28,13 @@ apps:
       QT_PLUGIN_PATH: $SNAP/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/qt6/plugins
       PYTHONHOME: $SNAP/usr
       PYTHONPATH: $SNAP/usr/lib/python3.12:$SNAP/usr/lib/python3.12/lib-dynload:$SNAP/usr/lib/python3/dist-packages
+      # Graphviz (dot_viewer) looks for its plugins under the host's /usr/lib by default.
+      GVBINDIR: $SNAP/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/graphviz
+      # Verilator simulation runs verilator, make and g++ as child processes; use the
+      # bundled ones (toolchain part). The wrappers in toolchain/bin must come first.
+      PATH: $SNAP/toolchain/bin:$PATH
+      VERILATOR_ROOT: $SNAP/usr/share/verilator
+      PERL5LIB: $SNAP/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/perl5/5.38:$SNAP/usr/share/perl5:$SNAP/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/perl-base:$SNAP/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/perl/5.38:$SNAP/usr/share/perl/5.38
     plugs:
       - home
       - removable-media
@@ -63,6 +72,16 @@ parts:
       # The glob skips dotfiles such as .gitignore and .DS_Store.
       install -d "$CRAFT_PART_INSTALL/usr/share/hal/examples"
       cp -r "$CRAFT_PART_SRC"/examples/* "$CRAFT_PART_INSTALL/usr/share/hal/examples/"
+    override-prime: |
+      craftctl default
+      # Graphviz only loads plugins listed in config6a, which libgvc6's postinst normally
+      # creates with `dot -c`. Stage packages skip postinst, so generate it here.
+      # Runs the staged arm64/amd64 dot binary, so this needs a native (not cross) build.
+      GV="$CRAFT_PRIME/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/graphviz"
+      GVBINDIR="$GV" \
+      LD_LIBRARY_PATH="$CRAFT_PRIME/usr/lib:$CRAFT_PRIME/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}" \
+        "$CRAFT_PRIME/usr/bin/dot" -c
+      test -s "$GV/config6a"
     build-packages:
       # Mirrors install_dependencies.sh for Ubuntu 24.04, minus docs/coverage tooling.
       - build-essential
@@ -116,3 +135,74 @@ parts:
       - libgomp1
       - graphviz
       - fonts-dejavu-core
+
+  # Toolchain for the Verilator simulation backend (plugins/simulator/verilator), which
+  # generates C++ from the design and compiles it with make + g++ at runtime.
+  # Inside the snap the host's /usr is not visible, so everything is bundled here.
+  toolchain:
+    # After hal so that override-prime below sees the complete prime directory.
+    after: [hal]
+    plugin: nil
+    stage-packages:
+      - verilator
+      - make
+      - perl
+      - binutils
+      - gcc-13
+      - g++-13
+      - libc6-dev
+      - libstdc++-13-dev
+      - libgcc-13-dev
+      - rapidjson-dev
+      - zlib1g-dev
+    override-build: |
+      craftctl default
+      # Wrappers that run the bundled tools from $SNAP:
+      # - g++/gcc compile against $SNAP as sysroot, so headers and dev libraries come
+      #   from the snap instead of the (header-less) base snap.
+      # - verilator is a perl script whose #! points at /usr/bin/perl, absent in core24.
+      B="$CRAFT_PART_INSTALL/toolchain/bin"
+      install -d "$B"
+      for c in g++ c++; do
+        printf '#!/bin/sh\nexec "$SNAP/usr/bin/g++-13" --sysroot="$SNAP" "$@"\n' > "$B/$c"
+      done
+      for c in gcc cc; do
+        printf '#!/bin/sh\nexec "$SNAP/usr/bin/gcc-13" --sysroot="$SNAP" "$@"\n' > "$B/$c"
+      done
+      printf '#!/bin/sh\nexec "$SNAP/usr/bin/perl" "$SNAP/usr/bin/verilator" "$@"\n' > "$B/verilator"
+      chmod 755 "$B"/*
+      # With VERILATOR_ROOT set, the verilator script only looks for its backend in
+      # $VERILATOR_ROOT/bin (never PATH), but Ubuntu installs verilator_bin to /usr/bin.
+      ln -sfn ../../../bin/verilator_bin "$CRAFT_PART_INSTALL/usr/share/verilator/bin/verilator_bin"
+    override-prime: |
+      craftctl default
+      # Snapcraft does not stage packages that core24 already provides (libc6, libstdc++6,
+      # libgcc-s1, ...), so linking against $SNAP as sysroot would miss their .so files.
+      # Point those at the base snap's copies with absolute symlinks, which resolve to
+      # core24's /usr at runtime.
+      cd "$CRAFT_PRIME"
+      T="${CRAFT_ARCH_TRIPLET_BUILD_FOR}"
+      # 1. Absolute paths in linker scripts, e.g. libc.so: GROUP ( /lib/<triplet>/libc.so.6 ... )
+      for s in usr/lib/"$T"/*.so usr/lib/gcc/"$T"/*/*.so; do
+        [ -f "$s" ] && [ ! -L "$s" ] || continue
+        grep -q '^GROUP' "$s" 2>/dev/null || continue
+        for p in $(grep '^GROUP' "$s" | grep -o '/[^ )]*'); do
+          if [ ! -e ".$p" ] && [ -e "$p" ]; then
+            mkdir -p "$(dirname ".$p")"
+            ln -sfn "$p" ".$p"
+          fi
+        done
+        # Bare names are searched in the library path, e.g. libgcc_s.so: GROUP ( libgcc_s.so.1 -lgcc )
+        for n in $(grep '^GROUP' "$s" | tr ' ()' '\n\n\n' | grep -x '[^/-][^/]*\.so[.0-9]*'); do
+          if [ ! -e "usr/lib/$T/$n" ] && [ ! -e "$(dirname "$s")/$n" ] && [ -e "/usr/lib/$T/$n" ]; then
+            ln -sfn "/usr/lib/$T/$n" "usr/lib/$T/$n"
+          fi
+        done
+      done
+      # 2. Dangling .so symlinks, e.g. gcc/<triplet>/13/libstdc++.so -> ../../../<triplet>/libstdc++.so.6
+      find usr/lib -type l -name '*.so*' | while read -r l; do
+        [ -e "$l" ] && continue
+        t="$(realpath -m "$l")"
+        rel="/${t#"$CRAFT_PRIME"/}"
+        if [ -e "$rel" ]; then ln -sfn "$rel" "$l"; fi
+      done
