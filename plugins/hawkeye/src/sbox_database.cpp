@@ -6,6 +6,7 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
+#include <algorithm>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -296,6 +297,32 @@ namespace hal
             constexpr u64 LINEAR_REPRESENTATIVE_BUDGET = 250000;
 
             std::vector<u8> compute_linear_representative_bounded(const std::vector<u8>& sbox, u64& budget);
+
+            /**
+             * How often every value occurs in the difference distribution table of an S-box, over all nonzero input
+             * differences: entry c counts the pairs of input and output difference that c inputs map onto each other.
+             * Linear and affine equivalence and XORing constants onto inputs or outputs only permute the entries of the
+             * table, so two S-boxes that the database considers equal have the same spectrum (but not vice versa).
+             */
+            std::vector<u32> differential_spectrum(const std::vector<u8>& sbox)
+            {
+                const u32 len = sbox.size();
+                std::vector<u32> spectrum(len + 1, 0);
+                std::vector<u32> row(256);
+                for (u32 a = 1; a < len; a++)
+                {
+                    std::fill(row.begin(), row.end(), 0);
+                    for (u32 x = 0; x < len; x++)
+                    {
+                        row[sbox[x] ^ sbox[x ^ a]]++;
+                    }
+                    for (const u32 count : row)
+                    {
+                        spectrum[count]++;
+                    }
+                }
+                return spectrum;
+            }
         }    // namespace
 
         SBoxDatabase::SBoxDatabase(const std::map<std::string, std::vector<u8>>& sboxes)
@@ -337,6 +364,13 @@ namespace hal
                 auto lin_rep = compute_linear_representative_bounded(sbox_alpha, budget);
                 if (budget == 0)
                 {
+                    if (sbox_alpha.front() == 0)
+                    {
+                        // A table that maps 0 to 0 takes a search of its own, which can exhaust the budget for this
+                        // one alpha only, e.g., for AES and alpha = 0x63 (inversion in GF(2^8)). Leave the entry out:
+                        // lookup skips the corresponding beta as well and finds such an S-box through the others.
+                        continue;
+                    }
                     // storing a representative from a truncated search would silently break every lookup against this
                     // entry, and a real S-box is never degenerate enough to exhaust the search in the first place
                     return ERR("cannot add S-box '" + name + "' to the database: the canonical form search was abandoned, the S-box is too close to linear");
@@ -483,6 +517,16 @@ namespace hal
             {
                 return ERR("no S-box of matching bit-size of " + std::to_string(bit_size) + " bits contained in database");
             }
+            const auto& matching_size_data = std::get<1>(*size_it);
+
+            // The canonical form search below runs once per beta and costs a lot for 8-bit tables (about 20 seconds
+            // for one that matches nothing), so first rule out the tables that no entry can match at all: every entry
+            // of the same equivalence class has the same differential spectrum.
+            const auto spectrum = differential_spectrum(sbox);
+            if (std::none_of(matching_size_data.cbegin(), matching_size_data.cend(), [&spectrum](const auto& entry) { return differential_spectrum(entry.first) == spectrum; }))
+            {
+                return ERR("no match found within database");
+            }
 
             // beta has to count beyond the largest table index, so it must be wider than a table entry: a u8 stays
             // below a size of 256 forever, which made this loop endless for every 8-bit S-box not in the database
@@ -498,14 +542,20 @@ namespace hal
                 auto lin_rep = compute_linear_representative_bounded(sbox_beta, budget);
                 if (budget == 0)
                 {
-                    // XORing a constant onto the outputs does not change how close to linear the table is, so if the
-                    // search degenerates for one beta it degenerates for all of them, and no real S-box ever does
+                    if (sbox_beta.front() == 0)
+                    {
+                        // A table that maps 0 to 0 takes a search of its own (see compute_linear_representative_bounded),
+                        // which can exhaust the budget for this one beta only, e.g., for AES XORed with 0x63, which is
+                        // linearly equivalent to inversion in GF(2^8). The other betas still find such an S-box.
+                        continue;
+                    }
+                    // apart from that, XORing a constant onto the outputs does not change how close to linear the
+                    // table is, so if the search degenerates for one beta it degenerates for all of them
                     log_info("hawkeye", "giving up the S-box lookup, as the table is too close to linear to be a real S-box.");
                     break;
                 }
 
-                const auto& matching_size_data = std::get<1>(*size_it);
-                const auto rep_it              = matching_size_data.find(lin_rep);
+                const auto rep_it = matching_size_data.find(lin_rep);
                 if (rep_it != matching_size_data.end())
                 {
                     return OK(rep_it->second.front().first);

@@ -107,6 +107,48 @@ namespace hal
                     // find successors
                     std::unordered_map<const Net*, std::pair<std::unordered_set<Gate*>, std::unordered_set<u32>>> suc_cache;
                     std::unordered_map<const Net*, std::unordered_set<u32>> pred_cache;
+
+                    // The caches are shared by the traversals of all target gates, so an entry is trusted to be
+                    // complete. A traversal does not push a net that it has visited before, though, so whatever such
+                    // a net leads to has to be handed to the nets of the current path explicitly. Otherwise, the
+                    // entries of these nets miss it, and so does every later traversal that finds them in the cache.
+                    // A visited net that is not on the current path has been explored completely; one on the path
+                    // closes a combinational loop and is still being explored, so its entry is not complete yet.
+                    const auto on_path = [](const Net* net, const Net* current, const std::vector<const Net*>& previous) {
+                        return net == current || std::find(previous.cbegin(), previous.cend(), net) != previous.cend();
+                    };
+                    const auto pass_on_successors = [&suc_cache, &on_path](const Net* visited_net, const Net* current, const std::vector<const Net*>& previous) {
+                        const auto it = suc_cache.find(visited_net);
+                        if (it == suc_cache.end() || on_path(visited_net, current, previous))
+                        {
+                            return;
+                        }
+                        // references to the elements of an unordered_map stay valid when inserting rehashes it
+                        const auto& [cached_gates, cached_net_groups] = it->second;
+                        for (const Net* n : previous)
+                        {
+                            auto& entry = suc_cache[n];
+                            std::get<0>(entry).insert(cached_gates.cbegin(), cached_gates.cend());
+                            std::get<1>(entry).insert(cached_net_groups.cbegin(), cached_net_groups.cend());
+                        }
+                        auto& entry = suc_cache[current];
+                        std::get<0>(entry).insert(cached_gates.cbegin(), cached_gates.cend());
+                        std::get<1>(entry).insert(cached_net_groups.cbegin(), cached_net_groups.cend());
+                    };
+                    const auto pass_on_predecessors = [&pred_cache, &on_path](const Net* visited_net, const Net* current, const std::vector<const Net*>& previous) {
+                        const auto it = pred_cache.find(visited_net);
+                        if (it == pred_cache.end() || on_path(visited_net, current, previous))
+                        {
+                            return;
+                        }
+                        const auto& cached_net_groups = it->second;
+                        for (const Net* n : previous)
+                        {
+                            pred_cache[n].insert(cached_net_groups.cbegin(), cached_net_groups.cend());
+                        }
+                        pred_cache[current].insert(cached_net_groups.cbegin(), cached_net_groups.cend());
+                    };
+
                     for (const auto& gate : netlist_abstr.target_gates)
                     {
                         cnt++;
@@ -203,6 +245,10 @@ namespace hal
                                                 stack.push_back(n);
                                                 added = true;
                                             }
+                                            else
+                                            {
+                                                pass_on_successors(n, current, previous);
+                                            }
                                         }
                                     }
                                 }
@@ -278,6 +324,10 @@ namespace hal
                                             {
                                                 stack.push_back(n);
                                                 added = true;
+                                            }
+                                            else
+                                            {
+                                                pass_on_predecessors(n, current, previous);
                                             }
                                         }
                                     }
