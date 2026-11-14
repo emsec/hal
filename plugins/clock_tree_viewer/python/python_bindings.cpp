@@ -129,14 +129,7 @@ namespace hal
                 // waits for the interpreter.
                 py::gil_scoped_release release;
 
-                ClockTreeViewer *viewer = ClockTreeViewer::instance();
-                if( viewer == nullptr )
-                {
-                    log_error( "clock_tree_viewer", "Cannot find clock tree viewer instance." );
-                    return false;
-                }
-
-                return viewer->setClockTree(
+                return ClockTreeViewer::setClockTree(
                     clock_tree,
                     ctv::StyleOverrides{ node_radius, edge_width, picture_margin, pixels_per_unit },
                     x_key,
@@ -147,12 +140,12 @@ namespace hal
             py::arg( "edge_width" ) = py::none(),
             py::arg( "picture_margin" ) = py::none(),
             py::arg( "pixels_per_unit" ) = py::none(),
-            py::arg( "x_key" ) = py::none(),
-            py::arg( "y_key" ) = py::none(),
+            py::arg( "x_key" ) = ctv::DEFAULT_X_KEY,
+            py::arg( "y_key" ) = ctv::DEFAULT_Y_KEY,
             R"(
             Plot a clock tree in the clock tree viewer of the GUI.
 
-            The gates are drawn at their location in the layout, unless the keys of both coordinates are given: then the coordinates are read from the gate parameters of these names, e.g., from Verilog instance parameters, the same as ``ClockTree.export`` does. If no gate has coordinates, nothing is drawn and an error is shown. If only some gates have none, those are left out of the plot and a warning is shown. A clock tree of another netlist than the one that is open in the GUI is not drawn either, since its gates cannot be matched to the gates in HAL.
+            The coordinates of the gates are read from the gate parameters ``X`` and ``Y``, e.g., from Verilog instance parameters, unless the keys of other parameters are given. Pass ``None`` for both keys to draw the gates at their location in the layout instead. If no gate has coordinates, nothing is drawn and an error is shown. If only some gates have none, those are left out of the plot and a warning is shown. A clock tree of another netlist than the one that is open in the GUI is not drawn either, since its gates cannot be matched to the gates in HAL.
 
             The sizes and coordinate keys are kept: extracting a clock tree with the button in the toolbar of the viewer uses them again.
 
@@ -165,8 +158,8 @@ namespace hal
             :param float edge_width: The width of the lines that represent connections. Defaults to ``None``, which derives it from the coordinates.
             :param float picture_margin: The empty border around the tree in a saved picture. Defaults to ``None``, which derives it from the coordinates.
             :param float pixels_per_unit: The resolution of a saved picture. Defaults to ``None``, which derives it from the coordinates and lowers it for a large tree, so that a picture stays within 10000 pixels per side. A resolution given here is kept, and a picture that would exceed the limit is not saved.
-            :param str x_key: The name of the parameter that holds the x-coordinate. Defaults to ``None``, which uses the location.
-            :param str y_key: The name of the parameter that holds the y-coordinate. Defaults to ``None``, which uses the location.
+            :param str x_key: The name of the parameter that holds the x-coordinate, ``None`` to use the location. Defaults to ``"X"``.
+            :param str y_key: The name of the parameter that holds the y-coordinate, ``None`` to use the location. Defaults to ``"Y"``.
             :returns: ``True`` if the clock tree is plotted, ``False`` otherwise.
             :rtype: bool
         )" );
@@ -199,14 +192,7 @@ namespace hal
                 // The viewer hands the work to the GUI thread and waits for it, see show_clock_tree.
                 py::gil_scoped_release release;
 
-                ClockTreeViewer *viewer = ClockTreeViewer::instance();
-                if( viewer == nullptr )
-                {
-                    log_error( "clock_tree_viewer", "Cannot find clock tree viewer instance." );
-                    return 0;
-                }
-
-                return viewer->highlightGates( gate_ids );
+                return ClockTreeViewer::highlightGates( gate_ids );
             },
             py::arg( "gates" ),
             R"(

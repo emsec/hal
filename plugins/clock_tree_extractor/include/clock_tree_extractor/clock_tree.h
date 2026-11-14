@@ -92,6 +92,12 @@ namespace hal
           public:
             ~ClockTree();
 
+            // owns its igraph graph, which must not be copied implicitly: trees are only handed around in a unique_ptr
+            ClockTree( const ClockTree & ) = delete;
+            ClockTree &operator=( const ClockTree & ) = delete;
+            ClockTree( ClockTree && ) = delete;
+            ClockTree &operator=( ClockTree && ) = delete;
+
             static Result<std::unique_ptr<ClockTree>> from_netlist( const Netlist *netlist );
 
             Result<std::vector<std::pair<const void *, PtrType>>> get_neighbors( const void *ptr,
@@ -134,8 +140,6 @@ namespace hal
             const Netlist *m_netlist;
 
             igraph_t m_igraph;
-
-            igraph_t *m_igraph_ptr;
 
             std::unordered_set<igraph_int_t> m_roots;
 

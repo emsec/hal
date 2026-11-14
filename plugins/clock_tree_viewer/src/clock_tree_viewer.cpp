@@ -47,6 +47,7 @@
 
 #include <QAction>
 #include <QColor>
+#include <QCoreApplication>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QGuiApplication>
@@ -68,6 +69,7 @@
 #include <cmath>
 #include <exception>
 #include <memory>
+#include <utility>
 
 namespace hal
 {
@@ -148,6 +150,32 @@ namespace hal
                 result += QString( " and %1 more" ).arg( ids.size() - MAX_LISTED_GATES );
             }
             return result;
+        }
+
+        // Runs the work in the GUI thread and waits for it, so a script thread can hand work to a viewer. The viewer must
+        // be looked up inside the work: the GUI may delete it at any time between two of its events.
+        template<typename Work>
+        void run_in_gui_thread( Work &&work )
+        {
+            QCoreApplication *application = QCoreApplication::instance();
+            if( QThread::currentThread() == application->thread() )
+            {
+                work();
+                return;
+            }
+            QMetaObject::invokeMethod( application, std::forward<Work>( work ), Qt::BlockingQueuedConnection );
+        }
+
+        // The viewer that is open, logged as an error if there is none. Only valid in the GUI thread, see
+        // run_in_gui_thread.
+        ClockTreeViewer *open_viewer()
+        {
+            ClockTreeViewer *viewer = ClockTreeViewer::instance();
+            if( viewer == nullptr )
+            {
+                log_error( "clock_tree_viewer", "Cannot find clock tree viewer instance." );
+            }
+            return viewer;
         }
     }  // namespace
 
@@ -281,14 +309,14 @@ namespace hal
         // showing the result has to happen in the GUI thread.
         const Result<ctv::Layout> layout = layout_of( tree, gNetlist, x_key, y_key );
 
-        if( QThread::currentThread() == thread() )
-        {
-            return display( layout, overrides, x_key, y_key );
-        }
-
         bool shown = false;
-        QMetaObject::invokeMethod(
-            this, [&]() { shown = display( layout, overrides, x_key, y_key ); }, Qt::BlockingQueuedConnection );
+        run_in_gui_thread( [&]() {
+            ClockTreeViewer *viewer = open_viewer();
+            if( viewer != nullptr )
+            {
+                shown = viewer->display( layout, overrides, x_key, y_key );
+            }
+        } );
         return shown;
     }
 
@@ -561,18 +589,18 @@ namespace hal
     std::size_t ClockTreeViewer::highlightGates( const std::vector<u32> &gateIds )
     {
         std::size_t highlighted = 0;
+        bool found = false;
 
-        if( QThread::currentThread() == thread() )
-        {
-            highlighted = applyHighlight( gateIds );
-        }
-        else
-        {
-            QMetaObject::invokeMethod(
-                this, [&]() { highlighted = applyHighlight( gateIds ); }, Qt::BlockingQueuedConnection );
-        }
+        run_in_gui_thread( [&]() {
+            ClockTreeViewer *viewer = open_viewer();
+            if( viewer != nullptr )
+            {
+                found = true;
+                highlighted = viewer->applyHighlight( gateIds );
+            }
+        } );
 
-        if( !gateIds.empty() )
+        if( found && !gateIds.empty() )
         {
             log_info( "clock_tree_viewer",
                       "Highlighted {} of {} gates, the others are not in the plot.",

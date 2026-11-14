@@ -96,7 +96,8 @@ namespace hal
         ~ClockTreeViewer() override;
 
         /**
-         * Get the clock tree viewer that is currently open.
+         * Get the clock tree viewer that is currently open. Must be called from the GUI thread, which may delete the
+         * viewer at any time between two of its events: other threads use the static functions below instead.
          *
          * @returns The viewer, a `nullptr` if none is open.
          */
@@ -110,7 +111,8 @@ namespace hal
         void setupToolbar( Toolbar *toolbar ) override;
 
         /**
-         * Plot a clock tree.
+         * Plot a clock tree in the viewer that is open. Can be called from any thread: the viewer is looked up in the GUI
+         * thread, and the call waits until the plot is shown there.
          *
          * The gates are drawn at their coordinates, see `ctv::build_layout`, the sizes of the drawing follow from them
          * unless provided. If no gate has coordinates, nothing is drawn and the error is shown instead. If only some have
@@ -123,13 +125,15 @@ namespace hal
          * @param[in] tree - The clock tree.
          * @param[in] overrides - The sizes of the drawing. Whatever is not provided is derived from the coordinates.
          * @param[in] x_key - The name of the parameter that holds the x-coordinate, or std::nullopt to use the location.
+         *                    Defaults to `ctv::DEFAULT_X_KEY`.
          * @param[in] y_key - The name of the parameter that holds the y-coordinate, or std::nullopt to use the location.
-         * @returns `true` if the clock tree is drawn, `false` otherwise.
+         *                    Defaults to `ctv::DEFAULT_Y_KEY`.
+         * @returns `true` if the clock tree is drawn, `false` otherwise, e.g., if no viewer is open.
          */
-        bool setClockTree( const cte::ClockTree &tree,
+        static bool setClockTree( const cte::ClockTree &tree,
                            const ctv::StyleOverrides &overrides = ctv::StyleOverrides(),
-                           const std::optional<std::string> &x_key = std::nullopt,
-                           const std::optional<std::string> &y_key = std::nullopt );
+                           const std::optional<std::string> &x_key = ctv::DEFAULT_X_KEY,
+                           const std::optional<std::string> &y_key = ctv::DEFAULT_Y_KEY );
 
         /**
          * Save a picture of the whole clock tree that is displayed, independent of the zoom and the size of the window.
@@ -141,14 +145,15 @@ namespace hal
         bool savePicture( const QString &filename );
 
         /**
-         * Highlight gates in the plot, instead of the ones that were highlighted before. Gates that are not in the plot are
-         * ignored, as are those that are in the clock tree but have no coordinates, so cannot be drawn. The highlight is
-         * replaced as soon as the selection in HAL changes.
+         * Highlight gates in the plot of the viewer that is open, instead of the ones that were highlighted before. Gates
+         * that are not in the plot are ignored, as are those that are in the clock tree but have no coordinates, so cannot
+         * be drawn. The highlight is replaced as soon as the selection in HAL changes. Can be called from any thread, see
+         * `setClockTree`.
          *
          * @param[in] gateIds - The IDs of the gates. Pass none to remove the highlight.
-         * @returns The number of gates that are highlighted now.
+         * @returns The number of gates that are highlighted now, 0 if no viewer is open.
          */
-        std::size_t highlightGates( const std::vector<u32> &gateIds );
+        static std::size_t highlightGates( const std::vector<u32> &gateIds );
 
         /**
          * Get the IDs of the gates that are highlighted. Must be called from the GUI thread.
@@ -307,10 +312,13 @@ namespace hal
         /** The gates that are highlighted, all of them are plotted. */
         QSet<u32> mHighlightedGates;
 
-        /** The sizes and coordinate keys of the clock tree that is drawn, which an extraction uses again. */
+        /**
+         * The sizes and coordinate keys of the clock tree that is drawn, which an extraction uses again. Before any clock
+         * tree is drawn, an extraction reads the coordinates from the default parameters.
+         */
         ctv::StyleOverrides mOverrides;
-        std::optional<std::string> mXKey;
-        std::optional<std::string> mYKey;
+        std::optional<std::string> mXKey = ctv::DEFAULT_X_KEY;
+        std::optional<std::string> mYKey = ctv::DEFAULT_Y_KEY;
 
         /** Whether the message in place of the drawing is an error, which is colored as one. */
         bool mShowsError = false;

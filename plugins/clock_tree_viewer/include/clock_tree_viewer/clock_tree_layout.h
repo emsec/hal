@@ -50,6 +50,10 @@ namespace hal
         /** The longest side a picture of the clock tree may have in pixels, which keeps its memory in check. */
         constexpr double MAX_PICTURE_SIDE_PIXELS = 10000.0;
 
+        /** The gate parameters the viewer reads the coordinates from unless it is given other keys. */
+        inline const std::string DEFAULT_X_KEY = "X";
+        inline const std::string DEFAULT_Y_KEY = "Y";
+
         /** A gate of the clock tree that has coordinates. */
         struct Node
         {

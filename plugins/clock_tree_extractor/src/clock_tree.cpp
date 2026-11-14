@@ -144,8 +144,6 @@ namespace hal::cte
         , m_vertices_to_ptrs( std::move( vertices_to_ptrs ) )
         , m_ptrs_to_types( std::move( ptrs_to_types ) )
     {
-        m_igraph_ptr = &m_igraph;
-
         for( const auto &[vertex, ptr] : m_vertices_to_ptrs )
         {
             m_ptrs_to_vertices[ptr] = vertex;
@@ -499,7 +497,7 @@ namespace hal::cte
             }
 
             if( ( ierror =
-                      igraph_neighbors( m_igraph_ptr, &parents, root, IGRAPH_IN, IGRAPH_NO_LOOPS, IGRAPH_NO_MULTIPLE ) )
+                      igraph_neighbors( &m_igraph, &parents, root, IGRAPH_IN, IGRAPH_NO_LOOPS, IGRAPH_NO_MULTIPLE ) )
                 != IGRAPH_SUCCESS )
             {
                 igraph_vector_int_destroy( &parents );
@@ -521,7 +519,7 @@ namespace hal::cte
             return ERR( igraph_strerror( ierror ) );
         }
 
-        if( ( ierror = igraph_dfs( m_igraph_ptr,
+        if( ( ierror = igraph_dfs( &m_igraph,
                                    root,
                                    IGRAPH_OUT,
                                    false,
@@ -546,7 +544,7 @@ namespace hal::cte
         }
 
         igraph_vector_int_t map;
-        if( ( ierror = igraph_vector_int_init( &map, igraph_vcount( m_igraph_ptr ) ) ) != IGRAPH_SUCCESS )
+        if( ( ierror = igraph_vector_int_init( &map, igraph_vcount( &m_igraph ) ) ) != IGRAPH_SUCCESS )
         {
             igraph_vs_destroy( &vs );
             igraph_vector_int_destroy( &vertices );
@@ -554,7 +552,7 @@ namespace hal::cte
         }
 
         igraph_t igraph;
-        if( ( ierror = igraph_induced_subgraph_map( m_igraph_ptr, &igraph, vs, IGRAPH_SUBGRAPH_AUTO, &map, nullptr ) )
+        if( ( ierror = igraph_induced_subgraph_map( &m_igraph, &igraph, vs, IGRAPH_SUBGRAPH_AUTO, &map, nullptr ) )
             != IGRAPH_SUCCESS )
         {
             igraph_vs_destroy( &vs );
@@ -730,7 +728,7 @@ namespace hal::cte
 
     const igraph_t *ClockTree::get_igraph() const
     {
-        return m_igraph_ptr;
+        return &m_igraph;
     }
 
     Result<std::vector<std::pair<const void *, PtrType>>>
@@ -753,7 +751,7 @@ namespace hal::cte
         }
 
         if( ( ierror = igraph_neighbors(
-                  m_igraph_ptr, &neighbors, it->second, direction, IGRAPH_NO_LOOPS, IGRAPH_NO_MULTIPLE ) )
+                  &m_igraph, &neighbors, it->second, direction, IGRAPH_NO_LOOPS, IGRAPH_NO_MULTIPLE ) )
             != IGRAPH_SUCCESS )
         {
             igraph_vector_int_destroy( &neighbors );
