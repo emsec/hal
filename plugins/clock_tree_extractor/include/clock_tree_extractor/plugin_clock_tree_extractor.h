@@ -39,15 +39,15 @@ namespace hal
       public:
         ClockTreeExtractorPlugin() = default;
 
-        ~ClockTreeExtractorPlugin() = default;
+        ~ClockTreeExtractorPlugin() override = default;
 
-        std::string get_name() const override;
+        [[nodiscard]] std::string get_name() const override;
 
-        std::string get_version() const override;
+        [[nodiscard]] std::string get_version() const override;
 
-        std::string get_description() const override;
+        [[nodiscard]] std::string get_description() const override;
 
-        std::set<std::string> get_dependencies() const override;
+        [[nodiscard]] std::set<std::string> get_dependencies() const override;
 
         void initialize() override;
 
