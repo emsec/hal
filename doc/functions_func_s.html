@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-258-gf372a0264</span>
+   &#160;<span id="projectnumber">v4.5.0-259-g577210b12</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -175,6 +175,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 </li>
 <li>saveLoggerSettings()
 : <a class="el" href="classhal_1_1_settings_manager.html#a011128656408a12f7264d16d490f735f">hal::SettingsManager</a>
+</li>
+<li>savePicture()
+: <a class="el" href="classhal_1_1_clock_tree_viewer.html#a883f45c059481f80ff46e07a20534b77">hal::ClockTreeViewer</a>
 </li>
 <li>saveSaleae()
 : <a class="el" href="classhal_1_1_wave_data.html#a69558360451409207fed3dee0eda79c7">hal::WaveData</a>
@@ -597,7 +600,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 </li>
 <li>set_input()
 : <a class="el" href="classhal_1_1_netlist_simulator.html#afe1725308cfc0e654b24ac26543a59ad">hal::NetlistSimulator</a>
-, <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a3c1905849c71af265fbececb7c913ee5">hal::NetlistSimulatorController</a>
+, <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a0d6b5f14e662a4cf0dedf8a7be5c00b4">hal::NetlistSimulatorController</a>
 </li>
 <li>set_input_filename()
 : <a class="el" href="classhal_1_1_netlist.html#a02bbae5afdbcdac1f01951fb7c0ed21d">hal::Netlist</a>
@@ -659,7 +662,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 , <a class="el" href="classhal_1_1_simulation_input.html#a51581d624529220566bfb0329c382070">hal::SimulationInput</a>
 </li>
 <li>set_option()
-: <a class="el" href="classhal_1_1_program_arguments.html#aac1f1a5341ba9dff148302ae419ffebf">hal::ProgramArguments</a>
+: <a class="el" href="classhal_1_1_program_arguments.html#ae72a73ca9f5f694201656e323c7ca1f3">hal::ProgramArguments</a>
 </li>
 <li>set_ordered()
 : <a class="el" href="classhal_1_1_pin_group.html#a8eda48699d495c843815115218cc5235">hal::PinGroup&lt; T &gt;</a>
@@ -824,6 +827,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setCliIconStyle()
 : <a class="el" href="classhal_1_1_gui_plugin_manager.html#a881330bb4f0777d8e99f16dc41309bca">hal::GuiPluginManager</a>
 </li>
+<li>setClockTree()
+: <a class="el" href="classhal_1_1_clock_tree_viewer.html#aceb29407083e32058e0c24cf621d9878">hal::ClockTreeViewer</a>
+</li>
 <li>setCloseIconPath()
 : <a class="el" href="classhal_1_1_file_actions.html#a03aaead5ea3fbc01aed23c02ac6aeed8">hal::FileActions</a>
 </li>
@@ -837,6 +843,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="classhal_1_1_grouping_table_entry.html#a2254452d7c0703266c5086ef8d3c7b93">hal::GroupingTableEntry</a>
 , <a class="el" href="classhal_1_1_shadow_effect.html#a159a044a703394febde1e06c568c584e">hal::ShadowEffect</a>
 , <a class="el" href="classhal_1_1_simulation_settings.html#accd712e0e5320e8a6c3cd09fc3a6573f">hal::SimulationSettings</a>
+</li>
+<li>setColors()
+: <a class="el" href="classhal_1_1_clock_tree_scene.html#aa2fc1a8250ae91c75b2643471b00c4e8">hal::ClockTreeScene</a>
 </li>
 <li>setColorSelectIconPath()
 : <a class="el" href="classhal_1_1_grouping_manager_widget.html#a69b027296dcf54bc3798931006eff077">hal::GroupingManagerWidget</a>
@@ -1264,6 +1273,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>setHideNetsIconPath()
 : <a class="el" href="classhal_1_1_module_widget.html#ab3f3c62bb6e634a200d65b0a84c24264">hal::ModuleWidget</a>
 </li>
+<li>setHighlight()
+: <a class="el" href="classhal_1_1_clock_tree_scene.html#a4af007fb56757304461a111da11250cb">hal::ClockTreeScene</a>
+</li>
 <li>setHighlightCurrentLineEnabled()
 : <a class="el" href="classhal_1_1_code_editor.html#a10bb611c5c531f288d45cd9cf343e43a">hal::CodeEditor</a>
 </li>
@@ -1361,6 +1373,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 </li>
 <li>setLast()
 : <a class="el" href="classhal_1_1_net_layout_junction_range.html#a4f6c52e33c7c9a86e82fd8b59b4f22e1">hal::NetLayoutJunctionRange</a>
+</li>
+<li>setLayout()
+: <a class="el" href="classhal_1_1_clock_tree_scene.html#a5787a0549ae937c57bee6fd33ae8b459">hal::ClockTreeScene</a>
 </li>
 <li>setLayoutBoxesEnabled()
 : <a class="el" href="classhal_1_1_standard_graph_layouter.html#a971e575c009153bde2d47830aed08014">hal::StandardGraphLayouter</a>
@@ -2038,7 +2053,8 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 , <a class="el" href="classhal_1_1_wavedata_table_editor.html#a94ce3ce8eea4d8cf762d55954d44b6f5">hal::WavedataTableEditor</a>
 </li>
 <li>setupToolbar()
-: <a class="el" href="classhal_1_1_content_widget.html#a08d76ceb8080776f6b87af4a3bd6e6d8">hal::ContentWidget</a>
+: <a class="el" href="classhal_1_1_clock_tree_viewer.html#ac4e6bec440736c0144ba3b1598c1199d">hal::ClockTreeViewer</a>
+, <a class="el" href="classhal_1_1_content_widget.html#a08d76ceb8080776f6b87af4a3bd6e6d8">hal::ContentWidget</a>
 , <a class="el" href="classhal_1_1_context_manager_widget.html#ac9c9f540f1429a103a9c571915082024">hal::ContextManagerWidget</a>
 , <a class="el" href="classhal_1_1_dot_viewer.html#ac53bb169af753561a7e9cddecbca9f1e">hal::DotViewer</a>
 , <a class="el" href="classhal_1_1_grouping_manager_widget.html#a2246dddd6c1526899bc5701555b2ccad">hal::GroupingManagerWidget</a>
@@ -2183,6 +2199,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>showAllSettings()
 : <a class="el" href="classhal_1_1_main_settings_widget.html#a6393f5cf945d93e51272b17101fddbac">hal::MainSettingsWidget</a>
 </li>
+<li>showArea()
+: <a class="el" href="classhal_1_1_clock_tree_graphics_view.html#a0206fd683914ca54f67a3a106616972b">hal::ClockTreeGraphicsView</a>
+</li>
 <li>showBusy()
 : <a class="el" href="classhal_1_1_graph_widget.html#a4c5b9b75b65cc63dafc031a4bf0222bb">hal::GraphWidget</a>
 </li>
@@ -2197,7 +2216,8 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="classhal_1_1_graph_tab_widget.html#aa18b4eee005357a3cf24788fb67c094e">hal::GraphTabWidget</a>
 </li>
 <li>showEvent()
-: <a class="el" href="classhal_1_1_searchbar.html#aee1318fbf959564a565d4147c963edc8">hal::Searchbar</a>
+: <a class="el" href="classhal_1_1_clock_tree_graphics_view.html#acc0bbde9fed4cbafa4cbc8d3fe704b9e">hal::ClockTreeGraphicsView</a>
+, <a class="el" href="classhal_1_1_searchbar.html#aee1318fbf959564a565d4147c963edc8">hal::Searchbar</a>
 </li>
 <li>showGate()
 : <a class="el" href="classhal_1_1_gatelibrary_graphics_view.html#ab7d42213272bc86ac7748ced8e64b607">hal::GatelibraryGraphicsView</a>
@@ -2538,6 +2558,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 </li>
 <li>strValue()
 : <a class="el" href="classhal_1_1_wave_data.html#aec1ae1d2c8cf7d36f8e3ebdce86e2dc8">hal::WaveData</a>
+</li>
+<li>style()
+: <a class="el" href="classhal_1_1_clock_tree_scene.html#a0c451493d49f35b499e815bae2bf1d11">hal::ClockTreeScene</a>
 </li>
 <li>Sub()
 : <a class="el" href="classhal_1_1_boolean_function.html#a5ba9ee5f8f7a3406f522a157ef65fb98">hal::BooleanFunction</a>

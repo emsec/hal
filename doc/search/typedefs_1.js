@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['caseinsensitivestring_42892',['CaseInsensitiveString',['../namespacehal_1_1core__strings.html#a939599c80f140610abb0390b66acf8a6',1,'hal::core_strings']]]
+  ['branch_43060',['Branch',['../namespacehal_1_1cte.html#a74034e2b8120e61fb0445d6852d83a23',1,'hal::cte']]]
 ];

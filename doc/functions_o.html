@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-258-gf372a0264</span>
+   &#160;<span id="projectnumber">v4.5.0-259-g577210b12</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -110,9 +110,13 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 <li>omitHistory()
 : <a class="el" href="classhal_1_1_wave_render_engine.html#a00722fda0c241d906c66f68eca78cca2">hal::WaveRenderEngine</a>
 </li>
+<li>omitted_edges
+: <a class="el" href="structhal_1_1ctv_1_1_layout.html#a7336728201849912b2aa1598f11ae31d">hal::ctv::Layout</a>
+</li>
 <li>on_load()
 : <a class="el" href="classhal_1_1_base_plugin_interface.html#a1b6ba845f5f74b505fc1d1e6326b1d17">hal::BasePluginInterface</a>
 , <a class="el" href="classhal_1_1_clock_tree_extractor_plugin.html#a01a113c7b3908f39cd956cb385113391">hal::ClockTreeExtractorPlugin</a>
+, <a class="el" href="classhal_1_1_clock_tree_viewer_plugin.html#aed6f61cc6b85a8362a60c22b0c2551dc">hal::ClockTreeViewerPlugin</a>
 , <a class="el" href="classhal_1_1_dot_viewer_plugin.html#a17a6100e5bc86665fcb335f8b8b60ba7">hal::DotViewerPlugin</a>
 , <a class="el" href="classhal_1_1_genlib_writer_plugin.html#a8a3a458083d11baa180c19c20de8b032">hal::GenlibWriterPlugin</a>
 , <a class="el" href="classhal_1_1_gexf_writer_plugin.html#a4503f904a4ba35ede41c80961d329b9c">hal::GexfWriterPlugin</a>
@@ -131,6 +135,7 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 <li>on_unload()
 : <a class="el" href="classhal_1_1_base_plugin_interface.html#a69d08d279368508e2ee94efd4748c3a1">hal::BasePluginInterface</a>
 , <a class="el" href="classhal_1_1_clock_tree_extractor_plugin.html#a1f0b95ef0d6a7a2be38954372aaf7940">hal::ClockTreeExtractorPlugin</a>
+, <a class="el" href="classhal_1_1_clock_tree_viewer_plugin.html#ab7dd5e6c0ce5be4a35f1e9494a52f7c5">hal::ClockTreeViewerPlugin</a>
 , <a class="el" href="classhal_1_1_dot_viewer_plugin.html#a9319569e36418a7eed35ea078b793944">hal::DotViewerPlugin</a>
 , <a class="el" href="classhal_1_1_genlib_writer_plugin.html#ace794dbdd0119f2ae80ca690ae730ed7">hal::GenlibWriterPlugin</a>
 , <a class="el" href="classhal_1_1_gexf_writer_plugin.html#ad36cdaf69bd284274dc9a06d4e0a437e">hal::GexfWriterPlugin</a>
@@ -306,7 +311,7 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 </li>
 <li>operator++()
 : <a class="el" href="classhal_1_1_lane_index.html#aba8b8f81b1b8689e9b5fd32d1f1b6f93">hal::LaneIndex</a>
-, <a class="el" href="classhal_1_1_net_layout_direction.html#a4311dd71c9e376d1b52bb5f3964811f8">hal::NetLayoutDirection</a>
+, <a class="el" href="classhal_1_1_net_layout_direction.html#ac9231c6ce6c60f6471177259ec4b67b3">hal::NetLayoutDirection</a>
 </li>
 <li>operator+=()
 : <a class="el" href="classhal_1_1_boolean_function.html#acaf2ce222de3fe86ade165a4cd837d50">hal::BooleanFunction</a>
@@ -345,9 +350,10 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 , <a class="el" href="structhal_1_1_s_m_t_1_1_solver_result.html#a28c472f41859c5de06f23d50db7d935e">hal::SMT::SolverResult</a>
 </li>
 <li>operator=()
-: <a class="el" href="classhal_1_1_error.html#a56fda25d24c87b0b8c4d892d176388c4">hal::Error</a>
+: <a class="el" href="classhal_1_1cte_1_1_clock_tree.html#ac2ebd8d71a8a06cf65371aa9e7aa6389">hal::cte::ClockTree</a>
+, <a class="el" href="classhal_1_1_error.html#a32bfdc1b4e70f7c3d12df849565027b7">hal::Error</a>
 , <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#abd83b25b8f812bc8cf60978781b7f353">hal::graph_algorithm::NetlistGraph</a>
-, <a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html#a17556bfb050446e6a51217ef7d91ee1c">hal::hawkeye::CipherCandidate</a>
+, <a class="el" href="classhal_1_1hawkeye_1_1_cipher_candidate.html#aa50179ab094041ebb710e4424ebe82e9">hal::hawkeye::CipherCandidate</a>
 , <a class="el" href="classhal_1_1_json_write_data.html#a85ea747622ce40e223c161236b093809">hal::JsonWriteData</a>
 , <a class="el" href="classhal_1_1netlist__preprocessing_1_1_gui_layout_locker.html#a695eff6e9d64c786c4256e159df06cdb">hal::netlist_preprocessing::GuiLayoutLocker</a>
 , <a class="el" href="classhal_1_1_subgraph_function_cache.html#af975f70d96eeb43317ff3f25346e372d">hal::SubgraphFunctionCache</a>

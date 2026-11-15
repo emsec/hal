@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ddmanager_42893',['DdManager',['../simplification__abc_8cpp.html#a5f3806802ba452e3081bf9932c2a05ad',1,'simplification_abc.cpp']]]
+  ['caseinsensitivestring_43061',['CaseInsensitiveString',['../namespacehal_1_1core__strings.html#a939599c80f140610abb0390b66acf8a6',1,'hal::core_strings']]]
 ];

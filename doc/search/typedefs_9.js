@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['nm_5fman_5ft_42908',['Nm_Man_t',['../simplification__abc_8cpp.html#a94ff1ee7f27a9a8e95226ded9133c78f',1,'simplification_abc.cpp']]]
+  ['mem_5ffixed_5ft_43075',['Mem_Fixed_t',['../simplification__abc_8cpp.html#a076d79b565fe918d3fcc2c68bb3a95e5',1,'simplification_abc.cpp']]],
+  ['mem_5fstep_5ft_43076',['Mem_Step_t',['../simplification__abc_8cpp.html#a48e110fd5dc37ab6c4f4e88532c2c023',1,'simplification_abc.cpp']]]
 ];

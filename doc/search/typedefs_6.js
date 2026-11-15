@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['i16_42899',['i16',['../defines_8h.html#a977685259fe8059c48e92450967d46a8',1,'defines.h']]],
-  ['i32_42900',['i32',['../defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84',1,'defines.h']]],
-  ['i64_42901',['i64',['../defines_8h.html#a86025ec3a0bc201ca893caac2cb2acbd',1,'defines.h']]],
-  ['i8_42902',['i8',['../defines_8h.html#a196513547113c3f96a078ee3e658a6ef',1,'defines.h']]],
-  ['instantiate_5fplugin_5ffunction_42903',['instantiate_plugin_function',['../namespacehal.html#af1388a5c4377a81f3215cac5d274fd60',1,'hal']]],
-  ['iterator_42904',['iterator',['../classhal_1_1utils_1_1_recursive_directory_range.html#a3352aa0beb99907d05f526cad21a78e9',1,'hal::utils::RecursiveDirectoryRange::iterator()'],['../classhal_1_1utils_1_1_directory_range.html#ac58e3e6f46f8e5a746540806063aac58',1,'hal::utils::DirectoryRange::iterator()']]]
+  ['handle_5fptr_5ft_43065',['handle_ptr_t',['../namespacehal.html#a974188318f6c3613e6fa1993cea21a1e',1,'hal']]],
+  ['hop_5fman_5ft_43066',['Hop_Man_t',['../simplification__abc_8cpp.html#a99f7bacf52c4423597a4023fa733a389',1,'simplification_abc.cpp']]],
+  ['hop_5fobj_5ft_43067',['Hop_Obj_t',['../simplification__abc_8cpp.html#afe514c8755fe80dfee6a0914205f23e6',1,'simplification_abc.cpp']]]
 ];

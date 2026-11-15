@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-258-gf372a0264</span>
+   &#160;<span id="projectnumber">v4.5.0-259-g577210b12</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -117,8 +117,9 @@ Inheritance diagram for hal::ContentWidget:</div>
 <area shape="rect" href="classhal_1_1_selection_details_widget.html" title="Container for all specific details widgets." alt="" coords="2155,1261,2407,1617"/>
 <area shape="rect" href="classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="1163,497,1271,619"/>
 <area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qwidget.html" title=" " alt="" coords="1113,5,1320,449"/>
-<area shape="rect" href="classhal_1_1_dot_viewer.html" title=" " alt="" coords="113,1812,350,2007"/>
-<area shape="rect" href="classhal_1_1_waveform_viewer.html" title=" " alt="" coords="375,1797,592,2021"/>
+<area shape="rect" href="classhal_1_1_clock_tree_viewer.html" title=" " alt="" coords="47,1819,213,1999"/>
+<area shape="rect" href="classhal_1_1_dot_viewer.html" title=" " alt="" coords="238,1812,475,2007"/>
+<area shape="rect" href="classhal_1_1_waveform_viewer.html" title=" " alt="" coords="500,1797,717,2021"/>
 </map>
 </div>
 <div class="dynheader">
@@ -1559,7 +1560,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00080">80</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__layout__area_8cpp_source.html#l00123">hal::ContentLayoutArea::addContent()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00162">hal::GraphTabWidget::addTab()</a>, <a class="el" href="content__frame_8cpp_source.html#l00013">hal::ContentFrame::ContentFrame()</a>, <a class="el" href="content__widget_8cpp_source.html#l00013">ContentWidget()</a>, <a class="el" href="dock__button_8cpp_source.html#l00012">hal::DockButton::DockButton()</a>, <a class="el" href="module__widget_8cpp_source.html#l00031">hal::ModuleWidget::ModuleWidget()</a>, <a class="el" href="content__widget_8cpp_source.html#l00110">set_name()</a>, <a class="el" href="settings__manager_8cpp_source.html#l00115">hal::SettingsManager::widgetDetach()</a>, and <a class="el" href="settings__manager_8cpp_source.html#l00127">hal::SettingsManager::widgetPlacement()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__layout__area_8cpp_source.html#l00123">hal::ContentLayoutArea::addContent()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00162">hal::GraphTabWidget::addTab()</a>, <a class="el" href="clock__tree__viewer_8cpp_source.html#l00182">hal::ClockTreeViewer::ClockTreeViewer()</a>, <a class="el" href="content__frame_8cpp_source.html#l00013">hal::ContentFrame::ContentFrame()</a>, <a class="el" href="content__widget_8cpp_source.html#l00013">ContentWidget()</a>, <a class="el" href="dock__button_8cpp_source.html#l00012">hal::DockButton::DockButton()</a>, <a class="el" href="module__widget_8cpp_source.html#l00031">hal::ModuleWidget::ModuleWidget()</a>, <a class="el" href="content__widget_8cpp_source.html#l00110">set_name()</a>, <a class="el" href="settings__manager_8cpp_source.html#l00115">hal::SettingsManager::widgetDetach()</a>, and <a class="el" href="settings__manager_8cpp_source.html#l00127">hal::SettingsManager::widgetPlacement()</a>.</p>
 
 </div>
 </div>
@@ -2050,7 +2051,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_waveform_viewer.html#a92c70cf4381db66cacb410d7f42044d8">hal::WaveformViewer</a>, <a class="el" href="classhal_1_1_selection_details_widget.html#ac9fce7b5132c6322acb670e39e7631a5">hal::SelectionDetailsWidget</a>, <a class="el" href="classhal_1_1_python_editor.html#a798358bbbc28d11a1e36ed505fbf9255">hal::PythonEditor</a>, <a class="el" href="classhal_1_1_python_console_widget.html#ae3dd67a328353a6247319741346741ab">hal::PythonConsoleWidget</a>, <a class="el" href="classhal_1_1_module_widget.html#af3288d2d2b62b819dcade360f5b82db9">hal::ModuleWidget</a>, <a class="el" href="classhal_1_1_logger_widget.html#a1d261def9cb41c2b0d82d2b4626a6708">hal::LoggerWidget</a>, <a class="el" href="classhal_1_1_grouping_manager_widget.html#a2246dddd6c1526899bc5701555b2ccad">hal::GroupingManagerWidget</a>, <a class="el" href="classhal_1_1_context_manager_widget.html#ac9c9f540f1429a103a9c571915082024">hal::ContextManagerWidget</a>, and <a class="el" href="classhal_1_1_dot_viewer.html#ac53bb169af753561a7e9cddecbca9f1e">hal::DotViewer</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_waveform_viewer.html#a92c70cf4381db66cacb410d7f42044d8">hal::WaveformViewer</a>, <a class="el" href="classhal_1_1_selection_details_widget.html#ac9fce7b5132c6322acb670e39e7631a5">hal::SelectionDetailsWidget</a>, <a class="el" href="classhal_1_1_python_editor.html#a798358bbbc28d11a1e36ed505fbf9255">hal::PythonEditor</a>, <a class="el" href="classhal_1_1_python_console_widget.html#ae3dd67a328353a6247319741346741ab">hal::PythonConsoleWidget</a>, <a class="el" href="classhal_1_1_module_widget.html#af3288d2d2b62b819dcade360f5b82db9">hal::ModuleWidget</a>, <a class="el" href="classhal_1_1_logger_widget.html#a1d261def9cb41c2b0d82d2b4626a6708">hal::LoggerWidget</a>, <a class="el" href="classhal_1_1_grouping_manager_widget.html#a2246dddd6c1526899bc5701555b2ccad">hal::GroupingManagerWidget</a>, <a class="el" href="classhal_1_1_context_manager_widget.html#ac9c9f540f1429a103a9c571915082024">hal::ContextManagerWidget</a>, <a class="el" href="classhal_1_1_clock_tree_viewer.html#ac4e6bec440736c0144ba3b1598c1199d">hal::ClockTreeViewer</a>, and <a class="el" href="classhal_1_1_dot_viewer.html#ac53bb169af753561a7e9cddecbca9f1e">hal::DotViewer</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00116">116</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
@@ -2081,7 +2082,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00258">258</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00013">ContentWidget()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00041">hal::ContextManagerWidget::ContextManagerWidget()</a>, <a class="el" href="dot__viewer_8cpp_source.html#l00023">hal::DotViewer::DotViewer()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00107">hal::GraphTabWidget::GraphTabWidget()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00061">hal::GraphWidget::GraphWidget()</a>, <a class="el" href="grouping__manager__widget_8cpp_source.html#l00040">hal::GroupingManagerWidget::GroupingManagerWidget()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00025">hal::LoggerWidget::LoggerWidget()</a>, <a class="el" href="module__widget_8cpp_source.html#l00031">hal::ModuleWidget::ModuleWidget()</a>, <a class="el" href="python__console__widget_8cpp_source.html#l00009">hal::PythonConsoleWidget::PythonConsoleWidget()</a>, <a class="el" href="python__editor_8cpp_source.html#l00207">hal::PythonEditor::PythonEditor()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00058">hal::SelectionDetailsWidget::SelectionDetailsWidget()</a>, and <a class="el" href="waveform__viewer_8cpp_source.html#l00062">hal::WaveformViewer::WaveformViewer()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="clock__tree__viewer_8cpp_source.html#l00182">hal::ClockTreeViewer::ClockTreeViewer()</a>, <a class="el" href="content__widget_8cpp_source.html#l00013">ContentWidget()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00041">hal::ContextManagerWidget::ContextManagerWidget()</a>, <a class="el" href="dot__viewer_8cpp_source.html#l00023">hal::DotViewer::DotViewer()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00107">hal::GraphTabWidget::GraphTabWidget()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00061">hal::GraphWidget::GraphWidget()</a>, <a class="el" href="grouping__manager__widget_8cpp_source.html#l00040">hal::GroupingManagerWidget::GroupingManagerWidget()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00025">hal::LoggerWidget::LoggerWidget()</a>, <a class="el" href="module__widget_8cpp_source.html#l00031">hal::ModuleWidget::ModuleWidget()</a>, <a class="el" href="python__console__widget_8cpp_source.html#l00009">hal::PythonConsoleWidget::PythonConsoleWidget()</a>, <a class="el" href="python__editor_8cpp_source.html#l00207">hal::PythonEditor::PythonEditor()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00058">hal::SelectionDetailsWidget::SelectionDetailsWidget()</a>, and <a class="el" href="waveform__viewer_8cpp_source.html#l00062">hal::WaveformViewer::WaveformViewer()</a>.</p>
 
 </div>
 </div>

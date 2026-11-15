@@ -12,9 +12,17 @@ var annotated_dup =
         [ "CaseInsensitiveCharTraits", "structhal_1_1core__strings_1_1_case_insensitive_char_traits.html", null ]
       ] ],
       [ "cte", "namespacehal_1_1cte.html", [
+        [ "Diagnostic", "structhal_1_1cte_1_1_diagnostic.html", "structhal_1_1cte_1_1_diagnostic" ],
         [ "VoidPtrHash", "structhal_1_1cte_1_1_void_ptr_hash.html", "structhal_1_1cte_1_1_void_ptr_hash" ],
         [ "PairPtrEq", "structhal_1_1cte_1_1_pair_ptr_eq.html", "structhal_1_1cte_1_1_pair_ptr_eq" ],
         [ "ClockTree", "classhal_1_1cte_1_1_clock_tree.html", "classhal_1_1cte_1_1_clock_tree" ]
+      ] ],
+      [ "ctv", "namespacehal_1_1ctv.html", [
+        [ "Node", "structhal_1_1ctv_1_1_node.html", "structhal_1_1ctv_1_1_node" ],
+        [ "Edge", "structhal_1_1ctv_1_1_edge.html", "structhal_1_1ctv_1_1_edge" ],
+        [ "Layout", "structhal_1_1ctv_1_1_layout.html", "structhal_1_1ctv_1_1_layout" ],
+        [ "StyleOverrides", "structhal_1_1ctv_1_1_style_overrides.html", "structhal_1_1ctv_1_1_style_overrides" ],
+        [ "Style", "structhal_1_1ctv_1_1_style.html", "structhal_1_1ctv_1_1_style" ]
       ] ],
       [ "dataflow", "namespacehal_1_1dataflow.html", [
         [ "evaluation", "namespacehal_1_1dataflow_1_1evaluation.html", [
@@ -192,6 +200,12 @@ var annotated_dup =
       [ "BitorderPropagationPlugin", "classhal_1_1_bitorder_propagation_plugin.html", "classhal_1_1_bitorder_propagation_plugin" ],
       [ "BooleanInfluencePlugin", "classhal_1_1_boolean_influence_plugin.html", "classhal_1_1_boolean_influence_plugin" ],
       [ "ClockTreeExtractorPlugin", "classhal_1_1_clock_tree_extractor_plugin.html", "classhal_1_1_clock_tree_extractor_plugin" ],
+      [ "ClockTreeGraphicsView", "classhal_1_1_clock_tree_graphics_view.html", "classhal_1_1_clock_tree_graphics_view" ],
+      [ "ClockTreeColors", "structhal_1_1_clock_tree_colors.html", "structhal_1_1_clock_tree_colors" ],
+      [ "ClockTreeScene", "classhal_1_1_clock_tree_scene.html", "classhal_1_1_clock_tree_scene" ],
+      [ "ClockTreeViewer", "classhal_1_1_clock_tree_viewer.html", "classhal_1_1_clock_tree_viewer" ],
+      [ "ClockTreeViewerFactory", "classhal_1_1_clock_tree_viewer_factory.html", "classhal_1_1_clock_tree_viewer_factory" ],
+      [ "ClockTreeViewerPlugin", "classhal_1_1_clock_tree_viewer_plugin.html", "classhal_1_1_clock_tree_viewer_plugin" ],
       [ "CliExtensionDataflow", "classhal_1_1_cli_extension_dataflow.html", "classhal_1_1_cli_extension_dataflow" ],
       [ "GuiExtensionDataflow", "classhal_1_1_gui_extension_dataflow.html", "classhal_1_1_gui_extension_dataflow" ],
       [ "DataflowPlugin", "classhal_1_1_dataflow_plugin.html", "classhal_1_1_dataflow_plugin" ],

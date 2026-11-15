@@ -1,7 +1,8 @@
 <map id="hal::ExternalContentWidget" name="hal::ExternalContentWidget">
-<area shape="rect" id="node1" title=" " alt="" coords="145,637,354,744"/>
-<area shape="rect" id="node4" href="$classhal_1_1_dot_viewer.html" title=" " alt="" coords="5,807,243,1001"/>
-<area shape="rect" id="node5" href="$classhal_1_1_waveform_viewer.html" title=" " alt="" coords="267,792,485,1016"/>
-<area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="159,175,339,589"/>
-<area shape="rect" id="node3" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="195,5,303,127"/>
+<area shape="rect" id="node1" title=" " alt="" coords="211,637,420,744"/>
+<area shape="rect" id="node4" href="$classhal_1_1_clock_tree_viewer.html" title=" " alt="" coords="5,814,172,994"/>
+<area shape="rect" id="node5" href="$classhal_1_1_dot_viewer.html" title=" " alt="" coords="197,807,434,1001"/>
+<area shape="rect" id="node6" href="$classhal_1_1_waveform_viewer.html" title=" " alt="" coords="459,792,676,1016"/>
+<area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="225,175,405,589"/>
+<area shape="rect" id="node3" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="261,5,369,127"/>
 </map>

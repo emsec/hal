@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-258-gf372a0264</span>
+   &#160;<span id="projectnumber">v4.5.0-259-g577210b12</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -92,11 +92,14 @@ $(document).ready(function(){initNavTree('plugins_2clock__tree__extractor_2pytho
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="python__bindings_8h_source.html">hal_core/python_bindings/python_bindings.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="branches_8h_source.html">clock_tree_extractor/branches.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="clock__tree_8h_source.html">clock_tree_extractor/clock_tree.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="dot__export_8h_source.html">clock_tree_extractor/dot_export.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="plugin__clock__tree__extractor_8h_source.html">clock_tree_extractor/plugin_clock_tree_extractor.h</a>&quot;</code><br />
 <code>#include &quot;pybind11/pybind11.h&quot;</code><br />
+<code>#include &quot;pybind11/stl.h&quot;</code><br />
 <code>#include &lt;igraph/igraph.h&gt;</code><br />
-<code>#include &lt;pybind11/detail/descr.h&gt;</code><br />
+<code>#include &lt;optional&gt;</code><br />
 <code>#include &lt;pybind11/pytypes.h&gt;</code><br />
 <code>#include &lt;set&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
@@ -106,56 +109,56 @@ Include dependency graph for python_bindings.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="plugins_2clock__tree__extractor_2python_2python__bindings_8cpp__incl.png" border="0" usemap="#aplugins_2clock__tree__extractor_2python_2python__bindings_8cpp" alt=""/></div>
 <map name="aplugins_2clock__tree__extractor_2python_2python__bindings_8cpp" id="aplugins_2clock__tree__extractor_2python_2python__bindings_8cpp">
-<area shape="rect" title=" " alt="" coords="4333,5,4520,61"/>
-<area shape="rect" href="python__bindings_8h.html" title=" " alt="" coords="2477,109,2665,151"/>
-<area shape="rect" title=" " alt="" coords="263,1091,305,1117"/>
-<area shape="rect" title=" " alt="" coords="3922,1091,3985,1117"/>
-<area shape="rect" title=" " alt="" coords="1080,1091,1139,1117"/>
-<area shape="rect" title=" " alt="" coords="4259,213,4418,240"/>
-<area shape="rect" href="clock__tree_8h.html" title=" " alt="" coords="4163,987,4317,1028"/>
-<area shape="rect" title=" " alt="" coords="4339,1091,4459,1117"/>
+<area shape="rect" title=" " alt="" coords="4456,5,4643,61"/>
+<area shape="rect" href="python__bindings_8h.html" title=" " alt="" coords="2385,109,2573,151"/>
+<area shape="rect" title=" " alt="" coords="288,1091,331,1117"/>
+<area shape="rect" title=" " alt="" coords="4201,1091,4263,1117"/>
+<area shape="rect" title=" " alt="" coords="2811,399,2885,426"/>
+<area shape="rect" title=" " alt="" coords="1192,1091,1251,1117"/>
+<area shape="rect" title=" " alt="" coords="4309,213,4467,240"/>
+<area shape="rect" title=" " alt="" coords="4492,213,4607,240"/>
+<area shape="rect" href="branches_8h.html" title=" " alt="" coords="4604,875,4759,917"/>
+<area shape="rect" href="clock__tree_8h.html" title=" " alt="" coords="4485,987,4640,1028"/>
+<area shape="rect" title=" " alt="" coords="4645,1091,4765,1117"/>
+<area shape="rect" href="dot__export_8h.html" title=" " alt="" coords="685,303,840,344"/>
 <area shape="rect" href="plugin__clock__tree__extractor_8h.html" title=" " alt="" coords="449,987,666,1028"/>
-<area shape="rect" title=" " alt="" coords="4595,117,4768,143"/>
-<area shape="rect" title=" " alt="" coords="4793,117,4943,143"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="2398,1091,2538,1117"/>
-<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="3101,571,3280,612"/>
-<area shape="rect" href="solver_8h.html" title=" " alt="" coords="2945,303,3124,344"/>
-<area shape="rect" href="include_2hal__core_2netlist_2boolean__function_2types_8h.html" title=" " alt="" coords="2975,481,3153,523"/>
-<area shape="rect" href="symbolic__execution_8h.html" title=" " alt="" coords="3544,392,3771,433"/>
-<area shape="rect" href="symbolic__state_8h.html" title=" " alt="" coords="3523,481,3720,523"/>
-<area shape="rect" href="boolean__function__decorator_8h.html" title=" " alt="" coords="1169,206,1388,247"/>
-<area shape="rect" href="module_8h.html" title=" " alt="" coords="1049,310,1236,337"/>
-<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="1513,392,1676,433"/>
-<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1521,481,1676,523"/>
-<area shape="rect" href="gate__pin_8h.html" title=" " alt="" coords="1522,571,1675,612"/>
-<area shape="rect" href="base__pin_8h.html" title=" " alt="" coords="1538,675,1691,716"/>
-<area shape="rect" href="pin__group_8h.html" title=" " alt="" coords="1170,779,1323,820"/>
-<area shape="rect" href="log_8h.html" title=" " alt="" coords="1541,875,1672,917"/>
-<area shape="rect" href="program__arguments_8h.html" title=" " alt="" coords="1605,987,1776,1028"/>
-<area shape="rect" href="program__options_8h.html" title=" " alt="" coords="1851,987,1999,1028"/>
-<area shape="rect" href="include_2hal__core_2utilities_2utils_8h.html" title=" " alt="" coords="1400,987,1531,1028"/>
-<area shape="rect" href="module__pin_8h.html" title=" " alt="" coords="1082,392,1235,433"/>
-<area shape="rect" href="net_8h.html" title=" " alt="" coords="1338,489,1497,515"/>
-<area shape="rect" href="boolean__function__net__decorator_8h.html" title=" " alt="" coords="2377,392,2623,433"/>
-<area shape="rect" href="netlist__modification__decorator_8h.html" title=" " alt="" coords="2299,206,2533,247"/>
-<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="2276,310,2455,337"/>
-<area shape="rect" href="netlist__traversal__decorator_8h.html" title=" " alt="" coords="1962,206,2174,247"/>
-<area shape="rect" href="subgraph__netlist__decorator_8h.html" title=" " alt="" coords="3422,206,3637,247"/>
-<area shape="rect" href="gate_8h.html" title=" " alt="" coords="3179,399,3346,426"/>
-<area shape="rect" href="async__set__reset__behavior_8h.html" title=" " alt="" coords="2710,199,2874,255"/>
-<area shape="rect" href="gate__library__manager_8h.html" title=" " alt="" coords="3933,979,4088,1035"/>
-<area shape="rect" href="gate__library__parser__manager_8h.html" title=" " alt="" coords="3659,972,3859,1043"/>
-<area shape="rect" href="gate__library__writer__manager_8h.html" title=" " alt="" coords="3809,660,4004,731"/>
-<area shape="rect" href="include_2hal__core_2netlist_2grouping_8h.html" title=" " alt="" coords="2933,883,3128,909"/>
-<area shape="rect" href="netlist__factory_8h.html" title="This file contains various functions to create and load netlists." alt="" coords="1863,303,2030,344"/>
-<area shape="rect" href="netlist__utils_8h.html" title=" " alt="" coords="3763,206,3930,247"/>
-<area shape="rect" href="netlist__writer__manager_8h.html" title=" " alt="" coords="1249,868,1415,924"/>
-<area shape="rect" href="netlist__serializer_8h.html" title=" " alt="" coords="3679,779,3870,820"/>
-<area shape="rect" href="project__manager_8h.html" title=" " alt="" coords="1767,206,1937,247"/>
-<area shape="rect" href="fac__extension__interface_8h.html" title=" " alt="" coords="2840,987,3035,1028"/>
-<area shape="rect" href="plugin__manager_8h.html" title=" " alt="" coords="2683,875,2859,917"/>
-<area shape="rect" title=" " alt="" coords="2899,213,3061,240"/>
-<area shape="rect" title=" " alt="" coords="3085,213,3245,240"/>
+<area shape="rect" title=" " alt="" coords="4885,117,5035,143"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="2589,1091,2729,1117"/>
+<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="3180,571,3359,612"/>
+<area shape="rect" href="solver_8h.html" title=" " alt="" coords="2899,206,3077,247"/>
+<area shape="rect" href="include_2hal__core_2netlist_2boolean__function_2types_8h.html" title=" " alt="" coords="2772,303,2951,344"/>
+<area shape="rect" href="symbolic__execution_8h.html" title=" " alt="" coords="3101,206,3328,247"/>
+<area shape="rect" href="symbolic__state_8h.html" title=" " alt="" coords="3433,303,3631,344"/>
+<area shape="rect" href="boolean__function__decorator_8h.html" title=" " alt="" coords="1341,206,1560,247"/>
+<area shape="rect" href="module_8h.html" title=" " alt="" coords="1635,310,1821,337"/>
+<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="2003,392,2165,433"/>
+<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="2011,481,2165,523"/>
+<area shape="rect" href="gate__pin_8h.html" title=" " alt="" coords="1758,571,1911,612"/>
+<area shape="rect" href="base__pin_8h.html" title=" " alt="" coords="1549,660,1702,701"/>
+<area shape="rect" href="pin__group_8h.html" title=" " alt="" coords="1574,764,1727,805"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="1344,875,1475,917"/>
+<area shape="rect" href="program__arguments_8h.html" title=" " alt="" coords="1371,987,1541,1028"/>
+<area shape="rect" href="program__options_8h.html" title=" " alt="" coords="1147,987,1295,1028"/>
+<area shape="rect" href="module__pin_8h.html" title=" " alt="" coords="1431,392,1585,433"/>
+<area shape="rect" href="net_8h.html" title=" " alt="" coords="1321,489,1479,515"/>
+<area shape="rect" href="boolean__function__net__decorator_8h.html" title=" " alt="" coords="2910,392,3157,433"/>
+<area shape="rect" href="netlist__modification__decorator_8h.html" title=" " alt="" coords="3403,206,3637,247"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="2403,310,2581,337"/>
+<area shape="rect" href="netlist__traversal__decorator_8h.html" title=" " alt="" coords="2373,206,2585,247"/>
+<area shape="rect" href="subgraph__netlist__decorator_8h.html" title=" " alt="" coords="2609,206,2823,247"/>
+<area shape="rect" href="gate_8h.html" title=" " alt="" coords="3586,399,3753,426"/>
+<area shape="rect" href="async__set__reset__behavior_8h.html" title=" " alt="" coords="1838,199,2002,255"/>
+<area shape="rect" href="gate__library__manager_8h.html" title=" " alt="" coords="4097,979,4252,1035"/>
+<area shape="rect" href="gate__library__parser__manager_8h.html" title=" " alt="" coords="3873,972,4073,1043"/>
+<area shape="rect" href="gate__library__writer__manager_8h.html" title=" " alt="" coords="3937,749,4132,820"/>
+<area shape="rect" href="include_2hal__core_2netlist_2grouping_8h.html" title=" " alt="" coords="4343,667,4537,694"/>
+<area shape="rect" href="netlist__factory_8h.html" title="This file contains various functions to create and load netlists." alt="" coords="1947,303,2114,344"/>
+<area shape="rect" href="netlist__utils_8h.html" title=" " alt="" coords="3661,206,3827,247"/>
+<area shape="rect" href="netlist__writer__manager_8h.html" title=" " alt="" coords="1001,868,1167,924"/>
+<area shape="rect" href="netlist__serializer_8h.html" title=" " alt="" coords="3839,481,4030,523"/>
+<area shape="rect" href="project__manager_8h.html" title=" " alt="" coords="2128,206,2299,247"/>
+<area shape="rect" href="fac__extension__interface_8h.html" title=" " alt="" coords="2072,987,2267,1028"/>
+<area shape="rect" href="plugin__manager_8h.html" title=" " alt="" coords="1869,875,2045,917"/>
 </map>
 </div>
 </div>
