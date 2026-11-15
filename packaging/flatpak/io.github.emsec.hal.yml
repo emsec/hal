@@ -1,0 +1,171 @@
+# Flatpak manifest for HAL
+#
+# Local test build (run from the repository root):
+#   flatpak install --user flathub org.kde.Sdk//6.10
+#   flatpak-builder --user --install --force-clean \
+#       --state-dir ~/.cache/hal-flatpak/state ~/.cache/hal-flatpak/build \
+#       packaging/flatpak/io.github.emsec.hal.yml
+#   flatpak run io.github.emsec.hal --help
+
+app-id: io.github.emsec.hal
+# The SDK (not org.kde.Platform) is used as runtime on purpose: the simulator
+# plugin invokes verilator, make and g++ at runtime to compile simulation
+# models, and the Platform runtime ships none of these tools.
+runtime: org.kde.Sdk
+runtime-version: '6.10'
+sdk: org.kde.Sdk
+command: hal
+
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  # HAL opens netlists, gate libraries and projects from arbitrary locations
+  - --filesystem=home
+
+cleanup:
+  - /share/man
+  - '*.a'
+  - '*.la'
+
+modules:
+  # Header-only parts of Boost (Spirit X3, Fusion, Multiprecision) plus the
+  # CMake config files that find_package(Boost) needs under CMake >= 3.30.
+  - name: boost
+    buildsystem: simple
+    build-commands:
+      - ./bootstrap.sh --prefix=/app --with-libraries=system
+      - ./b2 install -j ${FLATPAK_BUILDER_N_JOBS} variant=release link=shared threading=multi
+    cleanup:
+      - /include
+      - /lib/cmake
+    sources:
+      - type: archive
+        url: https://archives.boost.io/release/1.89.0/source/boost_1_89_0.tar.bz2
+        sha256: 85a33fa22621b4f314f8e85e1a5e2a9363d22e4f4992925d4bb3bc631b5a0c7a
+
+  # Headers are kept at runtime: verilator-generated simulation models are
+  # compiled against /app/include/rapidjson.
+  - name: rapidjson
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DRAPIDJSON_BUILD_DOC=OFF
+      - -DRAPIDJSON_BUILD_EXAMPLES=OFF
+      - -DRAPIDJSON_BUILD_TESTS=OFF
+    sources:
+      # last tagged release (1.1.0, 2016) does not compile with current GCC
+      - type: git
+        url: https://github.com/Tencent/rapidjson.git
+        commit: 297637bc0a0f00dc504dbc1a47ebdaa577f8ae19
+
+  - name: z3
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INSTALL_LIBDIR=lib   # /app/lib64 is not on the loader path
+      - -DZ3_BUILD_PYTHON_BINDINGS=OFF
+      - -DZ3_BUILD_TEST_EXECUTABLES=OFF
+      - -DZ3_BUILD_DOCUMENTATION=OFF
+      - -DZ3_ENABLE_EXAMPLE_TARGETS=OFF
+    cleanup:
+      - /include
+      - /lib/cmake
+      - /lib/pkgconfig
+    sources:
+      - type: archive
+        url: https://github.com/Z3Prover/z3/archive/refs/tags/z3-4.15.8.tar.gz
+        sha256: a0828f637de02d775646a65aaeed4b7e270eaced15a37edafd1b78eb5b297717
+
+  # needed by the dot_viewer plugin
+  - name: graphviz
+    buildsystem: autotools
+    config-opts:
+      - --disable-static
+      - --disable-man-pdfs
+      - --without-qt
+      - --without-x
+      - --without-gtk
+      - --without-gdk
+      - --disable-swig
+    post-install:
+      # register layout/render plugins (writes /app/lib/graphviz/config*)
+      - /app/bin/dot -c
+    cleanup:
+      - /include
+      - /lib/pkgconfig
+    sources:
+      - type: archive
+        url: https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/16.1.1/graphviz-16.1.1.tar.xz
+        sha256: 52e7fb9a57b52b5c67f41dba6504ba3231e118258779421cb8f4f99104de71f6
+
+  # HAL's vendored igraph (deps/igraph-1.0.x) downloads its sources at build
+  # time, which the sandbox forbids, so it is built here instead.
+  - name: igraph
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INSTALL_LIBDIR=lib   # /app/lib64 is not on the loader path
+      - -DBUILD_SHARED_LIBS=ON
+      - -DIGRAPH_WARNINGS_AS_ERRORS=OFF
+      - -DBUILD_TESTING=OFF
+    cleanup:
+      - /include
+      - /lib/cmake
+      - /lib/pkgconfig
+    sources:
+      - type: archive
+        url: https://github.com/igraph/igraph/releases/download/1.0.1/igraph-1.0.1.tar.gz
+        sha256: 969f2d7d22f67e788d8638c9a8c96615f50d7819c08978b3ef4a787bb6daa96c
+
+  # Used by the simulator plugin at runtime (see comment on `runtime` above).
+  # Installs verilator-config.cmake to /app/share/verilator, where HAL's
+  # find_package(verilator) picks it up and hardcodes the executable path.
+  - name: verilator
+    # The git tag archive ships configure.ac only (no autogen.sh), so run autoconf by hand.
+    buildsystem: simple
+    build-commands:
+      - autoconf
+      - ./configure --prefix=/app
+      - make -j ${FLATPAK_BUILDER_N_JOBS}
+      - make install
+    sources:
+      - type: archive
+        url: https://github.com/verilator/verilator/archive/refs/tags/v5.054.tar.gz
+        sha256: 18658731b46922ef660bcb650be0aa503d751e5c17eb9d4644fdfabb11835198
+
+  - name: hal
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DBUILD_ALL_PLUGINS=ON
+      - -DUSE_VENDORED_IGRAPH=OFF
+      - -DENABLE_INSTALL_LDCONFIG=OFF
+      - -DBUILD_TESTS=OFF
+      - -DBUILD_DOCUMENTATION=OFF
+    sources:
+      # Local checkout for development; switch to `type: git` + tag for releases.
+      - type: dir
+        path: ../..
+        skip:
+          - build
+          - .git
+          - .flatpak-builder
+          # packaging files only, keeps edits here from triggering a HAL rebuild
+          - packaging/flatpak
+
+  # Menu entry (starts the GUI via `hal -g`) and icon
+  - name: desktop-integration
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 io.github.emsec.hal.desktop /app/share/applications/io.github.emsec.hal.desktop
+      - install -Dm644 io.github.emsec.hal.png /app/share/icons/hicolor/128x128/apps/io.github.emsec.hal.png
+    sources:
+      - type: file
+        path: io.github.emsec.hal.desktop
+      - type: file
+        path: ../../documentation/hal_icon.png
+        dest-filename: io.github.emsec.hal.png

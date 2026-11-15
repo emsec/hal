@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=HAL
+GenericName=Netlist Analyzer
+Comment=Hardware analyzer for reverse engineering of gate-level netlists
+Exec=hal -g
+Icon=io.github.emsec.hal
+Terminal=false
+Categories=Development;Electronics;Engineering;
+Keywords=netlist;hardware;reverse engineering;FPGA;ASIC;verilog;vhdl;
+StartupWMClass=hal

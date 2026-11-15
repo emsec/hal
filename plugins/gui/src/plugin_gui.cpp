@@ -28,6 +28,7 @@
 
 #include <QDir>
 #include <QApplication>
+#include <cstdlib>
 #include <QFile>
 #include <QFont>
 #include <QFontDatabase>
@@ -181,6 +182,13 @@ namespace hal
         QApplication::setApplicationName("HAL Qt Interface");
         QApplication::setOrganizationName("Chair for Embedded Security - Ruhr University Bochum");
         QApplication::setOrganizationDomain("emsec.rub.de");
+
+        // When running as a Flatpak, the desktop entry is named after the app ID. Wayland
+        // compositors match windows to their desktop entry (and thus icon) via this name.
+        if (const char* flatpakId = std::getenv("FLATPAK_ID"))
+        {
+            QGuiApplication::setDesktopFileName(QString::fromUtf8(flatpakId));
+        }
 
 // Non native dialogs do not work on macOS. Therefore do net set AA_DontUseNativeDialogs!
 #ifdef __linux__

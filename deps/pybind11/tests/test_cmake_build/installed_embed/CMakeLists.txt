@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.5)
 
 # The `cmake_minimum_required(VERSION 3.4...3.18)` syntax does not work with
 # some versions of VS that have a patched CMake 3.11. This forces us to emulate

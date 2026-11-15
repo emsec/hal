@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.5)
 project(test_installed_module CXX)
 
 # The `cmake_minimum_required(VERSION 3.4...3.18)` syntax does not work with
