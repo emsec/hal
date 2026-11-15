@@ -35,17 +35,17 @@ namespace hal
 
     std::string ClockTreeExtractorPlugin::get_name() const
     {
-        return std::string( "clock_tree_extractor" );
+        return { "clock_tree_extractor" };
     }
 
     std::string ClockTreeExtractorPlugin::get_version() const
     {
-        return std::string( "0.1" );
+        return { "0.1" };
     }
 
     std::string ClockTreeExtractorPlugin::get_description() const
     {
-        return "Prototype plugin for extracting and visualizing the clock tree of a digital gate-level netlist.";
+        return { "Prototype plugin for extracting and visualizing the clock tree of a digital gate-level netlist." };
     }
 
     void ClockTreeExtractorPlugin::on_load()
