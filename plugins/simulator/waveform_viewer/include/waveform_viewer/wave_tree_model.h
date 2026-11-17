@@ -189,6 +189,13 @@ namespace hal {
 
         QSet<int> waveDataIndexSet() const;
 
+        /**
+         * Check whether the waveform of a net is shown at the top level of the tree, i.e., not inside a group.
+         * @param netId The ID of the net.
+         * @return `true` if the waveform is a top level item, `false` otherwise.
+         */
+        bool isTopLevelNet(u32 netId) const;
+
         static const char* sStateColor[3];
         bool persist() const;
         void restore();
