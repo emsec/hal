@@ -1272,6 +1272,8 @@ namespace hal {
 
     WaveDataList::~WaveDataList()
     {
+        // views must not react to the final cleanup, e.g. by persisting an empty waveform tree when HAL closes
+        blockSignals(true);
         clearAll();
     }
 
@@ -1319,14 +1321,25 @@ namespace hal {
 
     void WaveDataList::clearAll()
     {
-        bool notEmpty = ! isEmpty();
+        bool notEmpty = ! isEmpty() || ! mDataGroups.isEmpty() || ! mDataBooleans.isEmpty() || ! mDataTrigger.isEmpty();
         mIds.clear();
+        // listeners must drop their references to waves, groups, booleans, and triggers here, all of them are deleted below
         if (notEmpty)
             Q_EMIT waveRemoved(-1);
         setMaxTime(0);
         for (auto it=begin(); it!=end(); ++it)
             mTrashCan.append(*it);
         clear();
+        // groups, booleans, and triggers refer to the waves deleted above
+        for (WaveDataGroup* grp : mDataGroups.values())
+            mTrashCan.append(grp);
+        mDataGroups.clear();
+        for (WaveDataBoolean* wdBool : mDataBooleans.values())
+            mTrashCan.append(wdBool);
+        mDataBooleans.clear();
+        for (WaveDataTrigger* wdTrig : mDataTrigger.values())
+            mTrashCan.append(wdTrig);
+        mDataTrigger.clear();
         emptyTrash();
     }
 

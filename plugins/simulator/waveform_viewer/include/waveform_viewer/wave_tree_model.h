@@ -50,7 +50,7 @@ namespace hal {
             : WaveDataGroup(wdList,0,"root") {;}
         void recalcData() override {;}
         bool moveGroupPosition(int sourceRow, int targetRow);
-        void clearAll() { mGroupList.clear(); }
+        void clearAll() { mGroupList.clear(); mIndex.clear(); }
         void dump() const;
     };
 
@@ -130,6 +130,13 @@ namespace hal {
     public Q_SLOTS:
         void handleUpdateValueColumn();
         void handleWaveAdded(int iwave);
+
+        /**
+         * Remove all rows and wave items when the wave data list is cleared (iwave < 0), e.g. when the controller is reset.
+         * Must be connected directly since the waveform data is deleted right after the signal.
+         * @param iwave The index of the removed wave, or -1 if all waves were removed.
+         */
+        void handleWaveRemoved(int iwave);
         void handleWaveRenamed(int iwave);
         void handleGroupRenamed(int grpId);
         void handleWaveAddedToGroup(const QVector<u32>& netIds, int grpId);

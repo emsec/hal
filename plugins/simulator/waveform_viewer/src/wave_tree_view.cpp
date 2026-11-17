@@ -524,12 +524,10 @@ namespace hal {
         {
             WaveItemIndex wii = wtm->hashIndex(inx);
             WaveItem* wi = mWaveItemHash->value(wii);
-            if (wi)
-            {
-                wi->setWaveSelected(true);
-                if (!mWaveItemHash->firstSelected())
-                    mWaveItemHash->setSelected(wi);
-            }
+            if (!wi) continue;
+            wi->setWaveSelected(true);
+            if (!mWaveItemHash->firstSelected())
+                mWaveItemHash->setSelected(wi);
             const WaveData* wd = wi->wavedata();
             if (wd)
             {
