@@ -5,6 +5,7 @@
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {
@@ -134,6 +135,12 @@ namespace hal
 
         Configuration& Configuration::with_known_structures(const std::unordered_set<const GateType*>& structures, bool overwrite)
         {
+            if (this->netlist == nullptr)
+            {
+                log_error("dataflow", "cannot add known structures by gate type, netlist is a nullptr");
+                return *this;
+            }
+
             if (overwrite)
             {
                 this->known_net_groups.clear();
@@ -164,6 +171,12 @@ namespace hal
 
         Configuration& Configuration::with_known_structures(const std::unordered_map<const GateType*, std::vector<PinGroup<GatePin>*>>& structures, bool overwrite)
         {
+            if (this->netlist == nullptr)
+            {
+                log_error("dataflow", "cannot add known structures by gate type, netlist is a nullptr");
+                return *this;
+            }
+
             if (overwrite)
             {
                 this->known_net_groups.clear();
@@ -223,6 +236,12 @@ namespace hal
 
         Configuration& Configuration::with_known_groups(const std::vector<std::vector<u32>>& groups, bool overwrite)
         {
+            if (this->netlist == nullptr)
+            {
+                log_error("dataflow", "cannot add known groups by gate ID, netlist is a nullptr");
+                return *this;
+            }
+
             if (overwrite)
             {
                 this->known_gate_groups.clear();
@@ -270,6 +289,12 @@ namespace hal
 
         Configuration& Configuration::with_gate_types(const std::set<GateTypeProperty>& gate_type_properties, bool overwrite)
         {
+            if (this->netlist == nullptr)
+            {
+                log_error("dataflow", "cannot add gate types by property, netlist is a nullptr");
+                return *this;
+            }
+
             auto gate_types_map = this->netlist->get_gate_library()->get_gate_types([gate_type_properties](const GateType* gt) {
                 for (GateTypeProperty p : gate_type_properties)
                 {
