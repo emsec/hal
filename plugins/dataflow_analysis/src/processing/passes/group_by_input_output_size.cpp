@@ -20,8 +20,10 @@ namespace hal
 
                 /* check characteristics */
                 std::map<std::pair<u32, u32>, std::list<u32>> characteristics_map;
-                for (const auto& [group_id, gates] : state->gates_of_group)
+                for (const auto group_id : state->get_group_ids())
                 {
+                    const auto& gates = state->gates_of_group.at(group_id);
+
                     std::pair<u32, u32> min_max_connections;
                     bool first = true;
                     for (auto g : gates)

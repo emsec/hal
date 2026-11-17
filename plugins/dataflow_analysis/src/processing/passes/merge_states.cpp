@@ -20,8 +20,10 @@ namespace hal
 
                 for (const auto& state : {state1, state2})
                 {
-                    for (const auto& [group_id, gates] : state->gates_of_group)
+                    for (const auto group_id : state->get_group_ids())
                     {
+                        const auto& gates = state->gates_of_group.at(group_id);
+
                         u32 new_group_id = ++id_counter;
 
                         new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr.gate_to_fingerprint.at(*gates.begin());

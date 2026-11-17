@@ -294,14 +294,24 @@ namespace hal
                     float cnt = 0;
                     std::vector<std::unordered_set<u32>> spread_stages;
                     std::set<std::vector<u32>> seen;
-                    for (auto& [g, stages] : netlist_abstr.gate_to_register_stages)
+
+                    // the multi-stages found depend on the order in which the gates are visited, so the gates are visited in ascending ID order
+                    for (const auto* gate : netlist_abstr.target_gates)
                     {
-                        progress_bar.report(++cnt / netlist_abstr.gate_to_register_stages.size());
+                        progress_bar.report(++cnt / netlist_abstr.target_gates.size());
+
+                        const auto stages_it = netlist_abstr.gate_to_register_stages.find(gate->get_id());
+                        if (stages_it == netlist_abstr.gate_to_register_stages.end())
+                        {
+                            continue;
+                        }
+                        const auto& stages = stages_it->second;
 
                         if (stages.size() > 1)
                         {
                             // collect current multi stage in vector for fast iteration + low memory
                             auto stages_vec = std::vector<u32>(stages.begin(), stages.end());
+                            std::sort(stages_vec.begin(), stages_vec.end());
 
                             // seen this multi stage before? skip!
                             if (seen.find(stages_vec) != seen.end())
