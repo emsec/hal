@@ -14,6 +14,11 @@ namespace hal {
 
     void WavedataTableEditor::setup(const std::vector<NetlistSimulatorController::InputColumnHeader> &inpColHeads, bool omitClock)
     {
+        // called again whenever the wizard page is entered, start with an empty table
+        disconnect(this, &QTableWidget::itemChanged, this, &WavedataTableEditor::handleItemChanged);
+        mInputColumnHeader.clear();
+        clear();
+
         for (NetlistSimulatorController::InputColumnHeader ich : inpColHeads)
         {
             if (omitClock && ich.is_clock) continue;
