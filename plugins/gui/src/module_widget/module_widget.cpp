@@ -89,7 +89,6 @@ namespace hal
         connect(mTreeView->selectionModel(), &QItemSelectionModel::currentChanged, this, &ModuleWidget::handleCurrentChanged);
         connect(mTreeView, &ModuleTreeView::doubleClicked, this, &ModuleWidget::handleItemDoubleClicked);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleWidget::handleSelectionChanged, Qt::QueuedConnection);
-        connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &ModuleWidget::handleModuleRemoved);
 
         connect(mSearchAction, &QAction::triggered, this, &ModuleWidget::toggleSearchbar);
 
@@ -243,17 +242,6 @@ namespace hal
         context_menu.exec(mTreeView->viewport()->mapToGlobal(point));
     }
 
-    void ModuleWidget::handleModuleRemoved(Module* module, u32 module_id)
-    {
-        UNUSED(module);
-        UNUSED(module_id);
-
-        //prevents the execution of "handleTreeSelectionChanged"
-        //when a module is (re)moved the corresponding item in the tree is deleted and deselected, thus also triggering "handleTreeSelectionChanged"
-        //this call due to the selection model signals is unwanted behavior because "handleTreeSelectionChanged" is ment to only react to an "real" action performed by the user on the tree itself
-        mIgnoreSelectionChange = true;
-    }
-
     void ModuleWidget::handleCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
     {
         Q_UNUSED(previous);
@@ -269,6 +257,7 @@ namespace hal
         Q_UNUSED(selected)
         Q_UNUSED(deselected)
 
+        // the model is modifying while it removes or moves the items of (re)moved modules, which deselects them
         if (mIgnoreSelectionChange || mModuleModel->isModifying())
             return;
 
