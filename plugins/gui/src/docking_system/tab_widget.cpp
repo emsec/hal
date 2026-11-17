@@ -174,11 +174,10 @@ namespace hal
     //does not delete the widgets, just removes
     void TabWidget::clear()
     {
-        for (int i = 0; i < mDockBar->count(); ++i)
-        {
-            ContentWidget* widget = mDockBar->widgetAt(0);
-            remove(widget);
-        }
+        // remove() shrinks the dock bar, so iterate from the back to remove every widget. The caller deletes the
+        // widgets afterwards, any widget left behind would remain the current widget as a dangling pointer.
+        for (int i = mDockBar->count() - 1; i >= 0; --i)
+            remove(mDockBar->widgetAt(i));
 
         mDockBar->update();
     }
