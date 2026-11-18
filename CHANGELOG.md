@@ -205,6 +205,7 @@ All notable changes to this project will be documented in this file.
     * added `to_string` and `write_txt` to the state transition graph, printing the full conditions of all transitions together with a legend that maps the state bits, the outputs, and every net variable of a Boolean function back to the netlist
     * added tests
     * removed the debug output that `solve_fsm` printed to stdout on every run
+    * fixed `solve_fsm` crashing on a nullptr in the state register, which is now rejected with an error naming its index, as is a nullptr in the transition logic
     * fixed `solve_fsm` interpreting a user-provided initial state with the wrong bit order
   * netlist preprocessing
     * added an optional gate scope to the preprocessing functions, restricting which gates may be modified or deleted and defaulting to the entire netlist

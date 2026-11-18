@@ -470,6 +470,17 @@ namespace hal
             EXPECT_TRUE(solve_fsm::solve_fsm(solve_fsm::Configuration(nl.get()).with_transition_logic(transition_logic)).is_error());
             EXPECT_TRUE(solve_fsm::solve_fsm(solve_fsm::Configuration(nl.get()).with_state_register(sr.gates())).is_error());
 
+            // a nullptr in the state register or the transition logic is rejected instead of dereferenced, and the error names where it is
+            const auto expect_nullptr_error = [&](const std::vector<Gate*>& state_register, const std::vector<Gate*>& logic, const std::string& expected) {
+                const auto res = solve_fsm::solve_fsm(solve_fsm::Configuration(nl.get()).with_state_register(state_register).with_transition_logic(logic));
+                ASSERT_TRUE(res.is_error());
+                EXPECT_NE(res.get_error().get().find(expected), std::string::npos) << res.get_error().get();
+            };
+            expect_nullptr_error({nullptr, sr.ff0, sr.ff1}, transition_logic, "flip-flop at index 0 of the state register is a nullptr");
+            expect_nullptr_error({sr.ff0, sr.ff1, nullptr}, transition_logic, "flip-flop at index 2 of the state register is a nullptr");
+            expect_nullptr_error(sr.gates(), {nullptr, transition_logic.at(0), transition_logic.at(1)}, "gate at index 0 of the transition logic is a nullptr");
+            expect_nullptr_error(sr.gates(), {transition_logic.at(0), transition_logic.at(1), nullptr}, "gate at index 2 of the transition logic is a nullptr");
+
             // an initial state that does not cover the whole state register is rejected as well
             const auto incomplete = solve_fsm::Configuration(nl.get())
                                         .with_state_register(sr.gates())
