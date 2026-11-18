@@ -57,6 +57,7 @@ All notable changes to this project will be documented in this file.
     * fixed crash when passing a `nullptr` pin to `Net::remove_source` or `Net::remove_destination`
     * fixed Python binding `Grouping.remove_module_by_id` removing the gate with the given ID instead of the module
     * added `Gate::has_boolean_function`, which checks whether `Gate::get_boolean_function` finds a function for a name or an output pin
+    * renamed the Python keyword arguments `recusive` of `Module.contains_module` to `recursive` and `hdl_string` of `NetlistFactory.load_netlist_from_string` to `netlist_string`, matching the C++ parameters
   * module pins
     * sped up assigning gates to a module and removing them from it, `Module::get_pin_by_net` scanned every pin of the module for every net of every gate that enters or leaves it; the pins are now indexed by net
     * added `PinChangedBulkScope`, which collects the pin events of a bulk operation and sends a single `PinEvent::PinsReload` per affected module instead. Assigning gates to modules opens one, while interactive pin changes keep their fine-grained events
@@ -75,6 +76,7 @@ All notable changes to this project will be documented in this file.
     * fixed `GateTypeProperty.fifo` being bound to `ram` in Python
     * fixed `GateType.components` raising a `TypeError` whenever it was read from Python
     * fixed Python property `GateLibrary.gnd_gate_types` returning the VCC gate types
+    * renamed the Python keyword argument `pin_name` of `GateType.add_boolean_function` to `name`, matching the C++ parameter
   * Boolean functions
     * sped up `BooleanFunction::compute_truth_table` by evaluating 64 rows of the table at once instead of running a symbolic execution per row. Applies to single-bit functions of bitwise operations whose variables are all part of the truth table
     * raised the limit on the number of variables a truth table may be computed for from 10 to 20, see `BooleanFunction::MAX_TRUTH_TABLE_VARIABLES`
@@ -83,6 +85,7 @@ All notable changes to this project will be documented in this file.
     * added constant folding for the `Sdiv`, `Udiv`, `Srem` and `Urem` operations
     * added simplification rules for the word level operations: extensions to the width the value already has, nested extensions and slices, slices that fall into one half of a concatenation or into either part of an extension, unsigned comparisons against zero and the maximum, equality of a value with its own negation, and single bit equalities and selections
     * fixed deadlock and memory leak which could occur when `abc_simplification` failed
+    * fixed `BooleanFunction::simplify` leaking about 376 KB on every call that reached the ABC simplification, as neither the ABC network built for it nor the strings handed to ABC were freed
     * fixed the constant folding of `Add` and `Sub` masking the result to 32 bit before cutting it to the operand width, so for operands of 33 to 64 bit the upper bits of the result were always zero
     * fixed `Eq` reporting a definite inequality when an undefined bit could have made the two values equal, it now reports an undefined result like the other comparisons do
     * fixed `BooleanFunction::to_string` reading past the end of its digit table when a bit-vector that contains an `X` or `Z` is converted to an octal or hexadecimal string
@@ -142,11 +145,18 @@ All notable changes to this project will be documented in this file.
   * clock tree extractor
     * added the `clock_tree_extractor` plugin, which recovers the clock distribution network of a gate-level netlist. Starting at the clock pin of every flip-flop it walks against the signal direction through buffers, inverters, delay gates, clock gates and toggle-flip-flop clock dividers up to the global input nets that drive them, and returns the result as a `ClockTree`. Reconvergent clock networks, i.e. meshes, are extracted as well.
     * added `ClockTree::from_netlist` that extracts the clock tree of a netlist
-    * added `ClockTree::export_dot` that writes the tree as a DOT graph
+    * added `cte::export_dot`, bound to Python as `ClockTree.export`, that writes a clock tree as a DOT graph. A gate is placed at its location, or at the coordinates read from the two gate parameters named by `x_key` and `y_key`, which unlike a location can be negative
     * added `ClockTree::get_subtree` that returns the clock tree below a gate or net as a `ClockTree` of its own
     * added `ClockTree::get_neighbors`, bound to Python as `get_parents` and `get_childs`, that returns the gates and nets directly upstream or downstream of an object in the clock tree
     * added `ClockTree::get_gates`, `get_nets`, `get_all` and `get_netlist` that list the gates and nets of a clock tree and hand back the netlist it was built from
     * added `ClockTree::get_vertex_from_ptr`, `get_ptr_from_vertex`, `get_vertices_from_ptrs` and `get_ptrs_from_vertices` that translate between gates or nets and their igraph vertex IDs, and `ClockTree::get_igraph` that exposes the underlying `igraph_t` to C++ callers
+    * added `ClockTree::get_diagnostics`, which lists what the extraction had to skip, e.g., a flip-flop whose clock pin has no net or a clock net with several drivers, as `Diagnostic` objects holding a `Severity`, a `DiagnosticCode`, the gate or net concerned and a message
+    * added `recover_branches`, bound to Python as `ClockTree.get_branches`, that returns every path from a root to a sink of a clock tree; a gate or net reached over several paths is part of several branches
+    * added `ClockTree::get_roots` that returns the igraph vertex IDs of the roots of a clock tree to C++ callers
+  * clock tree viewer
+    * added the `clock_tree_viewer` plugin, which plots a clock tree in the GUI at the coordinates of its gates, read from the gate parameters `X` and `Y` or from the location of each gate. A gate takes the color of its module, its grouping or the selection, as in the graph view, and the gates selected in HAL are highlighted in the plot
+    * added a toolbar to the viewer to extract and plot the clock tree of the loaded netlist, zoom to the whole tree or to the highlighted gates, and save a picture of the whole tree
+    * added the Python functions `show_clock_tree()`, which plots a clock tree in the viewer, and `highlight_gates()`, which highlights gates in the plot
   * dot viewer
     * added the `dot_viewer` plugin, which renders a Graphviz `.dot` file inside the GUI and, for a file written by another HAL plugin, ties the graph to the netlist
     * added Python function `load_dot_file()` to open a `.dot` file in the viewer
@@ -160,12 +170,15 @@ All notable changes to this project will be documented in this file.
       * fixed the round function of HAWKEYE walking every path from each flip-flop of the register rather than every gate, which is exponential in a cone of logic that reconverges
       * sped up the S-box identification of HAWKEYE by tabulating each output over the state and the control inputs together and reading the assignment of the control inputs out of that one table, instead of substituting the control values and tabulating anew for each of up to 256 assignments
       * changed the round function of a HAWKEYE candidate to determine which flip-flops each of its gates depends on only when the S-box search asks for it
-      * added a limit to the canonical form search behind an S-box lookup, which finishes quickly for a real S-box but does not terminate in reasonable time for a table that is close to linear
+      * added a limit to the canonical form search behind an S-box lookup, which finishes quickly for a real S-box but does not terminate in reasonable time for a table that is close to linear. A table that maps 0 to 0 takes a search of its own, which can hit the limit for a real S-box, e.g., AES XORed with `0x63`, so `SBoxDatabase::lookup` skips that one output constant and `SBoxDatabase::add` leaves it out
+      * sped up `SBoxDatabase::lookup` for a table that matches no S-box of the database, which took about 20 s for an 8-bit table as it ran the canonical form search once per output constant; the differential spectrum of the table is now compared with those of the database entries first, which rejects such a table in 0.03 s
     * bugfixes
       * fixed the candidates of HAWKEYE being ordered by the addresses of their gates, which made the result of `detect_candidates` differ between runs of the same binary
       * fixed `RegisterCandidate::operator==` never reporting a round-based candidate as equal to itself
       * fixed the S-box search of HAWKEYE calling `std::includes` on the unsorted result of `get_unique_predecessors`, which made the number of located S-boxes differ between runs of the same binary
       * fixed the linear independence check of HAWKEYE shifting by more than the width of its type for S-boxes of more than 6 bits, which is undefined and made the check operate on garbage for 7-bit and 8-bit S-boxes
+      * fixed the S-box identification of HAWKEYE keeping the wrong outputs of an S-box with more outputs than inputs: the elimination that selects the independent outputs reused pivots, which got the rank wrong, and took the complement of another output, e.g., a key addition with the key bit held at 0, for an independent one. On a synthesized AES-128 netlist all 16 S-boxes are now identified instead of 6
+      * fixed the S-box search of HAWKEYE splitting a component into groups of 2 flip-flops, so that the 2-to-4 predecoders synthesis may put at the inputs of an S-box passed for many small S-boxes, 64 on a synthesized AES-128 netlist; a group now needs at least 3 flip-flops, as a whole component always did
       * fixed `SBoxDatabase::lookup` never terminating for an 8-bit S-box that is not contained in the database, as it counted the constant it adds to the outputs in a `u8`, which never reaches 256
       * fixed `SBoxDatabase::store` reporting a failure although it had written the database, and made it report one if the file cannot be opened
       * fixed `hawkeye.DetectionConfiguration` and `hawkeye.SBoxDatabase` leaking every instance created from Python, `SBoxDatabase.from_file` leaked 25 KB per call
@@ -178,6 +191,7 @@ All notable changes to this project will be documented in this file.
       * changed the window title from `Empty Wizard` to `Simulation Wizard` and greyed out the input method that is not selected
       * fixed editing a time in the middle of the input table replacing it with the previous time plus 1000 as if it were the last row; it is now kept if it lies between its neighbours and replaced by their midpoint otherwise
       * fixed the wizard starting with the wave data and net groups of the previous run, its SALEAE directory and the controller are now reset when the wizard opens
+      * fixed the input table of the wizard listing every input once more each time its page was entered again, e.g., after going back, and HAL then crashing on `Next`
     * bugfixes
       * fixed the debug dump of the SALEAE directory that was printed to the console whenever waveforms were loaded
       * fixed the waveform viewer keeping the tab of a simulation controller that was deleted, e.g., from Python, and dereferencing the deleted controller from it
@@ -187,6 +201,8 @@ All notable changes to this project will be documented in this file.
   * dataflow analysis
     * fixed running the dataflow analysis from the command line with `--dataflow`, which failed with "no gate types specified"
     * fixed the dataflow analysis blocking a thread when it wrote its results, progress was reported while the lock that guards the results was held
+    * fixed the dataflow analysis missing edges between flip-flops wherever the fan-out of a net reconverges: a traversal does not enter a net twice, so the nets on a second path to it never received what the shared cache held for it, and neither did every later traversal that found these nets in the cache. On two synthesized AES-128 netlists about 1 % of the edges were missing, which split a 128-bit register into groups of 120 and 8 flip-flops. The known net groups that precede a gate were collected with the same defect
+    * fixed `with_flip_flops`, `with_gate_types` by property, `with_known_structures` by gate type and `with_known_groups` by gate ID of the dataflow `Configuration` dereferencing a missing netlist, e.g., after `Configuration(None)` in a script whose netlist failed to load; they now log an error and return the configuration unchanged
     * changed `create_modules` to create the pin groups of a DANA module in descending order
     * `Result::write_dot` now returns the path it wrote to, as it replaces a wrong extension
     * changed the plugin dialog to no longer open the written `.dot` graph in the DOT viewer unprompted
@@ -286,6 +302,7 @@ All notable changes to this project will be documented in this file.
     * fixed behavior of an isolated view which is not bound to a module not to remove all gates when module gets deleted
     * fixed the GUI at times not registering the first change to a netlist after start, and so not offering to save it on close
     * fixed unloading the waveform viewer or the DOT viewer plugin leaving its dock button behind
+    * fixed the GUI crashing when a project is closed and another one is opened or imported in the same session while the center area holds more than one widget, e.g., the DOT viewer next to the graph views; closing the project removed only half of the widgets of the center area
     * fixed the GUI crashing when the selection is to be brought into view before the graph view has rendered its layout, e.g. by `GuiApi::selectGate` with `navigate_to_selection` set right after opening a netlist, the scene had no item for the selected element yet
     * fixed the GUI dropping an unrelated gate from the selection instead of the net itself when a selected net is deleted
     * fixed the GUI re-laying out its graph views once per gate while a preprocessing function invoked from a context menu deletes or replaces many of them
@@ -326,6 +343,8 @@ All notable changes to this project will be documented in this file.
   * added support for Ubuntu 26.04, which is now built and tested in CI next to 22.04, 24.04 and macOS
   * fixed `install_dependencies.sh` on macOS writing the Homebrew prefix into the shell configuration as the unexpanded text
   * fixed the documentation build: Sphinx is now run through the Python interpreter that `hal_py` is linked against
+  * fixed the Python API documentation of the `boolean_influence`, `dataflow` and `module_identification` plugins, whose pages were empty, and added the missing pages for `AsyncSetResetBehavior`, `MACComponent`, `LogManager`, `ProjectDirectory`, the base pin classes and the logging functions
+  * fixed the C++ API documentation leaving out 17 plugins and whole classes that Doxygen lost to the unexpanded `Q_DECLARE_METATYPE` and `__attribute__` macros
   * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
   * fixed the Qt6 fallback on macOS, which pointed to a Qt5 installation (`qt@5`); if `Qt6_DIR` is not given, the Qt6 installed by Homebrew is used
   * changed `install_dependencies.sh` to add Homebrew's `llvm` to `PATH` instead of `llvm@14`, matching the `Brewfile`
