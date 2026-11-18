@@ -278,6 +278,7 @@ All notable changes to this project will be documented in this file.
   * bugfixes
     * fixed gate library parsing error when creating new project by loading the parser plugin
     * fixed the module trees keeping a net under its module after the net was marked as a global input or output, and leaving a net out after it was unmarked
+    * fixed clicking a module in the modules widget not updating the selection details after a module had been deleted or moved to another parent, e.g., by a second dataflow analysis run, until something was selected elsewhere
     * fixed `Number of nets` in the details of a module showing the number of internal nets; it now counts every net with a source or a destination inside the module, as `Module::get_nets` returns them
     * fixed the GUI crashing when a pin group that still holds pins is deleted
     * fixed the GUI crashing when `Delete pin group` is chosen for a group that holds a single pin named like the group
