@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 <!--
   Entries are grouped by what they affect: Core (one sub-heading per component, Boolean functions
-  and the Python binding machinery included), Plugins (one sub-heading per plugin), GUI, and Build
+  and the Python binding machinery included), Plugins (one sub-heading per plugin), GUI, Examples, and Build
   and dependencies. A Python binding fix goes under the component it binds. Add a new entry under
   the group it belongs to rather than at the top of the section, and create the group if it is not
   there yet.
@@ -319,6 +319,9 @@ All notable changes to this project will be documented in this file.
     * changed the Python console to accept several statements pasted at once, as an alternative to the Python editor for pasted snippets that do not need editing
     * fixed the Python console switching to the `...` prompt after a line with a syntax error instead of reporting the error right away
     * fixed the Python console not executing a multi-line statement when the final empty line still contained indentation
+* Examples
+  * updated the example projects to ship exact copies of the current gate libraries, whose copies predated the corrected pin types of `lsi_10k.hgl`, the flip-flop `INIT` parameters of `example_library.hgl`, and the parameters and multi-output LUTs of `XILINX_UNISIM.hgl`, and to store the gate library and netlist paths of `fsm.hal`, `simple_alu.hal`, `toy_cipher.hal` and `uart.hal` relative to the project
+  * fixed the HAWKEYE script of the `crypto_trojan` example, which still called the functions replaced by `CipherCandidate` and failed on its first call
 * Build and dependencies
   * changed the GUI from Qt 5 to Qt 6
   * updated the vendored QuaZip from 1.3 to 1.5 as part of the move to Qt 6
