@@ -8,3 +8,4 @@
 !verilator*
 !verilator/**/*
 !.gitignore
+!CMakeLists.txt
