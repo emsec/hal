@@ -181,6 +181,7 @@ All notable changes to this project will be documented in this file.
     * bugfixes
       * fixed the debug dump of the SALEAE directory that was printed to the console whenever waveforms were loaded
       * fixed the waveform viewer keeping the tab of a simulation controller that was deleted, e.g., from Python, and dereferencing the deleted controller from it
+      * fixed the waveform viewer keeping the waveforms and groups of a simulation controller in its tab after the controller was reset, e.g., by the simulation wizard, and crashing on the next selection in the graph view
       * fixed the value of a waveform group being computed with the first net as LSB in `WaveDataGroup::recalcData`, `WaveDataProviderGroup` and `WaveGroupValue` while the rest of the viewer takes the first net as MSB, so the same group showed different values depending on where it was evaluated
       * fixed the waveform tree losing the expanded or collapsed state of its groups whenever its items are reordered, e.g., after a drag and drop
       * fixed dropping a waveform onto a group in the waveform tree always inserting it as the first entry of the group regardless of the drop position
