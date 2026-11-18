@@ -18,18 +18,19 @@ namespace hal
 
             .def(
                 "load_netlist",
-                [](const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file = std::filesystem::path()) {
+                [](const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file) {
                     return std::shared_ptr<Netlist>(netlist_factory::load_netlist(netlist_file, gate_library_file));
                 },
                 py::arg("netlist_file"),
-                py::arg("gate_library_file") = std::filesystem::path(),
+                // a default of std::filesystem::path() would reach Python as pathlib.Path(""), which is '.', and come back as a non-empty path
+                py::arg("gate_library_file") = "",
                 R"(
                 Create a netlist from the given file using the specified gate library file.
                 Will either deserialize ``.hal`` file or call parser plugin for other formats.
                 In the latter case the specified gate library file is mandatory.
 
                 :param pathlib.Path netlist_file: Path to the file.
-                :param pathlib.Path gate_library_file: Path to the gate library file.
+                :param pathlib.Path gate_library_file: Path to the gate library file. Optional for a ``.hal`` file, which then uses the gate library it names.
                 :returns: The netlist on success, ``None`` otherwise.
                 :rtype: hal_py.Netlist or None
             )")
