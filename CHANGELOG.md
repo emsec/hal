@@ -176,7 +176,9 @@ All notable changes to this project will be documented in this file.
       * added a `Display values as hex numbers` switch to the input table, and changed the table to accept values in the `0x`, `0o`, `0b` and the Verilog `'h`, `'o`, `'b`, `'d` notations as well as `"<character>` for the code of a character, each checked against the width of the pin group
       * changed the input columns of the simulation wizard to list the nets of a descending pin group from the highest index down, so that the bits of an entered value land on the nets in the order the group declares
       * changed the window title from `Empty Wizard` to `Simulation Wizard` and greyed out the input method that is not selected
+      * changed the wizard to ask before it resets a controller that already has gates or waveform data and deletes its simulation data
       * fixed editing a time in the middle of the input table replacing it with the previous time plus 1000 as if it were the last row; it is now kept if it lies between its neighbours and replaced by their midpoint otherwise
+      * fixed the wizard opening on the previously shown simulation controller right after a new one was created, which reset that controller and deleted its simulation data; creating a controller, or opening a saved one through `Open input file`, now switches to its tab
       * fixed the wizard starting with the wave data and net groups of the previous run, its SALEAE directory and the controller are now reset when the wizard opens
     * bugfixes
       * fixed the debug dump of the SALEAE directory that was printed to the console whenever waveforms were loaded
