@@ -51,12 +51,7 @@ namespace hal
         widget->setupToolbar(mLeftToolbar);
         mRightToolbar->addAction(action);
 
-        for (QShortcut* s : widget->createShortcuts())
-        {
-            s->setParent(this);
-            s->setContext(Qt::WidgetWithChildrenShortcut);
-            s->setEnabled(true);
-        }
+        widget->ensureShortcuts();
 
         setLayout(mVerticalLayout);
         mVerticalLayout->addLayout(mHorizontalLayout, Qt::AlignTop);

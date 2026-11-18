@@ -149,6 +149,5 @@ namespace hal
         Toolbar* mRightToolbar;
         ContentWidget* mCurrentWidget;
         QAction* mActionDetach;
-        QList<QShortcut*> mActiveShortcuts;
     };
 }
