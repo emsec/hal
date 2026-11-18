@@ -3,10 +3,19 @@
 #include "hal_core/netlist/gate.h"
 
 #include "hal_core/netlist/boolean_function/solver.h"
+#include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "netlist_test_utils.h"
+
+#include <array>
+#include <functional>
 
 namespace hal
 {
@@ -149,6 +158,122 @@ namespace hal
                 }
             }
             return std::nullopt;
+        }
+
+        /**
+         * A gate library whose flip-flops feed their current state back into their next-state function, which the
+         * flip-flop of the default test library does not do. 'DFFE' holds its state while 'EN' is unset. 'TFFN'
+         * toggles its state while 'D' is set and describes that in terms of its negated state.
+         */
+        static std::unique_ptr<GateLibrary> create_internal_state_library()
+        {
+            auto gl = std::make_unique<GateLibrary>("", "SOLVE_FSM_INTERNAL_STATE_LIBRARY");
+
+            const auto add_pins = [](GateType* gt, const std::vector<std::tuple<std::string, PinDirection, PinType>>& pins) {
+                for (const auto& [name, direction, type] : pins)
+                {
+                    if (gt->create_pin(name, direction, type).is_error())
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            };
+
+            GateType* buf = gl->create_gate_type("BUF", {GateTypeProperty::combinational, GateTypeProperty::c_buffer});
+            GateType* inv = gl->create_gate_type("INV", {GateTypeProperty::combinational, GateTypeProperty::c_inverter});
+            for (GateType* gt : {buf, inv})
+            {
+                if (!add_pins(gt, {{"I", PinDirection::input, PinType::none}, {"O", PinDirection::output, PinType::none}}))
+                {
+                    return nullptr;
+                }
+            }
+            buf->add_boolean_function("O", BooleanFunction::from_string("I").get());
+            inv->add_boolean_function("O", BooleanFunction::from_string("!I").get());
+
+            const std::vector<std::tuple<std::string, std::string, bool>> ffs = {
+                {"DFFE", "((EN & D) | ((! EN) & IQ))", true},
+                {"TFFN", "((D & IQN) | ((! D) & (! IQN)))", false},
+            };
+            for (const auto& [name, next_state, has_enable] : ffs)
+            {
+                GateType* ff = gl->create_gate_type(name,
+                                                    {GateTypeProperty::sequential, GateTypeProperty::ff},
+                                                    FFComponent::create(StateComponent::create(InitComponent::create("generic", {"INIT"}), "IQ", "IQN"),
+                                                                        BooleanFunction::from_string(next_state).get(),
+                                                                        BooleanFunction::from_string("CLK").get()));
+
+                std::vector<std::tuple<std::string, PinDirection, PinType>> pins = {{"CLK", PinDirection::input, PinType::clock}, {"D", PinDirection::input, PinType::data}};
+                if (has_enable)
+                {
+                    pins.push_back({"EN", PinDirection::input, PinType::enable});
+                }
+                pins.push_back({"Q", PinDirection::output, PinType::state});
+                pins.push_back({"QN", PinDirection::output, PinType::neg_state});
+                if (!add_pins(ff, pins))
+                {
+                    return nullptr;
+                }
+                ff->add_boolean_function("Q", BooleanFunction::from_string("IQ").get());
+                ff->add_boolean_function("QN", BooleanFunction::from_string("IQN").get());
+            }
+
+            return gl;
+        }
+
+        /**
+         * Evaluate a transition condition under the given assignment of its variables, failing the test if the
+         * condition depends on any other variable.
+         */
+        static bool holds(const BooleanFunction& condition, const std::map<std::string, bool>& assignment)
+        {
+            std::unordered_map<std::string, std::vector<BooleanFunction::Value>> values;
+            for (const auto& var : condition.get_variable_names())
+            {
+                const auto it = assignment.find(var);
+                if (it == assignment.end())
+                {
+                    ADD_FAILURE() << "condition '" << condition.to_string() << "' depends on unexpected variable '" << var << "'";
+                    return false;
+                }
+                values[var] = {it->second ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO};
+            }
+
+            const auto res = condition.evaluate(values);
+            if (res.is_error())
+            {
+                ADD_FAILURE() << "could not evaluate condition '" << condition.to_string() << "': " << res.get_error().get();
+                return false;
+            }
+            return res.get().front() == BooleanFunction::Value::ONE;
+        }
+
+        /**
+         * Check that the graph of an FSM with a single input reaches exactly the given states, and that from each of
+         * them it takes the transition to 'successor(state, value)' and no other for each value of the input.
+         */
+        static void expect_transitions(const solve_fsm::StateTransitionGraph& graph, const std::string& input, const std::set<u64>& states, const std::function<u64(u64, bool)>& successor)
+        {
+            std::set<u64> reached;
+            for (const auto& [state, _] : graph.transitions)
+            {
+                reached.insert(state);
+            }
+            EXPECT_EQ(reached, states);
+
+            for (const auto& [state, successors] : graph.transitions)
+            {
+                for (const bool value : {false, true})
+                {
+                    const u64 expected = successor(state, value);
+                    EXPECT_NE(successors.find(expected), successors.end()) << "missing transition " << state << " -> " << expected;
+                    for (const auto& [suc, condition] : successors)
+                    {
+                        EXPECT_EQ(holds(condition, {{input, value}}), suc == expected) << "transition " << state << " -> " << suc << " with " << input << " = " << value;
+                    }
+                }
+            }
         }
     };
 
@@ -624,6 +749,202 @@ namespace hal
             const auto plain_dot_res = plain_res.get().generate_dot_graph();
             ASSERT_TRUE(plain_dot_res.is_ok());
             EXPECT_EQ(plain_dot_res.get().find("label=\"0\\nOUT"), std::string::npos);
+        }
+        TEST_END
+    }
+
+    /**
+     * Test that the next state of a flip-flop is derived correctly when its next-state function refers to its negated
+     * internal state, also when the negated state output is not connected.
+     *
+     * Functions: solve_fsm
+     */
+    TEST_F(SolveFsmTest, check_negated_internal_state)
+    {
+        TEST_START
+        {
+            const auto gl = create_internal_state_library();
+            ASSERT_NE(gl, nullptr);
+            auto nl = std::make_unique<Netlist>(gl.get());
+
+            // a toggle flip-flop whose toggle input comes from a global input through a buffer
+            Gate* ff  = nl->create_gate(gl->get_gate_type_by_name("TFFN"), "ff");
+            Gate* buf = nl->create_gate(gl->get_gate_type_by_name("BUF"), "buf_t");
+
+            Net* clk = nl->create_net("clk");
+            clk->add_destination(ff, "CLK");
+            clk->mark_global_input_net();
+
+            Net* t = nl->create_net("t");
+            t->add_destination(buf, "I");
+            t->mark_global_input_net();
+
+            Net* d = nl->create_net("d");
+            d->add_source(buf, "O");
+            d->add_destination(ff, "D");
+
+            // only the state output is connected, so the negated internal state has to be expressed through it
+            Net* q = nl->create_net("q");
+            q->add_source(ff, "Q");
+            q->mark_global_output_net();
+
+            const std::string t_var = BooleanFunctionNetDecorator(*t).get_boolean_variable_name();
+            const auto toggle       = [](const u64 state, const bool value) -> u64 { return value ? (state ^ 1) : state; };
+
+            auto config = solve_fsm::Configuration(nl.get()).with_state_register({ff}).with_transition_logic({buf});
+            for (const bool brute_force : {true, false})
+            {
+                if (!brute_force && !solver_available())
+                {
+                    continue;
+                }
+
+                const auto res = solve_fsm::solve_fsm(config.with_brute_force(brute_force));
+                ASSERT_TRUE(res.is_ok()) << res.get_error().get();
+                expect_transitions(res.get(), t_var, {0, 1}, toggle);
+            }
+        }
+        TEST_END
+    }
+
+    /**
+     * Test that a state flip-flop whose data input is driven directly by another state flip-flop is solved correctly
+     * when its next-state function also refers to its own internal state.
+     *
+     * Functions: solve_fsm
+     */
+    TEST_F(SolveFsmTest, check_state_bit_fed_by_another_state_bit)
+    {
+        TEST_START
+        {
+            const auto gl = create_internal_state_library();
+            ASSERT_NE(gl, nullptr);
+
+            // the order in which the two state bits are processed depends on where their nets end up in memory, so
+            // each flip-flop takes a turn at being fed directly by the other one
+            for (const u32 direct : {0u, 1u})
+            {
+                const u32 other = 1 - direct;
+                auto nl         = std::make_unique<Netlist>(gl.get());
+
+                const std::array<Gate*, 2> ffs = {nl->create_gate(gl->get_gate_type_by_name("DFFE"), "ff0"), nl->create_gate(gl->get_gate_type_by_name("DFFE"), "ff1")};
+                Gate* buf                      = nl->create_gate(gl->get_gate_type_by_name("BUF"), "buf_en");
+                Gate* inv                      = nl->create_gate(gl->get_gate_type_by_name("INV"), "inv");
+
+                Net* clk = nl->create_net("clk");
+                clk->mark_global_input_net();
+
+                Net* en = nl->create_net("en");
+                en->add_destination(buf, "I");
+                en->mark_global_input_net();
+
+                Net* en_buf = nl->create_net("en_buf");
+                en_buf->add_source(buf, "O");
+
+                std::array<Net*, 2> qs;
+                for (u32 i = 0; i < 2; i++)
+                {
+                    clk->add_destination(ffs.at(i), "CLK");
+                    en_buf->add_destination(ffs.at(i), "EN");
+                    qs.at(i) = nl->create_net("q" + std::to_string(i));
+                    qs.at(i)->add_source(ffs.at(i), "Q");
+                }
+
+                // the directly fed flip-flop copies the other one, which in turn takes the inverse of the first, i.e., a
+                // two bit Johnson counter that holds its state while 'en' is unset
+                qs.at(other)->add_destination(ffs.at(direct), "D");
+                qs.at(direct)->add_destination(inv, "I");
+                Net* inv_out = nl->create_net("not_q" + std::to_string(direct));
+                inv_out->add_source(inv, "O");
+                inv_out->add_destination(ffs.at(other), "D");
+
+                const std::string en_var = BooleanFunctionNetDecorator(*en).get_boolean_variable_name();
+                const auto step          = [direct, other](const u64 state, const bool value) -> u64 {
+                    if (!value)
+                    {
+                        return state;
+                    }
+                    const u64 direct_bit = (state >> other) & 1;
+                    const u64 other_bit  = ((state >> direct) & 1) ^ 1;
+                    return (direct_bit << direct) | (other_bit << other);
+                };
+
+                auto config = solve_fsm::Configuration(nl.get()).with_state_register({ffs.at(0), ffs.at(1)}).with_transition_logic({buf, inv});
+                for (const bool brute_force : {true, false})
+                {
+                    if (!brute_force && !solver_available())
+                    {
+                        continue;
+                    }
+
+                    SCOPED_TRACE("ff" + std::to_string(direct) + " fed directly, " + (brute_force ? "brute force" : "SMT"));
+                    const auto res = solve_fsm::solve_fsm(config.with_brute_force(brute_force));
+                    ASSERT_TRUE(res.is_ok()) << res.get_error().get();
+                    expect_transitions(res.get(), en_var, {0, 1, 2, 3}, step);
+                }
+            }
+        }
+        TEST_END
+    }
+
+    /**
+     * Test that states using the upper half of a 64 bit state register are explored as configured.
+     *
+     * Functions: solve_fsm
+     */
+    TEST_F(SolveFsmTest, check_wide_state_register)
+    {
+        TEST_START
+        if (!solver_available())
+        {
+            GTEST_SKIP() << "no local SMT solver available";
+        }
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl = nl->get_gate_library();
+
+            Net* clk = nl->create_net("clk");
+            clk->mark_global_input_net();
+
+            // bits 31 and 32 sit on either side of the 32 bit boundary, bit 63 is the most significant one supported
+            const u64 initial = (u64(1) << 63) | (u64(1) << 32) | (u64(1) << 31);
+
+            std::vector<Gate*> state_register;
+            std::vector<Gate*> transition_logic;
+            std::map<Gate*, bool> initial_state;
+            for (u32 i = 0; i < 64; i++)
+            {
+                // every flip-flop holds its value through a buffer, so the FSM never leaves its initial state
+                Gate* ff  = nl->create_gate(gl->get_gate_type_by_name("DFF"), "ff" + std::to_string(i));
+                Gate* buf = nl->create_gate(gl->get_gate_type_by_name("BUF"), "buf" + std::to_string(i));
+                clk->add_destination(ff, "CLK");
+
+                Net* q = nl->create_net("q" + std::to_string(i));
+                q->add_source(ff, "Q");
+                q->add_destination(buf, "I");
+
+                Net* d = nl->create_net("d" + std::to_string(i));
+                d->add_source(buf, "O");
+                d->add_destination(ff, "D");
+
+                state_register.push_back(ff);
+                transition_logic.push_back(buf);
+                initial_state[ff] = (initial >> i) & 1;
+            }
+
+            const auto config =
+                solve_fsm::Configuration(nl.get()).with_state_register(state_register).with_transition_logic(transition_logic).with_initial_state(initial_state);
+            const auto res = solve_fsm::solve_fsm(config);
+            ASSERT_TRUE(res.is_ok()) << res.get_error().get();
+            const auto graph = res.get();
+
+            ASSERT_EQ(graph.transitions.size(), 1);
+            ASSERT_NE(graph.transitions.find(initial), graph.transitions.end());
+            const auto& successors = graph.transitions.at(initial);
+            ASSERT_EQ(successors.size(), 1);
+            EXPECT_EQ(successors.begin()->first, initial);
+            EXPECT_TRUE(successors.begin()->second.has_constant_value(1));
         }
         TEST_END
     }
