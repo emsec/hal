@@ -171,6 +171,7 @@ All notable changes to this project will be documented in this file.
       * fixed `hawkeye.DetectionConfiguration` and `hawkeye.SBoxDatabase` leaking every instance created from Python, `SBoxDatabase.from_file` leaked 25 KB per call
   * simulation
     * added selecting the nets of the waveforms selected in the waveform viewer in the graph view as well
+    * changed adding waveforms, through `Add waveform net` in the toolbar or on the result page of the simulation wizard, to group the waveforms of each pin group the added nets belong to once all nets of the group are shown ungrouped; before, nets added after the simulation always showed up as single waveforms
     * simulation wizard
       * added `Load data from file` to the manual input page, which fills the input table from a SALEAE directory, a VCD or a CSV file so that the data can be edited before simulating
       * added a `Display values as hex numbers` switch to the input table, and changed the table to accept values in the `0x`, `0o`, `0b` and the Verilog `'h`, `'o`, `'b`, `'d` notations as well as `"<character>` for the code of a character, each checked against the width of the pin group
@@ -182,6 +183,7 @@ All notable changes to this project will be documented in this file.
       * fixed the debug dump of the SALEAE directory that was printed to the console whenever waveforms were loaded
       * fixed the waveform viewer keeping the tab of a simulation controller that was deleted, e.g., from Python, and dereferencing the deleted controller from it
       * fixed the value of a waveform group being computed with the first net as LSB in `WaveDataGroup::recalcData`, `WaveDataProviderGroup` and `WaveGroupValue` while the rest of the viewer takes the first net as MSB, so the same group showed different values depending on where it was evaluated
+      * fixed a net that belongs to several simulated pin groups being grouped into whichever of them came first in an unordered set; module pin groups still take precedence over gate pin groups, followed by groups whose pins are all outputs and then by the alphabetically first name, ignoring case. Computing the net groups again no longer adds them a second time
       * fixed the waveform tree losing the expanded or collapsed state of its groups whenever its items are reordered, e.g., after a drag and drop
       * fixed dropping a waveform onto a group in the waveform tree always inserting it as the first entry of the group regardless of the drop position
   * dataflow analysis
