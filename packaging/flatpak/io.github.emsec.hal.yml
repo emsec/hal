@@ -23,6 +23,9 @@ finish-args:
   - --device=dri
   # HAL opens netlists, gate libraries and projects from arbitrary locations
   - --filesystem=home
+  # HAL resolves its plugin directory from HAL_BASE_PATH first; a value inherited
+  # from a developer's host environment would load incompatible host plugins.
+  - --env=HAL_BASE_PATH=/app
 
 cleanup:
   - /share/man
