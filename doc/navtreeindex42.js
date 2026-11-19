@@ -1,5 +1,6 @@
 var NAVTREEINDEX42 =
 {
+"netlist__traversal__decorator_8h.html":[10,0,0,0,1,1,3],
 "netlist__traversal__decorator_8h.html#ga10a0dbae61e1d4d1c8d2310ce40947c6":[10,0,0,0,1,1,3,1],
 "netlist__traversal__decorator_8h.html#gabf9ea95cf437527b2fd8929ae3d7489d":[10,0,0,0,1,1,3,0],
 "netlist__traversal__decorator_8h.html#gga10a0dbae61e1d4d1c8d2310ce40947c6a17bfc0c4ea85d792afc1c24aedd566fa":[10,0,0,0,1,1,3,1,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX42 =
 "plugin__clock__tree__viewer_8cpp.html":[10,0,1,3,2,5],
 "plugin__clock__tree__viewer_8cpp.html#a520a82c66e9e539acaa3fb2d6ce6578a":[10,0,1,3,2,5,0],
 "plugin__clock__tree__viewer_8cpp_source.html":[10,0,1,3,2,5],
-"plugin__clock__tree__viewer_8h.html":[10,0,1,3,0,0,5],
-"plugin__clock__tree__viewer_8h_source.html":[10,0,1,3,0,0,5]
+"plugin__clock__tree__viewer_8h.html":[10,0,1,3,0,0,5]
 };
