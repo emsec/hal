@@ -25,6 +25,7 @@
 #include <QDate>
 #include <QColor>
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QStatusBar>
 #include <QAction>
 #include <QMenu>
@@ -267,7 +268,11 @@ namespace hal
         }
         std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->create_simulator_controller();
         if (ctrlRef)
-            takeControllerOwnership(ctrlRef, false);
+        {
+            // show the new controller, otherwise the wizard and the toolbar act on the previous tab
+            WaveWidget* ww = takeControllerOwnership(ctrlRef, false);
+            if (ww) mTabWidget->setCurrentWidget(ww);
+        }
     }
 
     void WaveformViewer::handleSimulSettings()
@@ -385,7 +390,8 @@ namespace hal
             {
                 mOwnershipRequired = true;
                 std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist,filename.toStdString());
-                takeControllerOwnership(ctrlRef, true);
+                WaveWidget* ww = takeControllerOwnership(ctrlRef, true);
+                if (ww) mTabWidget->setCurrentWidget(ww);
                 mOwnershipRequired = false;
             }
         }
@@ -424,7 +430,7 @@ namespace hal
         }
     }
 
-    void WaveformViewer::takeControllerOwnership(std::unique_ptr<NetlistSimulatorController> &ctrlRef, bool create)
+    WaveWidget* WaveformViewer::takeControllerOwnership(std::unique_ptr<NetlistSimulatorController> &ctrlRef, bool create)
     {
         NetlistSimulatorController* nsc = ctrlRef.get();
 
@@ -450,6 +456,7 @@ namespace hal
         Q_ASSERT(ww);
         ww->takeOwnership(ctrlRef);
         showCloseButton();
+        return ww;
     }
 
     void WaveformViewer::handleSaveWaveforms()
@@ -465,7 +472,18 @@ namespace hal
     void WaveformViewer::handleInvokeWizzard()
     {
         if (!mCurrentWaveWidget) return;
-        Wizard wizard(NetlistSimulatorControllerPlugin::sSimulationSettings, mCurrentWaveWidget->controller(), mCurrentWaveWidget);
+        NetlistSimulatorController* ctrl = mCurrentWaveWidget->controller();
+        if (!ctrl) return;
+
+        // the wizard resets the controller and deletes its waveform data
+        if (ctrl->get_state() != NetlistSimulatorController::NoGatesSelected || !ctrl->get_waves()->isEmpty())
+        {
+            QString msg = QString("The simulation wizard resets '%1' and deletes its simulation data. Continue?").arg(ctrl->name());
+            if (QMessageBox::question(this, "Simulation Wizard", msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::No) != QMessageBox::Yes)
+                return;
+        }
+
+        Wizard wizard(NetlistSimulatorControllerPlugin::sSimulationSettings, ctrl, mCurrentWaveWidget);
         wizard.exec();
     }
 
