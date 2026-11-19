@@ -141,6 +141,7 @@ modules:
     builddir: true
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INSTALL_LIBDIR=lib   # RPATH is /app/lib; /app/lib64 is not on the loader path
       - -DBUILD_ALL_PLUGINS=ON
       - -DUSE_VENDORED_IGRAPH=OFF
       - -DENABLE_INSTALL_LDCONFIG=OFF
