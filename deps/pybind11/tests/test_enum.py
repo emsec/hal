@@ -1,7 +1,8 @@
-# -*- coding: utf-8 -*-
+# ruff: noqa: SIM201 SIM300 SIM202
+from __future__ import annotations
+
 import pytest
 
-import env
 from pybind11_tests import enums as m
 
 
@@ -60,9 +61,7 @@ Members:
 
   ETwo : Docstring for ETwo
 
-  EThree : Docstring for EThree""".split(
-        "\n"
-    ):
+  EThree : Docstring for EThree""".split("\n"):
         assert docstring_line in m.UnscopedEnum.__doc__
 
     # Unscoped enums will accept ==/!= int comparisons
@@ -241,10 +240,7 @@ def test_char_underlying_enum():  # Issue #1331/PR #1334:
     assert type(m.ScopedCharEnum.Positive.__int__()) is int
     assert int(m.ScopedChar16Enum.Zero) == 0
     assert hash(m.ScopedChar32Enum.Positive) == 1
-    if env.PY2:
-        assert m.ScopedCharEnum.Positive.__getstate__() == 1  # long
-    else:
-        assert type(m.ScopedCharEnum.Positive.__getstate__()) is int
+    assert type(m.ScopedCharEnum.Positive.__getstate__()) is int
     assert m.ScopedWCharEnum(1) == m.ScopedWCharEnum.Positive
     with pytest.raises(TypeError):
         # Even if the underlying type is char, only an int can be used to construct the enum:
@@ -255,10 +251,7 @@ def test_bool_underlying_enum():
     assert type(m.ScopedBoolEnum.TRUE.__int__()) is int
     assert int(m.ScopedBoolEnum.FALSE) == 0
     assert hash(m.ScopedBoolEnum.TRUE) == 1
-    if env.PY2:
-        assert m.ScopedBoolEnum.TRUE.__getstate__() == 1  # long
-    else:
-        assert type(m.ScopedBoolEnum.TRUE.__getstate__()) is int
+    assert type(m.ScopedBoolEnum.TRUE.__getstate__()) is int
     assert m.ScopedBoolEnum(1) == m.ScopedBoolEnum.TRUE
     # Enum could construct with a bool
     # (bool is a strict subclass of int, and False will be converted to 0)
@@ -270,3 +263,8 @@ def test_docstring_signatures():
         for attr in enum_type.__dict__.values():
             # Issue #2623/PR #2637: Add argument names to enum_ methods
             assert "arg0" not in (attr.__doc__ or "")
+
+
+def test_str_signature():
+    for enum_type in [m.ScopedEnum, m.UnscopedEnum]:
+        assert enum_type.__str__.__doc__.startswith("__str__")

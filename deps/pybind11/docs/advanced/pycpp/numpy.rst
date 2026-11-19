@@ -87,7 +87,7 @@ buffer objects (e.g. a NumPy matrix).
             /* Request a buffer descriptor from Python */
             py::buffer_info info = b.request();
 
-            /* Some sanity checks ... */
+            /* Some basic validation checks ... */
             if (info.format != py::format_descriptor<Scalar>::format())
                 throw std::runtime_error("Incompatible format: expected a double array!");
 
@@ -378,8 +378,6 @@ uses of ``py::array``:
 
 - ``.itemsize()`` returns the size of an item in bytes, i.e. ``sizeof(T)``.
 
-- ``.ndim()`` returns the number of dimensions.
-
 - ``.shape(n)`` returns the size of dimension ``n``
 
 - ``.size()`` returns the total number of elements (i.e. the product of the shapes).
@@ -395,11 +393,9 @@ uses of ``py::array``:
 Ellipsis
 ========
 
-Python 3 provides a convenient ``...`` ellipsis notation that is often used to
+Python provides a convenient ``...`` ellipsis notation that is often used to
 slice multidimensional arrays. For instance, the following snippet extracts the
 middle dimensions of a tensor with the first and last index set to zero.
-In Python 2, the syntactic sugar ``...`` is not available, but the singleton
-``Ellipsis`` (of type ``ellipsis``) can still be used directly.
 
 .. code-block:: python
 
@@ -414,8 +410,6 @@ operation on the C++ side:
    py::array a = /* A NumPy array */;
    py::array b = a[py::make_tuple(0, py::ellipsis(), 0)];
 
-.. versionchanged:: 2.6
-   ``py::ellipsis()`` is now also available in Python 2.
 
 Memory view
 ===========
@@ -437,7 +431,7 @@ following:
             { 2, 4 },                                  // shape (rows, cols)
             { sizeof(uint8_t) * 4, sizeof(uint8_t) }   // strides in bytes
         );
-    })
+    });
 
 This approach is meant for providing a ``memoryview`` for a C/C++ buffer not
 managed by Python. The user is responsible for managing the lifetime of the
@@ -453,11 +447,7 @@ We can also use ``memoryview::from_memory`` for a simple 1D contiguous buffer:
             buffer,               // buffer pointer
             sizeof(uint8_t) * 8   // buffer size
         );
-    })
-
-.. note::
-
-    ``memoryview::from_memory`` is not available in Python 2.
+    });
 
 .. versionchanged:: 2.6
     ``memoryview::from_memory`` added.
