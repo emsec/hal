@@ -239,9 +239,13 @@ namespace hal
                     if (act) act->exec();
                 }
             });
-            menu.addAction("Toggle ascending/descending", [itemId, mod](){
+            menu.addAction("Toggle ascending/descending", [this, itemId, mod, clickedIndex](){
+                // the toggle replaces the group by a new one at the same row, which the view would show collapsed
+                bool wasExpanded = isExpanded(clickedIndex);
+                int row          = clickedIndex.row();
                 ActionPingroup* act = ActionPingroup::toggleAscendingGroup(mod, itemId);
-                if (act) act->exec();
+                if (act && act->exec() && wasExpanded)
+                    setExpanded(mPortModel->index(row, 0), true);
             });
             menu.addAction("Automatically rename pins", [itemId, mod](){
                 ActionPingroup* act = ActionPingroup::automaticallyRenamePins(mod, itemId);
