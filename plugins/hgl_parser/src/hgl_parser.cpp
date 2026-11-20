@@ -13,10 +13,31 @@
 #include "hal_core/utilities/result.h"
 #include "hgl_parser/upgrade_hgl.h"
 #include "rapidjson/filereadstream.h"
-#include "rapidjson/stringbuffer.h"
 
 namespace hal
 {
+
+    bool HGLParser::do_not_upgrade_gatelib(const rapidjson::Document& document) const
+    {
+        if (!document.IsObject())
+        {
+            log_warning("gate_library_parser", "'{}' cannot be upgraded to HGL format version {} since it is not a JSON object.", m_path.string(), HGL_FORMAT_VERSION);
+            return true;
+        }
+        if (!document.HasMember("version"))
+        {
+            log_warning("gate_library_parser", "'{}' cannot be upgraded to HGL format version {} since version tag is missing.", m_path.string(), HGL_FORMAT_VERSION);
+            return true;
+        }
+        if (!document["version"].IsUint())
+        {
+            log_warning("gate_library_parser", "'{}' cannot be upgraded to HGL format version {} since current version is not a number.", m_path.string(), HGL_FORMAT_VERSION);
+            return true;
+        }
+        // also catches files of the current version that still contain LUT configurations in the old format
+        return !hgl_upgrade::needs_upgrade(document);
+    }
+
     Result<std::unique_ptr<GateLibrary>> HGLParser::parse(const std::filesystem::path& file_path)
     {
         m_path = file_path;
@@ -55,7 +76,7 @@ namespace hal
 
     Result<std::monostate> HGLParser::upgrade_outdated_file(rapidjson::Document& document)
     {
-        if (!document.IsObject() || !document.HasMember("version") || !document["version"].IsUint() || document["version"].GetUint() >= HGL_FORMAT_VERSION)
+        if (do_not_upgrade_gatelib(document))
         {
             // up to date, or not upgradable at all, which parse_gate_library reports
             return OK({});
@@ -63,7 +84,7 @@ namespace hal
 
         const u32 version = document["version"].GetUint();
 
-        // the upgrade happens in memory first, so that cells requiring manual work are reported before the file gets replaced
+        // the upgrade happens in memory first, so that the user is not asked for an upgrade that cannot succeed
         auto res = hgl_upgrade::upgrade_document(document);
         if (res.is_error())
         {
@@ -71,14 +92,18 @@ namespace hal
         }
         for (const std::string& warning : res.get())
         {
-            log_warning("gate_library_parser", "'{}' cannot be upgraded to HGL format version {} completely: {}", m_path.string(), HGL_FORMAT_VERSION, warning);
+            log_warning("gate_library_parser", "upgrade of '{}' to HGL format version {}: {}", m_path.string(), HGL_FORMAT_VERSION, warning);
         }
 
         // replacing the file requires the consent of the user
         if (!is_upgrade_requested())
         {
             set_parse_status(ParseStatus::NeedsUpgrade);
-            return ERR("HGL file format version " + std::to_string(version) + " is outdated (requires version " + std::to_string(HGL_FORMAT_VERSION) + "), the file needs to be upgraded");
+            if (version < HGL_FORMAT_VERSION)
+            {
+                return ERR("HGL file format version " + std::to_string(version) + " is outdated (requires version " + std::to_string(HGL_FORMAT_VERSION) + "), the file needs to be upgraded");
+            }
+            return ERR("HGL file contains LUT configurations in the format of version 5 or earlier, the file needs to be upgraded");
         }
 
         auto res_replace = hgl_upgrade::replace_file(document, m_path);
@@ -87,7 +112,14 @@ namespace hal
             return ERR(res_replace.get_error());
         }
 
-        log_info("gate_library_parser", "upgraded gate library '{}' from HGL format version {} to {}, the original file was kept as '{}'.", m_path.string(), version, HGL_FORMAT_VERSION, res_replace.get().string());
+        if (version < HGL_FORMAT_VERSION)
+        {
+            log_info("gate_library_parser", "upgraded gate library '{}' from HGL format version {} to {}, the original file was kept as '{}'.", m_path.string(), version, HGL_FORMAT_VERSION, res_replace.get().string());
+        }
+        else
+        {
+            log_info("gate_library_parser", "migrated the remaining LUT configurations of gate library '{}', the original file was kept as '{}'.", m_path.string(), res_replace.get().string());
+        }
         return OK({});
     }
 
@@ -615,7 +647,8 @@ namespace hal
             return OK(LUTComponent::create(std::move(cfg_map)));
         }
 
-        return OK(LUTComponent::create({}));
+        // the flat format of earlier versions would result in a LUT without any function
+        return ERR("could not parse LUT configuration: missing or invalid output_pins");
     }
 
     Result<std::unique_ptr<GateTypeComponent>> HGLParser::parse_ff_config(const rapidjson::Value& ff_config)

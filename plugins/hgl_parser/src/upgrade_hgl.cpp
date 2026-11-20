@@ -15,6 +15,9 @@ namespace hal
     {
         namespace
         {
+            /** The INIT size of a LUT is 2^n bits for n inputs and has to fit the 32 bit size of a LUT output configuration. */
+            const size_t MAX_LUT_INPUTS = 31;
+
             const std::map<std::string, std::string> LEGACY_TYPE_RENAMES = {{"buffer", "c_buffer"}, {"carry", "c_carry"}, {"mux", "c_mux"}, {"lut", "c_lut"}};
 
             /** Size of each parameter in the order the identifiers were found, the order is kept for the file. */
@@ -98,13 +101,33 @@ namespace hal
                 }
             }
 
-            void upgrade_lut_config(rapidjson::Value& cell, const std::string& cell_name, rapidjson::Document::AllocatorType& allocator, std::vector<std::string>& warnings)
+            bool has_legacy_lut_config(const rapidjson::Value& cell)
             {
-                rapidjson::Value& lut_config = cell["lut_config"];
-                if (!lut_config.IsObject() || lut_config.HasMember("output_pins") || !lut_config.HasMember("data_identifier"))
+                const rapidjson::Value* lut_config = find_member(cell, "lut_config");
+                return lut_config != nullptr && lut_config->IsObject() && !lut_config->HasMember("output_pins");
+            }
+
+            /**
+             * Replace the flat LUT configuration by an `output_pins` array.
+             *
+             * The flat configuration made every LUT output pin depend on all input pins of the cell and on the whole INIT
+             * value, so each output pin gets exactly that, which keeps the behavior of the cell unchanged.
+             *
+             * @returns An error message if the configuration cannot be migrated, an empty string otherwise.
+             */
+            std::string upgrade_lut_config(rapidjson::Value& cell, const std::string& cell_name, rapidjson::Document::AllocatorType& allocator, std::vector<std::string>& warnings)
+            {
+                if (!has_legacy_lut_config(cell))
                 {
                     // already in the new format or nothing to upgrade
-                    return;
+                    return "";
+                }
+
+                rapidjson::Value& lut_config = cell["lut_config"];
+                const rapidjson::Value* data_identifier = find_member(lut_config, "data_identifier");
+                if (data_identifier == nullptr || !data_identifier->IsString())
+                {
+                    return "cell '" + cell_name + "': LUT configuration has no data identifier";
                 }
 
                 std::vector<std::string> input_pins;
@@ -113,43 +136,47 @@ namespace hal
 
                 if (lut_output_pins.empty())
                 {
-                    warnings.push_back("cell '" + cell_name + "': no output pin with type 'lut' found, LUT configuration not migrated, please update manually.");
-                    return;
+                    return "cell '" + cell_name + "': no output pin with type 'lut' found";
                 }
 
                 if (input_pins.empty())
                 {
-                    warnings.push_back("cell '" + cell_name + "': no input pins found, LUT configuration not migrated, please update manually.");
-                    return;
+                    return "cell '" + cell_name + "': no input pins found";
+                }
+
+                if (input_pins.size() > MAX_LUT_INPUTS)
+                {
+                    return "cell '" + cell_name + "': " + std::to_string(input_pins.size()) + " input pins exceed the supported maximum of " + std::to_string(MAX_LUT_INPUTS) + " for a LUT";
                 }
 
                 if (lut_output_pins.size() > 1)
                 {
-                    // the input list and the INIT bit range of each output cannot be derived from the pins alone
-                    warnings.push_back("cell '" + cell_name + "': has " + std::to_string(lut_output_pins.size())
-                                       + " LUT output pins, multi-output LUT cells cannot be migrated automatically, please update manually.");
-                    return;
+                    warnings.push_back("cell '" + cell_name + "': each of its " + std::to_string(lut_output_pins.size())
+                                       + " LUT output pins was migrated to depend on all input pins and the whole INIT value, as before. If an output uses only part of "
+                                         "them, e.g., output O5 of a Xilinx LUT6_2, adjust its 'input_pins' and 'bit_count' manually.");
                 }
 
                 const rapidjson::Value* bit_order = find_member(lut_config, "bit_order");
                 const bool is_ascending           = (bit_order == nullptr) || (bit_order->IsString() && std::string(bit_order->GetString()) == "ascending");
 
-                rapidjson::Value inputs(rapidjson::kArrayType);
-                for (const auto& pin : input_pins)
-                {
-                    inputs.PushBack(make_string(pin, allocator), allocator);
-                }
-
-                rapidjson::Value output_pin(rapidjson::kObjectType);
-                output_pin.AddMember("pin", make_string(lut_output_pins.front(), allocator), allocator);
-                output_pin.AddMember("data_identifier", rapidjson::Value(lut_config["data_identifier"], allocator), allocator);
-                output_pin.AddMember("bit_offset", 0, allocator);
-                output_pin.AddMember("bit_count", u64(1) << input_pins.size(), allocator);
-                output_pin.AddMember("input_pins", inputs, allocator);
-                output_pin.AddMember("is_ascending", is_ascending, allocator);
-
                 rapidjson::Value output_pins(rapidjson::kArrayType);
-                output_pins.PushBack(output_pin, allocator);
+                for (const auto& lut_output_pin : lut_output_pins)
+                {
+                    rapidjson::Value inputs(rapidjson::kArrayType);
+                    for (const auto& pin : input_pins)
+                    {
+                        inputs.PushBack(make_string(pin, allocator), allocator);
+                    }
+
+                    rapidjson::Value output_pin(rapidjson::kObjectType);
+                    output_pin.AddMember("pin", make_string(lut_output_pin, allocator), allocator);
+                    output_pin.AddMember("data_identifier", rapidjson::Value(*data_identifier, allocator), allocator);
+                    output_pin.AddMember("bit_offset", 0, allocator);
+                    output_pin.AddMember("bit_count", u64(1) << input_pins.size(), allocator);
+                    output_pin.AddMember("input_pins", inputs, allocator);
+                    output_pin.AddMember("is_ascending", is_ascending, allocator);
+                    output_pins.PushBack(output_pin, allocator);
+                }
 
                 rapidjson::Value new_lut_config(rapidjson::kObjectType);
                 if (bit_order != nullptr)
@@ -164,6 +191,7 @@ namespace hal
 
                 // assigning keeps the position of 'lut_config' within the cell
                 lut_config = new_lut_config;
+                return "";
             }
 
             u64* find_size(ParameterSizes& sizes, const std::string& identifier)
@@ -258,26 +286,55 @@ namespace hal
             }
         }    // namespace
 
-        Result<std::vector<std::string>> upgrade_document(rapidjson::Document& document)
+        Result<u32> get_version(const rapidjson::Document& document)
         {
             if (!document.IsObject())
             {
-                return ERR("could not upgrade HGL document: document is not a JSON object");
+                return ERR("document is not a JSON object");
             }
+            if (!document.HasMember("version"))
+            {
+                return OK(u32(1));
+            }
+            if (!document["version"].IsUint())
+            {
+                return ERR("invalid version entry");
+            }
+            return OK(document["version"].GetUint());
+        }
+
+        bool needs_upgrade(const rapidjson::Document& document)
+        {
+            auto version = get_version(document);
+            if (version.is_error())
+            {
+                return false;
+            }
+            if (version.get() < TARGET_VERSION)
+            {
+                return true;
+            }
+            if (version.get() > TARGET_VERSION || !document.HasMember("cells") || !document["cells"].IsArray())
+            {
+                return false;
+            }
+
+            // earlier upgrades marked files as up to date without migrating all LUT configurations
+            const auto& cells = document["cells"].GetArray();
+            return std::any_of(cells.begin(), cells.end(), [](const rapidjson::Value& cell) { return has_legacy_lut_config(cell); });
+        }
+
+        Result<std::vector<std::string>> upgrade_document(rapidjson::Document& document)
+        {
+            auto version_res = get_version(document);
+            if (version_res.is_error())
+            {
+                return ERR_APPEND(version_res.get_error(), "could not upgrade HGL document");
+            }
+            const u32 version = version_res.get();
 
             std::vector<std::string> warnings;
-
-            u32 version = 1;
-            if (document.HasMember("version"))
-            {
-                if (!document["version"].IsUint())
-                {
-                    return ERR("could not upgrade HGL document: invalid version entry");
-                }
-                version = document["version"].GetUint();
-            }
-
-            if (version >= TARGET_VERSION)
+            if (!needs_upgrade(document))
             {
                 return OK(warnings);
             }
@@ -288,7 +345,7 @@ namespace hal
             }
 
             rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
-            document["version"].SetUint(TARGET_VERSION);
+            std::vector<std::string> errors;
 
             if (document.HasMember("cells") && document["cells"].IsArray())
             {
@@ -302,12 +359,33 @@ namespace hal
                     const std::string cell_name = cell.HasMember("name") && cell["name"].IsString() ? cell["name"].GetString() : "(unknown)";
 
                     rename_legacy_types(cell, allocator);
-                    if (cell.HasMember("lut_config"))
+                    if (std::string error = upgrade_lut_config(cell, cell_name, allocator, warnings); !error.empty())
                     {
-                        upgrade_lut_config(cell, cell_name, allocator, warnings);
+                        errors.push_back(error);
+                        continue;
                     }
                     add_parameters(cell, allocator);
                 }
+            }
+
+            if (!errors.empty())
+            {
+                // a partially upgraded document must not be marked as up to date, the parser would not notice what is missing
+                std::string message = "could not upgrade HGL document, the following cells have to be migrated manually: ";
+                for (size_t i = 0; i < errors.size(); ++i)
+                {
+                    message += (i == 0 ? "" : "; ") + errors[i];
+                }
+                return ERR(message);
+            }
+
+            if (document.HasMember("version"))
+            {
+                document["version"].SetUint(TARGET_VERSION);
+            }
+            else
+            {
+                document.AddMember("version", TARGET_VERSION, allocator);
             }
 
             return OK(warnings);
@@ -317,6 +395,14 @@ namespace hal
         {
             std::filesystem::path backup_path = file_path;
             backup_path.replace_extension(".json");
+
+            // a file repaired after an earlier upgrade already has a backup, which must not be overwritten
+            std::error_code ec;
+            for (u32 i = 1; std::filesystem::exists(backup_path, ec); ++i)
+            {
+                backup_path = file_path;
+                backup_path.replace_extension("." + std::to_string(i) + ".json");
+            }
             return backup_path;
         }
 

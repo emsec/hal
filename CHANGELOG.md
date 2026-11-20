@@ -249,6 +249,8 @@ All notable changes to this project will be documented in this file.
     * fixed wrong pin types of the `lsi_10k.hgl` flip-flops: the asynchronous preset `SD` is now of type `set` instead of `reset`, the `K` input of the JK flip-flops of type `data` instead of `reset`, the scan enable `TE`, which selects between `D` and `TI`, of type `select` instead of `enable`, and the tristate output enable `RD` of `FD2TS*` of type `enable` instead of `data`
   * HGL parser and writer
     * bumped the format version from 4 to 6; added serialization for typed parameter declarations and multi-output LUT configurations
+    * fixed the upgrade of gate libraries to format version 6 leaving multi-output LUTs such as `LUT6_2` and `LUT2_D` in the old LUT format, which the parser then read as LUTs without any function: every LUT output is now migrated to depend on all inputs and the whole INIT value, as in the old format, an upgrade that cannot migrate every cell fails instead of marking the file as version 6, and libraries left incomplete by the earlier upgrade are upgraded again
+    * the HGL parser rejects LUT configurations without `output_pins` instead of creating a LUT without any function
   * Verilog writer
     * changed the parameter output to `write_typed_parameter_value()` based on the `Parameter` type; removed the `valid_types` whitelist
   * Verilog parser

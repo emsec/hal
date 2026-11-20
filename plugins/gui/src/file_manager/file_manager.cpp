@@ -780,9 +780,9 @@ namespace hal
             return glib;
 
         QString message = QString("The gate library <%1> uses an outdated file format.\n\n"
-                                  "Upgrade it now? The original file will be kept as <%2>. "
-                                  "Cells that cannot be upgraded automatically are listed in the log.")
-                              .arg(path, glInfo.completeBaseName() + ".json");
+                                  "Upgrade it now? The original file will be kept next to it with the extension .json. "
+                                  "Cells that should be reviewed after the upgrade are listed in the log.")
+                              .arg(path);
         if (QMessageBox::question(qApp->activeWindow(), "Outdated gate library", message, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) != QMessageBox::Yes)
             return nullptr;
 
