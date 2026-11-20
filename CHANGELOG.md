@@ -56,6 +56,7 @@ All notable changes to this project will be documented in this file.
     * fixed `utils::split` reading the last character of an empty string
     * fixed crash when passing a `nullptr` pin to `Net::remove_source` or `Net::remove_destination`
     * fixed Python binding `Grouping.remove_module_by_id` removing the gate with the given ID instead of the module
+    * fixed Python binding `NetlistFactory.load_netlist` failing to load a `.hal` file when no gate library file was passed, as the omitted argument arrived as `.` instead of an empty path
     * added `Gate::has_boolean_function`, which checks whether `Gate::get_boolean_function` finds a function for a name or an output pin
   * module pins
     * sped up assigning gates to a module and removing them from it, `Module::get_pin_by_net` scanned every pin of the module for every net of every gate that enters or leaves it; the pins are now indexed by net
