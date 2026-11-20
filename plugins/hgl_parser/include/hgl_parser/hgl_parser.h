@@ -61,6 +61,7 @@ namespace hal
         std::filesystem::path m_path;
 
         std::set<std::string> m_cell_names;
+        bool do_not_upgrade_gatelib(const rapidjson::Document& document) const;
 
         Result<std::monostate> upgrade_outdated_file(rapidjson::Document& document);
         Result<std::monostate> parse_gate_library(const rapidjson::Document& document);
