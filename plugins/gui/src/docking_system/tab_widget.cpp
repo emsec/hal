@@ -136,21 +136,7 @@ namespace hal
         widget->setupToolbar(mLeftToolbar);
         mDockBar->checkButton(widget);
         mCurrentWidget = widget;
-
-        for (QShortcut* r : mActiveShortcuts)
-        {
-            delete r;
-        }
-
-        mActiveShortcuts.clear();
-
-        for (QShortcut* s : widget->createShortcuts())
-        {
-            s->setParent(this);
-            s->setContext(Qt::WidgetWithChildrenShortcut);
-            s->setEnabled(true);
-            mActiveShortcuts.append(s);
-        }
+        widget->ensureShortcuts();
     }
 
     void TabWidget::close(ContentWidget* widget)
