@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netlist Factory &mdash; hal_py v4.5.0-272-g138b65f1f documentation</title>
+  <title>Netlist Factory &mdash; hal_py v4.5.0-274-g2c5bbde1e documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-272-g138b65f1f
+                v4.5.0-274-g2c5bbde1e
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -151,7 +151,7 @@ Will either deserialize <code class="docutils literal notranslate"><span class="
 <span class="sig-prename descclassname"><span class="pre">hal_py.NetlistFactory.</span></span><span class="sig-name descname"><span class="pre">load_netlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistFactory.load_netlist" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p>load_netlist(netlist_file: os.PathLike, gate_library_file: os.PathLike = PosixPath(‘.’)) -&gt; hal_py.Netlist</p>
+<li><p>load_netlist(netlist_file: os.PathLike, gate_library_file: os.PathLike = ‘’) -&gt; hal_py.Netlist</p>
 <blockquote>
 <div><p>Create a netlist from the given file using the specified gate library file.
 Will either deserialize <code class="docutils literal notranslate"><span class="pre">.hal</span></code> file or call parser plugin for other formats.
@@ -161,7 +161,7 @@ In the latter case the specified gate library file is mandatory.</p>
 <dd class="field-odd"><p>Path to the file.</p>
 </dd>
 <dt class="field-even">param pathlib.Path gate_library_file</dt>
-<dd class="field-even"><p>Path to the gate library file.</p>
+<dd class="field-even"><p>Path to the gate library file. Optional for a <code class="docutils literal notranslate"><span class="pre">.hal</span></code> file, which then uses the gate library it names.</p>
 </dd>
 <dt class="field-odd">returns</dt>
 <dd class="field-odd"><p>The netlist on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
