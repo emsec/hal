@@ -1076,6 +1076,15 @@ namespace hal {
         grp->recalcData();
     }
 
+    bool WaveTreeModel::isTopLevelNet(u32 netId) const
+    {
+        int inx = mRoot->netIndex(netId);
+        if (inx < 0) return false;
+        // boolean and trigger waveforms share the index space of nets
+        WaveData::NetType tp = mRoot->children().at(inx)->netType();
+        return tp != WaveData::BooleanNet && tp != WaveData::TriggerTime;
+    }
+
     QSet<int> WaveTreeModel::waveDataIndexSet() const
     {
         QSet<int> retval;

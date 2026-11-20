@@ -174,6 +174,14 @@ public:
     u32 add_waveform_group(const std::string& name, const PinGroup<ModulePin>* pin_group);
 
     /**
+     * Create a waveform group from the nets of a net group identified by `compute_waveform_groups`.
+     *
+     * @param net_group The net group to create the waveform group from.
+     * @return ID of new waveform group
+     */
+    u32 add_waveform_group(const SimulationInput::NetGroup& net_group);
+
+    /**
      * Add waveform based on boolean expression.
      * @param expression The boolean expression based on names of existing waveforms.
      * @return ID of new boolean waveform
@@ -217,6 +225,13 @@ public:
      * the singals might not be available yet (e.g. before simulation has run)
      */
     void compute_waveform_groups();
+
+    /**
+     * Get the net groups identified by the last call to `compute_waveform_groups`.
+     *
+     * @return The net groups.
+     */
+    const std::vector<SimulationInput::NetGroup>& get_net_groups() const;
 
     /**
      * Load waveform signal groups into container either for inputs or for everything except inputs
