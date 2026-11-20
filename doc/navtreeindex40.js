@@ -1,5 +1,7 @@
 var NAVTREEINDEX40 =
 {
+"namespacehal_1_1resynthesis.html#a2a8facff4208648646c10ed0997a6b68":[8,0,0,32,3],
+"namespacehal_1_1resynthesis.html#a51373d59f7a0694d5237c031b2a68a11":[8,0,0,32,4],
 "namespacehal_1_1resynthesis.html#a59dd1f654a49c5d18692a640e3672ed8":[8,0,0,32,1],
 "namespacehal_1_1resynthesis.html#a61e0e2c29e50f1720f1f61b056060f43":[8,0,0,32,2],
 "namespacehal_1_1resynthesis.html#a9e3042fdd0a5d15989a1be74b59f2eb8":[8,0,0,32,8],
@@ -247,7 +249,5 @@ var NAVTREEINDEX40 =
 "net__layout__point_8cpp_source.html":[10,0,1,9,2,20,2,3],
 "net__layout__point_8h.html":[10,0,1,9,0,0,20,2,3],
 "net__layout__point_8h.html#a7b69c559c5934b72c3783843d5d17dea":[10,0,1,9,0,0,20,2,3,1],
-"net__layout__point_8h.html#a7feb466e42a0d4e1c5601fe9a6169154":[10,0,1,9,0,0,20,2,3,3],
-"net__layout__point_8h.html#a9175d5334a493e018757aac18ed79fa2":[10,0,1,9,0,0,20,2,3,0],
-"net__layout__point_8h.html#acc2ff595306dab2c33e934d7e24edac3":[10,0,1,9,0,0,20,2,3,2]
+"net__layout__point_8h.html#a7feb466e42a0d4e1c5601fe9a6169154":[10,0,1,9,0,0,20,2,3,3]
 };

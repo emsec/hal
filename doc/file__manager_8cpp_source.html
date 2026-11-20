@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-276-g6d3632b1b</span>
+   &#160;<span id="projectnumber">v4.5.0-278-g6a4f4a20b</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -870,9 +870,9 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;            <span class="keywordflow">return</span> glib;</div>
 <div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160; </div>
 <div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> message = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;The gate library &lt;%1&gt; uses an outdated file format.\n\n&quot;</span></div>
-<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;                                  <span class="stringliteral">&quot;Upgrade it now? The original file will be kept as &lt;%2&gt;. &quot;</span></div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;                                  <span class="stringliteral">&quot;Cells that cannot be upgraded automatically are listed in the log.&quot;</span>)</div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;                              .<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">arg</a>(path, glInfo.<a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html#completeBaseName">completeBaseName</a>() + <span class="stringliteral">&quot;.json&quot;</span>);</div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;                                  <span class="stringliteral">&quot;Upgrade it now? The original file will be kept next to it with the extension .json. &quot;</span></div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;                                  <span class="stringliteral">&quot;Cells that should be reviewed after the upgrade are listed in the log.&quot;</span>)</div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;                              .<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">arg</a>(path);</div>
 <div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;        <span class="keywordflow">if</span> (<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#question">QMessageBox::question</a>(qApp-&gt;activeWindow(), <span class="stringliteral">&quot;Outdated gate library&quot;</span>, message, <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Yes</a> | <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::No</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Yes</a>) != <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Yes</a>)</div>
 <div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
 <div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160; </div>
@@ -981,7 +981,6 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div class="ttc" id="aqfile_html_open"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfile.html#open">QFile::open</a></div><div class="ttdeci">virtual bool open(QIODevice::OpenMode mode) override</div></div>
 <div class="ttc" id="aqfile_html_remove"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfile.html#remove">QFile::remove</a></div><div class="ttdeci">bool remove()</div></div>
 <div class="ttc" id="aqfileinfo_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfileinfo.html">QFileInfo</a></div></div>
-<div class="ttc" id="aqfileinfo_html_completeBaseName"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfileinfo.html#completeBaseName">QFileInfo::completeBaseName</a></div><div class="ttdeci">QString completeBaseName() const const</div></div>
 <div class="ttc" id="aqfileinfo_html_exists"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfileinfo.html#exists">QFileInfo::exists</a></div><div class="ttdeci">bool exists() const const</div></div>
 <div class="ttc" id="aqfileinfo_html_fileName"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfileinfo.html#fileName">QFileInfo::fileName</a></div><div class="ttdeci">QString fileName() const const</div></div>
 <div class="ttc" id="aqfileinfo_html_isDir"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfileinfo.html#isDir">QFileInfo::isDir</a></div><div class="ttdeci">bool isDir() const const</div></div>

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-276-g6d3632b1b</span>
+   &#160;<span id="projectnumber">v4.5.0-278-g6a4f4a20b</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -94,12 +94,16 @@ $(document).ready(function(){initNavTree('namespacehal_1_1hgl__upgrade.html','')
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a33bd404e2369e3d99eb7964a6d2a5105"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1hgl__upgrade.html#a33bd404e2369e3d99eb7964a6d2a5105">needs_upgrade</a> (const rapidjson::Document &amp;document)</td></tr>
+<tr class="separator:a33bd404e2369e3d99eb7964a6d2a5105"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0781308fce585e9b57850ecedf06c2c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1hgl__upgrade.html#ac0781308fce585e9b57850ecedf06c2c">upgrade_document</a> (rapidjson::Document &amp;document)</td></tr>
 <tr class="separator:ac0781308fce585e9b57850ecedf06c2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40b9410e29d317a94a8ed5d834523cd9"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1hgl__upgrade.html#a40b9410e29d317a94a8ed5d834523cd9">get_backup_path</a> (const std::filesystem::path &amp;file_path)</td></tr>
 <tr class="separator:a40b9410e29d317a94a8ed5d834523cd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac600c5cdf6e330d3f59efd5766f87286"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::filesystem::path &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1hgl__upgrade.html#ac600c5cdf6e330d3f59efd5766f87286">replace_file</a> (const rapidjson::Document &amp;document, const std::filesystem::path &amp;file_path)</td></tr>
 <tr class="separator:ac600c5cdf6e330d3f59efd5766f87286"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5160168059497e774cb4a77c12b1805a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1hgl__upgrade.html#a5160168059497e774cb4a77c12b1805a">get_version</a> (const rapidjson::Document &amp;document)</td></tr>
+<tr class="separator:a5160168059497e774cb4a77c12b1805a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -109,7 +113,7 @@ Variables</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Upgrade of gate library files in HGL format from an older format version to version 6.</p>
 <p>What changed in version 6:</p><ol type="1">
-<li>The flat LUT configuration <code>{data_identifier, data_category, bit_order}</code> is replaced by an <code>output_pins</code> array, where each entry specifies the output pin, its <code>data_identifier</code>, <code>bit_offset</code>, <code>bit_count</code>, <code>is_ascending</code> and <code>input_pins</code>.</li>
+<li>The flat LUT configuration <code>{data_identifier, data_category, bit_order}</code> is replaced by an <code>output_pins</code> array, where each entry specifies the output pin, its <code>data_identifier</code>, <code>bit_offset</code>, <code>bit_count</code>, <code>is_ascending</code> and <code>input_pins</code>. The flat configuration made every LUT output pin depend on all input pins and the whole INIT value, so every LUT output pin is migrated to exactly that.</li>
 <li>Each cell that carries init data gets a <code>parameters</code> section, so that INIT identifiers can be resolved by name and size: one <code>bit_vector</code> parameter of size 2^n per LUT identifier, of size 1 per flip-flop or latch identifier, and of size <code>bit_size / count</code> per RAM identifier.</li>
 <li>Legacy gate type properties without the <code>c_</code> prefix (<code>buffer</code>, <code>carry</code>, <code>mux</code>, <code>lut</code>) are renamed to their canonical forms. </li>
 </ol>
@@ -130,7 +134,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Get the file name the original gate library is kept under after its upgrade.</p>
-<p>The <code>.hgl</code> extension is replaced by <code>.json</code>, so that the original file does not get selected as a gate library by accident.</p>
+<p>The <code>.hgl</code> extension is replaced by <code>.json</code>, so that the original file does not get selected as a gate library by accident. If that file exists already, e.g., from an earlier upgrade, a number is added to the name, i.e., <code>&lt;name&gt;.1.json</code>, <code>&lt;name&gt;.2.json</code>, and so on.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">file_path</td><td>- The path of the gate library file. </td></tr>
@@ -139,9 +143,66 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The path of the backup file. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="upgrade__hgl_8cpp_source.html#l00316">316</a> of file <a class="el" href="upgrade__hgl_8cpp_source.html">upgrade_hgl.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="upgrade__hgl_8cpp_source.html#l00394">394</a> of file <a class="el" href="upgrade__hgl_8cpp_source.html">upgrade_hgl.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="upgrade__hgl_8cpp_source.html#l00323">replace_file()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="upgrade__hgl_8cpp_source.html#l00409">replace_file()</a>.</p>
+
+</div>
+</div>
+<a id="a5160168059497e774cb4a77c12b1805a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5160168059497e774cb4a77c12b1805a">&#9670;&nbsp;</a></span>get_version()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&gt; hal::hgl_upgrade::get_version </td>
+          <td>(</td>
+          <td class="paramtype">const rapidjson::Document &amp;&#160;</td>
+          <td class="paramname"><em>document</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="upgrade__hgl_8cpp_source.html#l00289">289</a> of file <a class="el" href="upgrade__hgl_8cpp_source.html">upgrade_hgl.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="upgrade__hgl_8cpp_source.html#l00306">needs_upgrade()</a>, and <a class="el" href="upgrade__hgl_8cpp_source.html#l00327">upgrade_document()</a>.</p>
+
+</div>
+</div>
+<a id="a33bd404e2369e3d99eb7964a6d2a5105"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33bd404e2369e3d99eb7964a6d2a5105">&#9670;&nbsp;</a></span>needs_upgrade()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::hgl_upgrade::needs_upgrade </td>
+          <td>(</td>
+          <td class="paramtype">const rapidjson::Document &amp;&#160;</td>
+          <td class="paramname"><em>document</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check whether a parsed HGL document has to be upgraded.</p>
+<p>This is the case for documents below the target version, and for documents at the target version that still contain LUT configurations in the flat format, which earlier upgrades left behind for multi-output LUTs.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">document</td><td>- The parsed HGL document. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the document has to be upgraded, <code>false</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="upgrade__hgl_8cpp_source.html#l00306">306</a> of file <a class="el" href="upgrade__hgl_8cpp_source.html">upgrade_hgl.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="upgrade__hgl_8cpp_source.html#l00289">get_version()</a>, and <a class="el" href="upgrade__hgl_8h_source.html#l00059">TARGET_VERSION</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="upgrade__hgl_8cpp_source.html#l00327">upgrade_document()</a>.</p>
 
 </div>
 </div>
@@ -181,9 +242,9 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The path of the backup file on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="upgrade__hgl_8cpp_source.html#l00323">323</a> of file <a class="el" href="upgrade__hgl_8cpp_source.html">upgrade_hgl.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="upgrade__hgl_8cpp_source.html#l00409">409</a> of file <a class="el" href="upgrade__hgl_8cpp_source.html">upgrade_hgl.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="upgrade__hgl_8cpp_source.html#l00316">get_backup_path()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00188">hal::gate_library_manager::remove()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="upgrade__hgl_8cpp_source.html#l00394">get_backup_path()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00188">hal::gate_library_manager::remove()</a>.</p>
 
 </div>
 </div>
@@ -203,18 +264,18 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Upgrade a parsed HGL document in place.</p>
-<p>A document that is already at the target version is left unchanged. Cells that cannot be migrated automatically are left unchanged as well and reported by a warning.</p>
+<p>A document that does not need an upgrade according to <code>needs_upgrade</code> is left unchanged. The version of the document is only set to the target version if all cells were migrated. If any cell cannot be migrated, an error naming all such cells is returned and the document must be discarded.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">document</td><td>- The parsed HGL document. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A list of warnings, one per cell that requires manual migration, or an error if the document cannot be upgraded at all. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A list of warnings about cells that were migrated but should be reviewed, or an error if the document cannot be upgraded completely. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="upgrade__hgl_8cpp_source.html#l00261">261</a> of file <a class="el" href="upgrade__hgl_8cpp_source.html">upgrade_hgl.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="upgrade__hgl_8cpp_source.html#l00327">327</a> of file <a class="el" href="upgrade__hgl_8cpp_source.html">upgrade_hgl.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="upgrade__hgl_8h_source.html#l00058">TARGET_VERSION</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00064">ERR_APPEND</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacb5e100e5a9a3e7f6d1fd97512215282">hal::error</a>, <a class="el" href="upgrade__hgl_8cpp_source.html#l00289">get_version()</a>, <a class="el" href="upgrade__hgl_8cpp_source.html#l00306">needs_upgrade()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="upgrade__hgl_8h_source.html#l00059">TARGET_VERSION</a>.</p>
 
 </div>
 </div>
@@ -232,9 +293,9 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>The format version gate libraries are upgraded to. </p>
 
-<p class="definition">Definition at line <a class="el" href="upgrade__hgl_8h_source.html#l00058">58</a> of file <a class="el" href="upgrade__hgl_8h_source.html">upgrade_hgl.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="upgrade__hgl_8h_source.html#l00059">59</a> of file <a class="el" href="upgrade__hgl_8h_source.html">upgrade_hgl.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="upgrade__hgl_8cpp_source.html#l00261">upgrade_document()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="upgrade__hgl_8cpp_source.html#l00306">needs_upgrade()</a>, and <a class="el" href="upgrade__hgl_8cpp_source.html#l00327">upgrade_document()</a>.</p>
 
 </div>
 </div>

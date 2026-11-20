@@ -94,6 +94,8 @@ var namespacehal =
     [ "hawkeye", "namespacehal_1_1hawkeye.html", "namespacehal_1_1hawkeye" ],
     [ "hgl_upgrade", "namespacehal_1_1hgl__upgrade.html", [
       [ "get_backup_path", "namespacehal_1_1hgl__upgrade.html#a40b9410e29d317a94a8ed5d834523cd9", null ],
+      [ "get_version", "namespacehal_1_1hgl__upgrade.html#a5160168059497e774cb4a77c12b1805a", null ],
+      [ "needs_upgrade", "namespacehal_1_1hgl__upgrade.html#a33bd404e2369e3d99eb7964a6d2a5105", null ],
       [ "replace_file", "namespacehal_1_1hgl__upgrade.html#ac600c5cdf6e330d3f59efd5766f87286", null ],
       [ "upgrade_document", "namespacehal_1_1hgl__upgrade.html#ac0781308fce585e9b57850ecedf06c2c", null ],
       [ "TARGET_VERSION", "namespacehal_1_1hgl__upgrade.html#a7531aa65b235e02f7a9abf6a83c7aca1", null ]

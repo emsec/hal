@@ -1,5 +1,7 @@
 var NAVTREEINDEX42 =
 {
+"netlist__simulator__controller_8cpp_source.html":[10,0,1,22,1,3,1],
+"netlist__simulator__controller_8h.html":[10,0,1,22,1,0,0,1],
 "netlist__simulator__controller_8h_source.html":[10,0,1,22,1,0,0,1],
 "netlist__traversal__decorator_8h.html":[10,0,0,0,1,1,3],
 "netlist__traversal__decorator_8h.html#ga10a0dbae61e1d4d1c8d2310ce40947c6":[10,0,0,0,1,1,3,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX42 =
 "plugin__clock__tree__extractor_8cpp_source.html":[10,0,1,2,2,3],
 "plugin__clock__tree__extractor_8h.html":[10,0,1,2,0,0,3],
 "plugin__clock__tree__extractor_8h_source.html":[10,0,1,2,0,0,3],
-"plugin__clock__tree__viewer_8cpp.html":[10,0,1,3,2,5],
-"plugin__clock__tree__viewer_8cpp.html#a520a82c66e9e539acaa3fb2d6ce6578a":[10,0,1,3,2,5,0],
-"plugin__clock__tree__viewer_8cpp_source.html":[10,0,1,3,2,5]
+"plugin__clock__tree__viewer_8cpp.html":[10,0,1,3,2,5]
 };
