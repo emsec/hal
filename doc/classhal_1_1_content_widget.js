@@ -7,6 +7,7 @@ var classhal_1_1_content_widget =
     [ "detach", "classhal_1_1_content_widget.html#a6296257c7a801a119265c3084b4ba6a0", null ],
     [ "detached", "classhal_1_1_content_widget.html#a4c6a567e4b2c6b1bab14e328999f8bce", null ],
     [ "detachedFrame", "classhal_1_1_content_widget.html#af70decb33d7fd19600678caecfafcba1", null ],
+    [ "ensureShortcuts", "classhal_1_1_content_widget.html#aee1a798024d3a1f324493f0f1a6c739e", null ],
     [ "handleSearchKeysequenceChanged", "classhal_1_1_content_widget.html#aa90888b283295d5a5c665c3f75fe878d", null ],
     [ "icon", "classhal_1_1_content_widget.html#a9663ae72248e9c072ca407fed07e923a", null ],
     [ "iconPath", "classhal_1_1_content_widget.html#aa05c852c9a71516c950f9232e8b2c258", null ],
