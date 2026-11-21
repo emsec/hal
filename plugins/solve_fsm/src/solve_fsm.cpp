@@ -636,6 +636,22 @@ namespace hal
                 return ERR("failed to solve FSM: no transition logic configured.");
             }
 
+            for (u32 i = 0; i < config.state_register.size(); i++)
+            {
+                if (config.state_register.at(i) == nullptr)
+                {
+                    return ERR("failed to solve FSM: the flip-flop at index " + std::to_string(i) + " of the state register is a nullptr.");
+                }
+            }
+
+            for (u32 i = 0; i < config.transition_logic.size(); i++)
+            {
+                if (config.transition_logic.at(i) == nullptr)
+                {
+                    return ERR("failed to solve FSM: the gate at index " + std::to_string(i) + " of the transition logic is a nullptr.");
+                }
+            }
+
             const u32 state_size = config.state_register.size();
             if (state_size > 64)
             {
