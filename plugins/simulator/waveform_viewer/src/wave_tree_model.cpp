@@ -335,6 +335,26 @@ namespace hal {
         addOrReplaceItem(wd, WaveItemIndex::Wire, iwave, 0);
     }
 
+    void WaveTreeModel::handleWaveRemoved(int iwave)
+    {
+        if (iwave >= 0) return; // removal of a single wave is not reflected in the tree
+
+        ReorderRequest req(this);
+        beginResetModel();
+        mRoot->clearAll();
+        int oldCount = mWaveItemHash->size();
+        for (WaveItem* wi : mWaveItemHash->values())
+            mWaveItemHash->dispose(wi);
+        mWaveItemHash->clear();
+        mWaveItemHash->setSelected(nullptr);
+        endResetModel();
+        if (oldCount)
+        {
+            ++mNumberEntriesChangedEvents;
+            Q_EMIT numberEntriesChanged(0);
+        }
+    }
+
     void WaveTreeModel::addWaves(const QVector<WaveData*>& wds)
     {
         ReorderRequest req(this);

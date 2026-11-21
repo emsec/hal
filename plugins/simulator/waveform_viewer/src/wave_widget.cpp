@@ -51,6 +51,8 @@ namespace hal {
         addWidget(mGraphicsCanvas);
 
         connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded,Qt::QueuedConnection);
+        // direct, the waves are deleted right after the signal
+        connect(mWaveDataList,&WaveDataList::waveRemoved,mTreeModel,&WaveTreeModel::handleWaveRemoved,Qt::DirectConnection);
         connect(mWaveDataList,&WaveDataList::groupAdded,mTreeModel,&WaveTreeModel::handleGroupAdded,Qt::QueuedConnection);
         connect(mWaveDataList,&WaveDataList::booleanAdded,mTreeModel,&WaveTreeModel::handleBooleanAdded,Qt::QueuedConnection);
         connect(mWaveDataList,&WaveDataList::triggerAdded,mTreeModel,&WaveTreeModel::handleTriggerAdded,Qt::QueuedConnection);
