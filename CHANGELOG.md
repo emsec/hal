@@ -210,6 +210,10 @@ All notable changes to this project will be documented in this file.
     * `Result::write_dot` now returns the path it wrote to, as it replaces a wrong extension
     * changed the plugin dialog to no longer open the written `.dot` graph in the DOT viewer unprompted
     * fixed `dataflow.Configuration` leaking every instance created from Python
+    * fixed the dataflow analysis producing different groups and group IDs on different machines for the same netlist, as the outcome depended on the standard library: equally scored candidates are now ordered by their gates, and the passes, the stage identification and the evaluation visit groups and gates in ascending ID order
+    * fixed a data race between the worker threads of the dataflow analysis when they compared their results against the same grouping, which could crash the analysis with a segmentation fault or let a grouping that had been seen before pass as a new one
+    * changed `create_modules` to create the DANA modules in ascending order of the group IDs and to number the pins of a module in ascending order of the IDs of the gates they connect to, so that, e.g., `i_D(k)` and `o_Q(k)` belong to the same flip-flop; it previously numbered them in an order that depended on memory addresses
+    * changed `get_gates`, `get_groups_as_list` (`get_group_list` in Python), `write_dot` and `write_txt` to list groups and gates in ascending ID order
   * graph algorithm
     * added `NetlistGraph::from_gates` that builds a graph from a subset of the gates of a netlist, optionally representing a gate by a primary and a shadow vertex so that feedback through it does not close a cycle
     * fixed `NetlistGraph` destroying an igraph graph that was never created when `from_netlist` or `copy` fail before creating it

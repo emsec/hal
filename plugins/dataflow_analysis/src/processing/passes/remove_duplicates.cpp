@@ -20,10 +20,11 @@ namespace hal
 
                 auto new_state = std::make_shared<Grouping>(state->netlist_abstr);
 
-                std::map<u32, std::unordered_set<u32>> size_group_map;
-                for (const auto& [group_id, gates] : state->gates_of_group)
+                std::map<u32, std::vector<u32>> size_group_map;
+                for (const auto group_id : state->get_group_ids())
                 {
-                    size_group_map[gates.size()].insert(group_id);
+                    const auto& gates = state->gates_of_group.at(group_id);
+                    size_group_map[gates.size()].push_back(group_id);
                 }
 
                 u32 id_counter = -1;

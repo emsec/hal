@@ -18,15 +18,15 @@ namespace hal
                 auto new_state = std::make_shared<Grouping>(state->netlist_abstr);
 
                 /* check characteristics */
-                std::map<std::set<u32>, std::unordered_set<u32>> characteristics_map;
-                for (const auto& [group_id, gates] : state->gates_of_group)
+                std::map<std::set<u32>, std::list<u32>> characteristics_map;
+                for (const auto group_id : state->get_group_ids())
                 {
                     std::set<u32> candidate_characteristic_set;
                     for (const auto& [_, signals] : state->get_control_signals_of_group(group_id))
                     {
                         candidate_characteristic_set.insert(signals.begin(), signals.end());
                     }
-                    characteristics_map[candidate_characteristic_set].insert(group_id);
+                    characteristics_map[candidate_characteristic_set].push_back(group_id);
                 }
 
                 /* check if merge is allowed */

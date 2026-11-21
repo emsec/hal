@@ -18,8 +18,10 @@ namespace hal
                 auto new_state = std::make_shared<Grouping>(state->netlist_abstr);
 
                 u32 id_counter = -1;
-                for (const auto& [group_id, gates] : state->gates_of_group)
+                for (const auto group_id : state->get_group_ids())
                 {
+                    const auto& gates = state->gates_of_group.at(group_id);
+
                     if (!state->is_group_allowed_to_split(group_id))
                     {
                         u32 new_group_id = ++id_counter;

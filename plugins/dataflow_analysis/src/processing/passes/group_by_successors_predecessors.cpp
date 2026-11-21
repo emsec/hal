@@ -20,7 +20,7 @@ namespace hal
 
                 /* check characteristics */
                 std::map<std::set<u32>, std::list<u32>> characteristics_map;
-                for (const auto& [group_id, group] : state->gates_of_group)
+                for (const auto group_id : state->get_group_ids())
                 {
                     std::set<u32> characteristics_of_group;
 
