@@ -1,7 +1,5 @@
 var NAVTREEINDEX23 =
 {
-"classhal_1_1_settings_item_keybind.html#a1e614620132e15d0d166de636d466fd4":[7,1,4,12,4],
-"classhal_1_1_settings_item_keybind.html#a2552a08bf7d57dc2e5853d6766cd8a06":[7,1,4,12,3],
 "classhal_1_1_settings_item_keybind.html#a3af9226f0e8dab351ac42e2c9cce3317":[7,1,4,12,5],
 "classhal_1_1_settings_item_keybind.html#a58ddc35457276492c9dbff2789c257a1":[7,1,4,12,1],
 "classhal_1_1_settings_item_keybind.html#aad023a551bf9aadb4314461d29366519":[7,1,4,12,6],
@@ -249,5 +247,7 @@ var NAVTREEINDEX23 =
 "classhal_1_1_simulation_settings.html#a3d9826857910c7c9f2d26a51eb8d95a1":[9,0,0,588,9],
 "classhal_1_1_simulation_settings.html#a46f2d14914b3ee8d2f083197e408005f":[9,0,0,588,3],
 "classhal_1_1_simulation_settings.html#a6041487b5c46c4cc8f875f6bd44fd584":[9,0,0,588,7],
-"classhal_1_1_simulation_settings.html#a6a273cc179f220ae4be43b1d01993d6c":[9,0,0,588,6]
+"classhal_1_1_simulation_settings.html#a6a273cc179f220ae4be43b1d01993d6c":[9,0,0,588,6],
+"classhal_1_1_simulation_settings.html#a87c660886acf88ae899ab24ba8e4d2c0":[9,0,0,588,10],
+"classhal_1_1_simulation_settings.html#aacbfc31be49fc2e3b514f0961cc961d3":[9,0,0,588,5]
 };

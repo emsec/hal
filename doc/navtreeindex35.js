@@ -1,7 +1,5 @@
 var NAVTREEINDEX35 =
 {
-"group__graph-contexts.html":[7,1,0,1],
-"group__graph-layouter.html":[7,1,0,2],
 "group__graph-visuals-gate.html":[7,1,0,0,0],
 "group__graph-visuals-module.html":[7,1,0,0,1],
 "group__graph-visuals-net.html":[7,1,0,0,2],
@@ -50,8 +48,8 @@ var NAVTREEINDEX35 =
 "group__pybind.html#ga47f737f5507460b0c35de4bae39f5450":[8,0,0,736],
 "group__pybind.html#ga545c84ed3add4bda012c247a063b50ce":[7,0,3,13],
 "group__pybind.html#ga545c84ed3add4bda012c247a063b50ce":[8,0,0,737],
-"group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1":[8,0,0,756],
 "group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1":[7,0,3,29],
+"group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1":[8,0,0,756],
 "group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9":[7,0,3,8],
 "group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9":[8,0,0,729],
 "group__pybind.html#ga6f399ac0514c1e1adff48f88ee349380":[7,0,3,36],
@@ -70,8 +68,8 @@ var NAVTREEINDEX35 =
 "group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e":[8,0,0,752],
 "group__pybind.html#gaa2fbdd0b4ea1f33476ee30d7f2ce6a81":[7,0,3,9],
 "group__pybind.html#gaa2fbdd0b4ea1f33476ee30d7f2ce6a81":[8,0,0,733],
-"group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22":[7,0,3,20],
 "group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22":[8,0,0,746],
+"group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22":[7,0,3,20],
 "group__pybind.html#gaab97b444976a9d5305e3efc20b8bfad6":[7,0,3,16],
 "group__pybind.html#gaab97b444976a9d5305e3efc20b8bfad6":[8,0,0,740],
 "group__pybind.html#gab35847badbf935ed3e01dbcaad19205c":[7,0,3,5],
@@ -249,5 +247,7 @@ var NAVTREEINDEX35 =
 "include_2hal__core_2netlist_2boolean__function_2simplification_8h.html#a079b46fa168981ee4628cc3b8d01ced9":[10,0,0,0,1,0,1,1],
 "include_2hal__core_2netlist_2boolean__function_2simplification_8h.html#a596c449cefc0ec052c5ce6d8691e825e":[10,0,0,0,1,0,1,0],
 "include_2hal__core_2netlist_2boolean__function_2simplification_8h_source.html":[10,0,0,0,1,0,1],
-"include_2hal__core_2netlist_2boolean__function_2types_8h.html":[10,0,0,0,1,0,6]
+"include_2hal__core_2netlist_2boolean__function_2types_8h.html":[10,0,0,0,1,0,6],
+"include_2hal__core_2netlist_2boolean__function_2types_8h.html#a27de5a7424d277b60f19547c5e78feb6":[10,0,0,0,1,0,6,4],
+"include_2hal__core_2netlist_2boolean__function_2types_8h.html#a27de5a7424d277b60f19547c5e78feb6a4d70254b3a8e2bc38b6147fa6ee813be":[10,0,0,0,1,0,6,4,1]
 };
