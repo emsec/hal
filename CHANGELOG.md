@@ -225,6 +225,10 @@ All notable changes to this project will be documented in this file.
     * added tests
     * removed the debug output that `solve_fsm` printed to stdout on every run
     * fixed `solve_fsm` interpreting a user-provided initial state with the wrong bit order
+    * fixed `solve_fsm` leaving the negated internal state of a flip-flop in its next-state function as a free input
+    * fixed `solve_fsm` crashing when the next state of a flip-flop depends on its current state and the matching state output is not connected
+    * fixed `solve_fsm` deriving a wrong next state, depending on memory layout, when a state flip-flop that depends on its own state is fed directly by another one
+    * fixed `solve_fsm` corrupting states with bit 31 or above set, and with them the exploration of state registers wider than 31 bits
   * netlist preprocessing
     * added an optional gate scope to the preprocessing functions, restricting which gates may be modified or deleted and defaulting to the entire netlist
     * changed `split_shift_registers` and `unify_ff_outputs` to assign newly created gates to the module of the gate they replace instead of always to the top module

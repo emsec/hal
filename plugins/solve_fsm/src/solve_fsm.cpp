@@ -91,6 +91,11 @@ namespace hal
                     const std::vector<GatePin*> state_pins     = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::state; });
                     const std::vector<GatePin*> neg_state_pins = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::neg_state; });
 
+                    // the net leaving the only pin among the given ones, or a nullptr if there is no such pin or it is not connected
+                    const auto get_single_fan_out_net = [ff](const std::vector<GatePin*>& pins) -> Net* { return (pins.size() == 1) ? ff->get_fan_out_net(pins.front()) : nullptr; };
+                    const Net* state_net                = get_single_fan_out_net(state_pins);
+                    const Net* neg_state_net            = get_single_fan_out_net(neg_state_pins);
+
                     Net* data_net = ff->get_fan_in_net(d_pin);
 
                     BooleanFunction bf;
@@ -118,30 +123,39 @@ namespace hal
                         for (const auto& pin_var : complete_bf.get_variable_names())
                         {
                             // The complete Boolean function of a flip flop will contain the internal state and negated internal state.
-                            // We substitute them with the outgoing state / negated state nets.
-                            if (pin_var == internal_state_identifier)
+                            // We substitute them with the outgoing state / negated state nets, and express one as the negation of the
+                            // other if only one of the two outputs is connected.
+                            if (pin_var == internal_state_identifier || pin_var == internal_negated_state_identifier)
                             {
-                                if (state_pins.size() != 1)
+                                const bool negated      = (pin_var == internal_negated_state_identifier);
+                                const Net* direct_net   = negated ? neg_state_net : state_net;
+                                const Net* opposite_net = negated ? state_net : neg_state_net;
+
+                                BooleanFunction internal_bf;
+                                if (direct_net != nullptr)
                                 {
-                                    return ERR("failed to generate boolean functions of state: found " + std::to_string(state_pins.size()) + " state pins at gate " + ff->get_name() + " with ID "
-                                               + std::to_string(ff->get_id()) + ", but we expect exactly 1.");
+                                    internal_bf = BooleanFunctionNetDecorator(*direct_net).get_boolean_variable();
+                                }
+                                else if (opposite_net != nullptr)
+                                {
+                                    internal_bf = ~BooleanFunctionNetDecorator(*opposite_net).get_boolean_variable();
+                                }
+                                else
+                                {
+                                    return ERR("failed to generate boolean functions of state: the next state of gate " + ff->get_name() + " with ID " + std::to_string(ff->get_id())
+                                               + " depends on its current state, but neither a single state output nor a single negated state output of it is connected.");
                                 }
 
-                                complete_bf = complete_bf.substitute(internal_state_identifier, BooleanFunctionNetDecorator(*(ff->get_fan_out_net(state_pins.front()))).get_boolean_variable_name());
-
-                                continue;
-                            }
-
-                            if (pin_var == internal_negated_state_identifier)
-                            {
-                                if (neg_state_pins.size() != 1)
+                                if (auto res = complete_bf.substitute(pin_var, internal_bf); res.is_error())
                                 {
-                                    return ERR("failed to generate boolean functions of state: found " + std::to_string(neg_state_pins.size()) + " neg state pins at gate " + ff->get_name()
-                                               + " with ID " + std::to_string(ff->get_id()) + ", but we expect exactly 1.");
+                                    return ERR_APPEND(res.get_error(),
+                                                      "failed to generate boolean functions of state: could not substitute the internal state " + pin_var + " of gate " + ff->get_name() + " with ID "
+                                                          + std::to_string(ff->get_id()) + ".");
                                 }
-
-                                complete_bf =
-                                    complete_bf.substitute(internal_state_identifier, BooleanFunctionNetDecorator(*(ff->get_fan_out_net(neg_state_pins.front()))).get_boolean_variable_name());
+                                else
+                                {
+                                    complete_bf = res.get();
+                                }
 
                                 continue;
                             }
@@ -207,15 +221,18 @@ namespace hal
                         }
                     }
 
-                    bf.simplify();
+                    bf = bf.simplify();
 
                     const auto var_names = bf.get_variable_names();
 
                     // in the transition logic expressions of the next state bits we substitue the output nets of the state flip-flops with their (negated) input net.
+                    // All of them are substituted at once, since the input net of one flip-flop may be the output net of another one.
+                    std::map<std::string, BooleanFunction> state_substitution;
                     for (const auto& [out, in] : output_net_to_input_net)
                     {
                         // check whether output net is part of the expression
-                        if (var_names.find(BooleanFunctionNetDecorator(*out).get_boolean_variable_name()) == var_names.end())
+                        const std::string out_var = BooleanFunctionNetDecorator(*out).get_boolean_variable_name();
+                        if (var_names.find(out_var) == var_names.end())
                         {
                             continue;
                         }
@@ -235,14 +252,15 @@ namespace hal
                             in_bf = ~in_bf;
                         }
 
-                        auto res = bf.substitute(BooleanFunctionNetDecorator(*out).get_boolean_variable_name(), in_bf);
+                        state_substitution.insert({out_var, std::move(in_bf)});
+                    }
 
-                        if (res.is_error())
-                        {
-                            return ERR("failed to generate boolean functions of state: unable to replace out net " + std::to_string(out->get_id()) + " with in net " + std::to_string(in->get_id())
-                                       + ".");
-                        }
-
+                    if (auto res = bf.substitute(state_substitution); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "failed to generate boolean functions of state: unable to replace the output nets of the state register with its input nets.");
+                    }
+                    else
+                    {
                         bf = res.get();
                     }
 
@@ -457,9 +475,9 @@ namespace hal
                         }
 
                         const auto& eval_res = state_bf.evaluate(input_mapping);
-                        if (sub_res.is_error())
+                        if (eval_res.is_error())
                         {
-                            return ERR_APPEND(sub_res.get_error(), "failed to solve fsm: unable to evaluate next state function.");
+                            return ERR_APPEND(eval_res.get_error(), "failed to solve fsm: unable to evaluate next state function.");
                         }
 
                         const auto eval = eval_res.get();
@@ -543,7 +561,7 @@ namespace hal
 
                             auto m       = s_res.model.value();
                             auto suc     = m.evaluate(next_state_vec).get();
-                            auto suc_num = 0;
+                            u64 suc_num = 0;
 
                             // a constant (numeral) successor state
                             if (suc.is_constant())
