@@ -32,6 +32,7 @@ var classhal_1_1_wave_tree_model =
     [ "handleUpdateValueColumn", "classhal_1_1_wave_tree_model.html#aec1fb846cb6e77159b4309802151a109", null ],
     [ "handleWaveAdded", "classhal_1_1_wave_tree_model.html#a4008291165f6fd74b5caa2a29627446a", null ],
     [ "handleWaveAddedToGroup", "classhal_1_1_wave_tree_model.html#a2fd602b562a5a6c71bc57795598dc9ce", null ],
+    [ "handleWaveRemoved", "classhal_1_1_wave_tree_model.html#a7c99f44753a4e0849a0f40ade55a4652", null ],
     [ "handleWaveRemovedFromGroup", "classhal_1_1_wave_tree_model.html#a3389287b18cc5ddab2263a3886b219ed", null ],
     [ "handleWaveRenamed", "classhal_1_1_wave_tree_model.html#a952c47113f5f3c4af395b7ab5ab71323", null ],
     [ "hashIndex", "classhal_1_1_wave_tree_model.html#af2a6de98cc071d146ecd789295032888", null ],

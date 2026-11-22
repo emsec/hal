@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-283-g3f42a39fa</span>
+   &#160;<span id="projectnumber">v4.5.0-286-gceabdab92</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -143,6 +143,8 @@ Public Slots</h2></td></tr>
 <tr class="separator:aec1fb846cb6e77159b4309802151a109"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4008291165f6fd74b5caa2a29627446a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_wave_tree_model.html#a4008291165f6fd74b5caa2a29627446a">handleWaveAdded</a> (int iwave)</td></tr>
 <tr class="separator:a4008291165f6fd74b5caa2a29627446a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c99f44753a4e0849a0f40ade55a4652"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_wave_tree_model.html#a7c99f44753a4e0849a0f40ade55a4652">handleWaveRemoved</a> (int iwave)</td></tr>
+<tr class="separator:a7c99f44753a4e0849a0f40ade55a4652"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a952c47113f5f3c4af395b7ab5ab71323"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_wave_tree_model.html#a952c47113f5f3c4af395b7ab5ab71323">handleWaveRenamed</a> (int iwave)</td></tr>
 <tr class="separator:a952c47113f5f3c4af395b7ab5ab71323"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4978ee47810aa3295710d4c87fdff075"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_wave_tree_model.html#a4978ee47810aa3295710d4c87fdff075">handleGroupRenamed</a> (int grpId)</td></tr>
@@ -695,7 +697,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00021">21</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00874">handleStartValueThread()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::QueuedConnection</a>, and <a class="el" href="classhal_1_1_wave_tree_model.html#a8f7cfb441a1c9646e301112d242861c5">triggerStartValueThread()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00894">handleStartValueThread()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::QueuedConnection</a>, and <a class="el" href="classhal_1_1_wave_tree_model.html#a8f7cfb441a1c9646e301112d242861c5">triggerStartValueThread()</a>.</p>
 
 </div>
 </div>
@@ -716,11 +718,11 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00338">338</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00358">358</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01110">hal::WaveDataGroup::addWaves()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Wire</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__widget_8cpp_source.html#l00250">hal::WaveWidget::addSelectedResults()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__widget_8cpp_source.html#l00252">hal::WaveWidget::addSelectedResults()</a>.</p>
 
 </div>
 </div>
@@ -740,7 +742,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00521">521</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00541">541</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>.</p>
 
@@ -802,9 +804,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#canDropMimeData">QAbstractItemModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00752">752</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00772">772</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="wave__tree__model_8cpp_source.html#l00445">data()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00764">isLeaveItem()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>.</p>
+<p class="reference">References <a class="el" href="wave__tree__model_8cpp_source.html#l00465">data()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00784">isLeaveItem()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>.</p>
 
 </div>
 </div>
@@ -834,7 +836,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#columnCount">QAbstractItemModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00553">553</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00573">573</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>.</p>
 
@@ -863,9 +865,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8h_source.html#l00187">187</a> of file <a class="el" href="wave__tree__model_8h_source.html">wave_tree_model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8h_source.html#l00194">194</a> of file <a class="el" href="wave__tree__model_8h_source.html">wave_tree_model.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__widget_8cpp_source.html#l00181">hal::WaveWidget::setVisualizeNetState()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__widget_8cpp_source.html#l00183">hal::WaveWidget::setVisualizeNetState()</a>.</p>
 
 </div>
 </div>
@@ -892,9 +894,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8h_source.html#l00188">188</a> of file <a class="el" href="wave__tree__model_8h_source.html">wave_tree_model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8h_source.html#l00195">195</a> of file <a class="el" href="wave__tree__model_8h_source.html">wave_tree_model.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__widget_8cpp_source.html#l00181">hal::WaveWidget::setVisualizeNetState()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__widget_8cpp_source.html#l00183">hal::WaveWidget::setVisualizeNetState()</a>.</p>
 
 </div>
 </div>
@@ -934,11 +936,11 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#data">QAbstractItemModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00445">445</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00465">465</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignLeft</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignRight</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::BackgroundRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#column">QModelIndex::column()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::DisplayRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::FontRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::ForegroundRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html#fromRgb">QColor::fromRgb()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qrandomgenerator.html#global">QRandomGenerator::global()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00076">index()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00764">isLeaveItem()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="el" href="wave__data_8h_source.html#l00104">hal::WaveData::name()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#number-1">QString::number()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfont.html#setBold">QFont::setBold()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfont.html#setPixelSize">QFont::setPixelSize()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::SizeHintRole</a>, <a class="el" href="saleae__file_8h_source.html#l00165">hal::SaleaeDataTuple::sReadError</a>, <a class="el" href="plugin__netlist__simulator__controller_8h_source.html#l00151">hal::NetlistSimulatorControllerPlugin::sSimulationSettings</a>, <a class="el" href="wave__data_8cpp_source.html#l00484">hal::WaveData::strValue()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::TextAlignmentRole</a>, <a class="el" href="simulation__settings_8h_source.html#l00040">hal::SimulationSettings::Value0</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#GlobalColor-enum">Qt::white</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignLeft</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignRight</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::BackgroundRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#column">QModelIndex::column()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::DisplayRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::FontRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::ForegroundRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html#fromRgb">QColor::fromRgb()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qrandomgenerator.html#global">QRandomGenerator::global()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00076">index()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00784">isLeaveItem()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="el" href="wave__data_8h_source.html#l00104">hal::WaveData::name()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#number-1">QString::number()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfont.html#setBold">QFont::setBold()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfont.html#setPixelSize">QFont::setPixelSize()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::SizeHintRole</a>, <a class="el" href="saleae__file_8h_source.html#l00165">hal::SaleaeDataTuple::sReadError</a>, <a class="el" href="plugin__netlist__simulator__controller_8h_source.html#l00151">hal::NetlistSimulatorControllerPlugin::sSimulationSettings</a>, <a class="el" href="wave__data_8cpp_source.html#l00484">hal::WaveData::strValue()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::TextAlignmentRole</a>, <a class="el" href="simulation__settings_8h_source.html#l00040">hal::SimulationSettings::Value0</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#GlobalColor-enum">Qt::white</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00752">canDropMimeData()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00772">canDropMimeData()</a>.</p>
 
 </div>
 </div>
@@ -1015,9 +1017,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dropMimeData">QAbstractItemModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00720">720</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00740">740</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01062">hal::WaveDataGroup::childAt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstringlist.html#contains">QStringList::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmimedata.html#formats">QMimeData::formats()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00764">isLeaveItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#mimeData">QAbstractItemModel::mimeData()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#parent">QModelIndex::parent()</a>, and <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>.</p>
+<p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01062">hal::WaveDataGroup::childAt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstringlist.html#contains">QStringList::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmimedata.html#formats">QMimeData::formats()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00784">isLeaveItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#mimeData">QAbstractItemModel::mimeData()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#parent">QModelIndex::parent()</a>, and <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>.</p>
 
 </div>
 </div>
@@ -1047,9 +1049,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#flags">QAbstractItemModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00593">593</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00613">613</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="wave__tree__model_8cpp_source.html#l00076">index()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00764">isLeaveItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemFlags</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemIsDragEnabled</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemIsDropEnabled</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemIsEnabled</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemIsSelectable</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemIsUserCheckable</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemNeverHasChildren</a>.</p>
+<p class="reference">References <a class="el" href="wave__tree__model_8cpp_source.html#l00076">index()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00784">isLeaveItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemFlags</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemIsDragEnabled</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemIsDropEnabled</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemIsEnabled</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemIsSelectable</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemIsUserCheckable</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemNeverHasChildren</a>.</p>
 
 </div>
 </div>
@@ -1076,7 +1078,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00578">578</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00598">598</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>.</p>
 
@@ -1107,7 +1109,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00583">583</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00603">603</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>.</p>
 
@@ -1131,7 +1133,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00528">528</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00548">548</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>.</p>
 
@@ -1165,7 +1167,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00287">287</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Bool</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#contains">QHash::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l01043">insertBoolean()</a>, <a class="el" href="wave__data_8h_source.html#l00204">hal::WaveDataList::mDataBooleans</a>, and <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>.</p>
+<p class="reference">References <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Bool</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#contains">QHash::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l01063">insertBoolean()</a>, <a class="el" href="wave__data_8h_source.html#l00204">hal::WaveDataList::mDataBooleans</a>, and <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00118">restore()</a>, and <a class="el" href="wave__widget_8cpp_source.html#l00033">hal::WaveWidget::WaveWidget()</a>.</p>
 
@@ -1205,9 +1207,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00678">678</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00698">698</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="wave__tree__model_8cpp_source.html#l00704">handleUpdateValueColumn()</a>.</p>
+<p class="reference">References <a class="el" href="wave__tree__model_8cpp_source.html#l00724">handleUpdateValueColumn()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wave__widget_8cpp_source.html#l00033">hal::WaveWidget::WaveWidget()</a>.</p>
 
@@ -1237,11 +1239,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00691">691</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00711">711</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="wave__tree__model_8cpp_source.html#l00704">handleUpdateValueColumn()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>.</p>
+<p class="reference">References <a class="el" href="wave__tree__model_8cpp_source.html#l00724">handleUpdateValueColumn()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00874">handleStartValueThread()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00894">handleStartValueThread()</a>.</p>
 
 </div>
 </div>
@@ -1269,7 +1271,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00996">996</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01016">1016</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="el" href="wave__data_8cpp_source.html#l01062">hal::WaveDataGroup::childAt()</a>, <a class="el" href="wave__data_8cpp_source.html#l01068">hal::WaveDataGroup::childIndex()</a>, <a class="el" href="wave__item_8h_source.html#l00074">hal::WaveItem::DeleteRequest</a>, <a class="el" href="wave__item_8cpp_source.html#l00320">hal::WaveItemHash::dispose()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#end">QHash::end()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#erase-1">QHash::erase()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#find">QHash::find()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Group</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__data_8h_source.html#l00350">hal::WaveDataGroup::isEmpty()</a>, <a class="el" href="wave__data_8cpp_source.html#l01090">hal::WaveDataGroup::removeAt()</a>, <a class="el" href="wave__item_8cpp_source.html#l00266">hal::WaveItem::setRequest()</a>, <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#value">QHash::value()</a>, <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Wire</a>.</p>
 
@@ -1303,7 +1305,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00298">298</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#contains">QHash::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Group</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l01067">insertGroup()</a>, <a class="el" href="wave__data_8h_source.html#l00203">hal::WaveDataList::mDataGroups</a>, and <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#contains">QHash::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Group</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l01087">insertGroup()</a>, <a class="el" href="wave__data_8h_source.html#l00203">hal::WaveDataList::mDataGroups</a>, and <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00118">restore()</a>, and <a class="el" href="wave__widget_8cpp_source.html#l00033">hal::WaveWidget::WaveWidget()</a>.</p>
 
@@ -1333,7 +1335,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00361">361</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00381">381</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01068">hal::WaveDataGroup::childIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">QAbstractItemModel::dataChanged()</a>, <a class="el" href="wave__data_8h_source.html#l00203">hal::WaveDataList::mDataGroups</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>.</p>
 
@@ -1365,7 +1367,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00976">976</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00996">996</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__item_8h_source.html#l00074">hal::WaveItem::DataChanged</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Group</a>, <a class="el" href="wave__item_8cpp_source.html#l00266">hal::WaveItem::setRequest()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#value">QHash::value()</a>.</p>
 
@@ -1397,9 +1399,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00874">874</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00894">894</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="saleae__directory_8cpp_source.html#l00384">hal::SaleaeDirectory::get_directory()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00691">handleEndValueThread()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="el" href="wave__data_8h_source.html#l00242">hal::WaveDataList::saleaeDirectory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qthread.html#start">QThread::start()</a>, and <a class="el" href="classhal_1_1_wave_value_thread.html#a1c7815a2deaf7f18096c002d8c66ea57">hal::WaveValueThread::valueThreadEnds()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="saleae__directory_8cpp_source.html#l00384">hal::SaleaeDirectory::get_directory()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00711">handleEndValueThread()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="el" href="wave__data_8h_source.html#l00242">hal::WaveDataList::saleaeDirectory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qthread.html#start">QThread::start()</a>, and <a class="el" href="classhal_1_1_wave_value_thread.html#a1c7815a2deaf7f18096c002d8c66ea57">hal::WaveValueThread::valueThreadEnds()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00021">WaveTreeModel()</a>.</p>
 
@@ -1431,7 +1433,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00276">276</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#contains">QHash::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l01027">insertTrigger()</a>, <a class="el" href="wave__data_8h_source.html#l00205">hal::WaveDataList::mDataTrigger</a>, <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Trig</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#contains">QHash::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l01047">insertTrigger()</a>, <a class="el" href="wave__data_8h_source.html#l00205">hal::WaveDataList::mDataTrigger</a>, <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Trig</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00118">restore()</a>, and <a class="el" href="wave__widget_8cpp_source.html#l00033">hal::WaveWidget::WaveWidget()</a>.</p>
 
@@ -1460,11 +1462,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00704">704</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00724">724</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">QAbstractItemModel::dataChanged()</a>, <a class="el" href="wave__data_8h_source.html#l00203">hal::WaveDataList::mDataGroups</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00678">handleCursorMoved()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00691">handleEndValueThread()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00698">handleCursorMoved()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00711">handleEndValueThread()</a>.</p>
 
 </div>
 </div>
@@ -1494,7 +1496,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00328">328</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#contains">QHash::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00824">insertItem()</a>, <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Wire</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#contains">QHash::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00844">insertItem()</a>, <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Wire</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00118">restore()</a>, and <a class="el" href="wave__widget_8cpp_source.html#l00033">hal::WaveWidget::WaveWidget()</a>.</p>
 
@@ -1534,11 +1536,49 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00375">375</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00395">395</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="el" href="wave__item_8cpp_source.html#l00272">hal::WaveItem::clearRequest()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="wave__item_8h_source.html#l00074">hal::WaveItem::DeleteAcknowledged</a>, <a class="el" href="wave__item_8h_source.html#l00074">hal::WaveItem::DeleteRequest</a>, <a class="el" href="wave__item_8cpp_source.html#l00320">hal::WaveItemHash::dispose()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00215">indexes()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#insert">QHash::insert()</a>, <a class="el" href="wave__data_8h_source.html#l00203">hal::WaveDataList::mDataGroups</a>, <a class="el" href="wave__tree__model_8h_source.html#l00088">Move</a>, <a class="el" href="wave__data_8cpp_source.html#l01073">hal::WaveDataGroup::netIndex()</a>, <a class="el" href="wave__tree__model_8h_source.html#l00088">None</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00919">removeItemFromHash()</a>, <a class="el" href="wave__item_8h_source.html#l00074">hal::WaveItem::SetPosition</a>, <a class="el" href="wave__item_8cpp_source.html#l00266">hal::WaveItem::setRequest()</a>, <a class="el" href="wave__item_8cpp_source.html#l00040">hal::WaveItem::setWaveData()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#value">QHash::value()</a>, <a class="el" href="wave__item_8h_source.html#l00129">hal::WaveItem::wavedata()</a>, <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Wire</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="el" href="wave__item_8cpp_source.html#l00272">hal::WaveItem::clearRequest()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="wave__item_8h_source.html#l00074">hal::WaveItem::DeleteAcknowledged</a>, <a class="el" href="wave__item_8h_source.html#l00074">hal::WaveItem::DeleteRequest</a>, <a class="el" href="wave__item_8cpp_source.html#l00320">hal::WaveItemHash::dispose()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00215">indexes()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#insert">QHash::insert()</a>, <a class="el" href="wave__data_8h_source.html#l00203">hal::WaveDataList::mDataGroups</a>, <a class="el" href="wave__tree__model_8h_source.html#l00088">Move</a>, <a class="el" href="wave__data_8cpp_source.html#l01073">hal::WaveDataGroup::netIndex()</a>, <a class="el" href="wave__tree__model_8h_source.html#l00088">None</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00939">removeItemFromHash()</a>, <a class="el" href="wave__item_8h_source.html#l00074">hal::WaveItem::SetPosition</a>, <a class="el" href="wave__item_8cpp_source.html#l00266">hal::WaveItem::setRequest()</a>, <a class="el" href="wave__item_8cpp_source.html#l00040">hal::WaveItem::setWaveData()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#value">QHash::value()</a>, <a class="el" href="wave__item_8h_source.html#l00129">hal::WaveItem::wavedata()</a>, <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Wire</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00824">insertItem()</a>, and <a class="el" href="wave__widget_8cpp_source.html#l00033">hal::WaveWidget::WaveWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00844">insertItem()</a>, and <a class="el" href="wave__widget_8cpp_source.html#l00033">hal::WaveWidget::WaveWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a7c99f44753a4e0849a0f40ade55a4652"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c99f44753a4e0849a0f40ade55a4652">&#9670;&nbsp;</a></span>handleWaveRemoved</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::WaveTreeModel::handleWaveRemoved </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>iwave</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Remove all rows and wave items when the wave data list is cleared (iwave &lt; 0), e.g. when the controller is reset. Must be connected directly since the waveform data is deleted right after the signal. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">iwave</td><td>The index of the removed wave, or -1 if all waves were removed. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00338">338</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#clear">QHash::clear()</a>, <a class="el" href="wave__tree__model_8h_source.html#l00053">hal::WaveDataRoot::clearAll()</a>, <a class="el" href="wave__item_8cpp_source.html#l00320">hal::WaveItemHash::dispose()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="classhal_1_1_wave_tree_model.html#a44643f0c7c4247d4b6010ca9ce7486a5">numberEntriesChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="wave__item_8h_source.html#l00167">hal::WaveItemHash::setSelected()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#size">QHash::size()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#values">QHash::values()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="wave__widget_8cpp_source.html#l00033">hal::WaveWidget::WaveWidget()</a>.</p>
 
 </div>
 </div>
@@ -1576,7 +1616,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00982">982</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01002">1002</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="el" href="wave__item_8cpp_source.html#l00320">hal::WaveItemHash::dispose()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#end">QHash::end()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#erase-1">QHash::erase()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#find">QHash::find()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Wire</a>.</p>
 
@@ -1608,7 +1648,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00354">354</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00374">374</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">QAbstractItemModel::dataChanged()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00215">indexes()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>.</p>
 
@@ -1636,7 +1676,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Bool</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::BooleanNet</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Group</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00076">index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::NetGroup</a>, <a class="el" href="wave__data_8h_source.html#l00105">hal::WaveData::netType()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Trig</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::TriggerTime</a>, <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Wire</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__tree__view_8cpp_source.html#l00554">hal::WaveTreeView::currentChanged()</a>, and <a class="el" href="wave__tree__view_8cpp_source.html#l00514">hal::WaveTreeView::selectionChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__tree__view_8cpp_source.html#l00552">hal::WaveTreeView::currentChanged()</a>, and <a class="el" href="wave__tree__view_8cpp_source.html#l00514">hal::WaveTreeView::selectionChanged()</a>.</p>
 
 </div>
 </div>
@@ -1682,7 +1722,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#headerData">QAbstractItemModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00430">430</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00450">450</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::DisplayRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Orientation-enum">Qt::Horizontal</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::SizeHintRole</a>.</p>
 
@@ -1734,7 +1774,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>, and <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00445">data()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00593">flags()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00055">hashIndex()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00764">isLeaveItem()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00535">netName()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00504">waveIndex()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00465">data()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00613">flags()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00055">hashIndex()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00784">isLeaveItem()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00555">netName()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00524">waveIndex()</a>.</p>
 
 </div>
 </div>
@@ -1780,7 +1820,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01047">hal::WaveDataGroup::children()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00375">handleWaveAddedToGroup()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00354">handleWaveRenamed()</a>, and <a class="el" href="wave__tree__view_8cpp_source.html#l00577">hal::WaveTreeView::setWaveSelection()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00395">handleWaveAddedToGroup()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00374">handleWaveRenamed()</a>, and <a class="el" href="wave__tree__view_8cpp_source.html#l00575">hal::WaveTreeView::setWaveSelection()</a>.</p>
 
 </div>
 </div>
@@ -1816,9 +1856,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01055">1055</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01075">1075</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00824">insertItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#parent">QModelIndex::parent()</a>, <a class="el" href="wave__data_8cpp_source.html#l00681">hal::WaveDataBoolean::recalcData()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00844">insertItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#parent">QModelIndex::parent()</a>, <a class="el" href="wave__data_8cpp_source.html#l00681">hal::WaveDataBoolean::recalcData()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>.</p>
 
 </div>
 </div>
@@ -1854,9 +1894,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01043">1043</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01063">1063</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00824">insertItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#parent">QModelIndex::parent()</a>, <a class="el" href="wave__data_8cpp_source.html#l00681">hal::WaveDataBoolean::recalcData()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00844">insertItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#parent">QModelIndex::parent()</a>, <a class="el" href="wave__data_8cpp_source.html#l00681">hal::WaveDataBoolean::recalcData()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00287">handleBooleanAdded()</a>.</p>
 
@@ -1922,7 +1962,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00772">772</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00792">792</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Bool</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::BooleanNet</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Group</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#insert">QHash::insert()</a>, <a class="el" href="wave__data_8cpp_source.html#l01100">hal::WaveDataGroup::insert()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Invalid</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="el" href="wave__data_8h_source.html#l00204">hal::WaveDataList::mDataBooleans</a>, <a class="el" href="wave__data_8h_source.html#l00203">hal::WaveDataList::mDataGroups</a>, <a class="el" href="wave__data_8h_source.html#l00205">hal::WaveDataList::mDataTrigger</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::NetGroup</a>, <a class="el" href="wave__data_8h_source.html#l00105">hal::WaveData::netType()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>, <a class="el" href="wave__data_8cpp_source.html#l01144">hal::WaveDataGroup::recalcData()</a>, <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Trig</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::TriggerTime</a>, <a class="el" href="wave__item_8h_source.html#l00129">hal::WaveItem::wavedata()</a>, <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Wire</a>.</p>
 
@@ -1954,9 +1994,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01067">1067</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01087">1087</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00824">insertItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#parent">QModelIndex::parent()</a>, <a class="el" href="wave__data_8cpp_source.html#l01144">hal::WaveDataGroup::recalcData()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00844">insertItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#parent">QModelIndex::parent()</a>, <a class="el" href="wave__data_8cpp_source.html#l01144">hal::WaveDataGroup::recalcData()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00298">handleGroupAdded()</a>.</p>
 
@@ -1994,11 +2034,11 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00824">824</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00844">844</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Bool</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::BooleanNet</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Group</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00375">handleWaveAddedToGroup()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__data_8cpp_source.html#l01100">hal::WaveDataGroup::insert()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::NetGroup</a>, <a class="el" href="wave__data_8h_source.html#l00105">hal::WaveData::netType()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>, <a class="el" href="wave__data_8cpp_source.html#l00681">hal::WaveDataBoolean::recalcData()</a>, <a class="el" href="wave__data_8cpp_source.html#l00839">hal::WaveDataTrigger::recalcData()</a>, <a class="el" href="wave__data_8cpp_source.html#l01144">hal::WaveDataGroup::recalcData()</a>, <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Trig</a>, and <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::TriggerTime</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Bool</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::BooleanNet</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Group</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00395">handleWaveAddedToGroup()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__data_8cpp_source.html#l01100">hal::WaveDataGroup::insert()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::NetGroup</a>, <a class="el" href="wave__data_8h_source.html#l00105">hal::WaveData::netType()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>, <a class="el" href="wave__data_8cpp_source.html#l00681">hal::WaveDataBoolean::recalcData()</a>, <a class="el" href="wave__data_8cpp_source.html#l00839">hal::WaveDataTrigger::recalcData()</a>, <a class="el" href="wave__data_8cpp_source.html#l01144">hal::WaveDataGroup::recalcData()</a>, <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Trig</a>, and <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::TriggerTime</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00328">handleWaveAdded()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l01043">insertBoolean()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l01067">insertGroup()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l01027">insertTrigger()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00328">handleWaveAdded()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l01063">insertBoolean()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l01087">insertGroup()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l01047">insertTrigger()</a>.</p>
 
 </div>
 </div>
@@ -2046,9 +2086,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01027">1027</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01047">1047</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00824">insertItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#parent">QModelIndex::parent()</a>, <a class="el" href="wave__data_8cpp_source.html#l00839">hal::WaveDataTrigger::recalcData()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>, and <a class="el" href="wave__data_8cpp_source.html#l00805">hal::WaveDataTrigger::set_filter_wave()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00844">insertItem()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#parent">QModelIndex::parent()</a>, <a class="el" href="wave__data_8cpp_source.html#l00839">hal::WaveDataTrigger::recalcData()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>, and <a class="el" href="wave__data_8cpp_source.html#l00805">hal::WaveDataTrigger::set_filter_wave()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00276">handleTriggerAdded()</a>.</p>
 
@@ -2070,11 +2110,11 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00764">764</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00784">784</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__tree__model_8cpp_source.html#l00076">index()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00752">canDropMimeData()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00445">data()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00720">dropMimeData()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00593">flags()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00602">setDragIndexes()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00772">canDropMimeData()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00465">data()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00740">dropMimeData()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00613">flags()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00622">setDragIndexes()</a>.</p>
 
 </div>
 </div>
@@ -2098,7 +2138,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01062">hal::WaveDataGroup::childAt()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00076">index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00521">booleanId()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00445">data()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00720">dropMimeData()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00528">groupId()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00691">handleEndValueThread()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00874">handleStartValueThread()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00055">hashIndex()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00076">index()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00772">insertExisting()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00824">insertItem()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00764">isLeaveItem()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00535">netName()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00919">removeItemFromHash()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00542">rowCount()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00514">triggerId()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00504">waveIndex()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00541">booleanId()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00465">data()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00740">dropMimeData()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00548">groupId()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00711">handleEndValueThread()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00894">handleStartValueThread()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00055">hashIndex()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00076">index()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00792">insertExisting()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00844">insertItem()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00784">isLeaveItem()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00555">netName()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00939">removeItemFromHash()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00562">rowCount()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00534">triggerId()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00524">waveIndex()</a>.</p>
 
 </div>
 </div>
@@ -2118,7 +2158,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00535">535</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00555">555</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__tree__model_8cpp_source.html#l00076">index()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, and <a class="el" href="wave__data_8h_source.html#l00104">hal::WaveData::name()</a>.</p>
 
@@ -2148,7 +2188,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="wave__widget_8cpp_source.html#l00033">hal::WaveWidget::WaveWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00338">handleWaveRemoved()</a>, and <a class="el" href="wave__widget_8cpp_source.html#l00033">hal::WaveWidget::WaveWidget()</a>.</p>
 
 </div>
 </div>
@@ -2168,7 +2208,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01102">1102</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01122">1122</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 </div>
 </div>
@@ -2198,7 +2238,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#parent">QAbstractItemModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00559">559</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00579">579</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01062">hal::WaveDataGroup::childAt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, and <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>.</p>
 
@@ -2243,9 +2283,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00958">958</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00978">978</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01062">hal::WaveDataGroup::childAt()</a>, <a class="el" href="wave__item_8cpp_source.html#l00320">hal::WaveItemHash::dispose()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#end">QHash::end()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#erase-1">QHash::erase()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#find">QHash::find()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Group</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="el" href="wave__data_8cpp_source.html#l01553">hal::WaveDataList::removeGroup()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>.</p>
+<p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01062">hal::WaveDataGroup::childAt()</a>, <a class="el" href="wave__item_8cpp_source.html#l00320">hal::WaveItemHash::dispose()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#end">QHash::end()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#erase-1">QHash::erase()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#find">QHash::find()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Group</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="el" href="wave__data_8cpp_source.html#l01566">hal::WaveDataList::removeGroup()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>.</p>
 
 </div>
 </div>
@@ -2275,11 +2315,11 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00919">919</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00939">939</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginRemoveRows">QAbstractItemModel::beginRemoveRows()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Bool</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::BooleanNet</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#end">QHash::end()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endRemoveRows">QAbstractItemModel::endRemoveRows()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#erase-1">QHash::erase()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#find">QHash::find()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Invalid</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="el" href="wave__data_8h_source.html#l00105">hal::WaveData::netType()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>, <a class="el" href="wave__data_8cpp_source.html#l01144">hal::WaveDataGroup::recalcData()</a>, <a class="el" href="wave__data_8cpp_source.html#l01090">hal::WaveDataGroup::removeAt()</a>, <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Trig</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::TriggerTime</a>, <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Wire</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00375">handleWaveAddedToGroup()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__tree__model_8cpp_source.html#l00395">handleWaveAddedToGroup()</a>.</p>
 
 </div>
 </div>
@@ -2300,7 +2340,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00118">118</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#begin">QHash::begin()</a>, <a class="el" href="saleae__directory_8h_source.html#l00113">hal::SaleaeDirectoryNetEntry::Boolean</a>, <a class="el" href="wave__data_8cpp_source.html#l01047">hal::WaveDataGroup::children()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#clear">QHash::clear()</a>, <a class="el" href="wave__tree__model_8h_source.html#l00053">hal::WaveDataRoot::clearAll()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#contains">QHash::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html#data">QByteArray::data()</a>, <a class="el" href="wave__data_8cpp_source.html#l01290">hal::WaveDataList::emitTimeframeChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#end">QHash::end()</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="saleae__directory_8cpp_source.html#l00384">hal::SaleaeDirectory::get_directory()</a>, <a class="el" href="saleae__directory_8h_source.html#l00113">hal::SaleaeDirectoryNetEntry::Group</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00287">handleBooleanAdded()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00298">handleGroupAdded()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00276">handleTriggerAdded()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00328">handleWaveAdded()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__data_8h_source.html#l00204">hal::WaveDataList::mDataBooleans</a>, <a class="el" href="wave__data_8h_source.html#l00203">hal::WaveDataList::mDataGroups</a>, <a class="el" href="wave__data_8h_source.html#l00205">hal::WaveDataList::mDataTrigger</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#path">QFileInfo::path()</a>, <a class="el" href="wave__graphics__canvas_8h_source.html#l00092">hal::WaveGraphicsCanvas::renderEngine()</a>, <a class="el" href="wave__data_8h_source.html#l00242">hal::WaveDataList::saleaeDirectory()</a>, <a class="el" href="wave__render__engine_8h_source.html#l00119">hal::WaveRenderEngine::setZoomHistory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toUtf8">QString::toUtf8()</a>, <a class="el" href="saleae__directory_8h_source.html#l00113">hal::SaleaeDirectoryNetEntry::Trigger</a>, <a class="el" href="wave__graphics__canvas_8cpp_source.html#l00276">hal::WaveGraphicsCanvas::undoZoom()</a>, <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Wire</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#begin">QHash::begin()</a>, <a class="el" href="saleae__directory_8h_source.html#l00113">hal::SaleaeDirectoryNetEntry::Boolean</a>, <a class="el" href="wave__data_8cpp_source.html#l01047">hal::WaveDataGroup::children()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#clear">QHash::clear()</a>, <a class="el" href="wave__tree__model_8h_source.html#l00053">hal::WaveDataRoot::clearAll()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#contains">QHash::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html#data">QByteArray::data()</a>, <a class="el" href="wave__data_8cpp_source.html#l01292">hal::WaveDataList::emitTimeframeChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#end">QHash::end()</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="saleae__directory_8cpp_source.html#l00384">hal::SaleaeDirectory::get_directory()</a>, <a class="el" href="saleae__directory_8h_source.html#l00113">hal::SaleaeDirectoryNetEntry::Group</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00287">handleBooleanAdded()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00298">handleGroupAdded()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00276">handleTriggerAdded()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00328">handleWaveAdded()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__data_8h_source.html#l00204">hal::WaveDataList::mDataBooleans</a>, <a class="el" href="wave__data_8h_source.html#l00203">hal::WaveDataList::mDataGroups</a>, <a class="el" href="wave__data_8h_source.html#l00205">hal::WaveDataList::mDataTrigger</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#path">QFileInfo::path()</a>, <a class="el" href="wave__graphics__canvas_8h_source.html#l00092">hal::WaveGraphicsCanvas::renderEngine()</a>, <a class="el" href="wave__data_8h_source.html#l00242">hal::WaveDataList::saleaeDirectory()</a>, <a class="el" href="wave__render__engine_8h_source.html#l00119">hal::WaveRenderEngine::setZoomHistory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toUtf8">QString::toUtf8()</a>, <a class="el" href="saleae__directory_8h_source.html#l00113">hal::SaleaeDirectoryNetEntry::Trigger</a>, <a class="el" href="wave__graphics__canvas_8cpp_source.html#l00276">hal::WaveGraphicsCanvas::undoZoom()</a>, <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>, and <a class="el" href="wave__item_8h_source.html#l00048">hal::WaveItemIndex::Wire</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wave__widget_8cpp_source.html#l00033">hal::WaveWidget::WaveWidget()</a>.</p>
 
@@ -2332,7 +2372,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#rowCount">QAbstractItemModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00542">542</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00562">562</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>, and <a class="el" href="wave__data_8h_source.html#l00339">hal::WaveDataGroup::size()</a>.</p>
 
@@ -2354,9 +2394,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00602">602</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00622">622</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="wave__tree__model_8cpp_source.html#l00764">isLeaveItem()</a>, and <a class="el" href="wave__tree__model_8h_source.html#l00088">Move</a>.</p>
+<p class="reference">References <a class="el" href="wave__tree__model_8cpp_source.html#l00784">isLeaveItem()</a>, and <a class="el" href="wave__tree__model_8h_source.html#l00088">Move</a>.</p>
 
 </div>
 </div>
@@ -2413,7 +2453,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#supportedDragActions">QAbstractItemModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00588">588</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00608">608</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#DropAction-enum">Qt::CopyAction</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#DropAction-enum">Qt::MoveAction</a>.</p>
 
@@ -2435,7 +2475,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00514">514</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00534">534</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>.</p>
 
@@ -2513,11 +2553,11 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01079">1079</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01099">1099</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01047">hal::WaveDataGroup::children()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, and <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wave__widget_8cpp_source.html#l00214">hal::WaveWidget::addableEntries()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__widget_8cpp_source.html#l00216">hal::WaveWidget::addableEntries()</a>.</p>
 
 </div>
 </div>
@@ -2537,7 +2577,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00504">504</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l00524">524</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00076">index()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00047">item()</a>, and <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>.</p>
 
@@ -2566,7 +2606,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8h_source.html#l00192">192</a> of file <a class="el" href="wave__tree__model_8h_source.html">wave_tree_model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8h_source.html#l00199">199</a> of file <a class="el" href="wave__tree__model_8h_source.html">wave_tree_model.h</a>.</p>
 
 </div>
 </div>
