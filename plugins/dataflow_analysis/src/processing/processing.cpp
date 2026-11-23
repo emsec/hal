@@ -12,6 +12,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 
+#include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <thread>
@@ -76,49 +77,43 @@ namespace hal
                         for (u32 current_id = start_id; current_id < end_id; ++current_id)
                         {
                             const auto& [current_state, current_pass] = ctx.current_passes[current_id];
+                            auto& outcome                             = ctx.current_outcomes[current_id];
 
                             if (auto it = ctx.pass_outcome.find({current_state, current_pass.id}); it != ctx.pass_outcome.end())
                             {
-                                {
-                                    // early exit, outcome is already known
-                                    std::lock_guard guard(ctx.result_mutex);
-                                    ctx.new_recurring_results.emplace_back(current_state, current_pass.id, it->second);
-                                    ctx.finished_passes++;
-                                    m_progress_printer->report((float)ctx.finished_passes / ctx.current_passes.size(),
-                                                              std::to_string(ctx.finished_passes) + "\\" + std::to_string(ctx.current_passes.size()) + " ("
-                                                                  + std::to_string(ctx.new_unique_groupings.size()) + " new results)");
-                                }
-                                continue;
+                                // early exit, outcome is already known
+                                outcome = {it->second, false};
                             }
-
-                            // process work
-                            auto new_state = current_pass.function(current_state);
-
-                            // aggregate result
-                            std::shared_ptr<Grouping> duplicate = nullptr;
-                            for (const auto& other : ctx.result.unique_groupings)
+                            else
                             {
-                                if (*new_state == *other)
+                                // process work
+                                auto new_state = current_pass.function(current_state);
+
+                                // aggregate result
+                                std::shared_ptr<Grouping> duplicate = nullptr;
+                                for (const auto& other : ctx.result.unique_groupings)
                                 {
-                                    duplicate = other;
-                                    break;
+                                    if (*new_state == *other)
+                                    {
+                                        duplicate = other;
+                                        break;
+                                    }
                                 }
+
+                                outcome = (duplicate == nullptr) ? std::make_pair(new_state, true) : std::make_pair(duplicate, false);
                             }
+
                             {
                                 std::lock_guard guard(ctx.result_mutex);
-                                if (duplicate == nullptr)
+                                if (outcome.second)
                                 {
-                                    ctx.new_unique_groupings.emplace_back(current_state, current_pass.id, new_state);
-                                }
-                                else
-                                {
-                                    ctx.new_recurring_results.emplace_back(current_state, current_pass.id, duplicate);
+                                    ctx.num_new_outcomes++;
                                 }
 
                                 ctx.finished_passes++;
                                 m_progress_printer->report((float)ctx.finished_passes / ctx.current_passes.size(),
                                                           std::to_string(ctx.finished_passes) + "\\" + std::to_string(ctx.current_passes.size()) + " ("
-                                                              + std::to_string(ctx.new_unique_groupings.size()) + " new results)");
+                                                              + std::to_string(ctx.num_new_outcomes) + " new results)");
                             }
                         }
                     }
@@ -171,9 +166,11 @@ namespace hal
                     ctx.current_passes = generate_pass_combinations(ctx, config, (layer == 0) ? initial_grouping : nullptr);
 
                     // preparations
-                    ctx.done            = false;
-                    ctx.pass_counter    = 0;
-                    ctx.finished_passes = 0;
+                    ctx.done             = false;
+                    ctx.pass_counter     = 0;
+                    ctx.finished_passes  = 0;
+                    ctx.num_new_outcomes = 0;
+                    ctx.current_outcomes.assign(ctx.current_passes.size(), {nullptr, false});
 
                     m_progress_printer = std::make_unique<user_feedback::ProgressPrinter>("dataflow: processing …", 30);
 
@@ -194,46 +191,40 @@ namespace hal
 
                     m_progress_printer.reset();
 
-                    log_info("dataflow", "  finished in {:3.2f}s, processed {} passes, filtering results...", seconds_since(begin_time), ctx.finished_passes, ctx.new_unique_groupings.size());
-
-                    auto all_new_results = ctx.new_recurring_results;
+                    log_info("dataflow", "  finished in {:3.2f}s, processed {} passes, filtering results...", seconds_since(begin_time), ctx.finished_passes);
 
                     begin_time = std::chrono::high_resolution_clock::now();
 
-                    // filter same results of different threads
-                    u32 num_unique_filtered = 0;
-                    std::vector<bool> do_not_consider(ctx.new_unique_groupings.size(), false);
-                    for (u32 i = 0; i < ctx.new_unique_groupings.size(); ++i)
+                    // filter same results of different passes of this layer
+                    // the outcomes are visited in the order of the passes, so the grouping kept for a set of equal results does not depend on which thread finished first
+                    std::vector<std::tuple<std::shared_ptr<Grouping>, pass_id, std::shared_ptr<Grouping>>> all_new_results;
+                    all_new_results.reserve(ctx.current_passes.size());
+                    std::vector<std::shared_ptr<Grouping>> new_unique_groupings;
+                    for (u32 i = 0; i < ctx.current_passes.size(); ++i)
                     {
-                        if (do_not_consider[i])
-                        {
-                            continue;
-                        }
-                        const auto& [start_state_i, pass_i, new_state_i] = ctx.new_unique_groupings[i];
-                        for (u32 j = i + 1; j < ctx.new_unique_groupings.size(); ++j)
-                        {
-                            if (do_not_consider[j])
-                            {
-                                continue;
-                            }
-                            const auto& [start_state_j, pass_j, new_state_j] = ctx.new_unique_groupings[j];
+                        const auto& [start_state, pass] = ctx.current_passes[i];
+                        auto new_state                  = ctx.current_outcomes[i].first;
 
-                            // j is a duplicate of i
-                            if (*new_state_i == *new_state_j)
+                        if (ctx.current_outcomes[i].second)
+                        {
+                            if (const auto it = std::find_if(new_unique_groupings.begin(), new_unique_groupings.end(), [&new_state](const auto& other) { return *new_state == *other; });
+                                it != new_unique_groupings.end())
                             {
-                                do_not_consider[j] = true;
-                                all_new_results.emplace_back(start_state_j, pass_j, new_state_i);
+                                new_state = *it;
+                            }
+                            else
+                            {
+                                new_unique_groupings.push_back(new_state);
+                                ctx.result.unique_groupings.push_back(new_state);
                             }
                         }
-                        ctx.result.unique_groupings.push_back(new_state_i);
-                        all_new_results.push_back(ctx.new_unique_groupings[i]);
-                        num_unique_filtered++;
+
+                        all_new_results.emplace_back(start_state, pass.id, new_state);
                     }
-                    log_info("dataflow", "  filtered results in {:3.2f}s, got {} new unique results", seconds_since(begin_time), num_unique_filtered);
+                    log_info("dataflow", "  filtered results in {:3.2f}s, got {} new unique results", seconds_since(begin_time), new_unique_groupings.size());
 
                     begin_time = std::chrono::high_resolution_clock::now();
-                    ctx.new_recurring_results.clear();
-                    ctx.new_unique_groupings.clear();
+                    ctx.current_outcomes.clear();
 
                     // fill results: compute path by appending pass id to the path of the prev round
                     for (const auto& [start_state, pass, new_state] : all_new_results)

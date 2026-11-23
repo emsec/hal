@@ -78,7 +78,7 @@ namespace hal
             /**
              * @brief Get all gates contained in any of the groups groups.
              * 
-             * @returns A vector of gates.
+             * @returns A vector of gates in ascending ID order.
              */
             std::vector<Gate*> get_gates() const;
 
@@ -170,6 +170,7 @@ namespace hal
              * @brief Create modules for the dataflow analysis result.
              * 
              * Please note that the IDs of the module are assigned independent of the group IDs of the register groups.
+             * The modules are created in ascending order of the group IDs, and the pins of a module are numbered in ascending order of the IDs of the gates they connect to.
              * 
              * @param[in] group_ids - The group IDs to consider. If an empty set is provided, all groups will be considered. Defaults to an empty set.
              * @returns Ok() and a map from group IDs to Modules on success, an error otherwise.
@@ -180,6 +181,7 @@ namespace hal
              * @brief Create modules for the dataflow analysis result.
              * 
              * Please note that the IDs of the module are assigned independent of the group IDs of the register groups.
+             * The modules are created in ascending order of the group IDs, and the pins of a module are numbered in ascending order of the IDs of the gates they connect to.
              * 
              * @param[in] module_suffixes - The suffixes to use for modules containing only gates of a specific gate type. Defaults to `"module"` for mixed and unspecified gate types.
              * @param[in] pin_prefixes - The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name.
@@ -194,6 +196,7 @@ namespace hal
              * @brief Create modules for the dataflow analysis result.
              * 
              * Please note that the IDs of the module are assigned independent of the group IDs of the register groups.
+             * The modules are created in ascending order of the group IDs, and the pins of a module are numbered in ascending order of the IDs of the gates they connect to.
              * 
              * @param[in] module_suffixes - The suffixes to use for modules containing only gates of a specific gate type. All gate types featuring the specified gate type property are considered, but the module must still be pure (i.e., all gates must be of the same type) for the suffix to be used. Defaults to `"module"` for mixed and unspecified gate types.
              * @param[in] pin_prefixes - The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name.
@@ -208,7 +211,7 @@ namespace hal
              * @brief Get the groups of the dataflow analysis result as a list.
              * 
              * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
-             * @returns A vector of groups with each group being a vector of gates.
+             * @returns A vector of groups with each group being a vector of gates, both in ascending ID order.
              */
             std::vector<std::vector<Gate*>> get_groups_as_list(const std::unordered_set<u32>& group_ids = {}) const;
 

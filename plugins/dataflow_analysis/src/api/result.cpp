@@ -7,7 +7,9 @@
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
+#include <algorithm>
 #include <fstream>
+#include <limits>
 
 namespace hal
 {
@@ -15,14 +17,71 @@ namespace hal
     {
         namespace
         {
-            std::unordered_set<u32> nets_to_id_set(const std::unordered_set<Net*>& nets)
+            std::set<u32> nets_to_id_set(const std::unordered_set<Net*>& nets)
             {
-                std::unordered_set<u32> ids;
+                std::set<u32> ids;
                 for (const auto* net : nets)
                 {
                     ids.insert(net->get_id());
                 }
                 return ids;
+            }
+
+            // groups and gates are visited in ascending ID order, so that the output does not depend on the iteration order of the hash maps holding them
+
+            std::vector<u32> sorted_group_ids(const std::unordered_map<u32, std::unordered_set<Gate*>>& groups)
+            {
+                std::vector<u32> group_ids;
+                group_ids.reserve(groups.size());
+                for (const auto& [group_id, _] : groups)
+                {
+                    group_ids.push_back(group_id);
+                }
+                std::sort(group_ids.begin(), group_ids.end());
+                return group_ids;
+            }
+
+            std::vector<Gate*> sorted_gates(const std::unordered_set<Gate*>& gates)
+            {
+                std::vector<Gate*> sorted(gates.begin(), gates.end());
+                std::sort(sorted.begin(), sorted.end(), [](const Gate* a, const Gate* b) { return a->get_id() < b->get_id(); });
+                return sorted;
+            }
+
+            // the order in which a module's pins are created depends on memory addresses, so the pins are ordered by the position of the
+            // first of the module's gates they connect to, and by their net ID where that is the same, e.g., for a shared clock
+            std::vector<ModulePin*> sorted_pins(const Module* mod, const std::vector<Gate*>& gates)
+            {
+                std::unordered_map<const Gate*, u32> position_of_gate;
+                for (u32 i = 0; i < gates.size(); ++i)
+                {
+                    position_of_gate[gates[i]] = i;
+                }
+
+                std::vector<std::pair<std::pair<u32, u32>, ModulePin*>> keyed_pins;
+                for (auto* pin : mod->get_pins())
+                {
+                    const auto* net      = pin->get_net();
+                    const auto endpoints = (pin->get_direction() == PinDirection::output) ? net->get_sources() : net->get_destinations();
+                    u32 first_gate       = std::numeric_limits<u32>::max();
+                    for (const auto* ep : endpoints)
+                    {
+                        if (const auto it = position_of_gate.find(ep->get_gate()); it != position_of_gate.end())
+                        {
+                            first_gate = std::min(first_gate, it->second);
+                        }
+                    }
+                    keyed_pins.push_back({{first_gate, net->get_id()}, pin});
+                }
+                std::sort(keyed_pins.begin(), keyed_pins.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+
+                std::vector<ModulePin*> pins;
+                pins.reserve(keyed_pins.size());
+                for (const auto& [_, pin] : keyed_pins)
+                {
+                    pins.push_back(pin);
+                }
+                return pins;
             }
         }    // namespace
 
@@ -114,6 +173,7 @@ namespace hal
             {
                 std::transform(std::get<1>(group_gates).begin(), std::get<1>(group_gates).end(), std::back_inserter(gates), [](auto* gate) { return gate; });
             }
+            std::sort(gates.begin(), gates.end(), [](const Gate* a, const Gate* b) { return a->get_id() < b->get_id(); });
 
             return gates;
         }
@@ -273,12 +333,14 @@ namespace hal
                 ofs << "digraph {\n\tcomment=\"created by HAL plugin dataflow\"\n\tnode [shape=box fillcolor=white style=filled];\n";
 
                 // print node
-                for (const auto& [group_id, gates] : this->get_groups())
+                for (const auto group_id : sorted_group_ids(this->get_groups()))
                 {
                     if (!group_ids.empty() && group_ids.find(group_id) == group_ids.end())
                     {
                         continue;
                     }
+
+                    const auto& gates = this->get_groups().at(group_id);
 
                     auto size = gates.size() * 0.1;
                     if (size < 1500)
@@ -290,15 +352,15 @@ namespace hal
                 }
 
                 // print edges
-                for (const auto& [group_id, gates] : this->get_groups())
+                for (const auto group_id : sorted_group_ids(this->get_groups()))
                 {
                     if (!group_ids.empty() && group_ids.find(group_id) == group_ids.end())
                     {
                         continue;
                     }
 
-                    auto sucs = this->get_group_successors(group_id).get();
-                    for (auto suc_id : sucs)
+                    const auto unsorted_sucs = this->get_group_successors(group_id).get();
+                    for (auto suc_id : std::set<u32>(unsorted_sucs.begin(), unsorted_sucs.end()))
                     {
                         if (!group_ids.empty() && group_ids.find(suc_id) == group_ids.end())
                         {
@@ -347,12 +409,14 @@ namespace hal
                 ofs << "State:";
                 ofs << "\n\n";
 
-                for (const auto& [group_id, gates] : this->get_groups())
+                for (const auto group_id : sorted_group_ids(this->get_groups()))
                 {
                     if (!group_ids.empty() && group_ids.find(group_id) == group_ids.end())
                     {
                         continue;
                     }
+
+                    const auto& gates = this->get_groups().at(group_id);
 
                     ofs << "ID:" << group_id << ", ";
                     ofs << "Size:" << gates.size() << ", ";
@@ -443,8 +507,9 @@ namespace hal
             log_info("dataflow", "successfully deleted old DANA modules");
 
             // create new modules and try to keep hierarchy if possible
+            // the modules are created in ascending order of the group IDs, so that the module IDs follow them
             std::unordered_map<u32, Module*> group_to_module;
-            for (const auto& [group_id, group] : this->get_groups())
+            for (const auto group_id : sorted_group_ids(this->get_groups()))
             {
                 if (!group_ids.empty() && group_ids.find(group_id) == group_ids.end())
                 {
@@ -457,11 +522,9 @@ namespace hal
                 const GateType* gate_type;
                 auto* reference_module = nl->get_top_module();
 
-                std::vector<Gate*> gates;
-                for (const auto gate : group)
+                const std::vector<Gate*> gates = sorted_gates(this->get_groups().at(group_id));
+                for (const auto gate : gates)
                 {
-                    gates.push_back(gate);
-
                     if (first_run)
                     {
                         reference_module = gate->get_module();
@@ -498,7 +561,7 @@ namespace hal
                 group_to_module[group_id] = new_mod;
 
                 std::map<const std::pair<PinDirection, std::string>, PinGroup<ModulePin>*> pin_groups;
-                for (auto* pin : new_mod->get_pins())
+                for (auto* pin : sorted_pins(new_mod, gates))
                 {
                     if (pin->get_direction() == PinDirection::input)
                     {
@@ -611,19 +674,14 @@ namespace hal
         std::vector<std::vector<Gate*>> dataflow::Result::get_groups_as_list(const std::unordered_set<u32>& group_ids) const
         {
             std::vector<std::vector<Gate*>> groups;
-            for (const auto& [group_id, group] : this->get_groups())
+            for (const auto group_id : sorted_group_ids(this->get_groups()))
             {
                 if (!group_ids.empty() && group_ids.find(group_id) == group_ids.end())
                 {
                     continue;
                 }
 
-                std::vector<Gate*> group_vector;
-                for (const auto& gate : group)
-                {
-                    group_vector.push_back(gate);
-                }
-                groups.push_back(group_vector);
+                groups.push_back(sorted_gates(this->get_groups().at(group_id)));
             }
             return groups;
         }
@@ -651,12 +709,11 @@ namespace hal
             std::unordered_set<u32> group_ids_set(group_ids.begin(), group_ids.end());
             for (auto group_id : group_ids_set)
             {
-                // new group
+                // new group, the gates are reassigned first, as erasing the old group destroys gates_at_i
                 auto& gates_at_i = this->m_gates_of_group.at(group_id);
+                std::for_each(gates_at_i.begin(), gates_at_i.end(), [this, target_group_id](const Gate* g) { this->m_parent_group_of_gate.at(g) = target_group_id; });
                 this->m_gates_of_group[target_group_id].insert(gates_at_i.begin(), gates_at_i.end());
                 this->m_gates_of_group.erase(group_id);
-
-                std::for_each(gates_at_i.begin(), gates_at_i.end(), [this, target_group_id](const Gate* g) { this->m_parent_group_of_gate.at(g) = target_group_id; });
 
                 // signals
                 if (const auto signals_it = this->m_group_signals.find(group_id); signals_it != this->m_group_signals.end())
@@ -670,10 +727,12 @@ namespace hal
                 }
 
                 // successors / predecessors
+                // the sets are bound before the target group is inserted, which may rehash the map and invalidate the iterator
                 if (const auto suc_it = this->m_group_successors.find(group_id); suc_it != this->m_group_successors.end())
                 {
-                    auto& target_suc_ids = this->m_group_successors[target_group_id];
-                    for (auto suc_id : std::get<1>(*suc_it))
+                    const auto& suc_ids_of_group = std::get<1>(*suc_it);
+                    auto& target_suc_ids         = this->m_group_successors[target_group_id];
+                    for (auto suc_id : suc_ids_of_group)
                     {
                         auto& pred_ids = this->m_group_predecessors.at(suc_id);
                         pred_ids.insert(target_group_id);
@@ -684,8 +743,9 @@ namespace hal
 
                 if (const auto pred_it = this->m_group_predecessors.find(group_id); pred_it != this->m_group_predecessors.end())
                 {
-                    auto& target_pred_ids = this->m_group_predecessors[target_group_id];
-                    for (auto pred_id : std::get<1>(*pred_it))
+                    const auto& pred_ids_of_group = std::get<1>(*pred_it);
+                    auto& target_pred_ids         = this->m_group_predecessors[target_group_id];
+                    for (auto pred_id : pred_ids_of_group)
                     {
                         auto& suc_ids = this->m_group_successors.at(pred_id);
                         suc_ids.insert(target_group_id);

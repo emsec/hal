@@ -78,11 +78,14 @@ namespace hal
                 /** A map from an input grouping and a pass to the grouping that the pass produced. */
                 std::map<std::pair<std::shared_ptr<Grouping>, pass_id>, std::shared_ptr<Grouping>> pass_outcome;
 
-                /** The groupings produced in this iteration that have not been seen before. */
-                std::vector<std::tuple<std::shared_ptr<Grouping>, pass_id, std::shared_ptr<Grouping>>> new_unique_groupings;
+                /**
+                 * The grouping that each pass in `current_passes` produced, at the index of the pass, together with a flag that is `true` if no earlier layer produced that grouping.
+                 * Every pass writes its own entry, so the worker threads need no lock to fill it, and the outcomes are evaluated in the order of the passes.
+                 */
+                std::vector<std::pair<std::shared_ptr<Grouping>, bool>> current_outcomes;
 
-                /** The groupings produced in this iteration that had already been seen before. */
-                std::vector<std::tuple<std::shared_ptr<Grouping>, pass_id, std::shared_ptr<Grouping>>> new_recurring_results;
+                /** The number of passes in this layer that produced a grouping no earlier layer produced. */
+                u32 num_new_outcomes = 0;
 
                 /* progress printing */
 

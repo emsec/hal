@@ -65,11 +65,12 @@ namespace hal
                     u32 id_counter = -1;
 
                     // copy known groups to final result and erase from scorings
-                    for (const auto& [group_id, gates] : initial_grouping->gates_of_group)
+                    for (const auto group_id : initial_grouping->get_group_ids())
                     {
                         if (!initial_grouping->operations_on_group_allowed.at(group_id))
                         {
-                            u32 new_group_id = ++id_counter;
+                            const auto& gates = initial_grouping->gates_of_group.at(group_id);
+                            u32 new_group_id  = ++id_counter;
 
                             output->group_control_fingerprint_map[new_group_id] = initial_grouping->netlist_abstr.gate_to_fingerprint.at(*gates.begin());
                             output->operations_on_group_allowed[new_group_id]   = false;
@@ -118,7 +119,14 @@ namespace hal
                             return false;
                         }
 
-                        return a.score > b.score;
+                        if (a.score != b.score)
+                        {
+                            return a.score > b.score;
+                        }
+
+                        // the order of groups with equal scores determines which of them is picked first, and thereby the resulting groups
+                        // and their IDs, so it must not be left to the sorting algorithm of the standard library
+                        return *a.group < *b.group;
                     });
 
                     const float percent_scan = 0.1f;

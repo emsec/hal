@@ -119,6 +119,15 @@ namespace hal
             bool operator!=(const Grouping& other) const;
 
             /**
+             * @brief Get the IDs of all groups in ascending order.
+             *
+             * Iterating the groups in this order instead of the order of `gates_of_group` keeps the outcome of an operation independent of the standard library's hash map implementation.
+             *
+             * @returns The group IDs in ascending order.
+             */
+            std::vector<u32> get_group_ids() const;
+
+            /**
              * @brief Get the control signals of a group as a map from the control pin type to the connected net IDs.
              * 
              * @param[in] group_id - The ID of the group.
@@ -164,7 +173,9 @@ namespace hal
 
             /**
              * @brief Get the intersection of the register stages of all gates of the group.
-             * 
+             *
+             * A gate without register stages counts as belonging to the single stage `INT32_MAX`.
+             *
              * @param[in] group_id - The ID of the group.
              * @returns The register stage intersection of all gates of the group.
              */
