@@ -109,8 +109,13 @@ namespace hal
             return false;
         m_netlist_file = m_proj_dir.get_default_filename(".hal");
 
+        if (!create_zip_warning())
+            return false;
+        }
+
         std::filesystem::create_directory(m_proj_dir.get_filename("py"));
         std::filesystem::create_directory(m_proj_dir.get_filename(ProjectDirectory::s_shadow_dir));
+
         return serialize_to_projectfile(false);
     }
 
@@ -332,4 +337,18 @@ namespace hal
             std::cout << "serializer: <" << it->first << "> <" << it->second << ">" << std::endl;
         }
     }
+
+    bool ProjectManager::create_zip_warning() const
+    {
+        std::filesystem::path readme_file = m_proj_dir.get_filename("DO-NOT-ZIP-THIS-DIRECTORY.txt");
+        std::ofstream readme_file_stream(readme_file.string());
+        if (readme_file_stream.fail())
+        {
+            log_error("project_manager", "could not open or create file {}: please verify that the file and the containing directory is writable", readme_file.string());
+            return false;
+        }
+        readme_file_stream << "This directory is a HAL project directory.\n"
+                          "Please DO NOT zip this directory manually, as it will break the project structure.\n"
+                          "Use the 'Export Project' feature in HAL to create a zip file of this project.\n";
+        readme_file_stream.close();
 }    // namespace hal

@@ -88,6 +88,14 @@ namespace hal
          */
         bool serialize_to_projectfile(bool shadow) const;
 
+        /**
+         * Internal method to create a the "DO-NOT-ZIP-THIS-DIRECTORY.txt"
+         * warning file in the project directory.
+         *
+         * @return `true` if the warning file was created successfully, `false` otherwise.
+         */
+        bool create_zip_warning() const;
+
     public:
         /**
          * Returns the singleton instance which gets constructed upon first call.
