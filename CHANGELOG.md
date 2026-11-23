@@ -312,6 +312,7 @@ All notable changes to this project will be documented in this file.
     * fixed the GUI crashing when a project is closed and another one is opened or imported in the same session while the center area holds more than one widget, e.g., the DOT viewer next to the graph views; closing the project removed only half of the widgets of the center area
     * fixed the GUI crashing when the selection is to be brought into view before the graph view has rendered its layout, e.g. by `GuiApi::selectGate` with `navigate_to_selection` set right after opening a netlist, the scene had no item for the selected element yet
     * fixed the GUI dropping an unrelated gate from the selection instead of the net itself when a selected net is deleted
+    * fixed the GUI crashing when a script run from the Python editor, e.g. `dataflow.Result.create_modules`, moves all gates of an unfolded module shown in a view into a new submodule and then changes another module
     * fixed the GUI re-laying out its graph views once per gate while a preprocessing function invoked from a context menu deletes or replaces many of them
     * fixed the GUI hanging for minutes when a module with many gates is selected
     * fixed the GUI stalling when a large module is unfolded within a list of modules
