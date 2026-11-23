@@ -29,6 +29,8 @@ namespace hal
 
     const std::string ProjectManager::s_project_file = ".project.json";
 
+    const std::string ProjectManager::s_zip_warning_file = "DO-NOT-ZIP-THIS-DIRECTORY.txt";
+
     ProjectManager::ProjectManager() : m_project_status(ProjectStatus::NONE)
     {
         ;
@@ -109,10 +111,7 @@ namespace hal
             return false;
         m_netlist_file = m_proj_dir.get_default_filename(".hal");
 
-        if (!create_zip_warning())
-        {
-            return false;
-        }
+        create_zip_warning();
 
         std::filesystem::create_directory(m_proj_dir.get_filename("py"));
         std::filesystem::create_directory(m_proj_dir.get_filename(ProjectDirectory::s_shadow_dir));
@@ -339,19 +338,21 @@ namespace hal
         }
     }
 
-    bool ProjectManager::create_zip_warning() const
+    void ProjectManager::create_zip_warning() const
     {
-        std::filesystem::path readme_file = m_proj_dir.get_filename("DO-NOT-ZIP-THIS-DIRECTORY.txt");
+        std::filesystem::path readme_file = m_proj_dir.get_filename(s_zip_warning_file);
         std::ofstream readme_file_stream(readme_file.string());
-        if (readme_file_stream.fail())
-        {
-            log_error("project_manager", "could not open or create file {}: please verify that the file and the containing directory is writable", readme_file.string());
-            return false;
-        }
         readme_file_stream << "This directory is a HAL project directory.\n"
                           "Please DO NOT zip this directory manually, as it will break the project structure.\n"
                           "Use the 'Export Project' feature in HAL to create a zip file of this project.\n";
         readme_file_stream.close();
-        return true;
+
+        // a stream that could not be opened fails on writing as well, so this covers both
+        if (readme_file_stream.fail())
+        {
+            log_warning("project_manager",
+                        "could not write file {}, creating the project without it: please verify that the file and the containing directory are writable",
+                        readme_file.string());
+        }
     }
 }    // namespace hal
