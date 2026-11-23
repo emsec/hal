@@ -709,12 +709,11 @@ namespace hal
             std::unordered_set<u32> group_ids_set(group_ids.begin(), group_ids.end());
             for (auto group_id : group_ids_set)
             {
-                // new group
+                // new group, the gates are reassigned first, as erasing the old group destroys gates_at_i
                 auto& gates_at_i = this->m_gates_of_group.at(group_id);
+                std::for_each(gates_at_i.begin(), gates_at_i.end(), [this, target_group_id](const Gate* g) { this->m_parent_group_of_gate.at(g) = target_group_id; });
                 this->m_gates_of_group[target_group_id].insert(gates_at_i.begin(), gates_at_i.end());
                 this->m_gates_of_group.erase(group_id);
-
-                std::for_each(gates_at_i.begin(), gates_at_i.end(), [this, target_group_id](const Gate* g) { this->m_parent_group_of_gate.at(g) = target_group_id; });
 
                 // signals
                 if (const auto signals_it = this->m_group_signals.find(group_id); signals_it != this->m_group_signals.end())
@@ -728,10 +727,12 @@ namespace hal
                 }
 
                 // successors / predecessors
+                // the sets are bound before the target group is inserted, which may rehash the map and invalidate the iterator
                 if (const auto suc_it = this->m_group_successors.find(group_id); suc_it != this->m_group_successors.end())
                 {
-                    auto& target_suc_ids = this->m_group_successors[target_group_id];
-                    for (auto suc_id : std::get<1>(*suc_it))
+                    const auto& suc_ids_of_group = std::get<1>(*suc_it);
+                    auto& target_suc_ids         = this->m_group_successors[target_group_id];
+                    for (auto suc_id : suc_ids_of_group)
                     {
                         auto& pred_ids = this->m_group_predecessors.at(suc_id);
                         pred_ids.insert(target_group_id);
@@ -742,8 +743,9 @@ namespace hal
 
                 if (const auto pred_it = this->m_group_predecessors.find(group_id); pred_it != this->m_group_predecessors.end())
                 {
-                    auto& target_pred_ids = this->m_group_predecessors[target_group_id];
-                    for (auto pred_id : std::get<1>(*pred_it))
+                    const auto& pred_ids_of_group = std::get<1>(*pred_it);
+                    auto& target_pred_ids         = this->m_group_predecessors[target_group_id];
+                    for (auto pred_id : pred_ids_of_group)
                     {
                         auto& suc_ids = this->m_group_successors.at(pred_id);
                         suc_ids.insert(target_group_id);

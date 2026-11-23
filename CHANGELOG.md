@@ -193,6 +193,7 @@ All notable changes to this project will be documented in this file.
     * fixed `dataflow.Configuration` leaking every instance created from Python
     * fixed the dataflow analysis producing different groups and group IDs on different machines for the same netlist, as the outcome depended on the standard library: equally scored candidates are now ordered by their gates, and the passes, the stage identification and the evaluation visit groups and gates in ascending ID order
     * fixed a data race between the worker threads of the dataflow analysis when they compared their results against the same grouping, which could crash the analysis with a segmentation fault or let a grouping that had been seen before pass as a new one
+    * fixed `Result::merge_groups` reading the gates of a merged group after it had freed them. Depending on the standard library, the gates kept the IDs of the deleted groups, so `get_group_id_of_gate` and `split_groups` worked with groups that no longer exist
     * changed `create_modules` to create the DANA modules in ascending order of the group IDs and to number the pins of a module in ascending order of the IDs of the gates they connect to, so that, e.g., `i_D(k)` and `o_Q(k)` belong to the same flip-flop; it previously numbered them in an order that depended on memory addresses
     * changed `get_gates`, `get_groups_as_list` (`get_group_list` in Python), `write_dot` and `write_txt` to list groups and gates in ascending ID order
   * graph algorithm
