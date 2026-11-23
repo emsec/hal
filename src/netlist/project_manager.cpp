@@ -110,6 +110,7 @@ namespace hal
         m_netlist_file = m_proj_dir.get_default_filename(".hal");
 
         if (!create_zip_warning())
+        {
             return false;
         }
 
@@ -351,4 +352,6 @@ namespace hal
                           "Please DO NOT zip this directory manually, as it will break the project structure.\n"
                           "Use the 'Export Project' feature in HAL to create a zip file of this project.\n";
         readme_file_stream.close();
+        return true;
+    }
 }    // namespace hal
