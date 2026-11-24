@@ -88,15 +88,6 @@ namespace hal
          */
         bool serialize_to_projectfile(bool shadow) const;
 
-        /**
-         * Internal method to create the "DO-NOT-ZIP-THIS-DIRECTORY.txt"
-         * warning file in the project directory.
-         *
-         * The file only gives advice, so if it cannot be written a warning
-         * is logged and the project is created without it.
-         */
-        void create_zip_warning() const;
-
     public:
         /**
          * Returns the singleton instance which gets constructed upon first call.
@@ -224,11 +215,5 @@ namespace hal
          * File name of project info file (mandatory for all hal projects)
          */
         static const std::string s_project_file;
-
-        /**
-         * File name of the warning against zipping the project directory by hand,
-         * which is left out when the project is exported
-         */
-        static const std::string s_zip_warning_file;
     };
 }    // namespace hal

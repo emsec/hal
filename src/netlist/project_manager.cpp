@@ -29,8 +29,6 @@ namespace hal
 
     const std::string ProjectManager::s_project_file = ".project.json";
 
-    const std::string ProjectManager::s_zip_warning_file = "DO-NOT-ZIP-THIS-DIRECTORY.txt";
-
     ProjectManager::ProjectManager() : m_project_status(ProjectStatus::NONE)
     {
         ;
@@ -111,7 +109,7 @@ namespace hal
             return false;
         m_netlist_file = m_proj_dir.get_default_filename(".hal");
 
-        create_zip_warning();
+        m_proj_dir.create_zip_warning();
 
         std::filesystem::create_directory(m_proj_dir.get_filename("py"));
         std::filesystem::create_directory(m_proj_dir.get_filename(ProjectDirectory::s_shadow_dir));
@@ -161,7 +159,15 @@ namespace hal
         if (!serialize_external(shadow))
             return false;
 
-        return serialize_to_projectfile(shadow);
+        if (!serialize_to_projectfile(shadow))
+            return false;
+
+        // a regular save writes to the project directory anyway, so this is where projects created before
+        // the warning existed get it; autosave writes only to the shadow directory and leaves it alone
+        if (!shadow)
+            m_proj_dir.create_zip_warning();
+
+        return true;
     }
 
     std::string ProjectManager::get_netlist_filename() const
@@ -335,24 +341,6 @@ namespace hal
         for (auto it = m_filename.begin(); it != m_filename.end(); ++it)
         {
             std::cout << "serializer: <" << it->first << "> <" << it->second << ">" << std::endl;
-        }
-    }
-
-    void ProjectManager::create_zip_warning() const
-    {
-        std::filesystem::path readme_file = m_proj_dir.get_filename(s_zip_warning_file);
-        std::ofstream readme_file_stream(readme_file.string());
-        readme_file_stream << "This directory is a HAL project directory.\n"
-                          "Please DO NOT zip this directory manually, as it will break the project structure.\n"
-                          "Use the 'Export Project' feature in HAL to create a zip file of this project.\n";
-        readme_file_stream.close();
-
-        // a stream that could not be opened fails on writing as well, so this covers both
-        if (readme_file_stream.fail())
-        {
-            log_warning("project_manager",
-                        "could not write file {}, creating the project without it: please verify that the file and the containing directory are writable",
-                        readme_file.string());
         }
     }
 }    // namespace hal

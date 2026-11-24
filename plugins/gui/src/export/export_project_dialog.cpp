@@ -3,6 +3,7 @@
 #include "gui/python/python_editor.h"
 #include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/utilities/project_directory.h"
 
 #include <QFileInfo>
 #include <QTemporaryDir>
@@ -70,7 +71,7 @@ namespace hal
             {
                 if (relPath.startsWith("autosave/")) continue;
                 // the warning against zipping the project directory by hand does not belong into a proper export
-                if (relPath == QString::fromStdString(ProjectManager::s_zip_warning_file)) continue;
+                if (relPath == QString::fromStdString(ProjectDirectory::s_zip_warning_file)) continue;
                 filesToCopy.append(relPath);
             }
             else

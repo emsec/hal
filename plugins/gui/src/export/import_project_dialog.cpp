@@ -2,6 +2,7 @@
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_utils/graphics.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/utilities/project_directory.h"
 #include <QRegularExpression>
 #include <QGridLayout>
 #include <QVBoxLayout>
@@ -212,6 +213,9 @@ namespace hal {
             deleteFilesList(extracted);
             return false;
         }
+
+        // exports leave the warning out, so the freshly extracted directory needs its own copy
+        ProjectDirectory(mExtractedProjectAbsolutePath.toStdString()).create_zip_warning();
 
         return true;
     }
