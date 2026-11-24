@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 <!--
   Entries are grouped by what they affect: Core (one sub-heading per component, Boolean functions
-  and the Python binding machinery included), Plugins (one sub-heading per plugin), GUI, and Build
+  and the Python binding machinery included), Plugins (one sub-heading per plugin), GUI, Examples, and Build
   and dependencies. A Python binding fix goes under the component it binds. Add a new entry under
   the group it belongs to rather than at the top of the section, and create the group if it is not
   there yet.
@@ -56,7 +56,9 @@ All notable changes to this project will be documented in this file.
     * fixed `utils::split` reading the last character of an empty string
     * fixed crash when passing a `nullptr` pin to `Net::remove_source` or `Net::remove_destination`
     * fixed Python binding `Grouping.remove_module_by_id` removing the gate with the given ID instead of the module
+    * fixed Python binding `NetlistFactory.load_netlist` failing to load a `.hal` file when no gate library file was passed, as the omitted argument arrived as `.` instead of an empty path
     * added `Gate::has_boolean_function`, which checks whether `Gate::get_boolean_function` finds a function for a name or an output pin
+    * renamed the Python keyword arguments `recusive` of `Module.contains_module` to `recursive` and `hdl_string` of `NetlistFactory.load_netlist_from_string` to `netlist_string`, matching the C++ parameters
   * module pins
     * sped up assigning gates to a module and removing them from it, `Module::get_pin_by_net` scanned every pin of the module for every net of every gate that enters or leaves it; the pins are now indexed by net
     * added `PinChangedBulkScope`, which collects the pin events of a bulk operation and sends a single `PinEvent::PinsReload` per affected module instead. Assigning gates to modules opens one, while interactive pin changes keep their fine-grained events
@@ -75,6 +77,7 @@ All notable changes to this project will be documented in this file.
     * fixed `GateTypeProperty.fifo` being bound to `ram` in Python
     * fixed `GateType.components` raising a `TypeError` whenever it was read from Python
     * fixed Python property `GateLibrary.gnd_gate_types` returning the VCC gate types
+    * renamed the Python keyword argument `pin_name` of `GateType.add_boolean_function` to `name`, matching the C++ parameter
   * Boolean functions
     * sped up `BooleanFunction::compute_truth_table` by evaluating 64 rows of the table at once instead of running a symbolic execution per row. Applies to single-bit functions of bitwise operations whose variables are all part of the truth table
     * raised the limit on the number of variables a truth table may be computed for from 10 to 20, see `BooleanFunction::MAX_TRUTH_TABLE_VARIABLES`
@@ -83,6 +86,7 @@ All notable changes to this project will be documented in this file.
     * added constant folding for the `Sdiv`, `Udiv`, `Srem` and `Urem` operations
     * added simplification rules for the word level operations: extensions to the width the value already has, nested extensions and slices, slices that fall into one half of a concatenation or into either part of an extension, unsigned comparisons against zero and the maximum, equality of a value with its own negation, and single bit equalities and selections
     * fixed deadlock and memory leak which could occur when `abc_simplification` failed
+    * fixed `BooleanFunction::simplify` leaking about 376 KB on every call that reached the ABC simplification, as neither the ABC network built for it nor the strings handed to ABC were freed
     * fixed the constant folding of `Add` and `Sub` masking the result to 32 bit before cutting it to the operand width, so for operands of 33 to 64 bit the upper bits of the result were always zero
     * fixed `Eq` reporting a definite inequality when an undefined bit could have made the two values equal, it now reports an undefined result like the other comparisons do
     * fixed `BooleanFunction::to_string` reading past the end of its digit table when a bit-vector that contains an `X` or `Z` is converted to an octal or hexadecimal string
@@ -142,11 +146,18 @@ All notable changes to this project will be documented in this file.
   * clock tree extractor
     * added the `clock_tree_extractor` plugin, which recovers the clock distribution network of a gate-level netlist. Starting at the clock pin of every flip-flop it walks against the signal direction through buffers, inverters, delay gates, clock gates and toggle-flip-flop clock dividers up to the global input nets that drive them, and returns the result as a `ClockTree`. Reconvergent clock networks, i.e. meshes, are extracted as well.
     * added `ClockTree::from_netlist` that extracts the clock tree of a netlist
-    * added `ClockTree::export_dot` that writes the tree as a DOT graph
+    * added `cte::export_dot`, bound to Python as `ClockTree.export`, that writes a clock tree as a DOT graph. A gate is placed at its location, or at the coordinates read from the two gate parameters named by `x_key` and `y_key`, which unlike a location can be negative
     * added `ClockTree::get_subtree` that returns the clock tree below a gate or net as a `ClockTree` of its own
     * added `ClockTree::get_neighbors`, bound to Python as `get_parents` and `get_childs`, that returns the gates and nets directly upstream or downstream of an object in the clock tree
     * added `ClockTree::get_gates`, `get_nets`, `get_all` and `get_netlist` that list the gates and nets of a clock tree and hand back the netlist it was built from
     * added `ClockTree::get_vertex_from_ptr`, `get_ptr_from_vertex`, `get_vertices_from_ptrs` and `get_ptrs_from_vertices` that translate between gates or nets and their igraph vertex IDs, and `ClockTree::get_igraph` that exposes the underlying `igraph_t` to C++ callers
+    * added `ClockTree::get_diagnostics`, which lists what the extraction had to skip, e.g., a flip-flop whose clock pin has no net or a clock net with several drivers, as `Diagnostic` objects holding a `Severity`, a `DiagnosticCode`, the gate or net concerned and a message
+    * added `recover_branches`, bound to Python as `ClockTree.get_branches`, that returns every path from a root to a sink of a clock tree; a gate or net reached over several paths is part of several branches
+    * added `ClockTree::get_roots` that returns the igraph vertex IDs of the roots of a clock tree to C++ callers
+  * clock tree viewer
+    * added the `clock_tree_viewer` plugin, which plots a clock tree in the GUI at the coordinates of its gates, read from the gate parameters `X` and `Y` or from the location of each gate. A gate takes the color of its module, its grouping or the selection, as in the graph view, and the gates selected in HAL are highlighted in the plot
+    * added a toolbar to the viewer to extract and plot the clock tree of the loaded netlist, zoom to the whole tree or to the highlighted gates, and save a picture of the whole tree
+    * added the Python functions `show_clock_tree()`, which plots a clock tree in the viewer, and `highlight_gates()`, which highlights gates in the plot
   * dot viewer
     * added the `dot_viewer` plugin, which renders a Graphviz `.dot` file inside the GUI and, for a file written by another HAL plugin, ties the graph to the netlist
     * added Python function `load_dot_file()` to open a `.dot` file in the viewer
@@ -160,12 +171,15 @@ All notable changes to this project will be documented in this file.
       * fixed the round function of HAWKEYE walking every path from each flip-flop of the register rather than every gate, which is exponential in a cone of logic that reconverges
       * sped up the S-box identification of HAWKEYE by tabulating each output over the state and the control inputs together and reading the assignment of the control inputs out of that one table, instead of substituting the control values and tabulating anew for each of up to 256 assignments
       * changed the round function of a HAWKEYE candidate to determine which flip-flops each of its gates depends on only when the S-box search asks for it
-      * added a limit to the canonical form search behind an S-box lookup, which finishes quickly for a real S-box but does not terminate in reasonable time for a table that is close to linear
+      * added a limit to the canonical form search behind an S-box lookup, which finishes quickly for a real S-box but does not terminate in reasonable time for a table that is close to linear. A table that maps 0 to 0 takes a search of its own, which can hit the limit for a real S-box, e.g., AES XORed with `0x63`, so `SBoxDatabase::lookup` skips that one output constant and `SBoxDatabase::add` leaves it out
+      * sped up `SBoxDatabase::lookup` for a table that matches no S-box of the database, which took about 20 s for an 8-bit table as it ran the canonical form search once per output constant; the differential spectrum of the table is now compared with those of the database entries first, which rejects such a table in 0.03 s
     * bugfixes
       * fixed the candidates of HAWKEYE being ordered by the addresses of their gates, which made the result of `detect_candidates` differ between runs of the same binary
       * fixed `RegisterCandidate::operator==` never reporting a round-based candidate as equal to itself
       * fixed the S-box search of HAWKEYE calling `std::includes` on the unsorted result of `get_unique_predecessors`, which made the number of located S-boxes differ between runs of the same binary
       * fixed the linear independence check of HAWKEYE shifting by more than the width of its type for S-boxes of more than 6 bits, which is undefined and made the check operate on garbage for 7-bit and 8-bit S-boxes
+      * fixed the S-box identification of HAWKEYE keeping the wrong outputs of an S-box with more outputs than inputs: the elimination that selects the independent outputs reused pivots, which got the rank wrong, and took the complement of another output, e.g., a key addition with the key bit held at 0, for an independent one. On a synthesized AES-128 netlist all 16 S-boxes are now identified instead of 6
+      * fixed the S-box search of HAWKEYE splitting a component into groups of 2 flip-flops, so that the 2-to-4 predecoders synthesis may put at the inputs of an S-box passed for many small S-boxes, 64 on a synthesized AES-128 netlist; a group now needs at least 3 flip-flops, as a whole component always did
       * fixed `SBoxDatabase::lookup` never terminating for an 8-bit S-box that is not contained in the database, as it counted the constant it adds to the outputs in a `u8`, which never reaches 256
       * fixed `SBoxDatabase::store` reporting a failure although it had written the database, and made it report one if the file cannot be opened
       * fixed `hawkeye.DetectionConfiguration` and `hawkeye.SBoxDatabase` leaking every instance created from Python, `SBoxDatabase.from_file` leaked 25 KB per call
@@ -180,15 +194,19 @@ All notable changes to this project will be documented in this file.
       * fixed editing a time in the middle of the input table replacing it with the previous time plus 1000 as if it were the last row; it is now kept if it lies between its neighbours and replaced by their midpoint otherwise
       * fixed the wizard opening on the previously shown simulation controller right after a new one was created, which reset that controller and deleted its simulation data; creating a controller, or opening a saved one through `Open input file`, now switches to its tab
       * fixed the wizard starting with the wave data and net groups of the previous run, its SALEAE directory and the controller are now reset when the wizard opens
+      * fixed the input table of the wizard listing every input once more each time its page was entered again, e.g., after going back, and HAL then crashing on `Next`
     * bugfixes
       * fixed the debug dump of the SALEAE directory that was printed to the console whenever waveforms were loaded
       * fixed the waveform viewer keeping the tab of a simulation controller that was deleted, e.g., from Python, and dereferencing the deleted controller from it
+      * fixed the waveform viewer keeping the waveforms and groups of a simulation controller in its tab after the controller was reset, e.g., by the simulation wizard, and crashing on the next selection in the graph view
       * fixed the value of a waveform group being computed with the first net as LSB in `WaveDataGroup::recalcData`, `WaveDataProviderGroup` and `WaveGroupValue` while the rest of the viewer takes the first net as MSB, so the same group showed different values depending on where it was evaluated
       * fixed the waveform tree losing the expanded or collapsed state of its groups whenever its items are reordered, e.g., after a drag and drop
       * fixed dropping a waveform onto a group in the waveform tree always inserting it as the first entry of the group regardless of the drop position
   * dataflow analysis
     * fixed running the dataflow analysis from the command line with `--dataflow`, which failed with "no gate types specified"
     * fixed the dataflow analysis blocking a thread when it wrote its results, progress was reported while the lock that guards the results was held
+    * fixed the dataflow analysis missing edges between flip-flops wherever the fan-out of a net reconverges: a traversal does not enter a net twice, so the nets on a second path to it never received what the shared cache held for it, and neither did every later traversal that found these nets in the cache. On two synthesized AES-128 netlists about 1 % of the edges were missing, which split a 128-bit register into groups of 120 and 8 flip-flops. The known net groups that precede a gate were collected with the same defect
+    * fixed `with_flip_flops`, `with_gate_types` by property, `with_known_structures` by gate type and `with_known_groups` by gate ID of the dataflow `Configuration` dereferencing a missing netlist, e.g., after `Configuration(None)` in a script whose netlist failed to load; they now log an error and return the configuration unchanged
     * changed `create_modules` to create the pin groups of a DANA module in descending order
     * `Result::write_dot` now returns the path it wrote to, as it replaces a wrong extension
     * changed the plugin dialog to no longer open the written `.dot` graph in the DOT viewer unprompted
@@ -248,6 +266,8 @@ All notable changes to this project will be documented in this file.
     * fixed wrong pin types of the `lsi_10k.hgl` flip-flops: the asynchronous preset `SD` is now of type `set` instead of `reset`, the `K` input of the JK flip-flops of type `data` instead of `reset`, the scan enable `TE`, which selects between `D` and `TI`, of type `select` instead of `enable`, and the tristate output enable `RD` of `FD2TS*` of type `enable` instead of `data`
   * HGL parser and writer
     * bumped the format version from 4 to 6; added serialization for typed parameter declarations and multi-output LUT configurations
+    * fixed the upgrade of gate libraries to format version 6 leaving multi-output LUTs such as `LUT6_2` and `LUT2_D` in the old LUT format, which the parser then read as LUTs without any function: every LUT output is now migrated to depend on all inputs and the whole INIT value, as in the old format, an upgrade that cannot migrate every cell fails instead of marking the file as version 6, and libraries left incomplete by the earlier upgrade are upgraded again
+    * the HGL parser rejects LUT configurations without `output_pins` instead of creating a LUT without any function
   * Verilog writer
     * changed the parameter output to `write_typed_parameter_value()` based on the `Parameter` type; removed the `valid_types` whitelist
   * Verilog parser
@@ -280,16 +300,20 @@ All notable changes to this project will be documented in this file.
   * bugfixes
     * fixed gate library parsing error when creating new project by loading the parser plugin
     * fixed the module trees keeping a net under its module after the net was marked as a global input or output, and leaving a net out after it was unmarked
+    * fixed clicking a module in the modules widget not updating the selection details after a module had been deleted or moved to another parent, e.g., by a second dataflow analysis run, until something was selected elsewhere
     * fixed `Number of nets` in the details of a module showing the number of internal nets; it now counts every net with a source or a destination inside the module, as `Module::get_nets` returns them
     * fixed the GUI crashing when a pin group that still holds pins is deleted
     * fixed the GUI crashing when `Delete pin group` is chosen for a group that holds a single pin named like the group
     * fixed toggling a pin group between ascending and descending losing the direction and the type of the group, and deleting a pin group creating the single-pin groups for its pins without direction and type
+    * fixed the pin tree of a module showing a pin group without its pins after the group was moved to another row, by dragging it or by toggling it between ascending and descending, until the module was selected again. Toggling a group now also keeps it expanded
     * fixed a module that reuses the ID of a deleted module being shown with the color icon of the deleted one in the selection details
     * fixed behavior of an isolated view which is not bound to a module not to remove all gates when module gets deleted
     * fixed the GUI at times not registering the first change to a netlist after start, and so not offering to save it on close
     * fixed unloading the waveform viewer or the DOT viewer plugin leaving its dock button behind
+    * fixed the GUI crashing when a project is closed and another one is opened or imported in the same session while the center area holds more than one widget, e.g., the DOT viewer next to the graph views; closing the project removed only half of the widgets of the center area
     * fixed the GUI crashing when the selection is to be brought into view before the graph view has rendered its layout, e.g. by `GuiApi::selectGate` with `navigate_to_selection` set right after opening a netlist, the scene had no item for the selected element yet
     * fixed the GUI dropping an unrelated gate from the selection instead of the net itself when a selected net is deleted
+    * fixed the GUI crashing when a script run from the Python editor, e.g. `dataflow.Result.create_modules`, moves all gates of an unfolded module shown in a view into a new submodule and then changes another module
     * fixed the GUI re-laying out its graph views once per gate while a preprocessing function invoked from a context menu deletes or replaces many of them
     * fixed the GUI hanging for minutes when a module with many gates is selected
     * fixed the GUI stalling when a large module is unfolded within a list of modules
@@ -321,6 +345,9 @@ All notable changes to this project will be documented in this file.
     * changed the Python console to accept several statements pasted at once, as an alternative to the Python editor for pasted snippets that do not need editing
     * fixed the Python console switching to the `...` prompt after a line with a syntax error instead of reporting the error right away
     * fixed the Python console not executing a multi-line statement when the final empty line still contained indentation
+* Examples
+  * updated the example projects to ship exact copies of the current gate libraries, whose copies predated the corrected pin types of `lsi_10k.hgl`, the flip-flop `INIT` parameters of `example_library.hgl`, and the parameters and multi-output LUTs of `XILINX_UNISIM.hgl`, and to store the gate library and netlist paths of `fsm.hal`, `simple_alu.hal`, `toy_cipher.hal` and `uart.hal` relative to the project
+  * fixed the HAWKEYE script of the `crypto_trojan` example, which still called the functions replaced by `CipherCandidate` and failed on its first call
 * Build and dependencies
   * changed the GUI from Qt 5 to Qt 6
   * updated the vendored QuaZip from 1.3 to 1.5 as part of the move to Qt 6
@@ -328,6 +355,8 @@ All notable changes to this project will be documented in this file.
   * added support for Ubuntu 26.04, which is now built and tested in CI next to 22.04, 24.04 and macOS
   * fixed `install_dependencies.sh` on macOS writing the Homebrew prefix into the shell configuration as the unexpanded text
   * fixed the documentation build: Sphinx is now run through the Python interpreter that `hal_py` is linked against
+  * fixed the Python API documentation of the `boolean_influence`, `dataflow` and `module_identification` plugins, whose pages were empty, and added the missing pages for `AsyncSetResetBehavior`, `MACComponent`, `LogManager`, `ProjectDirectory`, the base pin classes and the logging functions
+  * fixed the C++ API documentation leaving out 17 plugins and whole classes that Doxygen lost to the unexpanded `Q_DECLARE_METATYPE` and `__attribute__` macros
   * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
   * fixed the Qt6 fallback on macOS, which pointed to a Qt5 installation (`qt@5`); if `Qt6_DIR` is not given, the Qt6 installed by Homebrew is used
   * changed `install_dependencies.sh` to add Homebrew's `llvm` to `PATH` instead of `llvm@14`, matching the `Brewfile`

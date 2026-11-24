@@ -79,6 +79,16 @@ namespace hal
         virtual QList<QShortcut*> createShortcuts();
 
         /**
+         * Creates the widget's shortcuts by calling createShortcuts() on first invocation, subsequent calls do nothing.
+         * The shortcuts are owned by this widget and are only active while the focus is within this widget. Since Qt
+         * ignores shortcuts of hidden widgets, shortcuts of widgets in inactive tabs or closed frames do not compete
+         * with the shortcuts of the visible widgets.
+         *
+         * Must be used by containers (TabWidget, ContentFrame) instead of calling createShortcuts() directly.
+         */
+        void ensureShortcuts();
+
+        /**
          * Reapplies the current Stylesheet by using the QStyle's unpolish and polish functions. It is necessary because
          * certain aspects of a widgets are not automatically set and rendered just by calling setStylesheet() when
          * switched to a new one (for example when a new theme wants to be applied at runtime).
@@ -253,6 +263,7 @@ namespace hal
 
         QString mIconStyle;
         QString mIconPath;
+        bool mShortcutsCreated = false;
 
     protected:
         QVBoxLayout* mContentLayout;
