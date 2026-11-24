@@ -522,9 +522,18 @@ namespace hal
         }
         case PinEvent::GroupReorder:
         {
-            int inx = ActionPingroup::pinGroupIndex(m,pgroup);
-            removeItem(ptiGroup);
-            insertItem(ptiGroup, mRootItem, inx);
+            // move the row instead of removing and re-inserting it, removeItem() would detach the pins of the group
+            int inx    = ActionPingroup::pinGroupIndex(m,pgroup);
+            int oldRow = ptiGroup->getOwnRow();
+            if (inx < 0 || oldRow < 0 || inx == oldRow)
+                break;
+            // the destination row of beginMoveRows() counts the rows before the move
+            if (beginMoveRows(QModelIndex(), oldRow, oldRow, QModelIndex(), inx > oldRow ? inx + 1 : inx))
+            {
+                mRootItem->removeChild(ptiGroup);
+                mRootItem->insertChild(inx, ptiGroup);
+                endMoveRows();
+            }
             break;
         }
         case PinEvent::GroupRename:
