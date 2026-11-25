@@ -1055,6 +1055,20 @@ namespace hal
         mSimulationInput->compute_net_groups();
     }
 
+    const std::vector<SimulationInput::NetGroup>& NetlistSimulatorController::get_net_groups() const
+    {
+        return mSimulationInput->get_net_groups();
+    }
+
+    u32 NetlistSimulatorController::add_waveform_group(const SimulationInput::NetGroup& net_group)
+    {
+        if (net_group.gate)
+        {
+            return add_waveform_group(net_group.gate, net_group.gate_pin_group);
+        }
+        return add_waveform_group(net_group.module_pin_group);
+    }
+
     void NetlistSimulatorController::load_waveform_groups(bool inputs)
     {
         for (const SimulationInput::NetGroup& ng : mSimulationInput->get_net_groups())
@@ -1073,14 +1087,7 @@ namespace hal
                     continue;
                 }
             }
-            if (ng.gate)
-            {
-                add_waveform_group(ng.gate, ng.gate_pin_group);
-            }
-            else
-            {
-                add_waveform_group(ng.module_pin_group);
-            }
+            add_waveform_group(ng);
         }
     }
 
