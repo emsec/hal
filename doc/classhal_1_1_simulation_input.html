@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-296-g13d92ebdd</span>
+   &#160;<span id="projectnumber">v4.5.0-299-g9ee015483</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -239,7 +239,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00066">66</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00071">71</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01029">hal::NetlistSimulatorController::add_clock_period()</a>.</p>
 
@@ -268,9 +268,9 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00045">45</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00050">50</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01087">hal::NetlistSimulatorController::add_gates()</a>, <a class="el" href="logic__evaluator__dialog_8cpp_source.html#l00034">hal::LogicEvaluatorDialog::LogicEvaluatorDialog()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00074">hal::NetlistSimulatorController::NetlistSimulatorController()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01094">hal::NetlistSimulatorController::add_gates()</a>, <a class="el" href="logic__evaluator__dialog_8cpp_source.html#l00034">hal::LogicEvaluatorDialog::LogicEvaluatorDialog()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00074">hal::NetlistSimulatorController::NetlistSimulatorController()</a>.</p>
 
 </div>
 </div>
@@ -290,9 +290,9 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Clear all internal container (gate set, input nets ...) </p>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00071">71</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00076">76</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01270">hal::NetlistSimulatorController::reset()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01277">hal::NetlistSimulatorController::reset()</a>.</p>
 
 </div>
 </div>
@@ -310,11 +310,11 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Group one-bit signals to multi-bit bus according to pingroups. Pingroups are only evaluated if all connected nets are part of the simulation. <a class="el" href="classhal_1_1_module.html">Module</a> pingroups have priority before gate pingroups. </p>
+<p>Group one-bit signals to multi-bit bus according to pingroups. Pingroups are only evaluated if all connected nets are part of the simulation. Each net belongs to at most one group. If pingroups share nets, module pingroups have priority before gate pingroups, then source pingroups (all pins are outputs) before the others, then the pingroup whose name comes first alphabetically. </p>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00249">249</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00289">289</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="simulation__input_8h_source.html#l00080">hal::SimulationInput::NetGroup::ascending</a>, <a class="el" href="simulation__input_8h_source.html#l00076">hal::SimulationInput::NetGroup::direction</a>, <a class="el" href="simulation__input_8h_source.html#l00077">hal::SimulationInput::NetGroup::gate</a>, <a class="el" href="simulation__input_8h_source.html#l00079">hal::SimulationInput::NetGroup::gate_pin_group</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00126">hal::Module::get_parent_module()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00548">hal::GateType::get_pin_groups()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00971">hal::Module::get_pin_groups()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, <a class="el" href="simulation__input_8h_source.html#l00058">InputOnly</a>, <a class="el" href="simulation__input_8h_source.html#l00058">Mixed</a>, <a class="el" href="simulation__input_8h_source.html#l00078">hal::SimulationInput::NetGroup::module_pin_group</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, <a class="el" href="simulation__input_8h_source.html#l00058">OutputOnly</a>, and <a class="el" href="simulation__input_8h_source.html#l00058">Undefined</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00126">hal::Module::get_parent_module()</a>, <a class="el" href="pin__group_8h_source.html#l00173">hal::PinGroup&lt; T &gt;::get_type()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, <a class="el" href="simulation__input_8h_source.html#l00058">InputOnly</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, <a class="el" href="simulation__input_8h_source.html#l00058">OutputOnly</a>, <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00523">hal::utils::to_lower()</a>, and <a class="el" href="simulation__input_8h_source.html#l00058">Undefined</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01053">hal::NetlistSimulatorController::compute_waveform_groups()</a>, and <a class="el" href="logic__evaluator__dialog_8cpp_source.html#l00034">hal::LogicEvaluatorDialog::LogicEvaluatorDialog()</a>.</p>
 
@@ -343,7 +343,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if part, <code>false</code> otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00040">40</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00045">45</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
 </div>
 </div>
@@ -369,7 +369,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00121">121</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00126">126</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00076">log_warning</a>.</p>
 
@@ -403,7 +403,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="simulation__input_8h_source.html#l00135">135</a> of file <a class="el" href="simulation__input_8h_source.html">simulation_input.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01130">hal::NetlistSimulatorController::get_input_column_headers()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">hal::NetlistSimulatorController::persist()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00530">hal::NetlistSimulatorController::run_simulation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01137">hal::NetlistSimulatorController::get_input_column_headers()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">hal::NetlistSimulatorController::persist()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00530">hal::NetlistSimulatorController::run_simulation()</a>.</p>
 
 </div>
 </div>
@@ -423,9 +423,9 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Returns the gates from simulation set </p><dl class="section return"><dt>Returns</dt><dd>reference to gate set </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00054">54</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00059">59</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01120">hal::NetlistSimulatorController::get_gates()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">hal::NetlistSimulatorController::persist()</a>, and <a class="el" href="verilator_8cpp_source.html#l00120">hal::verilator::VerilatorEngine::setSimulationInput()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01127">hal::NetlistSimulatorController::get_gates()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">hal::NetlistSimulatorController::persist()</a>, and <a class="el" href="verilator_8cpp_source.html#l00120">hal::verilator::VerilatorEngine::setSimulationInput()</a>.</p>
 
 </div>
 </div>
@@ -446,9 +446,9 @@ Public Member Functions</h2></td></tr>
 <p>Get all nets that are considered inputs, i.e., not driven by a gate in the simulation set or global inputs.</p>
 <dl class="section return"><dt>Returns</dt><dd>The input nets. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00091">91</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00096">96</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01087">hal::NetlistSimulatorController::add_gates()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01130">hal::NetlistSimulatorController::get_input_column_headers()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01125">hal::NetlistSimulatorController::get_input_nets()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00464">hal::NetlistSimulatorController::handleOpenInputFile()</a>, <a class="el" href="logic__evaluator__dialog_8cpp_source.html#l00034">hal::LogicEvaluatorDialog::LogicEvaluatorDialog()</a>, <a class="el" href="simulation__thread_8cpp_source.html#l00029">hal::SimulationThread::run()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00530">hal::NetlistSimulatorController::run_simulation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01094">hal::NetlistSimulatorController::add_gates()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01137">hal::NetlistSimulatorController::get_input_column_headers()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01132">hal::NetlistSimulatorController::get_input_nets()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00464">hal::NetlistSimulatorController::handleOpenInputFile()</a>, <a class="el" href="logic__evaluator__dialog_8cpp_source.html#l00034">hal::LogicEvaluatorDialog::LogicEvaluatorDialog()</a>, <a class="el" href="simulation__thread_8cpp_source.html#l00029">hal::SimulationThread::run()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00530">hal::NetlistSimulatorController::run_simulation()</a>.</p>
 
 </div>
 </div>
@@ -476,9 +476,9 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Get groups computed in method above. </p><dl class="section return"><dt>Returns</dt><dd>Vector of groups. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8h_source.html#l00219">219</a> of file <a class="el" href="simulation__input_8h_source.html">simulation_input.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8h_source.html#l00220">220</a> of file <a class="el" href="simulation__input_8h_source.html">simulation_input.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01130">hal::NetlistSimulatorController::get_input_column_headers()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01058">hal::NetlistSimulatorController::load_waveform_groups()</a>, and <a class="el" href="logic__evaluator__dialog_8cpp_source.html#l00034">hal::LogicEvaluatorDialog::LogicEvaluatorDialog()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01137">hal::NetlistSimulatorController::get_input_column_headers()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01058">hal::NetlistSimulatorController::get_net_groups()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01072">hal::NetlistSimulatorController::load_waveform_groups()</a>, and <a class="el" href="logic__evaluator__dialog_8cpp_source.html#l00034">hal::LogicEvaluatorDialog::LogicEvaluatorDialog()</a>.</p>
 
 </div>
 </div>
@@ -499,9 +499,9 @@ Public Member Functions</h2></td></tr>
 <p>Get all output nets of gates in the simulation set that have a destination outside of the set or that are global outputs.</p>
 <dl class="section return"><dt>Returns</dt><dd>The output nets. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00096">96</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00101">101</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01173">hal::NetlistSimulatorController::get_output_nets()</a>, and <a class="el" href="logic__evaluator__dialog_8cpp_source.html#l00034">hal::LogicEvaluatorDialog::LogicEvaluatorDialog()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01180">hal::NetlistSimulatorController::get_output_nets()</a>, and <a class="el" href="logic__evaluator__dialog_8cpp_source.html#l00034">hal::LogicEvaluatorDialog::LogicEvaluatorDialog()</a>.</p>
 
 </div>
 </div>
@@ -522,9 +522,9 @@ Public Member Functions</h2></td></tr>
 <p>Get all nets from the partial netlist.</p>
 <dl class="section return"><dt>Returns</dt><dd>The nets from partial netlist </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00101">101</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00106">106</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01178">hal::NetlistSimulatorController::get_partial_netlist_nets()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01185">hal::NetlistSimulatorController::get_partial_netlist_nets()</a>.</p>
 
 </div>
 </div>
@@ -544,9 +544,9 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Checks whether gates have been selected for simulation </p><dl class="section return"><dt>Returns</dt><dd><code>true</code> if at least one gate is in simulation set, <code>false</code> otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00086">86</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00091">91</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01087">hal::NetlistSimulatorController::add_gates()</a>, and <a class="el" href="simulation__input_8cpp_source.html#l00081">is_ready()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01094">hal::NetlistSimulatorController::add_gates()</a>, and <a class="el" href="simulation__input_8cpp_source.html#l00086">is_ready()</a>.</p>
 
 </div>
 </div>
@@ -573,7 +573,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if net has been selected as clock, <code>false</code> otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00059">59</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00064">64</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00530">hal::NetlistSimulatorController::run_simulation()</a>.</p>
 
@@ -602,9 +602,9 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if net is input net, <code>false</code> otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00106">106</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00111">111</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01183">hal::NetlistSimulatorController::set_input()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01190">hal::NetlistSimulatorController::set_input()</a>.</p>
 
 </div>
 </div>
@@ -624,7 +624,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Check wether no clock signal will be automatically generated as simulation input. Either there is no clock present or the clock signal will be passed as normal waveform input. </p>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00116">116</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00121">121</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00288">hal::NetlistSimulatorController::is_no_clock_used()</a>.</p>
 
@@ -646,9 +646,9 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Checks whether essential data for simulation has been provided (gates, clock, input_nets) </p><dl class="section return"><dt>Returns</dt><dd><code>true</code> if essential data is present, <code>false</code> otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00081">81</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00086">86</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00086">has_gates()</a>.</p>
+<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00091">has_gates()</a>.</p>
 
 </div>
 </div>
@@ -668,7 +668,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Prepare simulation where no net is defined as clock input </p>
 
-<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00111">111</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="simulation__input_8cpp_source.html#l00116">116</a> of file <a class="el" href="simulation__input_8cpp_source.html">simulation_input.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00282">hal::NetlistSimulatorController::set_no_clock_used()</a>.</p>
 

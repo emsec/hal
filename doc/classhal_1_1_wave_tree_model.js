@@ -48,6 +48,7 @@ var classhal_1_1_wave_tree_model =
     [ "insertItem", "classhal_1_1_wave_tree_model.html#aae61b1bb9f242dc567bf4393d2de7ebc", null ],
     [ "insertTrigger", "classhal_1_1_wave_tree_model.html#a50f835bfb7366c1147e68febfe6a06b0", null ],
     [ "isLeaveItem", "classhal_1_1_wave_tree_model.html#ab28a0995ed3326412bef534470df7704", null ],
+    [ "isTopLevelNet", "classhal_1_1_wave_tree_model.html#a4c9de061d06e0c5ea5735053fec48e89", null ],
     [ "item", "classhal_1_1_wave_tree_model.html#a6a456d6c774302b626928b099f7017f2", null ],
     [ "netName", "classhal_1_1_wave_tree_model.html#a66f6256560e39f2a6679919a608c1d49", null ],
     [ "numberEntriesChanged", "classhal_1_1_wave_tree_model.html#a44643f0c7c4247d4b6010ca9ce7486a5", null ],

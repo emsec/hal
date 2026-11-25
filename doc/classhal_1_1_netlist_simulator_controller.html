@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-296-g13d92ebdd</span>
+   &#160;<span id="projectnumber">v4.5.0-299-g9ee015483</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -190,6 +190,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a71812a5801fe980ff5e39baa7a78abfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2abeceb11accd293880dde4beb7157f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_simulator_controller.html#a2abeceb11accd293880dde4beb7157f7">add_waveform_group</a> (const std::string &amp;<a class="el" href="classhal_1_1_netlist_simulator_controller.html#a628ff6b7f1b81efd91ff324aae000979">name</a>, const <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_module_pin.html">ModulePin</a> &gt; *pin_group)</td></tr>
 <tr class="separator:a2abeceb11accd293880dde4beb7157f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99115643fd0214b4baa0b3ff184aa02e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_simulator_controller.html#a99115643fd0214b4baa0b3ff184aa02e">add_waveform_group</a> (const <a class="el" href="structhal_1_1_simulation_input_1_1_net_group.html">SimulationInput::NetGroup</a> &amp;net_group)</td></tr>
+<tr class="separator:a99115643fd0214b4baa0b3ff184aa02e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a0db60fdafe656a06e15ef2ea70fb5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_simulator_controller.html#a9a0db60fdafe656a06e15ef2ea70fb5c">add_boolean_expression_waveform</a> (const std::string &amp;expression)</td></tr>
 <tr class="separator:a9a0db60fdafe656a06e15ef2ea70fb5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a808cfff9d04feeb9a22c9cda327eb010"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_simulator_controller.html#a808cfff9d04feeb9a22c9cda327eb010">add_boolean_accept_list_waveform</a> (const std::vector&lt; <a class="el" href="classhal_1_1_wave_data.html">WaveData</a> * &gt; &amp;input_waves, const std::vector&lt; int &gt; &amp;accepted_combination)</td></tr>
@@ -202,6 +204,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a33d42ec29d290b7283a572f1008f3845"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15e323533bcc6198735753f70457f54c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_simulator_controller.html#a15e323533bcc6198735753f70457f54c">compute_waveform_groups</a> ()</td></tr>
 <tr class="separator:a15e323533bcc6198735753f70457f54c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30f8ce2f5f512210f64bd87de787d821"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="structhal_1_1_simulation_input_1_1_net_group.html">SimulationInput::NetGroup</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_simulator_controller.html#a30f8ce2f5f512210f64bd87de787d821">get_net_groups</a> () const</td></tr>
+<tr class="separator:a30f8ce2f5f512210f64bd87de787d821"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63c85148a718e1078fa4c60651cdb157"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_simulator_controller.html#a63c85148a718e1078fa4c60651cdb157">load_waveform_groups</a> (bool inputs)</td></tr>
 <tr class="separator:a63c85148a718e1078fa4c60651cdb157"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c1905849c71af265fbececb7c913ee5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_simulator_controller.html#a3c1905849c71af265fbececb7c913ee5">set_input</a> (const <a class="el" href="classhal_1_1_net.html">Net</a> *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, <a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">BooleanFunction::Value</a> value)</td></tr>
@@ -580,7 +584,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00032">32</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absolutePath">QDir::absolutePath()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00100">hal::LogManager::add_channel()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01333">hal::NetlistSimulatorControllerMap::addController()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="el" href="simulation__settings_8cpp_source.html#l00063">hal::SimulationSettings::baseDirectory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00061">hal::LogManager::get_instance()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01324">hal::NetlistSimulatorControllerMap::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#mkpath">QDir::mkpath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#open">QFile::open()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtemporarydir.html#path">QTemporaryDir::path()</a>, <a class="el" href="plugin__netlist__simulator__controller_8h_source.html#l00151">hal::NetlistSimulatorControllerPlugin::sSimulationSettings</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#write">QIODevice::write()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absolutePath">QDir::absolutePath()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00100">hal::LogManager::add_channel()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01340">hal::NetlistSimulatorControllerMap::addController()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="el" href="simulation__settings_8cpp_source.html#l00063">hal::SimulationSettings::baseDirectory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00061">hal::LogManager::get_instance()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01331">hal::NetlistSimulatorControllerMap::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#mkpath">QDir::mkpath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#open">QFile::open()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtemporarydir.html#path">QTemporaryDir::path()</a>, <a class="el" href="plugin__netlist__simulator__controller_8h_source.html#l00151">hal::NetlistSimulatorControllerPlugin::sSimulationSettings</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#write">QIODevice::write()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>.</p>
 
 </div>
 </div>
@@ -624,7 +628,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00074">74</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absolutePath">QDir::absolutePath()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00100">hal::LogManager::add_channel()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01029">add_clock_period()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00045">hal::SimulationInput::add_gates()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01333">hal::NetlistSimulatorControllerMap::addController()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00250">create_simulation_engine()</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00195">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00061">hal::LogManager::get_instance()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00142">hal::Gate::get_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00355">hal::Netlist::get_net_by_id()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01324">hal::NetlistSimulatorControllerMap::instance()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#mkpath">QDir::mkpath()</a>, <a class="el" href="wave__data_8h_source.html#l00242">hal::WaveDataList::saleaeDirectory()</a>, <a class="el" href="simulation__engine_8cpp_source.html#l00064">hal::SimulationEngine::set_engine_property()</a>, <a class="el" href="wave__data_8cpp_source.html#l01223">hal::WaveDataTimeframe::simulateMaxTime()</a>, <a class="el" href="saleae__directory_8h_source.html#l00069">hal::SaleaeDirectoryStoreRequest::sWriteDisabled</a>, <a class="el" href="wave__data_8h_source.html#l00233">hal::WaveDataList::timeFrame()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="el" href="wave__data_8cpp_source.html#l01599">hal::WaveDataList::updateFromSaleae()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absolutePath">QDir::absolutePath()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00100">hal::LogManager::add_channel()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01029">add_clock_period()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00050">hal::SimulationInput::add_gates()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01340">hal::NetlistSimulatorControllerMap::addController()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00250">create_simulation_engine()</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00195">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00061">hal::LogManager::get_instance()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00142">hal::Gate::get_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00355">hal::Netlist::get_net_by_id()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01331">hal::NetlistSimulatorControllerMap::instance()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#mkpath">QDir::mkpath()</a>, <a class="el" href="wave__data_8h_source.html#l00242">hal::WaveDataList::saleaeDirectory()</a>, <a class="el" href="simulation__engine_8cpp_source.html#l00064">hal::SimulationEngine::set_engine_property()</a>, <a class="el" href="wave__data_8cpp_source.html#l01223">hal::WaveDataTimeframe::simulateMaxTime()</a>, <a class="el" href="saleae__directory_8h_source.html#l00069">hal::SaleaeDirectoryStoreRequest::sWriteDisabled</a>, <a class="el" href="wave__data_8h_source.html#l00233">hal::WaveDataList::timeFrame()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="el" href="wave__data_8cpp_source.html#l01599">hal::WaveDataList::updateFromSaleae()</a>.</p>
 
 </div>
 </div>
@@ -645,7 +649,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00171">171</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">QObject::deleteLater()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01324">hal::NetlistSimulatorControllerMap::instance()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01340">hal::NetlistSimulatorControllerMap::removeController()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">QObject::deleteLater()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01331">hal::NetlistSimulatorControllerMap::instance()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01347">hal::NetlistSimulatorControllerMap::removeController()</a>.</p>
 
 </div>
 </div>
@@ -822,7 +826,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01029">1029</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00066">hal::SimulationInput::add_clock()</a>, <a class="el" href="wave__data_8cpp_source.html#l01643">hal::WaveDataList::addOrReplace()</a>, <a class="el" href="simulation__input_8h_source.html#l00065">hal::SimulationInput::Clock::clock_net</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="simulation__input_8h_source.html#l00067">hal::SimulationInput::Clock::start_at_zero</a>, and <a class="el" href="simulation__input_8h_source.html#l00066">hal::SimulationInput::Clock::switch_time</a>.</p>
+<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00071">hal::SimulationInput::add_clock()</a>, <a class="el" href="wave__data_8cpp_source.html#l01643">hal::WaveDataList::addOrReplace()</a>, <a class="el" href="simulation__input_8h_source.html#l00065">hal::SimulationInput::Clock::clock_net</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="simulation__input_8h_source.html#l00067">hal::SimulationInput::Clock::start_at_zero</a>, and <a class="el" href="simulation__input_8h_source.html#l00066">hal::SimulationInput::Clock::switch_time</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01009">add_clock_frequency()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00074">NetlistSimulatorController()</a>, <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="wizard_8cpp_source.html#l00222">hal::PageClock::validatePage()</a>.</p>
 
@@ -851,9 +855,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01087">1087</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01094">1094</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00045">hal::SimulationInput::add_gates()</a>, <a class="el" href="wave__data_8cpp_source.html#l01643">hal::WaveDataList::addOrReplace()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00091">hal::SimulationInput::get_input_nets()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00086">hal::SimulationInput::has_gates()</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::InputNet</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00066">NoGatesSelected</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00067">ParameterSetup</a>, <a class="el" href="wave__data_8cpp_source.html#l01748">hal::WaveDataList::remove()</a>, and <a class="el" href="wave__data_8cpp_source.html#l01738">hal::WaveDataList::toSet()</a>.</p>
+<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00050">hal::SimulationInput::add_gates()</a>, <a class="el" href="wave__data_8cpp_source.html#l01643">hal::WaveDataList::addOrReplace()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00096">hal::SimulationInput::get_input_nets()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00091">hal::SimulationInput::has_gates()</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::InputNet</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00066">NoGatesSelected</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00067">ParameterSetup</a>, <a class="el" href="wave__data_8cpp_source.html#l01748">hal::WaveDataList::remove()</a>, and <a class="el" href="wave__data_8cpp_source.html#l01738">hal::WaveDataList::toSet()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="wizard_8cpp_source.html#l00135">hal::PageSelectGates::validatePage()</a>.</p>
 
@@ -902,7 +906,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <a id="a71812a5801fe980ff5e39baa7a78abfe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71812a5801fe980ff5e39baa7a78abfe">&#9670;&nbsp;</a></span>add_waveform_group() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a71812a5801fe980ff5e39baa7a78abfe">&#9670;&nbsp;</a></span>add_waveform_group() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -938,12 +942,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00411">411</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00368">add_waveform_group()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00852">hal::Gate::get_fan_in_net()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00996">hal::Gate::get_fan_out_net()</a>, <a class="el" href="pin__group_8h_source.html#l00153">hal::PinGroup&lt; T &gt;::get_name()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="pin__group_8h_source.html#l00205">hal::PinGroup&lt; T &gt;::get_pins()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+<p class="reference">References <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00368">add_waveform_group()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00852">hal::Gate::get_fan_in_net()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00996">hal::Gate::get_fan_out_net()</a>, <a class="el" href="pin__group_8h_source.html#l00153">hal::PinGroup&lt; T &gt;::get_name()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="pin__group_8h_source.html#l00205">hal::PinGroup&lt; T &gt;::get_pins()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
 
 </div>
 </div>
 <a id="a174ad0af78768558cb485996d82f18e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a174ad0af78768558cb485996d82f18e4">&#9670;&nbsp;</a></span>add_waveform_group() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a174ad0af78768558cb485996d82f18e4">&#9670;&nbsp;</a></span>add_waveform_group() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -968,12 +972,42 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00395">395</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00368">add_waveform_group()</a>, <a class="el" href="pin__group_8h_source.html#l00153">hal::PinGroup&lt; T &gt;::get_name()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="pin__group_8h_source.html#l00205">hal::PinGroup&lt; T &gt;::get_pins()</a>, and <a class="el" href="log_8h_source.html#l00076">log_warning</a>.</p>
+<p class="reference">References <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00368">add_waveform_group()</a>, <a class="el" href="pin__group_8h_source.html#l00153">hal::PinGroup&lt; T &gt;::get_name()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="pin__group_8h_source.html#l00205">hal::PinGroup&lt; T &gt;::get_pins()</a>, and <a class="el" href="log_8h_source.html#l00076">log_warning</a>.</p>
+
+</div>
+</div>
+<a id="a99115643fd0214b4baa0b3ff184aa02e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99115643fd0214b4baa0b3ff184aa02e">&#9670;&nbsp;</a></span>add_waveform_group() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::NetlistSimulatorController::add_waveform_group </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structhal_1_1_simulation_input_1_1_net_group.html">SimulationInput::NetGroup</a> &amp;&#160;</td>
+          <td class="paramname"><em>net_group</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Create a waveform group from the nets of a net group identified by <code>compute_waveform_groups</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">net_group</td><td>The net group to create the waveform group from. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ID of new waveform group </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01063">1063</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00368">add_waveform_group()</a>, <a class="el" href="simulation__input_8h_source.html#l00077">hal::SimulationInput::NetGroup::gate</a>, <a class="el" href="simulation__input_8h_source.html#l00079">hal::SimulationInput::NetGroup::gate_pin_group</a>, and <a class="el" href="simulation__input_8h_source.html#l00078">hal::SimulationInput::NetGroup::module_pin_group</a>.</p>
 
 </div>
 </div>
 <a id="a2abeceb11accd293880dde4beb7157f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2abeceb11accd293880dde4beb7157f7">&#9670;&nbsp;</a></span>add_waveform_group() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2abeceb11accd293880dde4beb7157f7">&#9670;&nbsp;</a></span>add_waveform_group() <span class="overload">[4/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1009,12 +1043,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00443">443</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00368">add_waveform_group()</a>, <a class="el" href="pin__group_8h_source.html#l00153">hal::PinGroup&lt; T &gt;::get_name()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="pin__group_8h_source.html#l00205">hal::PinGroup&lt; T &gt;::get_pins()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="netlist__simulator__controller_8h_source.html#l00336">name()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00368">add_waveform_group()</a>, <a class="el" href="pin__group_8h_source.html#l00153">hal::PinGroup&lt; T &gt;::get_name()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="pin__group_8h_source.html#l00205">hal::PinGroup&lt; T &gt;::get_pins()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="netlist__simulator__controller_8h_source.html#l00351">name()</a>.</p>
 
 </div>
 </div>
 <a id="a91b55ce9063909e91914303a7f1aa18d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a91b55ce9063909e91914303a7f1aa18d">&#9670;&nbsp;</a></span>add_waveform_group() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a91b55ce9063909e91914303a7f1aa18d">&#9670;&nbsp;</a></span>add_waveform_group() <span class="overload">[5/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1049,9 +1083,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00368">368</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01542">hal::WaveDataList::addWavesToGroup()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#append">QVector::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00640">get_waveform_by_net()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#isEmpty">QVector::isEmpty()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00336">name()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#reserve">QVector::reserve()</a>.</p>
+<p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01542">hal::WaveDataList::addWavesToGroup()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#append">QVector::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00640">get_waveform_by_net()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#isEmpty">QVector::isEmpty()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00351">name()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#reserve">QVector::reserve()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00395">add_waveform_group()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01058">load_waveform_groups()</a>, and <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00395">add_waveform_group()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01072">load_waveform_groups()</a>, and <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -1097,7 +1131,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01053">1053</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00249">hal::SimulationInput::compute_net_groups()</a>.</p>
+<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00289">hal::SimulationInput::compute_net_groups()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wizard_8cpp_source.html#l00135">hal::PageSelectGates::validatePage()</a>.</p>
 
@@ -1128,7 +1162,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00250">250</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_simulation_engine_factory.html#ae9ec7566061b6b645074a5c172673cea">hal::SimulationEngineFactory::createEngine()</a>, <a class="el" href="simulation__engine_8cpp_source.html#l00137">hal::SimulationEngineFactories::factoryByName()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00222">get_working_directory()</a>, <a class="el" href="simulation__engine_8cpp_source.html#l00122">hal::SimulationEngineFactories::instance()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00336">name()</a>, <a class="el" href="simulation__engine_8h_source.html#l00075">hal::SimulationEngine::name()</a>, and <a class="el" href="simulation__engine_8cpp_source.html#l00026">hal::SimulationEngine::set_working_directory()</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_simulation_engine_factory.html#ae9ec7566061b6b645074a5c172673cea">hal::SimulationEngineFactory::createEngine()</a>, <a class="el" href="simulation__engine_8cpp_source.html#l00137">hal::SimulationEngineFactories::factoryByName()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00222">get_working_directory()</a>, <a class="el" href="simulation__engine_8cpp_source.html#l00122">hal::SimulationEngineFactories::instance()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00351">name()</a>, <a class="el" href="simulation__engine_8h_source.html#l00075">hal::SimulationEngine::name()</a>, and <a class="el" href="simulation__engine_8cpp_source.html#l00026">hal::SimulationEngine::set_working_directory()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00074">NetlistSimulatorController()</a>, <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="wizard_8cpp_source.html#l00285">hal::PageEngine::validatePage()</a>.</p>
 
@@ -1239,7 +1273,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the file gerneration was successful, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01291">1291</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01298">1298</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="vcd__serializer_8cpp_source.html#l00172">hal::VcdSerializer::exportVcd()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="wave__data_8cpp_source.html#l01228">hal::WaveDataTimeframe::sceneMaxTime()</a>, <a class="el" href="wave__data_8cpp_source.html#l01242">hal::WaveDataTimeframe::sceneMinTime()</a>, <a class="el" href="wave__data_8h_source.html#l00233">hal::WaveDataList::timeFrame()</a>, and <a class="el" href="wave__data_8cpp_source.html#l01653">hal::WaveDataList::waveDataByNet()</a>.</p>
 
@@ -1287,9 +1321,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Shortcut to <a class="el" href="classhal_1_1_simulation_input.html#acff637a1ed97d2e3413ca032c40fca03">SimulationInput::get_gates</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01120">1120</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01127">1127</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00054">hal::SimulationInput::get_gates()</a>.</p>
+<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00059">hal::SimulationInput::get_gates()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="wizard_8cpp_source.html#l00135">hal::PageSelectGates::validatePage()</a>.</p>
 
@@ -1319,9 +1353,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Getter for controller ID </p><dl class="section return"><dt>Returns</dt><dd>the ID </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8h_source.html#l00348">348</a> of file <a class="el" href="netlist__simulator__controller_8h_source.html">netlist_simulator_controller.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8h_source.html#l00363">363</a> of file <a class="el" href="netlist__simulator__controller_8h_source.html">netlist_simulator_controller.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01333">hal::NetlistSimulatorControllerMap::addController()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">persist()</a>, and <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01340">hal::NetlistSimulatorControllerMap::addController()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">persist()</a>, and <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -1341,9 +1375,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Get headers for input columns. A column might comprise a single net or a group of nets </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01130">1130</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01137">1137</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="simulation__input_8h_source.html#l00135">hal::SimulationInput::get_clocks()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00091">hal::SimulationInput::get_input_nets()</a>, <a class="el" href="simulation__input_8h_source.html#l00219">hal::SimulationInput::get_net_groups()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00087">hal::NetlistSimulatorController::InputColumnHeader::is_clock</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00086">hal::NetlistSimulatorController::InputColumnHeader::name</a>, and <a class="el" href="netlist__simulator__controller_8h_source.html#l00085">hal::NetlistSimulatorController::InputColumnHeader::nets</a>.</p>
+<p class="reference">References <a class="el" href="simulation__input_8h_source.html#l00135">hal::SimulationInput::get_clocks()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00096">hal::SimulationInput::get_input_nets()</a>, <a class="el" href="simulation__input_8h_source.html#l00220">hal::SimulationInput::get_net_groups()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00087">hal::NetlistSimulatorController::InputColumnHeader::is_clock</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00086">hal::NetlistSimulatorController::InputColumnHeader::name</a>, and <a class="el" href="netlist__simulator__controller_8h_source.html#l00085">hal::NetlistSimulatorController::InputColumnHeader::nets</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wizard_8cpp_source.html#l00523">hal::PageInputData::initializePage()</a>.</p>
 
@@ -1365,9 +1399,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Shortcut to <a class="el" href="classhal_1_1_simulation_input.html#aa7333a01a4eef9d66ef71c9b7a21e8b9">SimulationInput::get_input_nets</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01125">1125</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01132">1132</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00091">hal::SimulationInput::get_input_nets()</a>.</p>
+<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00096">hal::SimulationInput::get_input_nets()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wizard_8cpp_source.html#l00196">hal::PageClock::initializePage()</a>, <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="wizard_8cpp_source.html#l00135">hal::PageSelectGates::validatePage()</a>, <a class="el" href="wizard_8cpp_source.html#l00222">hal::PageClock::validatePage()</a>, and <a class="el" href="wizard_8cpp_source.html#l00657">hal::PageInputData::validatePage()</a>.</p>
 
@@ -1421,9 +1455,32 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Getter for controller name </p><dl class="section return"><dt>Returns</dt><dd>name as std::string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">342</a> of file <a class="el" href="netlist__simulator__controller_8h_source.html">netlist_simulator_controller.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">357</a> of file <a class="el" href="netlist__simulator__controller_8h_source.html">netlist_simulator_controller.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01029">add_clock_period()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01087">add_gates()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00368">add_waveform_group()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00250">create_simulation_engine()</a>, <a class="el" href="wizard_8cpp_source.html#l00798">hal::PageRunSimulation::handleEngineFinished()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00922">handleRunFinished()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00773">import_simulation()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">persist()</a>, <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00530">run_simulation()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01183">set_input()</a>, and <a class="el" href="wizard_8cpp_source.html#l00657">hal::PageInputData::validatePage()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01029">add_clock_period()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01094">add_gates()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00368">add_waveform_group()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00250">create_simulation_engine()</a>, <a class="el" href="wizard_8cpp_source.html#l00798">hal::PageRunSimulation::handleEngineFinished()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00922">handleRunFinished()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00773">import_simulation()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">persist()</a>, <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00530">run_simulation()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01190">set_input()</a>, and <a class="el" href="wizard_8cpp_source.html#l00657">hal::PageInputData::validatePage()</a>.</p>
+
+</div>
+</div>
+<a id="a30f8ce2f5f512210f64bd87de787d821"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30f8ce2f5f512210f64bd87de787d821">&#9670;&nbsp;</a></span>get_net_groups()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt; <a class="el" href="structhal_1_1_simulation_input_1_1_net_group.html">SimulationInput::NetGroup</a> &gt; &amp; hal::NetlistSimulatorController::get_net_groups </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the net groups identified by the last call to <code>compute_waveform_groups</code>.</p>
+<dl class="section return"><dt>Returns</dt><dd>The net groups. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01058">1058</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="simulation__input_8h_source.html#l00220">hal::SimulationInput::get_net_groups()</a>.</p>
 
 </div>
 </div>
@@ -1443,9 +1500,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Shortcut to <a class="el" href="classhal_1_1_simulation_input.html#a30d5deccf8c3f20142267a68b86d2d0c">SimulationInput::get_output_nets</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01173">1173</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01180">1180</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00096">hal::SimulationInput::get_output_nets()</a>.</p>
+<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00101">hal::SimulationInput::get_output_nets()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -1467,9 +1524,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Shortcut to <a class="el" href="classhal_1_1_simulation_input.html#a1352373f370a259bb8ff5c684778f1a3">SimulationInput::get_partial_netlist_nets</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01178">1178</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01185">1185</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00101">hal::SimulationInput::get_partial_netlist_nets()</a>.</p>
+<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00106">hal::SimulationInput::get_partial_netlist_nets()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -1567,7 +1624,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Getter for controller state </p><dl class="section return"><dt>Returns</dt><dd>state of type SimulationState </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8h_source.html#l00444">444</a> of file <a class="el" href="netlist__simulator__controller_8h_source.html">netlist_simulator_controller.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8h_source.html#l00459">459</a> of file <a class="el" href="netlist__simulator__controller_8h_source.html">netlist_simulator_controller.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wizard_8cpp_source.html#l00798">hal::PageRunSimulation::handleEngineFinished()</a>, <a class="el" href="wizard_8cpp_source.html#l00813">hal::PageRunSimulation::nextId()</a>, and <a class="el" href="wizard_8cpp_source.html#l00807">hal::PageRunSimulation::validatePage()</a>.</p>
 
@@ -1693,7 +1750,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="wave__data_8h_source.html#l00203">hal::WaveDataList::mDataGroups</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01244">set_input()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01251">set_input()</a>.</p>
 
 </div>
 </div>
@@ -1721,7 +1778,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Getter for wave data list - simulation input as well as output </p><dl class="section return"><dt>Returns</dt><dd>const pointer to wave data list </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8h_source.html#l00438">438</a> of file <a class="el" href="netlist__simulator__controller_8h_source.html">netlist_simulator_controller.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8h_source.html#l00453">453</a> of file <a class="el" href="netlist__simulator__controller_8h_source.html">netlist_simulator_controller.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugin__perf__test_8cpp_source.html#l00056">hal::PerfTestPlugin::cmp_sim_data()</a>, <a class="el" href="wizard_8cpp_source.html#l00135">hal::PageSelectGates::validatePage()</a>, <a class="el" href="wizard_8cpp_source.html#l00657">hal::PageInputData::validatePage()</a>, <a class="el" href="wizard_8cpp_source.html#l00884">hal::PageLoadResults::validatePage()</a>, and <a class="el" href="wave__widget_8cpp_source.html#l00033">hal::WaveWidget::WaveWidget()</a>.</p>
 
@@ -1777,7 +1834,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00464">464</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00091">hal::SimulationInput::get_input_nets()</a>, <a class="el" href="vcd__serializer_8cpp_source.html#l00630">hal::VcdSerializer::importVcd()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, and <a class="el" href="wave__data_8cpp_source.html#l01599">hal::WaveDataList::updateFromSaleae()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00096">hal::SimulationInput::get_input_nets()</a>, <a class="el" href="vcd__serializer_8cpp_source.html#l00630">hal::VcdSerializer::importVcd()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, and <a class="el" href="wave__data_8cpp_source.html#l01599">hal::WaveDataList::updateFromSaleae()</a>.</p>
 
 </div>
 </div>
@@ -1807,7 +1864,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00922">922</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist__simulator__controller_8h_source.html#l00071">EngineFailed</a>, <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a01f8fbdbbf27d0f6f3e67e537ae63d38">engineFinished()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__simulator__controller_8h_source.html#l00071">EngineFailed</a>, <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a01f8fbdbbf27d0f6f3e67e537ae63d38">engineFinished()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="simulation__process_8cpp_source.html#l00064">hal::SimulationProcess::SimulationProcess()</a>, and <a class="el" href="simulation__thread_8cpp_source.html#l00011">hal::SimulationThread::SimulationThread()</a>.</p>
 
@@ -1836,7 +1893,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01283">1283</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01290">1290</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
 </div>
 </div>
@@ -1978,7 +2035,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00773">773</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#copy">QFile::copy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#entryInfoList-1">QDir::entryInfoList()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="saleae__directory_8cpp_source.html#l00318">hal::SaleaeDirectory::get_datafile_index()</a>, <a class="el" href="saleae__directory_8cpp_source.html#l00384">hal::SaleaeDirectory::get_directory()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="vcd__serializer_8cpp_source.html#l00800">hal::VcdSerializer::importSaleae()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00077">NoFilter</a>, <a class="el" href="classhal_1_1_netlist_simulator_controller.html#aa280b3a52e8300491f1177976d78d6ee">parseComplete()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#remove">QFile::remove()</a>, <a class="el" href="wave__data_8h_source.html#l00242">hal::WaveDataList::saleaeDirectory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="el" href="wave__data_8cpp_source.html#l01599">hal::WaveDataList::updateFromSaleae()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#copy">QFile::copy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#entryInfoList-1">QDir::entryInfoList()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="saleae__directory_8cpp_source.html#l00318">hal::SaleaeDirectory::get_datafile_index()</a>, <a class="el" href="saleae__directory_8cpp_source.html#l00384">hal::SaleaeDirectory::get_directory()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="vcd__serializer_8cpp_source.html#l00800">hal::VcdSerializer::importSaleae()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00077">NoFilter</a>, <a class="el" href="classhal_1_1_netlist_simulator_controller.html#aa280b3a52e8300491f1177976d78d6ee">parseComplete()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#remove">QFile::remove()</a>, <a class="el" href="wave__data_8h_source.html#l00242">hal::WaveDataList::saleaeDirectory()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="el" href="wave__data_8cpp_source.html#l01599">hal::WaveDataList::updateFromSaleae()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -2042,7 +2099,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Does nothing. Kept because existing scripts call it.</p>
 <p>The body has been empty since simulation moved to an external engine: there is nothing to initialize here any more, and unlike the legacy <a class="el" href="classhal_1_1_netlist_simulator.html">NetlistSimulator</a> this controller does not stop accepting gates or clocks at any point. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01266">1266</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01273">1273</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -2090,7 +2147,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00288">288</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00116">hal::SimulationInput::is_no_clock_used()</a>.</p>
+<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00121">hal::SimulationInput::is_no_clock_used()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="wizard_8cpp_source.html#l00523">hal::PageInputData::initializePage()</a>.</p>
 
@@ -2119,11 +2176,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01058">1058</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01072">1072</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00368">add_waveform_group()</a>, and <a class="el" href="simulation__input_8h_source.html#l00219">hal::SimulationInput::get_net_groups()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00368">add_waveform_group()</a>, and <a class="el" href="simulation__input_8h_source.html#l00220">hal::SimulationInput::get_net_groups()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="wizard_8cpp_source.html#l00135">hal::PageSelectGates::validatePage()</a>, and <a class="el" href="wizard_8cpp_source.html#l00884">hal::PageLoadResults::validatePage()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wizard_8cpp_source.html#l00135">hal::PageSelectGates::validatePage()</a>.</p>
 
 </div>
 </div>
@@ -2179,7 +2236,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Getter for controller name </p><dl class="section return"><dt>Returns</dt><dd>name as <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8h_source.html#l00336">336</a> of file <a class="el" href="netlist__simulator__controller_8h_source.html">netlist_simulator_controller.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8h_source.html#l00351">351</a> of file <a class="el" href="netlist__simulator__controller_8h_source.html">netlist_simulator_controller.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00368">add_waveform_group()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00250">create_simulation_engine()</a>, <a class="el" href="waveform__viewer_8cpp_source.html#l00346">hal::WaveformViewer::handleControllerAdded()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00661">rename_waveform()</a>.</p>
 
@@ -2230,7 +2287,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">483</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00114">hal::JsonWriteObject::add_array()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00151">hal::JsonWriteArray::add_object()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00107">hal::JsonWriteObject::add_object()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00084">hal::JsonWriteComplex::close()</a>, <a class="el" href="simulation__input_8h_source.html#l00135">hal::SimulationInput::get_clocks()</a>, <a class="el" href="simulation__engine_8h_source.html#l00216">hal::SimulationEngine::get_engine_properties()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00054">hal::SimulationInput::get_gates()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00348">get_id()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="simulation__engine_8h_source.html#l00075">hal::SimulationEngine::name()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00184">hal::JsonWriteDocument::serialize()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00524">sPersistFile</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00114">hal::JsonWriteObject::add_array()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00151">hal::JsonWriteArray::add_object()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00107">hal::JsonWriteObject::add_object()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00084">hal::JsonWriteComplex::close()</a>, <a class="el" href="simulation__input_8h_source.html#l00135">hal::SimulationInput::get_clocks()</a>, <a class="el" href="simulation__engine_8h_source.html#l00216">hal::SimulationEngine::get_engine_properties()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00059">hal::SimulationInput::get_gates()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00363">get_id()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="simulation__engine_8h_source.html#l00075">hal::SimulationEngine::name()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00184">hal::JsonWriteDocument::serialize()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00539">sPersistFile</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00530">run_simulation()</a>.</p>
 
@@ -2301,7 +2358,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00661">661</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01401">hal::WaveDataList::emitGroupUpdated()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00336">name()</a>, <a class="el" href="wave__data_8cpp_source.html#l00089">hal::WaveData::rename()</a>, <a class="el" href="wave__data_8cpp_source.html#l01360">hal::WaveDataList::updateWaveName()</a>, and <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>.</p>
+<p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01401">hal::WaveDataList::emitGroupUpdated()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00351">name()</a>, <a class="el" href="wave__data_8cpp_source.html#l00089">hal::WaveData::rename()</a>, <a class="el" href="wave__data_8cpp_source.html#l01360">hal::WaveDataList::updateWaveName()</a>, and <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -2323,9 +2380,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Reset the simulator state, i.e., treat all signals as unknown. Does not remove gates/nets from the simulation set. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01270">1270</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01277">1277</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00071">hal::SimulationInput::clear()</a>, <a class="el" href="wave__data_8cpp_source.html#l01322">hal::WaveDataList::clearAll()</a>, and <a class="el" href="netlist__simulator__controller_8h_source.html#l00066">NoGatesSelected</a>.</p>
+<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00076">hal::SimulationInput::clear()</a>, <a class="el" href="wave__data_8cpp_source.html#l01322">hal::WaveDataList::clearAll()</a>, and <a class="el" href="netlist__simulator__controller_8h_source.html#l00066">NoGatesSelected</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="wizard_8cpp_source.html#l00135">hal::PageSelectGates::validatePage()</a>, and <a class="el" href="wizard_8cpp_source.html#l00020">hal::Wizard::Wizard()</a>.</p>
 
@@ -2349,7 +2406,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00530">530</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01643">hal::WaveDataList::addOrReplace()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#begin">QMap::begin()</a>, <a class="el" href="simulation__engine_8h_source.html#l00114">hal::SimulationEngine::clock_events_required()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#constBegin">QHash::constBegin()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#constEnd">QHash::constEnd()</a>, <a class="el" href="wave__data_8cpp_source.html#l01292">hal::WaveDataList::emitTimeframeChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#end">QMap::end()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00071">EngineFailed</a>, <a class="el" href="simulation__settings_8cpp_source.html#l00025">hal::SimulationSettings::engineProperties()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="simulation__input_8h_source.html#l00135">hal::SimulationInput::get_clocks()</a>, <a class="el" href="simulation__engine_8cpp_source.html#l00069">hal::SimulationEngine::get_engine_property()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00091">hal::SimulationInput::get_input_nets()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00059">hal::SimulationInput::is_clock()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#isEmpty">QMap::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#key">QMap::key()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00068">ParameterReady</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">persist()</a>, <a class="el" href="classhal_1_1_simulation_engine.html#a12cdcc3e859c10de0fb7443e1a00cd15">hal::SimulationEngine::run()</a>, <a class="el" href="wave__data_8cpp_source.html#l01228">hal::WaveDataTimeframe::sceneMaxTime()</a>, <a class="el" href="simulation__engine_8cpp_source.html#l00064">hal::SimulationEngine::set_engine_property()</a>, <a class="el" href="simulation__settings_8cpp_source.html#l00035">hal::SimulationSettings::setEngineProperties()</a>, <a class="el" href="classhal_1_1_simulation_engine.html#abfe6ef9ace74880b48aba2b722756be9">hal::SimulationEngine::setSimulationInput()</a>, <a class="el" href="wave__data_8cpp_source.html#l01760">hal::WaveDataList::setValueForEmpty()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00069">SimulationRun</a>, <a class="el" href="plugin__netlist__simulator__controller_8h_source.html#l00151">hal::NetlistSimulatorControllerPlugin::sSimulationSettings</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#sync">QSettings::sync()</a>, and <a class="el" href="wave__data_8h_source.html#l00233">hal::WaveDataList::timeFrame()</a>.</p>
+<p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01643">hal::WaveDataList::addOrReplace()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#begin">QMap::begin()</a>, <a class="el" href="simulation__engine_8h_source.html#l00114">hal::SimulationEngine::clock_events_required()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#constBegin">QHash::constBegin()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#constEnd">QHash::constEnd()</a>, <a class="el" href="wave__data_8cpp_source.html#l01292">hal::WaveDataList::emitTimeframeChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#end">QMap::end()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00071">EngineFailed</a>, <a class="el" href="simulation__settings_8cpp_source.html#l00025">hal::SimulationSettings::engineProperties()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="simulation__input_8h_source.html#l00135">hal::SimulationInput::get_clocks()</a>, <a class="el" href="simulation__engine_8cpp_source.html#l00069">hal::SimulationEngine::get_engine_property()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00096">hal::SimulationInput::get_input_nets()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00064">hal::SimulationInput::is_clock()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#isEmpty">QMap::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#key">QMap::key()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00068">ParameterReady</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">persist()</a>, <a class="el" href="classhal_1_1_simulation_engine.html#a12cdcc3e859c10de0fb7443e1a00cd15">hal::SimulationEngine::run()</a>, <a class="el" href="wave__data_8cpp_source.html#l01228">hal::WaveDataTimeframe::sceneMaxTime()</a>, <a class="el" href="simulation__engine_8cpp_source.html#l00064">hal::SimulationEngine::set_engine_property()</a>, <a class="el" href="simulation__settings_8cpp_source.html#l00035">hal::SimulationSettings::setEngineProperties()</a>, <a class="el" href="classhal_1_1_simulation_engine.html#abfe6ef9ace74880b48aba2b722756be9">hal::SimulationEngine::setSimulationInput()</a>, <a class="el" href="wave__data_8cpp_source.html#l01760">hal::WaveDataList::setValueForEmpty()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00069">SimulationRun</a>, <a class="el" href="plugin__netlist__simulator__controller_8h_source.html#l00151">hal::NetlistSimulatorControllerPlugin::sSimulationSettings</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#sync">QSettings::sync()</a>, and <a class="el" href="wave__data_8h_source.html#l00233">hal::WaveDataList::timeFrame()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -2389,11 +2446,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01183">1183</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01190">1190</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01643">hal::WaveDataList::addOrReplace()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="wave__data_8cpp_source.html#l01560">hal::WaveDataList::insertBooleanValue()</a>, <a class="el" href="wave__data_8cpp_source.html#l00103">hal::WaveData::insertBooleanValueWithoutSync()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00106">hal::SimulationInput::is_input_net()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="el" href="wave__data_8cpp_source.html#l01223">hal::WaveDataTimeframe::simulateMaxTime()</a>, <a class="el" href="wave__data_8h_source.html#l00233">hal::WaveDataList::timeFrame()</a>, and <a class="el" href="wave__data_8cpp_source.html#l01653">hal::WaveDataList::waveDataByNet()</a>.</p>
+<p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01643">hal::WaveDataList::addOrReplace()</a>, <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="wave__data_8cpp_source.html#l01560">hal::WaveDataList::insertBooleanValue()</a>, <a class="el" href="wave__data_8cpp_source.html#l00103">hal::WaveData::insertBooleanValueWithoutSync()</a>, <a class="el" href="simulation__input_8cpp_source.html#l00111">hal::SimulationInput::is_input_net()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="el" href="wave__data_8cpp_source.html#l01223">hal::WaveDataTimeframe::simulateMaxTime()</a>, <a class="el" href="wave__data_8h_source.html#l00233">hal::WaveDataList::timeFrame()</a>, and <a class="el" href="wave__data_8cpp_source.html#l01653">hal::WaveDataList::waveDataByNet()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01214">set_input()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01221">set_input()</a>.</p>
 
 </div>
 </div>
@@ -2431,9 +2488,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01250">1250</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01257">1257</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="pin__group_8h_source.html#l00205">hal::PinGroup&lt; T &gt;::get_pins()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01183">set_input()</a>.</p>
+<p class="reference">References <a class="el" href="pin__group_8h_source.html#l00205">hal::PinGroup&lt; T &gt;::get_pins()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01190">set_input()</a>.</p>
 
 </div>
 </div>
@@ -2471,9 +2528,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01214">1214</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01221">1221</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01183">set_input()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01190">set_input()</a>.</p>
 
 </div>
 </div>
@@ -2511,9 +2568,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01244">1244</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01251">1251</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00646">get_waveform_group_by_id()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01183">set_input()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00646">get_waveform_group_by_id()</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01190">set_input()</a>.</p>
 
 </div>
 </div>
@@ -2551,9 +2608,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01228">1228</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01235">1235</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist__simulator__controller_8h_source.html#l00342">get_name()</a>, <a class="el" href="wave__data_8cpp_source.html#l01004">hal::WaveDataGroup::get_waveforms()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01183">set_input()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__simulator__controller_8h_source.html#l00357">get_name()</a>, <a class="el" href="wave__data_8cpp_source.html#l01004">hal::WaveDataGroup::get_waveforms()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01190">set_input()</a>.</p>
 
 </div>
 </div>
@@ -2591,7 +2648,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01208">1208</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01215">1215</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01560">hal::WaveDataList::insertBooleanValue()</a>, <a class="el" href="wave__data_8cpp_source.html#l01223">hal::WaveDataTimeframe::simulateMaxTime()</a>, and <a class="el" href="wave__data_8h_source.html#l00233">hal::WaveDataList::timeFrame()</a>.</p>
 
@@ -2615,7 +2672,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00282">282</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00111">hal::SimulationInput::set_no_clock_used()</a>.</p>
+<p class="reference">References <a class="el" href="simulation__input_8cpp_source.html#l00116">hal::SimulationInput::set_no_clock_used()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2simulator_2netlist__simulator__controller_2python_2python__bindings_8cpp_source.html#l00020">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="wizard_8cpp_source.html#l00222">hal::PageClock::validatePage()</a>.</p>
 
@@ -2684,7 +2741,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01261">1261</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01268">1268</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01304">hal::WaveDataList::setUserTimeframe()</a>.</p>
 
@@ -2741,7 +2798,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01277">1277</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8cpp_source.html#l01284">1284</a> of file <a class="el" href="netlist__simulator__controller_8cpp_source.html">netlist_simulator_controller.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01297">hal::WaveDataList::incrementSimulTime()</a>.</p>
 
@@ -2852,7 +2909,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8h_source.html#l00524">524</a> of file <a class="el" href="netlist__simulator__controller_8h_source.html">netlist_simulator_controller.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__simulator__controller_8h_source.html#l00539">539</a> of file <a class="el" href="netlist__simulator__controller_8h_source.html">netlist_simulator_controller.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">persist()</a>.</p>
 

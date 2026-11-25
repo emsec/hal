@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-296-g13d92ebdd</span>
+   &#160;<span id="projectnumber">v4.5.0-299-g9ee015483</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -259,6 +259,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a802d89f433c4f7dc9c79c85aeb6046ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb4e394ac0d35eb4bb8d44445edc7bc0"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_wave_tree_model.html#abb4e394ac0d35eb4bb8d44445edc7bc0">waveDataIndexSet</a> () const</td></tr>
 <tr class="separator:abb4e394ac0d35eb4bb8d44445edc7bc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c9de061d06e0c5ea5735053fec48e89"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_wave_tree_model.html#a4c9de061d06e0c5ea5735053fec48e89">isTopLevelNet</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> netId) const</td></tr>
+<tr class="separator:a4c9de061d06e0c5ea5735053fec48e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcfc35318c1441b66815ae8b74b6e6c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_wave_tree_model.html#abcfc35318c1441b66815ae8b74b6e6c3">persist</a> () const</td></tr>
 <tr class="separator:abcfc35318c1441b66815ae8b74b6e6c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53e00a7c2a6ce51e6d414ec85ef72121"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_wave_tree_model.html#a53e00a7c2a6ce51e6d414ec85ef72121">restore</a> ()</td></tr>
@@ -2118,6 +2120,35 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a4c9de061d06e0c5ea5735053fec48e89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c9de061d06e0c5ea5735053fec48e89">&#9670;&nbsp;</a></span>isTopLevelNet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::WaveTreeModel::isTopLevelNet </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
+          <td class="paramname"><em>netId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check whether the waveform of a net is shown at the top level of the tree, i.e., not inside a group. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">netId</td><td>The ID of the net. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the waveform is a top level item, <code>false</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01099">1099</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::BooleanNet</a>, <a class="el" href="wave__data_8cpp_source.html#l01047">hal::WaveDataGroup::children()</a>, <a class="el" href="wave__data_8cpp_source.html#l01073">hal::WaveDataGroup::netIndex()</a>, and <a class="el" href="wave__data_8h_source.html#l00078">hal::WaveData::TriggerTime</a>.</p>
+
+</div>
+</div>
 <a id="a6a456d6c774302b626928b099f7017f2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6a456d6c774302b626928b099f7017f2">&#9670;&nbsp;</a></span>item()</h2>
 
@@ -2208,7 +2239,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01122">1122</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01131">1131</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 </div>
 </div>
@@ -2553,7 +2584,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01099">1099</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8cpp_source.html#l01108">1108</a> of file <a class="el" href="wave__tree__model_8cpp_source.html">wave_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="wave__data_8cpp_source.html#l01047">hal::WaveDataGroup::children()</a>, <a class="el" href="wave__data_8h_source.html#l00103">hal::WaveData::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, and <a class="el" href="wave__data_8h_source.html#l00227">hal::WaveDataList::waveIndexByNetId()</a>.</p>
 
@@ -2606,7 +2637,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wave__tree__model_8h_source.html#l00199">199</a> of file <a class="el" href="wave__tree__model_8h_source.html">wave_tree_model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wave__tree__model_8h_source.html#l00206">206</a> of file <a class="el" href="wave__tree__model_8h_source.html">wave_tree_model.h</a>.</p>
 
 </div>
 </div>
