@@ -1,10 +1,14 @@
 #include "hal_core/utilities/project_directory.h"
+#include "hal_core/utilities/log.h"
+#include <fstream>
 #include <sstream>
 #include <iostream>
 #include <time.h>
 
 namespace hal {
     const std::string ProjectDirectory::s_shadow_dir = "autosave";
+
+    const std::string ProjectDirectory::s_zip_warning_file = "DO-NOT-ZIP-THIS-DIRECTORY.txt";
 
     ProjectDirectory::ProjectDirectory(const std::string& path_)
         : std::filesystem::path(path_)
@@ -81,5 +85,37 @@ namespace hal {
         if (!relative.compare(0,n,canonical_dir))
             return (std::filesystem::path(relative.substr(n)));
         return retval;
+    }
+
+    bool ProjectDirectory::create_zip_warning() const
+    {
+        // get_filename() resolves through the canonical path, which is empty for a directory that does not exist,
+        // so without this check the file would land in the current working directory
+        std::error_code err_code;
+        if (empty() || !std::filesystem::is_directory(*this, err_code))
+        {
+            log_warning("core", "cannot create file {} in '{}', project directory does not exist.", s_zip_warning_file, string());
+            return false;
+        }
+
+        std::filesystem::path warning_file = get_filename(s_zip_warning_file);
+        if (std::filesystem::exists(warning_file, err_code))
+            return true;
+
+        std::ofstream warning_file_stream(warning_file.string());
+        warning_file_stream << "This directory is a HAL project directory.\n"
+                               "Please DO NOT zip this directory manually, as it will break the project structure.\n"
+                               "Use the 'Export Project' feature in HAL to create a zip file of this project.\n";
+        warning_file_stream.close();
+
+        // a stream that could not be opened fails on writing as well, so this covers both
+        if (warning_file_stream.fail())
+        {
+            log_warning("core",
+                        "could not write file {}, continuing without it: please verify that the file and the containing directory are writable",
+                        warning_file.string());
+            return false;
+        }
+        return true;
     }
 }

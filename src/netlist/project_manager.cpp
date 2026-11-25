@@ -109,8 +109,11 @@ namespace hal
             return false;
         m_netlist_file = m_proj_dir.get_default_filename(".hal");
 
+        m_proj_dir.create_zip_warning();
+
         std::filesystem::create_directory(m_proj_dir.get_filename("py"));
         std::filesystem::create_directory(m_proj_dir.get_filename(ProjectDirectory::s_shadow_dir));
+
         return serialize_to_projectfile(false);
     }
 
@@ -156,7 +159,15 @@ namespace hal
         if (!serialize_external(shadow))
             return false;
 
-        return serialize_to_projectfile(shadow);
+        if (!serialize_to_projectfile(shadow))
+            return false;
+
+        // a regular save writes to the project directory anyway, so this is where projects created before
+        // the warning existed get it; autosave writes only to the shadow directory and leaves it alone
+        if (!shadow)
+            m_proj_dir.create_zip_warning();
+
+        return true;
     }
 
     std::string ProjectManager::get_netlist_filename() const
