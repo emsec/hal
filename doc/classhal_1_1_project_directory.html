@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-290-g2c29c08ef</span>
+   &#160;<span id="projectnumber">v4.5.0-296-g13d92ebdd</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -131,6 +131,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2ce61d5bf709b4e75b00dce4e5ffa392"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21fb3c3899dab62d526717562c13bd7d"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_project_directory.html#a21fb3c3899dab62d526717562c13bd7d">get_relative_file_path</a> (const std::string &amp;filename) const</td></tr>
 <tr class="separator:a21fb3c3899dab62d526717562c13bd7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a103322f7159923d9149e713b291319ec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_project_directory.html#a103322f7159923d9149e713b291319ec">create_zip_warning</a> () const</td></tr>
+<tr class="separator:a103322f7159923d9149e713b291319ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -141,6 +143,8 @@ Static Public Member Functions</h2></td></tr>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a59f7d3aed28585c1722faa89c12b3679"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_project_directory.html#a59f7d3aed28585c1722faa89c12b3679">s_shadow_dir</a> = &quot;autosave&quot;</td></tr>
 <tr class="separator:a59f7d3aed28585c1722faa89c12b3679"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad48e307e13862b8492e0bae21a2bf2b9"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_project_directory.html#ad48e307e13862b8492e0bae21a2bf2b9">s_zip_warning_file</a> = &quot;DO-NOT-ZIP-THIS-DIRECTORY.txt&quot;</td></tr>
+<tr class="separator:ad48e307e13862b8492e0bae21a2bf2b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -175,13 +179,39 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00009">9</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00013">13</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="project__directory_8cpp_source.html#l00015">generate_random()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="project__directory_8cpp_source.html#l00019">generate_random()</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a103322f7159923d9149e713b291319ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a103322f7159923d9149e713b291319ec">&#9670;&nbsp;</a></span>create_zip_warning()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::ProjectDirectory::create_zip_warning </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates the file warning against zipping the project directory by hand, unless it already exists. An existing file is left untouched, so calling this on every save does not modify the directory.</p>
+<p>The file only gives advice, so a failure to write it is logged as a warning and the caller should carry on.</p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the file exists afterwards, <code>false</code> if the project directory does not exist or the file could not be written. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00090">90</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00051">get_filename()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="project__directory_8h_source.html#l00126">s_zip_warning_file</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2project__manager_8cpp_source.html#l00096">hal::ProjectManager::create_project_directory()</a>, <a class="el" href="import__project__dialog_8cpp_source.html#l00127">hal::ImportProjectDialog::importProject()</a>, and <a class="el" href="netlist_2project__manager_8cpp_source.html#l00142">hal::ProjectManager::serialize_project()</a>.</p>
+
+</div>
+</div>
 <a id="a66c2e74a77bef4d0eab40bbc221c9897"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a66c2e74a77bef4d0eab40bbc221c9897">&#9670;&nbsp;</a></span>generate_random()</h2>
 
@@ -207,9 +237,9 @@ Friends</h2></td></tr>
 <p>Generates a random directory name in the current working directory.</p>
 <dl class="section return"><dt>Returns</dt><dd>The absolute path to the generated directory. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00015">15</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00019">19</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00009">ProjectDirectory()</a>.</p>
+<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00013">ProjectDirectory()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>.</p>
 
@@ -232,9 +262,9 @@ Friends</h2></td></tr>
 <p>Returns the canonical path to the project directory.</p>
 <dl class="section return"><dt>Returns</dt><dd>The absolute canonical path to the project directory. If no project path is given, an empty path is returned. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00031">31</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00035">35</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="project__directory_8cpp_source.html#l00038">get_default_filename()</a>, <a class="el" href="project__directory_8cpp_source.html#l00047">get_filename()</a>, <a class="el" href="project__directory_8cpp_source.html#l00074">get_relative_file_path()</a>, <a class="el" href="project__directory_8cpp_source.html#l00067">get_shadow_dir()</a>, <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>, and <a class="el" href="python__editor_8cpp_source.html#l00096">hal::PythonSerializer::serialize_control()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="project__directory_8cpp_source.html#l00042">get_default_filename()</a>, <a class="el" href="project__directory_8cpp_source.html#l00051">get_filename()</a>, <a class="el" href="project__directory_8cpp_source.html#l00078">get_relative_file_path()</a>, <a class="el" href="project__directory_8cpp_source.html#l00071">get_shadow_dir()</a>, <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>, and <a class="el" href="python__editor_8cpp_source.html#l00096">hal::PythonSerializer::serialize_control()</a>.</p>
 
 </div>
 </div>
@@ -262,11 +292,11 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The absolute path to the default file. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00038">38</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00042">42</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00031">get_canonical_path()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
+<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00035">get_canonical_path()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2project__manager_8cpp_source.html#l00096">hal::ProjectManager::create_project_directory()</a>, <a class="el" href="file__manager_8cpp_source.html#l00331">hal::FileManager::importFile()</a>, <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00125">hal::netlist_factory::load_netlist()</a>, <a class="el" href="file__manager_8cpp_source.html#l00272">hal::FileManager::newProject()</a>, <a class="el" href="file__manager_8cpp_source.html#l00453">hal::FileManager::openProject()</a>, <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>, and <a class="el" href="netlist_2project__manager_8cpp_source.html#l00139">hal::ProjectManager::serialize_project()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2project__manager_8cpp_source.html#l00096">hal::ProjectManager::create_project_directory()</a>, <a class="el" href="file__manager_8cpp_source.html#l00331">hal::FileManager::importFile()</a>, <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00125">hal::netlist_factory::load_netlist()</a>, <a class="el" href="file__manager_8cpp_source.html#l00272">hal::FileManager::newProject()</a>, <a class="el" href="file__manager_8cpp_source.html#l00453">hal::FileManager::openProject()</a>, <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>, and <a class="el" href="netlist_2project__manager_8cpp_source.html#l00142">hal::ProjectManager::serialize_project()</a>.</p>
 
 </div>
 </div>
@@ -294,11 +324,11 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The absolute path to the file. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00047">47</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00051">51</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00031">get_canonical_path()</a>.</p>
+<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00035">get_canonical_path()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2project__manager_8cpp_source.html#l00096">hal::ProjectManager::create_project_directory()</a>, <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>, and <a class="el" href="python__editor_8cpp_source.html#l00041">hal::PythonSerializer::PythonSerializer()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2project__manager_8cpp_source.html#l00096">hal::ProjectManager::create_project_directory()</a>, <a class="el" href="project__directory_8cpp_source.html#l00090">create_zip_warning()</a>, <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>, and <a class="el" href="python__editor_8cpp_source.html#l00041">hal::PythonSerializer::PythonSerializer()</a>.</p>
 
 </div>
 </div>
@@ -326,9 +356,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The relative file path if the file is within the project directory; otherwise, the original filename. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00074">74</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00078">78</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00031">get_canonical_path()</a>.</p>
+<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00035">get_canonical_path()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>, <a class="el" href="dot__viewer__factory_8cpp_source.html#l00035">hal::DotViewerFactory::serialize()</a>, and <a class="el" href="plugin__netlist__simulator__controller_8cpp_source.html#l00028">hal::SimulatorSerializer::serialize()</a>.</p>
 
@@ -351,11 +381,11 @@ Friends</h2></td></tr>
 <p>Returns the path to the autosave (shadow) directory.</p>
 <dl class="section return"><dt>Returns</dt><dd>The absolute path to the autosave directory. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00067">67</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00071">71</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00031">get_canonical_path()</a>, and <a class="el" href="project__directory_8h_source.html#l00110">s_shadow_dir</a>.</p>
+<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00035">get_canonical_path()</a>, and <a class="el" href="project__directory_8h_source.html#l00120">s_shadow_dir</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00092">hal::FileManager::autosave()</a>, <a class="el" href="project__directory_8cpp_source.html#l00058">get_shadow_filename()</a>, <a class="el" href="file__manager_8cpp_source.html#l00453">hal::FileManager::openProject()</a>, and <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00092">hal::FileManager::autosave()</a>, <a class="el" href="project__directory_8cpp_source.html#l00062">get_shadow_filename()</a>, <a class="el" href="file__manager_8cpp_source.html#l00453">hal::FileManager::openProject()</a>, and <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>.</p>
 
 </div>
 </div>
@@ -383,11 +413,11 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The absolute path to the shadow file. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00058">58</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00062">62</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00067">get_shadow_dir()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
+<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00071">get_shadow_dir()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>, and <a class="el" href="netlist_2project__manager_8cpp_source.html#l00139">hal::ProjectManager::serialize_project()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>, and <a class="el" href="netlist_2project__manager_8cpp_source.html#l00142">hal::ProjectManager::serialize_project()</a>.</p>
 
 </div>
 </div>
@@ -438,9 +468,36 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <p>Name of autosave subdirectory </p>
 
-<p class="definition">Definition at line <a class="el" href="project__directory_8h_source.html#l00110">110</a> of file <a class="el" href="project__directory_8h_source.html">project_directory.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__directory_8h_source.html#l00120">120</a> of file <a class="el" href="project__directory_8h_source.html">project_directory.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2project__manager_8cpp_source.html#l00096">hal::ProjectManager::create_project_directory()</a>, <a class="el" href="project__directory_8cpp_source.html#l00067">get_shadow_dir()</a>, <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>, and <a class="el" href="netlist_2project__manager_8cpp_source.html#l00174">hal::ProjectManager::restore_project_file_from_autosave()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2project__manager_8cpp_source.html#l00096">hal::ProjectManager::create_project_directory()</a>, <a class="el" href="project__directory_8cpp_source.html#l00071">get_shadow_dir()</a>, <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>, and <a class="el" href="netlist_2project__manager_8cpp_source.html#l00185">hal::ProjectManager::restore_project_file_from_autosave()</a>.</p>
+
+</div>
+</div>
+<a id="ad48e307e13862b8492e0bae21a2bf2b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad48e307e13862b8492e0bae21a2bf2b9">&#9670;&nbsp;</a></span>s_zip_warning_file</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string hal::ProjectDirectory::s_zip_warning_file = &quot;DO-NOT-ZIP-THIS-DIRECTORY.txt&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>File name of the warning against zipping the project directory by hand, which is left out when the project is exported </p>
+
+<p class="definition">Definition at line <a class="el" href="project__directory_8h_source.html#l00126">126</a> of file <a class="el" href="project__directory_8h_source.html">project_directory.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="project__directory_8cpp_source.html#l00090">create_zip_warning()</a>, and <a class="el" href="export__project__dialog_8cpp_source.html#l00034">hal::ExportProjectDialog::exportProject()</a>.</p>
 
 </div>
 </div>

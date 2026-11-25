@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['context_20management_44871',['Context Management',['../group__graph-contexts.html',1,'']]],
-  ['context_20manager_20widget_44872',['Context Manager Widget',['../group__utility__widgets-context.html',1,'']]]
+  ['context_20management_44862',['Context Management',['../group__graph-contexts.html',1,'']]],
+  ['context_20manager_20widget_44863',['Context Manager Widget',['../group__utility__widgets-context.html',1,'']]]
 ];

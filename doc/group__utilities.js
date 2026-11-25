@@ -71,6 +71,7 @@ var group__utilities =
     ] ],
     [ "ProjectDirectory", "classhal_1_1_project_directory.html", [
       [ "ProjectDirectory", "classhal_1_1_project_directory.html#a6eedb87774801b9838792d12720ad181", null ],
+      [ "create_zip_warning", "classhal_1_1_project_directory.html#a103322f7159923d9149e713b291319ec", null ],
       [ "get_canonical_path", "classhal_1_1_project_directory.html#a2ce61d5bf709b4e75b00dce4e5ffa392", null ],
       [ "get_default_filename", "classhal_1_1_project_directory.html#adc4b09f2b9e56e57813bc00e447fc004", null ],
       [ "get_filename", "classhal_1_1_project_directory.html#a05266d178bc1bb73cea16768ae75d269", null ],
