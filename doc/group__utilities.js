@@ -38,7 +38,7 @@ var group__utilities =
       [ "handle_options", "classhal_1_1_log_manager.html#ad3e0a37bb3366fc8b538251694a23b8c", null ],
       [ "remove_channel", "classhal_1_1_log_manager.html#a320be7b76170b47f9806b3891d74748c", null ],
       [ "remove_sink_from_default", "classhal_1_1_log_manager.html#ac7dad63d99c3d3e6bfff4476c33bdee7", null ],
-      [ "set_file_name", "classhal_1_1_log_manager.html#af9498836b0dc786c6e38c9c0a76bcb7e", null ],
+      [ "set_file_name", "classhal_1_1_log_manager.html#ae8df5c79824ac755cf023f3faf35395c", null ],
       [ "set_format_pattern", "classhal_1_1_log_manager.html#aa132cf5f8634a2dbe37735f7d98ab714", null ],
       [ "set_level_of_channel", "classhal_1_1_log_manager.html#a05ee503b0a3d64ad5ee6e067361eee67", null ]
     ] ],

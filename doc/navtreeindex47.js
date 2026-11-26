@@ -70,9 +70,10 @@ var NAVTREEINDEX47 =
 "qt.html#Key-enum":[8,0,4,736],
 "qt.html#Key-enum":[8,0,4,436],
 "qt.html#Key-enum":[8,0,4,529],
+"qt.html#Key-enum":[8,0,4,759],
 "qt.html#Key-enum":[8,0,4,530],
-"qt.html#Key-enum":[8,0,4,737],
 "qt.html#Key-enum":[8,0,4,445],
+"qt.html#Key-enum":[8,0,4,737],
 "qt.html#Key-enum":[8,0,4,685],
 "qt.html#Key-enum":[8,0,4,833],
 "qt.html#Key-enum":[8,0,4,709],
@@ -248,6 +249,5 @@ var NAVTREEINDEX47 =
 "qt.html#Key-enum":[8,0,4,807],
 "qt.html#Key-enum":[8,0,4,808],
 "qt.html#Key-enum":[8,0,4,481],
-"qt.html#Key-enum":[8,0,4,460],
-"qt.html#Key-enum":[8,0,4,465]
+"qt.html#Key-enum":[8,0,4,460]
 };

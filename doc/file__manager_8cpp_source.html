@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-299-g9ee015483</span>
+   &#160;<span id="projectnumber">v4.5.0-301-gde78b8553</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -793,104 +793,107 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;        <a class="code" href="namespacehal.html#ac87c0ce709dc346017d7c2aff4aea006">gNetlistRelay</a>-&gt;<a class="code" href="classhal_1_1_netlist_relay.html#a8f8aacd4af1c88532eaa8f1b8d6ff429">debugHandleFileClosed</a>();</div>
 <div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;        <a class="code" href="plugin__system_2plugin__manager_8cpp.html#a62dbb26bbfa46d79426a59c805071f42">ProjectManager::instance</a>()-&gt;set_project_status(ProjectManager::ProjectStatus::NONE);</div>
 <div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160; </div>
-<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;        Q_EMIT fileClosed();</div>
-<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;    }</div>
+<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;        <span class="comment">// project closed: resume logging to default log file until a new (writable) project log sink gets opened</span></div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;        LogManager::get_instance()-&gt;set_file_name();</div>
 <div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160; </div>
-<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;    <span class="keywordtype">void</span> FileManager::handleFileChanged(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; path)</div>
-<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;    {</div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;        Q_EMIT fileChanged(path);</div>
-<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;    }</div>
-<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160; </div>
-<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;    <span class="keywordtype">void</span> FileManager::handleDirectoryChanged(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; path)</div>
-<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;    {</div>
-<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;        Q_EMIT fileDirectoryChanged(path);</div>
-<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;    }</div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160; </div>
-<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;    <span class="keywordtype">void</span> FileManager::updateRecentFiles(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; file)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a> list;</div>
-<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160; </div>
-<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#beginReadArray">beginReadArray</a>(<span class="stringliteral">&quot;recent_files&quot;</span>);</div>
-<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 14; ++i)</div>
-<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;        {</div>
-<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;            <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#setArrayIndex">setArrayIndex</a>(i);</div>
-<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> state_file = <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#value">value</a>(<span class="stringliteral">&quot;file&quot;</span>).<a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">toString</a>();</div>
-<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160; </div>
-<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;            <span class="keywordflow">if</span> (state_file.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
-<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;        Q_EMIT fileClosed();</div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;    }</div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160; </div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;    <span class="keywordtype">void</span> FileManager::handleFileChanged(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; path)</div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;    {</div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;        Q_EMIT fileChanged(path);</div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;    }</div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160; </div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;    <span class="keywordtype">void</span> FileManager::handleDirectoryChanged(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; path)</div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;    {</div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;        Q_EMIT fileDirectoryChanged(path);</div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;    }</div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160; </div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;    <span class="keywordtype">void</span> FileManager::updateRecentFiles(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; file)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a> list;</div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160; </div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#beginReadArray">beginReadArray</a>(<span class="stringliteral">&quot;recent_files&quot;</span>);</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 14; ++i)</div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;        {</div>
+<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;            <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#setArrayIndex">setArrayIndex</a>(i);</div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> state_file = <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#value">value</a>(<span class="stringliteral">&quot;file&quot;</span>).<a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">toString</a>();</div>
 <div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160; </div>
-<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;            list.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#append">append</a>(<a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#value">value</a>(<span class="stringliteral">&quot;file&quot;</span>).<a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">toString</a>());</div>
-<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;        }</div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#endArray">endArray</a>();</div>
-<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160; </div>
-<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a> = list.<a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html#indexOf-1">indexOf</a>(file);</div>
-<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a> == -1)</div>
-<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;            list.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#prepend">prepend</a>(file);</div>
-<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;            list.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#move">move</a>(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>, 0);</div>
-<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160; </div>
-<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#beginGroup">beginGroup</a>(<span class="stringliteral">&quot;recent_files&quot;</span>);</div>
-<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#remove">remove</a>(<span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#endGroup">endGroup</a>();</div>
-<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160; </div>
-<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#beginWriteArray">beginWriteArray</a>(<span class="stringliteral">&quot;recent_files&quot;</span>);</div>
-<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;        <span class="keywordtype">int</span> i = 0;</div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;        std::vector&lt;std::filesystem::path&gt; files;</div>
-<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;        <span class="keywordflow">for</span> (<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <span class="keywordtype">string</span> : list)</div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;        {</div>
-<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;            std::filesystem::path file_path(<span class="keywordtype">string</span>.toStdString());</div>
-<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;            <span class="keywordtype">bool</span> skip = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; other : files)</div>
-<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;            {</div>
-<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;                <span class="keywordflow">if</span> (std::filesystem::equivalent(file_path, other))</div>
-<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;                {</div>
-<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;                    skip = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;                }</div>
-<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;            }</div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;            <span class="keywordflow">if</span> (!skip)</div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;            {</div>
-<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;                <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#setArrayIndex">setArrayIndex</a>(i);</div>
-<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;                <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#setValue">setValue</a>(<span class="stringliteral">&quot;file&quot;</span>, <span class="keywordtype">string</span>);</div>
-<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;                ++i;</div>
-<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;                <span class="keywordflow">if</span> (i == 14)</div>
-<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;            }</div>
-<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;        }</div>
-<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#endArray">endArray</a>();</div>
-<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;    }</div>
-<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160; </div>
-<div class="line"><a name="l00773"></a><span class="lineno"><a class="line" href="classhal_1_1_file_manager.html#acd41c54bdfa3bdca5fd6d4b4ae83e707">  773</a></span>&#160;    <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* FileManager::loadGateLibrary(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; path)</div>
-<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;    {</div>
-<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;        std::filesystem::path glPath(path.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>());</div>
-<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;        <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* glib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a21db0193886493918bc33a7ffd09b8ff">gate_library_manager::load</a>(glPath);</div>
-<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;        <span class="comment">// the parse status is only meaningful if a parser was involved, which requires an existing file</span></div>
-<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html">QFileInfo</a> glInfo(path);</div>
-<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;        <span class="keywordflow">if</span> (glib || !glInfo.<a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html#isFile">isFile</a>() || GateLibraryParser::get_parse_status() != GateLibraryParser::ParseStatus::NeedsUpgrade)</div>
-<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;            <span class="keywordflow">return</span> glib;</div>
-<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160; </div>
-<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> message = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;The gate library &lt;%1&gt; uses an outdated file format.\n\n&quot;</span></div>
-<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;                                  <span class="stringliteral">&quot;Upgrade it now? The original file will be kept next to it with the extension .json. &quot;</span></div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;                                  <span class="stringliteral">&quot;Cells that should be reviewed after the upgrade are listed in the log.&quot;</span>)</div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;                              .<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">arg</a>(path);</div>
-<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;        <span class="keywordflow">if</span> (<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#question">QMessageBox::question</a>(qApp-&gt;activeWindow(), <span class="stringliteral">&quot;Outdated gate library&quot;</span>, message, <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Yes</a> | <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::No</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Yes</a>) != <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Yes</a>)</div>
-<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160; </div>
-<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;        GateLibraryParser::request_upgrade();</div>
-<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespacehal_1_1gate__library__manager.html#a21db0193886493918bc33a7ffd09b8ff">gate_library_manager::load</a>(glPath);</div>
-<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;    }</div>
-<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160; </div>
-<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;    <span class="keywordtype">void</span> FileManager::displayErrorMessage(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> error_message)</div>
-<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;    {</div>
-<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html">QMessageBox</a> msgBox;</div>
-<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;        msgBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#text-prop">setText</a>(<span class="stringliteral">&quot;Error&quot;</span>);</div>
-<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;        msgBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#informativeText-prop">setInformativeText</a>(error_message);</div>
-<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;        msgBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#styleSheet-prop">setStyleSheet</a>(<span class="stringliteral">&quot;QLabel{min-width: 600px;}&quot;</span>);</div>
-<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;        msgBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#standardButtons-prop">setStandardButtons</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Ok</a>);</div>
-<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;        msgBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#setDefaultButton">setDefaultButton</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Ok</a>);</div>
-<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;        msgBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#exec">exec</a>();</div>
-<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;    }</div>
-<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;            <span class="keywordflow">if</span> (state_file.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160; </div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;            list.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#append">append</a>(<a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#value">value</a>(<span class="stringliteral">&quot;file&quot;</span>).<a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">toString</a>());</div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;        }</div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#endArray">endArray</a>();</div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160; </div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a> = list.<a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html#indexOf-1">indexOf</a>(file);</div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a> == -1)</div>
+<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;            list.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#prepend">prepend</a>(file);</div>
+<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;            list.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#move">move</a>(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>, 0);</div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160; </div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#beginGroup">beginGroup</a>(<span class="stringliteral">&quot;recent_files&quot;</span>);</div>
+<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#remove">remove</a>(<span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#endGroup">endGroup</a>();</div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160; </div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#beginWriteArray">beginWriteArray</a>(<span class="stringliteral">&quot;recent_files&quot;</span>);</div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;        <span class="keywordtype">int</span> i = 0;</div>
+<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;        std::vector&lt;std::filesystem::path&gt; files;</div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;        <span class="keywordflow">for</span> (<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <span class="keywordtype">string</span> : list)</div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;        {</div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;            std::filesystem::path file_path(<span class="keywordtype">string</span>.toStdString());</div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;            <span class="keywordtype">bool</span> skip = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; other : files)</div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;            {</div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;                <span class="keywordflow">if</span> (std::filesystem::equivalent(file_path, other))</div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;                {</div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;                    skip = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;                }</div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;            }</div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;            <span class="keywordflow">if</span> (!skip)</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;            {</div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;                <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#setArrayIndex">setArrayIndex</a>(i);</div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;                <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#setValue">setValue</a>(<span class="stringliteral">&quot;file&quot;</span>, <span class="keywordtype">string</span>);</div>
+<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;                ++i;</div>
+<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;                <span class="keywordflow">if</span> (i == 14)</div>
+<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;            }</div>
+<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;        }</div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;        <a class="code" href="namespacehal.html#a26043d445e88c55f2c8cb048e9abc291">gGuiState</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qsettings.html#endArray">endArray</a>();</div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;    }</div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160; </div>
+<div class="line"><a name="l00776"></a><span class="lineno"><a class="line" href="classhal_1_1_file_manager.html#acd41c54bdfa3bdca5fd6d4b4ae83e707">  776</a></span>&#160;    <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* FileManager::loadGateLibrary(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; path)</div>
+<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;    {</div>
+<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;        std::filesystem::path glPath(path.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>());</div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;        <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* glib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a21db0193886493918bc33a7ffd09b8ff">gate_library_manager::load</a>(glPath);</div>
+<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;        <span class="comment">// the parse status is only meaningful if a parser was involved, which requires an existing file</span></div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html">QFileInfo</a> glInfo(path);</div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;        <span class="keywordflow">if</span> (glib || !glInfo.<a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html#isFile">isFile</a>() || GateLibraryParser::get_parse_status() != GateLibraryParser::ParseStatus::NeedsUpgrade)</div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;            <span class="keywordflow">return</span> glib;</div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160; </div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> message = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;The gate library &lt;%1&gt; uses an outdated file format.\n\n&quot;</span></div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;                                  <span class="stringliteral">&quot;Upgrade it now? The original file will be kept next to it with the extension .json. &quot;</span></div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;                                  <span class="stringliteral">&quot;Cells that should be reviewed after the upgrade are listed in the log.&quot;</span>)</div>
+<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;                              .<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">arg</a>(path);</div>
+<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;        <span class="keywordflow">if</span> (<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#question">QMessageBox::question</a>(qApp-&gt;activeWindow(), <span class="stringliteral">&quot;Outdated gate library&quot;</span>, message, <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Yes</a> | <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::No</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Yes</a>) != <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Yes</a>)</div>
+<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160; </div>
+<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;        GateLibraryParser::request_upgrade();</div>
+<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespacehal_1_1gate__library__manager.html#a21db0193886493918bc33a7ffd09b8ff">gate_library_manager::load</a>(glPath);</div>
+<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;    }</div>
+<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160; </div>
+<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;    <span class="keywordtype">void</span> FileManager::displayErrorMessage(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> error_message)</div>
+<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;    {</div>
+<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html">QMessageBox</a> msgBox;</div>
+<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;        msgBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#text-prop">setText</a>(<span class="stringliteral">&quot;Error&quot;</span>);</div>
+<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;        msgBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#informativeText-prop">setInformativeText</a>(error_message);</div>
+<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;        msgBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#styleSheet-prop">setStyleSheet</a>(<span class="stringliteral">&quot;QLabel{min-width: 600px;}&quot;</span>);</div>
+<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;        msgBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#standardButtons-prop">setStandardButtons</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Ok</a>);</div>
+<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;        msgBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#setDefaultButton">setDefaultButton</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Ok</a>);</div>
+<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;        msgBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#exec">exec</a>();</div>
+<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;    }</div>
+<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_content_manager_html_a8ff143980197218dd6834a06165f0a5d"><div class="ttname"><a href="classhal_1_1_content_manager.html#a8ff143980197218dd6834a06165f0a5d">hal::ContentManager::handleOpenDocument</a></div><div class="ttdeci">void handleOpenDocument(const QString &amp;fileName)</div><div class="ttdef"><b>Definition:</b> <a href="content__manager_8cpp_source.html#l00189">content_manager.cpp:189</a></div></div>
 <div class="ttc" id="aclasshal_1_1_file_manager_html"><div class="ttname"><a href="classhal_1_1_file_manager.html">hal::FileManager</a></div><div class="ttdoc">Stores information about the currently opened netlist.</div><div class="ttdef"><b>Definition:</b> <a href="file__manager_8h_source.html#l00048">file_manager.h:49</a></div></div>
 <div class="ttc" id="aclasshal_1_1_file_manager_html_a5911170f4c0730fb3a214d4d3e7788f2"><div class="ttname"><a href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2">hal::FileManager::DirectoryStatus</a></div><div class="ttdeci">DirectoryStatus</div><div class="ttdef"><b>Definition:</b> <a href="file__manager_8h_source.html#l00094">file_manager.h:94</a></div></div>
