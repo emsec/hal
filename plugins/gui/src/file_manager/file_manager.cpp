@@ -703,6 +703,9 @@ namespace hal
         gNetlistRelay->debugHandleFileClosed();
         ProjectManager::instance()->set_project_status(ProjectManager::ProjectStatus::NONE);
 
+        // project closed: resume logging to default log file until a new (writable) project log sink gets opened
+        LogManager::get_instance()->set_file_name();
+
         Q_EMIT fileClosed();
     }
 

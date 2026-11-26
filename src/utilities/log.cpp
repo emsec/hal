@@ -1,6 +1,7 @@
 #include "hal_core/utilities/log.h"
 
 #include <iostream>
+#include <optional>
 #include <spdlog/common.h>
 #include <spdlog/fmt/fmt.h>
 #include <spdlog/sinks/ansicolor_sink.h>
@@ -14,9 +15,16 @@ namespace hal
 
     LogManager* LogManager::m_instance = nullptr;
 
+    std::filesystem::path LogManager::default_file_path_if_empty(const std::filesystem::path &file_name)
+    {
+        if (file_name.empty())
+            return utils::get_default_log_directory() / "hal.log";
+        return file_name;
+    }
+
     LogManager::LogManager(const std::filesystem::path& file_name)
     {
-        m_file_path = (file_name.empty()) ? utils::get_default_log_directory() / "hal.log" : file_name;
+        m_file_path = default_file_path_if_empty(file_name);
         std::filesystem::create_directories(m_file_path.parent_path());
 
         m_level = {
@@ -290,7 +298,8 @@ namespace hal
 
     void LogManager::set_file_name(const std::filesystem::path& file_path)
     {
-        log_info("core", "setting log file to '{}'.", file_path.string());
+        std::filesystem::path new_file_path = default_file_path_if_empty(file_path);
+        if (new_file_path == m_file_path) return; // nothing to do, already logging to new path
 
         // search through all existing channels
         // mark every channel for recreation which contains a file sink that pointed to the old path
@@ -310,22 +319,49 @@ namespace hal
             }
         }
 
+        std::optional<std::string> create_file_sink_error;
+        std::map<std::string, std::vector<std::shared_ptr<log_sink>>> new_sinks;
+
         // recreate all marked channels
         // keep all sinks and rebuild file sinks with the new path
         for (const auto& name : channels_to_recreate)
         {
-            auto level = get_level_of_channel(name);
-
-            std::vector<std::shared_ptr<log_sink>> new_sinks;
             for (const auto& sink : m_logger_sinks[name])
             {
                 if (sink->is_file_sink && (sink->path == m_file_path))
-                    new_sinks.push_back(create_file_sink(file_path, sink->truncate));
+                    try
+                    {
+                        new_sinks[name].push_back(create_file_sink(new_file_path, sink->truncate));
+                    }
+                    catch (const std::exception& e)
+                    {
+                        create_file_sink_error = e.what();
+                    }
+                catch (...)
+                    {
+                        create_file_sink_error = "unknown error";
+                    }
                 else
-                    new_sinks.push_back(sink);
+                    new_sinks[name].push_back(sink);
             }
-            remove_channel(name);
-            add_channel(name, new_sinks, level);
+        }
+
+        // don't replace sinks if there was an error creating files (e.g. no write permission)
+        if (create_file_sink_error)
+        {
+            log_warning("core", "Could not set log file to '{}': {}.", new_file_path.string(), *create_file_sink_error);
+            return;
+        }
+        else
+        {
+            log_info("core", "setting log file to '{}'.", new_file_path.string());
+
+            for (const auto& name : channels_to_recreate)
+            {
+                auto level = get_level_of_channel(name);
+                remove_channel(name);
+                add_channel(name, new_sinks[name], level);
+            }
         }
 
         // update default sinks
@@ -333,7 +369,7 @@ namespace hal
         {
             if (m_default_sinks.at(sink_idx)->is_file_sink && m_default_sinks.at(sink_idx)->path == m_file_path)
             {
-                m_default_sinks.at(sink_idx) = create_file_sink(file_path, m_default_sinks.at(sink_idx)->truncate);
+                m_default_sinks.at(sink_idx) = create_file_sink(new_file_path, m_default_sinks.at(sink_idx)->truncate);
             }
         }
 
@@ -347,7 +383,7 @@ namespace hal
         }
 
         // adjust path
-        m_file_path = file_path;
+        m_file_path = new_file_path;
     }
 
     ProgramOptions& LogManager::get_option_descriptions()

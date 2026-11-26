@@ -134,7 +134,7 @@ namespace hal
          *
          * @param[in] file_name - The desired log file.
          */
-        void set_file_name(const std::filesystem::path& file_name);
+        void set_file_name(const std::filesystem::path& file_name = std::filesystem::path());
 
         /**
          * Set the logging format pattern.<br>
@@ -300,6 +300,8 @@ namespace hal
 
         // LogManager class object non-copyable
         LogManager& operator=(const LogManager&) = delete;
+
+        static std::filesystem::path default_file_path_if_empty(const std::filesystem::path &file_name);
 
         std::filesystem::path m_file_path;
 

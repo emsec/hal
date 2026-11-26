@@ -57,6 +57,7 @@ All notable changes to this project will be documented in this file.
     * fixed crash when passing a `nullptr` pin to `Net::remove_source` or `Net::remove_destination`
     * fixed Python binding `Grouping.remove_module_by_id` removing the gate with the given ID instead of the module
     * fixed Python binding `NetlistFactory.load_netlist` failing to load a `.hal` file when no gate library file was passed, as the omitted argument arrived as `.` instead of an empty path
+    * fixed logging policy: do not crash upon logging to read-only projects, stop logging to project after project closes
     * added `Gate::has_boolean_function`, which checks whether `Gate::get_boolean_function` finds a function for a name or an output pin
     * renamed the Python keyword arguments `recusive` of `Module.contains_module` to `recursive` and `hdl_string` of `NetlistFactory.load_netlist_from_string` to `netlist_string`, matching the C++ parameters
   * module pins
