@@ -5,6 +5,8 @@
 !boolean_influence/**/*
 !clock_tree_extractor*
 !clock_tree_extractor/**/*
+!clock_tree_viewer*
+!clock_tree_viewer/**/*
 !dataflow_analysis*
 !dataflow_analysis/**/*
 !dot_viewer*
@@ -35,6 +37,8 @@
 !module_identification/**/*
 !netlist_preprocessing*
 !netlist_preprocessing/**/*
+!perf_test*
+!perf_test/**/*
 !python_shell*
 !python_shell/**/*
 !resynthesis*

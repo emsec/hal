@@ -11,7 +11,7 @@
 namespace hal
 {
     ContentWidget::ContentWidget(QString name, QWidget* parent) : Widget(parent), mName(name), mContentLayout(new QVBoxLayout()),
-        mSearchAction(new QAction(this)), mSearchShortcut(new QShortcut(this)), mSearchKeysequence(tr("Ctrl+F")),
+        mSearchAction(new QAction(this)), mSearchShortcut(nullptr),mSearchKeysequence(tr("Ctrl+F")),
           mDetachedFrame(nullptr)
     {
         mContentLayout->setContentsMargins(0, 0, 0, 0);
@@ -120,6 +120,21 @@ namespace hal
         return QList<QShortcut*>();
     }
 
+    void ContentWidget::ensureShortcuts()
+    {
+        if (mShortcutsCreated)
+            return;
+        mShortcutsCreated = true;
+
+        for (QShortcut* s : createShortcuts())
+        {
+            // shortcuts must stay owned by this widget: derived classes keep pointers to them (e.g. mSearchShortcut)
+            s->setParent(this);
+            s->setContext(Qt::WidgetWithChildrenShortcut);
+            s->setEnabled(true);
+        }
+    }
+
     void ContentWidget::repolish()
     {
         QStyle* s = style();
@@ -162,6 +177,8 @@ namespace hal
    void ContentWidget::handleSearchKeysequenceChanged(QKeySequence seq)
    {
        mSearchKeysequence = seq;
-       mSearchShortcut->setKey(mSearchKeysequence);
+       // shortcut does not exist before the widget was shown for the first time, it will then be created with the new key sequence
+       if (mSearchShortcut)
+           mSearchShortcut->setKey(mSearchKeysequence);
    }
 }

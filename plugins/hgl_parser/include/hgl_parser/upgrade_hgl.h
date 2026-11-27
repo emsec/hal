@@ -41,7 +41,8 @@ namespace hal
      * What changed in version 6:
      *  1. The flat LUT configuration `{data_identifier, data_category, bit_order}` is replaced by an `output_pins` array,
      *     where each entry specifies the output pin, its `data_identifier`, `bit_offset`, `bit_count`, `is_ascending`
-     *     and `input_pins`.
+     *     and `input_pins`. The flat configuration made every LUT output pin depend on all input pins and the whole
+     *     INIT value, so every LUT output pin is migrated to exactly that.
      *  2. Each cell that carries init data gets a `parameters` section, so that INIT identifiers can be resolved by name
      *     and size: one `bit_vector` parameter of size 2^n per LUT identifier, of size 1 per flip-flop or latch
      *     identifier, and of size `bit_size / count` per RAM identifier.
@@ -58,14 +59,26 @@ namespace hal
         const u32 TARGET_VERSION = 6;
 
         /**
+         * Check whether a parsed HGL document has to be upgraded.
+         *
+         * This is the case for documents below the target version, and for documents at the target version that still
+         * contain LUT configurations in the flat format, which earlier upgrades left behind for multi-output LUTs.
+         *
+         * @param[in] document - The parsed HGL document.
+         * @returns `true` if the document has to be upgraded, `false` otherwise.
+         */
+        NETLIST_API bool needs_upgrade(const rapidjson::Document& document);
+
+        /**
          * Upgrade a parsed HGL document in place.
          *
-         * A document that is already at the target version is left unchanged. Cells that cannot be migrated
-         * automatically are left unchanged as well and reported by a warning.
+         * A document that does not need an upgrade according to `needs_upgrade` is left unchanged. The version of the
+         * document is only set to the target version if all cells were migrated. If any cell cannot be migrated, an
+         * error naming all such cells is returned and the document must be discarded.
          *
          * @param[in,out] document - The parsed HGL document.
-         * @returns A list of warnings, one per cell that requires manual migration, or an error if the document cannot
-         * be upgraded at all.
+         * @returns A list of warnings about cells that were migrated but should be reviewed, or an error if the
+         * document cannot be upgraded completely.
          */
         NETLIST_API Result<std::vector<std::string>> upgrade_document(rapidjson::Document& document);
 
@@ -73,7 +86,8 @@ namespace hal
          * Get the file name the original gate library is kept under after its upgrade.
          *
          * The `.hgl` extension is replaced by `.json`, so that the original file does not get selected as a gate
-         * library by accident.
+         * library by accident. If that file exists already, e.g., from an earlier upgrade, a number is added to the
+         * name, i.e., `<name>.1.json`, `<name>.2.json`, and so on.
          *
          * @param[in] file_path - The path of the gate library file.
          * @returns The path of the backup file.

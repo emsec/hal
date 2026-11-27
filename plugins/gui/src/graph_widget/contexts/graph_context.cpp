@@ -329,7 +329,9 @@ namespace hal
         if (!contextGates.isEmpty()) return false;
         auto contextModules = (mModules - mRemovedModules) + mAddedModules;
         if (contextModules.size() != 1) return false;
-        return (*mModules.constBegin() == 1); // top_module has ID=1
+        // the module has to be taken from what the context shows once its pending changes are applied, as mModules
+        // may still be empty or hold a module that is about to be removed
+        return (*contextModules.constBegin() == 1); // top_module has ID=1
     }
 
     void GraphContext::getModuleChildrenRecursively(const u32 id, QSet<u32>* gates, QSet<u32>* modules) const

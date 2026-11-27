@@ -893,7 +893,6 @@ namespace hal {
             WaveDataList* wd = mController->get_waves();
             SaleaeDirectoryStoreRequest save(&wd->saleaeDirectory());
             mWaveWidget->addSelectedResults(mWaveModel->entryMap(selIndexList));
-            mController->load_waveform_groups(false); // create waveform groups EXCEPT(=false) input groups
         }
         return true;
     }

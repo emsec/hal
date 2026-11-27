@@ -201,14 +201,6 @@ namespace hal
          */
         void handleSelectionChanged(void* sender);
 
-        /**
-         * Q_SLOT to handle that a module has been removed from the netlist.
-         *
-         * @param module - The module that has been removed
-         * @param module_id - The id of the module that has been removed
-         */
-        void handleModuleRemoved(Module* module, u32 module_id);
-
     private Q_SLOTS:
         /**
          * Q_SLOT to toggle the visibility of nets in the module widget. Called when the 'Toggle Net Visibility'-buttons was clicked.

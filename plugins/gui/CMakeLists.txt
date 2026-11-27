@@ -145,4 +145,5 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
         add_sanitizers(gui)
     endif()
 
+    add_subdirectory(test)
 endif()

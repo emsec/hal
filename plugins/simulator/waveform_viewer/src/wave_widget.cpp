@@ -51,6 +51,8 @@ namespace hal {
         addWidget(mGraphicsCanvas);
 
         connect(mWaveDataList,&WaveDataList::waveAdded,mTreeModel,&WaveTreeModel::handleWaveAdded,Qt::QueuedConnection);
+        // direct, the waves are deleted right after the signal
+        connect(mWaveDataList,&WaveDataList::waveRemoved,mTreeModel,&WaveTreeModel::handleWaveRemoved,Qt::DirectConnection);
         connect(mWaveDataList,&WaveDataList::groupAdded,mTreeModel,&WaveTreeModel::handleGroupAdded,Qt::QueuedConnection);
         connect(mWaveDataList,&WaveDataList::booleanAdded,mTreeModel,&WaveTreeModel::handleBooleanAdded,Qt::QueuedConnection);
         connect(mWaveDataList,&WaveDataList::triggerAdded,mTreeModel,&WaveTreeModel::handleTriggerAdded,Qt::QueuedConnection);
@@ -271,8 +273,40 @@ namespace hal {
                 wavesToAdd.append(mWaveDataList->at(iwave));
         }
         mTreeModel->addWaves(wavesToAdd);
-		
+        groupAddedWaves(wavesToAdd);
+
 		if (sd) delete sd;
+    }
+
+    void WaveWidget::groupAddedWaves(const QVector<WaveData*>& added)
+    {
+        if (!mController || added.isEmpty()) return;
+
+        QSet<u32> addedNetIds;
+        for (const WaveData* wd : added)
+            addedNetIds.insert(wd->id());
+
+        // recompute, pin groups might have changed since the simulation was set up
+        mController->compute_waveform_groups();
+
+        // group the nets of every pin group touched by this call once all its nets are shown ungrouped
+        for (const SimulationInput::NetGroup& ng : mController->get_net_groups())
+        {
+            bool anyAdded    = false;
+            bool allTopLevel = true;
+            for (const Net* n : ng.get_nets())
+            {
+                if (!n || !mTreeModel->isTopLevelNet(n->get_id()))
+                {
+                    allTopLevel = false;
+                    break;
+                }
+                if (addedNetIds.contains(n->get_id()))
+                    anyAdded = true;
+            }
+            if (anyAdded && allTopLevel)
+                mController->add_waveform_group(ng);
+        }
     }
 
     void WaveWidget::addResults()

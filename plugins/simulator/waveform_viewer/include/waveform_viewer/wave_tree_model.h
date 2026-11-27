@@ -50,7 +50,7 @@ namespace hal {
             : WaveDataGroup(wdList,0,"root") {;}
         void recalcData() override {;}
         bool moveGroupPosition(int sourceRow, int targetRow);
-        void clearAll() { mGroupList.clear(); }
+        void clearAll() { mGroupList.clear(); mIndex.clear(); }
         void dump() const;
     };
 
@@ -130,6 +130,13 @@ namespace hal {
     public Q_SLOTS:
         void handleUpdateValueColumn();
         void handleWaveAdded(int iwave);
+
+        /**
+         * Remove all rows and wave items when the wave data list is cleared (iwave < 0), e.g. when the controller is reset.
+         * Must be connected directly since the waveform data is deleted right after the signal.
+         * @param iwave The index of the removed wave, or -1 if all waves were removed.
+         */
+        void handleWaveRemoved(int iwave);
         void handleWaveRenamed(int iwave);
         void handleGroupRenamed(int grpId);
         void handleWaveAddedToGroup(const QVector<u32>& netIds, int grpId);
@@ -188,6 +195,13 @@ namespace hal {
         int cursorXpos() const { return mCursorXpos; }
 
         QSet<int> waveDataIndexSet() const;
+
+        /**
+         * Check whether the waveform of a net is shown at the top level of the tree, i.e., not inside a group.
+         * @param netId The ID of the net.
+         * @return `true` if the waveform is a top level item, `false` otherwise.
+         */
+        bool isTopLevelNet(u32 netId) const;
 
         static const char* sStateColor[3];
         bool persist() const;

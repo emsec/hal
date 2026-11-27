@@ -3,7 +3,12 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/netlist/module.h"
+#include <algorithm>
+#include <cctype>
 #include <stdio.h>
+#include <tuple>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace hal {
 
@@ -246,18 +251,54 @@ namespace hal {
         }
     }
 
+    namespace
+    {
+        // A pin group whose nets are all part of the simulation, competing for its nets with other pin groups.
+        struct NetGroupCandidate
+        {
+            SimulationInput::NetGroup group;
+            std::vector<const Net*> nets;
+            int rank;                   // 0: module source group, 1: other module group, 2: gate source group, 3: other gate group
+            std::string sort_name;      // lower-case pin group name
+            std::string name;
+            u32 owner_id;
+            u32 pin_group_id;
+        };
+
+        SimulationInput::DirectionType group_direction(const std::vector<const Net*>& nets, const std::unordered_map<const Net*, SimulationInput::DirectionType>& simulated_nets)
+        {
+            SimulationInput::DirectionType retval = SimulationInput::Undefined;
+            for (const Net* n : nets)
+            {
+                SimulationInput::DirectionType dir = simulated_nets.at(n);
+                if (retval == SimulationInput::Undefined)
+                    retval = dir;
+                else if (retval != SimulationInput::Mixed && retval != dir)
+                    retval = SimulationInput::Mixed;
+            }
+            return retval;
+        }
+
+        std::string to_lower(std::string s)
+        {
+            std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
+            return s;
+        }
+    }    // namespace
+
     void SimulationInput::compute_net_groups()
     {
-        std::unordered_set<const Module*> simulated_modules;
+        m_netgroups.clear();
 
         // all nets that are part of the simulation
-        std::unordered_map<const Net*, DirectionType> ungrouped_nets;
+        std::unordered_map<const Net*, DirectionType> simulated_nets;
 
-        for (const Net* n : m_partial_nets) ungrouped_nets[n] = Undefined;
-        for (const Net* n : m_input_nets)   ungrouped_nets[n] = InputOnly;
-        for (const Net* n : m_output_nets)  ungrouped_nets[n] = OutputOnly;
+        for (const Net* n : m_partial_nets) simulated_nets[n] = Undefined;
+        for (const Net* n : m_input_nets)   simulated_nets[n] = InputOnly;
+        for (const Net* n : m_output_nets)  simulated_nets[n] = OutputOnly;
 
         // all modules that contain at least one simulated gate
+        std::unordered_set<const Module*> simulated_modules;
         for (const Gate* g : mSimulationSet)
         {
             const Module *m = g->get_module();
@@ -268,82 +309,60 @@ namespace hal {
             }
         }
 
-        // check all pingroups from affected modules, working the module hierarchy top -> bottom
-        auto it = simulated_modules.begin();
-        for (int level = 0; ! simulated_modules.empty(); )
+        std::vector<NetGroupCandidate> candidates;
+
+        for (const Module* m : simulated_modules)
         {
-           while ((*it)->get_submodule_depth() != level)
-           {
-               if (++it == simulated_modules.end())
-               {
-                   ++level;
-                   it = simulated_modules.begin();
-               }
-           }
+            for (PinGroup<ModulePin>* pg : m->get_pin_groups())
+            {
+                if (pg->size() < 2 || pg->size() > 31) continue;
+                bool pin_group_simulated = true;
+                bool is_source = true;
+                std::vector<const Net*> nets;
 
-           const Module*m = (*it);
-           for (PinGroup<ModulePin>* pg : m->get_pin_groups())
-           {
-               if (pg->size() < 2 || pg->size() > 31) continue;
-               bool pin_group_simulated = true;
-               DirectionType groupType = Undefined;
+                for (ModulePin* mp : pg->get_pins())
+                {
+                    if (mp->get_direction() != PinDirection::output)
+                        is_source = false;
+                    const Net* n = mp->get_net();
+                    if (!n) continue;
+                    if (simulated_nets.find(n) == simulated_nets.end())
+                    {
+                        // pin : net exists and is not part of the simulation, ignore pin group
+                        pin_group_simulated = false;
+                        break;
+                    }
+                    nets.push_back(n);
+                }
+                if (!pin_group_simulated || nets.empty()) continue;
 
-               for (ModulePin* mp : pg->get_pins())
-               {
-                   Net* n = mp->get_net();
-                   if (n)
-                   {
-                       auto itNet = ungrouped_nets.find(n);
-                       if (itNet == ungrouped_nets.end())
-                       {
-                           // pin : net exists and is not part of the simulation, ignore pin group
-                           pin_group_simulated = false;
-                           break;
-                       }
-                       else
-                       {
-                           if (groupType == Undefined)
-                               groupType = itNet->second;
-                           else if (groupType != Mixed && groupType != itNet->second)
-                               groupType = Mixed;
-                       }
-                   }
-               }
-               if (pin_group_simulated)
-               {
-                   NetGroup group;
-                   group.module_pin_group = pg;
-                   group.direction = groupType;
-                   group.ascending = pg->is_ascending();
-                   for (ModulePin* mp : pg->get_pins())
-                   {
-                       Net* n = mp->get_net();
-                       if (n)
-                       {
-                           ungrouped_nets.erase(n);
-                       }
-                   }
-                   m_netgroups.push_back(group);
-               }
-           }
-
-           simulated_modules.erase(it);
-           it = simulated_modules.begin();
+                NetGroupCandidate cand;
+                cand.group.module_pin_group = pg;
+                cand.group.direction        = group_direction(nets, simulated_nets);
+                cand.group.ascending        = pg->is_ascending();
+                cand.nets                   = nets;
+                cand.rank                   = is_source ? 0 : 1;
+                cand.name                   = pg->get_name();
+                cand.sort_name              = to_lower(cand.name);
+                cand.owner_id               = m->get_id();
+                cand.pin_group_id           = pg->get_id();
+                candidates.push_back(cand);
+            }
         }
 
         for (const Gate* g : mSimulationSet)
         {
-            const GateType* gt = g->get_type();
-
-            for (PinGroup<GatePin>* pg : gt->get_pin_groups())
+            for (PinGroup<GatePin>* pg : g->get_type()->get_pin_groups())
             {
                 if (pg->size() < 2 || pg->size() > 31) continue;
                 bool pin_group_simulated = true;
-                DirectionType groupType = Undefined;
-                std::unordered_set<const Net*> connectedNets;
+                bool is_source = true;
+                std::vector<const Net*> nets;
 
                 for (GatePin* gp : pg->get_pins())
                 {
+                    if (gp->get_direction() != PinDirection::output)
+                        is_source = false;
                     Net* n = nullptr;
                     switch (gp->get_direction())
                     {
@@ -356,40 +375,42 @@ namespace hal {
                     default:
                         break;
                     }
-                    if (n)
+                    if (!n || simulated_nets.find(n) == simulated_nets.end())
                     {
-                        auto itNet = ungrouped_nets.find(n);
-                        if (itNet == ungrouped_nets.end())
-                        {
-                            // pin : net already assigned to module pin group, ignore gate pin group
-                            pin_group_simulated = false;
-                            break;
-                        }
-                        else
-                        {
-                            connectedNets.insert(n);
-                            if (groupType == Undefined)
-                                groupType = itNet->second;
-                            else if (groupType != Mixed && groupType != itNet->second)
-                                groupType = Mixed;
-                        }
-                    }
-                    else
                         pin_group_simulated = false;
+                        break;
+                    }
+                    nets.push_back(n);
                 }
+                if (!pin_group_simulated) continue;
 
-                if (pin_group_simulated)
-                {
-                    NetGroup group;
-                    group.gate = g;
-                    group.gate_pin_group = pg;
-                    group.direction = groupType;
-                    group.ascending = pg->is_ascending();
-                    for (const Net* n : connectedNets)
-                        ungrouped_nets.erase(n);
-                    m_netgroups.push_back(group);
-                }
+                NetGroupCandidate cand;
+                cand.group.gate           = g;
+                cand.group.gate_pin_group = pg;
+                cand.group.direction      = group_direction(nets, simulated_nets);
+                cand.group.ascending      = pg->is_ascending();
+                cand.nets                 = nets;
+                cand.rank                 = is_source ? 2 : 3;
+                cand.name                 = pg->get_name();
+                cand.sort_name            = to_lower(cand.name);
+                cand.owner_id             = g->get_id();
+                cand.pin_group_id         = pg->get_id();
+                candidates.push_back(cand);
             }
+        }
+
+        // pin groups sharing nets: module groups before gate groups, then source groups (all pins are outputs), then the alphabetically first name
+        std::sort(candidates.begin(), candidates.end(), [](const NetGroupCandidate& a, const NetGroupCandidate& b) {
+            return std::tie(a.rank, a.sort_name, a.name, a.owner_id, a.pin_group_id) < std::tie(b.rank, b.sort_name, b.name, b.owner_id, b.pin_group_id);
+        });
+
+        std::unordered_set<const Net*> grouped_nets;
+        for (const NetGroupCandidate& cand : candidates)
+        {
+            if (std::any_of(cand.nets.begin(), cand.nets.end(), [&grouped_nets](const Net* n) { return grouped_nets.find(n) != grouped_nets.end(); }))
+                continue;
+            grouped_nets.insert(cand.nets.begin(), cand.nets.end());
+            m_netgroups.push_back(cand.group);
         }
     }
 }

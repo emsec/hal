@@ -105,8 +105,24 @@ namespace hal
         static ProjectDirectory generate_random();
 
         /**
+         * Creates the file warning against zipping the project directory by hand, unless it already exists.
+         * An existing file is left untouched, so calling this on every save does not modify the directory.
+         *
+         * The file only gives advice, so a failure to write it is logged as a warning and the caller should carry on.
+         *
+         * @returns `true` if the file exists afterwards, `false` if the project directory does not exist or the file could not be written.
+         */
+        bool create_zip_warning() const;
+
+        /**
          * Name of autosave subdirectory
          */
         static const std::string s_shadow_dir;
+
+        /**
+         * File name of the warning against zipping the project directory by hand,
+         * which is left out when the project is exported
+         */
+        static const std::string s_zip_warning_file;
     };
 }    // namespace hal

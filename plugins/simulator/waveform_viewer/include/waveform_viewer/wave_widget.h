@@ -93,6 +93,8 @@ namespace hal {
         void resizeEvent(QResizeEvent *event) override;
 
     private:
+        void groupAddedWaves(const QVector<WaveData*>& added);
+
         QPointer<NetlistSimulatorController> mController;
         std::unique_ptr<NetlistSimulatorController> mControllerOwner;
 

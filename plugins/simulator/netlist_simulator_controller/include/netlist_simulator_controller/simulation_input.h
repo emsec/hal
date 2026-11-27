@@ -208,7 +208,8 @@ namespace hal {
         /**
          * Group one-bit signals to multi-bit bus according to pingroups.
          * Pingroups are only evaluated if all connected nets are part of the simulation.
-         * Module pingroups have priority before gate pingroups.
+         * Each net belongs to at most one group. If pingroups share nets, module pingroups have priority before gate pingroups,
+         * then source pingroups (all pins are outputs) before the others, then the pingroup whose name comes first alphabetically.
          */
         void compute_net_groups();
 
