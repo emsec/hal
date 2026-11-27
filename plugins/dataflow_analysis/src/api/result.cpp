@@ -651,29 +651,32 @@ namespace hal
             std::unordered_set<u32> group_ids_set(group_ids.begin(), group_ids.end());
             for (auto group_id : group_ids_set)
             {
-                // new group
-                auto& gates_at_i = this->m_gates_of_group.at(group_id);
-                this->m_gates_of_group[target_group_id].insert(gates_at_i.begin(), gates_at_i.end());
+                // new group: reassign the gates before erasing the old group, as erasing it destroys its gate set
+                const auto& gates_of_group = this->m_gates_of_group.at(group_id);
+                for (const Gate* g : gates_of_group)
+                {
+                    this->m_parent_group_of_gate.at(g) = target_group_id;
+                }
+                this->m_gates_of_group[target_group_id].insert(gates_of_group.begin(), gates_of_group.end());
                 this->m_gates_of_group.erase(group_id);
 
-                std::for_each(gates_at_i.begin(), gates_at_i.end(), [this, target_group_id](const Gate* g) { this->m_parent_group_of_gate.at(g) = target_group_id; });
-
-                // signals
+                // signals: move them out and erase the old entry first, as inserting the target group may rehash the map and invalidate signals_it
                 if (const auto signals_it = this->m_group_signals.find(group_id); signals_it != this->m_group_signals.end())
                 {
-                    for (auto& signals_of_type : std::get<1>(*signals_it))
-                    {
-                        auto& signals = std::get<1>(signals_of_type);
-                        this->m_group_signals[target_group_id][signals_of_type.first].insert(signals.begin(), signals.end());
-                    }
+                    const auto signals_of_group = std::move(signals_it->second);
                     this->m_group_signals.erase(signals_it);
+                    for (const auto& [type, signals] : signals_of_group)
+                    {
+                        this->m_group_signals[target_group_id][type].insert(signals.begin(), signals.end());
+                    }
                 }
 
-                // successors / predecessors
+                // successors / predecessors: iterate copies, as inserting the target group may rehash the maps and invalidate suc_it and pred_it
                 if (const auto suc_it = this->m_group_successors.find(group_id); suc_it != this->m_group_successors.end())
                 {
-                    auto& target_suc_ids = this->m_group_successors[target_group_id];
-                    for (auto suc_id : std::get<1>(*suc_it))
+                    const auto suc_ids_of_group = suc_it->second;
+                    auto& target_suc_ids        = this->m_group_successors[target_group_id];
+                    for (auto suc_id : suc_ids_of_group)
                     {
                         auto& pred_ids = this->m_group_predecessors.at(suc_id);
                         pred_ids.insert(target_group_id);
@@ -684,8 +687,9 @@ namespace hal
 
                 if (const auto pred_it = this->m_group_predecessors.find(group_id); pred_it != this->m_group_predecessors.end())
                 {
-                    auto& target_pred_ids = this->m_group_predecessors[target_group_id];
-                    for (auto pred_id : std::get<1>(*pred_it))
+                    const auto pred_ids_of_group = pred_it->second;
+                    auto& target_pred_ids        = this->m_group_predecessors[target_group_id];
+                    for (auto pred_id : pred_ids_of_group)
                     {
                         auto& suc_ids = this->m_group_successors.at(pred_id);
                         suc_ids.insert(target_group_id);
@@ -744,6 +748,28 @@ namespace hal
                 return ERR("size of the target group does not match combined size of the split groups.");
             }
 
+            // detach the old group from its neighbors, which would otherwise still refer to it
+            if (const auto suc_it = this->m_group_successors.find(group_id); suc_it != this->m_group_successors.end())
+            {
+                for (const auto suc_id : suc_it->second)
+                {
+                    if (const auto it = this->m_group_predecessors.find(suc_id); it != this->m_group_predecessors.end())
+                    {
+                        it->second.erase(group_id);
+                    }
+                }
+            }
+            if (const auto pred_it = this->m_group_predecessors.find(group_id); pred_it != this->m_group_predecessors.end())
+            {
+                for (const auto pred_id : pred_it->second)
+                {
+                    if (const auto it = this->m_group_successors.find(pred_id); it != this->m_group_successors.end())
+                    {
+                        it->second.erase(group_id);
+                    }
+                }
+            }
+
             this->m_gates_of_group.erase(group_id);
             this->m_group_successors.erase(group_id);
             this->m_group_predecessors.erase(group_id);
@@ -799,6 +825,25 @@ namespace hal
                         {
                             this->m_group_predecessors[current_id].insert(this->m_parent_group_of_gate.at(pred_g));
                         }
+                    }
+                }
+            }
+
+            // the neighbors of the new groups refer to them as well
+            for (const auto current_id : new_group_ids)
+            {
+                if (const auto suc_it = this->m_group_successors.find(current_id); suc_it != this->m_group_successors.end())
+                {
+                    for (const auto suc_id : suc_it->second)
+                    {
+                        this->m_group_predecessors[suc_id].insert(current_id);
+                    }
+                }
+                if (const auto pred_it = this->m_group_predecessors.find(current_id); pred_it != this->m_group_predecessors.end())
+                {
+                    for (const auto pred_id : pred_it->second)
+                    {
+                        this->m_group_successors[pred_id].insert(current_id);
                     }
                 }
             }
