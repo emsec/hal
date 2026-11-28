@@ -214,6 +214,9 @@ All notable changes to this project will be documented in this file.
     * `Result::write_dot` now returns the path it wrote to, as it replaces a wrong extension
     * changed the plugin dialog to no longer open the written `.dot` graph in the DOT viewer unprompted
     * fixed `dataflow.Configuration` leaking every instance created from Python
+    * fixed `Result::merge_groups` reading the gates of a merged group after erasing them, a use-after-free that left the gates pointing to the old group or, with GCC's standard library, failed with `unordered_map::at` (`IndexError` in Python). It also kept iterators that inserting the new group could invalidate
+    * fixed `Result::split_group` leaving the neighbors of a split group pointing to the old group and not to the new ones, so that a later `merge_groups` of such a neighbor failed
+    * added the first tests of the dataflow analysis (`runTest-dataflow`), covering the configuration, the analysis, the result API including writing DOT and text files, creating modules, and merging and splitting groups, and the command line and GUI interfaces of the plugin
   * graph algorithm
     * added `NetlistGraph::from_gates` that builds a graph from a subset of the gates of a netlist, optionally representing a gate by a primary and a shadow vertex so that feedback through it does not close a cycle
     * fixed `NetlistGraph` destroying an igraph graph that was never created when `from_netlist` or `copy` fail before creating it
